@@ -1,0 +1,13 @@
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.pdf
+
+# Wolfbook notebook sidecar data (checkpoints, kernel state)
+*.wb.img/

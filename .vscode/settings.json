@@ -1,0 +1,6 @@
+{
+    "wolfbook.evalMode": "refine",
+    "wolfbook.collabMode": true,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000
+}
