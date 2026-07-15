@@ -873,10 +873,15 @@ Expected: a numeric complex pair, no error.
   here is strong evidence both derivations, including the re-derived L3 M-extraction/J1,J0
   structure, are correct). Sample points avoid roots of a(u) and Qθ(u). Checked for every (M,n) at
   (λ1,λ2,λ3)=(1,1,1) and one asymmetric case (2,1,1), mirroring the L2 notebook's regression
-  cases.*)
+  cases. Uses uu (NOT u) as the sampling-loop variable: BaxterMatrix (Task 8) uses a bare,
+  non-Module-localized "u" internally for CoefficientList, so if this outer Table used the same
+  bare symbol "u", Table's dynamic (Block-style) iterator binding would clobber BaxterMatrix's
+  internal u the first time an uncached QSolve call happens to run while u is numerically bound —
+  the L2 predecessor (Experiments/Baxter_Solver_L2.wb, cells 15-16) already avoids this by using
+  uu for exactly this reason; reused here for the same reason.*)
 checkTQ[λ1_, λ2_, λ3_, M_, n_] := Max[Abs[Table[
-    aFun[λ1, λ2, λ3][u] Q1[λ1, λ2, λ3][M, n][u + h] - τ[λ1, λ2, λ3][M, n][u] Q1[λ1, λ2, λ3][M, n][u] + Qθ[u] Q1[λ1, λ2, λ3][M, n][u - h],
-    {u, {0, 1, 2, -1, 5}}]]];
+    aFun[λ1, λ2, λ3][uu] Q1[λ1, λ2, λ3][M, n][uu + h] - τ[λ1, λ2, λ3][M, n][uu] Q1[λ1, λ2, λ3][M, n][uu] + Qθ[uu] Q1[λ1, λ2, λ3][M, n][uu - h],
+    {uu, {0, 1, 2, -1, 5}}]]];
 Table[{M, n, checkTQ[1, 1, 1, M, n]}, {M, 0, 3}, {n, 0, dPred[M, 1, 1, 1] - 1}] // Flatten[#, 1] &
 ```
 
