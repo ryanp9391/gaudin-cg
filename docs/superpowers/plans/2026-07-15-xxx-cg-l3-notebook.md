@@ -73,12 +73,22 @@ This changes three routines relative to L2:
   $(J_1,J_0)=(t_1,t_0)$ directly (no formula — same "read it straight off the eigenvector" pattern
   L2 used for $J$).
 - `BaxterMatrix` subtracts only $\tau_0(u)$ (which has zero $u^1,u^0$ coefficients) when building
-  the state-independent linear operator, and needs one more high-degree vanishing check (degree
-  $M{+}1,M{+}2,M{+}3$, not L2's two) since $a(u),Q_\theta(u),\tau_0(u)$ are now degree 3.
-  Note: this asymmetry is inherent to the $O[u^k]$ construction, not a bug to fix — for a column
-  index $k<M$, the checked high-degree coefficients are trivially zero by degree bound alone, and
-  the check only becomes substantive for the top one or two columns ($k$ near $M$); this matches
-  the same (mostly-vacuous-except-at-the-top) structure the L2 notebook already has.
+  the state-independent linear operator. It still needs exactly **two** high-degree vanishing
+  checks, same count as L2 — but shifted up one degree ($M{+}2,M{+}3$, not L2's $M{+}1,M{+}2$)
+  since $a(u),Q_\theta(u),\tau_0(u)$ are now degree 3. The row directly above that, degree
+  $M{+}1$, is **not** a pure per-column identity at L3 (unlike L2): writing
+  $O_0[u^k]=O_{\mathrm{full}}[u^k]+J_1u^{k+1}+J_0u^k$ (relating the state-independent $O_0$, built
+  from $\tau_0$ only, to the true $O_{\mathrm{full}}$, built from the full $\tau=\tau_0+J_1u+J_0$),
+  the $J_1$ term contaminates row $p=k+1$ — which reaches exactly row $M{+}1$ from the top column
+  $k=M$. Rows $M{+}2,M{+}3$ are never reached this way ($k{+}1$ tops out at $M{+}1$ for $k\le M$),
+  so they stay clean identities. Row $M{+}1$'s physical content is exactly what `QSolve`'s
+  $J_1\cdot(\text{shiftDown})$ correction supplies later — it must not be asserted to vanish in
+  `BaxterMatrix` — and its correctness is confirmed instead by Task 12's end-to-end TQ residual
+  check (which validates every degree, including $M{+}1$, numerically at sample points). This
+  generalizes cleanly: for any chain length $L$, exactly the **top two** extra-degree
+  coefficients ($M{+}(L{-}1)$ and $M{+}L$) are always pure per-column identities, regardless of
+  $L$; any lower extra-degree row is contaminated by one of the $L{-}1$ free state-dependent
+  parameters and belongs to `QSolve`, not `BaxterMatrix`.
 - `QSolve` subtracts **both** $J_1\cdot(\text{subdiagonal shift matrix})$ and $J_0\cdot\mathbb{1}$
   from `BaxterMatrix` before the nullspace solve (L2 only needed $J\cdot\mathbb{1}$), because
   $J_1 u^{k+1}$ (from $\tau(u)u^k$) lands one row below the diagonal relative to column $k$.
@@ -558,10 +568,15 @@ Verify: output shows `aFun` as a degree-3 polynomial, `Qθ[u]` as `(u-θ1)(u-θ2
 
 ```wolfram
 (*BaxterMatrix: build O[u^k]=κ1 a(u)(u+h)^k + κ2 Qθ[u](u-h)^k - τ0(u) u^k for k=0..M.
-  Since a(u),Qθ(u),τ0(u) are all degree 3 (one more than L2's degree 2), O[u^k] has nonzero
-  coefficients up to degree k+3 — HARD ASSERT that the degree M+1, M+2, AND M+3 coefficients
-  vanish for every column (THREE checks, not L2's two — this is where a wrong a/Qθ/τ0 or a wrong
-  ee1=λ1+λ2+λ3-M convention would first show up). Then columns = degree-0..M coefficients.*)
+  a(u),Qθ(u),τ0(u) are degree 3 (one more than L2's degree 2), so O[u^k] has nonzero coefficients
+  up to degree k+3 — but only the TOP TWO extra-degree coefficients, degree M+2 and M+3, are pure
+  per-column identities (same count as L2, just shifted up one degree). Degree M+1 is deliberately
+  NOT checked here: it is contaminated by the free parameter J1 (from τ(u)=τ0(u)+J1 u+J0) via its
+  u^(k+1) shift landing exactly at the top column k=M — that row's physical content is supplied
+  later by QSolve's J1·shiftDown correction, not asserted here, and is confirmed instead by the
+  end-to-end TQ residual check (Task 12). HARD ASSERT that the degree M+2, M+3 coefficients vanish
+  for every column (this is where a wrong a/Qθ/τ0 or a wrong ee1=λ1+λ2+λ3-M convention would first
+  show up). Then columns = degree-0..M coefficients.*)
 ClearAll[BaxterMatrix];
 BaxterMatrix[λ1_, λ2_, λ3_, M_] := Module[{clists, high, maxhigh, cols},
   clists = Table[
@@ -571,7 +586,7 @@ BaxterMatrix[λ1_, λ2_, λ3_, M_] := Module[{clists, high, maxhigh, cols},
        u],
       M + 4],
      {k, 0, M}];
-  high = clists[[All, {M + 2, M + 3, M + 4}]];
+  high = clists[[All, {M + 3, M + 4}]];
   maxhigh = Max[Abs[Flatten[high]]];
   If[maxhigh > 10^-18,
     Print["BaxterMatrix ASSERTION FAILED (λ1,λ2,λ3,M)=", {λ1, λ2, λ3, M},
