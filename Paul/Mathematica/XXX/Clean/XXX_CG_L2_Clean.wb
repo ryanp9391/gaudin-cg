@@ -1,0 +1,243 @@
+{
+ "cells": [
+  {
+   "kind": 2,
+   "value": "(*Numeric parameters (shared across the whole notebook). NOTE: this assigns global numeric values to θ1,θ2,h,κ1,κ2.\n  χ1,χ2 are the companion twist G's eigenvalues (Section A's G={{χ1,-χ2},{1,0}} has char. poly\n  λ²-χ1 λ+χ2=(λ-κ1)(λ-κ2), so χ1=κ1+κ2, χ2=κ1κ2=1 here since κ2=1/κ1) — fixed here, numerically,\n  once for the whole merged notebook (both Section A and Section B rely on G/t2 being numeric).*)\nθ1 = 1/3;\nθ2 = 1/7;\nh = 1;\nκ1 = N[Exp[I Zeta[3]], 30];\nκ2 = 1/κ1;\nχ1 = κ1 + κ2;\nχ2 = 1;\n{θ1, θ2, h, κ1, κ2, χ1, χ2}",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "(*Two-site XXX_{su(2)} chain (L=2). Sites carry independent gl(2) representations [λ1,0], [λ2,0], independent inhomogeneities θ1, θ2, and a SHARED companion twist G=(χ1,χ2) for the whole chain. Physical space V_λ1⊗V_λ2. Generator/GT-basis machinery (ps,dim,J0,Jp,Jm,JJ) and Ee, L are ported verbatim from XXX_su2.wb — they are single-site building blocks, independent of L.*)",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ps[rep_] := \n  ps[rep] = \n   Block[{res = (Prepend[rep, #] & /@ (Tuples[\n          Table[Range[rep[[1, i + 1]], rep[[1, i]]], {i, 1, \n            Length[rep[[1]]] - 1}]]))}, \n    If[Length[res[[1, 1]]] == 1, Reverse@Sort@res, \n     Reverse@Sort@Flatten[ps /@ res, 1]]];\ndim[rep_] := dim[rep] = Length[ps[{rep}]];\nJ0[k_][pat_] := \n  J0[k][pat] = \n   Sum[pat[[k, i]], {i, 1, k}] - Sum[pat[[k - 1, i]], {i, 1, k - 1}];\nJp[k_][pat_] := \n  Jp[k][pat] = -Sum[\n     Product[pat[[k, i]] - i - pat[[k + 1, j]] + j, {j, \n         Range[k + 1]}]/\n       Product[pat[[k, i]] - i - pat[[k, j]] + j, {j, \n         Complement[Range[k], {i}]}] v[\n       ReplacePart[pat, {k, i} -> pat[[k, i]] + 1]], {i, 1, k}];\nJm[k_][pat_] := \n  Jm[k][pat] = \n   Sum[Product[\n       pat[[k, i]] - i - pat[[k - 1, j]] + j, {j, Range[k - 1]}]/\n      Product[pat[[k, i]] - i - pat[[k, j]] + j, {j, \n        Complement[Range[k], {i}]}] v[\n      ReplacePart[pat, {k, i} -> pat[[k, i]] - 1]], {i, 1, k}];\nJJ[k_, l_, rep_] := \n  JJ[k, l, rep] = \n   Which[k == l, DiagonalMatrix[J0[k] /@ ps[{rep}]], l == k + 1, \n    Transpose[\n     Table[Coefficient[Jp[k][ps[{rep}][[i]]], v[#]] & /@ \n       ps[{rep}], {i, 1, Length[ps[{rep}]]}]], l == k - 1, \n    Transpose[\n     Table[Coefficient[Jm[l][ps[{rep}][[i]]], v[#]] & /@ \n       ps[{rep}], {i, 1, Length[ps[{rep}]]}]], l > k + 1, \n    JJ[k, k + 1, rep] . JJ[k + 1, l, rep] - \n     JJ[k + 1, l, rep] . JJ[k, k + 1, rep], l < k - 1, \n    JJ[k, k - 1, rep] . JJ[k - 1, l, rep] - \n     JJ[k - 1, l, rep] . JJ[k, k - 1, rep]];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*spin-s generators*)\nClearAll[Ee];\nEe[λ_][i_,j_]:=JJ[i,j,{λ,0}]",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*Lax matrix for spin-s representation (no θ baked in — shift applied when a site is instantiated)*)\nClearAll[L];\nL[λ_][i_,j_][u_]:=KroneckerDelta[i,j]*u*IdentityMatrix[dim[{λ,0}]]-h Ee[λ][j,i];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*companion twist matrix — shared by the whole chain*)\nG={{χ1,-χ2},{1,0}};",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "(*Two-site Lax operators on V_λ1⊗V_λ2, built as KroneckerProduct of the single-site Lax matrix (evaluated at its own site's inhomogeneity shift) with the identity on the other factor. Signature L1[λ1,λ2][i,j][u], L2[λ1,λ2][i,j][u] carries both λ's explicitly (needed to know the size of the identity factor).*)",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[L1,L2];\nL1[λ1_,λ2_][i_,j_][u_]:=KroneckerProduct[L[λ1][i,j][u-θ1],IdentityMatrix[dim[{λ2,0}]]];\nL2[λ1_,λ2_][i_,j_][u_]:=KroneckerProduct[IdentityMatrix[dim[{λ1,0}]],L[λ2][i,j][u-θ2]];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "(*Monodromy matrix T[λ1,λ2][i,j][u] = product of the two site Lax operators in auxiliary space, T(u)=L1(u).L2(u). Both factors carry the SAME spectral parameter u — each site's inhomogeneity shift is already built into L1/L2 via θ1,θ2 respectively, so no extra shift is needed here (unlike the single-site quantum-determinant construction t[λ][2,1][u], which shifts the second factor by h because there the two factors are the SAME site's L-matrix evaluated at u and u-h).*)",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[T];\nT[λ1_,λ2_][i_,j_][u_]:=T[λ1,λ2][i,j][u]=Sum[L1[λ1,λ2][i,k][u].L2[λ1,λ2][k,j][u],{k,2}];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*transfer matrix in fundamental representation*)\nClearAll[t2];\nt2[λ1_,λ2_][1,1][u_]:=Sum[T[λ1,λ2][i,j][u]G[[j,i]],{i,2},{j,2}];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*transfer matrices commute at different values of spectral parameter*)\n(*so coefficients generate a complete family of integrals of motion*)\nTable[t2[λ1,λ2][1,1][u].t2[λ1,λ2][1,1][v]-t2[λ1,λ2][1,1][v].t2[λ1,λ2][1,1][u],{λ1,1,4},{λ2,1,4}]//Simplify//Flatten//Union",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*transfer matrix in fundamental representation with diagonal twist*)\nt2diag[λ1_,λ2_][1,1][u_]:=Sum[T[λ1,λ2][i,i][u]κ[i],{i,2}];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*global Lie algebra generators*)\nClearAll[EE]\nEE[λ1_,λ2_][i_,j_]:=KroneckerProduct[Ee[λ1][i,j],IdentityMatrix[dim[{λ2,0}]]]+KroneckerProduct[IdentityMatrix[dim[{λ1,0}]],Ee[λ2][i,j]];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*central charge*)\nTable[EE[λ1,λ2][1,1]+EE[λ1,λ2][2,2]-(λ1+λ2)IdentityMatrix[dim[{λ1,0}]dim[{λ2,0}]],{λ1,1,4},{λ2,1,4}]//Flatten//Union",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*asymptotics of transfer matrix in diagonal frame*)\ntdiagasympt[λ1_,λ2_][u_]:=(κ[1]+κ[2])u^2 IdentityMatrix[dim[{λ1,0}]*dim[{λ2,0}]]-u(κ[1]+κ[2])(θ1+θ2) IdentityMatrix[dim[{λ1,0}]*dim[{λ2,0}]]- u h(κ[1] EE[λ1,λ2][1,1]+κ[2] EE[λ1,λ2][2,2])",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*checking asymptotics matches*)\nt2diag[1,1][1,1][u]-tdiagasympt[1,1][u];\nCoefficient[%,u,1]//Simplify",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*quantum determinant*)\nClearAll[qdetT];\nqdetT[λ1_,λ2_][u_]:=T[λ1,λ2][1,1][u].T[λ1,λ2][2,2][u-h]-T[λ1,λ2][2,1][u].T[λ1,λ2][1,2][u-h];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "(*Fusion/Hirota hierarchy for the two-site transfer matrices t2[λ1,λ2][1,s][u], built exactly as in the L=1 case (t2[λ1,λ2][2,1][u]=χ2 qdetT[λ1,λ2][u], then Hirota recursion t2[1,s][u]=t2[1,s-1][u].t2[1,1][u+(s-1)h]-t2[2,1][u+(s-1)h].t2[1,s-2][u]), with boundary conditions t2[0,s]=t2[a,0]=identity on V_λ1⊗V_λ2.*)",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*fused transfer matrices*)\nt2[λ1_,λ2_][0,s_][u_]:=IdentityMatrix[dim[{λ1,0}]*dim[{λ2,0}]];\nt2[λ1_,λ2_][a_,0][u_]:=IdentityMatrix[dim[{λ1,0}]*dim[{λ2,0}]];\nt2[λ1_,λ2_][2,1][u_]:=χ2 qdetT[λ1,λ2][u];\nt2[λ1_,λ2_][1,s_/;s>1][u_]:=t2[λ1,λ2][1,s-1][u].t2[λ1,λ2][1,1][u+(s-1)h]-t2[λ1,λ2][2,1][u+(s-1)h].t2[λ1,λ2][1,s-2][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*Qθ-type factors for the two sites*)\nClearAll[Qθ1,Qθ];\nQθ1[u_]:=(u-θ1);\nQθ[u_]:=(u-θ1)(u-θ2);",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "(*SoV B-operator for L=2: the bare (1,1) monodromy element (no G, no trace) — same convention as B[λ][u]=L[λ][1,1][u-θ] at L=1.*)",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[B2];\nB2[λ1_,λ2_][u_]:=T[λ1,λ2][1,1][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "(*Step 8: SoV pseudovacuum for L=2 as the tensor product of the two single-site lowest-weight covectors.*)",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[xSingle,x2];\nxSingle[λ_][{0}]:={Table[KroneckerDelta[ii,dim[{λ,0}]],{ii,1,dim[{λ,0}]}]};\nx2[λ1_,λ2_][{0,0}]:=KroneckerProduct[xSingle[λ1][{0}],xSingle[λ2][{0}]];\n\nx2[λ1_,λ2_][{s1_,s2_}] := x2[λ1,λ2][{s1,s2}] = x2[λ1,λ2][{0,0}].t2[λ1,λ2][1,s1][θ1].t2[λ1,λ2][1,s2][θ2]/(Product[Qθ[θ1 + (-λ1 + k - 1) h], {k, 1, s1}] Product[Qθ[θ2 + (-λ2 + k - 1) h], {k, 1, s2}]);",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*checking x2 diagonalizes B*)\nTable[Table[x2[λ1,λ2][{s1,s2}].B2[λ1,λ2][u]-(u-θ1-h s1)(u-θ2-h s2)x2[λ1,λ2][{s1,s2}],{s1,0,λ1},{s2,0,λ2}],{λ1,1,3},{λ2,1,3}]//Simplify//Flatten//Union",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "(*Section B — Baxter (TQ) solver: minimal reusable routine set (BaxterMatrix, TauEigensystem/Psi/τ, QSolve, Q1) ported from Experiments/Baxter_Solver_L2.wb. Only the load-bearing definitions are kept here; see that file for the full derivation, the spurious-vs-genuine motivation writeup (why a naive Baxter-matrix diagonalization overcounts states relative to the true weight-M subspace dimension dPred), and the validation/regression suite (stage-1 t2-eigenvalue checks and stage-2 end-to-end TQ-residual checks) that verified this pipeline. t2Coeffs below calls Section A's t2 directly (dedup: the shared companion-twist machinery lives only in Section A now).*)",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*a(u), d(u)=Qθ(u), and τ0 = τ minus the J term (using ee1=λ1+λ2-M, ee2=M).\n  Qθ (=d) is defined LOCALLY here so this file is self-contained.\n  qpoly builds a polynomial from an ASCENDING coefficient list {c0,...,cM} (cM=1 for monic q_n);\n  formed in a dummy symbol first so substituting uu=0 gives the constant term rather than an\n  indeterminate 0^0.*)\nClearAll[aFun, τ0, Qθ, qpoly];\naFun[λ1_, λ2_][u_] := (u - θ1 - h λ1) (u - θ2 - h λ2);\nQθ[u_] := (u - θ1) (u - θ2);\nτ0[λ1_, λ2_, M_][u_] := (κ1 + κ2) u^2 - (θ1 + θ2) (κ1 + κ2) u - u h (κ1 (λ1 + λ2 - M) + κ2 M);\nqpoly[clist_, uu_] := Module[{x}, (clist . x^Range[0, Length[clist] - 1]) /. x -> uu];\n{aFun[1, 1][u], Qθ[u], τ0[1, 1, 1][u]}",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*BaxterMatrix: build O[u^k]=κ1 a(u)(u+h)^k + κ2 Qθ[u](u-h)^k - τ0(u) u^k for k=0..M.\n  HARD ASSERT that the degree M+1 and M+2 coefficients vanish (this is where a wrong a/d/τ or a\n  wrong ee1=λ1+λ2-M convention would show up). Then columns = degree-0..M coefficients.\n  Used TWICE downstream: (old role) never diagonalized directly anymore; (new role) as the FIXED\n  linear operator whose nullspace at a KNOWN genuine J gives the Q-function coefficients\n  (see QSolve below) — this is now a linear solve, not an eigenvalue problem.*)\nClearAll[BaxterMatrix];\nBaxterMatrix[λ1_, λ2_, M_] := Module[{clists, high, maxhigh, cols},\n  clists = Table[\n     PadRight[\n      CoefficientList[\n       Expand[κ1 aFun[λ1, λ2][u] (u + h)^k + κ2 Qθ[u] (u - h)^k - τ0[λ1, λ2, M][u] u^k],\n       u],\n      M + 3],\n     {k, 0, M}];\n  high = clists[[All, {M + 2, M + 3}]];   (* degree M+1 and M+2 coeffs for each column k *)\n  maxhigh = Max[Abs[Flatten[high]]];\n  If[maxhigh > 10^-18,\n    Print[\"BaxterMatrix ASSERTION FAILED (λ1,λ2,M)=\", {λ1, λ2, M},\n          \"  max|high-degree coeff|=\", maxhigh, \"  high=\", high];\n    Abort[]];\n  cols = clists[[All, 1 ;; M + 1]];       (* degrees 0..M, one column per k *)\n  Transpose[cols]\n];\nDimensions /@ (BaxterMatrix[1, 1, #] & /@ {0, 1, 2})",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* Coefficient matrices C0,C1,C2 with t2[λ1,λ2][1,1][u] = C0 + C1 u + C2 u^2.\n   Extracted entrywise via CoefficientList in a dummy variable (NOT by evaluating at numeric\n   points). Memoized per (λ1,λ2) — reusable across all (M,n) of that representation. *)\nClearAll[t2Coeffs];\nt2Coeffs[λ1_, λ2_] := t2Coeffs[λ1, λ2] = Module[{uu, mat, cl},\n   mat = t2[λ1, λ2][1, 1][uu];\n   cl = Map[PadRight[CoefficientList[#, uu], 3] &, mat, {2}];\n   Table[cl[[All, All, k]], {k, 1, 3}]\n];\n(* check: C2 must equal (κ1+κ2) Id — leading-order asymptotics match τ by construction *)\nWith[{Cs = t2Coeffs[1, 1]}, \"max|C2-(κ1+κ2)Id|\" -> Max[Abs[Flatten[Cs[[3]] - (κ1 + κ2) IdentityMatrix[4]]]]]",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* dPred[M,λ1,λ2]: predicted dimension of the weight-M subspace of Vλ1⊗Vλ2 (number of (m1,m2)\n   pairs with m1+m2 fixed) = Min[M,λ1,λ2,λ1+λ2-M]+1. This is what the GENUINE t2-diagonalization\n   below must reproduce exactly for every M — no more, no less — since it is now an honest\n   d=(λ1+1)(λ2+1)-dimensional diagonalization of the actual transfer matrix, not an oversized\n   (M+1)-dimensional Baxter-matrix proxy that can manufacture spurious extra roots. *)\nClearAll[dPred];\ndPred[M_, λ1_, λ2_] := Min[M, λ1, λ2, λ1 + λ2 - M] + 1;\n\n(* TauEigensystem[λ1,λ2]: diagonalize the GENUINE transfer matrix t2[λ1,λ2][1,1][u] directly.\n   C0,C1,C2 pairwise commute (all built from the same commuting-family monodromy), so a GENERIC\n   linear combination C0+r C1 has the full set of common eigenvectors of C0 and C1 (C2 is already\n   known to be the scalar (κ1+κ2) Id, so it carries no extra information). We try a short list of\n   generic r candidates and keep the first that fully resolves the d-dim eigenspace (rank d,\n   d distinct combo-eigenvalues); this guards against an accidental coincidental degeneracy in\n   C0+r C1 for a specific r.\n   For each eigenvector v: extract t0=(v.C0.v)/(v.v), t1=(v.C1.v)/(v.v) (valid for ANY genuine\n   right eigenvector, no conjugation needed since C0,C1 are not Hermitian). The residual checks\n   ||C0.v-t0 v|| and ||C1.v-t1 v|| being ~0 IS the genuineness test (replaces the old\n   Baxter-matrix + post-hoc Psi::spurious filtering entirely: this diagonalization is exact, so a\n   real failure here means a genuine construction bug, hence a hard Abort).\n   M is read off ALGEBRAICALLY from t1 via τ0's u^1 coefficient (τ=τ0+J only shifts u^0):\n     M = [-(θ1+θ2)(κ1+κ2) - hκ1(λ1+λ2) - t1] / (h(κ2-κ1))\n   and must land within 10^-10 of an integer (hard assert). n within each M-sector: J=t0 directly\n   (τ0 has zero constant term), sorted ascending by (Re[J],Im[J]) — same tie-break convention as\n   the old BaxterSolve. Each M-sector's count is asserted to equal dPred[M,λ1,λ2] exactly.\n   Returns an Association keyed by {M,n} -> <|\"J\"->J_n,\"Psi\"->eigenvector normalized to last\n   component 1|>. Memoized per (λ1,λ2). *)\nClearAll[TauEigensystem];\nTauEigensystem::rankdef = \"Combination C0+r C1 failed to resolve the `1`-dim eigenspace for (λ1,λ2)=(`2`,`3`) at every tried r in `4`.\";\nTauEigensystem::noninteger = \"M = `1` is not within tolerance of an integer for eigenvector #`2` at (λ1,λ2)=(`3`,`4`) (combo r=`5`) — indicates a bug in the τ0 u^1-coefficient formula or the t2 construction.\";\nPsi::notgenuine = \"Eigenvector #`1` for (λ1,λ2)=(`2`,`3`) failed the common-eigenvector residual check against C0/C1 (residual=`4`, combo r=`5`) — the generic-combination diagonalization should make this impossible; investigate before trusting results.\";\nPsi::degnull = \"Weight sector M=`1` for (λ1,λ2)=(`2`,`3`) has `4` genuine state(s) but the predicted weight multiplicity dPred is `5`.\";\nPsi::lastzero = \"Genuine eigenvector for (M,n)=(`1`,`2`) at (λ1,λ2)=(`3`,`4`) has last component ~0; cannot normalize.\";\nTauEigensystem[λ1_, λ2_] := TauEigensystem[λ1, λ2] = Module[\n   {d, Cs, C0, C1, C2, rCandidates, r, vals, vecs, recs, byM, table},\n   d = (λ1 + 1) (λ2 + 1);\n   Cs = t2Coeffs[λ1, λ2]; {C0, C1, C2} = Cs;\n   rCandidates = {7/3, N[Pi, 30], N[E, 30], 11/5, 13/4, N[Sqrt[2], 30]};\n   r = SelectFirst[rCandidates,\n     Module[{ee, vv}, {ee, vv} = Eigensystem[C0 + # C1];\n       MatrixRank[vv] == d && Length[Union[Chop[ee, 10^-12]]] == d] &,\n     Missing[\"NoGenericR\"]];\n   If[MissingQ[r], Message[TauEigensystem::rankdef, d, λ1, λ2, rCandidates]; Abort[]];\n   {vals, vecs} = Eigensystem[N[C0 + r C1, 30]];\n   recs = Table[\n     Module[{v = vecs[[i]], t0, t1, res0, res1, Mi},\n       t0 = (v . (C0 . v))/(v . v);\n       t1 = (v . (C1 . v))/(v . v);\n       res0 = Max[Abs[C0 . v - t0 v]];\n       res1 = Max[Abs[C1 . v - t1 v]];\n       If[Max[res0, res1] > 10^-15,\n         Message[Psi::notgenuine, i, λ1, λ2, Max[res0, res1], r]; Abort[]];\n       Mi = (-(θ1 + θ2) (κ1 + κ2) - h κ1 (λ1 + λ2) - t1)/(h (κ2 - κ1));\n       If[Abs[Mi - Round[Re[Mi]]] > 10^-10,\n         Message[TauEigensystem::noninteger, Mi, i, λ1, λ2, r]; Abort[]];\n       <|\"M\" -> Round[Re[Mi]], \"J\" -> t0, \"vec\" -> v|>],\n     {i, 1, d}];\n   byM = GroupBy[recs, #[\"M\"] &];\n   table = Association @ Flatten @ KeyValueMap[\n     Function[{Mval, group},\n       Module[{sorted = SortBy[group, {Re[#[\"J\"]], Im[#[\"J\"]]} &], predicted = dPred[Mval, λ1, λ2]},\n         If[Length[sorted] != predicted,\n           Message[Psi::degnull, Mval, λ1, λ2, Length[sorted], predicted]; Abort[]];\n         MapIndexed[\n           Function[{rec, idx}, Module[{n = First[idx] - 1, vv = rec[\"vec\"], last},\n             last = vv[[-1]];\n             If[Abs[last] < 10^-15 Max[Abs[vv]],\n               Message[Psi::lastzero, Mval, n, λ1, λ2]; Abort[]];\n             {Mval, n} -> <|\"J\" -> rec[\"J\"], \"Psi\" -> vv/last|>]],\n           sorted]]],\n     byM];\n   If[Length[table] != d, Message[Psi::degnull, \"total\", λ1, λ2, Length[table], d]; Abort[]];\n   table\n];\n(* smoke test: (λ1,λ2)=(1,1) table keys and J values *)\nKeySort[TauEigensystem[1, 1]][[All, \"J\"]] // N",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* Psi[λ1,λ2][M,n]: on-demand accessor over the memoized TauEigensystem cache. Returns the fixed\n   (last-component-normalized) eigenvector for a genuine state.\n   τ[λ1,λ2][M,n][u]: the FULL τ eigenvalue polynomial for that state, τ0[λ1,λ2,M][u] + J_n.\n   Bounds/failure modes (Message + $Failed, matching the existing bounds-checked style):\n     Psi::bnds     — gross bounds violation: M not an integer in 0..λ1+λ2, or n not an integer in 0..M.\n     Psi::spurious — REPURPOSED from the old Baxter-matrix-filtering meaning: now fires when n is\n                     within the gross 0..M range but exceeds the ACTUAL weight multiplicity\n                     dPred[M,λ1,λ2]-1 for that M-sector (e.g. (λ1,λ2,M,n)=(2,1,2,2) — dPred[2,2,1]=2\n                     so only n=0,1 exist even though the gross bound allows n up to M=2). There is no\n                     other \"spurious\" failure mode left: every state actually produced by\n                     TauEigensystem is, by construction, a genuine common eigenvector of C0/C1/C2.\n   Both pull from the SAME cached TauEigensystem[λ1,λ2] table, so Psi and τ are mutually consistent\n   by construction. *)\nClearAll[Psi, τ];\nPsi::bnds = \"Invalid indices (M,n)=(`1`,`2`) for (λ1,λ2)=(`3`,`4`): need M an integer in 0..λ1+λ2 and n an integer in 0..M.\";\nτ::bnds = \"Invalid indices (M,n)=(`1`,`2`) for (λ1,λ2)=(`3`,`4`): need M an integer in 0..λ1+λ2 and n an integer in 0..M.\";\nPsi::spurious = \"No genuine state at (M,n)=(`1`,`2`) for (λ1,λ2)=(`3`,`4`): weight sector M=`1` has only `5` genuine state(s) (n=0..`6`), so n=`2` does not exist.\";\nτ::spurious = \"No genuine state at (M,n)=(`1`,`2`) for (λ1,λ2)=(`3`,`4`): weight sector M=`1` has only `5` genuine state(s) (n=0..`6`), so n=`2` does not exist.\";\nPsi[λ1_, λ2_][M_, n_] := Module[{tab, mult},\n  If[! (IntegerQ[M] && IntegerQ[n] && 0 <= M <= λ1 + λ2 && 0 <= n <= M),\n    Message[Psi::bnds, M, n, λ1, λ2]; Return[$Failed]];\n  tab = TauEigensystem[λ1, λ2];\n  mult = dPred[M, λ1, λ2];\n  If[n > mult - 1,\n    Message[Psi::spurious, M, n, λ1, λ2, mult, mult - 1]; Return[Missing[\"NoState\", {λ1, λ2, M, n}]]];\n  tab[{M, n}, \"Psi\"]];\nτ[λ1_, λ2_][M_, n_][u_] := Module[{tab, mult},\n  If[! (IntegerQ[M] && IntegerQ[n] && 0 <= M <= λ1 + λ2 && 0 <= n <= M),\n    Message[τ::bnds, M, n, λ1, λ2]; Return[$Failed]];\n  mult = dPred[M, λ1, λ2];\n  If[n > mult - 1,\n    Message[τ::spurious, M, n, λ1, λ2, mult, mult - 1]; Return[Missing[\"NoState\", {λ1, λ2, M, n}]]];\n  τ0[λ1, λ2, M][u] + TauEigensystem[λ1, λ2][{M, n}, \"J\"]];\n(* smoke test: a valid state, plus a deliberately out-of-range call (n exceeds actual multiplicity\n   for M=2 at (λ1,λ2)=(2,1), which is dPred[2,2,1]=2, so n=2 should fire Psi::spurious) *)\nPrint[\"spurious-guard test (expect a Psi::spurious message and Missing[...]): \", Psi[2, 1][2, 2]];\n{Psi[1, 1][1, 0], N[τ[1, 1][1, 0][2], 10]}",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* QSolve[λ1,λ2][M,n]: the TQ equation is now a LINEAR solve, not an eigenvalue problem, because\n   J_n (hence τ) is already KNOWN from the genuine TauEigensystem diagonalization above. The\n   monic-degree-M polynomial q_n(u) satisfies O[q_n]=0 with O the SAME BaxterMatrix operator as\n   before, now evaluated at the fixed known J_n: (BaxterMatrix[λ1,λ2,M] - J_n·Id).q_n = 0.\n   Reuses BaxterMatrix (built above) and the bounds/multiplicity-check style from Psi/τ.\n   CRITICAL numerical-precision pitfall (same theme as flagged for the old Psi construction, but a\n   DIFFERENT concrete manifestation): BaxterMatrix[λ1,λ2,M]-J_n·Id is singular by construction, but\n   its (M+1)-th (would-be-zero) entries/singular-values come out as precision-TRACKED zeros, e.g.\n   literally `0``26` (value exactly 0, but carrying a finite Accuracy/Precision tag rather than\n   Infinite precision). NullSpace treats such an entry's Precision (which evaluates to ~0, since\n   Precision[0]-style values are accuracy-driven) as UNKNOWN rather than confirmed-zero, and\n   conservatively returns an EMPTY nullspace even though the matrix is genuinely singular — this\n   bites the M=0 sector (1x1 matrix, entry identically the precision-tracked zero) with EITHER\n   default OR explicit Tolerance->10^-10 alone. The fix is to Chop the matrix (threshold 10^-12,\n   comfortably above the ~10^-26..10^-29 noise floor of this construction but far below any\n   genuine O(1) entry) BEFORE calling NullSpace, converting those precision-tracked zeros to exact\n   (infinite-precision) 0 so NullSpace's linear-algebra can recognize the singularity. The explicit\n   Tolerance->10^-10 is ALSO required per the design brief (matches the historical Psi-construction\n   bug at (λ1,λ2,M,n)=(2,1,2,0) in the old stacked-C0/C1/C2 nullspace, and provides headroom for any\n   genuinely-small-but-nonzero near-null direction that Chop alone would not catch in general).\n   Both are used together defensively. Messages/behavior on failure mirror Psi/τ (bnds/spurious)\n   plus new degnull/lastzero variants for this linear solve. Memoized per (λ1,λ2,M,n). *)\nClearAll[QSolve];\nQSolve::bnds = \"Invalid indices (M,n)=(`1`,`2`) for (λ1,λ2)=(`3`,`4`): need M an integer in 0..λ1+λ2 and n an integer in 0..M.\";\nQSolve::spurious = \"No genuine state at (M,n)=(`1`,`2`) for (λ1,λ2)=(`3`,`4`): weight sector M=`1` has only `5` genuine state(s) (n=0..`6`), so n=`2` does not exist.\";\nQSolve::degnull = \"Unexpected Q-function nullspace dimension `5` (expected 1) for (M,n)=(`1`,`2`) at (λ1,λ2)=(`3`,`4`).\";\nQSolve::lastzero = \"Q-function nullspace vector found but its top (u^M) coefficient is ~0 for (M,n)=(`1`,`2`) at (λ1,λ2)=(`3`,`4`); cannot normalize to monic.\";\nQSolve[λ1_, λ2_][M_, n_] := QSolve[λ1, λ2][M, n] = Module[{mult, Jn, mat, ns, vec, last},\n  If[! (IntegerQ[M] && IntegerQ[n] && 0 <= M <= λ1 + λ2 && 0 <= n <= M),\n    Message[QSolve::bnds, M, n, λ1, λ2]; Return[$Failed]];\n  mult = dPred[M, λ1, λ2];\n  If[n > mult - 1,\n    Message[QSolve::spurious, M, n, λ1, λ2, mult, mult - 1]; Return[$Failed]];\n  Jn = TauEigensystem[λ1, λ2][{M, n}, \"J\"];\n  mat = BaxterMatrix[λ1, λ2, M] - Jn IdentityMatrix[M + 1];\n  ns = NullSpace[Chop[mat, 10^-12], Tolerance -> 10^-10];\n  Which[\n    Length[ns] != 1, Message[QSolve::degnull, M, n, λ1, λ2, Length[ns]]; Return[$Failed],\n    True,\n      vec = ns[[1]]; last = vec[[-1]];\n      If[Abs[last] < 10^-15 Max[Abs[vec]],\n        Message[QSolve::lastzero, M, n, λ1, λ2]; Return[$Failed]];\n      vec/last]\n];\n(* smoke test: the regression-critical case (λ1,λ2,M,n)=(2,1,2,0) *)\nQSolve[2, 1][2, 0]",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* Q1[λ1,λ2][M,n][u] = κ1^(u/h) q_n(u): the actual Baxter Q-function value, built from the SAME\n   QSolve cache (mutually consistent with τ by construction, since both trace back to the same\n   TauEigensystem[λ1,λ2][{M,n}] entry). *)\nClearAll[Q1];\nQ1[λ1_, λ2_][M_, n_][u_] := Module[{q = QSolve[λ1, λ2][M, n]},\n  If[q === $Failed, $Failed, κ1^(u/h) qpoly[q, u]]];\n(* smoke test *)\n{Q1[1, 1][1, 0][2], N[τ[1, 1][1, 0][2], 10]}",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  }
+ ],
+ "metadata": {}
+}

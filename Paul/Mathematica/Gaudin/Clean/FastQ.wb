@@ -1,0 +1,54 @@
+{
+ "cells": [
+  {
+   "kind": 1,
+   "value": "# FastQ\n\nClean, validated residue-evaluation primitives for su(4) rectangular-rep Clebsch-Gordan coefficients via SoV in the Gaudin model. Ported over from `gaudinCG.wb` (definitions + validated helpers only, exploratory/benchmark cells left behind).",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[mm, res1, res0];\nmm[u_, n_, S1_, S2_, w_] := Exp[w u] u^n / ((u - 1)^S1 u^S2);\nres1[n_, S1_, S2_] := Exp[w] LaguerreL[S1 - 1, n - S2 - S1 + 1, -w];\nres0[n_, S1_, S2_] := If[S2 > n, (-1)^(S1 + S2 - n + 1) LaguerreL[S2 - n - 1, 1 - S1 - S2 + n, w], 0];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "doRes0[S1_,S2_,f_]:=Module[{nmax,coeffs,res},\n  nmax=Exponent[f,u];\n  coeffs=CoefficientList[f,u];\n  res=Plus@@(coeffs Table[res0[n,S1,S2],{n,0,nmax}]);\n  res\n  ]\n\ndoRes1[S1_,S2_,f_]:=Module[{nmax,coeffs,res},\n  nmax=Exponent[f,u];\n  coeffs=CoefficientList[f,u];\n  res=Plus@@(coeffs Table[res1[n,S1,S2],{n,0,nmax}]);\n  res\n  ]",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Validation\n\n`res1`/`res0` vs. direct `Residue[f[u,n,S1,S2,w], {u,1}]` / `{u,0}`, for `n ∈ {0,...,4}`, `S2 ∈ {0,...,4}`, `S1 ∈ {1,...,4}` (S1=0 has no pole at u=1; `res1` has no guard for that edge case, unlike `res0`'s `If[S2>n,...,0]`).",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "mismatches1 = Reap[\n   Do[\n    diff = Simplify[res1[n, S1, S2] - Residue[mm[u, n, S1, S2, w], {u, 1}]];\n    If[diff =!= 0, Sow[{n, S1, S2, diff}]],\n    {n, 0, 4}, {S1, 1, 4}, {S2, 0, 4}\n    ]\n   ][[2]] // Flatten[#, 1] &;\nmismatches0 = Reap[\n   Do[\n    diff = Simplify[res0[n, S1, S2] - Residue[mm[u, n, S1, S2, w], {u, 0}]];\n    If[diff =!= 0, Sow[{n, S1, S2, diff}]],\n    {n, 0, 4}, {S1, 0, 4}, {S2, 0, 4}\n    ]\n   ][[2]] // Flatten[#, 1] &;\nPrint[\"mismatches (res1, res0) = \", {Length[mismatches1], Length[mismatches0]}];",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-print-output\"><div class=\"wl-print-line\"><span class=\"wl-ps\">mismatches (res1, res0) = </span><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrhb4jbf-tfd5ctk\" data-page-width-em=\"24\" data-latex-b64=\"XGxlZnRcezAsMFxyaWdodFx9\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Print: mismatches (res1, res0) =[formula]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "b75d9041-e34c-47a0-a7ad-b34dd0fe79cc"
+    }
+   ],
+   "metadata": {}
+  }
+ ],
+ "metadata": {}
+}

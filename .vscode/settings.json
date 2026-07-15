@@ -2,5 +2,6 @@
     "wolfbook.evalMode": "refine",
     "wolfbook.collabMode": true,
     "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 1000
+    "files.autoSaveDelay": 1000,
+    "wolfbook.mcpEnabled": true
 }
