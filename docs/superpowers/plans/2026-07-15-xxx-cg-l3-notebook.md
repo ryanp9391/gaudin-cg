@@ -758,21 +758,28 @@ Task 5) or there's a bug in this cell's transcription of that formula.
    fixed (last-component-normalized) eigenvector for a genuine state.
    τ[λ1,λ2,λ3][M,n][u]: the FULL τ eigenvalue polynomial for that state, τ0[λ1,λ2,λ3,M][u] +
    J1_n u + J0_n (generalizing L2's τ0[...][u]+J_n by the extra J1 term — see the plan's
-   derivation note). Bounds/failure modes match the L2 accessor style (bnds/spurious). *)
+   derivation note). Bounds/failure modes match the L2 accessor style (bnds/spurious), EXCEPT the
+   gross bounds check on n omits L2's "n<=M" clause: at L2, dPred[M,λ1,λ2]=Min[M,λ1,λ2,λ1+λ2-M]+1
+   is always <=M+1 (M is one of the Min arguments), so n<=M is a harmless-but-redundant gross
+   check there. At L3, dPred is a genuine triple convolution and CAN exceed M+1 (e.g.
+   dPred[1,1,1,1]=3>M+1=2 — a binomial-like distribution across three sites), so "n<=M" would
+   wrongly reject genuine states before the real multiplicity check (n>mult-1, a few lines below)
+   ever runs. Only "n>=0" is kept as the gross sanity bound; the multiplicity check remains the
+   sole source of truth for which n actually exist. *)
 ClearAll[Psi, τ];
 Psi::bnds = "Invalid indices (M,n)=(`1`,`2`) for (λ1,λ2,λ3)=(`3`,`4`,`5`): need M an integer in 0..λ1+λ2+λ3 and n an integer in 0..M.";
 τ::bnds = "Invalid indices (M,n)=(`1`,`2`) for (λ1,λ2,λ3)=(`3`,`4`,`5`): need M an integer in 0..λ1+λ2+λ3 and n an integer in 0..M.";
 Psi::spurious = "No genuine state at (M,n)=(`1`,`2`) for (λ1,λ2,λ3)=(`3`,`4`,`5`): weight sector M=`1` has only `6` genuine state(s) (n=0..`7`), so n=`2` does not exist.";
 τ::spurious = "No genuine state at (M,n)=(`1`,`2`) for (λ1,λ2,λ3)=(`3`,`4`,`5`): weight sector M=`1` has only `6` genuine state(s) (n=0..`7`), so n=`2` does not exist.";
 Psi[λ1_, λ2_, λ3_][M_, n_] := Module[{mult},
-  If[! (IntegerQ[M] && IntegerQ[n] && 0 <= M <= λ1 + λ2 + λ3 && 0 <= n <= M),
+  If[! (IntegerQ[M] && IntegerQ[n] && 0 <= M <= λ1 + λ2 + λ3 && n >= 0),
     Message[Psi::bnds, M, n, λ1, λ2, λ3]; Return[$Failed]];
   mult = dPred[M, λ1, λ2, λ3];
   If[n > mult - 1,
     Message[Psi::spurious, M, n, λ1, λ2, λ3, mult, mult - 1]; Return[Missing["NoState", {λ1, λ2, λ3, M, n}]]];
   TauEigensystem[λ1, λ2, λ3][{M, n}, "Psi"]];
 τ[λ1_, λ2_, λ3_][M_, n_][u_] := Module[{mult, rec},
-  If[! (IntegerQ[M] && IntegerQ[n] && 0 <= M <= λ1 + λ2 + λ3 && 0 <= n <= M),
+  If[! (IntegerQ[M] && IntegerQ[n] && 0 <= M <= λ1 + λ2 + λ3 && n >= 0),
     Message[τ::bnds, M, n, λ1, λ2, λ3]; Return[$Failed]];
   mult = dPred[M, λ1, λ2, λ3];
   If[n > mult - 1,
@@ -798,14 +805,15 @@ multiplicity), followed by a `Missing[...]` result; then a valid `{Psi[...], τ 
   1-indexed) — this represents multiplying the column's underlying u^k monomial by an extra u^1,
   i.e. "J1 u^(k+1)" landing one row below the diagonal relative to column k. Same
   Chop-before-NullSpace precision-tracked-zero fix as L2 (see L2's QSolve comment for the full
-  numerical-precision rationale — unchanged here).*)
+  numerical-precision rationale — unchanged here). Gross bounds check on n omits L2's "n<=M"
+  clause for the same reason as the Psi/τ accessors above (dPred can exceed M+1 at L3).*)
 ClearAll[QSolve];
 QSolve::bnds = "Invalid indices (M,n)=(`1`,`2`) for (λ1,λ2,λ3)=(`3`,`4`,`5`): need M an integer in 0..λ1+λ2+λ3 and n an integer in 0..M.";
 QSolve::spurious = "No genuine state at (M,n)=(`1`,`2`) for (λ1,λ2,λ3)=(`3`,`4`,`5`): weight sector M=`1` has only `6` genuine state(s) (n=0..`7`), so n=`2` does not exist.";
 QSolve::degnull = "Unexpected Q-function nullspace dimension `6` (expected 1) for (M,n)=(`1`,`2`) at (λ1,λ2,λ3)=(`3`,`4`,`5`).";
 QSolve::lastzero = "Q-function nullspace vector found but its top (u^M) coefficient is ~0 for (M,n)=(`1`,`2`) at (λ1,λ2,λ3)=(`3`,`4`,`5`); cannot normalize to monic.";
 QSolve[λ1_, λ2_, λ3_][M_, n_] := QSolve[λ1, λ2, λ3][M, n] = Module[{mult, rec, J1n, J0n, shiftDown, mat, ns, vec, last},
-  If[! (IntegerQ[M] && IntegerQ[n] && 0 <= M <= λ1 + λ2 + λ3 && 0 <= n <= M),
+  If[! (IntegerQ[M] && IntegerQ[n] && 0 <= M <= λ1 + λ2 + λ3 && n >= 0),
     Message[QSolve::bnds, M, n, λ1, λ2, λ3]; Return[$Failed]];
   mult = dPred[M, λ1, λ2, λ3];
   If[n > mult - 1,
