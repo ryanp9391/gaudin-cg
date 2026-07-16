@@ -130,16 +130,26 @@ alongside the predicted values, and the max ratio-constancy deviation (digits va
    all site-2 factors and the cross-site `(1 - Exp[2πI/h (u-θ2)])`.
    `br1[λ1][f] := 2πI · Plus @@ (Residue[f mu1[λ1][u], {u, #}] & /@ Table[θ1 + h k, {k,0,λ1}])`.
    `Nn1[λ1]` is **derived** (not guessed) by requiring the $u=\theta_1$ residue to contribute with
-   coefficient exactly 1, so that `br1[λ1][f] = f(θ1) + (higher-tower corrections)`. Internal check:
-   `br1[λ1][1] == 1` (and, for a sanity handle, that `br1[λ1][f]` reproduces `f(θ1)` when `f` is
-   supported only at the leading pole).
-2. **LHS (functional).** `FL[λ1,λ2][M,n][k] := br1[λ1][ k^(u/h) · Q1[λ1,λ2][M,n][u] ]`. Keep `k`
-   symbolic. On the poles $u=\theta_1+h j$ ($j=0..\lambda_1$), `k^(u/h) = k^(θ1/h) k^j`, so `FL` is
-   `k^(θ1/h)` times a polynomial in `k`.
+   coefficient exactly 1, so that `br1[λ1][f] = f(θ1) + (higher-tower corrections)`. Internal check
+   (**corrected during execution**): the leading node weight `w_0 = 2πI Res[mu1, θ1] == 1` — **not**
+   `br1[λ1][1] == 1`. For a single-site rational measure with $\lambda_1\ge1$ the residues sum to
+   zero, so `br1[λ1][1] == 0`; the normalization statement is `w_0 == 1`.
+2. **LHS (functional) — the 1×1 FSoV determinant, not the bare bracket.**
+   `det1[λ1][f] := br1[λ1][f] / (f /. u -> θ1)` — Section C's `det[λ1,λ2][f]` (which divides by `f`
+   at each site's node, `1/(f/.u->θ1)/(f/.u->θ2)/(θ2-θ1)`) restricted to one site.
+   `FLdet[λ1,λ2][M,n][k] := det1[λ1][ k^(u/h) · Q1[λ1,λ2][M,n][u] ]`. **The `1/f(θ1) = 1/(k^(θ1/h)
+   Q1(θ1))` normalization is essential and was the bug in the first execution pass** (which used the
+   bare `br1[...]`, leaving a `k^(θ1/h)` prefactor and a state-dependent `Q1(θ1)` factor that
+   prevented the dictionary from closing). With it, the `k^(θ1/h)` cancels and `FLdet` is a clean
+   degree-$\lambda_1$ **polynomial in `k`** with constant term exactly 1:
+   `FLdet = Σ_{j=0}^{λ1} w_j k^j Q1(θ1+jh)/Q1(θ1) = 1 + (higher k)`.
 3. **RHS (operatorial).** With `φ` symbolic:
-   `g[λ1][φ] := MatrixExp[φ · Ee[λ1][a,b]]` for the chosen generator $(a,b)\in\{(1,2),(2,1)\}$
-   (nilpotent on the finite-dim rep ⇒ `MatrixExp` is an exact polynomial in `φ` of degree
-   $\le\lambda_1$); `rx[λ1][φ] := xSingle[λ1][{0}] . g[λ1][φ]`;
+   `g[λ1][φ] := IdentityMatrix[dim] + Sum[φ^m/m! MatrixPower[Ee[λ1][a,b], m], {m,1,λ1}]` for the
+   chosen generator $(a,b)\in\{(1,2),(2,1)\}$ — the explicit nilpotent series (exact, polynomial in
+   `φ` of degree $\le\lambda_1$). **Note (gotcha found during execution):** do **not** use
+   `MatrixExp` here, and do **not** include the `m=0` term inside the `Sum` — `MatrixPower[nilpotent,
+   0]` fires `MatrixPower::sing` and stays unevaluated, so the identity term must be split off
+   explicitly. `rx[λ1][φ] := xSingle[λ1][{0}] . g[λ1][φ]`;
    `OP[λ1,λ2][M,n][φ] := KroneckerProduct[rx[λ1][φ], xSingle[λ2][{0}]] . Psi[λ1,λ2][M,n]`, a
    polynomial in `φ` of degree $\le\lambda_1$.
 
@@ -195,3 +205,32 @@ against a predicted closed form (there is none yet; this discovery is how one wo
   dictionary is established.
 - Comparing `FL`/the CG overlap to a predicted closed-form CG formula — none exists yet.
 - Sweeping representations beyond $\{1,2,3\}$ (Part 1) / the four reps above (Part 2).
+
+## Result (executed 2026-07-16)
+
+**Part 1 — factorization confirmed, with the site-2 scalar fully characterized.** The ratio
+`x2[{s1,0}] / (xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}])` is bit-exactly constant over all 27
+$(\lambda_1,\lambda_2,s_1)$ cases. The site-2 pseudovacuum is a genuine left eigencovector of the
+site-2 factor of `t2[1,s1][θ1]` with eigenvalue
+$\mu_{s_1}(\lambda_2)=\prod_{k=1}^{s_1}(\theta_1-\theta_2+(k{-}1)h-\lambda_2 h)$, giving
+$c(\lambda_1,\lambda_2,s_1)=\prod_{k=1}^{s_1}\frac{\theta_1-\theta_2+(k-1)h-\lambda_2 h}{\theta_1-\theta_2+(k-1)h-\lambda_1 h}$
+(=1 at $\lambda_1=\lambda_2$). My original guess that the site-2 factor passes through as the
+identity ($c$ = $\lambda_2$-independent) was wrong; it carries this $Q_\theta$-type eigenvalue.
+Committed in Section E (cells 53–60), commit `8dbed52`.
+
+**Part 2 — the CG-overlap dictionary closes exactly.** With the corrected 1×1 determinant `det1`
+(the bare-bracket `FL` was the bug):
+$$
+\det{}_1^{[\lambda_1]}\!\big[k^{u/h}\,Q_1[\lambda_1,\lambda_2][M,n]\big]
+= \big(\langle x_0^{[\lambda_1]}|\,e^{-k\,E_{21}} \otimes \langle x_0^{[\lambda_2]}|\big)
+\cdot Psi[\lambda_1,\lambda_2][M,n].
+$$
+Dictionary: **generator $E_{21}$, $\varphi(k)=-k$** (α = −1, universal), normalization = the
+1-site FSoV determinant. `FLdet[λ1,λ2][M,n][k] − OPg[…][−k]` reduces to the **literal symbolic 0**
+across the full rep sweep $\{(1,1),(2,1),(1,2),(2,2),(3,1),(1,3)\}$ (41 states). Section F cells
+72–75 (72 `det1`/`FLdet`, 73 λ1=1 universality, 74 full-sweep hard assert, 75 report); cell 71
+annotated as resolved.
+
+**Two `Risks`-section notes are now stale** given the above: the "`k^(θ1/h)` prefactor" risk is
+resolved *by using `det1`* (the prefactor cancels, no manual factoring needed), and the "`Nn1`…
+`br1[λ1][1]==1`" guard should read `w_0==1` per the Build correction above.

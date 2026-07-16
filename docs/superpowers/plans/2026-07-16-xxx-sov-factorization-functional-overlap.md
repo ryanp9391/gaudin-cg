@@ -514,3 +514,40 @@ The orchestrator commits Phase 2 (Section F notebook changes) and reports the di
 - **Refinements** (LHS base `k·κ1`; `Nn1` check is `w_0==1` not `br1[1]==1`) are stated up front and applied in Tasks 3–4.
 - **Type/shape consistency:** `xSingle`/`xL1` are 1×n rows; `Flatten` before `.Psi`; `Psi` length D; `OP`/`OPg` polynomials in φ; `FL` a function of k. Signatures `FL[λ1,λ2][M,n][k]`, `OP[λ1,λ2][a,b][M,n][φ]`, `OPg[λ1,λ2][M,n][φ]`, `gRot[λ][a,b][φ]`, `t1[λ][a,s][u]`, `xL1[λ][{s}]`, `mu1[λ][u]`, `br1[λ][f]`, `Nn1[λ]` used consistently across tasks.
 - **Exploratory honesty:** Task 5 is the only non-deterministic task; it hard-asserts only internal universality and otherwise reports findings, matching the spec's "report the dictionary, don't assert the correspondence."
+
+---
+
+## Execution outcome & corrections (2026-07-16)
+
+**Phase 1 (Section E) — done, committed `8dbed52`.** Factorization confirmed bit-exactly. One
+correction to the plan's expectation: the site-2 passthrough is **not** the identity (μ≠1). It is a
+`Qθ`-type eigenvalue `μSite2[λ2,s1] = Product[(θ1-θ2+(k-1)h-λ2 h),{k,1,s1}]`, giving
+`c = Product[(θ1-θ2+(k-1)h-λ2 h)/(θ1-θ2+(k-1)h-λ1 h),{k,1,s1}]`. Task 2's `cPred` was corrected to
+this and the μEff soft-warn became a hard assert; a new cell documents `μSite2`. (Cells 53–60.)
+
+**Task 4 gRot bug (found & fixed during execution):** `Sum[φ^m/m! MatrixPower[Ee,m],{m,0,λ}]` leaves
+the `m=0` term unevaluated — `MatrixPower[nilpotent,0]` fires `MatrixPower::sing`. Fixed by splitting
+off the identity: `IdentityMatrix[dim] + Sum[..., {m,1,λ}]`. Do not use `MatrixExp` here.
+
+**Task 5 — the plan's object was wrong; the discovery only closed after the fix.** Task 4/5 built the
+**bare bracket** `FL = br1[k^(u/h) Q1]`, but the correct object is the **1×1 FSoV determinant**
+(Section C's `det` divides by `f` at each node):
+
+```
+det1[λ1][f]  := br1[λ1][f] / (f /. u -> θ1)
+FLdet[λ1,λ2][M,n][k] := det1[λ1][ k^(u/h) Q1[λ1,λ2][M,n][u] ]
+```
+
+The `1/f(θ1) = 1/(k^(θ1/h) Q1(θ1))` normalization cancels the `k^(θ1/h)` prefactor and the
+state-dependent `Q1(θ1)`, leaving `FLdet` a degree-λ1 polynomial in k with constant term 1. The
+bare-bracket `FL` (no normalization) produced a k-dependent per-state scalar and **did not close** —
+that was a plan bug (spec said "the 1×1 determinant collapses to a single bracket", dropping the
+normalization), not an executor error.
+
+**Result (cells 72–75, cell 71 annotated):** the dictionary closes **exactly** —
+```
+det1[λ1][k^(u/h) Q1[λ1,λ2][M,n]] = (⟨x0[λ1]| exp[-k E21] ⊗ ⟨x0[λ2]|) . Psi[λ1,λ2][M,n]
+```
+generator **E21**, **φ(k) = -k** (α=-1, universal), residual literal-symbolic-`0` across the rep
+sweep {(1,1),(2,1),(1,2),(2,2),(3,1),(1,3)}, 41 states. This is the CG-overlap correspondence the
+task targeted.
