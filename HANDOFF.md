@@ -9,7 +9,59 @@ freely each session rather than appending.
 Computing CG coefficients directly in the XXX spin chain (`Paul/Mathematica/XXX/`). The Gaudin
 subproject is parked.
 
-## State as of 2026-07-15
+## State as of 2026-07-16
+
+- **Nothing new this session is committed except the two design specs** (see below) — the
+  notebook edits (`Experiments/XXX_CG_L2_V2.wb`, `FSoV_L2.wb`) and both implementation plan `.md`
+  files are still untracked in the working tree (`git status` confirms: `Paul/Mathematica/
+  Experiments/`, `XXX/Experiments/FSoV_L2.wb`, `XXX/Experiments/XXX_CG_L2_V2.wb`, `XXX/
+  Experiments/img/XXX_CG_L2_V2/`, `docs/superpowers/plans/2026-07-16-fsov-scalar-product.md`,
+  `docs/superpowers/plans/2026-07-16-fsov-left-eigenvector-ratio.md`). Decide whether/when to
+  commit these along with the still-uncommitted restructuring noted below.
+- Rest of this section (2026-07-15 restructuring) is still accurate as written below.
+
+### Done: Section D — left eigenvectors + `<Psi|Psi>`/`det[Q,Q]` ratio (completed 2026-07-16)
+
+Generalized the just-finished FSoV scalar-product work (Section C, below) by adding left
+eigenvectors of the companion-twisted transfer matrix and pairing them with the existing right
+eigenvectors (`Psi`). Design → plan → `wolfbook-builder` execution, same pattern as Section C:
+`docs/superpowers/specs/2026-07-16-fsov-left-eigenvector-ratio-design.md` (committed) →
+`docs/superpowers/plans/2026-07-16-fsov-left-eigenvector-ratio.md` (not yet committed) → three
+tasks executed by `wolfbook-builder` in `Experiments/XXX_CG_L2_V2.wb`.
+
+- `TauEigensystemLeft[λ1,λ2]` (new, independent of Section B's `TauEigensystem` — does not edit
+  it): diagonalizes `Transpose[C0+r C1]` for its own generic `r`, matches each left eigenvector
+  to an existing `{M,n}` state via `τ[λ1,λ2][M,n][r]-(κ1+κ2) r^2`, normalizes to last-component-1
+  (same convention as `Psi`). `PsiLeft[λ1,λ2][M,n]` is the accessor.
+- Biorthogonality hard-assert (`PsiLeft[M,n].Psi[M',n']=0` for `{M,n}≠{M',n'}`) passed at exact
+  machine-precision `0.` — stronger than the ~10^-15 floor anticipated.
+- `braket[λ1,λ2][M,n] := PsiLeft[λ1,λ2][M,n].Psi[λ1,λ2][M,n]` (plain bilinear, no conjugation —
+  matches this notebook's existing non-Hermitian convention) and `normRatio := braket/
+  GramMatrix[λ1,λ2][[i,i]]`, both live in the notebook now (Section D, cells 51-52).
+- **Headline finding:** `normRatio` came out numerically **exactly 1** (to ~28-31 tracked
+  digits) for every state, confirmed across **four representations**: `(λ1,λ2) ∈
+  {(1,1),(1,2),(2,1),(2,2)}` — the last three done as an ad hoc scratch check (per explicit user
+  choice — not saved as new notebook cells, so nothing to see in the `.wb` file for those three;
+  only `(2,1)` is a permanent Section D cell). I.e. `<Psi|Psi>` equals the FSoV Gram-matrix
+  diagonal entry `det[Q,Q]` exactly, with no extra normalization constant — a clean identity not
+  yet written up anywhere in `paper/xxxCG.tex` (still single-site only).
+- Gotcha found (not yet investigated, no assert fired, flagged only): `GramMatrix[1,2][[1,1]]`
+  and `GramMatrix[2,1][[1,1]]` (both the `(M,n)=(0,0)` top-state diagonal entry) came out
+  numerically identical to ~27 digits, despite `(1,2)` and `(2,1)` having genuinely different
+  `TauEigensystem` `J` eigenvalue sets — possibly a `λ1↔λ2` symmetry of that specific state's
+  norm. Worth a look if picking this thread back up.
+- Wolfbook gotcha reconfirmed this session: the live kernel had lost all research definitions
+  (stale restart, cells never re-run) before Task 1 even started — `wolfbook-builder` rebuilt
+  state by re-running (not editing) cells 1-45 in order, matching their existing recorded
+  outputs exactly, before proceeding. Same caution as the existing kernel-sharing gotcha below:
+  check `wolfbook_getKernelState` before trusting any accessor works.
+
+**Next step (if picking this up again):** nothing queued unless you want to chase the
+`GramMatrix[1,2]`/`GramMatrix[2,1]` diagonal-symmetry curiosity above, extend the ratio check to
+larger representations, or turn the 3-representation scratch sweep into permanent Section E
+notebook content (explicitly declined this session in favor of a one-off check).
+
+## State as of 2026-07-15 (restructuring)
 
 - Repo just got split into two subprojects: `Paul/Mathematica/XXX/` and `Paul/Mathematica/Gaudin/`
   (each with `Clean/`/`Experiments/`), and the paper into `paper/xxxCG.tex` (has the real XXX
