@@ -29,11 +29,26 @@ restricted to one site). Dictionary: **generator E21, φ(k) = -k** (α=-1, unive
 the literal symbolic `0` across the rep sweep {(1,1),(2,1),(1,2),(2,2),(3,1),(1,3)} — 41 states.
 
 This rests on a prerequisite factorization: the s2=0 slice of the L=2 SoV basis,
-`x2[λ1,λ2][{s1,0}] = c (xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}])`, where `xL1` is a genuine standalone
-length-1 SoV covector (new `t1`/`qdet1` transfer-matrix hierarchy) and the site-2 pseudovacuum
-passes through `t2[1,s1][θ1]` with eigenvalue `μSite2[λ2,s1] = Product[(θ1-θ2+(k-1)h-λ2 h),
-{k,1,s1}]` — **not** the identity, a wrong guess corrected mid-session — giving
-`c = Product[(θ1-θ2+(k-1)h-λ2 h)/(θ1-θ2+(k-1)h-λ1 h),{k,1,s1}]`.
+`x2[λ1,λ2][{s1,0}] = xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}]` **exactly** (no leftover scalar), where
+`xL1` is a genuine standalone length-1 SoV covector (new `t1`/`qdet1` transfer-matrix hierarchy).
+
+**Normalization correction (same day, post-Clean-promotion):** the first pass of this factorization
+check found an apparently nontrivial site-2 "passthrough eigenvalue" `μSite2[λ2,s1] =
+Product[(θ1-θ2+(k-1)h-λ2 h),{k,1,s1}]`. **This was wrong** — a bug in `x2`'s own normalization, not
+real physics, found by the user. `x2`'s denominator used `Qθ[u]=(u-θ1)(u-θ2)` evaluated at a point
+shifted by `-λ1h`, which incorrectly puts that same `-λ1h` shift into the θ2 factor too (which
+should carry `-λ2h`, site 2's own weight) — that mismatch produced exactly the spurious `μSite2`.
+**Fix:** a new `ν1[λ1,λ2][u] := (u-θ1-hλ1)(u-θ2-hλ2)` (the Yangian weight eigenvalue of T11 on the
+HWS; deduped with Section B's `aFun`, same formula) replaces `Qθ` in `x2`'s denominator, argument no
+longer carrying the `-λh` shift separately. With the fix, the factorization ratio is **exactly 1**
+for all 27 `(λ1,λ2,s1)` cases — proved analytically too: `ν1[λ1,λ2][θ1+(k-1)h]` factors as
+`((k-1-λ1)h)·(θ1-θ2+(k-1-λ2)h)`, and that second factor is exactly the old spurious `μSite2`. `xL1`
+needed no functional change (`Qθ1` is linear, fix is a numeric no-op) but was rewritten with a
+single-site `ν1[λ][u]:=(u-θ1-hλ)` for parity. **Section F confirmed unaffected** (`dictReportDet`
+identical before/after). Applied to both `Clean/XXX_CG_L2_Clean.wb` and
+`Experiments/XXX_CG_L2_V2.wb`; fresh-kernel Run-All clean on both after the fix (also caught and
+fixed one unrelated hidden-dependency bug in V2's `obstructionReport` cell, same class as the
+`sts12` issue during Clean promotion — a scratch-only `ABTab` variable that was never a saved cell).
 
 **The crux / what nearly went wrong:** the first functional-discovery pass used the bare bracket
 `br1[k^(u/h) Q1]` (no determinant normalization) and did NOT close (k-dependent per-state scalar).
@@ -79,7 +94,8 @@ derivation record, same convention as other Clean promotions).
 ## Stable structure
 
 See `CLAUDE.md` for the full layout (XXX vs Gaudin split, Clean/Experiments convention, subagents).
-`Clean/XXX_CG_L2_Clean.wb` is now the authoritative A–F notebook: A (SoV construction) · B
-(Baxter/TQ, Psi/Q1) · C (2-site FSoV scalar product/orthogonality) · D (left eigenvectors,
-`<Psi|Psi>=det[Q,Q]`) · E (L=1 factorization + site-2 eigenvalue) · F (functional CG-overlap
-dictionary). Companion `.md`/`.tex` reference docs are up to date with it.
+`Clean/XXX_CG_L2_Clean.wb` is now the authoritative A–F notebook: A (SoV construction, incl. `ν1`) ·
+B (Baxter/TQ, Psi/Q1) · C (2-site FSoV scalar product/orthogonality) · D (left eigenvectors,
+`<Psi|Psi>=det[Q,Q]`) · E (exact L=1 factorization, c=1) · F (functional CG-overlap dictionary).
+Companion `.md`/`.tex` reference docs need refreshing for the Section E correction (not yet done as
+of this HANDOFF write — see Open threads).

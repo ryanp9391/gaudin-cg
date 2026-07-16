@@ -208,15 +208,42 @@ against a predicted closed form (there is none yet; this discovery is how one wo
 
 ## Result (executed 2026-07-16)
 
-**Part 1 — factorization confirmed, with the site-2 scalar fully characterized.** The ratio
-`x2[{s1,0}] / (xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}])` is bit-exactly constant over all 27
-$(\lambda_1,\lambda_2,s_1)$ cases. The site-2 pseudovacuum is a genuine left eigencovector of the
-site-2 factor of `t2[1,s1][θ1]` with eigenvalue
-$\mu_{s_1}(\lambda_2)=\prod_{k=1}^{s_1}(\theta_1-\theta_2+(k{-}1)h-\lambda_2 h)$, giving
+**Part 1 — factorization confirmed exactly, `c=1` unconditionally.** Committed in Section E
+(cells 53–60), commit `8dbed52`, **superseded by a normalization correction the same day** (see
+"Correction" below): the ratio `x2[{s1,0}] / (xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}])` is bit-exactly
+**equal to 1** over all 27 $(\lambda_1,\lambda_2,s_1)$ cases — a clean, unconditional tensor
+factorization with no leftover scalar. The `t_{1,s_1}(\theta_1)` transfer matrices building the SoV
+basis act purely on site 1; the site-2 pseudovacuum passes through untouched.
+
+### Correction (same day, post-promotion): the `x2` normalization was using the wrong function
+
+The original Section E build (above) found a *nontrivial* scalar
 $c(\lambda_1,\lambda_2,s_1)=\prod_{k=1}^{s_1}\frac{\theta_1-\theta_2+(k-1)h-\lambda_2 h}{\theta_1-\theta_2+(k-1)h-\lambda_1 h}$
-(=1 at $\lambda_1=\lambda_2$). My original guess that the site-2 factor passes through as the
-identity ($c$ = $\lambda_2$-independent) was wrong; it carries this $Q_\theta$-type eigenvalue.
-Committed in Section E (cells 53–60), commit `8dbed52`.
+and a "site-2 passthrough eigenvalue"
+$\mu_{s_1}(\lambda_2)=\prod_{k=1}^{s_1}(\theta_1-\theta_2+(k{-}1)h-\lambda_2 h)$. **This was wrong —
+an artifact of a bug in `x2`'s own normalization, not real physics.** `x2[λ1,λ2][{s1,s2}]` divided
+by `Qθ[u]=(u-\theta_1)(u-\theta_2)` evaluated at the site-1 tower point `u=\theta_1+(-\lambda_1+k-1)h`.
+Since `Qθ` is a *fixed* two-factor function, evaluating it at a point shifted by `-\lambda_1 h` puts
+that same shift into **both** factors — including the $\theta_2$ factor, which should have been
+shifted by `-\lambda_2 h` (site 2's own weight), not `-\lambda_1 h`. That mismatched shift is
+*exactly* the spurious $\mu_{s_1}(\lambda_2)$ eigenvalue found above.
+
+**The fix:** replace `Qθ` with a new function `ν1[λ1,λ2][u] := (u-\theta_1-h\lambda_1)(u-\theta_2-h\lambda_2)`
+(the Yangian weight eigenvalue of $T_{11}$ on the highest-weight state — already the same formula as
+Section B's `aFun`, now deduped: `aFun[λ1,λ2][u] := ν1[λ1,λ2][u]`), with the tower argument no longer
+carrying the `-λh` shift separately (it's baked into `ν1` itself):
+`x2[λ1,λ2][{s1,s2}]`'s denominator becomes
+`Product[ν1[λ1,λ2][θ1+(k-1)h],{k,1,s1}]·Product[ν1[λ1,λ2][θ2+(k-1)h],{k,1,s2}]`.
+`xL1` (Section E) needed no functional change — `Qθ1[u]=u-\theta_1` is linear, so shifting the
+argument vs. the function is equivalent — but was rewritten for notational parity using a
+single-site companion `ν1[λ_][u_] := (u-\theta_1-h\lambda)`.
+
+With the fix, the factorization ratio is **exactly 1** for all 27 cases (proved analytically too:
+`ν1[λ1,λ2][θ1+(k-1)h] = ((k-1-λ1)h)·(θ1-θ2+(k-1-λ2)h)`, and that second factor is exactly the old,
+spurious `μSite2[λ2,s1]`). Applied to both `Clean/XXX_CG_L2_Clean.wb` and
+`Experiments/XXX_CG_L2_V2.wb`; **Section F is unaffected** (`dictReportDet` identical before/after —
+it depends on `Q1`, which routes through `aFun`≡`ν1` with the same numeric value, not on `x2`/`xL1`
+directly).
 
 **Part 2 — the CG-overlap dictionary closes exactly.** With the corrected 1×1 determinant `det1`
 (the bare-bracket `FL` was the bug):

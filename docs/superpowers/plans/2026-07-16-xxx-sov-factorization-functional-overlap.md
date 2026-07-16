@@ -519,11 +519,25 @@ The orchestrator commits Phase 2 (Section F notebook changes) and reports the di
 
 ## Execution outcome & corrections (2026-07-16)
 
-**Phase 1 (Section E) — done, committed `8dbed52`.** Factorization confirmed bit-exactly. One
-correction to the plan's expectation: the site-2 passthrough is **not** the identity (μ≠1). It is a
-`Qθ`-type eigenvalue `μSite2[λ2,s1] = Product[(θ1-θ2+(k-1)h-λ2 h),{k,1,s1}]`, giving
+**Phase 1 (Section E) — done, committed `8dbed52`, then corrected same day.** Factorization
+confirmed bit-exactly. First pass found the site-2 passthrough was apparently **not** the identity
+(μ≠1) — a `Qθ`-type eigenvalue `μSite2[λ2,s1] = Product[(θ1-θ2+(k-1)h-λ2 h),{k,1,s1}]`, giving
 `c = Product[(θ1-θ2+(k-1)h-λ2 h)/(θ1-θ2+(k-1)h-λ1 h),{k,1,s1}]`. Task 2's `cPred` was corrected to
-this and the μEff soft-warn became a hard assert; a new cell documents `μSite2`. (Cells 53–60.)
+this and the μEff soft-warn became a hard assert; a new cell documented `μSite2`. (Cells 53–60.)
+
+**This turned out to be wrong — a bug in `x2`'s own normalization, found by the user, not real
+physics.** `x2`'s denominator used `Qθ[u]=(u-θ1)(u-θ2)` evaluated at the site-1 tower point
+`θ1+(-λ1+k-1)h`, which puts the `-λ1h` shift into *both* factors — including the θ2 factor, which
+should carry `-λ2h` (site 2's own weight). That mismatch produced exactly the spurious `μSite2`
+eigenvalue above. Fix: a new `ν1[λ1,λ2][u]:=(u-θ1-hλ1)(u-θ2-hλ2)` (deduped with Section B's `aFun`,
+same formula) replaces `Qθ` in `x2`'s denominator, with the tower argument no longer carrying the
+`-λh` shift separately (it's inside `ν1`). With this fix the factorization ratio is **exactly 1**
+for all 27 cases — proved analytically too: `ν1[λ1,λ2][θ1+(k-1)h]` factors as
+`((k-1-λ1)h)·(θ1-θ2+(k-1-λ2)h)`, and that second factor is exactly the old (spurious) `μSite2`.
+`xL1` needed no functional change (`Qθ1` is linear, so the fix is a no-op numerically) but was
+rewritten with a single-site `ν1[λ][u]:=(u-θ1-hλ)` for parity. Section F confirmed unaffected
+(`dictReportDet` identical: generator `{2,1}`, `φ(k)=-k`, residual 0). Applied to both
+`Clean/XXX_CG_L2_Clean.wb` and `Experiments/XXX_CG_L2_V2.wb`.
 
 **Task 4 gRot bug (found & fixed during execution):** `Sum[φ^m/m! MatrixPower[Ee,m],{m,0,λ}]` leaves
 the `m=0` term unevaluated — `MatrixPower[nilpotent,0]` fires `MatrixPower::sing`. Fixed by splitting

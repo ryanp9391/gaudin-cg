@@ -1660,3 +1660,297 @@ Print:
 Out[1]= (suppressed)
 Out[2]= {{1.00000000000000000000000000000000000001`28.402747934397283 + 0``28.703777930061257*I, -1.30044948810764362720923581419356337479`28.402747934397286 + 0``28.589684442012377*I, 2.02132923840209670174259111538466355738`28.359954584956583 + 0``28.69917086764009*I, 1.`28.402747934397283 + 0``28.703777930061257*I}, -0.02291660899982616316934999074083675684`10.15051499783199 + 0``11.790364642896865*I}
 ```
+
+---
+
+## 2026-07-16 17:04:33 — 🔄 KERNEL RESTART
+
+## 2026-07-16 17:24:20 — ✏️ EDIT CELL 30
+(*a(u)=aFun is now an ALIAS for Section A's two-site ν1 (Yangian weight eigenvalue of T[1,1] on
+  the HWS) — same formula (u-θ1-hλ1)(u-θ2-hλ2), deduped so there is a single source of truth
+  instead o…
+
+
+## 2026-07-16 17:24:20
+**Input:**
+```wolfram
+(*a(u)=aFun is now an ALIAS for Section A's two-site ν1 (Yangian weight eigenvalue of T[1,1] on
+  the HWS) — same formula (u-θ1-hλ1)(u-θ2-hλ2), deduped so there is a single source of truth
+  instead of two copies that could drift. d(u)=Qθ(u), and τ0 = τ minus the J term (using
+  ee1=λ1+λ2-M, ee2=M). Qθ (=d) is defined LOCALLY here so this file is self-contained.
+  qpoly builds a polynomial from an ASCENDING coefficient list {c0,...,cM} (cM=1 for monic q_n);
+  formed in a dummy symbol first so substituting uu=0 gives the constant term rather than an
+  indeterminate 0^0.*)
+ClearAll[aFun, τ0, Qθ, qpoly];
+aFun[λ1_, λ2_][u_] := ν1[λ1, λ2][u];
+Qθ[u_] := (u - θ1) (u - θ2);
+τ0[λ1_, λ2_, M_][u_] := (κ1 + κ2) u^2 - (θ1 + θ2) (κ1 + κ2) u - u h (κ1 (λ1 + λ2 - M) + κ2 M);
+qpoly[clist_, uu_] := Module[{x}, (clist . x^Range[0, Length[clist] - 1]) /. x -> uu];
+{aFun[1, 1][u], Qθ[u], τ0[1, 1, 1][u]}
+```
+**Output:**
+```
+Out= {(-4/3 + u)*(-8/7 + u), (-1/3 + u)*(-1/7 + u), (-1.064155821863240252882572111282100269533971449631508102601`29.54117567596917 + 0``29.336679005422717*I)*u + (0.7208797502944530745333553011911001825875290465245700049878`29.54117567596917 + 0``29.50582140452307*I)*u^2}
+```
+## 2026-07-16 17:24:24 — ✏️ EDIT CELL 58
+(*Genuine length-1 SoV covector (paper normalization, 1-site Qθ1(u)=u-θ1). xSingle[λ][{0}] is the
+  site lowest-weight covector (Section A) — a 1×(λ+1) row. xL1 stays that shape: (1×n).(n×n)=1×n.
+  B1…
+
+
+## 2026-07-16 17:24:25
+**Input:**
+```wolfram
+(*Genuine length-1 SoV covector (paper normalization, 1-site Qθ1(u)=u-θ1). xSingle[λ][{0}] is the
+  site lowest-weight covector (Section A) — a 1×(λ+1) row. xL1 stays that shape: (1×n).(n×n)=1×n.
+  B1 is the L=1 SoV B-operator. The single-site ν1[λ][u] defined here is the arity-1 companion to
+  Section A's two-site ν1[λ1,λ2][u] (same symbol, different arity — both DownValues coexist; NOT
+  ClearAll'd here so Section A's two-site pattern survives). Qθ1[θ1-λh+(p-1)h] and
+  ν1[λ][θ1+(p-1)h] give IDENTICAL numeric values (Qθ1 is linear, so shifting the argument vs. the
+  function is equivalent) — xL1 is rewritten here purely for notational parity with the Section A
+  x2 fix pattern; xL1 itself never had a bug.*)
+ClearAll[B1, xL1];
+B1[λ_][u_] := L[λ][1, 1][u - θ1];
+ν1[λ_][u_] := (u - θ1 - h λ);
+xL1[λ_][{0}] := xSingle[λ][{0}];
+xL1[λ_][{s_}] := xL1[λ][{s}] = xSingle[λ][{0}] . t1[λ][1, s][θ1] / Product[ν1[λ][θ1 + (p - 1) h], {p, 1, s}];
+```
+**Output:**
+```
+Out= Null
+```
+## 2026-07-16 17:24:34 — ▶️ RUN CELL 59 (0.05 s)
+**In [59]:** `(*Internal check (independent of the factorization): xL1[λ][{s}] must be a LEFT eigencovector of↵  B1 with eigenvalue u-θ1-s h — the paper's L=1 SoV property (verified there symbolically for↵  λ=1..5)`
+**Out:** Out[126]= \left\{0\right\}
+
+
+## 2026-07-16 17:24:36
+**Input:**
+```wolfram
+testRatio1 = Flatten[Table[
+   Module[{lhs, tp, nz, rl},
+    lhs = Flatten[x2[λ1, λ2][{s1, 0}]];
+    tp = Flatten[KroneckerProduct[xL1[λ1][{s1}], xSingle[λ2][{0}]]];
+    nz = Position[tp, x_ /; Abs[Chop[x, 10^-20]] > 10^-12];
+    rl = Extract[lhs, nz]/Extract[tp, nz];
+    {λ1, λ2, s1, N[Max[Abs[rl - 1]]]}],
+   {λ1, 1, 3}, {λ2, 1, 3}, {s1, 0, λ1}], 2];
+{Max[testRatio1[[All,4]]], testRatio1}
+```
+**Output:**
+```
+Out= {0., {{1, 1, 0, 0.}, {1, 1, 1, 0.}, {1, 2, 0, 0.}, {1, 2, 1, 0.}, {1, 3, 0, 0.}, {1, 3, 1, 0.}, {2, 1, 0, 0.}, {2, 1, 1, 0.}, {2, 1, 2, 0.}, {2, 2, 0, 0.}, {2, 2, 1, 0.}, {2, 2, 2, 0.}, {2, 3, 0, 0.}, {2, 3, 1, 0.}, {2, 3, 2, 0.}, {3, 1, 0, 0.}, {3, 1, 1, 0.}, {3, 1, 2, 0.}, {3, 1, 3, 0.}, {3, 2, 0, 0.}, {3, 2, 1, 0.}, {3, 2, 2, 0.}, {3, 2, 3, 0.}, {3, 3, 0, 0.}, {3, 3, 1, 0.}, {3, 3, 2, 0.}, {3, 3, 3, 0.}}}
+```
+
+## 2026-07-16 17:25:23
+**Input:**
+```wolfram
+muSite2Formula[λ2_,s1_] := Product[(θ1-θ2+(k-1)h-λ2 h),{k,1,s1}];
+testOpMu = Flatten[Table[
+   Module[{numLhs,numTp,nz,rl,muval},
+    numLhs = Flatten[x2[λ1,λ2][{0,0}] . t2[λ1,λ2][1,s1][θ1]];
+    numTp = Flatten[KroneckerProduct[xSingle[λ1][{0}] . t1[λ1][1,s1][θ1], xSingle[λ2][{0}]]];
+    nz = Position[numTp, x_ /; Abs[Chop[x,10^-20]] > 10^-12];
+    rl = Extract[numLhs,nz]/Extract[numTp,nz];
+    muval = Mean[rl];
+    {λ1,λ2,s1, N[muval - muSite2Formula[λ2,s1]]}],
+   {λ1,1,3},{λ2,1,3},{s1,0,λ1}], 2];
+Max[Abs[testOpMu[[All,4]]]]
+```
+**Output:**
+```
+Out= 0.
+```
+## 2026-07-16 17:25:52 — ✏️ EDIT CELL 60 [batch]
+(*Operatorial factorization: x2[λ1,λ2][{s1,0}] = xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}] — a PURE tensor
+  factorization with NO leftover scalar. (An earlier version of this notebook found an apparent
+  nont…
+
+
+## 2026-07-16 17:25:52
+**Input:**
+```wolfram
+(*Operatorial factorization: x2[λ1,λ2][{s1,0}] = xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}] — a PURE tensor
+  factorization with NO leftover scalar. (An earlier version of this notebook found an apparent
+  nontrivial "site-2 passthrough eigenvalue" μEff here — that was an ARTIFACT of a Qθ normalization
+  bug in x2's original definition, since fixed in Section A: x2 divided by Qθ(u)=(u-θ1)(u-θ2)
+  evaluated at a point shifted by -λ1h in BOTH factors, incorrectly putting site-1's λ1 shift into
+  the θ2 factor that should have carried site 2's OWN λ2 shift. The corrected x2 divides by
+  ν1[λ1,λ2][u]=(u-θ1-hλ1)(u-θ2-hλ2) instead — each factor shifted by its own site's λ — and with
+  that fix the ratio below comes out EXACTLY 1 for every (λ1,λ2,s1), not just a constant. There is
+  no genuine extra site-2 eigenvalue beyond what ν1 already encodes: the old cPredCorr/μSite2
+  "finding" was bookkeeping fallout from the bug, not new physics — see the cell below for the
+  honest restatement of that operator identity.)
+  HARD requirement: the ratio lhs/tp must be IDENTICALLY 1 (both non-constancy spread AND
+  deviation-from-1 below the 10^-15 floor) for all 27 (λ1,λ2,s1) cases.*)
+SoVFact::notconst = "Ratio lhs/tp not constant for (λ1,λ2,s1)=(`1`,`2`,`3`): spread=`4`.";
+SoVFact::notone = "Ratio lhs/tp ≠ 1 for (λ1,λ2,s1)=(`1`,`2`,`3`): ratio=`4`.";
+factResults = Flatten[Table[
+    Module[{lhs, tp, nz, rl, cval, spread},
+     lhs = Flatten[x2[λ1, λ2][{s1, 0}]];
+     tp = Flatten[KroneckerProduct[xL1[λ1][{s1}], xSingle[λ2][{0}]]];
+     nz = Position[tp, x_ /; Abs[Chop[x, 10^-20]] > 10^-12];
+     rl = Extract[lhs, nz]/Extract[tp, nz];
+     cval = Mean[rl];
+     spread = Max[Abs[rl - cval]];
+     If[spread > 10^-15, Message[SoVFact::notconst, λ1, λ2, s1, N[spread]]; Abort[]];
+     If[Abs[N[cval - 1]] > 10^-15, Message[SoVFact::notone, λ1, λ2, s1, N[cval]]; Abort[]];
+     {λ1, λ2, s1, N[cval], N[spread]}],
+    {λ1, 1, 3}, {λ2, 1, 3}, {s1, 0, λ1}], 2];
+Column[factResults]
+```
+**Output:**
+```
+Out= Out[130]= \begin{matrix}\left\{1,1,0,1.\,,0.\,\right\}\\\left\{1,1,1,1.\,,0.\,\right\}\\\left\{1,2,0,1.\,,0.\,\right\}\\\left\{1,2,1,1.\,,0.\,\right\}\\\left\{1,3,0,1.\,,0.\,\right\}\\\left\{1,3,1,1.\,,0.\,\right\}\\\left\{2,1,0,1.\,,0.\,\right\}\\\left\{2,1,1,1.\,,0.\,\right\}\\\left\{2,1,2,1.\,,0.\,\right\}\\\left\{2,2,0,1.\,,0.\,\right\}\\\left\{2,2,1,1.\,,0.\,\right\}\\\left\{2,2,2,1.\,,0.\,\r… [898 chars total]
+```
+## 2026-07-16 17:25:52 — ✏️ EDIT CELL 61 [batch]
+(*Summary: worst deviation from the now-EXACT tensor factorization (ratio ≡ 1, no leftover
+  scalar) across the whole sweep. Columns of factResults: {λ1,λ2,s1,ratio,spread}.*)
+<|
+  "max spread (ratio …
+
+
+## 2026-07-16 17:25:52
+**Input:**
+```wolfram
+(*Summary: worst deviation from the now-EXACT tensor factorization (ratio ≡ 1, no leftover
+  scalar) across the whole sweep. Columns of factResults: {λ1,λ2,s1,ratio,spread}.*)
+<|
+  "max spread (ratio non-constancy)" -> Max[factResults[[All, 5]]],
+  "max |ratio - 1| over sweep" -> Max[Abs[factResults[[All, 4]] - 1]],
+  "num (λ1,λ2,s1) cases checked" -> Length[factResults]
+|>
+```
+**Output:**
+```
+Out= Out[131]= \langle\!\lvert \text{max spread (ratio non-constancy)}\to 0.\,,\text{max |ratio - 1| over sweep}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases checked}\to 27\rvert\!\rangle
+```
+## 2026-07-16 17:25:52 — ✏️ EDIT CELL 62 [batch]
+(*Operator-level identity (STILL TRUE, and unaffected by the Qθ normalization bug — it never used
+  x2[{s1,0}]'s buggy denominator, only the raw x2[{0,0}] pseudovacuum and t2 itself): the site-2
+  pse…
+
+
+## 2026-07-16 17:25:52
+**Input:**
+```wolfram
+(*Operator-level identity (STILL TRUE, and unaffected by the Qθ normalization bug — it never used
+  x2[{s1,0}]'s buggy denominator, only the raw x2[{0,0}] pseudovacuum and t2 itself): the site-2
+  pseudovacuum xSingle[λ2][{0}] passes through t2[λ1,λ2][1,s1][θ1] picking up the factor
+  μSite2[λ2,s1] = Product[(θ1-θ2+(k-1)h-λ2 h),{k,1,s1}] relative to the bare tensor product
+  (xSingle[λ1][{0}].t1[λ1][1,s1][θ1]) ⊗ xSingle[λ2][{0}]. CORRECTED READING (see the cell above):
+  this is NOT an extra, unexplained site-2 eigenvalue — it is exactly the λ2-dependent factor of
+  Section A's two-site ν1[λ1,λ2][u]=(u-θ1-hλ1)(u-θ2-hλ2) evaluated on the site-1 tower, i.e.
+  ν1[λ1,λ2][θ1+(k-1)h] factors as ((k-1-λ1)h)·(θ1-θ2+(k-1-λ2)h), and the second factor here IS
+  μSite2[λ2,s1]. Once x2's denominator uses the FULL two-site ν1 (Section A's fix) instead of a
+  λ1-only Qθ factor, this piece is already built into the normalization, which is why the ratio in
+  the cell above is exactly 1 — μSite2 was always just part of the two-site Yangian weight
+  function's structure, not a surprising new eigenvalue. Kept here as a genuine, still-verified
+  operator identity (hard-asserted below), relabeled honestly.*)
+ClearAll[μSite2];
+μSite2[λ2_, s1_] := Product[(θ1 - θ2 + (k - 1) h - λ2 h), {k, 1, s1}];
+Site2Mu::notconst = "μ-ratio not constant at operator level for (λ1,λ2,s1)=(`1`,`2`,`3`): spread=`4`.";
+Site2Mu::mismatch = "μ ≠ μSite2 at operator level for (λ1,λ2,s1)=(`1`,`2`,`3`): μ=`4`, μSite2=`5`.";
+opMuResults = Flatten[Table[
+    Module[{numLhs, numTp, nz, rl, muval, mupred, spread},
+     numLhs = Flatten[x2[λ1, λ2][{0, 0}] . t2[λ1, λ2][1, s1][θ1]];
+     numTp = Flatten[KroneckerProduct[xSingle[λ1][{0}] . t1[λ1][1, s1][θ1], xSingle[λ2][{0}]]];
+     nz = Position[numTp, x_ /; Abs[Chop[x, 10^-20]] > 10^-12];
+     rl = Extract[numLhs, nz]/Extract[numTp, nz];
+     muval = Mean[rl];
+     spread = Max[Abs[rl - muval]];
+     mupred = μSite2[λ2, s1];
+     If[spread > 10^-15, Message[Site2Mu::notconst, λ1, λ2, s1, N[spread]]; Abort[]];
+     If[Abs[N[muval - mupred]] > 10^-15, Message[Site2Mu::mismatch, λ1, λ2, s1, N[muval], N[mupred]]; Abort[]];
+     {λ1, λ2, s1, N[muval], N[mupred], N[spread]}],
+    {λ1, 1, 3}, {λ2, 1, 3}, {s1, 0, λ1}], 2];
+<|"max operator-level spread" -> Max[opMuResults[[All, 6]]],
+  "max |μ - μSite2|" -> Max[Abs[opMuResults[[All, 4]] - opMuResults[[All, 5]]]],
+  "num (λ1,λ2,s1) cases" -> Length[opMuResults]|>
+```
+**Output:**
+```
+Out= Out[137]= \langle\!\lvert \text{max operator-level spread}\to 0.\,,\text{max |$\mu$ - $\mu$Site2|}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases}\to 27\rvert\!\rangle
+```
+
+## 2026-07-16 17:25:59
+**Input:**
+```wolfram
+dictReportDet
+```
+**Output:**
+```
+Out= dictReportDet
+```
+
+---
+
+## 2026-07-16 17:26:09 — 🔄 KERNEL RESTART
+
+## 2026-07-16 17:26:27 — ▶️ RUN CELLS 1–36
+Cell 1: ✓ — Out[8]= \left\{\frac{1}{3},\frac{1}{7},1,0.360439875147226537266677650596+0.932782448593374716484835982071\,\mathrm{i},0.36043987514722653726667765060-0.932782448593374716484835982071\,\mathrm{i},0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i},1\right\}
+Cell 3: ✓ — (no output)
+Cell 4: ✓ — (no output)
+Cell 5: ✓ — (no output)
+Cell 6: ✓ — (no output)
+Cell 8: ✓ — (no output)
+Cell 10: ✓ — (no output)
+Cell 11: ✓ — (no output)
+Cell 12: ✓ — Out[27]= \left\{0\right\}
+Cell 13: ✓ — (no output)
+Cell 14: ✓ — (no output)
+Cell 15: ✓ — Out[31]= \left\{0\right\}
+Cell 16: ✓ — (no output)
+Cell 17: ✓ — Out[34]= \begin{pmatrix}0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\end{pmatrix}
+Cell 18: ✓ — (no output)
+Cell 20: ✓ — (no output)
+Cell 21: ✓ — (no output)
+Cell 23: ✓ — (no output)
+Cell 25: ✓ — (no output)
+Cell 26: ✓ — (no output)
+Cell 27: ✓ — Out[52]= \begin{pmatrix}0 & \frac{1}{2} & 0 & 0 & 0 & 0\end{pmatrix}
+Cell 28: ✓ — Out[53]= \left\{0\right\}
+Cell 30: ✓ — Out[59]= \left\{\left(u-\frac{4}{3}\right)\,\left(u-\frac{8}{7}\right),\left(u-\frac{1}{3}\right)\,\left(u-\frac{1}{7}\right),\left(0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i}\right)\,u^2-\left(1.06415582186324025288257211128+0.\times 10^{-29}\,\mathrm{i}\right)\,u\right\}
+Cell 31: ✓ — Out[62]= \begin{pmatrix}1 & 1\\2 & 2\\3 & 3\end{pmatrix}
+Cell 32: ✓ — Out[65]= \text{max|C2-($\kappa$1+$\kappa$2)Id|}\to 0.\times 10^{-29}
+Cell 33: ✓ — Out[75]= \langle\!\lvert \left\{0,0\right\}\to 0.5664055180884988 +1.3769645669711723\,\mathrm{i},\left\{1,0\right\}\to -0.778123966451158+0.\,\,\mathrm{i},\left\{1,1\right\}\to 1.1900552523337025 +0.\,\,\mathrm{i},\left\{2,0\right\}\to 0.5664055180884988 -1.3769645669711723\,\mathrm{i}\rvert\!\rangle
+Cell 34: ✓ — 2 kernel messages: Psi::spurious: No genuine state at (M,n)=(2,2) for (λ1,λ2)=(2,1): weight sector M=2 has only 2 genuine state(s) (n=0..1), so n=2 does not exist. [also: Psi::spurious] result: Print: spurious-guard test (expect a Psi::spurious message and Missing[...]):[formula] | Out[84]= \left\{\left\{1.000000000000000000000000000+0.\times 10^{-29}\,\mathrm{i},-1.3004494881076436272092358…
+⚠️ stopped at Cell 34 — error detected (pass stopOnError:false to continue past errors)
+
+## 2026-07-16 17:26:50 — ▶️ RUN CELLS 35–73
+Cell 35: ✓ — Out[91]= \left\{1.03464899078135229594035121+0.381869568380946283899575941\,\mathrm{i},-2.37022278949001677248172619-0.20048970475590097847093779\,\mathrm{i},1.00000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right\}
+Cell 36: ✓ — Out[94]= \left\{-0.709231010958016926537225142+1.09596916251277206706752728\,\mathrm{i},-0.02291660900+0.\times 10^{-12}\,\mathrm{i}\right\}
+Cell 38: ✓ — (no output)
+Cell 39: ✓ — (no output)
+Cell 40: ✓ — (no output)
+Cell 41: ✓ — (no output)
+Cell 42: ✓ — Out[109]= 0
+Cell 43: ✓ — (no output)
+Cell 44: ✓ — Out[113]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 45: ✓ — Out[115]= \left\{6,6\right\}
+Cell 46: ✓ — Out[116]= \begin{pmatrix}2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i} & 0 & 0 & 0 & 0 & 0\\0 & 7.36608403016431791181-0.968046299794461400266\,\mathrm{i} & 0 & 0 & 0 & 0\\0 & 0 & 2.68702160063169134012-1.3456153260557858257\,\mathrm{i} & 0 & 0 & 0\\0 & 0 & 0 & 7.3660840301643179118107+0.9680462997944614002659\,\mathrm{i} & 0 & 0\\0 & 0 & 0 & 0 & 2.687021600631691340118… [537 chars total]
+Cell 47: ✓ — Out[125]= \langle\!\lvert \text{states}\to \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix},\text{max|off-diagonal|}\to 5.065342385207116\times 10^{-34},\text{digits vanished (-Log10)}\to 33.29539119374288,\text{min|diagonal|}\to 3.0051232400647923,\text{diagonal values}\to \left\{2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i},7.36608403016431791181-0… [699 chars total]
+Cell 49: ✓ — (no output)
+Cell 50: ✓ — Out[133]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 51: ✓ — Out[138]= \left\{1.00000000000000000000000000000,6\right\}
+Cell 52: ✓ — Out[143]= \langle\!\lvert \text{max|<PsiLeft|Psi>| off-diagonal}\to 0.\,,\text{digits vanished (-Log10)}\to \mathrm{Indeterminate}\rvert\!\rangle
+Cell 53: ✓ — Out[147]= \left\{7.366084030164317911810727273-0.9680462997944614002658874268\,\mathrm{i},1.00000000000000000000+0.\times 10^{-21}\,\mathrm{i}\right\}
+Cell 54: ✓ — Out[150]= \begin{matrix}\langle\!\lvert \text{M}\to 0,\text{n}\to 0,\text{braket}\to 2.909064289-5.804620064\,\mathrm{i},\text{G21 diagonal}\to 2.909064289-5.804620064\,\mathrm{i},\text{normRatio}\to 1.000000000+0.\times 10^{-10}\,\mathrm{i}\rvert\!\rangle \\\langle\!\lvert \text{M}\to 1,\text{n}\to 0,\text{braket}\to 7.366084030-0.968046300\,\mathrm{i},\text{G21 diagonal}\to 7.366084030-0.9680463… [1247 chars total]
+Cell 56: ✓ — (no output)
+Cell 57: ✓ — Out[158]= \begin{pmatrix}3 & 3\\3 & 3\end{pmatrix}
+Cell 58: ✓ — (no output)
+Cell 59: ✓ — Out[165]= \left\{0\right\}
+Cell 60: ✓ — Out[169]= \begin{matrix}\left\{1,1,0,1.\,,0.\,\right\}\\\left\{1,1,1,1.\,,0.\,\right\}\\\left\{1,2,0,1.\,,0.\,\right\}\\\left\{1,2,1,1.\,,0.\,\right\}\\\left\{1,3,0,1.\,,0.\,\right\}\\\left\{1,3,1,1.\,,0.\,\right\}\\\left\{2,1,0,1.\,,0.\,\right\}\\\left\{2,1,1,1.\,,0.\,\right\}\\\left\{2,1,2,1.\,,0.\,\right\}\\\left\{2,2,0,1.\,,0.\,\right\}\\\left\{2,2,1,1.\,,0.\,\right\}\\\left\{2,2,2,1.\,,0.\,\r… [898 chars total]
+Cell 61: ✓ — Out[170]= \langle\!\lvert \text{max spread (ratio non-constancy)}\to 0.\,,\text{max |ratio - 1| over sweep}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases checked}\to 27\rvert\!\rangle
+Cell 62: ✓ — Out[176]= \langle\!\lvert \text{max operator-level spread}\to 0.\,,\text{max |$\mu$ - $\mu$Site2|}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases}\to 27\rvert\!\rangle
+Cell 64: ✓ — (no output)
+Cell 65: ✓ — Out[185]= \langle\!\lvert \text{w\_0 ($\lambda$=1,2,3)}\to \left\{1,1,1\right\},\text{full weights w\_j}\to \left\{1\to \left\{1,-1\right\},2\to \left\{1,-2,1\right\},3\to \left\{1,-3,3,-1\right\}\right\},\text{br1[$\lambda$][1] ($\lambda$=1,2,3)}\to \left\{0,0,0\right\}\rvert\!\rangle
+Cell 66: ✓ — Out[187]= \left\{0,0\right\}
+Cell 67: ✓ — (no output)
+Cell 68: ✓ — Out[194]= \langle\!\lvert \text{OP(E12)}\to 1.\,+0.\times 10^{-30}\,\mathrm{i},\text{OP(E21)}\to \left(-0.03626734060947795145020244939-2.004237714666237867354326095\,\mathrm{i}\right)\,\varphi ^2-\left(1.522150083623538480912456055-0.2442047957313920727733393355\,\mathrm{i}\right)\,\varphi +\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right),\text{nontrivial generator \{a,b\}}\to \left\{2,1\right\},\… [464 chars total]
+Cell 69: ✓ — Out[197]= \left\{1,2\right\}
+Cell 70: ✓ — Out[201]= \left(1.000000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right)-\left(0.360439875147226537266677651+0.932782448593374716484835982\,\mathrm{i}\right)\,k
+Cell 71: ✓ — Out[209]= \langle\!\lvert \text{alphaTab \{state,D0,c0,Dc,c1,$\alpha$\}}\to \begin{pmatrix}\left\{0,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & -0.36043987514722653-0.9327824485933747\,\mathrm{i} & 0.36043987514722653 +0.9327824485933747\,\mathrm{i} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.7101545203859353 -0.2371533418544… [1247 chars total]
+Cell 72: ✓ — Out[217]= \langle\!\lvert \text{validation}\to \left\{\left\{1,1\right\}\to \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 0\\\left\{1,1\right\} & 0\\\left\{2,0\right\} & 0\end{pmatrix},\left\{2,1\right\}\to \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 0\\\left\{1,1\right\} & 0\\\left\{2,0\right\} & 0\\\left\{2,1\right\} & 0\\\left\{3,0\right\} & 0\end{pmatrix},\left\{1… [1247 chars total]
+Cell 73: ✓ — Out[219]= \langle\!\lvert \text{generator \{a,b\}}\to \left\{2,1\right\},\text{$\varphi$(k)}\to \text{$\alpha$ k},\text{$\alpha$ (universal value)}\to -1.\,+0.\,\,\mathrm{i},\text{normalization}\to \text{1-site FSoV determinant det1[f] = br1[f]/(f/.u->$\theta$1); Section C's det[$\lambda$1,$\lambda$2][f] restricted to 1 site},\text{max residual over rep sweep}\to 0,\text{reps validated}\to \begin{… [510 chars total]
+
