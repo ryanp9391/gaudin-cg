@@ -8,33 +8,40 @@ generation time — regenerate after material changes rather than hand-editing t
 This is the flagship Clean notebook in the XXX subproject: it sets up the two-site ($L=2$) rational
 $\mathfrak{gl}(2)$ (XXX) spin chain — independent representations $[\lambda_1,0]$, $[\lambda_2,0]$
 at each site, independent inhomogeneities $\theta_1,\theta_2$, and a shared companion twist $G$ —
-then builds up, in six sections (A through F, 71 cells total), the full machinery needed to state
-and numerically verify a **functional Clebsch–Gordan-overlap dictionary** for this chain:
+then builds up, in six sections (A through F, 73 cells total as of the 2026-07-16 normalization
+fix — see below), the full machinery needed to state and numerically verify a **functional
+Clebsch–Gordan-overlap dictionary** for this chain:
 
-- **Section A** (cells 2–26) — GT-basis/generator machinery, Lax/monodromy/transfer matrices, the
-  fusion (Hirota) hierarchy, the SoV $B$-operator, and the SoV pseudovacuum/covector basis
+- **Section A** (cells 2–28) — GT-basis/generator machinery, Lax/monodromy/transfer matrices, the
+  fusion (Hirota) hierarchy, the SoV $B$-operator, the Yangian-weight normalization factor
+  $\nu_1[\lambda_1,\lambda_2][u]$, and the SoV pseudovacuum/covector basis
   $x_2[\lambda_1,\lambda_2][\{s_1,s_2\}]$, each followed by its own inline validation cell. Ported
   verbatim from `Experiments/su2_XXX_L2.wb` (itself built on `Experiments/XXX_su2.wb`'s single-site
-  machinery).
-- **Section B** (cells 27–34) — the Baxter-equation ingredients, the genuine
+  machinery); `x2`'s normalization and the `ν1` symbol were corrected in place on 2026-07-16 (see
+  the `ν1`/`x2` entries below and Section E).
+- **Section B** (cells 29–36) — the Baxter-equation ingredients, the genuine
   transfer-matrix-eigenstate solve (`TauEigensystem`), and the linear TQ solve for the numeric
   Baxter Q-function (`QSolve`/`Q1`). Ported (routine-defining cells only) from
-  `Experiments/Baxter_Solver_L2.wb`.
-- **Section C** (cells 35–45, added 2026-07-16) — the Functional Separation of Variables (FSoV)
+  `Experiments/Baxter_Solver_L2.wb`; `aFun` was deduped on 2026-07-16 to be a direct alias of
+  Section A's `ν1` rather than an independent copy of the same formula.
+- **Section C** (cells 37–47, added 2026-07-16) — the Functional Separation of Variables (FSoV)
   scalar product: measures `mu`/`Nn`/`nn` per site, a residue bracket `br`, a $2\times2$
   Wronskian-type determinant `det` that realizes $\langle Q_A,Q_B\rangle$, and a full Gram matrix
   `GramMatrix`/`G21` over one representation's `Q1` states, verified numerically diagonal. Ported
   (with a port-fidelity check) from `Experiments/FSoV_L2.wb`.
-- **Section D** (cells 46–52, added 2026-07-16) — left eigenvectors of the companion-twisted
+- **Section D** (cells 48–54, added 2026-07-16) — left eigenvectors of the companion-twisted
   transfer matrix (`TauEigensystemLeft`/`PsiLeft`), paired with Section B's right eigenvectors to
   form the bilinear pairing `braket`$=\langle\Psi|\Psi\rangle$, whose ratio against Section C's
   `det[Q,Q]` (`normRatio`) is found numerically equal to $1$.
-- **Section E** (cells 53–60, added 2026-07-16) — a standalone length-1 (single-site) fused
-  transfer-matrix hierarchy `t1`/`qdet1` and length-1 SoV covector `xL1`/`B1` (the paper's $L=1$
-  construction, built independently of Section A's two-site objects), used to prove that the
-  $s_2=0$ slice of the $L=2$ SoV basis operatorially factorizes through a rank-1 site-2
-  passthrough eigenvalue `μSite2`.
-- **Section F** (cells 61–71, added 2026-07-16) — the headline result: a length-1 FSoV
+- **Section E** (cells 55–62, added 2026-07-16, rewritten 2026-07-16 alongside the `ν1`/`x2` fix) —
+  a standalone length-1 (single-site) fused transfer-matrix hierarchy `t1`/`qdet1` and length-1 SoV
+  covector `xL1`/`B1` (the paper's $L=1$ construction, built independently of Section A's two-site
+  objects), used to prove that the $s_2=0$ slice of the $L=2$ SoV basis factorizes **exactly** —
+  `x2[λ1,λ2][{s1,0}] = xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}]` with ratio bit-exactly $1$, no leftover
+  scalar, over all 27 swept $(\lambda_1,\lambda_2,s_1)$ cases. An earlier version of this section
+  found what looked like a nontrivial rank-1 "site-2 passthrough eigenvalue" — that was traced to
+  the same normalization bug fixed in `x2` (see `ν1`/`x2` below and the Section E writeup).
+- **Section F** (cells 63–73, added 2026-07-16) — the headline result: a length-1 FSoV
   measure/bracket (`Nn1`/`mu1`/`br1`) normalized so the leading node weight is $1$, the 1-site FSoV
   determinant `det1`/`FLdet`, the unipotent rotation `gRot`/operatorial overlap `OP`/`OPg`, and the
   closed functional$\leftrightarrow$operatorial dictionary, verified to exact symbolic zero across
@@ -50,17 +57,20 @@ is all new material developed directly in the notebook, cross-referenced below a
 specs under `docs/superpowers/specs/2026-07-16-*` rather than against the paper.
 
 **Known cell-output display glitch (cosmetic only, carried over from the A+B version of this
-notebook and still present after the C–F merge):** this notebook's cell outputs currently render as
-empty via the notebook-reading tools (`wolfbook_getNotebookContext`/`wolfbook_getCellOutput`) for
-essentially every cell, in all six sections — confirmed unrelated to correctness by direct
-kernel-state inspection (`wolfbook_getKernelState`): every routine documented below is present as a
-live memoized/evaluated kernel value with a numeric result consistent with the notebook's own
-inline hard-asserts (which would have `Abort`ed on a genuine failure). The recorded activity log
-shows a fresh kernel restart followed by `RUN CELLS 1–34`, `RUN CELLS 35–52`, `RUN CELLS 53–71` (plus
-a manual re-run of cell 32) immediately before this documentation pass, so the blank display is a
-capture artifact of the reading tools, not a sign the cells were never evaluated. Every numeric
-"Example" below is therefore sourced from direct kernel-state inspection rather than from a
-rendered cell output.
+notebook and still present after the C–F merge and the 2026-07-16 `ν1`/`x2` normalization fix):**
+this notebook's cell outputs currently render as empty via the notebook-reading tools
+(`wolfbook_getNotebookContext`/`wolfbook_getCellOutput`) for essentially every cell, across all 73
+cells — confirmed unrelated to correctness by direct kernel-state inspection
+(`wolfbook_getKernelState`) and by the rendered `Out[...]` labels visible when reading the notebook
+directly: every routine documented below is present as a live memoized/evaluated kernel value with
+a numeric result consistent with the notebook's own inline hard-asserts (which would have
+`Abort`ed on a genuine failure). Two cells were inserted into Section A on 2026-07-16 (the
+two-site `ν1[λ1,λ2][u]` Yangian-weight-eigenvalue definition, and an `x2[2,1][{2,0}]` worked
+example) as part of the normalization fix, and Section E's `x2`-factorization cells and the
+`μSite2` cell were re-evaluated against the corrected `x2`/`ν1` — shifting every downstream cell
+number by $+2$ relative to the doc's earlier (same-day) revision. Every numeric "Example" below is
+therefore sourced from direct kernel-state inspection / the notebook's own rendered `Out[...]`
+values rather than invented.
 
 ## Symbol reference — Section A (two-site chain setup)
 
@@ -254,10 +264,14 @@ rendered cell output.
 - **Defined in:** Cell 21.
 - **Paper reference:** `paper/xxxCG.tex` §2.3 defines $Q_\theta(u)=u-\theta$ at $L=1$; `Qθ` here is
   its two-site product generalization.
-- **Gotcha:** `Qθ1` is used directly by Section E's length-1 covector `xL1` (see below) even though
-  it went unused within Sections A/B themselves. `Qθ` is **redefined identically** in Section B
-  (Cell 28, which does `ClearAll[Qθ]` first) — functionally harmless since both definitions agree,
-  but editing one without the other will silently diverge.
+- **Gotcha (updated 2026-07-16):** `Qθ1` is defined here but is **no longer referenced anywhere
+  else in the live notebook** — Section E's length-1 covector `xL1` used to call `Qθ1` directly,
+  but as of the 2026-07-16 fix it instead uses its own single-site `ν1[λ][u]` (see Section E
+  below), kept purely for notational parity with the corrected two-site `ν1`/`x2` pair; the two
+  forms are numerically identical (`Qθ1` is linear, so shifting its argument by $-\lambda h$ is the
+  same as shifting the function), so this was a rename, not a behavior change. `Qθ` is **redefined
+  identically** in Section B (Cell 30, which does `ClearAll[Qθ]` first) — functionally harmless
+  since both definitions agree, but editing one without the other will silently diverge.
 
 ### `B2[λ1,λ2][u]`
 
@@ -270,6 +284,30 @@ rendered cell output.
   — here the $(1,1)$ monodromy element, with no extra shift needed since $\theta_1,\theta_2$ are
   already baked into $T$ via `L1`/`L2`.
 
+### `ν1[λ1,λ2][u]` — Yangian weight eigenvalue of $T_{11}$ on the highest-weight state
+
+- **Purpose:** added 2026-07-16 to fix a normalization bug in `x2` (see below): the eigenvalue that
+  the two-site monodromy element $T_{11}(u)$ takes on the two-site highest-weight state, with
+  **each site's own** representation label shifting **only its own** inhomogeneity factor. It
+  replaces the earlier use of the symmetric `Qθ[u]=(u-θ1)(u-θ2)` evaluated at a single argument
+  shifted by $-\lambda_1 h$ — which silently applied *site 1's* shift to *both* factors, including
+  the $\theta_2$ one that should have carried site 2's own $\lambda_2$.
+- **Signature:** `ν1[λ1_,λ2_][u_] := (u-θ1-h λ1)(u-θ2-h λ2)`.
+- **Returns:** a scalar, degree-2 polynomial in $u$.
+- **Depends on:** nothing else project-defined.
+- **Defined in:** Cell 25.
+- **Why the fix has to live inside the function, not the call site:** the bug in the old `x2`
+  denominator came from faking a per-site shift by shifting the *argument* of an already-symmetric
+  fixed function (`Qθ(θ_i+(k-1-\lambda_1)h)` for *both* $i=1,2$) instead of giving each factor its
+  own site-specific shift from the start. `ν1[λ1,λ2][u]` fixes this by construction: its two
+  factors are independently parametrized by $\lambda_1,\lambda_2$, so there is no argument-shift
+  trick left to get wrong. Used directly by `x2`'s denominator (below) and, via
+  `aFun[λ1,λ2][u] := ν1[λ1,λ2][u]`, by Section B's Baxter-equation coefficient (Section B).
+- **Gotcha:** a *different*, single-site (arity-1) version `ν1[λ_][u_] := (u-θ1-hλ)` is defined
+  independently in Section E — same symbol name, distinguished only by argument count (Wolfram
+  dispatches on the pattern `[λ1_,λ2_][u_]` vs. `[λ_][u_]` as separate DownValues on the same
+  head), not a conflict, but worth knowing when searching the notebook for `ν1`.
+
 ### `xSingle[λ][{0}]`, `x2[λ1,λ2][{s1,s2}]`
 
 - **Purpose:** the SoV pseudovacuum and covector basis for $L=2$: `xSingle` is the single-site
@@ -279,17 +317,29 @@ rendered cell output.
   - `xSingle[λ_][{0}] := {Table[KroneckerDelta[ii,dim[{λ,0}]],{ii,1,dim[{λ,0}]}]}` — the
     lowest-weight covector of $V_\lambda^*$'s GT basis.
   - `x2[λ1_,λ2_][{0,0}] := KroneckerProduct[xSingle[λ1][{0}], xSingle[λ2][{0}]]`.
-  - `x2[λ1_,λ2_][{s1_,s2_}] := x2[λ1,λ2][{0,0}].t2[λ1,λ2][1,s1][θ1].t2[λ1,λ2][1,s2][θ2] / (∏_{k=1}^{s1}Qθ(θ1+(-λ1+k-1)h) · ∏_{k=1}^{s2}Qθ(θ2+(-λ2+k-1)h))`
+  - `x2[λ1_,λ2_][{s1_,s2_}] := x2[λ1,λ2][{0,0}].t2[λ1,λ2][1,s1][θ1].t2[λ1,λ2][1,s2][θ2] / (∏_{k=1}^{s1}ν1[λ1,λ2][θ1+(k-1)h] · ∏_{k=1}^{s2}ν1[λ1,λ2][θ2+(k-1)h])`
     (memoized).
+  - **Corrected 2026-07-16:** the denominator previously read
+    `∏_{k=1}^{s1}Qθ(θ1+(-λ1+k-1)h) · ∏_{k=1}^{s2}Qθ(θ2+(-λ2+k-1)h)` with the fixed symmetric
+    `Qθ(u)=(u-θ1)(u-θ2)` evaluated at a single shifted argument — a bug, since plugging
+    $u=\theta_1+(k-1-\lambda_1)h$ into `Qθ` applies *site 1's* $\lambda_1$ shift to *both* factors
+    of `Qθ`, including the $(u-\theta_2)$ one that should have carried site 2's own $\lambda_2$.
+    The fix replaces `Qθ(·)` by the two-site `ν1[λ1,λ2][·]` (see above), whose two factors are
+    independently shifted by $\lambda_1$ and $\lambda_2$ from the start, so there is no
+    argument-shift trick left to get wrong.
 - **Depends on:** [`t2[1,s]`](#fusion-hierarchy--t2λ1λ20su-t2λ1λ2a0u-t2λ1λ221u-t2λ1λ21su),
-  [`Qθ`](#qθ1u-qθu-section-a), [`dim`](#psrep-dimrep-j0kpat-jpkpat-jmkpat-jjklrep).
-- **Defined in:** Cell 25.
+  [`ν1`](#ν1λ1λ2u--yangian-weight-eigenvalue-of-t11-on-the-highest-weight-state),
+  [`dim`](#psrep-dimrep-j0kpat-jpkpat-jmkpat-jjklrep).
+- **Defined in:** Cell 26.
 - **Paper reference:** generalizes `paper/xxxCG.tex` §2.3 eq.
   $\langle\svx^{[\lambda]}_s| = \langle\svx^{[\lambda]}_0|\,t_{1,s}(\theta) / \prod_{p=1}^{s}Q_\theta(\theta-\lambda h+(p-1)h)$
   to $L=2$ via a tensor-product pseudovacuum and independent fusion actions/normalizations per
-  site. Section E below proves an operatorial factorization statement about `x2` in terms of a
-  standalone $L=1$ construction (see `xL1`).
-- **Verified by:** Cell 26 checks
+  site. Section E below proves the (now exact) operatorial factorization statement about `x2` in
+  terms of a standalone $L=1$ construction (see `xL1`): with the `ν1` fix, `x2[λ1,λ2][{s1,0}]`
+  equals `xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}]` with ratio bit-exactly $1$, no leftover scalar.
+- **Example** (live kernel state): `x2[2,1][{2,0}]` (Cell 27) evaluates to
+  `{{0, 1/2, 0, 0, 0, 0}}`.
+- **Verified by:** Cell 28 checks
   `x2[λ1,λ2][{s1,s2}].B2[λ1,λ2][u] - (u-θ1-h s1)(u-θ2-h s2) x2[λ1,λ2][{s1,s2}]` over
   $s_1\in0..\lambda_1$, $s_2\in0..\lambda_2$, $\lambda_1,\lambda_2\in\{1,2,3\}$, `Simplify`d,
   `Flatten`/`Union`ed — designed to collapse to `{0}`, confirming `x2` diagonalizes `B2` with
@@ -318,14 +368,20 @@ relating them, functionally, to an operatorial overlap.
   $\tau_0$, the two-site $Q_\theta$ factor (redefinition of Section A's, see gotcha above), and a
   helper that evaluates an ascending-coefficient-list polynomial without an indeterminate $0^0$.
 - **Signature:**
-  - `aFun[λ1_,λ2_][u_] := (u-θ1-h λ1)(u-θ2-h λ2)`.
+  - `aFun[λ1_,λ2_][u_] := ν1[λ1,λ2][u]` — **deduped 2026-07-16:** `aFun` used to carry its own
+    literal copy of the formula `(u-θ1-hλ1)(u-θ2-hλ2)`; it is now a plain alias for Section A's
+    two-site `ν1` (same Yangian-weight-eigenvalue object `x2`'s denominator uses), so there is a
+    single source of truth for this formula instead of two copies that could silently drift apart.
+    The numeric value is unchanged by this dedup.
   - `Qθ[u_] := (u-θ1)(u-θ2)` — identical to Section A's, re-`ClearAll`'d and redefined.
   - `τ0[λ1_,λ2_,M_][u_] := (κ1+κ2)u^2 - (θ1+θ2)(κ1+κ2)u - u h(κ1(λ1+λ2-M)+κ2 M)` — note zero
     constant ($u^0$) term by construction, so the full eigenvalue is $\tau=\tau_0+J$ with $J$ the
     constant term.
   - `qpoly[clist_,uu_] := Module[{x}, (clist.x^Range[0,Length[clist]-1]) /. x -> uu]` — evaluates
     a polynomial given ascending coefficients `{c0,...,cM}` at `uu`.
-- **Defined in:** Cell 28.
+- **Depends on:** [`ν1`](#ν1λ1λ2u--yangian-weight-eigenvalue-of-t11-on-the-highest-weight-state)
+  (Section A).
+- **Defined in:** Cell 30.
 - **Paper reference:** none — `paper/xxxCG.tex` does not yet state a Baxter/TQ equation (its SoV
   section stops at the pseudovacuum/covector construction). `a(u)=\prod_i(u-\theta_i-h\lambda_i)$,
   $Q_\theta(u)=\prod_i(u-\theta_i)$ is the standard XXX Baxter-equation form generalized to two
@@ -345,8 +401,8 @@ relating them, functionally, to an operatorial overlap.
   coefficients of each column become the matrix's columns.
 - **Returns:** an $(M{+}1)\times(M{+}1)$ matrix.
 - **Depends on:** [`aFun`, `τ0`, `Qθ`](#afunλ1λ2u-τ0λ1λ2mu-qθu-section-b-qpolyclistuu).
-- **Defined in:** Cell 29.
-- **Verified by:** the hard in-function assert (no separate check cell in this notebook); Cell 29's
+- **Defined in:** Cell 31.
+- **Verified by:** the hard in-function assert (no separate check cell in this notebook); Cell 31's
   smoke test `Dimensions /@ (BaxterMatrix[1,1,#] & /@ {0,1,2})` is designed to give
   `{{1,1},{2,2},{3,3}}`. Confirmed via the predecessor `Experiments/Baxter_Solver_L2.wb` (Cells 4–5,
   identical code).
@@ -360,8 +416,8 @@ relating them, functionally, to an operatorial overlap.
 - **Signature:** `t2Coeffs[λ1_,λ2_] := t2Coeffs[λ1,λ2] = Module[...]` (memoized), returns
   `{C0,C1,C2}`.
 - **Depends on:** Section A's [`t2[·][1,1][·]`](#t2λ1λ211u).
-- **Defined in:** Cell 30.
-- **Verified by:** Cell 30's own check, `Max[Abs[Flatten[Cs[[3]] - (κ1+κ2) IdentityMatrix[...]]]]`
+- **Defined in:** Cell 32.
+- **Verified by:** Cell 32's own check, `Max[Abs[Flatten[Cs[[3]] - (κ1+κ2) IdentityMatrix[...]]]]`
   — designed to confirm $C_2=(\kappa_1+\kappa_2)\mathbb{1}$ (the transfer matrix's leading-order
   asymptotics, twist-independent). Live kernel state confirms `t2Coeffs[1,1]`, `t2Coeffs[1,2]`,
   `t2Coeffs[1,3]` (and further reps) are memoized.
@@ -373,7 +429,7 @@ relating them, functionally, to an operatorial overlap.
   exact multiplicity `TauEigensystem` (and `TauEigensystemLeft`, Section D) must reproduce per
   $M$-sector (no more, no fewer).
 - **Signature:** `dPred[M_,λ1_,λ2_] := Min[M,λ1,λ2,λ1+λ2-M] + 1`.
-- **Defined in:** Cell 31.
+- **Defined in:** Cell 33.
 - **Depends on:** nothing (pure combinatorics).
 
 ### `TauEigensystem[λ1,λ2]`
@@ -398,7 +454,7 @@ relating them, functionally, to an operatorial overlap.
 - **Returns:** an `Association` keyed by `{M,n}` $\to$ `<|"J"->J_n, "Psi"->eigenvector normalized to
   last component 1|>`.
 - **Depends on:** [`t2Coeffs`](#t2coeffsλ1λ2), [`dPred`](#dpredmλ1λ2).
-- **Defined in:** Cell 31.
+- **Defined in:** Cell 33.
 - **Paper reference:** none (Baxter/TQ machinery not yet in `paper/xxxCG.tex`).
 - **Verified by:** the in-function hard asserts (rank/degeneracy resolution, residual $<10^{-15}$,
   integer $M$ within $10^{-10}$, per-sector count exactly matching `dPred`) constitute the check;
@@ -428,8 +484,8 @@ relating them, functionally, to an operatorial overlap.
   `dPred[M,λ1,λ2]-1`, fires `Message[·::spurious]` and returns `Missing["NoState",...]`.
 - **Depends on:** [`TauEigensystem`](#taueigensystemλ1λ2), [`dPred`](#dpredmλ1λ2),
   [`τ0`](#afunλ1λ2u-τ0λ1λ2mu-qθu-section-b-qpolyclistuu).
-- **Defined in:** Cell 32.
-- **Verified by:** the smoke test in Cell 32 deliberately calls `Psi[2,1][2,2]` (gross bound $n\le
+- **Defined in:** Cell 34.
+- **Verified by:** the smoke test in Cell 34 deliberately calls `Psi[2,1][2,2]` (gross bound $n\le
   M=2$ passes, but `dPred[2,2,1]=2` so only $n=0,1$ actually exist) — designed to fire
   `Psi::spurious` and return `Missing[...]`.
 
@@ -446,7 +502,7 @@ relating them, functionally, to an operatorial overlap.
   is $1$ (monic), or `$Failed`/message on `degnull`/`lastzero`/`bnds`/`spurious` failure.
 - **Depends on:** [`BaxterMatrix`](#baxtermatrixλ1λ2m), [`TauEigensystem`](#taueigensystemλ1λ2),
   [`dPred`](#dpredmλ1λ2).
-- **Defined in:** Cell 33.
+- **Defined in:** Cell 35.
 - **Precision gotcha (from the notebook's own comment):** `BaxterMatrix[λ1,λ2,M]-Jn·Id` is
   genuinely singular, but its would-be-zero entries come out as **precision-tracked** zeros. `Chop`
   the matrix (threshold $10^{-12}$) **before** `NullSpace` — see the "Known gotchas" section below.
@@ -469,7 +525,7 @@ relating them, functionally, to an operatorial overlap.
   that Section F's functional determinant `FLdet` is built from.
 - **Signature:** `Q1[λ1_,λ2_][M_,n_][u_] := Module[{q=QSolve[λ1,λ2][M,n]}, If[q===$Failed, $Failed, κ1^(u/h) qpoly[q,u]]]`.
 - **Depends on:** [`QSolve`](#qsolveλ1λ2mn), [`qpoly`](#afunλ1λ2u-τ0λ1λ2mu-qθu-section-b-qpolyclistuu).
-- **Defined in:** Cell 34.
+- **Defined in:** Cell 36.
 - **Paper reference:** none — standard Baxter Q-function normalization with the twist-eigenvalue
   prefactor $\kappa_1^{u/h}$, not yet stated in `paper/xxxCG.tex`.
 - **Verified by:** `Experiments/Baxter_Solver_L2.wb` Cells 15–16 run the full end-to-end TQ-equation
@@ -502,7 +558,7 @@ including cross-$M$ pairs). See
   symmetric for site 2 with `θ1`/`θ2` swapped in the oscillatory factor.
 - **Returns:** a rational (times exponential) function of $u$.
 - **Depends on:** [`Nn`](#nnλ1λ2i-nnλ1λ2i).
-- **Defined in:** Cell 36.
+- **Defined in:** Cell 38.
 - **Paper reference:** none yet — `paper/xxxCG.tex` does not state an FSoV scalar product; ported
   from the exploratory `Experiments/FSoV_L2.wb`.
 
@@ -515,7 +571,7 @@ including cross-$M$ pairs). See
   `nn[λ1_,λ2_][1] := (-1)^(λ1+λ2-1)h^(λ1)Gamma[λ1+1] Product[θ2+k h-θ1,{k,0,λ2}]//Simplify`
   (symmetric for site 2).
 - **Depends on:** nothing else project-defined.
-- **Defined in:** Cell 37.
+- **Defined in:** Cell 39.
 
 ### `br[λ1,λ2][i][f]`
 
@@ -526,7 +582,7 @@ including cross-$M$ pairs). See
   (symmetric for site 2). `f` is any function of `u` (typically a product of Q-functions).
 - **Returns:** a symbolic/numeric value (whatever `f` evaluates to under the residue sum).
 - **Depends on:** [`mu`](#muλ1λ2iu).
-- **Defined in:** Cell 38.
+- **Defined in:** Cell 40.
 
 ### `det[λ1,λ2][f]`
 
@@ -538,8 +594,8 @@ including cross-$M$ pairs). See
   `det[λ1_,λ2_][f_] := 1/(f/.u:>θ1)/(f/.u:>θ2)/(θ2-θ1)({{br[λ1,λ2][1][f],br[λ1,λ2][1][u f]},{br[λ1,λ2][2][f],br[λ1,λ2][2][u f]}}//Det//Expand//Simplify)`.
 - **Returns:** a scalar (the normalized $2\times2$ determinant of bracket values).
 - **Depends on:** [`br`](#brλ1λ2if).
-- **Defined in:** Cell 39.
-- **Verified by (port-fidelity check):** Cell 40's `fsovL2CachedFormula` is a verbatim transcription
+- **Defined in:** Cell 41.
+- **Verified by (port-fidelity check):** Cell 42's `fsovL2CachedFormula` is a verbatim transcription
   of `FSoV_L2.wb`'s own cached closed form for `det[1,1][f[u] z^(u/h)]` with $\theta_1,\theta_2,h$
   symbolic; `portCheckDiff = Simplify[det[1,1][f[u] z^(u/h)] - fsovL2CachedFormula[θ1,θ2,h,z,f]]`
   confirms the port is exact — live kernel state gives `portCheckDiff = 0`.
@@ -552,7 +608,7 @@ including cross-$M$ pairs). See
 - **Signature:** `statesOf[λ1_,λ2_] := SortBy[Keys[TauEigensystem[λ1,λ2]], {First,Last}]`.
 - **Returns:** a list of `{M,n}` pairs, sorted first by $M$ then by $n$.
 - **Depends on:** [`TauEigensystem`](#taueigensystemλ1λ2).
-- **Defined in:** Cell 41.
+- **Defined in:** Cell 43.
 - **Example** (live kernel state):
   ```wolfram
   states21 = statesOf[2, 1]
@@ -568,12 +624,12 @@ including cross-$M$ pairs). See
   $M=1,2$ are genuinely degenerate 2-dimensional sectors — a nontrivial test of the scalar
   product's ability to resolve degenerate states).
 - **Signature:** `GramMatrix[λ1_,λ2_] := Module[{s=statesOf[λ1,λ2]}, Table[det[λ1,λ2][Q1[λ1,λ2][s1[[1]],s1[[2]]][u] Q1[λ1,λ2][s2[[1]],s2[[2]]][u]],{s1,s},{s2,s}]]`;
-  `G21 = GramMatrix[2,1]` (Cell 43), a $6\times6$ matrix.
+  `G21 = GramMatrix[2,1]` (Cell 45), a $6\times6$ matrix.
 - **Depends on:** [`det`](#detλ1λ2f), [`statesOf`](#statesofλ1λ2), [`Q1`](#q1λ1λ2mnu).
-- **Defined in:** Cell 41 (`GramMatrix`), Cell 43 (`G21`).
+- **Defined in:** Cell 43 (`GramMatrix`), Cell 45 (`G21`).
 - **Paper reference:** none — the FSoV scalar product/orthogonality result has no counterpart yet
   in `paper/xxxCG.tex`.
-- **Verified by:** Cell 45's hard-assert check (own message names `FSoVGram::notorthogonal`,
+- **Verified by:** Cell 47's hard-assert check (own message names `FSoVGram::notorthogonal`,
   `FSoVGram::degenerate`): computes `maxOffDiag` over all 30 off-diagonal entries of the $6\times6$
   matrix (same-$M$ and cross-$M$ pairs alike) and `minDiagAbs` over the 6 diagonal entries, aborting
   if `maxOffDiag > 10^-15` or `minDiagAbs < 10^-15`. Live kernel-state result:
@@ -616,9 +672,9 @@ observed value is consistently $1$).
 - **Returns:** an `Association` keyed by `{M,n}` $\to$ left eigenvector, normalized to last
   component $1$.
 - **Depends on:** [`t2Coeffs`](#t2coeffsλ1λ2), [`statesOf`](#statesofλ1λ2), [`τ`](#psiλ1λ2mn-τλ1λ2mnu).
-- **Defined in:** Cell 47.
+- **Defined in:** Cell 49.
 - **Verified by:** the in-function hard asserts constitute the check (as with `TauEigensystem`).
-  Cell 48's smoke test confirms `KeySort[TauEigensystemLeft[2,1]]//Keys` reproduces the same 6 keys
+  Cell 50's smoke test confirms `KeySort[TauEigensystemLeft[2,1]]//Keys` reproduces the same 6 keys
   as `statesOf[2,1]` (already verified in Section C), via this fully independent left-eigenvector
   construction. Live kernel state confirms `TauEigensystemLeft[2,1]` is memoized.
 
@@ -628,12 +684,12 @@ observed value is consistently $1$).
   left-eigenvector counterpart of Section B's `Psi`, same bounds/spurious-guard pattern.
 - **Signature:** `PsiLeft[λ1_,λ2_][M_,n_]`, same `bnds`/`spurious` message pattern as `Psi`.
 - **Depends on:** [`TauEigensystemLeft`](#taueigensystemleftλ1λ2), [`dPred`](#dpredmλ1λ2).
-- **Defined in:** Cell 49.
-- **Verified by:** Cell 49's smoke test `{PsiLeft[2,1][1,0][[-1]], Length[PsiLeft[2,1][1,0]]}` —
+- **Defined in:** Cell 51.
+- **Verified by:** Cell 51's smoke test `{PsiLeft[2,1][1,0][[-1]], Length[PsiLeft[2,1][1,0]]}` —
   designed to give `{1, 6}` (last component exactly 1 by construction, length equal to $d=6$).
-  Biorthogonality (Cell 50) is the real correctness check on this construction (see below).
+  Biorthogonality (Cell 52) is the real correctness check on this construction (see below).
 
-### Biorthogonality check (Cell 50)
+### Biorthogonality check (Cell 52)
 
 - **Purpose:** the correctness check on `TauEigensystemLeft` independent of Section C's `det[Q,Q]`
   machinery: a genuine left/right eigenvector pair of a diagonalizable operator with simple
@@ -659,11 +715,11 @@ observed value is consistently $1$).
   general-purpose routine.
 - **Depends on:** [`PsiLeft`](#psileftλ1λ2mn), [`Psi`](#psiλ1λ2mn-τλ1λ2mnu), `G21`/`states21`
   (Section C).
-- **Defined in:** Cell 51.
+- **Defined in:** Cell 53.
 - **Paper reference:** none — the relation between $\langle\Psi|\Psi\rangle$ and $\det[Q,Q]$ is not
   stated anywhere in `paper/xxxCG.tex`; this is an exploratory numeric finding, not (yet) a proven
   identity.
-- **Verified by:** Cell 52's final report (`BraketReport::degenerate` hard-asserts every `braket` is
+- **Verified by:** Cell 54's final report (`BraketReport::degenerate` hard-asserts every `braket` is
   nonzero before reporting, guarding against an impossible degenerate pairing given biorthogonality
   already passed) tabulates `braket`, the corresponding `G21` diagonal entry, and `normRatio` for
   all 6 states of $(2,1)$. Live kernel state confirms, e.g. for state $(M,n)=(0,0)$:
@@ -677,14 +733,30 @@ observed value is consistently $1$).
   (* {2.909064289315083...-5.804620063565934...I, 2.909064289315083...-5.804620063565934...I} — equal *)
   ```
 
-## Symbol reference — Section E (operatorial factorization of the L=2 SoV basis)
+## Symbol reference — Section E (exact operatorial factorization of the L=2 SoV basis)
 
 Section E builds a genuine **standalone** length-1 (single-site) fused transfer-matrix hierarchy and
 SoV covector — the paper's $L=1$ construction, built here entirely independently of Section A's
-two-site `t2`/`x2` (it reuses only the single-site `L`, `G`, `Qθ1`, `xSingle`, `dim`) — and uses it
-to prove that the $s_2=0$ slice of the two-site SoV basis `x2` factorizes through a rank-1 site-2
-"passthrough" eigenvalue. Sections A–D are read-only from this point on. See
+two-site `t2`/`x2` (it reuses only the single-site `L`, `G`, `xSingle`, `dim`) — and uses it
+to prove that the $s_2=0$ slice of the two-site SoV basis `x2` **factorizes exactly** as
+`x2[λ1,λ2][{s1,0}] = xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}]`, with **no leftover scalar** (ratio
+bit-exactly $1$). Sections A–D are read-only from this point on. See
 `docs/superpowers/specs/2026-07-16-xxx-sov-factorization-functional-overlap-design.md`.
+
+**Rewritten 2026-07-16 alongside the `ν1`/`x2` normalization fix (Section A):** an earlier version
+of this section found what looked like a nontrivial rank-1 "site-2 passthrough eigenvalue"
+`μSite2`/`cPredCorr` multiplying the naive tensor product. That finding was **an artifact of the
+same `x2` normalization bug** described in Section A's `ν1` entry — `x2`'s old denominator divided
+by the symmetric `Qθ(u)=(u-θ1)(u-θ2)` evaluated at a single argument shifted by $-\lambda_1 h$,
+which incorrectly applied site 1's shift to *both* factors, including the $\theta_2$ one that
+should have carried site 2's own $\lambda_2$. Once `x2` divides by the corrected `ν1[λ1,λ2][u]`
+instead (each factor shifted by its own site's $\lambda$), the ratio comes out **exactly** $1$ for
+every swept case, not merely a constant — i.e. there is no genuine extra site-2 eigenvalue beyond
+what `ν1` already encodes; the old `cPredCorr`/`μSite2` "finding" was bookkeeping fallout from the
+bug, not new physics. The `cPredCorr` symbol has been removed entirely from the notebook (the
+factorization check now asserts the ratio equals $1$ directly, not a nontrivial closed form); the
+`μSite2` computation is *kept*, relabeled, as a genuine but no-longer-mysterious operator identity
+(see below) — it is exactly the $\lambda_2$-dependent factor that `ν1` already factors into.
 
 ### `t1[λ][a,s][u]`, `qdet1[λ][u]`
 
@@ -702,72 +774,89 @@ to prove that the $s_2=0$ slice of the two-site SoV basis `x2` factorizes throug
   - `t1[λ_][2,1][u_] := χ2 qdet1[λ][u]`; `t1[λ_][1,s_/;s>1][u_] := t1[λ][1,s-1][u].t1[λ][1,1][u+(s-1)h] - t1[λ][2,1][u+(s-1)h].t1[λ][1,s-2][u]`
     — same Hirota recursion form as Section A's `t2`, applied to a single site.
 - **Depends on:** [`L`](#lλiju), [`G`](#g-companion-twist-matrix), [`dim`](#psrep-dimrep-j0kpat-jpkpat-jmkpat-jjklrep).
-- **Defined in:** Cell 54.
+- **Defined in:** Cell 56.
 - **Paper reference:** `paper/xxxCG.tex` §2.2, the $L=1$ fusion hierarchy — this is a literal
   transcription (not a two-site generalization) of the paper's single-site formulas.
-- **Verified by:** Cell 55's shape smoke test, `{Dimensions[t1[2][1,1][u]], Dimensions[t1[2][1,2][u]]}`.
+- **Verified by:** Cell 57's shape smoke test, `{Dimensions[t1[2][1,1][u]], Dimensions[t1[2][1,2][u]]}`.
 
-### `B1[λ][u]`, `xL1[λ][{s}]`
+### `B1[λ][u]`, `ν1[λ][u]` (single-site), `xL1[λ][{s}]`
 
-- **Purpose:** the length-1 SoV $B$-operator and covector basis, in the paper's normalization
-  (using the 1-site `Qθ1[u]=u-θ1`, unlike Section A's two-site `Qθ`). `xSingle[λ][{0}]` (Section A)
-  is reused directly as the site's lowest-weight covector.
+- **Purpose:** the length-1 SoV $B$-operator and covector basis, in the paper's normalization.
+  `ν1[λ][u] := (u-θ1-hλ)` is the single-site (arity-1) companion added 2026-07-16 to Section A's
+  two-site `ν1[λ1,λ2][u]` — same symbol name, distinguished only by argument count (Wolfram
+  dispatches on the two DownValue patterns separately). `xSingle[λ][{0}]` (Section A) is reused
+  directly as the site's lowest-weight covector.
 - **Signature:** `B1[λ_][u_] := L[λ][1,1][u-θ1]`;
+  `ν1[λ_][u_] := (u-θ1-h λ)`;
   `xL1[λ_][{0}] := xSingle[λ][{0}]`;
-  `xL1[λ_][{s_}] := xL1[λ][{s}] = xSingle[λ][{0}].t1[λ][1,s][θ1] / Product[Qθ1[θ1-λ h+(p-1)h],{p,1,s}]`
+  `xL1[λ_][{s_}] := xL1[λ][{s}] = xSingle[λ][{0}].t1[λ][1,s][θ1] / Product[ν1[λ][θ1+(p-1)h],{p,1,s}]`
   (memoized). Shapes: $\langle x_0|$ is $1\times(\lambda{+}1)$, $t_{1,s}$ is
   $(\lambda{+}1)\times(\lambda{+}1)$, so `xL1` stays $1\times(\lambda{+}1)$.
-- **Depends on:** [`xSingle`](#xsingleλ0-x2λ1λ2s1s2), [`t1`](#t1λasu-qdet1λu),
-  [`Qθ1`](#qθ1u-qθu-section-a).
-- **Defined in:** Cell 56.
+- **Notational-only rewrite, not a bug fix:** `xL1`'s denominator previously read
+  `Product[Qθ1[θ1-λh+(p-1)h],{p,1,s}]` using the pre-existing `Qθ1[u]=(u-θ1)` (Section A) evaluated
+  at a shifted argument. Since `Qθ1` is linear, shifting its argument by $-\lambda h$ is numerically
+  identical to shifting the function itself, so `Qθ1[θ1-λh+(p-1)h] = ν1[λ][θ1+(p-1)h]` for every
+  $p$ — the rewrite changes notation only, to keep `xL1`'s denominator textually parallel to the
+  corrected two-site `x2`'s. `xL1` itself never had a bug (unlike `x2` — see Section A). `Qθ1`
+  (Section A, Cell 21) is consequently no longer referenced anywhere in the live notebook.
+- **Depends on:** [`xSingle`](#xsingleλ0-x2λ1λ2s1s2), [`t1`](#t1λasu-qdet1λu), single-site `ν1`
+  (this subsection).
+- **Defined in:** Cell 58.
 - **Paper reference:** `paper/xxxCG.tex` §2.3, the exact $L=1$ SoV covector formula
   $\langle x_s^{[\lambda]}| = \langle x_0^{[\lambda]}|\,t_{1,s}(\theta)/\prod_{p=1}^s Q_\theta(\theta-\lambda h+(p-1)h)$
   — a literal transcription, not a generalization.
-- **Verified by:** Cell 57's internal check (independent of the factorization result below):
+- **Verified by:** Cell 59's internal check (independent of the factorization result below):
   `xL1[λ][{s}].B1[λ][u] - (u-θ1-s h) xL1[λ][{s}]` for $\lambda=1,2,3$, $s=0,\dots,\lambda$,
   symbolic in $u$, `ExpandAll`/`Chop[·,10^-20]`/`Flatten`/`Union`ed — designed to collapse to `{0}`,
   confirming `xL1` is a genuine left eigencovector of `B1` with the paper's eigenvalue
   $u-\theta_1-sh$. Live kernel state: `xL1BCheck = {0}`.
 
-### `cPredCorr[λ1,λ2,s1]`
+### The exact factorization check (`SoVFact`, Cell 60)
 
-- **Purpose:** the corrected closed-form scalar $c$ relating the two-site SoV basis at $s_2=0$ to
-  the tensor product of the length-1 covector and the site-2 pseudovacuum. Supersedes an earlier
-  naive guess (a trivial identity site-2 passthrough) that failed; this corrected form accounts for
-  the genuine site-2 passthrough eigenvalue `μSite2` (Cell 60 below).
-- **Signature:** `cPredCorr[λ1_,λ2_,s1_] := Product[(θ1-θ2+(k-1)h-λ2 h)/(θ1-θ2+(k-1)h-λ1 h),{k,1,s1}]`.
-- **Returns:** a scalar (rational in $\theta_1,\theta_2,h$ once $\lambda_1,\lambda_2,s_1$ are
-  numeric); reduces to $1$ at $\lambda_1=\lambda_2$.
-- **Depends on:** nothing (closed-form combinatorial product).
-- **Defined in:** Cell 58.
-- **Paper reference:** none — this factorization identity is not stated in `paper/xxxCG.tex`.
-- **Verified by (the factorization result itself, Cell 58):** for each swept
-  $(\lambda_1,\lambda_2,s_1)$ with $\lambda_1,\lambda_2\in\{1,2,3\}$, $s_1\in0..\lambda_1$: flattens
+- **Purpose:** the corrected factorization statement itself: with the `ν1` fix in place, the $s_2=0$
+  slice of the two-site SoV basis is **identically** the tensor product of the length-1 covector
+  and the site-2 pseudovacuum,
+  $$x_2[\lambda_1,\lambda_2][\{s_1,0\}] \;=\; x^{[1]}_{s_1}[\lambda_1] \otimes x_0[\lambda_2],$$
+  with the componentwise ratio equal to $1$ everywhere — no free scalar $c$ left to determine (the
+  earlier `cPredCorr[λ1,λ2,s1]` closed form, and the symbol itself, have been removed from the
+  notebook: the corrected ratio doesn't need a nontrivial closed form because it's just $1$).
+- **Signature (inline, not a named routine):** for each swept $(\lambda_1,\lambda_2,s_1)$ with
+  $\lambda_1,\lambda_2\in\{1,2,3\}$, $s_1\in0..\lambda_1$ (27 cases total): flattens
   `x2[λ1,λ2][{s1,0}]` and `KroneckerProduct[xL1[λ1][{s1}], xSingle[λ2][{0}]]` to length-$D$ vectors,
   takes the componentwise ratio over the tensor product's nonzero entries, and hard-asserts (1) the
-  ratio is a genuine constant $c$ (spread $<10^{-15}$, `SoVFact::notconst` otherwise — the actual
-  factorization content: "`t2[1,s1][θ1]` acts only through a rank-1 site-2 eigenvalue"), and (2)
-  $c=$ `cPredCorr[λ1,λ2,s1]` exactly (`μEff := c/cPredCorr` must equal $1$ to $10^{-15}$,
-  `SoVFact::mu` otherwise — hardened from a soft warning to a hard assert once the corrected formula
-  was pinned down). Live kernel state, e.g. `factResults` entries `{1,1,0,1,1,1.,0.}`,
-  `{1,1,1,1,1,1.,0.}`, `{1,2,1,38/17,38/17,1.,0.}` (columns
-  $\{\lambda_1,\lambda_2,s_1,c,\text{cPred},\mu_{\mathrm{eff}},\text{spread}\}$) show exact rational
-  agreement between $c$ and `cPredCorr`. Cell 59 summarizes: `max spread` and `max|μEff-1|` over the
-  full sweep, both designed to be $0$.
+  ratio is a genuine constant (spread $<10^{-15}$, `SoVFact::notconst` otherwise), and (2) that
+  constant equals $1$ exactly (`SoVFact::notone` otherwise, tolerance $10^{-15}$) — a strictly
+  harder requirement than the pre-fix version's "ratio matches `cPredCorr`" check.
+- **Depends on:** [`x2`](#xsingleλ0-x2λ1λ2s1s2), [`xL1`](#b1λu-ν1λu-single-site-xl1λs).
+- **Defined in:** Cell 60.
+- **Paper reference:** none — this factorization identity is not stated in `paper/xxxCG.tex`.
+- **Verified by:** the in-cell hard asserts above constitute the check. Live kernel state,
+  `factResults` entries `{1,1,0,1.,0.}`, `{1,1,1,1.,0.}`, `{1,2,1,1.,0.}`, ..., `{3,3,3,1.,0.}`
+  (columns $\{\lambda_1,\lambda_2,s_1,\text{ratio},\text{spread}\}$) show ratio exactly $1$, spread
+  exactly $0$, for all 27 cases. Cell 61 summarizes: `max spread (ratio non-constancy)` $=0$,
+  `max |ratio - 1| over sweep` $=0$, `num (λ1,λ2,s1) cases checked` $=27$.
 
-### `μSite2[λ2,s1]`
+### `μSite2[λ2,s1]` — a corrected reading of a still-true operator identity
 
-- **Purpose:** the physics-level explanation for `cPredCorr`: the site-2 pseudovacuum
-  `xSingle[λ2][{0}]` is a left eigencovector of the site-2 Lax factor appearing in
-  `t2[λ1,λ2][1,s1][θ1]` at each of the $s_1$ fused steps, with this eigenvalue — *not* the identity,
-  which is why a naive "trivial passthrough" guess failed (the site-2 GT lowest-weight eigenvalue of
-  $L[\lambda_2]_{11}(\theta_1-\theta_2)$ is nontrivial at each fused step, shifted by $(k-1)h$ from
-  the internal Hirota recursion).
+- **Purpose:** kept as a genuine, still-verified operator-level identity, but with a **corrected
+  interpretation**: it is *not* a leftover normalization scalar in the SoV factorization (that
+  finding was the bug's signature — see the section note above), but simply names one half of the
+  factorization of Section A's two-site `ν1`. Concretely, `ν1[λ1,λ2][θ1+(k-1)h]` factors as
+  $\bigl((k-1-\lambda_1)h\bigr)\cdot\bigl(\theta_1-\theta_2+(k-1-\lambda_2)h\bigr)$, and that second
+  factor, accumulated over the $s_1$ fused Hirota steps, is exactly `μSite2[λ2,s1]`. Once `x2`'s
+  denominator uses the *full* two-site `ν1` (rather than the old λ1-only `Qθ` construction), this
+  piece is already built into the normalization — which is why the Cell 60 ratio is exactly $1$
+  rather than a nontrivial function of `μSite2`. The underlying computation this cell checks — that
+  the site-2 pseudovacuum `xSingle[λ2][{0}]` passes through `t2[λ1,λ2][1,s1][θ1]` at the raw
+  (un-normalized) `x2[{0,0}]` numerator level picking up exactly this factor relative to the bare
+  tensor product — remains a true, verified identity about `x2[{0,0}].t2[...]`'s components; it
+  simply no longer plays the role of "the SoV-factorization normalization scalar."
 - **Signature:** `μSite2[λ2_,s1_] := Product[(θ1-θ2+(k-1)h-λ2 h),{k,1,s1}]`.
 - **Depends on:** nothing (closed-form).
-- **Defined in:** Cell 60.
-- **Verified by:** Cell 60 checks, at the *numerator* level (before any `xL1` normalization is
-  applied — the cleanest statement of the effect):
+- **Defined in:** Cell 62.
+- **Verified by:** Cell 62 checks, at the *numerator* level (before any `xL1` normalization is
+  applied — the cleanest statement of the effect, and unaffected by the `x2`-denominator bug since
+  it never used it):
   `x2[λ1,λ2][{0,0}].t2[λ1,λ2][1,s1][θ1]` must equal `μSite2[λ2,s1]` times
   `(xSingle[λ1][{0}].t1[λ1][1,s1][θ1]) ⊗ xSingle[λ2][{0}]`, componentwise constant over the nonzero
   tensor-product entries — hard-asserted on both constancy (`Site2Mu::notconst`) and agreement with
@@ -775,7 +864,8 @@ to prove that the $s_2=0$ slice of the two-site SoV basis `x2` factorizes throug
   `{1,1,0,1.,1.,0.}`, `{1,1,1,-0.8095238095238095,-0.8095238095238095,0.}`,
   `{1,2,0,1.,1.,0.}`, `{1,2,1,-1.8095238095238095,...}` (columns
   $\{\lambda_1,\lambda_2,s_1,\mu_{\mathrm{val}},\mu_{\mathrm{pred}},\text{spread}\}$) show exact
-  agreement.
+  agreement — the same numeric values as before the reinterpretation, since this cell's computation
+  itself did not change, only what it's understood to mean.
 
 ## Symbol reference — Section F (functional CG-overlap dictionary)
 
@@ -799,14 +889,14 @@ See `docs/superpowers/specs/2026-07-16-xxx-sov-factorization-functional-overlap-
 - **Returns:** `Nn1` — a scalar; `mu1` — a rational function of $u$; `br1` — whatever `f`'s residue
   sum evaluates to.
 - **Depends on:** nothing else project-defined (self-contained single-site construction).
-- **Defined in:** Cell 62.
+- **Defined in:** Cell 64.
 - **Gotcha:** for $\lambda\ge1$, the residues of `mu1` alone sum to $0$ (so `br1[λ][1]=0` — a
   rational measure with no residue at infinity), so the correct normalization statement to check is
   $w_0=1$, not `br1[λ][1]=1`.
-- **Verified by:** Cell 63 hard-asserts, for $\lambda=1,2,3$: the leading weight
+- **Verified by:** Cell 65 hard-asserts, for $\lambda=1,2,3$: the leading weight
   `w1[λ][[1]] == 1` exactly (`Nn1Check::badlead` otherwise) and `br1[λ][1] == 0` exactly
   (`Nn1Check::badsum` otherwise). Live kernel state: `Nn1[1]=(I/2)/Pi`, `Nn1[2]=-I/Pi`,
-  `Nn1[3]=(3I)/Pi`. Cell 64 additionally sanity-checks that `br1` acting on a generic symbolic
+  `Nn1[3]=(3I)/Pi`. Cell 66 additionally sanity-checks that `br1` acting on a generic symbolic
   function `g[u]` reproduces the weighted tower sum $\sum_j w_j\,g(\theta_1+hj)$ exactly (`Simplify`
   to $0$), confirming `br1` is honestly the weighted residue sum it claims to be, not just correct
   on its leading term.
@@ -824,12 +914,12 @@ See `docs/superpowers/specs/2026-07-16-xxx-sov-factorization-functional-overlap-
 - **Returns:** `FLdet[λ1,λ2][M,n][k]` is a degree-$\lambda_1$ polynomial in $k$ with constant term
   exactly $1$ (a consequence of $w_0=1$).
 - **Depends on:** [`br1`](#nn1λ-mu1λu-br1λf), [`Q1`](#q1λ1λ2mnu).
-- **Defined in:** Cell 68.
+- **Defined in:** Cell 70.
 - **Paper reference:** none — this is the notebook's own novel functional CG-overlap object.
-- **Verified by:** Cell 68's own smoke test, `FLdet[1,2][0,0][k]//Simplify`, designed to be a
+- **Verified by:** Cell 70's own smoke test, `FLdet[1,2][0,0][k]//Simplify`, designed to be a
   degree-1 polynomial in $k$ with constant term exactly $1$ and no fractional power of $k$
   (confirming the prefactor cancellation). Full correctness (agreement with `OPg` under
-  $\varphi(k)=\alpha k$) is established by Cells 69–71 below.
+  $\varphi(k)=\alpha k$) is established by Cells 71–73 below.
 
 ### `gRot[λ][a,b][φ]`, `OP[λ1,λ2][a,b][M,n][φ]`, `genNontrivial`, `OPg[λ1,λ2][M,n][φ]`
 
@@ -844,21 +934,21 @@ See `docs/superpowers/specs/2026-07-16-xxx-sov-factorization-functional-overlap-
 - **Signature:**
   `gRot[λ_][a_,b_][φ_] := IdentityMatrix[dim[{λ,0}]] + Sum[φ^m/m! MatrixPower[Ee[λ][a,b],m],{m,1,λ}]`;
   `OP[λ1_,λ2_][a_,b_][M_,n_][φ_] := Flatten[KroneckerProduct[xSingle[λ1][{0}].gRot[λ1][a,b][φ], xSingle[λ2][{0}]]] . Psi[λ1,λ2][M,n]`;
-  `genNontrivial = {2,1}` (fixed once, from the Cell 66 test — see below);
+  `genNontrivial = {2,1}` (fixed once, from the Cell 68 test — see below);
   `OPg[λ1_,λ2_][M_,n_][φ_] := OP[λ1,λ2][genNontrivial[[1]],genNontrivial[[2]]][M,n][φ]`.
 - **Depends on:** [`Ee`](#eeλij), [`dim`](#psrep-dimrep-j0kpat-jpkpat-jmkpat-jjklrep),
   [`xSingle`](#xsingleλ0-x2λ1λ2s1s2), [`Psi`](#psiλ1λ2mn-τλ1λ2mnu).
-- **Defined in:** Cell 65 (`gRot`, `OP`), Cell 66 (`genNontrivial`, via a test), Cell 67 (`OPg`).
+- **Defined in:** Cell 67 (`gRot`, `OP`), Cell 68 (`genNontrivial`, via a test), Cell 69 (`OPg`).
 - **Gotcha (kernel quirk, noted in the notebook's own comment, not a typo):**
   `MatrixPower[singularMatrix,0]` does **not** auto-reduce to `IdentityMatrix` in this kernel (it
   fires `MatrixPower::sing` and stays unevaluated) even though $m=0$ is a concrete nonnegative
   integer — `Ee[λ][a,b]` is singular/nilpotent for the generators used here. `gRot`'s $m=0$ identity
   term is therefore split off explicitly and `MatrixPower` is only summed over $m=1,\dots,\lambda$.
-- **Verified by:** Cell 66 tests `OP[2,1][1,2][1,0][φ]` (generator $E_{12}$) vs.
+- **Verified by:** Cell 68 tests `OP[2,1][1,2][1,0][φ]` (generator $E_{12}$) vs.
   `OP[2,1][2,1][1,0][φ]` (generator $E_{21}$) on the fixed case $(\lambda_1,\lambda_2)=(2,1)$,
   state $(1,0)$: live kernel state shows `op12` is exactly $\varphi$-independent
   ($1.+0.\times I$, constant) while `op21` genuinely depends on $\varphi$ — confirming
-  `genNontrivial={2,1}` ($E_{21}$) is the correct, nontrivial choice. Cell 67's smoke test confirms
+  `genNontrivial={2,1}` ($E_{21}$) is the correct, nontrivial choice. Cell 69's smoke test confirms
   `Exponent[OPg[·][φ],φ] <= λ1` for a $\lambda_1=1$ and a $\lambda_1=2$ case.
 
 ### `αVal`, `φuniversal[k]` — the closed dictionary
@@ -867,7 +957,7 @@ See `docs/superpowers/specs/2026-07-16-xxx-sov-factorization-functional-overlap-
   with a single universal $\alpha$, equates `FLdet` (functional side) and `OPg` (operatorial side)
   across every representation and state tested.
 - **Signature/derivation:**
-  - Cell 69 (the "sharp discovery step", $\lambda_1=1$ universality test on rep $(1,2)$, all 6
+  - Cell 71 (the "sharp discovery step", $\lambda_1=1$ universality test on rep $(1,2)$, all 6
     states): both `FLdet[1,2][M,n][k]` and `OPg[1,2][M,n][φ]` are degree-1 polynomials with constant
     term exactly $1$ (hard-asserted, `DictDet::badconst` otherwise); $\alpha_{\text{state}} :=
     D_{\text{state}}/c_{1,\text{state}}$ (ratio of the linear coefficients) is hard-asserted to be
@@ -875,25 +965,25 @@ See `docs/superpowers/specs/2026-07-16-xxx-sov-factorization-functional-overlap-
     $10^{-12}$) — this constancy is the actual universality content, not the constant-term-1 fact.
     `αVal` is fixed to this common value. Live kernel state: `αVal = -1.+0.*I` exactly.
   - `φuniversal[k_] := αVal k`.
-  - Cell 70 validates $\varphi(k)=\alpha_{\mathrm{Val}}k$ (with the *same* fixed `αVal` from the
+  - Cell 72 validates $\varphi(k)=\alpha_{\mathrm{Val}}k$ (with the *same* fixed `αVal` from the
     $(1,2)$ test) across the **full** representation sweep
     `{{1,1},{2,1},{1,2},{2,2},{3,1},{1,3}}` and *all* their states: hard-asserts
     `Chop[Simplify[FLdet[λ1,λ2][M,n][k] - OPg[λ1,λ2][M,n][φuniversal[k]]], 10^-15] === 0` for every
     state of every rep (`DictDet::residual` otherwise) — this is the real content, testing that the
     tower weights $w_m$ (from `Nn1`/`mu1`) match `OPg`'s $\varphi^m$ Taylor coefficients (built from
     $E_{ab}^m$ via `gRot`) under the single rescaling $\alpha$, for every $(\lambda_1,\lambda_2,M,n)$.
-  - Cell 71's final report (`dictReportDet`) collects the closed dictionary:
+  - Cell 73's final report (`dictReportDet`) collects the closed dictionary:
     generator $\{2,1\}$ ($E_{21}$), $\varphi(k)=\alpha k$, $\alpha=-1$, normalization = the 1-site
     FSoV determinant `det1`, over the 6-representation sweep.
 - **Returns:** `dictReportDet` is an `Association` with keys `"generator {a,b}"`, `"φ(k)"`,
   `"α (universal value)"`, `"normalization"`, `"max residual over rep sweep"`, `"reps validated"`,
   `"num states validated"`.
 - **Depends on:** [`FLdet`](#det1λ1f-fldetλ1λ2mnk), [`OPg`](#grotλabφ-opλ1λ2abmnφ-gennontrivial-opgλ1λ2mnφ).
-- **Defined in:** Cell 69 (`αVal`), Cell 70 (`φuniversal`, full-sweep validation), Cell 71
+- **Defined in:** Cell 71 (`αVal`), Cell 72 (`φuniversal`, full-sweep validation), Cell 73
   (`dictReportDet`).
 - **Paper reference:** none — this is the notebook's own novel result; not yet incorporated into
   `paper/xxxCG.tex`.
-- **Verified by:** Cell 70's hard assert over the full sweep is the check: designed to reduce every
+- **Verified by:** Cell 72's hard assert over the full sweep is the check: designed to reduce every
   residual to the *literal symbolic* value `0` (not merely numerically small) via `Simplify`+`Chop`.
   Live kernel state confirms `allResidsDet` is a list of 41 literal zeros and `maxResidDet = 0`
   (`Length[allResidsDet] = 41`, matching $4+6+6+9+8+8$ states summed over the 6 representations
@@ -913,26 +1003,44 @@ See `docs/superpowers/specs/2026-07-16-xxx-sov-factorization-functional-overlap-
   empty on disk for every cell across all six sections (confirmed by this agent via
   `wolfbook_getCellOutput`/`wolfbook_getNotebookContext`). This is the same documented, understood
   tool-capture artifact noted for the original A+B version of this notebook, carried over
-  unchanged after the C–F merge — not a correctness problem. Direct kernel-state inspection
-  (`wolfbook_getKernelState`) confirms every routine's expected memoized/evaluated value is present
-  and matches the notebook's own inline hard-asserts (which would `Abort` on genuine failure), and
-  the activity log confirms a clean fresh-kernel `Run All` was performed immediately before this
-  documentation pass. A manual "Run All" in the front end should repopulate the displayed outputs
-  if that matters for interactive use.
+  unchanged after the C–F merge and the 2026-07-16 `ν1`/`x2` fix — not a correctness problem. Direct
+  kernel-state inspection (`wolfbook_getKernelState`) and the notebook's own rendered `Out[...]`
+  labels confirm every routine's expected memoized/evaluated value is present and matches the
+  notebook's own inline hard-asserts (which would `Abort` on genuine failure). A manual "Run All"
+  in the front end should repopulate the displayed outputs if that matters for interactive use.
 - **`κ[1]`/`κ[2]` vs `κ1`/`κ2`:** Cell 13's `t2diag` and Cell 16's `tdiagasympt` use the formal,
   purely symbolic indexed function `κ[i]` — these are unrelated to the numeric plain variables
   `κ1`,`κ2` set in Cell 1 (the actual companion-twist eigenvalues used everywhere else, including
   all of Sections B–F). They only appear together, symbolically, in the Cell 17 asymptotics
   cross-check.
-- **`Qθ` defined twice with the same formula:** Section A (Cell 21) and Section B (Cell 28, after
+- **`ν1` defined twice with different arity (added 2026-07-16):** Section A's Cell 25 defines the
+  two-site `ν1[λ1_,λ2_][u_] := (u-θ1-hλ1)(u-θ2-hλ2)`; Section E's Cell 58 independently defines a
+  single-site `ν1[λ_][u_] := (u-θ1-hλ)`. These coexist as separate DownValues on the same head
+  (Wolfram dispatches by argument-count pattern), which is not a conflict, but a reader searching
+  the notebook for `ν1` will find two differently-shaped formulas under the same name and should
+  check which arity is meant.
+- **`Qθ` defined twice with the same formula:** Section A (Cell 21) and Section B (Cell 30, after
   its own `ClearAll[Qθ]`) both define `Qθ[u_] := (u-θ1)(u-θ2)`. Currently harmless since they agree,
   but a future edit to one without the other will silently diverge. `Qθ1[u]=(u-θ1)` (Cell 21) is
-  now used by Section E's `xL1`/`B1` (it was unused within Sections A/B alone).
+  **no longer referenced anywhere** in the live notebook as of the 2026-07-16 fix — Section E's
+  `xL1` used to call it directly but now uses its own single-site `ν1[λ][u]` instead (numerically
+  identical, a notational-parity rename, not a behavior change — see Section E).
+- **`x2`'s normalization was fixed 2026-07-16 (do not revert):** the earlier denominator divided by
+  the symmetric `Qθ(u)=(u-θ1)(u-θ2)` evaluated at a single argument shifted by $-\lambda_1h$ for
+  *both* the `{s1,·}` and `{·,s2}` factors — silently applying site 1's shift to the $\theta_2$
+  factor that should have carried site 2's own $\lambda_2$. This produced an apparently nontrivial
+  "site-2 passthrough eigenvalue" in the old Section E, which was actually the bug's signature, not
+  a genuine finding (see Section E). The fix (Section A's `ν1[λ1,λ2][u]`, with independently
+  shifted per-site factors) makes the Section E factorization check come out exactly $1$ — if this
+  denominator is ever "simplified" back to a `Qθ`-based form, re-run Section E's factorization check
+  (Cell 60) to confirm it doesn't silently regress.
 - **Memoization caching stale results:** several routines (`ps`, `dim`, `J0`/`Jp`/`Jm`/`JJ`, `T`,
   `x2`, `t2Coeffs`, `TauEigensystem`, `TauEigensystemLeft`, `QSolve`, `xL1`, `Nn1`) are
   self-memoizing (`f[x_]:=f[x]=...`). Per the project-wide convention (`CLAUDE.md`), after fixing
   any upstream definition, re-run the defining cell and everything downstream that used the stale
-  cache — a partial re-run will not clear old memoized values.
+  cache — a partial re-run will not clear old memoized values. In particular, `x2` is memoized, so
+  the 2026-07-16 fix required re-evaluating Cell 26 and everything downstream of it (Section E's
+  factorization checks, Section F's `FLdet`/dictionary) rather than just editing the definition.
 - **Precision-tracked exact zeros before `NullSpace`:** see the `QSolve` gotcha above — always
   `Chop` a numeric matrix before `NullSpace` when its singularity is expected by construction rather
   than relying on `Tolerance` alone.
