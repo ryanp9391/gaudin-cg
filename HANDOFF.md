@@ -97,5 +97,5 @@ See `CLAUDE.md` for the full layout (XXX vs Gaudin split, Clean/Experiments conv
 `Clean/XXX_CG_L2_Clean.wb` is now the authoritative A–F notebook: A (SoV construction, incl. `ν1`) ·
 B (Baxter/TQ, Psi/Q1) · C (2-site FSoV scalar product/orthogonality) · D (left eigenvectors,
 `<Psi|Psi>=det[Q,Q]`) · E (exact L=1 factorization, c=1) · F (functional CG-overlap dictionary).
-Companion `.md`/`.tex` reference docs need refreshing for the Section E correction (not yet done as
-of this HANDOFF write — see Open threads).
+Companion `.md`/`.tex` reference docs are up to date with it (refreshed same day for the Section E
+correction; `.tex` compiles clean with plain `pdflatex`).
