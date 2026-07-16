@@ -803,3 +803,860 @@ Out= {1/3, 1/7, 1, 0.3604398751472265372666776505955500912937645232622850024938`
 ```
 Out= {"Q1[1,1][1,0][2] match" -> 0, "QSolve[2,1][2,0] match" -> {0, 0, 0}}
 ```
+## 2026-07-16 14:43:59 — 📥 BULK INSERT 11 CELL(S) at positions 35–45
+1. [markdown] (*Section C — FSoV scalar product / orthogonality check. mu/Nn/nn/br/det ported verbatim from↵  Expe
+2. [code] (*FSoV measures*)↵ClearAll[mu];↵mu[λ1_,λ2_][1][u_]:=Nn[λ1,λ2][1]/(Product[(u-θ1-h k),{k,0,λ1}]Produc
+3. [code] (*Normalization factors in measure*)↵Nn[λ1_,λ2_][1]:=1/(2 π I)/(1-Exp[2 π I/h(θ1-θ2)]) nn[λ1,λ2][1];
+4. [code] (*brackets of function f, given by contour integral around all poles in measure*)↵ClearAll[br];↵br[λ
+5. [code] ClearAll[det];↵det[λ1_,λ2_][f_]:=1/(f/.u:>θ1)/(f/.u:>θ2)/(θ2-θ1)({{br[λ1,λ2][1][f],br[λ1,λ2][1][u f]
+6. [code] (*Port-fidelity check: fsovL2CachedFormula is FSoV_L2.wb's own cached Out[215] for↵  det[1,1][f[u] z
+7. [code] (*statesOf: the sorted {M,n} key list for a representation, read off TauEigensystem's memoized↵  cac
+8. [code] states21 = statesOf[2, 1]
+9. [code] G21 = GramMatrix[2, 1];↵Dimensions[G21]
+10. [code] G21//Chop[#,10^(-30)]&
+11. [code] (*Verification: G21 should be numerically diagonal. maxOffDiag is the largest |off-diagonal|↵  entry
+
+
+## 2026-07-16 14:43:59
+**Input:**
+```wolfram
+(*FSoV measures*)
+ClearAll[mu];
+mu[λ1_,λ2_][1][u_]:=Nn[λ1,λ2][1]/(Product[(u-θ1-h k),{k,0,λ1}]Product[(u-θ2-h k),{k,0,λ2}])(1-Exp[2 π I/h (u-θ2)]);
+mu[λ1_,λ2_][2][u_]:=Nn[λ1,λ2][2]/(Product[(u-θ1-h k),{k,0,λ1}]Product[(u-θ2-h k),{k,0,λ2}])(1-Exp[2 π I/h (u-θ1)]);
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:43:59
+**Input:**
+```wolfram
+(*Normalization factors in measure*)
+Nn[λ1_,λ2_][1]:=1/(2 π I)/(1-Exp[2 π I/h(θ1-θ2)]) nn[λ1,λ2][1];
+Nn[λ1_,λ2_][2]:=1/(2 π I)/(1-Exp[2 π I/h(θ2-θ1)]) nn[λ1,λ2][2];
+
+nn[λ1_,λ2_][1]:= (-1)^(λ1+λ2-1)h^(λ1)Gamma[λ1+1] Product[θ2+k h-θ1,{k,0,λ2}]//Simplify;
+nn[λ1_,λ2_][2]:= (-1)^(λ1+λ2-1)h^(λ2)Gamma[λ2+1] Product[θ1+k h-θ2,{k,0,λ1}]//Simplify;
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:44:00
+**Input:**
+```wolfram
+(*brackets of function f, given by contour integral around all poles in measure*)
+ClearAll[br];
+br[λ1_,λ2_][1][f_]:=2 π I Plus@@(Residue[f mu[λ1,λ2][1][u],{u,#}]&/@Table[θ1+h k,{k,0,λ1}])//Expand//Simplify;
+br[λ1_,λ2_][2][f_]:=2 π I Plus@@(Residue[f mu[λ1,λ2][2][u],{u,#}]&/@Table[θ2+h k,{k,0,λ2}])//Expand//Simplify;
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:44:00
+**Input:**
+```wolfram
+ClearAll[det];
+det[λ1_,λ2_][f_]:=1/(f/.u:>θ1)/(f/.u:>θ2)/(θ2-θ1)({{br[λ1,λ2][1][f],br[λ1,λ2][1][u f]},{br[λ1,λ2][2][f],br[λ1,λ2][2][u f]}}//Det//Expand//Simplify)
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:44:00
+**Input:**
+```wolfram
+(*Port-fidelity check: fsovL2CachedFormula is FSoV_L2.wb's own cached Out[215] for
+  det[1,1][f[u] z^(u/h)], transcribed verbatim with θ1,θ2,h,z,f still symbolic (as they were in
+  that standalone notebook). Here θ1,θ2,h are already bound (cell 0), so comparing the freshly
+  computed det[...] against this formula with the SAME substitution applied is a direct
+  transcription check, independent of re-deriving the algebra.*)
+ClearAll[fsovL2CachedFormula];
+fsovL2CachedFormula[θ1_,θ2_,h_,z_,fn_] := -(z^((θ1+θ2)/h-θ1/h-θ2/h) (z fn[h+θ1] (fn[θ2] (h-θ1+θ2)+z (θ1-θ2) fn[h+θ2])+fn[θ1] (fn[θ2] (θ1-θ2)-z fn[h+θ2] (h+θ1-θ2))))/(fn[θ1] fn[θ2] (θ2-θ1));
+portCheckDiff = Simplify[det[1,1][f[u] z^(u/h)] - fsovL2CachedFormula[θ1,θ2,h,z,f]]
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:44:01
+**Input:**
+```wolfram
+(*statesOf: the sorted {M,n} key list for a representation, read off TauEigensystem's memoized
+  cache (built once in Section B) rather than re-deriving dPred here.
+  GramMatrix: the full Gram matrix G_{(M,n),(M',n')} = det[λ1,λ2][Q1(M,n)(u) Q1(M',n')(u)] over
+  ALL states of the representation at once — this covers same-M degeneracy AND cross-M pairs in
+  a single object, per the design.*)
+ClearAll[statesOf, GramMatrix];
+statesOf[λ1_,λ2_] := SortBy[Keys[TauEigensystem[λ1,λ2]], {First,Last}];
+GramMatrix[λ1_,λ2_] := Module[{s = statesOf[λ1,λ2]},
+  Table[
+    det[λ1,λ2][Q1[λ1,λ2][s1[[1]],s1[[2]]][u] Q1[λ1,λ2][s2[[1]],s2[[2]]][u]],
+    {s1, s}, {s2, s}]
+];
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:44:01
+**Input:**
+```wolfram
+states21 = statesOf[2, 1]
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:44:02
+**Input:**
+```wolfram
+G21 = GramMatrix[2, 1];
+Dimensions[G21]
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:44:02
+**Input:**
+```wolfram
+G21//Chop[#,10^(-30)]&
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:44:02
+**Input:**
+```wolfram
+(*Verification: G21 should be numerically diagonal. maxOffDiag is the largest |off-diagonal|
+  entry over all 30 off-diagonal pairs (same-M AND cross-M, since states21 spans all of M=0..3);
+  minDiagAbs is the smallest |diagonal| entry, confirming non-degeneracy (a genuine scalar
+  product, not one that degenerates to 0 on some state). Threshold 10^-15 matches this notebook's
+  existing hard-assert convention (e.g. Section B's TauEigensystem residual check, cell 30) — well
+  above the ~10^-20..10^-27 noise floor expected at this notebook's 30-digit working precision,
+  and far below any genuine O(1)-scale diagonal entry.*)
+FSoVGram::notorthogonal = "Off-diagonal Gram entries do not vanish for (λ1,λ2)=(2,1): max|off-diag|=`1`, min|diag|=`2`.";
+FSoVGram::degenerate = "A diagonal Gram entry is suspiciously small for (λ1,λ2)=(2,1) (min|diag|=`1`) — scalar product may be degenerate.";
+offDiagVals = Flatten[Table[If[i != j, G21[[i, j]], Nothing], {i, 1, 6}, {j, 1, 6}]];
+diagVals = Table[G21[[i, i]], {i, 1, 6}];
+maxOffDiag = Max[Abs[N[offDiagVals]]];
+minDiagAbs = Min[Abs[N[diagVals]]];
+If[maxOffDiag > 10^-15,
+  Message[FSoVGram::notorthogonal, maxOffDiag, minDiagAbs];
+  Abort[]];
+If[minDiagAbs < 10^-15,
+  Message[FSoVGram::degenerate, minDiagAbs];
+  Abort[]];
+<|
+  "states" -> states21,
+  "max|off-diagonal|" -> maxOffDiag,
+  "digits vanished (-Log10)" -> N[-Log10[maxOffDiag]],
+  "min|diagonal|" -> minDiagAbs,
+  "diagonal values" -> diagVals
+|>
+```
+**Output:**
+```
+(no output)
+```
+## 2026-07-16 14:45:22 — 📥 BULK INSERT 7 CELL(S) at positions 46–52
+1. [markdown] (*Section D — left eigenvectors of the companion-twisted transfer matrix, paired with the↵  existing
+2. [code] ClearAll[TauEigensystemLeft];↵TauEigensystemLeft::rankdef = "Left combination C0+r C1 failed to reso
+3. [code] (*smoke test: (λ1,λ2)=(2,1) must produce the same 6 keys as statesOf[2,1] (already verified in↵  Sec
+4. [code] (*PsiLeft[λ1,λ2][M,n]: on-demand accessor over the memoized TauEigensystemLeft cache, same↵  bounds/
+5. [code] (*Biorthogonality: a genuine left/right eigenvector pair of a diagonalizable operator with↵  simple 
+6. [code] (*braket = <Psi|Psi>: plain bilinear pairing (no conjugation), matching this notebook's existing↵  n
+7. [code] (*Final report: braket, G21 diagonal entry, and normRatio for all 6 states of (λ1,λ2)=(2,1).↵  Hard-
+
+
+## 2026-07-16 14:45:22
+**Input:**
+```wolfram
+ClearAll[TauEigensystemLeft];
+TauEigensystemLeft::rankdef = "Left combination C0+r C1 failed to resolve the `1`-dim eigenspace for (λ1,λ2)=(`2`,`3`) at every tried r in `4`.";
+TauEigensystemLeft::nomatch = "No left eigenvalue matched target for state `1` at (λ1,λ2)=(`2`,`3`) within tolerance (closest distance `4`).";
+TauEigensystemLeft::dupmatch = "Left eigenvector index `4` matched more than one state (latest: `1`) at (λ1,λ2)=(`2`,`3`) — combo eigenvalues are not resolving distinctly.";
+TauEigensystemLeft::lastzero = "Matched left eigenvector for state `1` at (λ1,λ2)=(`2`,`3`) has last component ~0; cannot normalize.";
+TauEigensystemLeft::countmismatch = "TauEigensystemLeft produced `3` states for (λ1,λ2)=(`1`,`2`), expected `4`.";
+TauEigensystemLeft[λ1_, λ2_] := TauEigensystemLeft[λ1, λ2] = Module[
+   {d, Cs, C0, C1, C2, rCandidatesL, r, valsL, vecsL, states, usedIdx, table},
+   d = (λ1 + 1) (λ2 + 1);
+   Cs = t2Coeffs[λ1, λ2]; {C0, C1, C2} = Cs;
+   rCandidatesL = {17/6, N[Pi, 30] + 1, N[E, 30] + 1, 9/4, 19/6, N[Sqrt[3], 30]};
+   r = SelectFirst[rCandidatesL,
+     Module[{ee, vv}, {ee, vv} = Eigensystem[Transpose[C0 + # C1]];
+       MatrixRank[vv] == d && Length[Union[Chop[ee, 10^-12]]] == d] &,
+     Missing["NoGenericR"]];
+   If[MissingQ[r], Message[TauEigensystemLeft::rankdef, d, λ1, λ2, rCandidatesL]; Abort[]];
+   {valsL, vecsL} = Eigensystem[Transpose[N[C0 + r C1, 30]]];
+   states = statesOf[λ1, λ2];
+   usedIdx = {};
+   table = Association @ Table[
+      Module[{Mn = states[[k]], target, dists, idx, w, last},
+        target = τ[λ1, λ2][Mn[[1]], Mn[[2]]][r] - (κ1 + κ2) r^2;
+        dists = Abs[valsL - target];
+        idx = First[Ordering[dists]];
+        If[dists[[idx]] > 10^-10,
+          Message[TauEigensystemLeft::nomatch, Mn, λ1, λ2, dists[[idx]]]; Abort[]];
+        If[MemberQ[usedIdx, idx],
+          Message[TauEigensystemLeft::dupmatch, Mn, λ1, λ2, idx]; Abort[]];
+        AppendTo[usedIdx, idx];
+        w = vecsL[[idx]];
+        last = w[[-1]];
+        If[Abs[last] < 10^-15 Max[Abs[w]],
+          Message[TauEigensystemLeft::lastzero, Mn, λ1, λ2]; Abort[]];
+        Mn -> w/last],
+      {k, 1, Length[states]}];
+   If[Length[table] != d,
+     Message[TauEigensystemLeft::countmismatch, λ1, λ2, Length[table], d]; Abort[]];
+   table
+];
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:45:23
+**Input:**
+```wolfram
+(*smoke test: (λ1,λ2)=(2,1) must produce the same 6 keys as statesOf[2,1] (already verified in
+  Section C), just via the independent left-eigenvector construction.*)
+KeySort[TauEigensystemLeft[2, 1]] // Keys
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:45:23
+**Input:**
+```wolfram
+(*PsiLeft[λ1,λ2][M,n]: on-demand accessor over the memoized TauEigensystemLeft cache, same
+  bounds/spurious-guard pattern as Psi (Section B).*)
+ClearAll[PsiLeft];
+PsiLeft::bnds = "Invalid indices (M,n)=(`1`,`2`) for (λ1,λ2)=(`3`,`4`): need M an integer in 0..λ1+λ2 and n an integer in 0..M.";
+PsiLeft::spurious = "No genuine state at (M,n)=(`1`,`2`) for (λ1,λ2)=(`3`,`4`): weight sector M=`1` has only `5` genuine state(s) (n=0..`6`), so n=`2` does not exist.";
+PsiLeft[λ1_, λ2_][M_, n_] := Module[{tab, mult},
+  If[! (IntegerQ[M] && IntegerQ[n] && 0 <= M <= λ1 + λ2 && 0 <= n <= M),
+    Message[PsiLeft::bnds, M, n, λ1, λ2]; Return[$Failed]];
+  tab = TauEigensystemLeft[λ1, λ2];
+  mult = dPred[M, λ1, λ2];
+  If[n > mult - 1,
+    Message[PsiLeft::spurious, M, n, λ1, λ2, mult, mult - 1]; Return[Missing["NoState", {λ1, λ2, M, n}]]];
+  tab[{M, n}]];
+(*smoke test: a valid state's left eigenvector, plus confirming its last component is exactly 1*)
+{PsiLeft[2, 1][1, 0][[-1]], Length[PsiLeft[2, 1][1, 0]]}
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:45:23
+**Input:**
+```wolfram
+(*Biorthogonality: a genuine left/right eigenvector pair of a diagonalizable operator with
+  simple spectrum must satisfy PsiLeft[M,n].Psi[M',n']=0 for {M,n}!={M',n'}. This is the
+  correctness check on TauEigensystemLeft's construction itself (independent of Section C's
+  det[Q,Q] machinery) — the natural companion to Section C's off-diagonal Gram check. Threshold
+  10^-15 matches this notebook's existing hard-assert convention.*)
+BiorthoCheck::fail = "Off-diagonal <PsiLeft|Psi> pairing does not vanish for (λ1,λ2)=(2,1): max|off-diag|=`1`.";
+offBiortho = Flatten[Table[
+   If[i != j, PsiLeft[2, 1] @@ states21[[i]] . (Psi[2, 1] @@ states21[[j]]), Nothing],
+   {i, 1, 6}, {j, 1, 6}]];
+maxOffBiortho = Max[Abs[N[offBiortho]]];
+If[maxOffBiortho > 10^-15,
+  Message[BiorthoCheck::fail, maxOffBiortho];
+  Abort[]];
+<|"max|<PsiLeft|Psi>| off-diagonal" -> maxOffBiortho,
+  "digits vanished (-Log10)" -> N[-Log10[maxOffBiortho]]|>
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:45:24
+**Input:**
+```wolfram
+(*braket = <Psi|Psi>: plain bilinear pairing (no conjugation), matching this notebook's existing
+  non-Hermitian convention. normRatio divides by G21's diagonal entry for the SAME state (G21 is
+  Section C's already-verified Gram matrix over states21) — only valid for (λ1,λ2)=(2,1) since
+  G21/states21 are fixed globals for that representation, matching this plan's fixed test case.*)
+ClearAll[braket, normRatio];
+braket[λ1_, λ2_][M_, n_] := PsiLeft[λ1, λ2][M, n] . Psi[λ1, λ2][M, n];
+normRatio[λ1_, λ2_][M_, n_] := Module[{i = First[FirstPosition[states21, {M, n}]]},
+  braket[λ1, λ2][M, n]/G21[[i, i]]];
+(*smoke test*)
+{braket[2, 1][1, 0], normRatio[2, 1][1, 0]}
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:45:24
+**Input:**
+```wolfram
+(*Final report: braket, G21 diagonal entry, and normRatio for all 6 states of (λ1,λ2)=(2,1).
+  Hard-assert every braket is nonzero (non-degenerate pairing) before reporting — a zero braket
+  here would mean PsiLeft and Psi are somehow orthogonal even on the diagonal, which should be
+  impossible given Task 2's biorthogonality check already passed.*)
+BraketReport::degenerate = "braket vanished for state `1` at (λ1,λ2)=(2,1) (value `2`) — pairing may be degenerate.";
+reportRows = Table[
+   Module[{Mn = states21[[i]], b, g, ratio},
+     b = braket[2, 1] @@ Mn;
+     g = G21[[i, i]];
+     ratio = normRatio[2, 1] @@ Mn;
+     If[Abs[N[b]] < 10^-15,
+       Message[BraketReport::degenerate, Mn, b];
+       Abort[]];
+     <|"M" -> Mn[[1]], "n" -> Mn[[2]], "braket" -> N[b, 10], "G21 diagonal" -> N[g, 10],
+       "normRatio" -> N[ratio, 10]|>],
+   {i, 1, 6}];
+reportRows // Column
+```
+**Output:**
+```
+(no output)
+```
+## 2026-07-16 14:46:10 — 📥 BULK INSERT 8 CELL(S) at positions 53–60
+1. [markdown] (*Section E — operatorial factorization of the L=2 SoV basis. Builds a genuine STANDALONE↵  length-1
+2. [code] (*Single-site (L=1) fused transfer matrices — the L=1 analogue of Section A's two-site t2 block,↵  b
+3. [code] (*smoke: shape check for the fused hierarchy*)↵{Dimensions[t1[2][1,1][u]], Dimensions[t1[2][1,2][u]]
+4. [code] (*Genuine length-1 SoV covector (paper normalization, 1-site Qθ1(u)=u-θ1). xSingle[λ][{0}] is the↵  
+5. [code] (*Internal check (independent of the factorization): xL1[λ][{s}] must be a LEFT eigencovector of↵  B
+6. [code] (*Operatorial factorization: x2[λ1,λ2][{s1,0}] = c (xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}]). Flatten both↵
+7. [code] (*Summary: worst ratio-constancy spread across the whole sweep (the hard-asserted factorization↵  co
+8. [code] (*Physics-level closure: the site-2 pseudovacuum xSingle[λ2][{0}] is a LEFT eigencovector of the↵  s
+
+
+## 2026-07-16 14:46:10
+**Input:**
+```wolfram
+(*Single-site (L=1) fused transfer matrices — the L=1 analogue of Section A's two-site t2 block,
+  built from the SAME single-site Lax L[λ] (no θ baked in) and shared companion twist G. qdet1 is
+  the single-site quantum determinant: both factors are this site's L evaluated at u-θ1 and u-θ1-h
+  (the internal -h shift), unlike the two-site qdetT where θ is already in T. t1[λ][1,1](u)=tr_a[G
+  L(u-θ1)] matches paper eq. t_{1,1}(u)=tr_a[G L(u-θ)].*)
+ClearAll[t1, qdet1];
+t1[λ_][0, s_][u_] := IdentityMatrix[dim[{λ, 0}]];
+t1[λ_][a_, 0][u_] := IdentityMatrix[dim[{λ, 0}]];
+t1[λ_][1, 1][u_] := Sum[L[λ][i, j][u - θ1] G[[j, i]], {i, 2}, {j, 2}];
+qdet1[λ_][u_] := L[λ][1, 1][u - θ1] . L[λ][2, 2][u - θ1 - h] - L[λ][2, 1][u - θ1] . L[λ][1, 2][u - θ1 - h];
+t1[λ_][2, 1][u_] := χ2 qdet1[λ][u];
+t1[λ_][1, s_ /; s > 1][u_] := t1[λ][1, s - 1][u] . t1[λ][1, 1][u + (s - 1) h] - t1[λ][2, 1][u + (s - 1) h] . t1[λ][1, s - 2][u];
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:46:10
+**Input:**
+```wolfram
+(*smoke: shape check for the fused hierarchy*)
+{Dimensions[t1[2][1,1][u]], Dimensions[t1[2][1,2][u]]}
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:46:10
+**Input:**
+```wolfram
+(*Genuine length-1 SoV covector (paper normalization, 1-site Qθ1(u)=u-θ1). xSingle[λ][{0}] is the
+  site lowest-weight covector (Section A) — a 1×(λ+1) row. xL1 stays that shape: (1×n).(n×n)=1×n.
+  B1 is the L=1 SoV B-operator.*)
+ClearAll[B1, xL1];
+B1[λ_][u_] := L[λ][1, 1][u - θ1];
+xL1[λ_][{0}] := xSingle[λ][{0}];
+xL1[λ_][{s_}] := xL1[λ][{s}] = xSingle[λ][{0}] . t1[λ][1, s][θ1] / Product[Qθ1[θ1 - λ h + (p - 1) h], {p, 1, s}];
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:46:11
+**Input:**
+```wolfram
+(*Internal check (independent of the factorization): xL1[λ][{s}] must be a LEFT eigencovector of
+  B1 with eigenvalue u-θ1-s h — the paper's L=1 SoV property (verified there symbolically for
+  λ=1..5). This validates the whole t1/xL1 construction before it is used downstream. Symbolic in
+  u; residual Chopped at the 10^-20 noise floor.*)
+xL1BCheck = Table[
+   xL1[λ][{s}] . B1[λ][u] - (u - θ1 - s h) xL1[λ][{s}],
+   {λ, 1, 3}, {s, 0, λ}] // ExpandAll // Chop[#, 10^-20] & // Flatten // Union;
+xL1BCheck
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:46:11
+**Input:**
+```wolfram
+(*Operatorial factorization: x2[λ1,λ2][{s1,0}] = c (xL1[λ1][{s1}] ⊗ xSingle[λ2][{0}]). Flatten both
+  to length-D vectors, take the component ratio over the nonzero components of the tensor product.
+  HARD requirement #1: the ratio lhs/tp must be a CONSTANT c (spread below the 10^-15 floor) — the
+  actual factorization content ("t2[1,s1][θ1] acts only through a rank-1 site-2 eigenvalue"). HARD
+  requirement #2 (hardened after the μEff≠1 finding was pinned down): c must equal the CORRECTED
+  scalar cPredCorr[λ1,λ2,s1] = Product[(θ1-θ2+(k-1)h-λ2 h)/(θ1-θ2+(k-1)h-λ1 h),{k,1,s1}], which
+  accounts for the genuine site-2 passthrough eigenvalue μSite2[λ2,s1] (defined/verified at the
+  operator level in the cell below) — NOT the naive 1/Product[(θ1-λ1 h+(k-1)h)-θ2,{k,1,s1}] that
+  assumed a trivial (identity) site-2 passthrough. cPredCorr reduces to 1 at λ1=λ2 and to
+  f(λ2)/f(λ1), f(λ)=21λ-4, at s1=1 — matching the earlier empirical finding exactly. mueff=cval/cpred
+  is now a closure check (must be exactly 1 to the noise floor) rather than a soft warning.*)
+ClearAll[cPredCorr];
+cPredCorr[λ1_, λ2_, s1_] := Product[(θ1 - θ2 + (k - 1) h - λ2 h)/(θ1 - θ2 + (k - 1) h - λ1 h), {k, 1, s1}];
+SoVFact::notconst = "Ratio lhs/tp not constant for (λ1,λ2,s1)=(`1`,`2`,`3`): spread=`4`.";
+SoVFact::mu = "c ≠ cPredCorr for (λ1,λ2,s1)=(`1`,`2`,`3`): μEff=`4` (corrected scalar formula failed — a construction bug, not a finding).";
+factResults = Flatten[Table[
+    Module[{lhs, tp, nz, rl, cval, cpred, mueff, spread},
+     lhs = Flatten[x2[λ1, λ2][{s1, 0}]];
+     tp = Flatten[KroneckerProduct[xL1[λ1][{s1}], xSingle[λ2][{0}]]];
+     nz = Position[tp, x_ /; Abs[Chop[x, 10^-20]] > 10^-12];
+     rl = Extract[lhs, nz]/Extract[tp, nz];
+     cval = Mean[rl];
+     spread = Max[Abs[rl - cval]];
+     cpred = cPredCorr[λ1, λ2, s1];
+     mueff = cval/cpred;
+     If[spread > 10^-15, Message[SoVFact::notconst, λ1, λ2, s1, N[spread]]; Abort[]];
+     If[Abs[N[mueff - 1]] > 10^-15, Message[SoVFact::mu, λ1, λ2, s1, N[mueff]]; Abort[]];  (* now HARD *)
+     {λ1, λ2, s1, cval, cpred, N[mueff], N[spread]}],
+    {λ1, 1, 3}, {λ2, 1, 3}, {s1, 0, λ1}], 2];
+Column[factResults]
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:46:11
+**Input:**
+```wolfram
+(*Summary: worst ratio-constancy spread across the whole sweep (the hard-asserted factorization
+  content), and the range of μEff=c/cPred (should be exactly 1 everywhere if the site-2 passthrough
+  is trivial). Columns of factResults: {λ1,λ2,s1,c,cPred,μEff,spread}.*)
+<|
+  "max spread (ratio non-constancy)" -> Max[factResults[[All, 7]]],
+  "max |μEff - 1| over sweep" -> Max[Abs[factResults[[All, 6]] - 1]],
+  "num (λ1,λ2,s1) cases checked" -> Length[factResults]
+|>
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:46:12
+**Input:**
+```wolfram
+(*Physics-level closure: the site-2 pseudovacuum xSingle[λ2][{0}] is a LEFT eigencovector of the
+  site-2 Lax factor appearing in t2[λ1,λ2][1,s1][θ1] at each fused step, with eigenvalue
+  μSite2[λ2,s1] = Product[(θ1-θ2+(k-1)h-λ2 h),{k,1,s1}]. This is WHY the naive "passthrough is the
+  identity" guess failed: L[λ2][1,1](θ1-θ2) has a nontrivial GT lowest-weight eigenvalue at each of
+  the s1 fused steps (shifted by (k-1)h from the internal Hirota recursion), not 1. Verified directly
+  at the NUMERATOR level (i.e. before any xL1-normalization is applied — the cleanest statement of the
+  effect): x2[λ1,λ2][{0,0}].t2[λ1,λ2][1,s1][θ1] must equal μSite2[λ2,s1] times
+  (xSingle[λ1][{0}].t1[λ1][1,s1][θ1]) ⊗ xSingle[λ2][{0}], componentwise constant over the nonzero
+  tensor-product entries. HARD assert on both constancy (spread) and the closed form (deviation
+  from μSite2).*)
+ClearAll[μSite2];
+μSite2[λ2_, s1_] := Product[(θ1 - θ2 + (k - 1) h - λ2 h), {k, 1, s1}];
+Site2Mu::notconst = "μ-ratio not constant at operator level for (λ1,λ2,s1)=(`1`,`2`,`3`): spread=`4`.";
+Site2Mu::mismatch = "μ ≠ μSite2 at operator level for (λ1,λ2,s1)=(`1`,`2`,`3`): μ=`4`, μSite2=`5`.";
+opMuResults = Flatten[Table[
+    Module[{numLhs, numTp, nz, rl, muval, mupred, spread},
+     numLhs = Flatten[x2[λ1, λ2][{0, 0}] . t2[λ1, λ2][1, s1][θ1]];
+     numTp = Flatten[KroneckerProduct[xSingle[λ1][{0}] . t1[λ1][1, s1][θ1], xSingle[λ2][{0}]]];
+     nz = Position[numTp, x_ /; Abs[Chop[x, 10^-20]] > 10^-12];
+     rl = Extract[numLhs, nz]/Extract[numTp, nz];
+     muval = Mean[rl];
+     spread = Max[Abs[rl - muval]];
+     mupred = μSite2[λ2, s1];
+     If[spread > 10^-15, Message[Site2Mu::notconst, λ1, λ2, s1, N[spread]]; Abort[]];
+     If[Abs[N[muval - mupred]] > 10^-15, Message[Site2Mu::mismatch, λ1, λ2, s1, N[muval], N[mupred]]; Abort[]];
+     {λ1, λ2, s1, N[muval], N[mupred], N[spread]}],
+    {λ1, 1, 3}, {λ2, 1, 3}, {s1, 0, λ1}], 2];
+<|"max operator-level spread" -> Max[opMuResults[[All, 6]]],
+  "max |μ - μSite2|" -> Max[Abs[opMuResults[[All, 4]] - opMuResults[[All, 5]]]],
+  "num (λ1,λ2,s1) cases" -> Length[opMuResults]|>
+```
+**Output:**
+```
+(no output)
+```
+## 2026-07-16 14:47:08 — 📥 BULK INSERT 11 CELL(S) at positions 61–71
+1. [markdown] (*Section F — functional CG overlap. Sets up the length-1 FSoV measure/bracket (Section C's↵  mu[...
+2. [code] (*Length-1 FSoV measure and bracket. mu1 is a single-site rational measure with simple poles at↵  th
+3. [code] (*Internal check: the leading (θ1-node) weight must be exactly 1 for λ=1,2,3 (this IS the↵  br1[f]=f
+4. [code] (*Sanity: br1 acting on a generic analytic f reproduces the weighted tower sum Σ_j w_j f(θ1+h j),↵  
+5. [code] (*RHS operatorial CG overlap: rotate the site-1 pseudovacuum covector by g=exp[φ Ee[λ1][a,b]]↵  (Ee[
+6. [code] (*Which single-site generator is nontrivial? The lowest-weight covector ⟨x0| annihilates one of↵  E1
+7. [code] (*OPg fixes the nontrivial generator so downstream code reads OPg[λ1,λ2][M,n][φ]. Degree in φ is ≤λ1
+8. [code] (*Functional object: the 1-site FSoV DETERMINANT det1[f] = br1[f]/f(θ1) — the 1-site reduction of↵  
+9. [code] (*λ1=1 universality test (the sharp discovery step), rep (1,2), all 6 states: det1 is 1+D_state k;↵ 
+10. [code] (*Validate the universal φ(k)=αVal k across the FULL rep sweep and ALL their states. This is the↵  r
+11. [code] (*Final dictionary report: the functional CG overlap and the operatorial CG overlap match EXACTLY↵
+
+
+## 2026-07-16 14:47:08
+**Input:**
+```wolfram
+(*Length-1 FSoV measure and bracket. mu1 is a single-site rational measure with simple poles at
+  the tower θ1+h k, k=0..λ. Nn1 is DERIVED (not guessed) by forcing the θ1-node weight
+  w_0 = 2πI Res[mu1, θ1] to equal 1, so that br1[λ][f] = f(θ1) + (higher-tower). br1 is the residue
+  sum over the whole tower. (For λ≥1 the residues of mu1 sum to 0, so br1[λ][1]=0 — the correct
+  normalization statement is w_0=1, checked next.)*)
+ClearAll[Nn1, mu1, br1];
+Nn1[λ_] := Nn1[λ] = Module[{uu}, 1/(2 π I Residue[1/Product[(uu - θ1 - h k), {k, 0, λ}], {uu, θ1}])];
+mu1[λ_][u_] := Nn1[λ]/Product[(u - θ1 - h k), {k, 0, λ}];
+br1[λ_][f_] := 2 π I Plus @@ (Residue[f mu1[λ][u], {u, #}] & /@ Table[θ1 + h k, {k, 0, λ}]);
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:47:09
+**Input:**
+```wolfram
+(*Internal check: the leading (θ1-node) weight must be exactly 1 for λ=1,2,3 (this IS the
+  br1[f]=f(θ1)+... normalization), and br1[λ][1] must be 0 (rational-measure residues sum to
+  zero). Also list the full weight vectors w_j for the record.*)
+w1[λ_] := Table[2 π I Residue[mu1[λ][u], {u, θ1 + h j}], {j, 0, λ}];
+Nn1Check::badlead = "Leading weight w_0 ≠ 1 for λ=`1`: w_0=`2`.";
+Nn1Check::badsum = "br1[λ][1] ≠ 0 for λ=`1`: got `2`.";
+Do[
+  Module[{w = w1[λ], s},
+   If[Abs[N[w[[1]] - 1]] > 10^-15, Message[Nn1Check::badlead, λ, w[[1]]]; Abort[]];
+   s = br1[λ][1];
+   If[Abs[N[s]] > 10^-15, Message[Nn1Check::badsum, λ, s]; Abort[]]],
+  {λ, 1, 3}];
+<|"w_0 (λ=1,2,3)" -> Table[w1[λ][[1]], {λ, 1, 3}],
+  "full weights w_j" -> Table[λ -> w1[λ], {λ, 1, 3}],
+  "br1[λ][1] (λ=1,2,3)" -> Table[br1[λ][1], {λ, 1, 3}]|>
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:47:09
+**Input:**
+```wolfram
+(*Sanity: br1 acting on a generic analytic f reproduces the weighted tower sum Σ_j w_j f(θ1+h j),
+  and picks out f(θ1) as the leading term. Test with f=g[u] (undefined head, stays symbolic).*)
+Clear[g];
+{br1[1][g[u]] - Sum[w1[1][[j + 1]] g[θ1 + h j], {j, 0, 1}] // Simplify,
+ br1[2][g[u]] - Sum[w1[2][[j + 1]] g[θ1 + h j], {j, 0, 2}] // Simplify}
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:47:09
+**Input:**
+```wolfram
+(*RHS operatorial CG overlap: rotate the site-1 pseudovacuum covector by g=exp[φ Ee[λ1][a,b]]
+  (Ee[a,b] nilpotent of order ≤λ1+1 on the finite-dim rep). Build g as the explicit truncated
+  series Σ_{m=0}^{λ} φ^m/m! Ee[a,b]^m — this is EXACT (higher powers vanish) and guaranteed to be a
+  polynomial in φ, avoiding MatrixExp returning an unevaluated symbolic exponential. Tensor with the
+  site-2 pseudovacuum covector, contract with the two-site right eigenvector Psi. Shapes:
+  (1×n1).(n1×n1)=1×n1 → KroneckerProduct with 1×n2 → Flatten to length D → .Psi = scalar.
+  NOTE (kernel quirk, not a typo): MatrixPower[singularMatrix,0] does NOT auto-reduce to
+  IdentityMatrix in this kernel (fires MatrixPower::sing and stays unevaluated) even though m=0 is
+  a concrete nonnegative integer, while m>=1 evaluates cleanly. Ee[λ][a,b] is nilpotent/singular for
+  the generators used here, so the m=0 identity term is split off explicitly and only
+  MatrixPower is summed over m=1..λ, which evaluates without any message.*)
+ClearAll[gRot, OP];
+gRot[λ_][a_, b_][φ_] := IdentityMatrix[dim[{λ, 0}]] + Sum[φ^m/m! MatrixPower[Ee[λ][a, b], m], {m, 1, λ}];
+OP[λ1_, λ2_][a_, b_][M_, n_][φ_] := Flatten[KroneckerProduct[xSingle[λ1][{0}] . gRot[λ1][a, b][φ], xSingle[λ2][{0}]]] . Psi[λ1, λ2][M, n];
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:47:10
+**Input:**
+```wolfram
+(*Which single-site generator is nontrivial? The lowest-weight covector ⟨x0| annihilates one of
+  E12/E21 (giving φ-independent OP); keep the other. Test on (λ1,λ2)=(2,1), state (1,0).*)
+op12 = OP[2, 1][1, 2][1, 0][φ] // Simplify;
+op21 = OP[2, 1][2, 1][1, 0][φ] // Simplify;
+genNontrivial = Which[
+   !FreeQ[op12, φ] && FreeQ[op21, φ], {1, 2},
+   !FreeQ[op21, φ] && FreeQ[op12, φ], {2, 1},
+   True, {1, 2}  (* fallback: if both depend on φ, default to {1,2} and flag in the report *)];
+<|"OP(E12)" -> op12, "OP(E21)" -> op21, "nontrivial generator {a,b}" -> genNontrivial,
+  "both φ-dependent?" -> (!FreeQ[op12, φ] && !FreeQ[op21, φ])|>
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:47:10
+**Input:**
+```wolfram
+(*OPg fixes the nontrivial generator so downstream code reads OPg[λ1,λ2][M,n][φ]. Degree in φ is ≤λ1.*)
+ClearAll[OPg];
+OPg[λ1_, λ2_][M_, n_][φ_] := OP[λ1, λ2][genNontrivial[[1]], genNontrivial[[2]]][M, n][φ];
+(*smoke: degree in φ for a λ1=1 and a λ1=2 case*)
+{Exponent[OPg[1, 1][1, 0][φ] // Simplify, φ], Exponent[OPg[2, 1][1, 0][φ] // Simplify, φ]}
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:47:10
+**Input:**
+```wolfram
+(*Functional object: the 1-site FSoV DETERMINANT det1[f] = br1[f]/f(θ1) — the 1-site reduction of
+  Section C's det[λ1,λ2][f] (which divides by f at BOTH nodes θ1,θ2; only the θ1-node survives at
+  1 site). This 1/f(θ1) normalization cancels the (k κ1)^(θ1/h) fractional prefactor that the bare
+  bracket br1[f] would otherwise carry, leaving det1[k^(u/h) Q1] = Σ_j w_j k^j Q1(θ1+jh)/Q1(θ1), a
+  CLEAN degree-λ1 polynomial in k with leading term exactly 1 (since w_0=1 by Nn1's construction).*)
+ClearAll[det1, FLdet];
+det1[λ1_][f_] := br1[λ1][f]/(f /. u -> θ1);
+FLdet[λ1_, λ2_][M_, n_][k_] := det1[λ1][k^(u/h) Q1[λ1, λ2][M, n][u]];
+(*smoke: FLdet[1,2][0,0][k] must be a degree-1 polynomial in k, constant term exactly 1, NO
+  fractional power of k.*)
+FLdet[1, 2][0, 0][k] // Simplify
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:47:11
+**Input:**
+```wolfram
+(*λ1=1 universality test (the sharp discovery step), rep (1,2), all 6 states: det1 is 1+D_state k;
+  OPg is 1+c1(state) φ. HARD assert #1: both constant terms are exactly 1 (a structural fact of the
+  normalization, not a coincidence). HARD assert #2: α_state := D_state/c1(state) is the SAME
+  constant across all 6 states — this is the actual universality content.*)
+sts12 = statesOf[1, 2];
+DictDet::badconst = "Constant term ≠ 1 for state `1`: FLdet const=`2`, OPg const=`3`.";
+DictDet::notuniv = "α_state not universal: spread=`1` (see alphaTab).";
+alphaTab = Table[
+   Module[{fl, op, D0, Dc, c0, c1, alpha},
+    fl = FLdet[1, 2][s[[1]], s[[2]]][k] // Simplify;
+    op = OPg[1, 2][s[[1]], s[[2]]][φ] // Simplify;
+    D0 = Coefficient[fl, k, 0]; Dc = Coefficient[fl, k, 1];
+    c0 = Coefficient[op, φ, 0]; c1 = Coefficient[op, φ, 1];
+    If[Abs[N[D0 - 1]] > 10^-15 || Abs[N[c0 - 1]] > 10^-15,
+     Message[DictDet::badconst, s, N[D0], N[c0]]; Abort[]];
+    alpha = Dc/c1;
+    {s, N[D0], N[c0], N[Dc], N[c1], N[alpha]}],
+   {s, sts12}];
+alphaSpread = Max[Abs[alphaTab[[All, 6]] - alphaTab[[1, 6]]]];
+If[alphaSpread > 10^-12, Message[DictDet::notuniv, alphaSpread]; Abort[]];
+αVal = alphaTab[[1, 6]];
+<|"alphaTab {state,D0,c0,Dc,c1,α}" -> alphaTab, "α spread" -> alphaSpread, "α (universal value)" -> αVal|>
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:47:11
+**Input:**
+```wolfram
+(*Validate the universal φ(k)=αVal k across the FULL rep sweep and ALL their states. This is the
+  real content: it tests that the binomial tower weights w_m (from Nn1/mu1) match OPg's φ^m Taylor
+  coefficients (built from Ee[a,b]^m via the fixed gRot) under the single rescaling α, for every
+  (λ1,λ2,M,n). HARD assert: residual FLdet-OPg[αVal k] vanishes (Simplify reduces it to literal 0,
+  or Chop below 10^-15) for every state of every rep in the sweep.*)
+ClearAll[φuniversal];
+φuniversal[k_] := αVal k;
+DictDet::residual = "Nonzero residual for (λ1,λ2,M,n)=(`1`,`2`,`3`,`4`): resid=`5`.";
+repSweepDet = {{1, 1}, {2, 1}, {1, 2}, {2, 2}, {3, 1}, {1, 3}};
+validationDet = Table[
+   Module[{λ1 = rep[[1]], λ2 = rep[[2]], sts, resids},
+    sts = statesOf[λ1, λ2];
+    resids = Table[
+      Module[{lhs, rhs, r},
+       lhs = FLdet[λ1, λ2][st[[1]], st[[2]]][k];
+       rhs = OPg[λ1, λ2][st[[1]], st[[2]]][φuniversal[k]];
+       r = Chop[Simplify[lhs - rhs], 10^-15];
+       If[r =!= 0, Message[DictDet::residual, λ1, λ2, st[[1]], st[[2]], r]; Abort[]];
+       {st, r}],
+      {st, sts}];
+    {λ1, λ2} -> resids],
+   {rep, repSweepDet}];
+allResidsDet = Flatten[Table[validationDet[[i, 2]][[All, 2]], {i, Length[validationDet]}]];
+maxResidDet = Max[Abs[allResidsDet]];
+<|"validation" -> validationDet, "max residual over full sweep" -> maxResidDet,
+  "num states checked" -> Length[allResidsDet]|>
+```
+**Output:**
+```
+(no output)
+```
+
+## 2026-07-16 14:47:11
+**Input:**
+```wolfram
+(*Final dictionary report: the functional CG overlap and the operatorial CG overlap match EXACTLY
+  (symbolically zero after Simplify, not merely below a noise floor) once the LHS uses the 1-site
+  FSoV DETERMINANT det1 (not the bare bracket br1) and the parameter map is the single LINEAR
+  rescaling φ(k)=α k. This is the Section F dictionary: generator, φ(k), and normalization.*)
+dictReportDet = <|
+  "generator {a,b}" -> genNontrivial,
+  "φ(k)" -> "α k",
+  "α (universal value)" -> αVal,
+  "normalization" -> "1-site FSoV determinant det1[f] = br1[f]/(f/.u->θ1); Section C's det[λ1,λ2][f] restricted to 1 site",
+  "max residual over rep sweep" -> maxResidDet,
+  "reps validated" -> repSweepDet,
+  "num states validated" -> Length[allResidsDet]
+|>;
+dictReportDet
+```
+**Output:**
+```
+(no output)
+```
+
+---
+
+## 2026-07-16 14:47:32 — 🔄 KERNEL RESTART
+
+## 2026-07-16 14:47:49 — ▶️ RUN CELLS 1–34
+Cell 1: ✓ — (no output)
+Cell 3: ✓ — (no output)
+Cell 4: ✓ — (no output)
+Cell 5: ✓ — (no output)
+Cell 6: ✓ — (no output)
+Cell 8: ✓ — (no output)
+Cell 10: ✓ — (no output)
+Cell 11: ✓ — (no output)
+Cell 12: ✓ — (no output)
+Cell 13: ✓ — (no output)
+Cell 14: ✓ — (no output)
+Cell 15: ✓ — (no output)
+Cell 16: ✓ — (no output)
+Cell 17: ✓ — (no output)
+Cell 18: ✓ — (no output)
+Cell 20: ✓ — (no output)
+Cell 21: ✓ — (no output)
+Cell 23: ✓ — (no output)
+Cell 25: ✓ — (no output)
+Cell 26: ✓ — (no output)
+Cell 28: ✓ — (no output)
+Cell 29: ✓ — (no output)
+Cell 30: ✓ — (no output)
+Cell 31: ✓ — (no output)
+Cell 32: ✓ — (no output)
+Cell 33: ✓ — (no output)
+Cell 34: ✓ — (no output)
+
+
+## 2026-07-16 14:48:05
+**Input:**
+```wolfram
+{θ1, θ2, h, κ1, TauEigensystem[1,1][{0,0}], Psi[1,1][1,0]}
+```
+**Output:**
+```
+Out= {1/3, 1/7, 1, 0.3604398751472265372666776505955500912937645232622850024938`29.707347828414424 + 0.9327824485933747164848359820708679294578496404879183613065`30.120295363558725*I, <|"J" -> 0.56640551808849884427620773665015014352`26.563908186381784 + 1.37696456697117220052523406877128122917`26.915783392193127*I, "Psi" -> {-0.74016619280770349120031215726511215204`28.25736179271083 + 0.67242397862104047713498006666438147933`28.24691480308365*I, 0.36043987514722653726667765059555009129`27.843010048988198 + 0.93278244859337471648483598207086792946`28.246958303210636*I, 0.36043987514722653726667765059555009129`27.843010048988198 + 0.93278244859337471648483598207086792946`28.246958303210636*I, 1.`28.25273175422156 + 0``28.253729389534094*I}|>, {1.00000000000000000000000000000000000001`28.402747934397283 + 0``28.703777930061257*I, -1.30044948810764362720923581419356337479`28.402747934397286 + 0``28.589684442012377*I, 2.02132923840209670174259111538466355738`28.359954584956583 + 0``28.69917086764009*I, 1.`28.402747934397283 + 0``28.703777930061257*I}}
+```
+## 2026-07-16 14:48:20 — ▶️ RUN CELLS 35–52
+Cell 36: ✓ — (no output)
+Cell 37: ✓ — (no output)
+Cell 38: ✓ — (no output)
+Cell 39: ✓ — (no output)
+Cell 40: ✓ — (no output)
+Cell 41: ✓ — (no output)
+Cell 42: ✓ — (no output)
+Cell 43: ✓ — (no output)
+Cell 44: ✓ — (no output)
+Cell 45: ✓ — (no output)
+Cell 47: ✓ — (no output)
+Cell 48: ✓ — (no output)
+Cell 49: ✓ — (no output)
+Cell 50: ✓ — (no output)
+Cell 51: ✓ — (no output)
+Cell 52: ✓ — (no output)
+
+## 2026-07-16 14:48:33 — ▶️ RUN CELLS 53–71
+Cell 54: ✓ — (no output)
+Cell 55: ✓ — (no output)
+Cell 56: ✓ — (no output)
+Cell 57: ✓ — (no output)
+Cell 58: ✓ — (no output)
+Cell 59: ✓ — (no output)
+Cell 60: ✓ — (no output)
+Cell 62: ✓ — (no output)
+Cell 63: ✓ — (no output)
+Cell 64: ✓ — (no output)
+Cell 65: ✓ — (no output)
+Cell 66: ✓ — (no output)
+Cell 67: ✓ — (no output)
+Cell 68: ✓ — (no output)
+Cell 69: ✓ — (no output)
+Cell 70: ✓ — (no output)
+Cell 71: ✓ — (no output)
+
+
+## 2026-07-16 14:48:53
+**Input:**
+```wolfram
+{
+ "xL1BCheck" -> xL1BCheck,
+ "factResults max spread/mueff" -> {Max[factResults[[All,7]]], Max[Abs[factResults[[All,6]]-1]]},
+ "opMuResults check" -> {Max[opMuResults[[All,6]]], Max[Abs[opMuResults[[All,4]]-opMuResults[[All,5]]]]},
+ "w1 check" -> {Table[w1[λ][[1]],{λ,1,3}], Table[br1[λ][1],{λ,1,3}]},
+ "genNontrivial" -> genNontrivial,
+ "alphaSpread,αVal" -> {alphaSpread, αVal},
+ "maxResidDet" -> maxResidDet,
+ "dictReportDet" -> dictReportDet,
+ "G21 offdiag/diag" -> {maxOffDiag, minDiagAbs},
+ "biortho" -> maxOffBiortho,
+ "portCheckDiff" -> portCheckDiff
+}
+```
+**Output:**
+```
+Out= {"xL1BCheck" -> {0}, "factResults max spread/mueff" -> {0., 0.}, "opMuResults check" -> {0., 0.}, "w1 check" -> {{1, 1, 1}, {0, 0, 0}}, "genNontrivial" -> {2, 1}, "alphaSpread,αVal" -> {0., -1. + 0.*I}, "maxResidDet" -> 0, "dictReportDet" -> <|"generator {a,b}" -> {2, 1}, "φ(k)" -> "α k", "α (universal value)" -> -1. + 0.*I, "normalization" -> "1-site FSoV determinant det1[f] = br1[f]/(f/.u->θ1); Section C's det[λ1,λ2][f] restricted to 1 site", "max residual over rep sweep" -> 0, "reps validated" -> {{1, 1}, {2, 1}, {1, 2}, {2, 2}, {3, 1}, {1, 3}}, "num states validated" -> 41|>, "G21 offdiag/diag" -> {5.065342385207116*^-34, 3.0051232400647923}, "biortho" -> 0., "portCheckDiff" -> 0}
+```
+## 2026-07-16 14:49:08 — ▶️ RUN CELL 32
+**In [32]:** `(* Psi[λ1,λ2][M,n]: on-demand accessor over the memoized TauEigensystem cache. Returns the fixed↵   (last-component-normalized) eigenvector for a genuine state.↵   τ[λ1,λ2][M,n][u]: the FULL τ eigenva`
+**Out:** (no output)
+
+
+## 2026-07-16 14:49:15
+**Input:**
+```wolfram
+Print["spurious-guard test (expect a Psi::spurious message and Missing[...]): ", Psi[2, 1][2, 2]];
+{Psi[1, 1][1, 0], N[τ[1, 1][1, 0][2], 10]}
+```
+**Output:**
+```
+Print:
+*STR*spurious-guard test (expect a Psi::spurious message and Missing[...]): \034BoxData[InterpretationBox[TooltipBox["\342\200\224", "(missing)"], Missing["NoState", {2, 1, 2, 2}]]]
+[message] Psi::spurious: No genuine state at (M,n)=(2,2) for (λ1,λ2)=(2,1): weight sector M=2 has only 2 genuine state(s) (n=0..1), so n=2 does not exist.
+Out[1]= (suppressed)
+Out[2]= {{1.00000000000000000000000000000000000001`28.402747934397283 + 0``28.703777930061257*I, -1.30044948810764362720923581419356337479`28.402747934397286 + 0``28.589684442012377*I, 2.02132923840209670174259111538466355738`28.359954584956583 + 0``28.69917086764009*I, 1.`28.402747934397283 + 0``28.703777930061257*I}, -0.02291660899982616316934999074083675684`10.15051499783199 + 0``11.790364642896865*I}
+```
