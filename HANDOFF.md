@@ -9,6 +9,80 @@ freely each session rather than appending.
 Computing CG coefficients directly in the XXX spin chain (`Paul/Mathematica/XXX/`). The Gaudin
 subproject is parked.
 
+## State as of 2026-07-17 (gl(3) general reps per site: `su3_V2_general.wb` — DONE, in Experiments)
+
+Generalized the two-site gl(3) XXX notebook from symmetric reps `{S,0,0}` per site to **arbitrary
+gl(3) Young-diagram reps `λ={λ1,λ2,λ3}`** (`λ1≥λ2≥λ3≥0`, integers), one independent diagram per
+site, in `Paul/Mathematica/XXX/Experiments/su3_V2_general.wb` (a copy of `su3_V1.wb` generalized in
+place). Diagonal-twist frame, `(H1,H2,n)` labelling, three Baxter Q-functions, and the hard-assert
+zero-residual convention all preserved. Design/plan (with Execution-outcome section):
+`docs/superpowers/specs/2026-07-17-su3-general-reps-design.md`,
+`docs/superpowers/plans/2026-07-17-su3-general-reps.md`. Tasks 1–6 all DONE; controller commits.
+
+**Interface:** every function is re-signatured `S1,S2 → λ1,λ2` and takes full 3-vectors per site
+(no scalar-`S` wrappers). Numeric params unchanged (`θ1=1/3, θ2=1/7, h=1`, high-precision `z[k]`).
+
+**The three genuine math edits (everything else is pure relabeling):**
+- **General Yangian weight** `ν[λ1,λ2][i][u] = (u−θ1−h·λ1[[i]])(u−θ2−h·λ2[[i]])` for `i=1,2,3`,
+  from the Lax action `L[λ][i,i][u]|hw⟩=(u−h λ_i)|hw⟩` on the two-site HWS. Verified via the HWS
+  eigenvalue check (T[i,i]|hw⟩=ν[i]|hw⟩) and the `qdetT == tg[·][3,1]` shift-ordering guard on
+  non-symmetric reps. `qdetT[λ1,λ2][u]=χ3 ν[·][1][u−2h] ν[·][2][u−h] ν[·][3][u]` (V1 shift order
+  survives).
+- **Honest tensor-product `wtMult`:** `siteWeightMult[λ]=Counts` of the gl(3) weight of every GT
+  pattern of `λ`; `wtMult[λ1,λ2][H1,H2]` recovers `(n1,n2,n3)` from `(H1,H2)` with `N=Total[λ1]+
+  Total[λ2]` and convolves the two single-site tallies — correctly yields interior multiplicity `>1`.
+  Sum rule `Σ wtMult == dim[λ1] dim[λ2]` hard-asserted across the sweep; guard on `{2,1,0}⊗{2,1,0}`
+  (d=64) passes.
+- **Degree closed form (Task 5 headline):** `M_k = Λ_1 − n_k`, with `Λ = λ1+λ2` the pseudovacuum
+  highest weight and `Λ_1 = (λ1+λ2)[[1]]`. Sum rule `Σ_k M_k = 3Λ_1 − N`. Reduces to V1's `M_k = N−n_k`
+  for symmetric reps (there `Λ_1 = N`). Extracted by fitting candidates `{N−n, Λ_1−n, Λ_k−n}` against
+  the rep-agnostic `Mdeg` over the full sweep — only `Λ_1−n` gives zero deviation on the non-symmetric
+  reps. Hard-asserted (`Mpred==Mdeg`, worst=0).
+
+**Full-sweep verification (acceptance, Task 6):** six rep pairs, **102 states total**, every `Q_k`
+solves the 3rd-order TQ equation and the 4×4 Casoratian reconstruction of `A1,A2,A3` matches
+`τ1,τ2,qdetT` — **worstTQ = worstCasoratian = 0** (machine-zero, both `< 10^-9`). Per-rep counts:
+
+| `λ1` | `λ2` | nstates |
+|---|---|---|
+| `{1,0,0}` | `{1,0,0}` | 9 |
+| `{2,0,0}` | `{1,1,0}` | 18 |
+| `{1,1,0}` | `{1,1,0}` | 9 |
+| `{2,1,0}` | `{1,0,0}` | 24 |
+| `{2,1,0}` | `{1,1,0}` | 24 |
+| `{2,2,0}` | `{1,0,0}` | 18 |
+
+Verified by a fresh-kernel top-to-bottom run (restart → run cells 1→40 in order); every hard-assert
+check passed in-kernel with no `Abort`.
+
+**wolfbook output-persistence glitch — re-run, do not trust blank boxes.** Several check cells created
+via `insertCells` / edited during Tasks 3–5 do NOT refresh their on-disk `Out[]` display even after a
+correct fresh-kernel re-run (confirmed: re-running an affected cell individually still shows blank).
+These cells computed the correct result in-kernel (verified by direct `evaluateExpression`), but their
+saved display is empty or stale. **A future reader must re-run the notebook rather than treat these as
+failures.** Cells still showing empty/stale output on disk after the full Task-6 run (1-based cell
+numbers; correct in-kernel values in parentheses):
+- Cell 14 — `qdetT == tg[·][3,1]` guard: **empty** (in-kernel `{0}`).
+- Cell 23 — `wtMult` sum-rule: **empty** (in-kernel all reps OK; the informational
+  `adjoint⊗fund @(0,0)` spot value is `0` because for N=4 the (0,0) weight is non-integer — not a
+  failure).
+- Cell 24 — `{2,1,0}⊗{2,1,0}` d=64 guard: **empty** (in-kernel `tot=64=dim`).
+- Cell 27 — eigensystem residual spot check on `{2,1,0}⊗{1,0,0}`: **empty** (in-kernel worst≈1.5×10⁻²⁷).
+- Cell 31 — `degData` tabulation: **stale** (shows an old `{H1H2n→…,sumM→…}` format; source now emits
+  raw `{λ1,λ2,H1,H2,n,{M}}` rows).
+- Cell 32 — degree candidate-fit `results` Association: **stale** (shows an old matrix; source now
+  emits `{"N-n"→…,"Lam1-n"→0,"Lamk-n"→…}`).
+- Cell 40 — full-sweep report: **stale** (shows the old symmetric sweep, 141 states; the current
+  λ-vector run gives the 102-state table above with worstTQ=worstCasoratian=0).
+
+Check cells whose on-disk `Out[]` IS correct: cell 4 (`C1`→{0}), cell 10 (HWS→{0}), cell 21
+(commuting-family, maxCommutator≈10⁻²⁶), cell 35 (degree assert worst→0; only its result-label string
+still reads "N-n_k", cosmetic), cell 39 (single-state TQ perQresidual→{0,0,0}).
+
+**Next natural steps:** promote `su3_V2_general.wb` to `Clean/` once satisfied; then the companion-twist
+SoV / FSoV CG-overlap program for general gl(3) reps (mirroring the su(2) Sections C–F), and the
+`paper/xxxCG.tex` write-up.
+
 ## State as of 2026-07-17 (gl(3) Section B: eigensystem + Baxter Q-functions — DONE, in Experiments)
 
 Built the gl(3) analog of the su(2) Clean notebook's Section B, in

@@ -159,3 +159,81 @@ leading coefficients are the expected `χ_a · 𝟙`.
 
 None. Three choices confirmed with the user: λ-vectors everywhere (no scalar wrappers); re-derive
 the degree closed form; mixed-small-dims sweep.
+
+## Execution outcome (2026-07-17)
+
+Implemented in `Paul/Mathematica/XXX/Experiments/su3_V2_general.wb` across six tasks, all with the
+hard-assert / zero-residual convention. Every function re-signatured `S1,S2 → λ1,λ2` (full 3-vectors
+per site, no scalar wrappers); numeric params (`θ1=1/3, θ2=1/7, h=1`, high-precision `z[k]`, `χ1,χ2,χ3`)
+unchanged.
+
+**Per task:**
+- **Task 1 (Section A embeddings/Lax/monodromy + general `ν`):** `Ee/id/idd/EE`, `C1`, `L`, `T/Tg/TG`
+  relabeled; the one physics edit `ν[λ1,λ2][i][u]=(u−θ1−h·λ1[[i]])(u−θ2−h·λ2[[i]])` installed.
+  Central-charge check `C1==total boxes → {0}` and HWS eigenvalue check `T[i,i]|hw⟩=ν[i]|hw⟩ → {0}`
+  on non-symmetric reps.
+- **Task 2 (quantum minors, transfer matrices, `qdetT`):** `qmin/qming/qminG`, `tg/tG`, `ν1`, `Bax`
+  relabeled; `qdetT[λ1,λ2][u]=χ3 ν[·][1][u−2h] ν[·][2][u−h] ν[·][3][u]` (V1 shift order retained).
+  The `qdetT == tg[·][3,1]` guard passes on non-symmetric reps, confirming the `ν` shift-ordering is
+  correct for distinct factors.
+- **Task 3 (`wtMult`):** rewritten as an honest tensor-product tally —
+  `siteWeightMult[λ]=Counts[{J0[1][#],J0[2][#],J0[3][#]}& /@ ps[{λ}]]`, and
+  `wtMult[λ1,λ2][H1,H2]` recovers `(n1,n2,n3)` from `(H1,H2)` with `N=Total[λ1]+Total[λ2]` and
+  convolves the two single-site tallies. Sum rule `Σ wtMult == dim[λ1] dim[λ2]` and the
+  `{2,1,0}⊗{2,1,0}` (d=64) guard both pass.
+- **Task 4 (eigensystem):** `tgCoeffs`, `H1op/H2op`, `TauEigensystem3` (with internal sector-count
+  hard-assert against `wtMult`), `Psi/tau1/tau2` relabeled. Leading-coeff + commuting-family check on
+  `{2,1,0}⊗{1,0,0}` (d=24, interior mult-2 weight): `C2=χ1 Id`, `D4=χ2 Id`, `maxCommutator≈10⁻²⁶`.
+  Eigensystem residual spot check worst≈1.5×10⁻²⁷, no degeneracy-splitting failures.
+- **Task 5 (Baxter solver + degree closed form):** `BaxOp`, `alphaCoeffs`, `Mdeg`, `QSolve3`, `Qfun`
+  relabeled; single-state TQ residual on `{2,1,0}⊗{1,0,0}` → `{0,0,0}`. Degree closed form extracted
+  by fitting candidates `{N−n, Λ_1−n, Λ_k−n}` to the rep-agnostic `Mdeg` over the sweep.
+- **Task 6 (full-sweep acceptance):** rewrote the full-sweep cell to the six λ-vector rep pairs;
+  fresh-kernel top-to-bottom run.
+
+**Degree closed form (headline deliverable):**
+```
+M_k = Λ_1 − n_k ,   Λ = λ1 + λ2 (pseudovacuum highest weight),  Λ_1 = (λ1+λ2)[[1]]
+```
+with `(n1,n2,n3)` the gl(3) weight components (`n3=(N−H1−2H2)/3, n2=n3+H2, n1=n3+H1+H2`,
+`N=Total[λ1]+Total[λ2]`). Only `Λ_1−n` gives zero deviation from `Mdeg` on the non-symmetric reps
+(plain `N−n` and per-index `Λ_k−n` fail off the symmetric locus). Sum rule `Σ_k M_k = 3Λ_1 − N`.
+Reduces to V1's `M_k = N−n_k` for symmetric reps (there `Λ_1 = N`, and `3Λ_1−N = 2N`). `M_k` pairs
+with `z_k` in-index and depends only on `(λ1,λ2,H1,H2)`, not on the branch index `n`. Hard-asserted
+`Mpred==Mdeg` (worst=0) over the full sweep.
+
+**Full-sweep verification (acceptance):** six rep pairs, **102 states total**, every `Q_k` solves the
+3rd-order TQ equation and the 4×4 Casoratian reconstruction of `A1,A2,A3` matches `τ1,τ2,qdetT` —
+**worstTQ = worstCasoratian = 0** (machine-zero, both `< 10^-9`), no `Abort`:
+
+| `λ1` | `λ2` | tensor dim | nstates |
+|---|---|---|---|
+| `{1,0,0}` | `{1,0,0}` | 9 | 9 |
+| `{2,0,0}` | `{1,1,0}` | 18 | 18 |
+| `{1,1,0}` | `{1,1,0}` | 9 | 9 |
+| `{2,1,0}` | `{1,0,0}` | 24 | 24 |
+| `{2,1,0}` | `{1,1,0}` | 24 | 24 |
+| `{2,2,0}` | `{1,0,0}` | 18 | 18 |
+
+**Two plan-code corrections made during execution:**
+- **Task 3 `wtMult` lookup:** the plan's `Lookup[m2,{n1,n2,n3}-w,0]` treats the bare `List`
+  `{n1,n2,n3}-w` as *multiple keys* (returns a list of lookups), not one weight key. Corrected to
+  `Lookup[m2, Key[{n1,n2,n3}-w], 0]` so the target weight is a single key — required for the sum rule
+  to close.
+- **Task 5 `alphaCoeffs`:** the `SeriesCoefficient` for the `1/u` coefficient uses `{u, Infinity, +1}`
+  (positive order), inherited verbatim from V1 — the large-`u` expansion coefficient of `1/u` is the
+  order `+1` coefficient at `u=Infinity`, not `-1`.
+
+**qdetT-check numeric wrapper:** the `qdetT == tg[·][3,1]` guard (cell 14) wraps its residual in
+`Chop[Simplify[...], 10^-15]` because `χ3` (hence the whole comparison) is *high-precision numeric*,
+not exact symbolic — `Simplify` alone leaves ~10⁻²⁷…10⁻³⁰ floating coefficients multiplying
+`u`-polynomials that never collapse to a literal `0` under `Union@Flatten`. `Chop` collapses them,
+yielding the exact `{0}`. Confirmed genuine-zero (not a wrong shift ordering) by checking that the
+reversed `ν[3][u−2h] ν[2][u−h] ν[1][u]` assignment gives an O(1) residual instead.
+
+**wolfbook display-persistence glitch:** several check cells created via `insertCells` or edited during
+Tasks 3–5 do not refresh their on-disk `Out[]` after a correct fresh-kernel re-run (re-running an
+affected cell individually still shows blank/stale). All computed correctly in-kernel (verified by
+direct evaluation). Cells still showing empty/stale display after the Task-6 run: **14, 23, 24, 27**
+(empty), **31, 32, 40** (stale old-format). A future reader should re-run rather than treat these
+blank boxes as failures. Check cells whose on-disk `Out[]` is correct: **4, 10, 21, 35, 39**.
