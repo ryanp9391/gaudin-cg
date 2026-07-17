@@ -482,6 +482,48 @@
     }
    ],
    "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*polynomial from an ascending coeff list {c0,c1,...,cM}: qpoly[clist,uu]=Sum ck uu^k.\n  Dummy-symbol trick (build in x, substitute uu at the end) avoids 0^0 issues when uu=0.*)\nClearAll[qpoly];\nqpoly[clist_, uu_] := Module[{x}, (clist . x^Range[0, Length[clist] - 1]) /. x -> uu];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*QSolve3[S1,S2][H1,H2,n] solves the 3rd-order Baxter (TQ) equation for the three monic\n  Q-polynomials q_1,q_2,q_3 (one per companion-twist eigenvalue z[k]), degrees M_k from Mdeg.\n  For fixed k, write Q_k(u)=z[k]^(u/h) q_k(u) and substitute into BaxOp[S1,S2][H1,H2,n][Q_k][u]=0,\n  then multiply through by ν1[u]ν1[u-h]ν1[u-2h] to clear denominators -- this turns the TQ\n  equation into a polynomial identity in u, linear in the unknown coefficients of q_k. Each\n  monomial q=u^j contributes one column (coefficient list in u); NullSpace of the resulting\n  matrix gives the coefficient vector (expected 1-dim nullspace), monic-normalized by dividing\n  by the top coefficient. Chop the (high-precision) matrix before NullSpace -- same pitfall as\n  su(2)'s QSolve: residual roundoff in the numeric tau1/tau2/qdetT/ν1 data can otherwise mask\n  the true nullspace.*)\nClearAll[QSolve3];\nQSolve3::degnull = \"Q_`4` nullspace dim `5` (expected 1) at (H1,H2,n)=(`1`,`2`,`3`).\";\nQSolve3::lastzero = \"Q_`4` top coeff ~0 at (H1,H2,n)=(`1`,`2`,`3`).\";\nQSolve3[S1_, S2_][H1_, H2_, n_] := QSolve3[S1, S2][H1, H2, n] = Module[\n   {Ms, u, T1, T2, QD, N1, N1m, N1mm, sols},\n   Ms = Mdeg[S1, S2][H1, H2, n];\n   T1 = tau1[S1, S2][H1, H2, n][u]; T2 = tau2[S1, S2][H1, H2, n][u];\n   QD = qdetT[S1, S2][u];\n   N1 = ν1[S1, S2][u]; N1m = ν1[S1, S2][u - h]; N1mm = ν1[S1, S2][u - 2 h];\n   sols = Table[\n     Module[{M = Ms[[k]], zk = z[k], cols, mat, ns, vec, last, maxdeg},\n       maxdeg = M + 6;\n       (* column j (j=0..M): coefficient list of the polynomial identity for q=u^j *)\n       cols = Table[\n          PadRight[CoefficientList[Expand[\n             zk (u + h)^j N1 N1m N1mm\n              - T1 u^j N1m N1mm\n              + T2/zk (u - h)^j N1mm\n              - QD/zk^2 (u - 2 h)^j], u], maxdeg + 1],\n          {j, 0, M}];\n       mat = Transpose[cols];                 (* (maxdeg+1) x (M+1) *)\n       ns = NullSpace[Chop[mat, 10^-12], Tolerance -> 10^-10];\n       If[Length[ns] != 1, Message[QSolve3::degnull, H1, H2, n, k, Length[ns]]; Abort[]];\n       vec = ns[[1]]; last = vec[[-1]];\n       If[Abs[last] < 10^-13 Max[Abs[vec]], Message[QSolve3::lastzero, H1, H2, n, k]; Abort[]];\n       vec/last],\n     {k, 1, 3}];\n   sols\n];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*Q accessor: Q_k(u)=z[k]^(u/h) q_k(u), q_k the monic coeff list from QSolve3.*)\nClearAll[Qfun];\nQfun[S1_, S2_][H1_, H2_, n_][k_][u_] := z[k]^(u/h) qpoly[QSolve3[S1, S2][H1, H2, n][[k]], u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*single-state TQ-residual check: each Q_k (built from QSolve3) must be annihilated by BaxOp,\n  tested at several generic numeric u. State: (S1,S2)=(2,1), (H1,H2,n)=(1,1,0) (confirmed to\n  exist as a key of TauEigensystem3[2,1]).*)\nModule[{S1 = 2, S2 = 1, H1 = 1, H2 = 1, n = 0, res},\n  res = Table[\n     Max@Table[\n        Abs@Chop[N[BaxOp[S1, S2][H1, H2, n][Function[uu, Qfun[S1, S2][H1, H2, n][k][uu]]][u0], 30]],\n        {u0, {2/3, 9/5, 4, 23/7}}],\n     {k, 1, 3}];\n  If[Max[res] > 10^-10, Print[\"TQ RESIDUAL FAIL: \", res]; Abort[]];\n  {\"perQresidual\" -> res}\n]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352972\" data-output-id=\"329\" data-out-n=\"108\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"38\" data-sub-start=\"3\" data-sub-end=\"11\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[108]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrp1j655-am75vsb\" data-page-width-em=\"21\" data-latex-b64=\"XGxlZnRce1x0ZXh0e3BlclFyZXNpZHVhbH1cdG8gXGxlZnRcezAsMCwwXHJpZ2h0XH1ccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord text\"><span class=\"mord\">perQresidual</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[108]= \\left\\{\\text{perQresidual}\\to \\left\\{0,0,0\\right\\}\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "350bd0fc-f7fe-46aa-a593-73e605179eef"
+    }
+   ],
+   "metadata": {}
   }
  ],
  "metadata": {}
