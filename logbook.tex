@@ -24,4 +24,75 @@
 \paragraph{Topics.}
 Logbook initialised.
 
+%------------------------------------------------------------------
+\section{17-07-2026}
+%------------------------------------------------------------------
+
+\paragraph{Topics.}
+Generalised the two-site gl(3) XXX spin chain from symmetric reps
+$\{S,0,0\}$ per site to arbitrary gl(3) Young-diagram representations
+$\lambda=\{\lambda_1,\lambda_2,\lambda_3\}$ ($\lambda_1\ge\lambda_2\ge\lambda_3\ge0$),
+one independent diagram per site, in the diagonal-twist $(H_1,H_2,n)$
+frame with three Baxter $Q$-functions. Three pieces of genuine
+mathematics distinguish the general case from the symmetric one: the
+Yangian highest weights, the tensor-product weight multiplicities, and
+the closed form for the Baxter $Q$-function degrees.
+
+\paragraph{Progress.}
+\begin{itemize}
+  \item \emph{General Yangian weight.} From the Lax action on the
+    two-site highest-weight state,
+    $L[\lambda][i,i][u]\,|\mathrm{hw}\rangle=(u-h\lambda_i)\,|\mathrm{hw}\rangle$,
+    the transfer-matrix eigenvalues on the pseudovacuum are
+    \begin{equation}
+      \nu_{\lambda_1,\lambda_2}[i](u)=
+      (u-\theta_1-h\,\lambda_1[[i]])\,(u-\theta_2-h\,\lambda_2[[i]]),
+      \qquad i=1,2,3,
+    \end{equation}
+    with $\lambda_a[[i]]$ the $i$-th component of the site-$a$ diagram.
+    V1's symmetric case $\nu[2]=\nu[3]=(u-\theta)^2$ is the
+    $\lambda_2=\lambda_3=0$ specialisation. The quantum determinant
+    keeps the V1 shift ordering,
+    $\mathrm{qdetT}_{\lambda_1,\lambda_2}(u)=\chi_3\,\nu[1](u-2h)\,\nu[2](u-h)\,\nu[3](u)$,
+    verified against the fused minor $\mathrm{tg}[\cdot][3,1]$ on
+    non-symmetric reps.
+  \item \emph{Honest tensor-product weight multiplicity.} Replaced the
+    symmetric-only splitting combinatorics with a convolution of the
+    single-site Gelfand--Tsetlin weight tallies (counts of the gl(3)
+    weight over all GT patterns of $\lambda$). This yields correct
+    interior multiplicities $>1$ --- e.g.\ the zero weight of the adjoint
+    $\{2,1,0\}$ has multiplicity $2$ --- with the sum rule
+    $\sum \mathrm{wtMult}=\dim[\lambda_1]\,\dim[\lambda_2]$.
+  \item \emph{Degree closed form (headline).} The three Baxter
+    $Q$-function polynomial degrees are
+    \begin{equation}
+      M_k=\Lambda_1-n_k,
+    \end{equation}
+    where $\Lambda=\lambda_1+\lambda_2$ is the pseudovacuum highest
+    weight, $\Lambda_1=(\lambda_1+\lambda_2)[[1]]$ its first component,
+    and $(n_1,n_2,n_3)$ the gl(3) weight of the state. All three degrees
+    anchor to the same $\Lambda_1$, giving the sum rule
+    $\sum_k M_k=3\Lambda_1-N$ with $N$ the total number of boxes. This
+    reduces to V1's $M_k=N-n_k$ for symmetric reps (where $\Lambda_1=N$).
+    It was extracted by fitting the candidates
+    $\{N-n_k,\ \Lambda_1-n_k,\ \Lambda_k-n_k\}$ against a rep-agnostic
+    asymptotic degree predictor over the sweep; only $\Lambda_1-n_k$ fits
+    the non-symmetric reps with zero deviation.
+  \item \emph{Full-sweep verification.} Six rep pairs ---
+    $\{1,0,0\}^{\otimes2}$, $\{2,0,0\}\otimes\{1,1,0\}$,
+    $\{1,1,0\}^{\otimes2}$, $\{2,1,0\}\otimes\{1,0,0\}$,
+    $\{2,1,0\}\otimes\{1,1,0\}$, $\{2,2,0\}\otimes\{1,0,0\}$, for
+    \textbf{102 states} in total --- with every $Q_k$ solving the
+    third-order TQ equation and the $4\times4$ Casoratian reconstruction
+    of $A_1,A_2,A_3$ matching $\tau_1,\tau_2,\mathrm{qdetT}$. Worst TQ residual
+    and worst Casoratian residual both $0$ (machine zero).
+\end{itemize}
+
+\paragraph{Open questions.}
+\begin{itemize}
+  \item The degree law $M_k=\Lambda_1-n_k$ is established empirically by
+    fit over the sweep; a direct derivation from the analytic structure
+    of the $Q$-functions is still open.
+\end{itemize}
+
 \end{document}
