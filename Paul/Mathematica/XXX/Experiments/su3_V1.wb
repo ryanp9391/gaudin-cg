@@ -237,6 +237,41 @@
     }
    ],
    "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*coefficient matrices of tau1=tg[.][1,1] (deg 2 in u) and tau2=tg[.][2,1] (deg 4 in u),\n  extracted by CoefficientList in a dummy variable uu so tg[..][..][uu] is treated as a polynomial in uu.\n  c1={C0,C1,C2} with tau1(u)=Sum_k C_k u^k (index k+1 in the list); c2={D0,...,D4} similarly for tau2.*)\nClearAll[tgCoeffs];\ntgCoeffs[S1_, S2_] := tgCoeffs[S1, S2] = Module[{uu, m1, m2, cl1, cl2},\n   m1 = tg[S1, S2][1, 1][uu];\n   m2 = tg[S1, S2][2, 1][uu];\n   cl1 = Map[PadRight[CoefficientList[#, uu], 3] &, m1, {2}];\n   cl2 = Map[PadRight[CoefficientList[#, uu], 5] &, m2, {2}];\n   {Table[cl1[[All, All, k]], {k, 1, 3}], Table[cl2[[All, All, k]], {k, 1, 5}]}\n];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*Cartan operators (gl(3) weight generators H1=E11-E22, H2=E22-E33) acting on the two-site space*)\nClearAll[H1op, H2op];\nH1op[S1_, S2_] := EE[S1, S2][1, 1] - EE[S1, S2][2, 2];\nH2op[S1_, S2_] := EE[S1, S2][2, 2] - EE[S1, S2][3, 3];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*hard-assert check: leading coefficients of tau1,tau2 are chi1*Id, chi2*Id (quantum-determinant\n  normalization), and the full commuting family {C0,C1,C2,D0,...,D4,H1op,H2op} pairwise-commutes*)\nModule[{S1 = 2, S2 = 1, d, c1, c2, C2, D4, mats, comm},\n  d = dim[{S1, 0, 0}] dim[{S2, 0, 0}];\n  {c1, c2} = tgCoeffs[S1, S2];\n  C2 = c1[[3]]; D4 = c2[[5]];\n  (* leading coeffs: τ1 ~ χ1 u^2, τ2 ~ χ2 u^4 *)\n  If[Max[Abs[Flatten[C2 - χ1 IdentityMatrix[d]]]] > 10^-13, Print[\"C2 FAIL\"]; Abort[]];\n  If[Max[Abs[Flatten[D4 - χ2 IdentityMatrix[d]]]] > 10^-13, Print[\"D4 FAIL\"]; Abort[]];\n  (* full commuting family pairwise-commutes *)\n  mats = Join[c1, c2, {H1op[S1, S2], H2op[S1, S2]}];\n  comm = Max[Table[Max[Abs[Flatten[mats[[i]].mats[[j]] - mats[[j]].mats[[i]]]]],\n      {i, Length[mats]}, {j, Length[mats]}]];\n  If[comm > 10^-12, Print[\"COMMUTATION FAIL: \", comm]; Abort[]];\n  {\"C2=χ1 Id OK\", \"D4=χ2 Id OK\", \"maxCommutator\" -> comm}\n]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352972\" data-output-id=\"318\" data-out-n=\"63\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"20\" data-sub-start=\"2\" data-sub-end=\"15\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[63]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mroz98zh-pgk9w2t\" data-page-width-em=\"21\" data-latex-b64=\"XGxlZnRce1x0ZXh0e0MyPSRcY2hpJDEgSWQgT0t9LFx0ZXh0e0Q0PSRcY2hpJDIgSWQgT0t9LFx0ZXh0e21heENvbW11dGF0b3J9XHRvIDAuXHRpbWVzIDEwXnstMjZ9XHJpZ2h0XH0=\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1.2141em;vertical-align:-0.35em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">{</span></span><span class=\"mord text\"><span class=\"mord\">C2=</span><span class=\"mord mathnormal\">χ</span><span class=\"mord\">1 Id OK</span></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">D4=</span><span class=\"mord mathnormal\">χ</span><span class=\"mord\">2 Id OK</span></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">maxCommutator</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0.</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">×</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">1</span><span class=\"mord\"><span class=\"mord\">0</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">−</span><span class=\"mord mtight\">26</span></span></span></span></span></span></span></span></span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">}</span></span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[63]= \\left\\{\\text{C2=$\\chi$1 Id OK},\\text{D4=$\\chi$2 Id OK},\\text{maxCommutator}\\to 0.\\times 10^{-26}\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "86d04a67-4315-4529-9ce6-a3c39a16bd8e"
+    }
+   ],
+   "metadata": {}
   }
  ],
  "metadata": {}
