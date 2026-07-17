@@ -9,6 +9,37 @@ freely each session rather than appending.
 Computing CG coefficients directly in the XXX spin chain (`Paul/Mathematica/XXX/`). The Gaudin
 subproject is parked.
 
+## State as of 2026-07-17 (gl(3) Section B: eigensystem + Baxter Q-functions — DONE, in Experiments)
+
+Built the gl(3) analog of the su(2) Clean notebook's Section B, in
+`Paul/Mathematica/XXX/Experiments/su3_V1.wb` (on top of the pre-existing Section A there). All
+committed to `main`, all hard-asserts zero-residual. Design/plan (with Execution-outcome sections):
+`docs/superpowers/specs/2026-07-17-su3-transfer-matrix-eigensystem-baxter-design.md`,
+`docs/superpowers/plans/2026-07-17-su3-transfer-matrix-eigensystem-baxter.md`.
+
+**What's there (Section B cells, diagonal-twist frame, numeric `θ1=1/3,θ2=1/7,h=1`,
+`z[k]=N[Exp[I Zeta[3/5/7]],30]`):**
+- `tgCoeffs` (coeff matrices of `τ1=tg[·][1,1]`, `τ2=tg[·][2,1]`), Cartan `H1op`/`H2op`, commuting-
+  family check (`maxCommutator=0`).
+- `wtMult[S1,S2][H1,H2]` — weight-multiplicity predictor (sum rule verified).
+- `TauEigensystem3[S1,S2]` — simultaneous diagonalization; every state labeled `(H1,H2,n)`
+  (`H1=E11−E22, H2=E22−E33`; `n` sorted by the full `τ1/τ2` charge tuple), sector counts match
+  `wtMult`. Accessors `Psi`/`tau1`/`tau2`.
+- `BaxOp` (TQ residual functional), `alphaCoeffs`, `Mdeg`, `qpoly`, `QSolve3` (three-Q solver),
+  `Qfun` accessor `Q_k = z_k^{u/h} q_k(u)`.
+
+**Key result — the degree relation:** `deg q_k = M_k = N − n_k` (`N=S1+S2`, `(n1,n2,n3)` the gl(3)
+weight components), equivalently `M1=(2N−2H1−H2)/3, M2=(2N+H1−H2)/3, M3=(2N+H1+2H2)/3`. `M_k` pairs
+with `z_k` in-index, depends only on `(H1,H2)`, `Σ M_k = 2N`. Hard-asserted.
+
+**Verification:** full sweep `{(1,1),(2,1),(1,2),(2,2),(3,1),(1,3)}`, 141 states — every `Q_k`
+solves the 3rd-order TQ equation (`worstTQ=0`) and the 4×4 Casoratian reconstruction of `A1,A2,A3`
+matches `τ1,τ2,qdetT` (`worstCasoratian=0`). Commits `b4b68c7`…`645517d`.
+
+**Next natural steps:** promote `su3_V1.wb` Section B to `Clean/` once satisfied; build the
+companion-twist SoV covectors / FSoV scalar product for gl(3) (the CG-overlap program, mirroring
+the su(2) Sections C–F); write up in `paper/xxxCG.tex`.
+
 ## State as of 2026-07-16 (SoV factorization + functional CG overlap — DONE, promoted to Clean)
 
 Big result this session: the **Clebsch–Gordan overlap correspondence closed exactly**, then

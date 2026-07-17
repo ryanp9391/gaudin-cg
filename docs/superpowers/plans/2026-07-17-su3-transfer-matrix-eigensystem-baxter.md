@@ -353,9 +353,14 @@ alphaCoeffs[S1_, S2_][H1_, H2_, n_] := alphaCoeffs[S1, S2][H1, H2, n] = Module[{
    A1 = tau1[S1, S2][H1, H2, n][u]/ν1[S1, S2][u];
    A2 = tau2[S1, S2][H1, H2, n][u]/(ν1[S1, S2][u] ν1[S1, S2][u - h]);
    A3 = qdetT[S1, S2][u]/(ν1[S1, S2][u] ν1[S1, S2][u - h] ν1[S1, S2][u - 2 h]);
-   SeriesCoefficient[#, {u, Infinity, -1}] & /@ {A1, A2, A3}
+   SeriesCoefficient[#, {u, Infinity, 1}] & /@ {A1, A2, A3}
 ];
 ```
+
+> **Corrected during execution:** the index must be `+1`, not `-1`. At `x0=Infinity`,
+> `SeriesCoefficient[f,{x,Infinity,k}]` returns the coefficient of `x^{-k}`, so the `1/u`
+> coefficient is index `+1`; `-1` asks for the (nonexistent) `u^{+1}` term and silently returns
+> `0`, which made `Mdeg={0,0,0}` everywhere while still passing the integer guard.
 
 - [ ] **Step 3: Define `Mdeg` from the asymptotic master formula:**
 
@@ -557,3 +562,35 @@ git commit -m "su(3) Section B: full-sweep verification (TQ residual + Casoratia
 - **Type consistency:** `TauEigensystem3` returns keys `{H1,H2,n}` with fields `"tau1c"`(len 3)/`"tau2c"`(len 5)/`"Psi"`; `tau1`/`tau2` dot those against `u^Range[0,2]`/`u^Range[0,4]` (consistent lengths). `Mdeg` returns a length-3 integer list; `QSolve3` indexes it `Ms[[k]]` and returns a length-3 list of coeff-lists; `Qfun[...][k]` indexes that `[[k]]` (consistent). `BaxOp` takes a pure function `Qf` and is fed `Function[uu, Qfun[...][k][uu]]` (consistent).
 
 Note on the Casoratian cofactor signs (Task 7 Step 2): the exact `A_i = ± minor_{i+1}/minor_1` signs follow from Laplace expansion of the 4×4 vanishing determinant; the plan flags adjusting them to match, since the TQ residual (Task 6) independently certifies the Q's regardless of that bookkeeping.
+
+---
+
+## Execution outcome (2026-07-17)
+
+All 7 tasks implemented in `Paul/Mathematica/XXX/Experiments/su3_V1.wb` (Section B, cells after
+the Section-A `Bax` reference cell), executed via subagent-driven development, each hard-assert
+verified live and committed to `main`.
+
+**Result — everything zero-residual:**
+- `TauEigensystem3` diagonalizes the diagonal-twist transfer matrices, labels every state by
+  `(H1,H2,n)`, sector counts matching `wtMult` exactly.
+- The three Baxter Q-functions `Q_k = z_k^{u/h} q_k(u)` are solved by `QSolve3`; each satisfies the
+  3rd-order TQ equation with residual `0`.
+- **Degree relation (the "figure it out" deliverable):** `deg q_k = M_k = N − n_k`, where
+  `N = S1+S2` and `(n1,n2,n3)` are the gl(3) weight components (`n3=(N−H1−2H2)/3, n2=n3+H2,
+  n1=n3+H1+H2`); equivalently `M1=(2N−2H1−H2)/3, M2=(2N+H1−H2)/3, M3=(2N+H1+2H2)/3`. `M_k` pairs
+  with `z_k` in the same index, depends only on `(H1,H2)` (not the branch index `n`), and
+  `M1+M2+M3 = 2N`. Hard-asserted to zero residual over `(2,1),(1,1),(2,2),(1,3)`.
+- **Full sweep** `{(1,1),(2,1),(1,2),(2,2),(3,1),(1,3)}`, 141 states total: `worstTQ = 0` and
+  `worstCasoratian = 0` for every rep (`nstates` = 9/18/18/36/30/30). The 4×4 Casoratian
+  reconstruction of `A1,A2,A3` from the three `Q_k` matches the coefficients built from
+  `τ1,τ2,qdetT` — the Wronskian/QQ consistency check.
+
+**Deviations from the as-written plan (both improvements, verified):**
+1. `alphaCoeffs` `SeriesCoefficient` index `-1 → +1` (see correction note above) — a real bug in the
+   plan; without it every degree came out `0`.
+2. `TauEigensystem3` `n`-ordering strengthened from a single C0 quotient to the full tuple of
+   `τ1`/`τ2` conserved charges, guaranteeing a total order within a degenerate weight sector.
+
+**Commits:** `b4b68c7` (Task 1) · `93ff66e` (Task 2) · `b783526` (Task 3) · `d09044c` (Task 4) ·
+`46d1509` (Task 5) · `dd66326` (Task 6) · `645517d` (Task 7).

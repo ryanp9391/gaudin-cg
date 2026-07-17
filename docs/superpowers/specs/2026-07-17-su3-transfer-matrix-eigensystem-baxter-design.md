@@ -162,3 +162,25 @@ Each check follows the notebook's hard-assert convention (a real failure aborts)
 
 None. Two minor choices confirmed with the user: `n` ordered by `(Re,Im)` of the eigenvalue within
 each sector; sweep set `{(1,1),(2,1),(1,2),(2,2),(3,1),(1,3)}`.
+
+---
+
+## Execution outcome (2026-07-17)
+
+Implemented as Section B of `Paul/Mathematica/XXX/Experiments/su3_V1.wb` (7 tasks, subagent-driven,
+each hard-assert verified live, committed to `main`: `b4b68c7`…`645517d`). Everything zero-residual.
+
+- **Eigensystem:** `TauEigensystem3` diagonalizes the diagonal-twist `τ1,τ2`, labels every state by
+  `(H1,H2,n)`, per-sector counts match `wtMult` exactly.
+- **Baxter Q-functions:** `QSolve3`/`Qfun` give the three `Q_k = z_k^{u/h} q_k(u)`, each solving the
+  3rd-order TQ equation with residual `0`.
+- **Degree relation (deliverable):** `deg q_k = M_k = N − n_k` (`N=S1+S2`, `(n1,n2,n3)` the gl(3)
+  weight components), equivalently `M1=(2N−2H1−H2)/3, M2=(2N+H1−H2)/3, M3=(2N+H1+2H2)/3`; `M_k`
+  pairs with `z_k` in-index, depends only on `(H1,H2)`, `Σ M_k = 2N`. Hard-asserted zero-residual.
+- **Full sweep** `{(1,1),(2,1),(1,2),(2,2),(3,1),(1,3)}`, 141 states: `worstTQ = worstCasoratian = 0`.
+  The 4×4 Casoratian reconstruction of `A1,A2,A3` from the three `Q_k` matches `τ1,τ2,qdetT`.
+
+Two plan corrections applied during execution: `alphaCoeffs` `SeriesCoefficient` index `-1 → +1`
+(the `1/u` coefficient at `Infinity`), and `TauEigensystem3` `n`-ordering strengthened to the full
+`τ1/τ2` charge tuple (total order within a degenerate sector). The `A3` normalization decision
+(`qdetT` keeps `χ3`, Baxter drops the explicit `χ3`) held with zero residual.
