@@ -32,7 +32,13 @@ The 3rd-order Baxter equation has three solutions `Q_k(u) = z_k^{u/h} q_k(u)`, `
 - **Numeric spectrum, symbolic-in-`u` eigenvalues.** Within a multiplicity-`>1` sector the
   eigenvalues are roots of a characteristic polynomial not generally solvable in radicals, so
   diagonalize numerically (numeric `z[i]`, `θ1,θ2`, `h`) while keeping `τ1(u)`, `τ2(u)`, `q_k(u)`
-  symbolic in `u` with numeric coefficients. (Matches su(2).)
+  symbolic in `u` with numeric coefficients. (Matches su(2).) **Concrete parameter cell**, copied
+  from the su(2) Clean notebook for `θ,h` and generalized to three distinct twists:
+  `θ1 = 1/3`, `θ2 = 1/7`, `h = 1`; three distinct high-precision twist eigenvalues, e.g.
+  `z[1] = N[Exp[I Zeta[3]], 30]`, `z[2] = N[Exp[I Zeta[5]], 30]`, `z[3] = N[Exp[I Zeta[7]], 30]`
+  (distinct moduli-1 phases → generic, non-degenerate; no `∏z=1` constraint since gl(3) is not
+  unimodular-normalized). `χ1,χ2,χ3` are then the elementary symmetric functions of the `z[i]`
+  (already how `G` is defined in Section A).
 - **General reps, validated on a sweep** `{(1,1),(2,1),(1,2),(2,2),(3,1),(1,3)}`.
 - **Extend `su3_V1.wb` in place** (Experiments/), mirroring Section B naming. No Clean promotion in
   this task.
@@ -92,11 +98,11 @@ with bounds/spurious guards analogous to su(2)'s `Psi`/`τ`.
 Q(u+h) − A1(u) Q(u) + A2(u) Q(u−h) − A3(u) Q(u−2h) = 0
 A1 = τ1/ν1[u],  A2 = τ2/(ν1[u] ν1[u−h]),  A3 = qdetT /(ν1[u] ν1[u−h] ν1[u−2h])
 ```
-with `ν1[S1,S2][u] = ν[S1,S2][1][u] = (u−θ1−h S1)(u−θ2−h S2)` and `qdetT` the twisted quantum
-determinant (which already carries the `χ3` factor — the sketched `Bax` cell's explicit `χ3` must
-not be double-counted). Reconcile the sketch carefully: confirm the overall sign/normalization of
-the `A3` term (and whether the intended `qdet` is the twisted `qdetT` or the untwisted
-`ν1[u−2h] ν2[u−h] ν3[u]`) so the operator annihilates the known Q's. Once `τ1,τ2` are known from Component 1, `A1,A2,A3` are explicit functions of `u`.
+with `ν1[S1,S2][u] = ν[S1,S2][1][u] = (u−θ1−h S1)(u−θ2−h S2)`. **Decided with the user:** the `χ3`
+factor stays inside `qdetT` (the twisted quantum determinant, `qdetT = χ3 · ν1[u−2h] ν2[u−h] ν3[u]`)
+and is therefore **removed** from the Baxter cell — the sketched `Bax`'s explicit `χ3 · qdet[3,1]`
+double-counts and must become just `qdetT`. Still verify the overall sign of the `A3` term so the
+operator annihilates the known `Q_k` (part of Component 3). Once `τ1,τ2` are known from Component 1, `A1,A2,A3` are explicit functions of `u`.
 
 **Three exponents** `z_1,z_2,z_3` = roots of `z³ − χ1 z² + χ2 z − χ3 = 0` (the companion-twist /
 `G` eigenvalues), assigned numerically.
