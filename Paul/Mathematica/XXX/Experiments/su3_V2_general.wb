@@ -23,7 +23,7 @@
   },
   {
    "kind": 2,
-   "value": "(*checking central charge constraint = total boxes, on general reps*)\nModule[{reps={{{2,1,0},{1,0,0}},{{1,1,0},{1,1,0}},{{2,2,0},{1,0,0}},{{2,1,0},{1,1,0}}}},\n Union@Flatten@Table[\n   C1[r[[1]],r[[2]]]-(Total[r[[1]]]+Total[r[[2]]]) idd[r[[1]],r[[2]]],{r,reps}]]",
+   "value": "(*checking central charge constraint = total boxes, on general reps.*)\nModule[{reps={{{2,1,0},{1,0,0}},{{1,1,0},{1,1,0}},{{2,2,0},{1,0,0}},{{2,1,0},{1,1,0}}}},\n Union@Flatten@Table[\n   C1[r[[1]],r[[2]]]-(Total[r[[1]]]+Total[r[[2]]]) idd[r[[1]],r[[2]]],{r,reps}]]",
    "languageId": "wolfram",
    "outputs": [
     {
@@ -261,51 +261,23 @@
   },
   {
    "kind": 2,
-   "value": "(*combinatorial predictor for gl(3) weight multiplicities in [S1,0,0]\\[CircleTimes][S2,0,0]:\n  recover (n1,n2,n3) from (H1,H2) via n1+n2+n3=S1+S2, then count splittings\n  (a1,a2,a3) of [S1,0,0] with a componentwise complement (n_i-a_i>=0) landing in [S2,0,0]*)\nClearAll[wtMult];\nwtMult[S1_, S2_][H1_, H2_] := Module[{Ntot = S1 + S2, n1, n2, n3},\n   n3 = (Ntot - H1 - 2 H2)/3; n2 = n3 + H2; n1 = n3 + H1 + H2;\n   If[! (IntegerQ[n1] && IntegerQ[n2] && IntegerQ[n3] && n1 >= 0 && n2 >= 0 && n3 >= 0),\n     Return[0]];\n   Length@Select[\n     Flatten[Table[{a1, a2, S1 - a1 - a2}, {a1, 0, S1}, {a2, 0, S1 - a1}], 1],\n     (n1 - #[[1]] >= 0 && n2 - #[[2]] >= 0 && n3 - #[[3]] >= 0) &]\n];",
+   "value": "(*gl(3) weight multiplicities in the tensor product of two general reps λ1⊗λ2.\n  siteWeightMult[λ]: tally the gl(3) weight (J0[1],J0[2],J0[3]) of every GT pattern of λ.\n  wtMult: recover (n1,n2,n3) from (H1,H2) with N=total boxes, then convolve the two site tallies.\n  NB: Lookup's second argument, when itself a List, is treated as a list of *separate* keys\n  (not one list-valued key) — must wrap the composite weight key in Key[...] or Lookup silently\n  returns a per-component {0,0,0} instead of the single association value.*)\nClearAll[siteWeightMult,wtMult];\nsiteWeightMult[λ_]:=siteWeightMult[λ]=Counts[({J0[1][#],J0[2][#],J0[3][#]}&)/@ps[{λ}]];\nwtMult[λ1_,λ2_][H1_,H2_]:=Module[{Ntot=Total[λ1]+Total[λ2],n1,n2,n3,m1,m2},\n  n3=(Ntot-H1-2 H2)/3; n2=n3+H2; n1=n3+H1+H2;\n  If[!(IntegerQ[n1]&&IntegerQ[n2]&&IntegerQ[n3]),Return[0]];\n  m1=siteWeightMult[λ1]; m2=siteWeightMult[λ2];\n  Total[KeyValueMap[Function[{w,c}, c Lookup[m2,Key[{n1,n2,n3}-w],0]],m1]]\n];",
    "languageId": "wolfram",
    "outputs": [],
    "metadata": {}
   },
   {
    "kind": 2,
-   "value": "(*hard-assert sum-rule check: total weight count over all (H1,H2) must equal dim[S1]*dim[S2]*)\nModule[{S1 = 2, S2 = 1, d, tot},\n  d = dim[{S1, 0, 0}] dim[{S2, 0, 0}];\n  tot = Total@Flatten@Table[\n      wtMult[S1, S2][H1, H2], {H1, -3 (S1 + S2), 3 (S1 + S2)}, {H2, -3 (S1 + S2), 3 (S1 + S2)}];\n  If[tot != d, Print[\"SUM-RULE FAIL: \", tot, \" != \", d]; Abort[]];\n  {\"total weights\" -> tot, \"dim\" -> d,\n   \"spot (2,1)@(H1,H2)=(1,1)\" -> wtMult[2, 1][1, 1]}\n]",
+   "value": "(*hard-assert sum-rule: Σ over all (H1,H2) of wtMult == dim[λ1] dim[λ2], for every test rep*)\nModule[{reps={{{2,1,0},{1,0,0}},{{2,0,0},{1,1,0}},{{1,1,0},{1,1,0}},{{2,1,0},{1,1,0}},{{2,2,0},{1,0,0}}},bad},\n  bad=Select[reps,Function[r,\n     Module[{Ntot=Total[r[[1]]]+Total[r[[2]]],d,tot},\n       d=dim[r[[1]]] dim[r[[2]]];\n       tot=Total@Flatten@Table[wtMult[r[[1]],r[[2]]][H1,H2],\n           {H1,-3 Ntot,3 Ntot},{H2,-3 Ntot,3 Ntot}];\n       tot=!=d]]];\n  If[bad=!={},Print[\"SUM-RULE FAIL: \",bad];Abort[]];\n  {\"all reps sum-rule OK\",\n   \"adjoint⊗fund @(H1,H2)=(0,0) mult\"->wtMult[{2,1,0},{1,0,0}][0,0]}\n]",
    "languageId": "wolfram",
-   "outputs": [
-    {
-     "items": [
-      {
-       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352972\" data-output-id=\"319\" data-out-n=\"66\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"22\" data-sub-start=\"1\" data-sub-end=\"8\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[66]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrozm6hc-evb34rn\" data-page-width-em=\"21\" data-latex-b64=\"XGxlZnRce1x0ZXh0e3RvdGFsIHdlaWdodHN9XHRvIDE4LFx0ZXh0e2RpbX1cdG8gMTgsXHRleHR7c3BvdCAoMiwxKUAoSDEsSDIpPSgxLDEpfVx0byAyXHJpZ2h0XH0=\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord text\"><span class=\"mord\">total weights</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">18</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">dim</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">18</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">spot (2,1)@(H1,H2)=(1,1)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">2</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
-       "mime": "x-application/wolfram-language-html"
-      },
-      {
-       "data": "Out[66]= \\left\\{\\text{total weights}\\to 18,\\text{dim}\\to 18,\\text{spot (2,1)@(H1,H2)=(1,1)}\\to 2\\right\\}",
-       "mime": "text/plain"
-      }
-     ],
-     "id": "a6f27bec-23b7-405c-be95-c2a9578a032a"
-    }
-   ],
+   "outputs": [],
    "metadata": {}
   },
   {
    "kind": 2,
-   "value": "(*guard the combinatorics on a second rep: (S1,S2)=(2,2), d=36*)\nModule[{S1 = 2, S2 = 2, d, tot},\n  d = dim[{S1, 0, 0}] dim[{S2, 0, 0}];\n  tot = Total@Flatten@Table[\n      wtMult[S1, S2][H1, H2], {H1, -3 (S1 + S2), 3 (S1 + S2)}, {H2, -3 (S1 + S2), 3 (S1 + S2)}];\n  If[tot != d, Print[\"SUM-RULE FAIL: \", tot, \" != \", d]; Abort[]];\n  {\"total weights\" -> tot, \"dim\" -> d}\n]",
+   "value": "(*guard on {2,1,0}⊗{2,1,0} (d=64) — a rep with genuine interior multiplicity on both sites*)\nModule[{λ1={2,1,0},λ2={2,1,0},Ntot,d,tot},\n  Ntot=Total[λ1]+Total[λ2]; d=dim[λ1] dim[λ2];\n  tot=Total@Flatten@Table[wtMult[λ1,λ2][H1,H2],{H1,-3 Ntot,3 Ntot},{H2,-3 Ntot,3 Ntot}];\n  If[tot!=d,Print[\"SUM-RULE FAIL: \",tot,\" != \",d];Abort[]];\n  {\"total weights\"->tot,\"dim\"->d}\n]",
    "languageId": "wolfram",
-   "outputs": [
-    {
-     "items": [
-      {
-       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352972\" data-output-id=\"320\" data-out-n=\"67\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"23\" data-sub-start=\"1\" data-sub-end=\"7\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[67]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrozmca0-vfyix5d\" data-page-width-em=\"21\" data-latex-b64=\"XGxlZnRce1x0ZXh0e3RvdGFsIHdlaWdodHN9XHRvIDM2LFx0ZXh0e2RpbX1cdG8gMzZccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord text\"><span class=\"mord\">total weights</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">36</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">dim</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">36</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
-       "mime": "x-application/wolfram-language-html"
-      },
-      {
-       "data": "Out[67]= \\left\\{\\text{total weights}\\to 36,\\text{dim}\\to 36\\right\\}",
-       "mime": "text/plain"
-      }
-     ],
-     "id": "8790fde4-0bbe-4b51-96a4-9fb9aaa37ea8"
-    }
-   ],
+   "outputs": [],
    "metadata": {}
   },
   {
