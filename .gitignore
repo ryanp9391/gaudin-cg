@@ -11,3 +11,8 @@
 
 # Wolfbook notebook sidecar data (checkpoints, kernel state)
 *.wb.img/
+
+# Python (Paul/Python/)
+.venv/
+__pycache__/
+*.pyc

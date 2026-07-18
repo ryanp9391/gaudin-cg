@@ -9,9 +9,51 @@
   },
   {
    "kind": 2,
-   "value": "ClearAll[Ee,id,EE,idd];\nEe[λ_][i_,j_]:=JJ[i,j,λ];\nid[λ_]:=IdentityMatrix[dim[λ]];\nidd[λ1_,λ2_]:=KroneckerProduct[id[λ1],id[λ2]];\nEE[λ1_,λ2_][i_,j_]:=KroneckerProduct[Ee[λ1][i,j],id[λ2]]+KroneckerProduct[id[λ1],Ee[λ2][i,j]];",
+   "value": "(*reps used for testing statements*)\ntestreps={{1,0,0},{2,0,0},{1,1,0},{2,2,0},{2,1,0}};",
    "languageId": "wolfram",
    "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*Ee[λ][i,j] are gl(3) generators in rep λ={λ1,λ2,λ3}*)\n(*id[λ] is identity matrix in rep λ, idd[λ1,λ2] is in rep λ1 x λ2*)\n(*EE[λ1,λ2][i,j] is global Lie algebra generator in λ1 x λ2*)\nClearAll[Ee,id,EE,idd];\nEe[λ_][i_,j_]:=JJ[i,j,λ];\nid[λ_]:=IdentityMatrix[dim[λ]];\nidd[λ1_,λ2_]:=KroneckerProduct[id[λ1],id[λ2]];\nEE[λ1_,λ2_][i_,j_]:=KroneckerProduct[Ee[λ1][i,j],id[λ2]]+KroneckerProduct[id[λ1],Ee[λ2][i,j]];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*Cartan operators (gl(3) weight generators H1=E11-E22, H2=E22-E33) acting on the two-site space*)\nClearAll[H1, H2];\nH1[λ1_, λ2_] := EE[λ1, λ2][1, 1] - EE[λ1, λ2][2, 2];\nH2[λ1_, λ2_] := EE[λ1, λ2][2, 2] - EE[λ1, λ2][3, 3];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*all (H1,H2) eigenvalue pairs on λ1⊗λ2*)\nClearAll[H1H2Pairs];\nH1H2Pairs[λ1_,λ2_]:=Transpose[{Diagonal[H1[λ1,λ2]],Diagonal[H2[λ1,λ2]]}]//Sort;\n\n(*multiplicity of weight in λ1⊗λ2*)\nmult[λ1_,λ2_][weight_]:=If[MemberQ[H1H2Pairs[λ1,λ2],weight],Count[H1H2Pairs[λ1,λ2],weight],\"weight does not appear in the tensor product\"];\n\n(*list of all states in λ1⊗λ2 counting their multiplicities*)\nstates[λ1_,λ2_]:=Table[\n  {weight, #}&/@Range[mult[λ1,λ2][weight]],\n  {weight,H1H2Pairs[λ1,λ2]//DeleteDuplicates}]//Flatten[#,1]&;",
+   "languageId": "c",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "states[{2,1,0},{2,1,0}]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"429514\" data-output-id=\"29\" data-out-n=\"116\" data-sub-idx=\"0\" data-output-format=\"InputForm\" data-output-is-graphics=\"0\" data-cell-idx=\"6\" data-sub-start=\"0\" data-sub-end=\"0\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[116]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\" style=\"white-space:pre-wrap;overflow-wrap:break-word;\">{{{-4, 2}, 1}, {{-3, 0}, 1}, {{-3, 0}, 2}, {{-3, 3}, 1}, {{-3, 3}, 2}, {{-2, -2}, 1}, {{-2, 1}, 1}, {{-2, 1}, 2}, {{-2, 1}, 3}, {{-2, 1}, 4}, {{-2, 1}, 5}, {{-2, 1}, 6}, {{-2, 4}, 1}, {{-1, -1}, 1}, {{-1, -1}, 2}, {{-1, -1}, 3}, {{-1, -1}, 4}, {{-1, -1}, 5}, {{-1, -1}, 6}, {{-1, 2}, 1}, {{-1, 2}, 2}, {{-1, 2}, 3}, {{-1, 2}, 4}, {{-1, 2}, 5}, {{-1, 2}, 6}, {{0, -3}, 1}, {{0, -3}, 2}, {{0, 0}, 1}, {{0, 0}, 2}, {{0, 0}, 3}, {{0, 0}, 4}, {{0, 0}, 5}, {{0, 0}, 6}, {{0, 0}, 7}, {{0, 0}, 8}, {{0, 0}, 9}, {{0, 0}, 10}, {{0, 3}, 1}, {{0, 3}, 2}, {{1, -2}, 1}, {{1, -2}, 2}, {{1, -2}, 3}, {{1, -2}, 4}, {{1, -2}, 5}, {{1, -2}, 6}, {{1, 1}, 1}, {{1, 1}, 2}, {{1, 1}, 3}, {{1, 1}, 4}, {{1, 1}, 5}, {{1, 1}, 6}, {{2, -4}, 1}, {{2, -1}, 1}, {{2, -1}, 2}, {{2, -1}, 3}, {{2, -1}, 4}, {{2, -1}, 5}, {{2, -1}, 6}, {{2, 2}, 1}, {{3, -3}, 1}, {{3, -3}, 2}, {{3, 0}, 1}, {{3, 0}, 2}, {{4, -2}, 1}}</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[116]= {{{-4, 2}, 1}, {{-3, 0}, 1}, {{-3, 0}, 2}, {{-3, 3}, 1}, {{-3, 3}, 2}, {{-2, -2}, 1}, {{-2, 1}, 1}, {{-2, 1}, 2}, {{-2, 1}, 3}, {{-2, 1}, 4}, {{-2, 1}, 5}, {{-2, 1}, 6}, {{-2, 4}, 1}, {{-1, -1}, 1}, {{-1, -1}, 2}, {{-1, -1}, 3}, {{-1, -1}, 4}, {{-1, -1}, 5}, {{-1, -1}, 6}, {{-1, 2}, 1}, {{-1, 2}, 2}, {{-1, 2}, 3}, {{-1, 2}, 4}, {{-1, 2}, 5}, {{-1, 2}, 6}, {{0, -3}, 1}, {{0, -3}, 2}, {{0, 0}, 1}, {{0, 0}, 2}, {{0, 0}, 3}, {{0, 0}, 4}, {{0, 0}, 5}, {{0, 0}, 6}, {{0, 0}, 7}, {{0, 0}, 8}, {{0, 0}, 9}, {{0, 0}, 10}, {{0, 3}, 1}, {{0, 3}, 2}, {{1, -2}, 1}, {{1, -2}, 2}, {{1, -2}, 3}, {{1, -2}, 4}, {{1, -2}, 5}, {{1, -2}, 6}, {{1, 1}, 1}, {{1, 1}, 2}, {{1, 1}, 3}, {{1, 1}, 4}, {{1, 1}, 5}, {{1, 1}, 6}, {{2, -4}, 1}, {{2, -1}, 1}, {{2, -1}, 2}, {{2, -1}, 3}, {{2, -1}, 4}, {{2, -1}, 5}, {{2, -1}, 6}, {{2, 2}, 1}, {{3, -3}, 1}, {{3, -3}, 2}, {{3, 0}, 1}, {{3, 0}, 2}, {{4, -2}, 1}}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "00600989-58e9-45f1-aee9-afbe40dc6df9"
+    }
+   ],
    "metadata": {}
   },
   {
@@ -23,21 +65,21 @@
   },
   {
    "kind": 2,
-   "value": "(*checking central charge constraint = total boxes, on general reps.*)\nModule[{reps={{{2,1,0},{1,0,0}},{{1,1,0},{1,1,0}},{{2,2,0},{1,0,0}},{{2,1,0},{1,1,0}}}},\n Union@Flatten@Table[\n   C1[r[[1]],r[[2]]]-(Total[r[[1]]]+Total[r[[2]]]) idd[r[[1]],r[[2]]],{r,reps}]]",
+   "value": "(*checking central charge constraint = total boxes |λ1| + |λ2|, on general reps.*)\nTable[\n   C1[r1,r2]-(Total[r1]+Total[r2]) idd[r1,r2],{r1,testreps},{r2,testreps}]//Flatten//Union",
    "languageId": "wolfram",
    "outputs": [
     {
      "items": [
       {
-       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352974\" data-output-id=\"413\" data-out-n=\"20\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"3\" data-sub-start=\"1\" data-sub-end=\"3\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[20]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrpc250c-8lzlt5a\" data-page-width-em=\"23\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"429514\" data-output-id=\"30\" data-out-n=\"119\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"7\" data-sub-start=\"1\" data-sub-end=\"2\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[119]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrq46vfl-d3ql7re\" data-page-width-em=\"47\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
        "mime": "x-application/wolfram-language-html"
       },
       {
-       "data": "Out[20]= \\left\\{0\\right\\}",
+       "data": "Out[119]= \\left\\{0\\right\\}",
        "mime": "text/plain"
       }
      ],
-     "id": "08320ace-7ccb-4178-8d12-17b97ffbcf4b"
+     "id": "d901ca5d-ce5a-4d17-8abf-b1cbd4ab87d9"
     }
    ],
    "metadata": {}
@@ -51,30 +93,16 @@
   },
   {
    "kind": 2,
-   "value": "(*companion twist matrix eith eigenvalues z[1],z[2],z[3]*)\nG={{χ1,-χ2,χ3},{1,0,0},{0,1,0}};\nχ1=z[1]+z[2]+z[3];\nχ2=z[1] z[2]+z[1]z[3]+z[2]z[3];\nχ3=z[1]z[2]z[3];",
+   "value": "(*Numeric parameters*)\nθ1 = 1/3;\nθ2 = 1/7;\nh = 1;\nz[1] = Exp[π I 2/5];\nz[2] = Exp[π I 3/4];\nz[3] = Exp[π I 5/9];\nu0=N[Zeta[3],50];\nv0=N[Zeta[5],50];",
    "languageId": "wolfram",
    "outputs": [],
    "metadata": {}
   },
   {
    "kind": 2,
-   "value": "(*Numeric parameters (shared across Section B). θ,h copied from the su(2) Clean notebook;\n  three DISTINCT unit-modulus twist eigenvalues z[1],z[2],z[3] (generic → non-degenerate;\n  no ∏z=1 constraint since gl(3) is not unimodular-normalized). χ1,χ2,χ3 and G were defined\n  in Section A as symmetric functions of z[i], so they become numeric automatically.*)\nθ1 = 1/3;\nθ2 = 1/7;\nh = 1;\nz[1] = N[Exp[I Zeta[3]], 30];\nz[2] = N[Exp[I Zeta[5]], 30];\nz[3] = N[Exp[I Zeta[7]], 30];\n{θ1, θ2, h, z[1], z[2], z[3], χ1, χ2, χ3}",
+   "value": "(*companion twist matrix eith eigenvalues z[1],z[2],z[3]*)\nG={{χ1,-χ2,χ3},{1,0,0},{0,1,0}};\nχ1=z[1]+z[2]+z[3];\nχ2=z[1] z[2]+z[1]z[3]+z[2]z[3];\nχ3=z[1]z[2]z[3];",
    "languageId": "wolfram",
-   "outputs": [
-    {
-     "items": [
-      {
-       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352974\" data-output-id=\"414\" data-out-n=\"33\" data-sub-idx=\"7\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"6\" data-sub-start=\"10\" data-sub-end=\"10\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[33]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrpc2ba7-y39bqa2\" data-page-width-em=\"50\" data-latex-b64=\"XGxlZnRce1xmcmFjezF9ezN9LFxmcmFjezF9ezd9LDEsMC4zNjA0Mzk4NzUxNDcyMjY1MzcyNjY2Nzc2NTA1OTYrMC45MzI3ODI0NDg1OTMzNzQ3MTY0ODQ4MzU5ODIwNzFcLFxtYXRocm17aX0sMC41MDg4NjczODA5OTA0OTk4MjgxNjMzMjEzNzIyNjcrMC44NjA4NDQ5MjcxMjkwNzkwOTMxODg2NDQzOTM2MTZcLFxtYXRocm17aX0sMC41MzMyNTc4ODA1ODk1OTkzNzI1OTU4MzIzNDUwOTMrMC44NDU5NTI3MzY3MzQ3OTQ1MjY0ODMzODE2MTg0NTNcLFxtYXRocm17aX0sMS40MDI1NjUxMzY3MjczMjU3MzgwMjU4MzEzNjc5NisyLjYzOTU4MDExMjQ1NzI0ODMzNjE1Njg2MTk5NDE0XCxcbWF0aHJte2l9LC0xLjY3MzMyMzk4NTkwMTYyOTA5OTExODI0NzIxODkrMi40NzY4MDQxODUwNDM1MTAxMTQ5Nzg0MTI3MzkzM1wsXG1hdGhybXtpfSwtMC45OTQ0MTQ1OTc4NDE1Mjg2NTc3ODA2NDU2MTUwNi0wLjEwNTU0NDMzOTQ5NjExMzMyOTUwNzUwNjAxMTNcLFxtYXRocm17aX1ccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:2.4em;vertical-align:-0.95em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size3\">{</span></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.3214em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">3</span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.686em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.3214em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">7</span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.686em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">1</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0.360439875147226537266677650596</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">0.932782448593374716484835982071</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathrm\">i</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0.508867380990499828163321372267</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">0.860844927129079093188644393616</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathrm\">i</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0.533257880589599372595832345093</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">0.845952736734794526483381618453</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathrm\">i</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">1.40256513672732573802583136796</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">2.63958011245724833615686199414</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathrm\">i</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">−</span><span class=\"mord\">1.6733239859016290991182472189</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">2.47680418504351011497841273933</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathrm\">i</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">−</span><span class=\"mord\">0.99441459784152865778064561506</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">0.1055443394961133295075060113</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathrm\">i</span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size3\">}</span></span></span></span></span></span></span></div></div></div></div>",
-       "mime": "x-application/wolfram-language-html"
-      },
-      {
-       "data": "Out[33]= \\left\\{\\frac{1}{3},\\frac{1}{7},1,0.360439875147226537266677650596+0.932782448593374716484835982071\\,\\mathrm{i},0.508867380990499828163321372267+0.860844927129079093188644393616\\,\\mathrm{i},0.533257880589599372595832345093+0.845952736734794526483381618453\\,\\mathrm{i},1.40256513672732573802583136796+2.63958011245724833615686199414\\,\\mathrm{i},-1.6733239859016290991182472189+2.47680418504351011497841273933\\,\\mathrm{i},-0.99441459784152865778064561506-0.1055443394961133295075060113\\,\\mathrm{i}\\right\\}",
-       "mime": "text/plain"
-      }
-     ],
-     "id": "5f36c02c-99d2-4a83-9589-0009512d6bc1"
-    }
-   ],
+   "outputs": [],
    "metadata": {}
   },
   {
@@ -86,35 +114,35 @@
   },
   {
    "kind": 2,
-   "value": "(*Yangian weights - eigenvalues of T[i,i] on the highest-weight state.\n  General rep: T[i,i]|hw> = (u-θ1-h λ1[[i]])(u-θ2-h λ2[[i]]) |hw>, from L[λ][i,i]|hw>=(u-h λ_i)|hw>.\n  Symmetric case λ=(S,0,0) reduces to ν[1]=(u-θ1-hS1)(u-θ2-hS2), ν[2]=ν[3]=(u-θ1)(u-θ2).*)\nClearAll[ν,HWS];\nν[λ1_,λ2_][i_][u_]:=(u-θ1-h λ1[[i]])(u-θ2-h λ2[[i]]);\nHWS[λ1_,λ2_]:=Table[{KroneckerDelta[1,ii]},{ii,1,dim[λ1] dim[λ2]}];",
+   "value": "(*Yangian weights - eigenvalues of T[i,i] on the highest-weight state.\n  General rep: T[i,i]|hw> = (u-θ1-h λ1[[i]])(u-θ2-h λ2[[i]]) |hw>*)\nClearAll[ν,HWS];\nν[λ1_,λ2_][i_][u_]:=(u-θ1-h λ1[[i]])(u-θ2-h λ2[[i]]);\nHWS[λ1_,λ2_]:=Table[{KroneckerDelta[1,ii]},{ii,1,dim[λ1] dim[λ2]}];",
    "languageId": "wolfram",
    "outputs": [],
    "metadata": {}
   },
   {
    "kind": 2,
-   "value": "(*checking highest-weights against the general ν, on non-symmetric reps*)\nModule[{reps={{{2,1,0},{1,0,0}},{{1,1,0},{1,1,0}},{{2,2,0},{1,0,0}},{{2,1,0},{1,1,0}}}},\n Union@Flatten@Table[\n   T[r[[1]],r[[2]]][i,i][u].HWS[r[[1]],r[[2]]]-ν[r[[1]],r[[2]]][i][u] HWS[r[[1]],r[[2]]],\n   {r,reps},{i,3}]]",
+   "value": "(*checking highest-weights against the general ν, on non-symmetric reps*)\nTable[\n   T[r1,r2][i,i][u].HWS[r1,r2]-ν[r1,r2][i][u] HWS[r1,r2],\n   {i,3},{r1,testreps},{r2,testreps}]//Flatten//Union",
    "languageId": "wolfram",
    "outputs": [
     {
      "items": [
       {
-       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352974\" data-output-id=\"415\" data-out-n=\"41\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"9\" data-sub-start=\"1\" data-sub-end=\"4\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[41]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrpc2pxu-hqcog4t\" data-page-width-em=\"50\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"429514\" data-output-id=\"31\" data-out-n=\"141\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"13\" data-sub-start=\"1\" data-sub-end=\"3\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[141]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrq480kj-0lghg9o\" data-page-width-em=\"47\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
        "mime": "x-application/wolfram-language-html"
       },
       {
-       "data": "Out[41]= \\left\\{0\\right\\}",
+       "data": "Out[141]= \\left\\{0\\right\\}",
        "mime": "text/plain"
       }
      ],
-     "id": "08bb149b-0fb8-4066-abf7-7cb06494f104"
+     "id": "56310fd1-0653-4903-ba3f-fab51b39951e"
     }
    ],
    "metadata": {}
   },
   {
    "kind": 2,
-   "value": "(*quantum minors (q-determinants) of the monodromy matrix*)\nClearAll[qmin,qming,qminG];\nqmin[λ1_, λ2_][II_List, JJ_List][u_] := \n    qmin[λ1, λ2][II, JJ][u] = \n     Sum[Signature[σ] \n        Dot @@ Table[T[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, \n            Length[II]}], {σ, Permutations[Range[Length[II]]]}];\n\nqming[λ1_, λ2_][II_List, JJ_List][u_] := \n    qming[λ1, λ2][II, JJ][u] = \n     Sum[Signature[σ] \n        Dot @@ Table[Tg[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, \n            Length[II]}], {σ, Permutations[Range[Length[II]]]}];\n\nqminG[λ1_, λ2_][II_List, JJ_List][u_] := \n    qminG[λ1, λ2][II, JJ][u] = \n     Sum[Signature[σ] \n        Dot @@ Table[TG[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, \n            Length[II]}], {σ, Permutations[Range[Length[II]]]}];",
+   "value": "(*quantum minors (q-determinants) of the monodromy matrix with diagonal twist g or companion twist G*)\n\nqming[λ1_, λ2_][II_List, JJ_List][u_] := \n    qming[λ1, λ2][II, JJ][u] = \n    Sum[Signature[σ]\n        Dot @@ Table[Tg[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, \n             Length[II]}], {σ, Permutations[Range[Length[II]]]}];\n\nqminG[λ1_, λ2_][II_List, JJ_List][u_] := \n    qminG[λ1, λ2][II, JJ][u] = \n     Sum[Signature[σ] \n        Dot @@ Table[TG[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, \n            Length[II]}], {σ, Permutations[Range[Length[II]]]}];",
    "languageId": "wolfram",
    "outputs": [],
    "metadata": {}
@@ -135,86 +163,51 @@
   },
   {
    "kind": 2,
-   "value": "(*qdetT central value == tg[·][3,1]; on non-symmetric reps this is the ν shift-ordering guard.\n  NB: Chop wraps Simplify because z[k] (hence χ3) are high-precision *numeric* (not exact\n  symbolic) here — the verbatim Simplify[...] form leaves ~10^-27..10^-30 floating \"0``prec\"\n  coefficients multiplying u-polynomials (Times doesn't auto-collapse 0.`prec*u to 0 for\n  symbolic u), so Union@Flatten never sees a literal 0 even though every entry evaluates to\n  exactly 0. numerically (verified at random u and u=1, Max|residual|=0. exactly). Confirmed\n  this is a genuine-zero/representation artifact, not a wrong shift ordering: the reversed\n  assignment ν[3][u-2h]ν[2][u-h]ν[1][u] gives a real O(1) residual (~5.8 at u=1, reps sample),\n  clearly distinguishing \"correct but unsimplified\" from \"actually wrong\".*)\nModule[{reps={{{2,1,0},{1,0,0}},{{1,1,0},{1,1,0}},{{2,2,0},{1,0,0}},{{2,1,0},{1,1,0}}}},\n Union@Flatten@Table[\n   Chop[Simplify[qdetT[r[[1]],r[[2]]][u] idd[r[[1]],r[[2]]]-tg[r[[1]],r[[2]]][3,1][u]],10^-15],{r,reps}]]",
+   "value": "(*checking quantum determinant is central with diagonal twist*)\nTable[\n  qdetT[r1,r2][u0] idd[r1,r2]-tg[r1,r2][3,1][u0],{r1,testreps},{r2,testreps}]//Chop[#,10^-30]&//Flatten//Union",
    "languageId": "wolfram",
    "outputs": [
     {
      "items": [
       {
-       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352974\" data-output-id=\"416\" data-out-n=\"52\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"13\" data-sub-start=\"9\" data-sub-end=\"11\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[52]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrpc3bd9-sjc5k01\" data-page-width-em=\"50\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"429514\" data-output-id=\"32\" data-out-n=\"150\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"17\" data-sub-start=\"1\" data-sub-end=\"2\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[150]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrq489by-m55jpfj\" data-page-width-em=\"47\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
        "mime": "x-application/wolfram-language-html"
       },
       {
-       "data": "Out[52]= \\left\\{0\\right\\}",
+       "data": "Out[150]= \\left\\{0\\right\\}",
        "mime": "text/plain"
       }
      ],
-     "id": "e3cbd347-1f01-40d0-ab36-61b022102ac6"
+     "id": "14ef9027-c7ee-4a7e-9e73-c3d353017886"
     }
    ],
    "metadata": {}
   },
   {
    "kind": 2,
-   "value": "(*verify numeric parameters took hold before building Section B on top of them*)\n{Precision[χ1], N[χ3], Chip = χ1 - (z[1] + z[2] + z[3])} /. Chip -> Chop[Chip]",
+   "value": "(*checking quantum determinant is central with companion twist*)\nTable[\n  qdetT[r1,r2][u0] idd[r1,r2]-tG[r1,r2][3,1][u0],{r1,testreps},{r2,testreps}]//Chop[#,10^-30]&//Flatten//Union",
    "languageId": "wolfram",
    "outputs": [
     {
      "items": [
       {
-       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352974\" data-output-id=\"417\" data-out-n=\"53\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"14\" data-sub-start=\"1\" data-sub-end=\"1\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[53]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrpc3ex9-go0453w\" data-page-width-em=\"50\" data-latex-b64=\"XGxlZnRcezI5Ljk5ODQxNTYyNDk5OTczMywtMC45OTQ0MTQ1OTc4NDE1Mjg2LTAuMTA1NTQ0MzM5NDk2MTEzMzNcLFxtYXRocm17aX0sMFxyaWdodFx9\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">29.998415624999733</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">−</span><span class=\"mord\">0.9944145978415286</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">0.10554433949611333</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathrm\">i</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"429514\" data-output-id=\"33\" data-out-n=\"151\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"18\" data-sub-start=\"1\" data-sub-end=\"2\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[151]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrq48czq-39ti3tv\" data-page-width-em=\"47\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
        "mime": "x-application/wolfram-language-html"
       },
       {
-       "data": "Out[53]= \\left\\{29.998415624999733,-0.9944145978415286-0.10554433949611333\\,\\mathrm{i},0\\right\\}",
+       "data": "Out[151]= \\left\\{0\\right\\}",
        "mime": "text/plain"
       }
      ],
-     "id": "addaf84a-d6d8-4013-b2c8-f64cbe8fa4c7"
+     "id": "9f32022b-69db-467d-ab9c-864fd86b64d3"
     }
    ],
    "metadata": {}
   },
   {
    "kind": 2,
-   "value": "(*single source of truth for the Yangian weight of T11*)\nClearAll[ν1];\nν1[λ1_,λ2_][u_]:=ν[λ1,λ2][1][u];\nν1[{1,0,0},{1,0,0}][u]",
+   "value": "Eigensystem[tg[{2, 1, 0}, {2, 1, 0}][1, 1][u0] // N];",
    "languageId": "wolfram",
-   "outputs": [
-    {
-     "items": [
-      {
-       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352974\" data-output-id=\"418\" data-out-n=\"56\" data-sub-idx=\"3\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"15\" data-sub-start=\"3\" data-sub-end=\"3\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[56]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrpc3zzz-zl6bz9z\" data-page-width-em=\"50\" data-latex-b64=\"XGxlZnQodS1cZnJhY3s0fXszfVxyaWdodClcLFxsZWZ0KHUtXGZyYWN7OH17N31ccmlnaHQp\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:2.4em;vertical-align:-0.95em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size3\">(</span></span><span class=\"mord mathnormal\">u</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.3214em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">3</span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">4</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.686em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size3\">)</span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size3\">(</span></span><span class=\"mord mathnormal\">u</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.3214em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">7</span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">8</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.686em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size3\">)</span></span></span></span></span></span></span></div></div></div></div>",
-       "mime": "x-application/wolfram-language-html"
-      },
-      {
-       "data": "Out[56]= \\left(u-\\frac{4}{3}\\right)\\,\\left(u-\\frac{8}{7}\\right)",
-       "mime": "text/plain"
-      }
-     ],
-     "id": "6fc91a20-ace7-450d-9a7d-ff657985f3e6"
-    }
-   ],
-   "metadata": {}
-  },
-  {
-   "kind": 2,
-   "value": "(*3rd-order Baxter/TQ equation (reference form). Diagonal-twist transfer matrices τ1=tg[·][1,1],\n  τ2=tg[·][2,1]; qdetT already carries χ3, so NO explicit χ3 here (would double-count).\n  A1=τ1/ν1[u], A2=τ2/(ν1[u]ν1[u-h]), A3=qdetT/(ν1[u]ν1[u-h]ν1[u-2h]).*)\nClearAll[Bax];\nBax[λ1_, λ2_] :=\n  f[u + h]\n   - tg[λ1, λ2][1, 1][u]/ν1[λ1, λ2][u] f[u]\n   + tg[λ1, λ2][2, 1][u]/(ν1[λ1, λ2][u] ν1[λ1, λ2][u - h]) f[u - h]\n   - qdetT[λ1, λ2][u]/(ν1[λ1, λ2][u] ν1[λ1, λ2][u - h] ν1[λ1, λ2][u - 2 h]) f[u - 2 h];\nHead[Bax[{1,0,0}, {1,0,0}]]",
-   "languageId": "wolfram",
-   "outputs": [
-    {
-     "items": [
-      {
-       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352972\" data-output-id=\"317\" data-out-n=\"57\" data-sub-idx=\"3\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"17\" data-sub-start=\"9\" data-sub-end=\"9\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[57]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mroz4id7-saffwlj\" data-page-width-em=\"21\" data-latex-b64=\"XG1hdGhybXtMaXN0fQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord\"><span class=\"mord mathrm\">List</span></span></span></span></span></span></div></div></div></div>",
-       "mime": "x-application/wolfram-language-html"
-      },
-      {
-       "data": "Out[57]= \\mathrm{List}",
-       "mime": "text/plain"
-      }
-     ],
-     "id": "c507840d-bbb0-49bb-8cb8-fae9fe6e907a"
-    }
-   ],
+   "outputs": [],
    "metadata": {}
   },
   {
@@ -222,34 +215,6 @@
    "value": "(*coefficient matrices of tau1=tg[.][1,1] (deg 2 in u) and tau2=tg[.][2,1] (deg 4 in u),\n  extracted by CoefficientList in a dummy variable uu so tg[..][..][uu] is treated as a polynomial in uu.\n  c1={C0,C1,C2} with tau1(u)=Sum_k C_k u^k (index k+1 in the list); c2={D0,...,D4} similarly for tau2.*)\nClearAll[tgCoeffs];\ntgCoeffs[λ1_, λ2_] := tgCoeffs[λ1, λ2] = Module[{uu, m1, m2, cl1, cl2},\n   m1 = tg[λ1, λ2][1, 1][uu];\n   m2 = tg[λ1, λ2][2, 1][uu];\n   cl1 = Map[PadRight[CoefficientList[#, uu], 3] &, m1, {2}];\n   cl2 = Map[PadRight[CoefficientList[#, uu], 5] &, m2, {2}];\n   {Table[cl1[[All, All, k]], {k, 1, 3}], Table[cl2[[All, All, k]], {k, 1, 5}]}\n];",
    "languageId": "wolfram",
    "outputs": [],
-   "metadata": {}
-  },
-  {
-   "kind": 2,
-   "value": "(*Cartan operators (gl(3) weight generators H1=E11-E22, H2=E22-E33) acting on the two-site space*)\nClearAll[H1op, H2op];\nH1op[λ1_, λ2_] := EE[λ1, λ2][1, 1] - EE[λ1, λ2][2, 2];\nH2op[λ1_, λ2_] := EE[λ1, λ2][2, 2] - EE[λ1, λ2][3, 3];",
-   "languageId": "wolfram",
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "kind": 2,
-   "value": "(*hard-assert: τ1,τ2 leading coeffs are χ1 Id, χ2 Id; full commuting family pairwise-commutes.\n  Tested on the adjoint⊗fundamental (d=24), which has an interior multiplicity-2 weight.*)\nModule[{λ1={2,1,0},λ2={1,0,0},d,c1,c2,C2,D4,mats,comm},\n  d=dim[λ1] dim[λ2];\n  {c1,c2}=tgCoeffs[λ1,λ2];\n  C2=c1[[3]]; D4=c2[[5]];\n  If[Max[Abs[Flatten[C2-χ1 IdentityMatrix[d]]]]>10^-13,Print[\"C2 FAIL\"];Abort[]];\n  If[Max[Abs[Flatten[D4-χ2 IdentityMatrix[d]]]]>10^-13,Print[\"D4 FAIL\"];Abort[]];\n  mats=Join[c1,c2,{H1op[λ1,λ2],H2op[λ1,λ2]}];\n  comm=Max[Table[Max[Abs[Flatten[mats[[i]].mats[[j]]-mats[[j]].mats[[i]]]]],\n      {i,Length[mats]},{j,Length[mats]}]];\n  If[comm>10^-12,Print[\"COMMUTATION FAIL: \",comm];Abort[]];\n  {\"C2=χ1 Id OK\",\"D4=χ2 Id OK\",\"maxCommutator\"->comm}\n]",
-   "languageId": "wolfram",
-   "outputs": [
-    {
-     "items": [
-      {
-       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"352974\" data-output-id=\"419\" data-out-n=\"62\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"19\" data-sub-start=\"2\" data-sub-end=\"13\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[62]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrpc4xyr-bihvduv\" data-page-width-em=\"50\" data-latex-b64=\"XGxlZnRce1x0ZXh0e0MyPSRcY2hpJDEgSWQgT0t9LFx0ZXh0e0Q0PSRcY2hpJDIgSWQgT0t9LFx0ZXh0e21heENvbW11dGF0b3J9XHRvIDAuXHRpbWVzIDEwXnstMjZ9XHJpZ2h0XH0=\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1.2141em;vertical-align:-0.35em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">{</span></span><span class=\"mord text\"><span class=\"mord\">C2=</span><span class=\"mord mathnormal\">χ</span><span class=\"mord\">1 Id OK</span></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">D4=</span><span class=\"mord mathnormal\">χ</span><span class=\"mord\">2 Id OK</span></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">maxCommutator</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0.</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">×</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">1</span><span class=\"mord\"><span class=\"mord\">0</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">−</span><span class=\"mord mtight\">26</span></span></span></span></span></span></span></span></span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">}</span></span></span></span></span></span></span></div></div></div></div>",
-       "mime": "x-application/wolfram-language-html"
-      },
-      {
-       "data": "Out[62]= \\left\\{\\text{C2=$\\chi$1 Id OK},\\text{D4=$\\chi$2 Id OK},\\text{maxCommutator}\\to 0.\\times 10^{-26}\\right\\}",
-       "mime": "text/plain"
-      }
-     ],
-     "id": "d0461d74-8db5-48d7-b651-41de5f24cdf2"
-    }
-   ],
    "metadata": {}
   },
   {
@@ -560,5 +525,10 @@
    "metadata": {}
   }
  ],
- "metadata": {}
+ "metadata": {
+  "wolframSettings": {
+   "backgroundColor": "",
+   "backgroundImagePath": ""
+  }
+ }
 }

@@ -35,6 +35,13 @@ between them.
   - `Experiments/Baxter_Solver_L2.wb` — standalone, self-contained numerical solver + validation
     suite for the L=2 su(2) XXX Baxter (TQ) equation. The physics/derivation lives in
     `su2_XXX_L2.wb`; this file is just the reusable solver.
+  - `Experiments/su3_V1.wb` — gl(3) analog of the su(2) Clean notebook's Section B: two-site
+    eigensystem + three-Q Baxter solver for symmetric reps `{S,0,0}` per site.
+  - `Experiments/su3_V2_general.wb` — generalizes `su3_V1.wb` from symmetric reps to arbitrary
+    gl(3) Young-diagram reps `λ={λ1,λ2,λ3}`, one independent diagram per site. Full-sweep verified
+    (102 states, worstTQ=worstCasoratian=0); next natural step is promotion to `Clean/`.
+  - `Experiments/su3_V2_general_Paul.wb` — Paul's personal exploratory fork of
+    `su3_V2_general.wb`; diverges from the shared notebook, not a drop-in replacement.
   - `Clean/` — empty so far (nothing promoted yet); validated XXX definitions go here once
     checked, same convention as `Gaudin/Clean/` below.
 - `Paul/Mathematica/Gaudin/` — Gaudin subproject notebooks.
@@ -46,6 +53,12 @@ between them.
   - `Experiments/ResidueBuilder.wb` — exploratory companion to `Clean/FastQ.wb`: validation
     checks, benchmark comparisons of evaluation strategies, scaling/precision experiments that
     motivated what was promoted to `Clean/`.
+- `Paul/Python/` — Python cross-check port, orthogonal to the XXX/Gaudin split (not a third
+  subproject). Reimplements select Mathematica notebook results independently in Python
+  (`sympy`/`uv`-managed) as a correctness cross-check, starting with the gl(3) single-site
+  generators ported from `XXX/Experiments/su3_V2_general.wb` (`gl3_reps.py`, tested via
+  `test_gl3_reps.py`). Design/plan docs under `docs/superpowers/specs/` and
+  `docs/superpowers/plans/` (`*-gl3-python-port-*`).
 
 Each `.wb` notebook has a matching `img/<NotebookName>/` directory (wolfbook eval logs, kernel
 debug logs) — tooling artifacts, not research content.
