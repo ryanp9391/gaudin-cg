@@ -1,0 +1,345 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{mathtools}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\newcommand{\Ident}{\mathbbm{1}}
+\newcommand{\ffact}[2]{#1^{\underline{#2}}}   % falling factorial x^{\underline n}
+
+\title{Local rotations for the $L=2$ XXX SoV: closed results}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+This note records the closed, hard-verified results of the ``local rotations'' program for the
+two-site ($L=2$) rational $\mathfrak{gl}(2)$ (XXX) spin chain in the companion-twist SoV framework:
+the pole-cancellation theorem localizing the two-site FSoV bracket to a single site, the exact
+two-rotation operatorial/functional dictionary, and its explicit assembly in terms of a
+state-independent recoupling matrix. All formulas below are boxed and were verified in-notebook by
+hard assertion (literal-zero residuals, not numerical tolerances) across a fixed six-representation
+sweep at fresh-kernel-reproducible precision. The full derivation record, including negative results
+and abandoned candidates, lives in \texttt{XXX\_CG\_L2\_V2.wb}, Sections G--K (cells 78--154); this
+note reports only what closed.
+\end{abstract}
+
+\section{Setup and conventions}
+\label{sec:setup}
+
+We work with the two-site inhomogeneous XXX $\mathfrak{su}(2)$ chain in the companion-twist gauge,
+exactly as set up in \texttt{Clean/XXX\_CG\_L2\_Clean.wb} (Sections A--F), which this note assumes
+and does not re-derive. We restate only the conventions needed to read the formulas below without
+ambiguity.
+
+\paragraph{Sites and monodromy.} Site $\alpha=1,2$ carries the $\mathfrak{gl}(2)$ representation
+$V_{\lambda_\alpha}$ (highest weight $(\lambda_\alpha,0)$, dimension $\lambda_\alpha+1$) and
+inhomogeneity $\theta_\alpha$. The single-site Lax matrix is
+$L^{[\lambda]}(u) = u\Ident - h\sum_{i,j} E_{ji}\otimes e_{ij}$, and the two-site monodromy is the
+ordered product
+\begin{equation}
+  T(u) = L^{[\lambda_1]}(u-\theta_1)\, L^{[\lambda_2]}(u-\theta_2) \;\in\;
+  \mathrm{End}(V_{\lambda_1}\otimes V_{\lambda_2})\otimes\mathrm{End}(\mathbb{C}^2),
+  \label{eq:monodromy}
+\end{equation}
+site 1 acting first. This ordering is not a free choice made in this note --- it is inherited from
+Section A of the Clean notebook and turns out to be structurally significant: several objects below
+(the recoupling matrices $A,B$ of \S\ref{sec:recoupling}) depend on $\lambda_1$ only, a direct
+signature of \eqref{eq:monodromy}'s asymmetry between the two sites.
+
+\paragraph{Companion twist.} The twist matrix is taken in companion form,
+$G=\begin{psmallmatrix}\chi_1&-\chi_2\\1&0\end{psmallmatrix}$ with eigenvalues $\kappa_1,\kappa_2$,
+$\chi_1=\kappa_1+\kappa_2$, $\chi_2=\kappa_1\kappa_2$. The transfer matrix is
+$t_{1,1}(u)=\mathrm{tr}_a[G\,T(u)]$, and the full fusion (Hirota) hierarchy $t_{a,s}(u)$ is built
+from it in the usual way, with $t_{2,1}(u)=\chi_2\,\mathrm{qdet}\,T(u)$.
+
+\paragraph{Baxter Q-function.} For an eigenstate labelled $(M,n)$ (weight sector $M$, degeneracy
+index $n$), the Baxter Q-function used throughout is
+\begin{equation}
+  Q_1(u) \;=\; \kappa_1^{u/h}\, q_1(u),
+  \label{eq:Q1}
+\end{equation}
+with $q_1$ the monic polynomial solution of the TQ equation with the twist eigenvalue $\kappa_1$
+chosen as reference. \emph{$Q_1$ always carries this prefactor} --- every formula below that
+involves $Q_1$ uses \eqref{eq:Q1} as written, never the bare polynomial $q_1$ alone; where this
+matters (\S\ref{sec:wavefunction}) it is flagged explicitly.
+
+\paragraph{Covectors.} $\langle x_0|_\lambda$ is the lowest-weight covector of $V_\lambda^*$ in the
+Gelfand--Tsetlin basis (the SoV pseudovacuum). $\langle x^{[1]}_s|_\lambda$ (written \texttt{xL1} in
+the notebook) is the length-1 (single-site) SoV covector,
+\begin{equation}
+  \langle x^{[1]}_s|_\lambda \;=\; \frac{\langle x_0|_\lambda\, t^{[1]}_{1,s}(\theta_1)}
+  {\prod_{p=1}^{s}\bigl(\theta_1+(p-1)h-\theta_1-h\lambda\bigr)},
+  \qquad s=0,\dots,\lambda,
+  \label{eq:xL1}
+\end{equation}
+built from a \emph{standalone} single-site fused hierarchy $t^{[1]}_{1,s}(u)$ (same construction as
+$t_{a,s}(u)$ above, but for one site alone). $\langle x_2(s_1,s_2)|_{\lambda_1,\lambda_2}$ (written
+\texttt{x2}) is the two-site SoV covector basis, built by acting on the tensor-product pseudovacuum
+$\langle x_0|_{\lambda_1}\otimes\langle x_0|_{\lambda_2}$ with the two-site fused hierarchy
+$t_{1,s_1}(\theta_1)\,t_{1,s_2}(\theta_2)$ and normalizing by the Yangian-weight eigenvalue
+$\nu_1[\lambda_1,\lambda_2](u)=(u-\theta_1-h\lambda_1)(u-\theta_2-h\lambda_2)$ evaluated along each
+tower --- this is the corrected (\texttt{Clean}) normalization, in which each tower's shift is
+carried by its own site's $\lambda$, not the other site's.
+
+\paragraph{Bracket/measure (Section C).} For each site $i=1,2$ the FSoV measure is the rational
+function
+\begin{equation}
+  \mu_i(u) = \frac{N_i}{\prod_{k=0}^{\lambda_1}(u-\theta_1-hk)\prod_{k=0}^{\lambda_2}(u-\theta_2-hk)}
+  \Bigl(1-e^{\frac{2\pi i}{h}(u-\theta_{\bar\imath})}\Bigr), \qquad \bar\imath = 3-i,
+  \label{eq:mu}
+\end{equation}
+with $N_i$ fixed by an explicit closed form (Section C); the bracket is the residue sum over site
+$i$'s tower,
+\begin{equation}
+  \mathrm{br}_i[f] = 2\pi i\sum_{k=0}^{\lambda_i} \mathrm{Res}_{u=\theta_i+hk}\bigl[f(u)\mu_i(u)\bigr],
+  \label{eq:br}
+\end{equation}
+and the two-site FSoV determinant is the $1/f(\text{node})$-normalized $2\times2$ Wronskian-type
+object
+\begin{equation}
+  \det[\lambda_1,\lambda_2][f] \;=\; \frac{1}{f(\theta_1)\,f(\theta_2)\,(\theta_2-\theta_1)}\,
+  \det\!\begin{pmatrix} \mathrm{br}_1[f] & \mathrm{br}_1[uf] \\ \mathrm{br}_2[f] & \mathrm{br}_2[uf]
+  \end{pmatrix}.
+  \label{eq:det}
+\end{equation}
+The length-1 reduction (Section F) is $\mathrm{br}_1[\lambda][f] = 2\pi i\sum_{k=0}^\lambda
+\mathrm{Res}_{u=\theta_1+hk}[f(u)\mu^{[1]}(u)]$ with $\mu^{[1]}(u)=N^{[1]}/\prod_{k=0}^\lambda
+(u-\theta_1-hk)$, $N^{[1]}$ fixed by forcing the leading node weight to $1$, and
+\begin{equation}
+  \det{}_1[\lambda][f] = \frac{\mathrm{br}_1[\lambda][f]}{f(\theta_1)}.
+  \label{eq:det1}
+\end{equation}
+Prior established context (not re-derived here): the single-rotation functional/operatorial
+dictionary
+\begin{equation}
+  \det{}_1[\lambda_1]\bigl[k^{u/h}Q_1(u)\bigr] \;=\;
+  \Bigl(\langle x_0|_{\lambda_1}\,e^{-kE_{21}}\otimes\langle x_0|_{\lambda_2}\Bigr)\cdot\Psi_{M,n},
+  \label{eq:single-dict}
+\end{equation}
+generator $E_{21}$, universal scaling $\varphi(k)=-k$, holds to literal symbolic zero across the
+sweep below (Clean Section F).
+
+\paragraph{Numeric verification setup.} All hard-asserts below use the notebook's fixed numeric
+parameters $\theta_1=\tfrac13$, $\theta_2=\tfrac17$, $h=1$, companion twist eigenvalue
+$\kappa_1=e^{i\zeta(3)}$ (30-digit precision), and the fixed six-representation sweep
+$(\lambda_1,\lambda_2)\in\{(1,1),(2,1),(1,2),(2,2),(3,1),(1,3)\}$, giving $41$ eigenstates in total
+($4+6+6+9+8+8$). We abbreviate $\theta_{12}:=\theta_1-\theta_2$.
+
+\section{Pole-cancellation theorem}
+\label{sec:pole-cancel}
+
+Multiplying the test function by a polynomial with roots on the \emph{other} site's inhomogeneity
+tower collapses the two-site bracket \eqref{eq:br} exactly onto the pure single-site bracket:
+\begin{equation}
+  \mathrm{br}_1\Bigl[P^{(2)}_{\lambda_2}(u)\,f(u)\Bigr] \;=\; C_1(\lambda_1,\lambda_2)\;\mathrm{br}_1[\lambda_1][f],
+  \qquad
+  P^{(2)}_{\lambda_2}(u) := \prod_{k=0}^{\lambda_2}\bigl(u-\theta_2-hk\bigr),
+  \label{eq:pole-cancel}
+\end{equation}
+\begin{equation}
+  C_1(\lambda_1,\lambda_2) \;=\; (-1)^{\lambda_2-1}\prod_{k=0}^{\lambda_2}\bigl(\theta_2+kh-\theta_1\bigr).
+  \label{eq:C1}
+\end{equation}
+The mirror statement, cancelling site 1's tower instead, holds with $1\leftrightarrow2$:
+$\mathrm{br}_2\bigl[P^{(1)}_{\lambda_1}(u) f(u)\bigr] = C_2(\lambda_1,\lambda_2)\,\mathrm{br}_1^{(2)}[\lambda_2][f]$,
+$P^{(1)}_{\lambda_1}(u)=\prod_{k=0}^{\lambda_1}(u-\theta_1-hk)$,
+$C_2(\lambda_1,\lambda_2)=(-1)^{\lambda_1-1}\prod_{k=0}^{\lambda_1}(\theta_1+kh-\theta_2)$, where
+$\mathrm{br}_1^{(2)}[\lambda_2][\cdot]$ is the site-2 analogue of \eqref{eq:det1}'s bracket (built by
+re-centering the $N^{[1]}/\mu^{[1]}/\mathrm{br}_1$ construction around $\theta_2$). Bracket
+localization is thus site-symmetric: the same mechanism works at either site with the roles of
+$\theta_1,\theta_2,\lambda_1,\lambda_2$ exchanged.
+
+\emph{Verification.} \eqref{eq:pole-cancel}--\eqref{eq:C1} and their mirror were hard-asserted to
+literal symbolic $0$ on a basis of monomials $u^j$ and twisted monomials $k^{u/h}u^j$
+($j=0,\dots,\lambda_1+2$) across the full sweep, and numerically (residual $0$ to the working
+precision) on the actual $Q_1(u)$ of every one of the 41 states, in both directions (Sections G,
+cells 79--87).
+
+\section{Global-rotation dictionary}
+\label{sec:global}
+
+Define the two-rotation operatorial overlap
+\begin{equation}
+  O(k_1,k_2) \;:=\; \Bigl(\langle x_0|_{\lambda_1}e^{-k_1E_{21}}\otimes\langle x_0|_{\lambda_2}e^{-k_2E_{21}}\Bigr)\cdot\Psi_{M,n}.
+  \label{eq:Odef}
+\end{equation}
+On the diagonal $k_1=k_2=k$, the full two-site FSoV determinant \eqref{eq:det} applied to the same
+twisted Q-function used in \eqref{eq:single-dict} reproduces $O$ exactly:
+\begin{equation}
+  \boxed{\;\det[\lambda_1,\lambda_2]\bigl[k^{u/h}Q_1(u)\bigr] \;=\; O(k,k)\;}
+  \label{eq:step0}
+\end{equation}
+\emph{Verification:} literal symbolic zero residual over the full 41-state sweep (Section I, cells
+107--108). This is the calibration anchor for everything that follows.
+
+\section{Rotated-covector identification}
+\label{sec:covector-id}
+
+The finite unipotent rotation of the lowest-weight covector by a power of the lowering generator is
+exactly proportional to the single-site SoV covector \eqref{eq:xL1}:
+\begin{equation}
+  \boxed{\;\langle x_0|_\lambda\, E_{21}^m \;=\; \gamma_m(\lambda)\,\langle x^{[1]}_m|_\lambda\;},
+  \qquad
+  \gamma_m(\lambda) \;=\; \frac{\lambda!}{(\lambda-m)!} \;=\; \ffact{\lambda}{m}
+  \label{eq:gamma}
+\end{equation}
+(falling factorial), a pure representation-theoretic statement with no $\theta$- or site-dependence.
+\emph{Verification:} exact for $\lambda=1,2,3$, all $m=0,\dots,\lambda$ (Section I, cells 109--110).
+
+\section{Level-graded recoupling}
+\label{sec:recoupling}
+
+The naive guess that the two-site covector factorizes as a single tensor product,
+$\langle x_2(s_1,m)| \propto \langle x^{[1]}_{s_1}|_{\lambda_1}\otimes\langle x^{[1]}_m|_{\lambda_2}$,
+holds \emph{only} at $m=0$ (a prior, independently established Clean-notebook result). For $m\ge1$
+it is replaced by a genuine \textbf{level-graded recoupling}:
+\begin{equation}
+  \boxed{\;\langle x_2(s_1,m)| \;=\;\!\!\sum_{\substack{s_1'+m'=s_1+m\\ 0\le s_1'\le\lambda_1,\;0\le m'\le\lambda_2}}\!\!
+  A(s_1,m;s_1',m')\;\langle x^{[1]}_{s_1'}|_{\lambda_1}\otimes\langle x^{[1]}_{m'}|_{\lambda_2}\;}
+  \label{eq:A-decomp}
+\end{equation}
+supported exactly on the total level $s_1'+m'=s_1+m$ (\emph{verified}: zero off-level coefficients
+in $127$ symbolic cases, $\lambda_1,\lambda_2\le3$). Within each level block, $A$ is upper-triangular
+in $s_1$ ascending order (a target $\langle x_2(s_1,m)|$ only involves basis vectors with
+$s_1'\ge s_1$), and its diagonal has the closed form
+\begin{equation}
+  \boxed{\;A(s,m;s,m) \;=\; \frac{\ffact{(s+\theta_{12})}{m}}{\ffact{(\lambda_1+\theta_{12})}{m}}
+  \;=\; \frac{(s+\theta_{12})(s+\theta_{12}-1)\cdots(s+\theta_{12}-m+1)}
+             {(\lambda_1+\theta_{12})(\lambda_1+\theta_{12}-1)\cdots(\lambda_1+\theta_{12}-m+1)}\;},
+  \label{eq:A-diag}
+\end{equation}
+worked out from small ($\lambda_1,\lambda_2\le2$) fully symbolic cases (genuinely free symbols
+$\theta_A,\theta_B$, not the notebook's already-numeric $\theta_1,\theta_2$) and verified exactly
+against the numeric $\theta_1,\theta_2$ over $81$ cases, $\lambda_1,\lambda_2\le3$ (Section J, cells
+125--138). At $s=\lambda_1$ this gives $A=1$ for every $m$: the extremal $s_1=\lambda_1$ slice is
+always unmixed.
+
+\subsection{The inverse recoupling $B$}
+
+Define $B:=A^{-1}$, block-by-block within each level. This is not an independent construction: it
+was solved directly by linear algebra --- the mixed product-covector pairing
+$\mathrm{MP}(a,b):=\bigl(\langle x^{[1]}_a|_{\lambda_1}\otimes\langle x^{[1]}_b|_{\lambda_2}\bigr)\cdot\Psi$
+lies in the span of the $x_2$-pairings $W(s,t):=\langle x_2(s,t)|\cdot\Psi$ (a state-independent
+statement, since \eqref{eq:A-decomp} holds at the level of covectors), so
+$\mathrm{MP}(a,b)=\sum_{s+t=a+b}B(a,b;s,t)\,W(s,t)$ with $B$ state-independent; solving this
+massively overdetermined linear system (every state of a representation gives one equation) against
+$B=A^{-1}$ agrees to exact rational equality. $B$'s diagonal is the reciprocal of \eqref{eq:A-diag}:
+\begin{equation}
+  \boxed{\;B(a,b;a,b) \;=\; \frac{\ffact{(\lambda_1+\theta_{12})}{b}}{\ffact{(a+\theta_{12})}{b}}\;}
+  \label{eq:B-diag}
+\end{equation}
+Both $A$ and $B$ were found to depend on $\lambda_1$ \emph{only} (not $\lambda_2$) for every entry
+checked --- a direct consequence of the monodromy ordering \eqref{eq:monodromy}: site 1 enters the
+fused hierarchy first, so the recoupling structure it generates is blind to the size of site 2's
+representation, which only bounds which entries exist. The off-diagonal closed form of $A$ (hence
+$B$) was not found in fully general closed form (see \S\ref{sec:closing}); it is available as exact
+rationals for $\lambda_1,\lambda_2\le3$ directly in the notebook.
+
+\section{Normalized wave-function factorization}
+\label{sec:wavefunction}
+
+The two-site covector pairs with the eigenstate exactly as a ratio of Baxter Q-function values at
+the corresponding SoV lattice points:
+\begin{equation}
+  \boxed{\;W(s_1,s_2) \;:=\; \langle x_2(s_1,s_2)|\cdot\Psi_{M,n} \;=\;
+  \frac{Q_1(\theta_1+s_1h)\,Q_1(\theta_2+s_2h)}{Q_1(\theta_1)\,Q_1(\theta_2)}\;}
+  \label{eq:wavefunction}
+\end{equation}
+with $Q_1$ \emph{exactly as in \eqref{eq:Q1}, including its $\kappa_1^{u/h}$ twist prefactor}. The
+prefactor does not cancel between numerator and denominator: it contributes an overall
+$\kappa_1^{s_1+s_2}$ (analytically, $Q_1(\theta_i+sh)/Q_1(\theta_i)=\kappa_1^{s}\,
+q_1(\theta_i+sh)/q_1(\theta_i)$ since $h=1$). Using the bare polynomial $q_1$ in place of $Q_1$ in
+\eqref{eq:wavefunction} is \emph{not} equivalent and fails numerically by an order-one amount.
+\emph{Verification:} literal $0$ residual over $297$ cases (41 states $\times$ every $(s_1,s_2)$
+pair; Section K, cells 139--141).
+
+\section{Main result: the closed two-rotation identity}
+\label{sec:main}
+
+Substituting \eqref{eq:gamma} and \eqref{eq:A-decomp}/\eqref{eq:B-diag} into the expansion of
+\eqref{eq:Odef} in powers of $E_{21}^a\otimes E_{21}^b$ and using \eqref{eq:wavefunction} for every
+$x_2$-pairing gives the fully assembled, closed formula:
+\begin{equation}
+  \boxed{\;
+  O(k_1,k_2) \;=\; \sum_{a=0}^{\lambda_1}\sum_{b=0}^{\lambda_2} c_A(a;k_1)\,c_B(b;k_2)
+  \!\!\sum_{s+t=a+b}\!\! B(a,b;s,t)\,W(s,t)\;}
+  \label{eq:main}
+\end{equation}
+\begin{equation}
+  c_A(a;k_1) := \frac{(-k_1)^a}{a!}\,\gamma_a(\lambda_1), \qquad
+  c_B(b;k_2) := \frac{(-k_2)^b}{b!}\,\gamma_b(\lambda_2),
+  \label{eq:cAcB}
+\end{equation}
+with $\gamma$ as in \eqref{eq:gamma}, $B$ as in \S\ref{sec:recoupling}, and $W$ as in
+\eqref{eq:wavefunction}. \emph{Verification:} literal $0$ residual across the full 41-state,
+six-representation sweep, on two independent $(k_1,k_2)$ grid points per state ($82$ cases total),
+directly against the independently-defined operatorial object \eqref{eq:Odef} (Section K, cells
+142--151). At $k_2=0$, \eqref{eq:main} reduces exactly to the single-rotation dictionary
+\eqref{eq:single-dict}. \eqref{eq:main} is, to our knowledge, the first fully closed statement of
+the two-independent-local-rotation overlap for the $L=2$ XXX chain as an explicit finite sum of
+Baxter Q-function bilinears.
+
+\section{The derived sum rule}
+\label{sec:sumrule}
+
+Because $\mu_i$'s poles are simple,
+\[
+  \mathrm{br}_i[f]=\sum_s w_i(s)\,f(\theta_i+sh), \qquad
+  w_i(s):=2\pi i\,\mathrm{Res}_{u=\theta_i+sh}\mu_i(u),
+\]
+pointwise (\S\ref{sec:setup}). Expanding
+\eqref{eq:det}'s $2\times2$ determinant this way and using \eqref{eq:wavefunction} gives $O(k,k)$ as
+an explicit Q-bilinear sum with known coefficients,
+\begin{multline}
+  \det[\lambda_1,\lambda_2]\bigl[k^{u/h}Q_1(u)\bigr] \;=\; \\
+  \sum_{s,t} w_1(s)\,w_2(t)\,\frac{\theta_2-\theta_1+(t-s)h}{\theta_2-\theta_1}\;
+  k^{s+t}\;W(s,t),
+  \label{eq:det-expanded}
+\end{multline}
+verified exactly against the live $\det[\cdot]$ object. Equating \eqref{eq:det-expanded} to
+\eqref{eq:main} at $k_1=k_2=k$, term-by-term in $k^{s+t}\,W(s,t)$, yields the sum rule on $B$:
+\begin{equation}
+  \boxed{\;(-1)^{s+t}\!\!\sum_{a+b=s+t}\!\! \frac{\gamma_a(\lambda_1)\,\gamma_b(\lambda_2)}{a!\,b!}\,
+  B(a,b;s,t) \;=\; w_1(s)\,w_2(t)\,\frac{\theta_2-\theta_1+(t-s)h}{\theta_2-\theta_1}\;}
+  \label{eq:sumrule}
+\end{equation}
+\emph{Verification:} literal $0$ deviation over $20$ cases across three representations (Section K,
+cells 146--148).
+
+\section{Closing remarks}
+\label{sec:closing}
+
+\textbf{Structural verdict.} The two-rotation data is carried entirely by the recoupling matrix $B$
+(equivalently $A^{-1}$), not by any spectral-parameter insertion into the FSoV bracket. The
+pole-cancelling polynomials of \S\ref{sec:pole-cancel} localize a bracket to a single tower exactly,
+but they cannot \emph{graded-select} a single level within that tower: no naive per-row-insertion
+determinant (twisting each site's bracket independently by its own $k_\alpha^{u/h}$, with node
+normalizations fixed to match \eqref{eq:step0} at $k_1=k_2$) reproduces \eqref{eq:main} --- its
+$k_1^ak_2^b$ coefficient is always the single "diagonal" term $R(a,b)W(a,b)$ (with
+$R(s,t):=w_1(s)w_2(t)\frac{\theta_2-\theta_1+(t-s)h}{\theta_2-\theta_1}$ as in
+\eqref{eq:det-expanded}), whereas the true coefficient is the full $B$-weighted sum over the level.
+The gap between the two is exactly the physics $A/B$ encode; it is not a small correction on top of
+a naive determinant.
+
+\textbf{Open.} The off-diagonal closed form of $A$ (hence $B$) beyond \eqref{eq:A-diag}/\eqref{eq:B-diag}
+was not found; the growing complexity with level suggests a discrete-orthogonal-polynomial family
+(Hahn or Racah type) rather than a simple product formula. Exact rational values are available in
+the notebook for every entry with $\lambda_1,\lambda_2\le3$.
+
+\textbf{Next target.} The natural generalization is the analogue of $B$ for general
+$\mathfrak{gl}(3)$ representations, where the recoupling is expected to become genuinely
+multi-index and the connection to known 6j/Racah-type combinatorics correspondingly sharper.
+
+The full verification record for this program, including negative results (failed candidate
+constructions, an incorrect conjectured sum rule later corrected, and the derivation history behind
+each boxed result above), lives in \texttt{XXX\_CG\_L2\_V2.wb}, Sections G--K (cells 78--154).
+
+\end{document}
