@@ -39,6 +39,54 @@ def _weight(k, pattern):
     return sum(row_k) - sum(row_prev)
 
 
+def _raise(k, pattern):
+    """Coefficients of E_{k,k+1} acting on `pattern`: {new_pattern: coeff}. Ports Jp[k][pat]."""
+    row_k = pattern[k - 1]
+    row_next = pattern[k]
+    terms = {}
+    for i in range(1, k + 1):
+        num = 1
+        for j in range(1, k + 2):
+            num *= row_k[i - 1] - i - row_next[j - 1] + j
+        den = 1
+        for j in range(1, k + 1):
+            if j == i:
+                continue
+            den *= row_k[i - 1] - i - row_k[j - 1] + j
+        coeff = -sympy.Rational(num, den)
+        if coeff == 0:
+            continue
+        new_row_k = list(row_k)
+        new_row_k[i - 1] += 1
+        new_pattern = pattern[: k - 1] + (tuple(new_row_k),) + pattern[k:]
+        terms[new_pattern] = terms.get(new_pattern, 0) + coeff
+    return terms
+
+
+def _lower(k, pattern):
+    """Coefficients of E_{k+1,k} acting on `pattern`: {new_pattern: coeff}. Ports Jm[k][pat]."""
+    row_k = pattern[k - 1]
+    row_prev = pattern[k - 2] if k > 1 else ()
+    terms = {}
+    for i in range(1, k + 1):
+        num = 1
+        for j in range(1, k):
+            num *= row_k[i - 1] - i - row_prev[j - 1] + j
+        den = 1
+        for j in range(1, k + 1):
+            if j == i:
+                continue
+            den *= row_k[i - 1] - i - row_k[j - 1] + j
+        coeff = sympy.Rational(num, den)
+        if coeff == 0:
+            continue
+        new_row_k = list(row_k)
+        new_row_k[i - 1] -= 1
+        new_pattern = pattern[: k - 1] + (tuple(new_row_k),) + pattern[k:]
+        terms[new_pattern] = terms.get(new_pattern, 0) + coeff
+    return terms
+
+
 class GL3Rep:
     """Irreducible gl(3) representation in the Gelfand-Tsetlin basis.
 
@@ -70,4 +118,34 @@ class GL3Rep:
     def _build_generator(self, i, j):
         if i == j:
             return sympy.diag(*[_weight(i, pat) for pat in self.patterns])
+        if j == i + 1:
+            return self._adjacent_up(i)
+        if j == i - 1:
+            return self._adjacent_down(j)
         raise ValueError(f"generator({i}, {j}) not yet implemented")
+
+    def _adjacent_up(self, k):
+        M = sympy.zeros(self.dim, self.dim)
+        for col, pat in enumerate(self.patterns):
+            for target, coeff in _raise(k, pat).items():
+                # _raise's raw formula can propose a target row outside the
+                # interlacing range (e.g. off the top of the GT pattern) with
+                # a nonzero coefficient. The Mathematica source relies on
+                # Coefficient[...] silently discarding such terms because
+                # they never match a v[pat] for pat in ps[{rep}]; the
+                # equivalent here is to skip targets absent from self._index.
+                row_index = self._index.get(target)
+                if row_index is not None:
+                    M[row_index, col] = coeff
+        return M
+
+    def _adjacent_down(self, k):
+        M = sympy.zeros(self.dim, self.dim)
+        for col, pat in enumerate(self.patterns):
+            for target, coeff in _lower(k, pat).items():
+                # Same boundary-term filtering as _adjacent_up, mirroring the
+                # Mathematica Coefficient[] extraction (see comment above).
+                row_index = self._index.get(target)
+                if row_index is not None:
+                    M[row_index, col] = coeff
+        return M

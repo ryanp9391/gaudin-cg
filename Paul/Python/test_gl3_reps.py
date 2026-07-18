@@ -30,3 +30,12 @@ def test_diagonal_generator_highest_weight_eigenvalue(lam):
     for k in range(1, 4):
         E_kk = rep.generator(k, k)
         assert E_kk[hw_index, hw_index] == lam[k - 1]
+
+
+@pytest.mark.parametrize("lam", REPS)
+def test_adjacent_commutators(lam):
+    rep = GL3Rep(lam)
+    comm12 = rep.generator(1, 2) * rep.generator(2, 1) - rep.generator(2, 1) * rep.generator(1, 2)
+    assert comm12 == rep.generator(1, 1) - rep.generator(2, 2)
+    comm23 = rep.generator(2, 3) * rep.generator(3, 2) - rep.generator(3, 2) * rep.generator(2, 3)
+    assert comm23 == rep.generator(2, 2) - rep.generator(3, 3)
