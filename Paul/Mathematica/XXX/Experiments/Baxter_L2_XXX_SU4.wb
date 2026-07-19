@@ -328,6 +328,48 @@
     }
    ],
    "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*polynomial from ascending coeff list {c0..cM}: qpoly[clist,uu]=Sum ck uu^k. x-substitution avoids 0^0.*)\nClearAll[qpoly];\nqpoly[clist_, uu_] := Module[{x}, (clist . x^Range[0, Length[clist] - 1]) /. x -> uu];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*QSolve4 solves the 4th-order Baxter (TQ) equation for the four monic Q-polynomials q_1..q_4\n  (one per twist z[k]), degrees M_k from Mdeg. For fixed k, Q_k=z[k]^(u/h) q_k(u); substitute into\n  BaxOp and multiply by ν1[u]ν1[u-h]ν1[u-2h]ν1[u-3h] to clear denominators, giving a polynomial\n  identity in u linear in the coeffs of q_k. Each q=u^j is one column; NullSpace (Chop first) gives\n  the coeff vector (1-dim), monic-normalized by the top coefficient.*)\nClearAll[QSolve4];\nQSolve4::degnull = \"Q_`5` nullspace dim `6` (expected 1) at (H1,H2,H3,n)=(`1`,`2`,`3`,`4`).\";\nQSolve4::lastzero = \"Q_`5` top coeff ~0 at (H1,H2,H3,n)=(`1`,`2`,`3`,`4`).\";\nQSolve4[λ1_, λ2_][H1_, H2_, H3_, n_] := QSolve4[λ1, λ2][H1, H2, H3, n] = Module[\n   {Ms, u, T1, T2, T3, QD, N1, N1m, N1mm, N1mmm, sols},\n   Ms = Mdeg[λ1, λ2][H1, H2, H3, n];\n   T1 = tau1[λ1, λ2][H1, H2, H3, n][u]; T2 = tau2[λ1, λ2][H1, H2, H3, n][u]; T3 = tau3[λ1, λ2][H1, H2, H3, n][u];\n   QD = qdetT[λ1, λ2][u];\n   N1 = ν1[λ1, λ2][u]; N1m = ν1[λ1, λ2][u - h]; N1mm = ν1[λ1, λ2][u - 2 h]; N1mmm = ν1[λ1, λ2][u - 3 h];\n   sols = Table[\n     Module[{M = Ms[[k]], zk = z[k], cols, mat, ns, vec, last, maxdeg},\n       maxdeg = M + 8;\n       cols = Table[\n          PadRight[CoefficientList[Expand[\n             zk (u + h)^j N1 N1m N1mm N1mmm\n              - T1 u^j N1m N1mm N1mmm\n              + T2/zk (u - h)^j N1mm N1mmm\n              - T3/zk^2 (u - 2 h)^j N1mmm\n              + QD/zk^3 (u - 3 h)^j], u], maxdeg + 1],\n          {j, 0, M}];\n       mat = Transpose[cols];\n       ns = NullSpace[Chop[mat, 10^-12], Tolerance -> 10^-10];\n       If[Length[ns] != 1, Message[QSolve4::degnull, H1, H2, H3, n, k, Length[ns]]; Abort[]];\n       vec = ns[[1]]; last = vec[[-1]];\n       If[Abs[last] < 10^-13 Max[Abs[vec]], Message[QSolve4::lastzero, H1, H2, H3, n, k]; Abort[]];\n       vec/last],\n     {k, 1, 4}];\n   sols\n];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*Q accessor: Q_k(u)=z[k]^(u/h) q_k(u), q_k the monic coeff list from QSolve4.*)\nClearAll[Qfun];\nQfun[λ1_, λ2_][H1_, H2_, H3_, n_][k_][u_] := z[k]^(u/h) qpoly[QSolve4[λ1, λ2][H1, H2, H3, n][[k]], u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*single-state TQ-residual check on a non-symmetric rep: each Q_k must be annihilated by BaxOp\n  at several generic numeric u. State = the first key of TauEigensystem4[{2,1,1,0},{1,0,0,0}].*)\nModule[{λ1 = {2, 1, 1, 0}, λ2 = {1, 0, 0, 0}, key, H1, H2, H3, n, res},\n  key = First[Keys[TauEigensystem4[λ1, λ2]]];\n  {H1, H2, H3, n} = key;\n  res = Table[\n     Max@Table[\n        Abs@Chop[N[BaxOp[λ1, λ2][H1, H2, H3, n][Function[uu, Qfun[λ1, λ2][H1, H2, H3, n][k][uu]]][u0], 30]],\n        {u0, {2/3, 9/5, 4, 23/7}}],\n     {k, 1, 4}];\n  If[Max[res] > 10^-10, Print[\"TQ RESIDUAL FAIL: \", res]; Abort[]];\n  {\"state\" -> key, \"perQresidual\" -> res}\n]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"75066\" data-output-id=\"9\" data-out-n=\"89\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"32\" data-sub-start=\"2\" data-sub-end=\"12\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[89]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrrzd2o4-tif0x8y\" data-page-width-em=\"21\" data-latex-b64=\"XGxlZnRce1x0ZXh0e3N0YXRlfVx0byBcbGVmdFx7MCwxLDEsMFxyaWdodFx9LFx0ZXh0e3BlclFyZXNpZHVhbH1cdG8gXGxlZnRcezAsMCwwLDAuXHRpbWVzIDEwXnstOX1ccmlnaHRcfVxyaWdodFx9\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1.2141em;vertical-align:-0.35em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">{</span></span><span class=\"mord text\"><span class=\"mord\">state</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">1</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">1</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">perQresidual</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">{</span></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0.</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">×</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">1</span><span class=\"mord\"><span class=\"mord\">0</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">−</span><span class=\"mord mtight\">9</span></span></span></span></span></span></span></span></span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">}</span></span></span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">}</span></span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[89]= \\left\\{\\text{state}\\to \\left\\{0,1,1,0\\right\\},\\text{perQresidual}\\to \\left\\{0,0,0,0.\\times 10^{-9}\\right\\}\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "86da6c55-64e1-4aae-8945-b0fa44c4f356"
+    }
+   ],
+   "metadata": {}
   }
  ],
  "metadata": {}
