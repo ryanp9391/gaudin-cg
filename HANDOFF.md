@@ -9,6 +9,47 @@ freely each session rather than appending.
 Computing CG coefficients directly in the XXX spin chain (`Paul/Mathematica/XXX/`). The Gaudin
 subproject is parked.
 
+## State as of 2026-07-19 (gl(4) L=2 untwisted Casimir eigenvalues — DONE, exploratory findings mixed, in Experiments)
+
+Follow-on to the twisted build below: new section appended to `Baxter_L2_XXX_SU4.wb` (cells 35–47),
+`z[k]→1` (untwisted/physical point), for the two-row-rectangular rep family `λ1=[S,S,0,0]`,
+`λ2=[P,P,0,0]`. Goal: closed-form eigenvalues `Λ_a(u)` of the untwisted transfer matrices via su(4)
+Casimir invariants of the irreps `μ` in `λ1⊗λ2=⊕N_μμ`. Design/plan (with gotchas/results recorded
+inline as found): `docs/superpowers/specs/2026-07-19-su4-l2-untwisted-casimir-eigenvalues-design.md`,
+`docs/superpowers/plans/2026-07-19-su4-l2-untwisted-casimir-eigenvalues.md`. All 5 tasks executed
+inline (subagents again lacked wolfbook tools this session).
+
+**Exact-arithmetic simplification:** at `z=1` (vs. the twisted case's irrational `Zeta`-based twists)
+every quantity is exact rational — no precision-cascade concerns at all in this section.
+
+**Verified result:** on the "top" state `μ=λ1+λ2` (always multiplicity 1, by general representation
+theory — confirmed empirically too: this rep family is **fully multiplicity-free** across the whole
+`(S,P)∈{(1,1),(2,1),(1,2),(2,2)}` sweep, up to `dim=400`), `Λ_1(u) = ν[1](u)+ν[2](u)+ν[3](u)+ν[4](u)`
+exactly (`worst~0×10⁻²⁵`) — no Casimir needed, follows directly from the pseudovacuum `ν` formula
+already built for the twisted case.
+
+**Falsified conjecture (honest negative result, not a bug):** "each `u^j` coefficient of `Λ_1(u)` is
+an affine function of `C2(μ)` (quadratic Casimir) alone" — tested two independent ways (2-anchor
+extrapolation and least-squares over all 167 multiplicity-free data points across 3 rep pairs) —
+**fails** for `j=0` (constant term, deviation ~3–4.7) and `j=1` (subleading term, deviation ~1.25–2.0).
+Only `j=2` (leading term) is trivially constant (`=χ1=4`, already known, not a real test). **Stopped
+here per convention rather than searching further candidates unprompted** — next step (quadratic-in-C2,
+a second invariant like `H2` itself, or a cubic/quartic Casimir) needs a decision before continuing.
+
+**Three real bugs found and fixed while executing** (all documented inline in the plan, useful
+precedent for future notebook work): `ClearAll[f]` wipes a function's rules entirely, not just its
+memoized cache (had to re-insert the original defining code, not just clear+recall);
+`assoc[Key[list]]` single-bracket indexing silently returns `KeyAbsent` even for a genuine key here
+(use `assoc[list]`, no wrapper); computing `"field"->expr&/@list` *inline inside* an association
+literal silently binds to a scalar instead of a vector (compute to a local variable first, as
+`TauEigensystem4` already did). Also: `Table[...,{S=SP[[1]],P=SP[[2]]}]` is invalid iterator syntax
+(silently no-ops instead of erroring loudly — `S,P` need to be `Module` locals); `Flatten[list,2]`
+over-flattens when list rows have internal list structure (use depth matched to actual nesting).
+
+**Next natural steps:** decide whether to keep searching for a closed form on `j=0,1` (candidates:
+quadratic-in-`C2`, a second commuting invariant, cubic/quartic Casimirs `C3op`/`C4op` — not yet
+built) or treat the top-state result + falsification as the reportable outcome for this rep family.
+
 ## State as of 2026-07-19 (gl(4) L=2 twisted Baxter solver: `Baxter_L2_XXX_SU4.wb` — DONE, in Experiments)
 
 Ported the two-site gl(3) XXX pipeline (`su3_V2_general.wb`) to **gl(4)**: two independent generic
