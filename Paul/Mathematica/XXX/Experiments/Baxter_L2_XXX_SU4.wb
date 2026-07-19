@@ -489,6 +489,27 @@
     }
    ],
    "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*Test the top-state (mu=lambda1+lambda2) closed-form conjecture: Lambda_1(u) = Sum_i nu[i](u),\n  with NO shifts (unlike qdetT's shifted product) since a=1 principal minors are literally T[i,i](u)\n  with zero row-shift in the quantum-minor definition. mu=lambda1+lambda2 has weight (S+P,S+P,0,0),\n  i.e. (H1,H2,H3)=(0,S+P,0), and occurs with multiplicity exactly 1 (general fact) -- so there is\n  exactly one key in TauEigensystemCasimir's output with that (H1,H2,H3).*)\nModule[{λ1 = {1, 1, 0, 0}, λ2 = {1, 1, 0, 0}, S = 1, P = 1, es, topKeys, key, H1, H2, H3, C2r, n, conj, actual, worst},\n  es = TauEigensystemCasimir[λ1, λ2];\n  topKeys = Select[Keys[es], {#[[1]], #[[2]], #[[3]]} == {0, S + P, 0} &];\n  If[Length[topKeys] != 1, Print[\"TOP STATE NOT UNIQUE: \", topKeys]; Abort[]];\n  key = First[topKeys];\n  {H1, H2, H3, C2r, n} = key;\n  conj[u_] := ν[λ1, λ2][1][u] + ν[λ1, λ2][2][u] + ν[λ1, λ2][3][u] + ν[λ1, λ2][4][u];\n  worst = Max@Table[Abs[N[LambdaU[λ1, λ2][H1, H2, H3, C2r, n][1][u0] - conj[u0], 30]], {u0, {2/3, 9/5, 4, 23/7}}];\n  {\"topKey\" -> key, \"conjectureMatches\" -> (worst < 10^-8), \"worst\" -> worst}\n]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"294853\" data-output-id=\"19\" data-out-n=\"115\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"42\" data-sub-start=\"5\" data-sub-end=\"14\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[115]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrs2jzja-kj400zh\" data-page-width-em=\"21\" data-latex-b64=\"XGxlZnRce1x0ZXh0e3RvcEtleX1cdG8gXGxlZnRcezAsMiwwLDE2LDBccmlnaHRcfSxcdGV4dHtjb25qZWN0dXJlTWF0Y2hlc31cdG8gXG1hdGhybXtUcnVlfSxcdGV4dHt3b3JzdH1cdG8gMC5cdGltZXMgMTBeey0yNX1ccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1.2141em;vertical-align:-0.35em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">{</span></span><span class=\"mord text\"><span class=\"mord\">topKey</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">2</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">16</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">conjectureMatches</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\"><span class=\"mord mathrm\">True</span></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">worst</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0.</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">×</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">1</span><span class=\"mord\"><span class=\"mord\">0</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">−</span><span class=\"mord mtight\">25</span></span></span></span></span></span></span></span></span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">}</span></span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[115]= \\left\\{\\text{topKey}\\to \\left\\{0,2,0,16,0\\right\\},\\text{conjectureMatches}\\to \\mathrm{True},\\text{worst}\\to 0.\\times 10^{-25}\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "28924d8d-9449-4b4c-b224-13cc36b05053"
+    }
+   ],
+   "metadata": {}
   }
  ],
  "metadata": {}
