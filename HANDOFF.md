@@ -9,6 +9,58 @@ freely each session rather than appending.
 Computing CG coefficients directly in the XXX spin chain (`Paul/Mathematica/XXX/`). The Gaudin
 subproject is parked.
 
+## State as of 2026-07-19 (gl(4) L=2 twisted Baxter solver: `Baxter_L2_XXX_SU4.wb` — DONE, in Experiments)
+
+Ported the two-site gl(3) XXX pipeline (`su3_V2_general.wb`) to **gl(4)**: two independent generic
+Young-diagram reps `λ={λ1,λ2,λ3,λ4}` per site, four **distinct** diagonal-twist eigenvalues
+`z[k]=N[Exp[I Zeta[2k+1]],70]` (k=1..4), 4th-order Baxter/TQ equation, four Q-functions, built fresh
+in `Paul/Mathematica/XXX/Experiments/Baxter_L2_XXX_SU4.wb` (was empty). Design/plan (with deviation
+notes recording what actually happened): `docs/superpowers/specs/2026-07-19-su4-l2-twisted-baxter-design.md`,
+`docs/superpowers/plans/2026-07-19-su4-l2-twisted-baxter.md`. All 10 tasks DONE, executed inline
+(not via subagent — the wolfbook MCP tools weren't wired into subagent tool sets this session, see
+plan/session notes), controller commits.
+
+**Companion twist dropped entirely** (user direction, confirmed before Task 2): no `G`/`TG`/`tG`/
+`qminG` — only the diagonal-twist branch (`Tg`/`tg`/`qming`) is built, matching what the gl(3) source
+pipeline actually used downstream anyway. `χ1..χ4` (elementary symmetric functions of `z[1..4]`)
+still built directly, needed by `qdetT` and the leading-coeff check.
+
+**Genuine gl(4) math (everything else is pure index/term extension from gl(3)):**
+- `ν[λ1,λ2][i][u]=(u−θ1−hλ1[[i]])(u−θ2−hλ2[[i]])` for `i=1..4`; `qdetT=χ4·ν[1][u−3h]ν[2][u−2h]ν[3][u−h]ν[4][u]`.
+- 4th-order `BaxOp`: `f[u+h]−A1 f[u]+A2 f[u−h]−A3 f[u−2h]+A4 f[u−3h]`.
+- **Degree formula carries over unchanged**: `M_k=Λ_1−n_k` (`Λ=λ1+λ2`, `Λ_1=(λ1+λ2)[[1]]`) — verified
+  with **zero deviation** against the derived asymptotic `Mdeg` master formula over the full 152-state
+  sweep; no candidate-fit re-derivation was needed (the plan's fallback path was never triggered).
+- `TauEigensystem4` simultaneously diagonalizes `τ1,τ2,τ3` (Cartan `H1,H2,H3`); `QSolve4` solves for
+  four monic `q_k`, `Qfun`=`z[k]^(u/h) q_k(u)`.
+
+**Full-sweep verification (acceptance):** 5 rep pairs, **152 states total**
+(`{1,0,0,0}⊗{1,0,0,0}`=16, `{1,0,0,0}⊗{1,1,1,0}`=16, `{1,1,0,0}⊗{1,0,0,0}`=24,
+`{1,1,0,0}⊗{1,1,0,0}`=36, `{2,1,1,0}⊗{1,0,0,0}`=60 adjoint⊗fund), every `Q_k` solves the 4th-order TQ
+equation and the 5×4 Casoratian reconstruction of `A1..A4` matches `τ1,τ2,τ3,qdetT` —
+**worstTQ = worstCasoratian = 0 exactly**. Verified by a fresh-kernel top-to-bottom run (restart → run
+cells 1→34 in order); every hard-assert passed in-kernel with no `Abort`.
+
+**Precision bug found and fixed (the real story of this session):** the plan specified `z[k]` at
+30-digit precision (matching gl(3)); the initial full sweep at that precision left the d=60
+adjoint⊗fund rep's Casoratian residual at `~4.5×10⁻⁸` — 45x over the `10⁻⁹` bar — even though the TQ
+residual was *exactly* 0 everywhere (proof the formulas/implementation were correct; this was a pure
+numerics issue). Bumping `z[k]` to 50 then 70 digits barely moved the residual (`~1.6×10⁻⁹`, then
+bit-identical again) — the real giveaway that something else was capping precision independent of
+`z`. Root cause: `TauEigensystem4`'s `rSets` (generic-combination coefficients for splitting the
+degenerate τ-eigenspace) and its `Kmix` eigendecomposition were **hardcoded to 30-digit precision** —
+a leftover copied verbatim from the gl(3) source's `TauEigensystem3`, never tied to the `z[k]`
+precision bump. This silently capped the entire downstream chain (τ-coefficients, `Qfun`, Casoratian)
+at ~19-25 accurate digits no matter how much precision `z` carried. Fix: match both to `z`'s 70-digit
+precision — eigen-residual improved from a capped `8.6×10⁻²⁶` to `3.46×10⁻⁶⁴`, and the full sweep then
+passed with **exact** zero residuals. Lesson for future gl(N) ports: hardcoded precision literals
+copied from a smaller-N source notebook are a silent trap — grep for bare `N[..., <number>]` whenever
+raising a global precision parameter.
+
+**Next natural steps:** promote to `Clean/` once satisfied; the deliberate follow-on is the `z→1`
+untwisted limit (su(4) irrep multiplet degeneracy, feeds the CG-overlap program) — explicitly out of
+scope for this notebook per the design spec.
+
 ## State as of 2026-07-17 (gl(3) general reps per site: `su3_V2_general.wb` — DONE, in Experiments)
 
 Generalized the two-site gl(3) XXX notebook from symmetric reps `{S,0,0}` per site to **arbitrary

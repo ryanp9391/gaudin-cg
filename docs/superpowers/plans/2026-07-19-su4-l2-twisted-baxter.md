@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - **File:** everything lives in one notebook — `Paul/Mathematica/XXX/Experiments/Baxter_L2_XXX_SU4.wb` (currently empty). Cells are appended in order; each task's cells come after the previous task's.
-- **Numeric params (verbatim):** `θ1 = 1/3`, `θ2 = 1/7`, `h = 1`, `z[k] = N[Exp[I Zeta[2 k + 1]], 30]` for `k = 1,2,3,4` (Zeta[3], Zeta[5], Zeta[7], Zeta[9]).
+- **Numeric params:** `θ1 = 1/3`, `θ2 = 1/7`, `h = 1`, `z[k] = N[Exp[I Zeta[2 k + 1]], 50]` for `k = 1,2,3,4` (Zeta[3], Zeta[5], Zeta[7], Zeta[9]). (Precision raised from 30→50 digits during Task 10 — see deviation note there: 30 digits, matching the gl(3) convention, left the largest rep's Casoratian residual at ~4.5e-8 due to precision cascading through a 60×60 eigendecomposition + 4th-order nullspace solve, not a formula error — TQ residual was exactly 0 everywhere at 30 digits too.)
 - **Twist:** four **distinct** unit-modulus eigenvalues; `χ1..χ4` = elementary symmetric functions of `z[1..4]`; **diagonal twist only** — no companion-twist matrix `G`/`TG`/`tG`/`qminG` (dropped 2026-07-19: unused by the gl(3) source pipeline too, which only ever solved the TQ equation off the diagonal-twist branch `Tg`/`tg`/`qming`; kept `TG` there purely for future convention. χ1..χ4 stay as plain elementary-symmetric-function definitions — still needed directly by `qdetT` and the leading-coeff/commutation check).
 - **Rep interface:** every function takes full 4-vectors `λ1, λ2` (one per site); `λ = {λ1,λ2,λ3,λ4}`, `λ1≥λ2≥λ3≥λ4≥0` integers. No scalar-`S` wrappers.
 - **Degree formula:** verify `M_k = Λ_1 − n_k` (`Λ = λ1+λ2`, `Λ_1 = (λ1+λ2)[[1]]`) holds; do NOT re-derive by candidate-fit unless it fails.
@@ -117,14 +117,20 @@ git commit -m "su4 L2: Section A foundations (GT engine, generators, Lax, centra
 (*Numeric parameters (shared across Section B). θ,h as in the gl(3) notebook;
   four DISTINCT unit-modulus twist eigenvalues z[1..4] (generic → non-degenerate).
   χ1..χ4 were defined above as symmetric functions of z[i], so they become
-  numeric automatically once z[i] are assigned.*)
+  numeric automatically once z[i] are assigned.
+  NB: 50-digit precision (raised from the gl(3)-matching 30 digits 2026-07-19) — the
+  4th-order Baxter equation and larger reps here (up to d=60) chain a 60x60 high-precision
+  eigendecomposition through several more linear-algebra stages than gl(3)'s 3rd-order/d<=24
+  case, and 30 digits left the worst-case Casoratian residual at ~4.5e-8 (just outside the
+  1e-9 hard-assert bar) even though the TQ residual itself was exactly 0 everywhere — i.e. a
+  precision-cascade issue, not a formula error. 50 digits gives enough headroom.*)
 θ1 = 1/3;
 θ2 = 1/7;
 h = 1;
-z[1] = N[Exp[I Zeta[3]], 30];
-z[2] = N[Exp[I Zeta[5]], 30];
-z[3] = N[Exp[I Zeta[7]], 30];
-z[4] = N[Exp[I Zeta[9]], 30];
+z[1] = N[Exp[I Zeta[3]], 50];
+z[2] = N[Exp[I Zeta[5]], 50];
+z[3] = N[Exp[I Zeta[7]], 50];
+z[4] = N[Exp[I Zeta[9]], 50];
 {θ1, θ2, h, z[1], z[2], z[3], z[4], χ1, χ2, χ3, χ4}
 ```
 
@@ -406,14 +412,21 @@ TauEigensystem4[λ1_, λ2_] := TauEigensystem4[λ1, λ2] = Module[
       splitting combination since they carry no state info *)
    mats = Join[c1, c2, c3, {H1op[λ1, λ2], H2op[λ1, λ2], H3op[λ1, λ2]}];
    nontriv = Join[c1[[1 ;; 2]], c2[[1 ;; 4]], c3[[1 ;; 6]], {H1op[λ1, λ2], H2op[λ1, λ2], H3op[λ1, λ2]}]; (* 15 matrices *)
-   rSets = Table[N[Table[Prime[100 i + 7 j]^(1/3), {j, Length[nontriv]}], 30], {i, 1, 8}];
+   (* NB (fixed 2026-07-19): rSets and Kmix's eigendecomposition were hardcoded to 30-digit
+      precision here (a leftover from the gl(3) source's TauEigensystem3), decoupled from the
+      z[k]-precision bump in Task 2 (30->70) — this silently capped the whole downstream chain
+      (tau-coefficients, Qfun, the Casoratian check) at ~19-25 accurate digits regardless of how
+      much precision z carried, which is why raising z from 50->70 digits left the worst-case
+      Casoratian residual completely unchanged (bit-identical) instead of shrinking. Both now
+      match z's 70-digit precision. *)
+   rSets = Table[N[Table[Prime[100 i + 7 j]^(1/3), {j, Length[nontriv]}], 70], {i, 1, 8}];
    rset = SelectFirst[rSets,
      Module[{ee, vv}, {ee, vv} = Eigensystem[#.nontriv];
         MatrixRank[vv] == d && Length[Union[Chop[ee, 10^-12]]] == d] &,
      Missing["NoGenericR"]];
    If[MissingQ[rset], Message[TauEigensystem4::rankdef, d, λ1, λ2]; Abort[]];
    Kmix = rset . nontriv;
-   {vals, vecs} = Eigensystem[N[Kmix, 30]];
+   {vals, vecs} = Eigensystem[N[Kmix, 70]];
    rayleigh[m_, v_] := (v . (m . v))/(v . v);
    recs = Table[
      Module[{v = vecs[[i]], res, H1v, H2v, H3v, t1c, t2c, t3c},
