@@ -12,7 +12,7 @@
 
 - **File:** everything lives in one notebook — `Paul/Mathematica/XXX/Experiments/Baxter_L2_XXX_SU4.wb` (currently empty). Cells are appended in order; each task's cells come after the previous task's.
 - **Numeric params (verbatim):** `θ1 = 1/3`, `θ2 = 1/7`, `h = 1`, `z[k] = N[Exp[I Zeta[2 k + 1]], 30]` for `k = 1,2,3,4` (Zeta[3], Zeta[5], Zeta[7], Zeta[9]).
-- **Twist:** four **distinct** unit-modulus eigenvalues; `χ1..χ4` = elementary symmetric functions of `z[1..4]`; companion `G = {{χ1,-χ2,χ3,-χ4},{1,0,0,0},{0,1,0,0},{0,0,1,0}}`.
+- **Twist:** four **distinct** unit-modulus eigenvalues; `χ1..χ4` = elementary symmetric functions of `z[1..4]`; **diagonal twist only** — no companion-twist matrix `G`/`TG`/`tG`/`qminG` (dropped 2026-07-19: unused by the gl(3) source pipeline too, which only ever solved the TQ equation off the diagonal-twist branch `Tg`/`tg`/`qming`; kept `TG` there purely for future convention. χ1..χ4 stay as plain elementary-symmetric-function definitions — still needed directly by `qdetT` and the leading-coeff/commutation check).
 - **Rep interface:** every function takes full 4-vectors `λ1, λ2` (one per site); `λ = {λ1,λ2,λ3,λ4}`, `λ1≥λ2≥λ3≥λ4≥0` integers. No scalar-`S` wrappers.
 - **Degree formula:** verify `M_k = Λ_1 − n_k` (`Λ = λ1+λ2`, `Λ_1 = (λ1+λ2)[[1]]`) holds; do NOT re-derive by candidate-fit unless it fails.
 - **Verification convention:** hard-assert with `If[worst > tol, Print[...]; Abort[]]`; all residuals machine-zero (`< 10^-9`). Chop high-precision numerics before rank/nullspace/Union.
@@ -90,20 +90,21 @@ git commit -m "su4 L2: Section A foundations (GT engine, generators, Lax, centra
 
 ---
 
-### Task 2: Twist (4×4 companion) + numeric parameters + monodromies
+### Task 2: Diagonal twist (χ1..χ4) + numeric parameters + monodromies
 
 **Files:**
 - Modify: `Baxter_L2_XXX_SU4.wb`
 
 **Interfaces:**
 - Consumes: `L`, `dim` (Task 1).
-- Produces: `G` (4×4 companion), `χ1,χ2,χ3,χ4`, `z[1..4]`, `θ1,θ2,h`, `T[λ1,λ2][i,j][u]`, `Tg[λ1,λ2][i,j][u]`, `TG[λ1,λ2][i,j][u]`. Indices `i,j ∈ 1..4`.
+- Produces: `χ1,χ2,χ3,χ4`, `z[1..4]`, `θ1,θ2,h`, `T[λ1,λ2][i,j][u]`, `Tg[λ1,λ2][i,j][u]`. Indices `i,j ∈ 1..4`.
 
-- [ ] **Step 1: Insert the twist cell** (gl(4): 4×4 companion, χ1..χ4 as symmetric functions of z[1..4]):
+**Deviation from the design spec (confirmed with the user 2026-07-19):** companion twist is dropped entirely for this project — no `G` matrix, no `TG`/`tG`/`qminG`. The gl(3) source pipeline only ever solved the TQ equation off the diagonal-twist branch (`Tg`/`tg`/`qming`); `TG`/`tG`/`qminG` were defined there but unused downstream. `χ1..χ4` stay as plain elementary-symmetric-function definitions of `z[1..4]` — still needed directly by `qdetT` (Task 4) and the leading-coeff/commutation check (Task 5).
+
+- [ ] **Step 1: Insert the χ definitions cell** (elementary symmetric functions of z[1..4]; no companion matrix):
 
 ```wolfram
-(*companion twist matrix with eigenvalues z[1],z[2],z[3],z[4]*)
-G={{χ1,-χ2,χ3,-χ4},{1,0,0,0},{0,1,0,0},{0,0,1,0}};
+(*χ1..χ4: elementary symmetric functions of the four diagonal-twist eigenvalues z[1..4]*)
 χ1=z[1]+z[2]+z[3]+z[4];
 χ2=z[1]z[2]+z[1]z[3]+z[1]z[4]+z[2]z[3]+z[2]z[4]+z[3]z[4];
 χ3=z[1]z[2]z[3]+z[1]z[2]z[4]+z[1]z[3]z[4]+z[2]z[3]z[4];
@@ -115,7 +116,7 @@ G={{χ1,-χ2,χ3,-χ4},{1,0,0,0},{0,1,0,0},{0,0,1,0}};
 ```wolfram
 (*Numeric parameters (shared across Section B). θ,h as in the gl(3) notebook;
   four DISTINCT unit-modulus twist eigenvalues z[1..4] (generic → non-degenerate).
-  χ1..χ4 and G were defined above as symmetric functions of z[i], so they become
+  χ1..χ4 were defined above as symmetric functions of z[i], so they become
   numeric automatically once z[i] are assigned.*)
 θ1 = 1/3;
 θ2 = 1/7;
@@ -127,30 +128,29 @@ z[4] = N[Exp[I Zeta[9]], 30];
 {θ1, θ2, h, z[1], z[2], z[3], z[4], χ1, χ2, χ3, χ4}
 ```
 
-- [ ] **Step 3: Insert the monodromy cell** (from cell 7, `{ii,3}` → `{ii,4}`):
+- [ ] **Step 3: Insert the monodromy cell** (from cell 7, `{ii,3}` → `{ii,4}`; diagonal-twist branch only):
 
 ```wolfram
-(*monodromy with no twist, diagonal twist, and companion twist*)
-ClearAll[T,Tg,TG];
+(*monodromy with no twist and diagonal twist*)
+ClearAll[T,Tg];
 T[λ1_,λ2_][i_,j_][u_]:=Sum[KroneckerProduct[L[λ1][i,ii][u-θ1],L[λ2][ii,j][u-θ2]],{ii,4}];
 Tg[λ1_,λ2_][i_,j_][u_]:= z[i] T[λ1,λ2][i,j][u];
-TG[λ1_,λ2_][i_,j_][u_]:=Sum[T[λ1,λ2][i,ii][u] G[[ii,j]],{ii,4}];
 ```
 
-- [ ] **Step 4: Run cells 1→(this) in order, then verify the twist companion has eigenvalues z[1..4]** (the test — confirms G, χ, and z assignments are consistent). Run via `evaluateExpression`:
+- [ ] **Step 4: Run cells 1→(this) in order, then sanity-check χ1..χ4 and distinctness of the twists** (the test — confirms the z/χ assignments are consistent). Run via `evaluateExpression`:
 
 ```wolfram
-Max[Abs[Sort[Eigenvalues[N[G, 30]]] - Sort[{z[1], z[2], z[3], z[4]}]]]
+{Abs[χ1 - Total[{z[1],z[2],z[3],z[4]}]], Min[Abs[Subtract @@@ Subsets[{z[1],z[2],z[3],z[4]}, {2}]]]}
 ```
 
-**Expected output: a number `< 10^-20`** (companion eigenvalues match the four twists). Also confirm distinctness: `evaluateExpression` on `Min[Abs[Subtract @@@ Subsets[{z[1],z[2],z[3],z[4]}, {2}]]]` → **Expected: an O(1) number** (all four twists well-separated, so the spectrum will be non-degenerate).
+**Expected output:** `{r, s}` with `r` a number `< 10^-25` (χ1 numerically equals Σz, confirming z[i] were assigned before χ1's value was captured) and `s` an O(1) number (all four twists well-separated, so the spectrum will be non-degenerate).
 
 - [ ] **Step 5: Save and commit** (controller):
 
 ```bash
 cd /home/paul/git_projects/gaudin-CG
 git add Paul/Mathematica/XXX/Experiments/Baxter_L2_XXX_SU4.wb
-git commit -m "su4 L2: 4x4 companion twist, numeric params (z4 added), monodromies"
+git commit -m "su4 L2: diagonal twist (chi1..chi4), numeric params (z4 added), monodromies"
 ```
 
 ---
