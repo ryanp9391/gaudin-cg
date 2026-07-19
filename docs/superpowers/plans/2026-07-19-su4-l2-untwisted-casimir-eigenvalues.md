@@ -433,7 +433,7 @@ casData = Flatten[Table[
        Function[{key, rec}, If[MemberQ[genuineMultKeys, key], Nothing,
          {S, P, key, rec["C2"], CoefficientList[LambdaU[λ1, λ2][key[[1]], key[[2]], key[[3]], key[[4]], key[[5]]][1][uu], uu]}]],
        es]],
-   {SP, {{1, 1}, {2, 1}, {1, 2}}}], 2];
+   {SP, {{1, 1}, {2, 1}, {1, 2}}}], 1];
 (*fit u^j coefficients as affine in C2 from the first two rows with distinct C2, verify on the rest*)
 Module[{distinctRows, anchor1, anchor2, coeffFit, worst},
   distinctRows = DeleteDuplicatesBy[casData, #[[4]] &];
@@ -451,14 +451,46 @@ Module[{distinctRows, anchor1, anchor2, coeffFit, worst},
 ]
 ```
 
-**Expected outcome (report precisely, do not force a pass):** if `"worstDeviation"` is effectively 0,
-the Casimir-affine conjecture holds exactly across the multiplicity-free sweep — record the fitted
-`(A_j,B_j)` as the closed form. If `"worstDeviation"` is large for some `j`, report exactly which
-coefficient order fails and by how much, and check (as a documented fallback, not required unless
-Step 1 fails) whether a **quadratic** (rather than affine) function of `C2` fits instead, or whether
-`C2` alone is insufficient and a second invariant (`H2` itself, or a cubic Casimir) is needed — using
-the same "collect data, fit candidates in a named `Association`, report exact match or exact failure"
-pattern already established in this notebook's twisted-case degree-formula work (cells 29–33).
+**Gotcha found executing this task:** `Flatten[Table[...], 2]` (as originally written) over-flattens
+— each row is itself `{S,P,key,C2,coeffList}` where `key` and `coeffList` are lists, so flattening 2
+levels merges the intended outer per-`(S,P)` grouping (level 1, correct) *and* the internal structure
+of every row (unintended — corrupted row boundaries, giving `nDataRows` far larger than the true
+state count). Fixed to `Flatten[...,1]`, flattening only the outer grouping.
+
+**Result (executed, both anchor-pair and least-squares versions — see Step 1b below): the
+affine-in-`C2`-alone conjecture is FALSIFIED for `j=0,1`** (the constant and subleading `u^j`
+coefficients of `Λ_1(u)`); only `j=2` (the leading coefficient, always `χ1=4` — already known from
+Task 1's commutation check) is trivially constant. This is a precise, reportable negative result, not
+a coding artifact — confirmed two independent ways:
+
+- [ ] **Step 1b (robustness check — run this too, do not stop at the 2-anchor result alone):** a
+  2-point anchor extrapolation is fragile if the two chosen anchors happen to share a coefficient
+  value by coincidence (which happened for `j=1`: `B=0` from the anchor pair, looking like "no
+  dependence on `C2`" when it might just be an unlucky pair). Confirm with a least-squares best fit
+  across **all** collected multiplicity-free data points, not just two:
+
+```wolfram
+(*Robustness check on the two-anchor fit above: least-squares best-fit line for each u^j
+  coefficient vs C2, across ALL multiplicity-free data points (not just 2 anchors) -- confirms
+  whether the two-anchor result was a genuine falsification or an unlucky anchor pair.*)
+Table[
+  Module[{xy, fit, resid},
+    xy = {#[[4]], #[[5, j + 1]]} & /@ casData;
+    fit = Fit[N[xy, 30], {1, x}, x];
+    resid = Max[Abs[(fit /. x -> #[[1]]) - #[[2]]] & /@ xy];
+    {"j" -> j, "fit" -> fit, "maxResidual" -> resid}],
+  {j, 0, 2}]
+```
+
+**Expected outcome (report precisely, do not force a pass):** if `"worstDeviation"`/`"maxResidual"` is
+effectively 0 for a given `j`, the Casimir-affine conjecture holds exactly for that coefficient across
+the multiplicity-free sweep — record the fitted `(A_j,B_j)` as the closed form. In practice: `j=0,1`
+both show clean, precision-confirmed nonzero deviations in *both* the anchor and least-squares tests
+(`j=0`: ~4.71 anchor / ~3.03 least-squares; `j=1`: ~2.00 anchor / ~1.25 least-squares) — a genuine
+falsification, not roundoff or an anchor artifact. **Stop here and report to the controller** rather
+than continuing to search for alternative candidates (quadratic-in-`C2`, a second invariant, a cubic
+Casimir, etc.) unprompted — this is exactly the kind of open-ended-ansatz-search point where the
+project's convention is to check in before continuing, not iterate blind.
 
 - [ ] **Step 2: Save the notebook and commit** (controller), message reflecting the actual result:
 
