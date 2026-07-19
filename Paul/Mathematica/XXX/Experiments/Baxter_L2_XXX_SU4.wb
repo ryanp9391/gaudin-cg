@@ -209,6 +209,34 @@
     }
    ],
    "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*gl(4) weight multiplicities in the tensor product λ1⊗λ2.\n  siteWeightMult[λ]: tally the gl(4) weight (J0[1..4]) of every GT pattern of λ.\n  wtMult: recover (n1,n2,n3,n4) from (H1,H2,H3) with N=total boxes, then convolve the site tallies.\n  H1=n1-n2, H2=n2-n3, H3=n3-n4, n1+n2+n3+n4=N ⇒ n4=(N-H1-2H2-3H3)/4.\n  NB: wrap the composite weight key in Key[...] — Lookup treats a bare List as several keys.*)\nClearAll[siteWeightMult,wtMult];\nsiteWeightMult[λ_]:=siteWeightMult[λ]=Counts[({J0[1][#],J0[2][#],J0[3][#],J0[4][#]}&)/@ps[{λ}]];\nwtMult[λ1_,λ2_][H1_,H2_,H3_]:=Module[{Ntot=Total[λ1]+Total[λ2],n1,n2,n3,n4,m1,m2},\n  n4=(Ntot-H1-2 H2-3 H3)/4; n3=n4+H3; n2=n4+H2+H3; n1=n4+H1+H2+H3;\n  If[!(IntegerQ[n1]&&IntegerQ[n2]&&IntegerQ[n3]&&IntegerQ[n4]),Return[0]];\n  m1=siteWeightMult[λ1]; m2=siteWeightMult[λ2];\n  Total[KeyValueMap[Function[{w,c}, c Lookup[m2,Key[{n1,n2,n3,n4}-w],0]],m1]]\n];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*hard-assert sum-rule: Σ over all (H1,H2,H3) of wtMult == dim[λ1] dim[λ2], for every sweep rep*)\nModule[{reps={{{1,0,0,0},{1,0,0,0}},{{1,0,0,0},{1,1,1,0}},{{1,1,0,0},{1,0,0,0}},{{1,1,0,0},{1,1,0,0}},{{2,1,1,0},{1,0,0,0}}},bad},\n  bad=Select[reps,Function[r,\n     Module[{Ntot=Total[r[[1]]]+Total[r[[2]]],d,tot},\n       d=dim[r[[1]]] dim[r[[2]]];\n       tot=Total@Flatten@Table[wtMult[r[[1]],r[[2]]][H1,H2,H3],\n           {H1,-Ntot,Ntot},{H2,-Ntot,Ntot},{H3,-Ntot,Ntot}];\n       tot=!=d]]];\n  If[bad=!={},Print[\"SUM-RULE FAIL: \",bad];Abort[]];\n  {\"all reps sum-rule OK\",\n   \"adjoint⊗fund @(H1,H2,H3)=(1,0,0) mult\"->wtMult[{2,1,1,0},{1,0,0,0}][1,0,0]}\n]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"75066\" data-output-id=\"6\" data-out-n=\"55\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"19\" data-sub-start=\"1\" data-sub-end=\"11\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[55]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrrz8ts6-4fl5zc2\" data-page-width-em=\"21\" data-latex-b64=\"XGxlZnRce1x0ZXh0e2FsbCByZXBzIHN1bS1ydWxlIE9LfSxcdGV4dHthZGpvaW50JFxvdGltZXMkZnVuZCBAKEgxLEgyLEgzKT0oMSwwLDApIG11bHR9XHRvIDZccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord text\"><span class=\"mord\">all reps sum-rule OK</span></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord text\"><span class=\"mord\">adjoint</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">⊗</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">fund @(H1,H2,H3)=(1,0,0) mult</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">6</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[55]= \\left\\{\\text{all reps sum-rule OK},\\text{adjoint$\\otimes$fund @(H1,H2,H3)=(1,0,0) mult}\\to 6\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "79053f13-ecb2-4ff6-9fbf-c8a3658dbe8c"
+    }
+   ],
+   "metadata": {}
   }
  ],
  "metadata": {}
