@@ -361,7 +361,8 @@ git commit -m "su4 L2 untwisted: top-state (mu=lambda1+lambda2) closed-form conj
   give GENUINELY DIFFERENT Lambda_a(u), that sector has real multiplicity -- no pure-Casimir formula
   can apply there (reported, not treated as failure).*)
 multData = Table[
-  Module[{λ1 = {S, S, 0, 0}, λ2 = {P, P, 0, 0}, es, byKey3, multSectors, genuineMult},
+  Module[{S = SP[[1]], P = SP[[2]], λ1, λ2, es, byKey3, multSectors, genuineMult},
+    λ1 = {S, S, 0, 0}; λ2 = {P, P, 0, 0};
     es = TauEigensystemCasimir[λ1, λ2];
     byKey3 = GroupBy[Keys[es], {#[[1]], #[[2]], #[[3]], #[[4]]} &];
     multSectors = Select[byKey3, Length[#] > 1 &];
@@ -370,14 +371,23 @@ multData = Table[
          Max[Abs[LambdaU[λ1, λ2][#[[1]], #[[2]], #[[3]], #[[4]], #[[5]]][1][17/5] - lam1s] & /@ keys]] > 10^-6]];
     {S, P, "dim" -> dim[λ1] dim[λ2], "nstates" -> Length[es], "sectorsWithMult" -> Length[multSectors],
      "genuineMultSectors" -> Length[genuineMult], "multFree" -> (Length[genuineMult] == 0)}],
-  {SP, {{1, 1}, {2, 1}, {1, 2}, {2, 2}}}, {S = SP[[1]], P = SP[[2]]}];
+  {SP, {{1, 1}, {2, 1}, {1, 2}, {2, 2}}}];
 Column[multData]
 ```
+
+**Gotcha found executing this task:** `Table[..., {S = SP[[1]], P = SP[[2]]}]` is **not valid `Table`
+iterator syntax** — `Table`'s iterator spec must be `{var,min,max}`/`{var,list}`/`{var,max}`, not an
+assignment. It silently fails (`Table::write: Tag Set ... is Protected`) rather than raising a clean
+error. Fixed by declaring `S,P` as `Module` locals initialized from `SP` (shown above), not as a
+second `Table` iterator. **(The identical mistake was originally also present in Task 5's `casData`
+cell below — already fixed there too before this task ran, once found here.)**
 
 **Expected:** no `Abort` (this cell reports, it doesn't hard-assert). Read and record the actual
 `"multFree"` value for each `(S,P)`. **If `(2,2)` (dim 400) is too slow to complete in reasonable
 time, descope it**: rerun the `Table` over just `{{1,1},{2,1},{1,2}}` and note in the commit message
-that `(2,2)` was not attempted due to computational cost.
+that `(2,2)` was not attempted due to computational cost. (In practice `(2,2)` completed —
+slowly enough to trigger an MCP response timeout, but the underlying kernel computation finished; if
+this happens, poll with a lightweight `ValueQ[multData]` / re-read rather than re-running blind.)
 
 - [ ] **Step 2: Save and commit** (controller), message reflecting the actual multiplicity findings:
 
@@ -414,7 +424,8 @@ mult-free `μ` in the sweep.
   Task 4). Fit each u^j coefficient of Lambda_1 as an affine function of the C2 eigenvalue, using the
   first two distinct-C2 rows as anchors, then hard-assert against every remaining row.*)
 casData = Flatten[Table[
-   Module[{λ1 = {S, S, 0, 0}, λ2 = {P, P, 0, 0}, es, byKey3, genuineMultKeys},
+   Module[{S = SP[[1]], P = SP[[2]], λ1, λ2, es, byKey3, genuineMultKeys},
+     λ1 = {S, S, 0, 0}; λ2 = {P, P, 0, 0};
      es = TauEigensystemCasimir[λ1, λ2];
      byKey3 = GroupBy[Keys[es], {#[[1]], #[[2]], #[[3]], #[[4]]} &];
      genuineMultKeys = Flatten[Values[Select[byKey3, Length[#] > 1 &]], 1]; (* skip these -- ambiguous *)
@@ -422,7 +433,7 @@ casData = Flatten[Table[
        Function[{key, rec}, If[MemberQ[genuineMultKeys, key], Nothing,
          {S, P, key, rec["C2"], CoefficientList[LambdaU[λ1, λ2][key[[1]], key[[2]], key[[3]], key[[4]], key[[5]]][1][uu], uu]}]],
        es]],
-   {SP, {{1, 1}, {2, 1}, {1, 2}}}, {S = SP[[1]], P = SP[[2]]}], 2];
+   {SP, {{1, 1}, {2, 1}, {1, 2}}}], 2];
 (*fit u^j coefficients as affine in C2 from the first two rows with distinct C2, verify on the rest*)
 Module[{distinctRows, anchor1, anchor2, coeffFit, worst},
   distinctRows = DeleteDuplicatesBy[casData, #[[4]] &];
