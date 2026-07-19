@@ -203,29 +203,26 @@ git commit -m "su4 L2: Yangian weights nu (i=1..4) + HWS eigenvalue check"
 - Modify: `Baxter_L2_XXX_SU4.wb`
 
 **Interfaces:**
-- Consumes: `T,Tg,TG`, `ν`, `χ4`, `idd`, `h` (Tasks 1–3).
-- Produces: `qmin/qming/qminG[λ1,λ2][II,JJ][u]`, `tg[λ1,λ2][a,1][u]` (`a ∈ 1,2,3,4`), `tG[λ1,λ2][a,1][u]`, `qdetT[λ1,λ2][u]`. `τ1=tg[·][1,1]` (deg 2), `τ2=tg[·][2,1]` (deg 4), `τ3=tg[·][3,1]` (deg 6), `tg[·][4,1]` = qdet (deg 8).
+- Consumes: `T,Tg`, `ν`, `χ4`, `idd`, `h` (Tasks 1–3).
+- Produces: `qmin/qming[λ1,λ2][II,JJ][u]`, `tg[λ1,λ2][a,1][u]` (`a ∈ 1,2,3,4`), `qdetT[λ1,λ2][u]`. `τ1=tg[·][1,1]` (deg 2), `τ2=tg[·][2,1]` (deg 4), `τ3=tg[·][3,1]` (deg 6), `tg[·][4,1]` = qdet (deg 8).
 
-- [ ] **Step 1: Insert the quantum-minors cell** (from cell 10, unchanged — already general in list length):
+**Deviation from the design spec (companion twist dropped, per Task 2):** `qminG`/`tG` are not built — only the diagonal-twist branch (`qmin`/`qming`/`tg`) is needed downstream.
+
+- [ ] **Step 1: Insert the quantum-minors cell** (from cell 10, diagonal-twist branch only):
 
 ```wolfram
 (*quantum minors (q-determinants) of the monodromy matrix*)
-ClearAll[qmin,qming,qminG];
+ClearAll[qmin,qming];
 qmin[λ1_, λ2_][II_List, JJ_List][u_] := qmin[λ1, λ2][II, JJ][u] = Sum[Signature[σ] Dot @@ Table[T[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, Length[II]}], {σ, Permutations[Range[Length[II]]]}];
 qming[λ1_, λ2_][II_List, JJ_List][u_] := qming[λ1, λ2][II, JJ][u] = Sum[Signature[σ] Dot @@ Table[Tg[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, Length[II]}], {σ, Permutations[Range[Length[II]]]}];
-qminG[λ1_, λ2_][II_List, JJ_List][u_] := qminG[λ1, λ2][II, JJ][u] = Sum[Signature[σ] Dot @@ Table[TG[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, Length[II]}], {σ, Permutations[Range[Length[II]]]}];
 ```
 
-- [ ] **Step 2: Insert the transfer-matrix cell** (from cell 11, subsets of `{1,2,3,4}`):
+- [ ] **Step 2: Insert the transfer-matrix cell** (from cell 11, subsets of `{1,2,3,4}`, diagonal-twist only):
 
 ```wolfram
 (*transfer matrices with diagonal twist*)
 ClearAll[tg];
 tg[λ1_,λ2_][a_,1][u_]:= Total[qming[λ1, λ2][#, #][u] & /@ Subsets[{1, 2, 3, 4}, {a}]]
-
-(*transfer matrices with companion twist*)
-ClearAll[tG];
-tG[λ1_,λ2_][a_,1][u_]:= Total[qminG[λ1, λ2][#, #][u] & /@ Subsets[{1, 2, 3, 4}, {a}]]
 ```
 
 - [ ] **Step 3: Insert the qdetT cell** (gl(4): χ4 carried, 4-fold ν product with shifts 3h,2h,h,0):

@@ -132,6 +132,48 @@
     }
    ],
    "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*quantum minors (q-determinants) of the monodromy matrix*)\nClearAll[qmin,qming];\nqmin[λ1_, λ2_][II_List, JJ_List][u_] := qmin[λ1, λ2][II, JJ][u] = Sum[Signature[σ] Dot @@ Table[T[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, Length[II]}], {σ, Permutations[Range[Length[II]]]}];\nqming[λ1_, λ2_][II_List, JJ_List][u_] := qming[λ1, λ2][II, JJ][u] = Sum[Signature[σ] Dot @@ Table[Tg[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, Length[II]}], {σ, Permutations[Range[Length[II]]]}];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*transfer matrices with diagonal twist*)\nClearAll[tg];\ntg[λ1_,λ2_][a_,1][u_]:= Total[qming[λ1, λ2][#, #][u] & /@ Subsets[{1, 2, 3, 4}, {a}]]",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*value of quantum determinant (χ4 carried here; general ν)*)\nClearAll[qdetT];\nqdetT[λ1_,λ2_][u_]:=χ4 ν[λ1,λ2][1][u-3h] ν[λ1,λ2][2][u-2h] ν[λ1,λ2][3][u-h] ν[λ1,λ2][4][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*qdetT central value == tg[·][4,1]; on non-symmetric reps this is the ν shift-ordering guard.\n  Chop wraps Simplify because z[k] (hence χ4) are high-precision numeric, leaving ~10^-27\n  floating \"0\" coefficients on symbolic-u polynomials that Union never collapses to a literal 0\n  even though every entry is numerically exactly 0.*)\nModule[{reps={{{1,1,0,0},{1,0,0,0}},{{2,1,1,0},{1,0,0,0}},{{1,1,0,0},{1,1,0,0}}}},\n Union@Flatten@Table[\n   Chop[Simplify[qdetT[r[[1]],r[[2]]][u] idd[r[[1]],r[[2]]]-tg[r[[1]],r[[2]]][4,1][u]],10^-15],{r,reps}]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"75066\" data-output-id=\"4\" data-out-n=\"44\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"14\" data-sub-start=\"4\" data-sub-end=\"6\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[44]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrrz662x-ydwfz9y\" data-page-width-em=\"21\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[44]= \\left\\{0\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "9b33e423-d90d-4400-bc03-e378601a9ab3"
+    }
+   ],
+   "metadata": {}
   }
  ],
  "metadata": {}
