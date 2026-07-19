@@ -184,9 +184,12 @@ TauEigensystemCasimir[λ1_, λ2_] := TauEigensystemCasimir[λ1, λ2] = Module[
    {vals, vecs} = Eigensystem[N[Kmix, 30]];
    rayleigh[m_, v_] := (v . (m . v))/(v . v);
    recs = Table[
-     Module[{v = vecs[[i]], res, H1v, H2v, H3v, C2v},
+     Module[{v = vecs[[i]], res, H1v, H2v, H3v, C2v, t1c, t2c, t3c},
        res = Max[Abs[#.v - rayleigh[#, v] v]] & /@ mats // Max;
        If[res > 10^-8, Message[TauEigensystemCasimir::notgenuine, i, λ1, λ2, res]; Abort[]];
+       t1c = rayleigh[#, v] & /@ c1;
+       t2c = rayleigh[#, v] & /@ c2;
+       t3c = rayleigh[#, v] & /@ c3;
        H1v = rayleigh[H1op[λ1, λ2], v]; H2v = rayleigh[H2op[λ1, λ2], v]; H3v = rayleigh[H3op[λ1, λ2], v];
        C2v = rayleigh[C2op[λ1, λ2], v];
        If[Abs[H1v - Round[Re[H1v]]] > 10^-6, Message[TauEigensystemCasimir::noninteger, H1v, i, λ1, λ2]; Abort[]];
@@ -194,8 +197,7 @@ TauEigensystemCasimir[λ1_, λ2_] := TauEigensystemCasimir[λ1, λ2] = Module[
        If[Abs[H3v - Round[Re[H3v]]] > 10^-6, Message[TauEigensystemCasimir::noninteger, H3v, i, λ1, λ2]; Abort[]];
        <|"H1" -> Round[Re[H1v]], "H2" -> Round[Re[H2v]], "H3" -> Round[Re[H3v]],
          "C2round" -> Round[Re[C2v], 10^-6], "C2" -> Re[C2v],
-         "t1c" -> rayleigh[#, v] & /@ c1, "t2c" -> rayleigh[#, v] & /@ c2, "t3c" -> rayleigh[#, v] & /@ c3,
-         "vec" -> v|>],
+         "t1c" -> t1c, "t2c" -> t2c, "t3c" -> t3c, "vec" -> v|>],
      {i, 1, d}];
    byHW = GroupBy[recs, {#["H1"], #["H2"], #["H3"], #["C2round"]} &];
    table = Association @ Flatten @ KeyValueMap[
@@ -207,6 +209,16 @@ TauEigensystemCasimir[λ1_, λ2_] := TauEigensystemCasimir[λ1, λ2] = Module[
 ];
 ```
 
+**Second gotcha found executing this task:** writing `"t1c" -> rayleigh[#, v] & /@ c1` *inline inside*
+an association literal (`<|"key1"->val1, "t1c" -> rayleigh[#,v] & /@ c1, ...|>`) does not parse the
+way it looks — the result left `rec["t1c"]` bound to a bare scalar (silently breaking the later
+`rec["t1c"].u^Range[0,2]` dot product into an unevaluated `scalar . vector` expression, not a clean
+number). `TauEigensystem4` in the twisted-case build never hit this because it always computed
+`t1c = rayleigh[#, v] & /@ c1;` as its own statement first, then referenced the variable inside the
+association. Fixed by matching that exact pattern (shown above: `t1c/t2c/t3c` computed as `Module`
+locals before the association literal, not inlined).
+```
+
 - [ ] **Step 2: Insert the `Λ_a(u)` accessor cell**:
 
 ```wolfram
@@ -215,7 +227,7 @@ TauEigensystemCasimir[λ1_, λ2_] := TauEigensystemCasimir[λ1, λ2] = Module[
   state, no per-eigenvector extraction needed).*)
 ClearAll[LambdaU];
 LambdaU[λ1_, λ2_][H1_, H2_, H3_, C2round_, n_][a_][u_] := Module[
-   {rec = TauEigensystemCasimir[λ1, λ2][Key[{H1, H2, H3, C2round, n}]]},
+   {rec = TauEigensystemCasimir[λ1, λ2][{H1, H2, H3, C2round, n}]},
    Which[
      a == 1, rec["t1c"] . u^Range[0, 2],
      a == 2, rec["t2c"] . u^Range[0, 4],
@@ -224,6 +236,14 @@ LambdaU[λ1_, λ2_][H1_, H2_, H3_, C2round_, n_][a_][u_] := Module[
    ]
 ];
 ```
+
+**Gotcha found executing this task:** `assoc[Key[list]]` (single-bracket indexing with an explicit
+`Key[...]` wrapper) does **not** perform key lookup here and returns `Missing["KeyAbsent",...]` even
+for a key the association genuinely has — only `assoc[list]` (no wrapper), `assoc[[Key[list]]]`
+(double-bracket `Part` form), or `Lookup[assoc, Key[list]]` work. (The twisted-case build's working
+code never hit this: it used `Lookup[...]` explicitly in `Psi`, and the two-argument `assoc[key,
+"field"]` form elsewhere — never bare single-bracket `assoc[Key[key]]`.) Fixed by dropping the `Key[]`
+wrapper as shown above.
 
 - [ ] **Step 3: Insert and run the eigen-residual / consistency check on `(S,P)=(1,1)`** (this is the
   test — mirrors the twisted case's `TauEigensystem4` eigen-residual check):
