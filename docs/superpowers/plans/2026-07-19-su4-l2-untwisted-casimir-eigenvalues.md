@@ -22,7 +22,10 @@ precisely.
   the existing 34 cells (twisted acceptance run, commit `fcd1349`). Do not modify cells 1–34.
 - **Section boundary:** `ClearAll[qmin, qming, tg, tgCoeffs]; z[1]=1; z[2]=1; z[3]=1; z[4]=1;` — the
   only z-dependent *memoized* definitions that need clearing. `T,Tg,ν,ν1,qdetT,H1op,H2op,H3op` are
-  not memoized and recompute correctly automatically; do not touch them.
+  not memoized and recompute correctly automatically; do not touch them. **`ClearAll` removes the
+  cleared functions' rules entirely, not just their cache** — `qmin,qming,tg,tgCoeffs` must be
+  re-defined (identical source, re-inserted) immediately after the boundary cell, or they stay
+  undefined (found executing Task 1; see that task for the exact restoration cells).
 - **Exact arithmetic simplification (new, not present in the twisted case):** with `z[k]=1` (exact
   integer) and `θ1=1/3,θ2=1/7,h=1` (exact rationals) and `JJ` built from rational GT-pattern
   arithmetic (no square roots in this notebook's convention), every quantity in this section is
@@ -71,6 +74,36 @@ z[1] = 1; z[2] = 1; z[3] = 1; z[4] = 1;
 
 Run via `wolfbook_runCell`. **Expected output: `{4, 6, 4, 1}`** — the elementary symmetric functions
 of four 1's, confirming the reassignment took hold and `χ` recomputed live.
+
+**Gotcha found executing this task (not knowable from the twisted-case build alone): `ClearAll[f]`
+wipes `f`'s definitions entirely, not just its memoized cache.** After `ClearAll[qmin,qming,tg,
+tgCoeffs]`, those symbols have no rule at all — calling `tgCoeffs[...]` later just returns the
+unevaluated symbolic expression (`Set::shape` error when destructured), it does NOT recompute at the
+new `z=1`. **Fix:** immediately after the boundary cell, re-insert the *original defining code* for
+`qmin`, `qming`, `tg`, `tgCoeffs` (identical source to the twisted-case build's Task 4/5 cells) so the
+rules exist again — this naturally reads the freshly-assigned `z=1` on first call, since the memo
+cache was correctly wiped. Two extra cells, inserted right after the boundary cell:
+
+```wolfram
+(*Restore the qmin/qming/tg/tgCoeffs definitions wiped by the ClearAll above -- ClearAll removes a
+  function's rules entirely, not just its memoized cache, so these MUST be redefined (not merely
+  re-called) here. Identical source to the twisted-case build; now reads the freshly-assigned z=1.*)
+qmin[λ1_, λ2_][II_List, JJ_List][u_] := qmin[λ1, λ2][II, JJ][u] = Sum[Signature[σ] Dot @@ Table[T[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, Length[II]}], {σ, Permutations[Range[Length[II]]]}];
+qming[λ1_, λ2_][II_List, JJ_List][u_] := qming[λ1, λ2][II, JJ][u] = Sum[Signature[σ] Dot @@ Table[Tg[λ1, λ2][II[[σ[[k]]]], JJ[[k]]][u - (k - 1) h], {k, Length[II]}], {σ, Permutations[Range[Length[II]]]}];
+tg[λ1_,λ2_][a_,1][u_]:= Total[qming[λ1, λ2][#, #][u] & /@ Subsets[{1, 2, 3, 4}, {a}]]
+```
+
+```wolfram
+tgCoeffs[λ1_, λ2_] := tgCoeffs[λ1, λ2] = Module[{uu, m1, m2, m3, cl1, cl2, cl3},
+   m1 = tg[λ1, λ2][1, 1][uu];
+   m2 = tg[λ1, λ2][2, 1][uu];
+   m3 = tg[λ1, λ2][3, 1][uu];
+   cl1 = Map[PadRight[CoefficientList[#, uu], 3] &, m1, {2}];
+   cl2 = Map[PadRight[CoefficientList[#, uu], 5] &, m2, {2}];
+   cl3 = Map[PadRight[CoefficientList[#, uu], 7] &, m3, {2}];
+   {Table[cl1[[All, All, k]], {k, 1, 3}], Table[cl2[[All, All, k]], {k, 1, 5}], Table[cl3[[All, All, k]], {k, 1, 7}]}
+];
+```
 
 - [ ] **Step 2: Insert the quadratic Casimir cell**:
 
