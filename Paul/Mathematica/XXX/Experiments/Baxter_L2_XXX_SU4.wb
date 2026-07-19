@@ -272,6 +272,62 @@
     }
    ],
    "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*single source of truth for the Yangian weight of T11*)\nClearAll[ν1];\nν1[λ1_,λ2_][u_]:=ν[λ1,λ2][1][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*4th-order TQ residual functional (operator form). A1=τ1/ν1, A2=τ2/(ν1 ν1[-h]),\n  A3=τ3/(ν1 ν1[-h] ν1[-2h]), A4=qdetT/(ν1 ν1[-h] ν1[-2h] ν1[-3h]); qdetT carries χ4.*)\nClearAll[BaxOp];\nBaxOp[λ1_, λ2_][H1_, H2_, H3_, n_][Qf_][u_] :=\n  Qf[u + h]\n   - tau1[λ1, λ2][H1, H2, H3, n][u]/ν1[λ1, λ2][u] Qf[u]\n   + tau2[λ1, λ2][H1, H2, H3, n][u]/(ν1[λ1, λ2][u] ν1[λ1, λ2][u - h]) Qf[u - h]\n   - tau3[λ1, λ2][H1, H2, H3, n][u]/(ν1[λ1, λ2][u] ν1[λ1, λ2][u - h] ν1[λ1, λ2][u - 2 h]) Qf[u - 2 h]\n   + qdetT[λ1, λ2][u]/(ν1[λ1, λ2][u] ν1[λ1, λ2][u - h] ν1[λ1, λ2][u - 2 h] ν1[λ1, λ2][u - 3 h]) Qf[u - 3 h];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*large-u asymptotics: alphaCoeffs = {α1,α2,α3,α4}, the 1/u coefficients of A1..A4 in BaxOp.\n  NB: for x0=Infinity, SeriesCoefficient[f,{u,Infinity,1}] is the coeff of u^(-1) — use n=+1.*)\nClearAll[alphaCoeffs];\nalphaCoeffs[λ1_, λ2_][H1_, H2_, H3_, n_] := alphaCoeffs[λ1, λ2][H1, H2, H3, n] = Module[{u, A1, A2, A3, A4},\n   A1 = tau1[λ1, λ2][H1, H2, H3, n][u]/ν1[λ1, λ2][u];\n   A2 = tau2[λ1, λ2][H1, H2, H3, n][u]/(ν1[λ1, λ2][u] ν1[λ1, λ2][u - h]);\n   A3 = tau3[λ1, λ2][H1, H2, H3, n][u]/(ν1[λ1, λ2][u] ν1[λ1, λ2][u - h] ν1[λ1, λ2][u - 2 h]);\n   A4 = qdetT[λ1, λ2][u]/(ν1[λ1, λ2][u] ν1[λ1, λ2][u - h] ν1[λ1, λ2][u - 2 h] ν1[λ1, λ2][u - 3 h]);\n   SeriesCoefficient[#, {u, Infinity, 1}] & /@ {A1, A2, A3, A4}\n];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*asymptotic master formula (gl(4)): for each twist eigenvalue z[k] (k=1..4) the large-u balance\n  of the 4th-order TQ equation fixes the polynomial degree M[k]. Derived from\n    M = -[Σ_j (-1)^j α_j z^{1-j}] / (h Σ_j (-1)^j χ_j (1-j) z^{1-j}), j=0..4,\n  giving numerator (α1 - α2/z + α3/z^2 - α4/z^3) and\n  denominator h (z - χ2/z + 2χ3/z^2 - 3χ4/z^3), the z-characteristic factor of the companion\n  char poly z^4-χ1 z^3+χ2 z^2-χ3 z+χ4 differentiated and divided by z^3.*)\nClearAll[Mdeg];\nMdeg[λ1_, λ2_][H1_, H2_, H3_, n_] := Mdeg[λ1, λ2][H1, H2, H3, n] = Module[{a, M},\n   a = alphaCoeffs[λ1, λ2][H1, H2, H3, n];\n   M = Table[\n      (a[[1]] - a[[2]]/z[k] + a[[3]]/z[k]^2 - a[[4]]/z[k]^3)/(h (z[k] - χ2/z[k] + 2 χ3/z[k]^2 - 3 χ4/z[k]^3)),\n      {k, 1, 4}];\n   If[Max[Abs[M - Round[Re[M]]]] > 10^-9, Print[\"Mdeg NON-INTEGER: \", M]; Abort[]];\n   Round[Re[M]]\n];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*closed-form degree: M_k = Λ_1 - n_k, Λ=λ1+λ2, Λ_1=(λ1+λ2)[[1]];\n  n4=(N-H1-2H2-3H3)/4, n3=n4+H3, n2=n4+H2+H3, n1=n4+H1+H2+H3, N=Total[λ1]+Total[λ2].*)\nClearAll[nvec, Mpred];\nnvec[H1_, H2_, H3_, Ntot_] := Module[{n4 = (Ntot - H1 - 2 H2 - 3 H3)/4}, {n4 + H1 + H2 + H3, n4 + H2 + H3, n4 + H3, n4}];\nMpred[λ1_, λ2_][H1_, H2_, H3_] := (λ1 + λ2)[[1]] - nvec[H1, H2, H3, Total[λ1] + Total[λ2]];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*hard-assert: closed form M_k=Λ_1-n_k matches the asymptotic Mdeg exactly over the sweep.*)\nModule[{sweep={{{1,0,0,0},{1,0,0,0}},{{1,0,0,0},{1,1,1,0}},{{1,1,0,0},{1,0,0,0}},{{1,1,0,0},{1,1,0,0}},{{2,1,1,0},{1,0,0,0}}},worst},\n  worst=Max@Table[\n     Module[{λ1=rep[[1]],λ2=rep[[2]],es},\n       es=TauEigensystem4[λ1,λ2];\n       Max@KeyValueMap[Function[{key,rec},\n          Max[Abs[Mdeg[λ1,λ2][key[[1]],key[[2]],key[[3]],key[[4]]]-Mpred[λ1,λ2][key[[1]],key[[2]],key[[3]]]]]],es]],\n     {rep,sweep}];\n  If[worst>0,Print[\"DEGREE-FORMULA MISMATCH: \",worst];Abort[]];\n  {\"closed-form M_k=Λ_1-n_k matches Mdeg over full sweep, worst\"->worst}\n]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"75066\" data-output-id=\"8\" data-out-n=\"80\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"28\" data-sub-start=\"1\" data-sub-end=\"10\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[80]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrrzbk1o-uoy93o7\" data-page-width-em=\"21\" data-latex-b64=\"XGxlZnRce1x0ZXh0e2Nsb3NlZC1mb3JtIE1cX2s9JFxMYW1iZGEkXF8xLW5cX2sgbWF0Y2hlcyBNZGVnIG92ZXIgZnVsbCBzd2VlcCwgd29yc3R9XHRvIDBccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1.2em;vertical-align:-0.35em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">{</span></span><span class=\"mord text\"><span class=\"mord\">closed-form M_k=Λ_1-n_k matches Mdeg over full sweep, worst</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">}</span></span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[80]= \\left\\{\\text{closed-form M\\_k=$\\Lambda$\\_1-n\\_k matches Mdeg over full sweep, worst}\\to 0\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "9612cf30-3917-442e-af1e-d2f1bd97ec60"
+    }
+   ],
+   "metadata": {}
   }
  ],
  "metadata": {}
