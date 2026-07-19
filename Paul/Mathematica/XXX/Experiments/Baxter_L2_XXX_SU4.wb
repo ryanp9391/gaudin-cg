@@ -104,6 +104,34 @@
     }
    ],
    "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*Yangian weights - eigenvalues of T[i,i] on the highest-weight state.\n  General rep: T[i,i]|hw> = (u-θ1-h λ1[[i]])(u-θ2-h λ2[[i]]) |hw>, for i=1..4,\n  from L[λ][i,i]|hw>=(u-h λ_i)|hw>.*)\nClearAll[ν,HWS];\nν[λ1_,λ2_][i_][u_]:=(u-θ1-h λ1[[i]])(u-θ2-h λ2[[i]]);\nHWS[λ1_,λ2_]:=Table[{KroneckerDelta[1,ii]},{ii,1,dim[λ1] dim[λ2]}];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*checking highest-weights against the general ν, on non-symmetric gl(4) reps*)\nModule[{reps={{{1,1,0,0},{1,0,0,0}},{{2,1,1,0},{1,0,0,0}},{{1,1,0,0},{1,1,0,0}}}},\n Union@Flatten@Table[\n   T[r[[1]],r[[2]]][i,i][u].HWS[r[[1]],r[[2]]]-ν[r[[1]],r[[2]]][i][u] HWS[r[[1]],r[[2]]],\n   {r,reps},{i,4}]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"75066\" data-output-id=\"3\" data-out-n=\"36\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"10\" data-sub-start=\"1\" data-sub-end=\"4\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[36]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrrz4xzi-u2v7ptx\" data-page-width-em=\"21\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[36]= \\left\\{0\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "3dbfd956-6cc3-4505-b635-2ed266722081"
+    }
+   ],
+   "metadata": {}
   }
  ],
  "metadata": {}
