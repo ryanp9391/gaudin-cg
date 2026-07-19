@@ -6671,3 +6671,1730 @@ Cell 150: ✓ — Out[546]= \left\{\text{STEP 3 assembly test (rep (2,1), 6 stat
 Cell 151: ✓ — Out[552]= \left\{\text{STEP 3 FULL-SWEEP ASSEMBLY CONFIRMED: O[k1,k2] = $\Sigma$ cA(k1)cB(k2) B-weighted Q-bilinears == O2rot exactly},\text{worst deviation},0,\text{num states x grid cases},82\right\}
 Cell 153: ✓ — Out[557]= \begin{pmatrix}0 & 0 & 1.\, & 1.\, & 0\\0 & 1 & -2.603469709065218-0.6885776528619827\,\mathrm{i} & 5.387818229958359 -1.970652830451791\,\mathrm{i} & -7.991287939023577+1.2820751775898085\,\mathrm{i}\\1 & 0 & 1.5221500836235384 -0.24420479573139206\,\mathrm{i} & -6.469137855400039+1.0378703818584163\,\mathrm{i} & 7.991287939023577 -1.2820751775898085\,\mathrm{i}\\1 & 1 & 1.2961011478017… [843 chars total]
 
+## 2026-07-18 16:16:01 — ▶️ RUN CELLS 1–10
+Cell 1: ✓ — Out[8]= \left\{\frac{1}{3},\frac{1}{7},1,0.360439875147226537266677650596+0.932782448593374716484835982071\,\mathrm{i},0.36043987514722653726667765060-0.932782448593374716484835982071\,\mathrm{i},0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i},1\right\}
+Cell 3: ✓ — (no output)
+Cell 4: ✓ — (no output)
+Cell 5: ✓ — (no output)
+Cell 6: ✓ — (no output)
+Cell 8: ✓ — (no output)
+Cell 10: ✓ — (no output)
+
+## 2026-07-18 16:16:06 — ▶️ RUN CELLS 11–20
+Cell 11: ✓ — (no output)
+Cell 12: ✓ — Out[27]= \left\{0\right\}
+Cell 13: ✓ — (no output)
+Cell 14: ✓ — (no output)
+Cell 15: ✓ — Out[31]= \left\{0\right\}
+Cell 16: ✓ — (no output)
+Cell 17: ✓ — Out[34]= \begin{pmatrix}0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\end{pmatrix}
+Cell 18: ✓ — (no output)
+Cell 20: ✓ — (no output)
+
+## 2026-07-18 16:16:09 — ▶️ RUN CELLS 21–28
+Cell 21: ✓ — (no output)
+Cell 23: ✓ — (no output)
+Cell 25: ✓ — (no output)
+Cell 26: ✓ — (no output)
+Cell 27: ✓ — Out[52]= \begin{pmatrix}0 & \frac{1}{2} & 0 & 0 & 0 & 0\end{pmatrix}
+Cell 28: ✓ — Out[53]= \left\{0\right\}
+
+## 2026-07-18 16:16:12 — ▶️ RUN CELLS 29–36
+Cell 30: ✓ — Out[59]= \left\{\left(u-\frac{4}{3}\right)\,\left(u-\frac{8}{7}\right),\left(u-\frac{1}{3}\right)\,\left(u-\frac{1}{7}\right),\left(0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i}\right)\,u^2-\left(1.06415582186324025288257211128+0.\times 10^{-29}\,\mathrm{i}\right)\,u\right\}
+Cell 31: ✓ — Out[62]= \begin{pmatrix}1 & 1\\2 & 2\\3 & 3\end{pmatrix}
+Cell 32: ✓ — Out[65]= \text{max|C2-($\kappa$1+$\kappa$2)Id|}\to 0.\times 10^{-29}
+Cell 33: ✓ — Out[75]= \langle\!\lvert \left\{0,0\right\}\to 0.5664055180884988 +1.3769645669711723\,\mathrm{i},\left\{1,0\right\}\to -0.778123966451158+0.\,\,\mathrm{i},\left\{1,1\right\}\to 1.1900552523337025 +0.\,\,\mathrm{i},\left\{2,0\right\}\to 0.5664055180884988 -1.3769645669711723\,\mathrm{i}\rvert\!\rangle
+Cell 34: ✓ — 2 kernel messages: Psi::spurious: No genuine state at (M,n)=(2,2) for (λ1,λ2)=(2,1): weight sector M=2 has only 2 genuine state(s) (n=0..1), so n=2 does not exist. [also: Psi::spurious] result: Print: spurious-guard test (expect a Psi::spurious message and Missing[...]):[formula] | Out[84]= \left\{\left\{1.000000000000000000000000000+0.\times 10^{-29}\,\mathrm{i},-1.3004494881076436272092358…
+⚠️ stopped at Cell 34 — error detected (pass stopOnError:false to continue past errors)
+
+## 2026-07-18 16:16:25 — ▶️ RUN CELLS 35–42
+Cell 35: ✓ — Out[91]= \left\{1.03464899078135229594035121+0.381869568380946283899575941\,\mathrm{i},-2.37022278949001677248172619-0.20048970475590097847093779\,\mathrm{i},1.00000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right\}
+Cell 36: ✓ — Out[94]= \left\{-0.709231010958016926537225142+1.09596916251277206706752728\,\mathrm{i},-0.02291660900+0.\times 10^{-12}\,\mathrm{i}\right\}
+Cell 37: ✓ — (no output)
+Cell 38: ✓ — (no output)
+Cell 39: ✓ — (no output)
+Cell 40: ✓ — (no output)
+Cell 41: ✓ — (no output)
+Cell 42: ✓ — Out[109]= 0
+
+## 2026-07-18 16:16:28 — ▶️ RUN CELLS 43–47
+Cell 43: ✓ — (no output)
+Cell 44: ✓ — Out[113]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 45: ✓ — Out[115]= \left\{6,6\right\}
+Cell 46: ✓ — Out[116]= \begin{pmatrix}2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i} & 0 & 0 & 0 & 0 & 0\\0 & 7.36608403016431791181-0.968046299794461400266\,\mathrm{i} & 0 & 0 & 0 & 0\\0 & 0 & 2.68702160063169134012-1.3456153260557858257\,\mathrm{i} & 0 & 0 & 0\\0 & 0 & 0 & 7.3660840301643179118107+0.9680462997944614002659\,\mathrm{i} & 0 & 0\\0 & 0 & 0 & 0 & 2.687021600631691340118… [537 chars total]
+Cell 47: ✓ — Out[125]= \langle\!\lvert \text{states}\to \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix},\text{max|off-diagonal|}\to 5.065342385207116\times 10^{-34},\text{digits vanished (-Log10)}\to 33.29539119374288,\text{min|diagonal|}\to 3.0051232400647923,\text{diagonal values}\to \left\{2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i},7.36608403016431791181-0… [699 chars total]
+
+## 2026-07-18 16:16:32 — ▶️ RUN CELLS 48–54
+Cell 48: ✓ — (no output)
+Cell 49: ✓ — (no output)
+Cell 50: ✓ — Out[133]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 51: ✓ — Out[138]= \left\{1.00000000000000000000000000000,6\right\}
+Cell 52: ✓ — Out[143]= \langle\!\lvert \text{max|<PsiLeft|Psi>| off-diagonal}\to 0.\,,\text{digits vanished (-Log10)}\to \mathrm{Indeterminate}\rvert\!\rangle
+Cell 53: ✓ — Out[147]= \left\{7.366084030164317911810727273-0.9680462997944614002658874268\,\mathrm{i},1.00000000000000000000+0.\times 10^{-21}\,\mathrm{i}\right\}
+Cell 54: ✓ — Out[150]= \begin{matrix}\langle\!\lvert \text{M}\to 0,\text{n}\to 0,\text{braket}\to 2.909064289-5.804620064\,\mathrm{i},\text{G21 diagonal}\to 2.909064289-5.804620064\,\mathrm{i},\text{normRatio}\to 1.000000000+0.\times 10^{-10}\,\mathrm{i}\rvert\!\rangle \\\langle\!\lvert \text{M}\to 1,\text{n}\to 0,\text{braket}\to 7.366084030-0.968046300\,\mathrm{i},\text{G21 diagonal}\to 7.366084030-0.9680463… [1247 chars total]
+
+## 2026-07-18 16:16:35 — ▶️ RUN CELLS 55–62
+Cell 56: ✓ — (no output)
+Cell 57: ✓ — Out[158]= \begin{pmatrix}3 & 3\\3 & 3\end{pmatrix}
+Cell 58: ✓ — (no output)
+Cell 59: ✓ — Out[165]= \left\{0\right\}
+Cell 60: ✓ — Out[169]= \begin{matrix}\left\{1,1,0,1.\,,0.\,\right\}\\\left\{1,1,1,1.\,,0.\,\right\}\\\left\{1,2,0,1.\,,0.\,\right\}\\\left\{1,2,1,1.\,,0.\,\right\}\\\left\{1,3,0,1.\,,0.\,\right\}\\\left\{1,3,1,1.\,,0.\,\right\}\\\left\{2,1,0,1.\,,0.\,\right\}\\\left\{2,1,1,1.\,,0.\,\right\}\\\left\{2,1,2,1.\,,0.\,\right\}\\\left\{2,2,0,1.\,,0.\,\right\}\\\left\{2,2,1,1.\,,0.\,\right\}\\\left\{2,2,2,1.\,,0.\,\r… [898 chars total]
+Cell 61: ✓ — Out[170]= \langle\!\lvert \text{max spread (ratio non-constancy)}\to 0.\,,\text{max |ratio - 1| over sweep}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases checked}\to 27\rvert\!\rangle
+Cell 62: ✓ — Out[176]= \langle\!\lvert \text{max operator-level spread}\to 0.\,,\text{max |$\mu$ - $\mu$Site2|}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases}\to 27\rvert\!\rangle
+
+## 2026-07-18 16:16:47 — ▶️ RUN CELLS 63–70
+Cell 64: ✓ — (no output)
+Cell 65: ✓ — Out[185]= \langle\!\lvert \text{w\_0 ($\lambda$=1,2,3)}\to \left\{1,1,1\right\},\text{full weights w\_j}\to \left\{1\to \left\{1,-1\right\},2\to \left\{1,-2,1\right\},3\to \left\{1,-3,3,-1\right\}\right\},\text{br1[$\lambda$][1] ($\lambda$=1,2,3)}\to \left\{0,0,0\right\}\rvert\!\rangle
+Cell 66: ✓ — Out[187]= \left\{0,0\right\}
+Cell 67: ✓ — Out[190]= \sqrt[3]{k}\,\left(\left(-1.18561270626131985872+0.832253303224995280404\,\mathrm{i}\right)\,k^2-\left(0.761819910806671651081+0.812812473459294825632\,\mathrm{i}\right)\,k-\left(0.404410037536507329420+0.598870869485872613792\,\mathrm{i}\right)\right)
+Cell 68: ✓ — Out[194]= \begin{pmatrix}0 & 0 & 0\\0 & 0 & 0\\0 & 0 & 0\end{pmatrix}
+Cell 69: ✓ — Out[198]= \langle\!\lvert \text{OP(E12)}\to 1.\,+0.\times 10^{-30}\,\mathrm{i},\text{OP(E21)}\to \left(-0.03626734060947795145020244939-2.004237714666237867354326095\,\mathrm{i}\right)\,\varphi ^2-\left(1.522150083623538480912456055-0.2442047957313920727733393355\,\mathrm{i}\right)\,\varphi +\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right),\text{nontrivial generator \{a,b\}}\to \left\{2,1\right\},\… [464 chars total]
+Cell 70: ✓ — Out[201]= \left\{1,2\right\}
+
+## 2026-07-18 16:16:51 — ▶️ RUN CELLS 71–77
+Cell 71: ✓ — Out[207]= \langle\!\lvert \text{states}\to \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix},\text{$\varphi$ candidates per state}\to \begin{pmatrix}\left\{0,0\right\} & \left(-0.920793778924720536105378676-0.390049761817044163511250929\,\mathrm{i}\right)\,k^{4/3}+\left(0.695722366612934233848844287-0.718310788304406529935213657\,\mathrm{i}\right)\,\sqrt[3]{k}-\left(0.3604398751… [1247 chars total]
+Cell 72: ✓ — Out[213]= \langle\!\lvert \text{c\_sb solution(s)}\to \left\{\left\{\mathrm{cb}\to \frac{\left(-6.242239011314\times 10^{45}-4.511757007219\times 10^{45}\,\mathrm{i}\right)\,k^{4/3}-\left(5.999302657796\times 10^{45}+8.356648463050\times 10^{45}\,\mathrm{i}\right)\,\sqrt[3]{k}}{9.833530773718\times 10^{45}\,k^{4/3}-\left(3.54439660434\times 10^{45}-9.172544913427\times 10^{45}\,\mathrm{i}\right)\,… [841 chars total]
+Cell 73: ✓ — Out[216]= \langle\!\lvert \text{generator \{a,b\} tested}\to \left\{2,1\right\},\text{rep tested}\to \left\{1,2\right\},\text{FL shape (verified exact for all 6 states)}\to \text{FL[1,2][state][k] = k\^{}(1/3) (A\_state + B\_state k)},\text{c0(state) = OPg[state][0]}\to \begin{pmatrix}\left\{0,0\right\} & 1.\,+0.\times 10^{-28}\,\mathrm{i}\\\left\{1,0\right\} & 1.\,+0.\times 10^{-28}\,\mathrm{i}\\… [1247 chars total]
+Cell 74: ✓ — Out[220]= \left(1.000000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right)-\left(0.360439875147226537266677651+0.932782448593374716484835982\,\mathrm{i}\right)\,k
+Cell 75: ✓ — Out[227]= \langle\!\lvert \text{alphaTab \{state,D0,c0,Dc,c1,$\alpha$\}}\to \begin{pmatrix}\left\{0,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & -0.36043987514722653-0.9327824485933747\,\mathrm{i} & 0.36043987514722653 +0.9327824485933747\,\mathrm{i} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.7101545203859353 -0.2371533418544… [1247 chars total]
+Cell 76: ✓ — Out[235]= \langle\!\lvert \text{validation}\to \left\{\left\{1,1\right\}\to \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 0\\\left\{1,1\right\} & 0\\\left\{2,0\right\} & 0\end{pmatrix},\left\{2,1\right\}\to \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 0\\\left\{1,1\right\} & 0\\\left\{2,0\right\} & 0\\\left\{2,1\right\} & 0\\\left\{3,0\right\} & 0\end{pmatrix},\left\{1… [1247 chars total]
+Cell 77: ✓ — Out[237]= \langle\!\lvert \text{generator \{a,b\}}\to \left\{2,1\right\},\text{$\varphi$(k)}\to \text{$\alpha$ k},\text{$\alpha$ (universal value)}\to -1.\,+0.\,\,\mathrm{i},\text{normalization}\to \text{1-site FSoV determinant det1[f] = br1[f]/(f/.u->$\theta$1); Section C's det[$\lambda$1,$\lambda$2][f] restricted to 1 site},\text{max residual over rep sweep}\to 0,\text{reps validated}\to \begin{… [510 chars total]
+
+## 2026-07-18 16:17:03 — ▶️ RUN CELLS 78–82
+Cell 79: ✓ — (no output)
+Cell 80: ✓ — Out[245]= \left\{\text{Test 1 (symbolic monomials u\^{}j) residuals},\left\{0\right\}\right\}
+Cell 81: ✓ — Out[250]= \left\{\text{Test 2 (twisted monomials k\^{}(u/h) u\^{}j) residuals},\left\{0\right\}\right\}
+Cell 82: ✓ — Out[259]= \left\{\text{Test 3 worst |br identity residual| on Q1},0,\text{worst |detRatio - predicted| },0,\text{num states checked},41\right\}
+
+## 2026-07-18 16:17:07 — ▶️ RUN CELLS 83–87
+Cell 84: ✓ — (no output)
+Cell 85: ✓ — Out[271]= \begin{pmatrix}1 & 1 & 0\\2 & 1 & 0\\3 & 1 & 0\end{pmatrix}
+Cell 86: ✓ — Out[278]= \left\{\text{Mirror Test1 (u\^{}j)},\left\{0\right\},\text{Mirror Test2 (k\^{}(u/h)u\^{}j)},\left\{0\right\}\right\}
+Cell 87: ✓ — Out[285]= \left\{\text{Mirror Test3 worst |br identity residual| on Q1},0,\text{num states checked},41\right\}
+
+## 2026-07-18 16:17:09 — ▶️ RUN CELLS 88–91
+Cell 89: ✓ — Out[294]= \left\{\text{OP2(E12)},1.\,+0.\times 10^{-30}\,\mathrm{i},\text{OP2(E21)},\left(2.603469709065218092712489006+0.6885776528619826437114966465\,\mathrm{i}\right)\,\varphi +\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right),\text{nontrivial generator \{a,b\}},\left\{2,1\right\}\right\}
+Cell 90: ✓ — Out[297]= \left(1.\,+0.\times 10^{-27}\,\mathrm{i}\right)-\left(0.360439875147226537266677651+0.932782448593374716484835982\,\mathrm{i}\right)\,k
+Cell 91: ✓ — Out[300]//TableForm= \begin{pmatrix}\left\{0,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & -0.36043987514722653-0.9327824485933747\,\mathrm{i} & 0.36043987514722653 +0.9327824485933747\,\mathrm{i} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.4685059330398573 -0.1713611156914601\,\mathrm{i} & 2.603469709065218 +0.6885776528619827… [1258 chars total]
+
+## 2026-07-18 16:17:21 — ▶️ RUN CELLS 92–108
+Cell 92: ✓ — Out[302]//TableForm= \begin{pmatrix}\left\{0,0\right\} & -1.\,+0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.973902234276272 +0.2269679230016555\,\mathrm{i} & 0.7391304347826086 +0.\,\,\mathrm{i} & 0.973902234276272 +0.2269679230016555\,\mathrm{i}\\\left\{1,0\right\} & 0.15191893851739566 -0.10600050418875033\,\mathrm{i} & -0.15191893851739566+0.10600050418875033\,\mathrm{i} & 0.7651595274649543 +… [1258 chars total]
+Cell 93: ✓ — Out[305]= \begin{pmatrix}\left\{0,0\right\} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 0.05448860910968355 -0.09540961504089102\,\mathrm{i}\\\left\{1,1\right\} & -0.0293413933141388+0.7363100318787654\,\mathrm{i}\\\left\{2,0\right\} & 0.11703059508534998 +0.\,\,\mathrm{i}\\\left\{2,1\right\} & 0.8158972359113332 +0.\,\,\mathrm{i}\\\left\{3,0\right\} & 0.05448860910968355 +0.09540961504089102\,… [541 chars total]
+Cell 96: ✓ — Out[311]= \left\{\text{O[k1,0]-FLdet[k1] (must be 0)},0,\text{O[0,k2]-FLdet2[k2] (expected NONZERO per Phase1 finding)},\left(-3.0719756421050755-0.5172165371705225\,\mathrm{i}\right)\,k2\right\}
+Cell 97: ✓ — Out[316]= \left\{\text{Fcand1},k1^2\,\left(\left(-2.2527492196701659-5.82989030370859198\,\mathrm{i}\right)\,k2-\left(0.4170744170089964+23.0487337186617355\,\mathrm{i}\right)\right)+k1\,\left(\left(0.67128913890100625-0.37524873225652243\,\mathrm{i}\right)\,k2+\left(9.51343802264711551-1.5262799733212005\,\mathrm{i}\right)\right)-\left(1.99115021541939352-0.72828474168870538\,\mathrm{i}\right)\,k… [1014 chars total]
+Cell 98: ✓ — Out[318]= \left(0.9252125034899888 -6.175727508765443\,\mathrm{i}\right)\,k1^2\,k2+\left(5.4271267482291075 +3.0890004366773067\,\mathrm{i}\right)\,k1\,k2
+Cell 99: ✓ — Out[323]= \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 7.991287939023577 -1.2820751775898085\,\mathrm{i}\\\left\{2,0\right\} & -0.3808070763995185-21.044496003995498\,\mathrm{i}\\\left\{0,1\right\} & 0.6123194936458246 +1.416862394550688\,\mathrm{i}\\\left\{1,1\right\} & -0.6248120089007682-3.051910425543801\,\mathrm{i}\\\left\{2,1\right\} & -1.8923093445229393-4.897107855115217\,\m… [421 chars total]
+Cell 100: ✓ — Out[328]= \left\{\text{Fcand2 (no P-insertion)},k1^2\,\left(\left(0.02466179161444501+1.36288164597304175\,\mathrm{i}\right)-\left(0.36043987514722654+0.93278244859337472\,\mathrm{i}\right)\,k2\right)+k1\,\left(\left(1.2351720155778515-0.69045766735200127\,\mathrm{i}\right)\,k2-\left(6.46913785540003854-1.0378703818584163\,\mathrm{i}\right)\right)+\left(5.38781822995835893-1.9706528304517910\,\mat… [788 chars total]
+Cell 101: ✓ — 2 kernel messages: Power::infy: Infinite expression 0       encountered.
+Infinity::indet: Indeterminate expression ----------------- encountered.                                                   1/3                    … [also: Power::infy] result: Out[331]//TableForm= \begin{pmatrix}2 & 1 & \left\{0,0\right\} & \mathrm{Indeterminate} & \mathrm{Indeterminate} & -4.970498218180917+4.515583419069149\,\mathrm{i}\\2 & 1 & \left\{1,1\right\} & \mathr…
+Cell 102: ✓ — Out[334]//TableForm= \begin{pmatrix}2 & 1 & \left\{0,0\right\} & \left(-7.771745024480887+7.060451775520925\,\mathrm{i}\right)\,k1^2-\left(3.7846186890458786 +9.794215710230434\,\mathrm{i}\right)\,k1 & \left(1.8923093445229393 +4.897107855115217\,\mathrm{i}\right)\,k2 & -4.970498218180917+4.515583419069149\,\mathrm{i}\\2 & 1 & \left\{1,1\right\} & \left(9.339255641812587 +10.661478687052961\,\math… [1258 chars total]
+Cell 103: ✓ — 2 kernel messages: Power::infy: Infinite expression 0       encountered.
+Infinity::indet: Indeterminate expression ----------------- encountered.                                                   1/3                    … [also: Power::infy] result: Out[338]= \left\{\text{Fcand1(k1,0)},\mathrm{Indeterminate},\text{FLdet[k1]},\frac{\left(2.45075493251774917289426756629+5.78551794268217244227029022731\,\mathrm{i}\right)\,\left(\left(0.0525946877178…
+Cell 104: ✓ — Out[343]= \left\{\text{Fcand1(k1,0)},\left(-8.51191121729+7.73287575414\,\mathrm{i}\right)\,k1^2-\left(4.5054984393+11.6597806074\,\mathrm{i}\right)\,k1+\left(1.000000000000+0.\times 10^{-12}\,\mathrm{i}\right),\text{FLdet[k1]},\frac{\left(2.45075493251774917289426756629+5.78551794268217244227029022731\,\mathrm{i}\right)\,\left(\left(0.05259468771783351844996683714+0.15021349717800998891606886537\… [960 chars total]
+Cell 107: ✓ — Out[348]= \left\{\text{STEP 0: det[$\lambda$1,$\lambda$2][k\^{}(u/h)Q1] vs O[k,k], worst |residual| (sample k)},0,\text{sample rows \{$\lambda$1,$\lambda$2,state,resid,ratio\}},\begin{pmatrix}1 & 1 & \left\{0,0\right\} & 0 & 1.\,\\1 & 1 & \left\{1,0\right\} & 0 & 1.\,\\1 & 1 & \left\{1,1\right\} & 0 & 1.\,\\1 & 1 & \left\{2,0\right\} & 0 & 1.\,\\2 & 1 & \left\{0,0\right\} & 0 & 1.\,\\2 & 1 & \left… [445 chars total]
+Cell 108: ✓ — Out[354]= \left\{\text{STEP 0 CONFIRMED: det[$\lambda$1,$\lambda$2][k\^{}(u/h)Q1] == O[k,k] identically},\text{worst residual over full sweep},0,\text{num states},41\right\}
+
+## 2026-07-18 16:17:31 — ▶️ RUN CELLS 109–123
+Cell 109: ✓ — 2 kernel messages: Power::infy: Infinite expression - encountered.                                  0
+Infinity::indet: Indeterminate expression 0 ComplexInfinity encountered.
+Power::infy: Infinite expression - encounter… [also: Power::infy] result: Out[358]= \begin{pmatrix}1 & 0 & \left\{1.\,\right\}\\1 & 1 & \left\{1.\,\right\}\\2 & 0 & \left\{1.\,\right\}\\2 & 1 & \left\{2.\,\right\}\\2 & 2 & \left\{2.\,\right\}\\3 & 0 & \left\{1.\,\right\}\\3…
+Cell 110: ✓ — Out[364]= \left\{\text{STEP 1 CONFIRMED: ⟨x0[$\lambda$]|E21\^{}m = $\gamma$\_m($\lambda$) xL1[$\lambda$][\{m\}], $\gamma$\_m($\lambda$)=$\lambda$!/($\lambda$-m)!},\text{worst deviation},0,\text{table \{$\lambda$,m,$\gamma$\_found,$\gamma$\_predicted,dev\}},\begin{pmatrix}1 & 0 & 1.\, & 1 & 0\\1 & 1 & 1.\, & 1 & 0\\2 & 0 & 1.\, & 1 & 0\\2 & 1 & 2.\, & 2 & 0\\2 & 2 & 2.\, & 2 & 0\\3 & 0 & 1.\, & 1 &… [489 chars total]
+Cell 111: ✓ — Out[369]= \left\{\text{STEP 2: x2[\{s1,m\}] vs xL1[$\lambda$1][\{s1\}]$\otimes$xL1[$\lambda$2][\{m\}], worst ratio-spread (constancy check)},0,\text{num cases},54,\text{sample rows},\begin{pmatrix}1 & 1 & 0 & 1 & 0.16 & 0\\1 & 1 & 1 & 1 & 1.\, & 0\\1 & 2 & 0 & 1 & 0.16 & 0\\1 & 2 & 0 & 2 & -0.68 & 0\\1 & 2 & 1 & 1 & 1.\, & 0\\1 & 2 & 1 & 2 & 1.\, & 0\\1 & 3 & 0 & 1 & 0.16 & 0\\1 & 3 & 0 & 2 & -0.6… [479 chars total]
+Cell 112: ✓ — Out[373]= \begin{pmatrix}1 & 0 & \frac{4}{25}\\1 & 1 & 1\\2 & 0 & \frac{2}{23}\\2 & 1 & \frac{25}{46}\\2 & 2 & 1\\3 & 0 & \frac{4}{67}\\3 & 1 & \frac{25}{67}\\3 & 2 & \frac{46}{67}\\3 & 3 & 1\end{pmatrix}
+Cell 113: ✓ — Out[378]= \left\{\text{c($\lambda$1,s1) hypothesis (m-independent) vs full sweep --- FAILS for m>=2, see next cell for the fix},\text{worst deviation over all 54 ($\lambda$1,$\lambda$2,s1,m) cases},1.68\right\}
+Cell 114: ✓ — Out[382]= \begin{pmatrix}1 & 0 & 1 & \frac{4}{25}\\1 & 0 & 2 & -\frac{17}{25}\\1 & 0 & 3 & -\frac{38}{25}\\1 & 1 & 1 & 1\\1 & 1 & 2 & 1\\1 & 1 & 3 & 1\\2 & 0 & 1 & \frac{2}{23}\\2 & 0 & 2 & -\frac{34}{575}\\2 & 0 & 3 & \frac{323}{575}\\2 & 1 & 1 & \frac{25}{46}\\2 & 1 & 2 & \frac{2}{23}\\2 & 1 & 3 & -\frac{17}{46}\\2 & 2 & 1 & 1\\2 & 2 & 2 & 1\\2 & 2 & 3 & 1\\3 & 0 & 1 & \frac{4}{67}\\3 & 0 & 2 & … [672 chars total]
+Cell 115: ✓ — 4 kernel messages: LinearSolve::nosol: Linear equation encountered that has no solution.
+LinearSolve::nosol: Linear equation encountered that has no solution.
+LinearSolve::nosol: Linear equation encountered that has no … [also: LinearSolve::nosol, LinearSolve::nosol, LinearSolve::nosol] result: Out[387]= \left\{\text{coeffs (rows=s1, cols=s1'=0..3)},\left\{\mathrm{LinearSolve}\left[\begin{pmatrix}0 & 0 & 0 & 0\\0 & 0 & 0 & \frac{1}{36}\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & \f…
+Cell 116: ✓ — Out[392]= \left\{\left\{0,2\right\}\to -0.02206359506813757300454250486697,\left\{1,1\right\}\to 0.1635301752109020116807268007787,\left\{2,0\right\}\to 0.8585334198572355613238157040883\right\}
+Cell 117: ✓ — Out[396]= \left\{\text{STEP 2 level-conservation check: \# off-level nonzero coeffs (want 0 everywhere)},0,\text{num ($\lambda$1,$\lambda$2,s1,m) cases},29\right\}
+Cell 119: ✓ — Out[404]= \left\{\text{m=0: Om-Cm (must be 0 per Phase1, C1pred/P1site2[$\theta$1] should equal exactly Cm's own norm here)},\left(2.5572121404875445 -0.4102640568287387\,\mathrm{i}\right)\,k1-\left(0.038411844228125346 +2.1227491621421546\,\mathrm{i}\right)\,k1^2,\text{m=1: Om\_1[k1]},\left(0.3604398751472265372666776506+0.9327824485933747164848359821\,\mathrm{i}\right)\,k1^2-\left(1.296101147801… [801 chars total]
+Cell 120: ✓ — Out[411]= \left\{\text{m=0: (B0-B1)/O\_0 ratio},\frac{\sqrt[3]{k1}\,\left(\left(-0.0292504903494856237+0.0205326892042810627\,\mathrm{i}\right)\,k1^2+\left(0.499242526583056932+0.532659421382621779\,\mathrm{i}\right)\,k1-\left(0.139388493663376676+0.206413542317126162\,\mathrm{i}\right)\right)}{\left(0.3604398751472265372666776506+0.9327824485933747164848359821\,\mathrm{i}\right)\,k1^2-\left(1.296… [1083 chars total]
+Cell 121: ✓ — Out[414]= \left\{\text{Cm[0]-Cm[1] shape},\left(-0.0225172879957976151-1.244370198497125076\,\mathrm{i}\right)\,k1^2+\left(5.434075798536032377-0.8718111207610696998\,\mathrm{i}\right)\,k1+\left(0.\times 10^{-20}+0.\times 10^{-20}\,\mathrm{i}\right),\text{ratio vs O\_0[k1] (want: clean constant)},\frac{\left(-0.0225172879957976151-1.244370198497125076\,\mathrm{i}\right)\,k1^2+\left(5.4340757985360… [753 chars total]
+Cell 122: ✓ — Out[416]= \left\{\text{Cm[0][k1] / O\_1[k1] (reversed-index hypothesis; want clean k1-independent constant)},\frac{\left(0.111318362779488714+0.0407158959953172346\,\mathrm{i}\right)\,k1^2-\left(0.21818047436770437-1.02534209918467083\,\mathrm{i}\right)\,k1+\left(0.360439875147226537-0.932782448593374716\,\mathrm{i}\right)}{\left(1.\,+0.\times 10^{-29}\,\mathrm{i}\right)\,k1^2-\left(2.963909584212… [539 chars total]
+
+## 2026-07-18 16:17:47 — ▶️ RUN CELLS 124–138
+Cell 125: ✓ — (no output)
+Cell 126: ✓ — Out[446]= \left\{\text{Symbolic-$\theta$,$\chi$1 port-fidelity: xL1Sym vs xL1},0,\text{x2Sym vs x2},0\right\}
+Cell 127: ✓ — Out[451]= \left\{\left\{0,0\right\}\to 0,\left\{0,1\right\}\to \frac{\theta A-\theta B}{\theta A-\theta B+1},\left\{1,0\right\}\to \frac{1}{\theta A-\theta B+1},\left\{1,1\right\}\to 0\right\}
+Cell 128: ✓ — Out[454]= 35
+Cell 129: ✓ — Out[460]= \left\{\left\{0,0\right\}\to 0,\left\{0,1\right\}\to \theta B-\theta A,\left\{1,0\right\}\to -1,\left\{1,1\right\}\to 0\right\}
+Cell 130: ✓ — Out[463]= 127
+Cell 131: ✓ — Out[466]= 127
+Cell 132: ✓ — Out[470]//MatrixForm= \begin{pmatrix}\frac{\theta A^2-2\,\theta A\,\theta B-\theta A+\theta B^2+\theta B}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)} & \frac{6\,\left(\theta A-\theta B\right)}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)} & \frac{6}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)}\\0 & \frac{\theta A-\theta B+1}{\the… [472 chars total]
+Cell 133: ✓ — Out[472]//MatrixForm= \begin{pmatrix}\frac{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)}{\theta A^2-2\,\theta A\,\theta B-\theta A+\theta B^2+\theta B} & -\frac{6\,\left(\theta A-\theta B+3\right)}{\theta A^2-2\,\theta A\,\theta B+\theta B^2-1} & \frac{6}{\left(\theta A-\theta B\right)\,\left(\theta A-\theta B+1\right)}\\0 & \frac{\theta A-\theta B+3}{\theta A-\theta B+1} & -… [453 chars total]
+Cell 134: ✓ — Out[478]= \left\{\text{equations},\left\{1.000000000000000000000+0.\times 10^{-21}\,\mathrm{i}⩵\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right)\,wc0+\left(2.603469709065218092712489006+0.6885776528619826437114966465\,\mathrm{i}\right)\,wc1,-1.0350620568640061670+0.16605926109734660949\,\mathrm{i}⩵\left(1.522150083623538480912456055-0.2442047957313920727733393355\,\mathrm{i}\right)\,wc0-\left(1.2961… [785 chars total]
+Cell 135: ✓ — Out[484]= \begin{pmatrix}0 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\0 & 1 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\1 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\1 & 1 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\2 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} … [510 chars total]
+Cell 136: ✓ — Out[489]= \left\{\text{Conjectured sum rule FAILS beyond the lucky L=1 case},\text{num failing cases},29,\text{num total cases},81,\text{sample failures},\begin{pmatrix}1 & 2 & 0 & 1 & \frac{1}{-\theta A+\theta B-1}\\1 & 2 & 0 & 2 & \frac{2}{\theta A-\theta B+1}\\1 & 3 & 0 & 1 & -\frac{2}{\theta A-\theta B+1}\end{pmatrix}\right\}
+Cell 138: ✓ — Out[496]= \left\{\text{BOXED: A[s1,m;s1,m] = Pochhammer[s1+$\theta$1-$\theta$2-m+1,m]/Pochhammer[$\lambda$1+$\theta$1-$\theta$2-m+1,m] --- verified at the live numeric $\theta$1,$\theta$2},\text{worst deviation},0,\text{num ($\lambda$1,$\lambda$2,s1,m) cases},81\right\}
+
+## 2026-07-18 16:17:56 — ▶️ RUN CELLS 139–154
+Cell 140: ✓ — Out[502]= \left\{\text{STEP 1a (WITH $\kappa$1\^{}(u/h) prefactor): worst |x2.Psi - Q1($\theta$1+s1)Q1($\theta$2+s2)/(Q1($\theta$1)Q1($\theta$2))|},0,\text{num cases},297\right\}
+Cell 141: ✓ — Out[509]= \left\{\text{STEP 1b (WITHOUT prefactor, bare q\_n): worst residual (expect NONZERO, confirming prefactor matters)},3.7396476326262356,\text{sample},\begin{pmatrix}\left\{0,0\right\} & 0 & 0 & 0\\\left\{1,0\right\} & 0 & 0 & 0\\\left\{1,1\right\} & 0 & 0 & 0\end{pmatrix}\right\}
+Cell 143: ✓ — Out[515]= \begin{pmatrix}\left\{0,0,\left\{\text{srng},\left\{0\right\},\text{sol},\left\{1.\,\right\},\text{maxResid},0.\times 10^{-28}\right\}\right\} & \left\{0,1,\left\{\text{srng},\left\{0,1\right\},\text{sol},\left\{11.50000000000000000000000000-4.431302171530629069010197265\times 10^{-38}\,\mathrm{i},-10.50000000000000000000000000+2.933894180666706878219239219\times 10^{-38}\,\mathrm{i}\rig… [1115 chars total]
+Cell 144: ✓ — Out[521]= \left\{\text{worst residual across full B-sweep (want \textasciitilde{}0)},0.\times 10^{-24},\text{num (rep,a,b) cases},37\right\}
+Cell 145: ✓ — Out[525]= \left\{\text{A-block ($\lambda$1=2,$\lambda$2=1, L=2, s,s'=1,2)},\begin{pmatrix}\frac{25}{46} & \frac{21}{46}\\0 & 1\end{pmatrix},\text{its inverse (should = B row)},\begin{pmatrix}\frac{46}{25} & -\frac{21}{25}\\0 & 1\end{pmatrix},\text{Step2's independently-solved B row \{1,1\}},\left\{\frac{46}{25},-\frac{21}{25}\right\},\text{match?},\left\{0,0\right\}\right\}
+Cell 147: ✓ — Out[532]= \left\{\text{det[$\lambda$1,$\lambda$2][k\^{}u Q1] - explicit residue-sum expansion (rep (2,1), state (1,0)), want 0},0\right\}
+Cell 148: ✓ — Out[538]= \left\{\text{TRUE sum rule (derived, Step 4): worst deviation},0,\text{num ($\lambda$1,$\lambda$2,s,t) cases},20,\text{sample},\begin{pmatrix}2 & 1 & 0 & 0 & 0\\2 & 1 & 0 & 1 & 0\\2 & 1 & 1 & 0 & 0\\2 & 1 & 1 & 1 & 0\\2 & 1 & 2 & 0 & 0\\2 & 1 & 2 & 1 & 0\end{pmatrix}\right\}
+Cell 150: ✓ — Out[546]= \left\{\text{STEP 3 assembly test (rep (2,1), 6 states x 3 grid points): worst |Oassembled-O2rot|},0,\text{num cases},18\right\}
+Cell 151: ✓ — Out[552]= \left\{\text{STEP 3 FULL-SWEEP ASSEMBLY CONFIRMED: O[k1,k2] = $\Sigma$ cA(k1)cB(k2) B-weighted Q-bilinears == O2rot exactly},\text{worst deviation},0,\text{num states x grid cases},82\right\}
+Cell 153: ✓ — Out[557]= \begin{pmatrix}0 & 0 & 1.\, & 1.\, & 0\\0 & 1 & -2.603469709065218-0.6885776528619827\,\mathrm{i} & 5.387818229958359 -1.970652830451791\,\mathrm{i} & -7.991287939023577+1.2820751775898085\,\mathrm{i}\\1 & 0 & 1.5221500836235384 -0.24420479573139206\,\mathrm{i} & -6.469137855400039+1.0378703818584163\,\mathrm{i} & 7.991287939023577 -1.2820751775898085\,\mathrm{i}\\1 & 1 & 1.2961011478017… [843 chars total]
+
+## 2026-07-18 16:18:31 — 📥 BULK INSERT 2 CELL(S) at positions 155–156
+1. [markdown] (*Section L — Paul's directed ansatz: does O[k1,k2] admit a 2x2-determinant form with row 1↵built pu
+2. [code] (*Build M[s,t](k1,k2) as a (λ1+1)x(λ2+1) matrix, exact rational entries at rational (k1,k2).↵  Reuse
+
+
+## 2026-07-18 16:18:31
+**Input:**
+```wolfram
+(*Build M[s,t](k1,k2) as a (λ1+1)x(λ2+1) matrix, exact rational entries at rational (k1,k2).
+  Reuses Section K's solveBratM (exact B) and gammaFun (γ_a(λ)=λ!/(λ-a)!).*)
+ClearAll[Mmatrix];
+Mmatrix[λ1_,λ2_][k1_,k2_] := Table[
+  Module[{L=s+t, aMin, aMax},
+    aMin = Max[0,L-λ2]; aMax = Min[L,λ1];
+    Sum[
+      Module[{srng,bv,idx},
+        {srng,bv} = solveBratM[λ1,λ2][a,L-a][[1;;2]];
+        idx = FirstPosition[srng,s];
+        If[idx===Missing["NotFound"], 0,
+          (-k1)^a/a! gammaFun[λ1,a] (-k2)^(L-a)/(L-a)! gammaFun[λ2,L-a] bv[[idx[[1]]]]]
+      ]
+    ,{a,aMin,aMax}]
+  ]
+,{s,0,λ1},{t,0,λ2}];
+(*smoke test: rep (2,1) at a generic rational (k1,k2) point.*)
+Mtest21 = Mmatrix[2,1][7/3,5/2];
+{"M matrix (rep (2,1), k1=7/3,k2=5/2)", Mtest21 // MatrixForm, "MatrixRank", MatrixRank[Mtest21]}
+```
+**Output:**
+```
+Out[561]= \left\{\text{M matrix (rep (2,1), k1=7/3,k2=5/2)},\begin{pmatrix}1 & -\frac{115}{4}\\\frac{259}{12} & \frac{322}{15}\\-\frac{196}{45} & -\frac{245}{18}\end{pmatrix},\text{MatrixRank},2\right\}
+```
+## 2026-07-18 16:18:50 — 📥 BULK INSERT 1 CELL(S) at positions 157–157
+1. [code] (*GATE 1 proper: only reps with BOTH λ1,λ2>=2 give a nontrivial rank<=2 test (max possible rank↵  fo
+
+
+## 2026-07-18 16:18:51
+**Input:**
+```wolfram
+(*GATE 1 proper: only reps with BOTH λ1,λ2>=2 give a nontrivial rank<=2 test (max possible rank
+  for a (λ1+1)x(λ2+1) matrix is min(λ1+1,λ2+1); reps like (2,1),(3,1),(1,2),(1,3) have min<=2
+  automatically). In the standard sweep only (2,2) is a genuine 3x3 test. Compute M at several
+  independent rational (k1,k2) sample points for EVERY rep, report rank (and max-possible-rank) for
+  the full record, flagging (2,2) as the decisive case.*)
+ClearAll[gate1Report];
+samplePts = {{7/3,5/2},{11/5,-4/3},{-2/7,9/4},{13/6,1/9}};
+gate1Report = {};
+Do[
+  {λ1,λ2} = rep;
+  Do[
+    Module[{Mm,rk},
+      Mm = Mmatrix[λ1,λ2][pt[[1]],pt[[2]]];
+      rk = MatrixRank[Mm];
+      AppendTo[gate1Report, {λ1,λ2,pt, rk, Min[λ1+1,λ2+1]}]
+    ]
+  ,{pt,samplePts}]
+,{rep,{{1,1},{2,1},{1,2},{2,2},{3,1},{1,3}}}];
+gate1Report//TableForm
+```
+**Output:**
+```
+Out[566]//TableForm= \begin{pmatrix}1 & 1 & \left\{\frac{7}{3},\frac{5}{2}\right\} & 2 & 2\\1 & 1 & \left\{\frac{11}{5},-\frac{4}{3}\right\} & 2 & 2\\1 & 1 & \left\{-\frac{2}{7},\frac{9}{4}\right\} & 2 & 2\\1 & 1 & \left\{\frac{13}{6},\frac{1}{9}\right\} & 2 & 2\\2 & 1 & \left\{\frac{7}{3},\frac{5}{2}\right\} & 2 & 2\\2 & 1 & \left\{\frac{11}{5},-\frac{4}{3}\right\} & 2 & 2\\2 & 1 & \left\{-\frac{… [1258 chars total]
+```
+
+## 2026-07-18 16:18:58
+**Input:**
+```wolfram
+Select[gate1Report, #[[1]]==2 && #[[2]]==2 &]
+```
+**Output:**
+```
+Out= {{2, 2, {7/3, 5/2}, 3, 3}, {2, 2, {11/5, -4/3}, 3, 3}, {2, 2, {-2/7, 9/4}, 3, 3}, {2, 2, {13/6, 1/9}, 3, 3}}
+```
+
+## 2026-07-18 16:19:11
+**Input:**
+```wolfram
+Mtest22 = Mmatrix[2,2][7/3,5/2]
+MatrixRank[Mtest22]
+Det[Mtest22]
+(* cross-check: sum over M of Mtest22[[s+1,t+1]]*W[s,t] should equal O2rot at this k1,k2, for some state *)
+One22 = Sum[Mtest22[[s+1,t+1]] Wval[2,2][1,1][s,t],{s,0,2},{t,0,2}]
+O2rot[2,2][1,1][7/3,5/2]
+```
+**Output:**
+```
+Out[1]= {{1, -115/2, -14375/136}, {287/6, 25438/255, -4025/12}, {14749/360, 10045/36, 1225/36}}
+Out[2]= 3
+Out[3]= 1143905/578
+Out[4]= -26.35272221942383516565637706206329909422`26.74096379604192 - 3.05193081177028427093874617402402432395`25.80576404167926*I
+Out[5]= -26.35272221942383516565637706206329909538`27.75450724060588 - 3.0519308117702842709387461740240243241`26.82391005190665*I
+```
+## 2026-07-18 16:19:36 — 📥 BULK INSERT 1 CELL(S) at positions 158–158
+1. [code] (*Confirm rank 3 is GENERIC (not an artifact of the 4 sample points) by computing Det[Mmatrix]↵  as
+
+
+## 2026-07-18 16:19:36
+**Input:**
+```wolfram
+(*Confirm rank 3 is GENERIC (not an artifact of the 4 sample points) by computing Det[Mmatrix]
+  as a SYMBOLIC polynomial in k1,k2 for rep (2,2) — if identically 0, rank<=2 almost everywhere
+  despite the isolated nonzero samples (impossible for a low-degree polynomial nonzero at 4 points,
+  but verify directly for full rigor) and cross-validate the M-reconstruction against O2rot on this
+  symbolic det computation.*)
+detM22sym = Det[Mmatrix[2,2][k1,k2]] // Simplify;
+{"Det[M(k1,k2)] symbolic, rep (2,2)", detM22sym, "identically zero?", detM22sym === 0}
+```
+**Output:**
+```
+Out[568]= \left\{\text{Det[M(k1,k2)] symbolic, rep (2,2)},\frac{213003\,k2^3\,\left(k1-k2\right)^2\,\left(17\,k1+46\,k2\right)}{7225},\text{identically zero?},\mathrm{False}\right\}
+```
+## 2026-07-18 16:20:13 — 📥 BULK INSERT 1 CELL(S) at positions 159–159
+1. [code] (*Extra due-diligence check (beyond the fixed 6-rep sweep): does the rank-3 failure generalize to↵
+
+
+## 2026-07-18 16:20:14
+**Input:**
+```wolfram
+(*Extra due-diligence check (beyond the fixed 6-rep sweep): does the rank-3 failure generalize to
+  OTHER reps with min(λ1,λ2)>=2, or is it specific to (2,2)? Test rep (2,3) (not in the standard
+  sweep — exercises the full on-demand TauEigensystem/QSolve machinery fresh for this rep).*)
+Mtest23 = Mmatrix[2,3][7/3,5/2];
+rank23 = MatrixRank[Mtest23];
+detM23sym = Det[Mtest23[[1;;3,1;;3]]]; (*3x3 minor, since M is 3x4 here, min dim 3*)
+{"rep (2,3): M dimensions", Dimensions[Mtest23], "rank at sample point", rank23,
+ "a 3x3 minor determinant (nonzero => rank>=3)", Chop[detM23sym,10^-10]}
+```
+**Output:**
+```
+Out[572]= \left\{\text{rep (2,3): M dimensions},\left\{3,4\right\},\text{rank at sample point},3,\text{a 3x3 minor determinant (nonzero => rank>=3)},\frac{19563970545}{1405696}\right\}
+```
+## 2026-07-18 16:20:59 — 📥 BULK INSERT 1 CELL(S) at positions 160–160
+1. [markdown] (*Section L final report — GATE 1 (pointwise rank) FAILS. Per the ask-first protocol ("if a gate↵fai
+
+
+---
+
+## 2026-07-18 16:21:07 — 🔄 KERNEL RESTART
+
+## 2026-07-18 16:21:35 — ▶️ RUN CELLS 1–10
+Cell 1: ✓ — Out[8]= \left\{\frac{1}{3},\frac{1}{7},1,0.360439875147226537266677650596+0.932782448593374716484835982071\,\mathrm{i},0.36043987514722653726667765060-0.932782448593374716484835982071\,\mathrm{i},0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i},1\right\}
+Cell 3: ✓ — (no output)
+Cell 4: ✓ — (no output)
+Cell 5: ✓ — (no output)
+Cell 6: ✓ — (no output)
+Cell 8: ✓ — (no output)
+Cell 10: ✓ — (no output)
+
+## 2026-07-18 16:21:40 — ▶️ RUN CELLS 11–20
+Cell 11: ✓ — (no output)
+Cell 12: ✓ — Out[27]= \left\{0\right\}
+Cell 13: ✓ — (no output)
+Cell 14: ✓ — (no output)
+Cell 15: ✓ — Out[31]= \left\{0\right\}
+Cell 16: ✓ — (no output)
+Cell 17: ✓ — Out[34]= \begin{pmatrix}0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\end{pmatrix}
+Cell 18: ✓ — (no output)
+Cell 20: ✓ — (no output)
+
+## 2026-07-18 16:21:43 — ▶️ RUN CELLS 21–28
+Cell 21: ✓ — (no output)
+Cell 23: ✓ — (no output)
+Cell 25: ✓ — (no output)
+Cell 26: ✓ — (no output)
+Cell 27: ✓ — Out[52]= \begin{pmatrix}0 & \frac{1}{2} & 0 & 0 & 0 & 0\end{pmatrix}
+Cell 28: ✓ — Out[53]= \left\{0\right\}
+
+## 2026-07-18 16:21:45 — ▶️ RUN CELLS 29–36
+Cell 30: ✓ — Out[59]= \left\{\left(u-\frac{4}{3}\right)\,\left(u-\frac{8}{7}\right),\left(u-\frac{1}{3}\right)\,\left(u-\frac{1}{7}\right),\left(0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i}\right)\,u^2-\left(1.06415582186324025288257211128+0.\times 10^{-29}\,\mathrm{i}\right)\,u\right\}
+Cell 31: ✓ — Out[62]= \begin{pmatrix}1 & 1\\2 & 2\\3 & 3\end{pmatrix}
+Cell 32: ✓ — Out[65]= \text{max|C2-($\kappa$1+$\kappa$2)Id|}\to 0.\times 10^{-29}
+Cell 33: ✓ — Out[75]= \langle\!\lvert \left\{0,0\right\}\to 0.5664055180884988 +1.3769645669711723\,\mathrm{i},\left\{1,0\right\}\to -0.778123966451158+0.\,\,\mathrm{i},\left\{1,1\right\}\to 1.1900552523337025 +0.\,\,\mathrm{i},\left\{2,0\right\}\to 0.5664055180884988 -1.3769645669711723\,\mathrm{i}\rvert\!\rangle
+Cell 34: ✓ — 2 kernel messages: Psi::spurious: No genuine state at (M,n)=(2,2) for (λ1,λ2)=(2,1): weight sector M=2 has only 2 genuine state(s) (n=0..1), so n=2 does not exist. [also: Psi::spurious] result: Print: spurious-guard test (expect a Psi::spurious message and Missing[...]):[formula] | Out[84]= \left\{\left\{1.000000000000000000000000000+0.\times 10^{-29}\,\mathrm{i},-1.3004494881076436272092358…
+⚠️ stopped at Cell 34 — error detected (pass stopOnError:false to continue past errors)
+
+## 2026-07-18 16:22:04 — ▶️ RUN CELLS 35–42
+Cell 35: ✓ — Out[91]= \left\{1.03464899078135229594035121+0.381869568380946283899575941\,\mathrm{i},-2.37022278949001677248172619-0.20048970475590097847093779\,\mathrm{i},1.00000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right\}
+Cell 36: ✓ — Out[94]= \left\{-0.709231010958016926537225142+1.09596916251277206706752728\,\mathrm{i},-0.02291660900+0.\times 10^{-12}\,\mathrm{i}\right\}
+Cell 37: ✓ — (no output)
+Cell 38: ✓ — (no output)
+Cell 39: ✓ — (no output)
+Cell 40: ✓ — (no output)
+Cell 41: ✓ — (no output)
+Cell 42: ✓ — Out[109]= 0
+
+## 2026-07-18 16:22:07 — ▶️ RUN CELLS 43–47
+Cell 43: ✓ — (no output)
+Cell 44: ✓ — Out[113]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 45: ✓ — Out[115]= \left\{6,6\right\}
+Cell 46: ✓ — Out[116]= \begin{pmatrix}2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i} & 0 & 0 & 0 & 0 & 0\\0 & 7.36608403016431791181-0.968046299794461400266\,\mathrm{i} & 0 & 0 & 0 & 0\\0 & 0 & 2.68702160063169134012-1.3456153260557858257\,\mathrm{i} & 0 & 0 & 0\\0 & 0 & 0 & 7.3660840301643179118107+0.9680462997944614002659\,\mathrm{i} & 0 & 0\\0 & 0 & 0 & 0 & 2.687021600631691340118… [537 chars total]
+Cell 47: ✓ — Out[125]= \langle\!\lvert \text{states}\to \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix},\text{max|off-diagonal|}\to 5.065342385207116\times 10^{-34},\text{digits vanished (-Log10)}\to 33.29539119374288,\text{min|diagonal|}\to 3.0051232400647923,\text{diagonal values}\to \left\{2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i},7.36608403016431791181-0… [699 chars total]
+
+## 2026-07-18 16:22:11 — ▶️ RUN CELLS 48–54
+Cell 48: ✓ — (no output)
+Cell 49: ✓ — (no output)
+Cell 50: ✓ — Out[133]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 51: ✓ — Out[138]= \left\{1.00000000000000000000000000000,6\right\}
+Cell 52: ✓ — Out[143]= \langle\!\lvert \text{max|<PsiLeft|Psi>| off-diagonal}\to 0.\,,\text{digits vanished (-Log10)}\to \mathrm{Indeterminate}\rvert\!\rangle
+Cell 53: ✓ — Out[147]= \left\{7.366084030164317911810727273-0.9680462997944614002658874268\,\mathrm{i},1.00000000000000000000+0.\times 10^{-21}\,\mathrm{i}\right\}
+Cell 54: ✓ — Out[150]= \begin{matrix}\langle\!\lvert \text{M}\to 0,\text{n}\to 0,\text{braket}\to 2.909064289-5.804620064\,\mathrm{i},\text{G21 diagonal}\to 2.909064289-5.804620064\,\mathrm{i},\text{normRatio}\to 1.000000000+0.\times 10^{-10}\,\mathrm{i}\rvert\!\rangle \\\langle\!\lvert \text{M}\to 1,\text{n}\to 0,\text{braket}\to 7.366084030-0.968046300\,\mathrm{i},\text{G21 diagonal}\to 7.366084030-0.9680463… [1247 chars total]
+
+## 2026-07-18 16:22:15 — ▶️ RUN CELLS 55–62
+Cell 56: ✓ — (no output)
+Cell 57: ✓ — Out[158]= \begin{pmatrix}3 & 3\\3 & 3\end{pmatrix}
+Cell 58: ✓ — (no output)
+Cell 59: ✓ — Out[165]= \left\{0\right\}
+Cell 60: ✓ — Out[169]= \begin{matrix}\left\{1,1,0,1.\,,0.\,\right\}\\\left\{1,1,1,1.\,,0.\,\right\}\\\left\{1,2,0,1.\,,0.\,\right\}\\\left\{1,2,1,1.\,,0.\,\right\}\\\left\{1,3,0,1.\,,0.\,\right\}\\\left\{1,3,1,1.\,,0.\,\right\}\\\left\{2,1,0,1.\,,0.\,\right\}\\\left\{2,1,1,1.\,,0.\,\right\}\\\left\{2,1,2,1.\,,0.\,\right\}\\\left\{2,2,0,1.\,,0.\,\right\}\\\left\{2,2,1,1.\,,0.\,\right\}\\\left\{2,2,2,1.\,,0.\,\r… [898 chars total]
+Cell 61: ✓ — Out[170]= \langle\!\lvert \text{max spread (ratio non-constancy)}\to 0.\,,\text{max |ratio - 1| over sweep}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases checked}\to 27\rvert\!\rangle
+Cell 62: ✓ — Out[176]= \langle\!\lvert \text{max operator-level spread}\to 0.\,,\text{max |$\mu$ - $\mu$Site2|}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases}\to 27\rvert\!\rangle
+
+## 2026-07-18 16:22:26 — ▶️ RUN CELLS 63–70
+Cell 64: ✓ — (no output)
+Cell 65: ✓ — Out[185]= \langle\!\lvert \text{w\_0 ($\lambda$=1,2,3)}\to \left\{1,1,1\right\},\text{full weights w\_j}\to \left\{1\to \left\{1,-1\right\},2\to \left\{1,-2,1\right\},3\to \left\{1,-3,3,-1\right\}\right\},\text{br1[$\lambda$][1] ($\lambda$=1,2,3)}\to \left\{0,0,0\right\}\rvert\!\rangle
+Cell 66: ✓ — Out[187]= \left\{0,0\right\}
+Cell 67: ✓ — Out[190]= \sqrt[3]{k}\,\left(\left(-1.18561270626131985872+0.832253303224995280404\,\mathrm{i}\right)\,k^2-\left(0.761819910806671651081+0.812812473459294825632\,\mathrm{i}\right)\,k-\left(0.404410037536507329420+0.598870869485872613792\,\mathrm{i}\right)\right)
+Cell 68: ✓ — Out[194]= \begin{pmatrix}0 & 0 & 0\\0 & 0 & 0\\0 & 0 & 0\end{pmatrix}
+Cell 69: ✓ — Out[198]= \langle\!\lvert \text{OP(E12)}\to 1.\,+0.\times 10^{-30}\,\mathrm{i},\text{OP(E21)}\to \left(-0.03626734060947795145020244939-2.004237714666237867354326095\,\mathrm{i}\right)\,\varphi ^2-\left(1.522150083623538480912456055-0.2442047957313920727733393355\,\mathrm{i}\right)\,\varphi +\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right),\text{nontrivial generator \{a,b\}}\to \left\{2,1\right\},\… [464 chars total]
+Cell 70: ✓ — Out[201]= \left\{1,2\right\}
+
+## 2026-07-18 16:22:29 — ▶️ RUN CELLS 71–77
+Cell 71: ✓ — Out[207]= \langle\!\lvert \text{states}\to \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix},\text{$\varphi$ candidates per state}\to \begin{pmatrix}\left\{0,0\right\} & \left(-0.920793778924720536105378676-0.390049761817044163511250929\,\mathrm{i}\right)\,k^{4/3}+\left(0.695722366612934233848844287-0.718310788304406529935213657\,\mathrm{i}\right)\,\sqrt[3]{k}-\left(0.3604398751… [1247 chars total]
+Cell 72: ✓ — Out[213]= \langle\!\lvert \text{c\_sb solution(s)}\to \left\{\left\{\mathrm{cb}\to \frac{\left(-6.242239011314\times 10^{45}-4.511757007219\times 10^{45}\,\mathrm{i}\right)\,k^{4/3}-\left(5.999302657796\times 10^{45}+8.356648463050\times 10^{45}\,\mathrm{i}\right)\,\sqrt[3]{k}}{9.833530773718\times 10^{45}\,k^{4/3}-\left(3.54439660434\times 10^{45}-9.172544913427\times 10^{45}\,\mathrm{i}\right)\,… [841 chars total]
+Cell 73: ✓ — Out[216]= \langle\!\lvert \text{generator \{a,b\} tested}\to \left\{2,1\right\},\text{rep tested}\to \left\{1,2\right\},\text{FL shape (verified exact for all 6 states)}\to \text{FL[1,2][state][k] = k\^{}(1/3) (A\_state + B\_state k)},\text{c0(state) = OPg[state][0]}\to \begin{pmatrix}\left\{0,0\right\} & 1.\,+0.\times 10^{-28}\,\mathrm{i}\\\left\{1,0\right\} & 1.\,+0.\times 10^{-28}\,\mathrm{i}\\… [1247 chars total]
+Cell 74: ✓ — Out[220]= \left(1.000000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right)-\left(0.360439875147226537266677651+0.932782448593374716484835982\,\mathrm{i}\right)\,k
+Cell 75: ✓ — Out[227]= \langle\!\lvert \text{alphaTab \{state,D0,c0,Dc,c1,$\alpha$\}}\to \begin{pmatrix}\left\{0,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & -0.36043987514722653-0.9327824485933747\,\mathrm{i} & 0.36043987514722653 +0.9327824485933747\,\mathrm{i} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.7101545203859353 -0.2371533418544… [1247 chars total]
+Cell 76: ✓ — Out[235]= \langle\!\lvert \text{validation}\to \left\{\left\{1,1\right\}\to \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 0\\\left\{1,1\right\} & 0\\\left\{2,0\right\} & 0\end{pmatrix},\left\{2,1\right\}\to \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 0\\\left\{1,1\right\} & 0\\\left\{2,0\right\} & 0\\\left\{2,1\right\} & 0\\\left\{3,0\right\} & 0\end{pmatrix},\left\{1… [1247 chars total]
+Cell 77: ✓ — Out[237]= \langle\!\lvert \text{generator \{a,b\}}\to \left\{2,1\right\},\text{$\varphi$(k)}\to \text{$\alpha$ k},\text{$\alpha$ (universal value)}\to -1.\,+0.\,\,\mathrm{i},\text{normalization}\to \text{1-site FSoV determinant det1[f] = br1[f]/(f/.u->$\theta$1); Section C's det[$\lambda$1,$\lambda$2][f] restricted to 1 site},\text{max residual over rep sweep}\to 0,\text{reps validated}\to \begin{… [510 chars total]
+
+## 2026-07-18 16:22:52 — ▶️ RUN CELLS 78–82
+Cell 79: ✓ — (no output)
+Cell 80: ✓ — Out[245]= \left\{\text{Test 1 (symbolic monomials u\^{}j) residuals},\left\{0\right\}\right\}
+Cell 81: ✓ — Out[250]= \left\{\text{Test 2 (twisted monomials k\^{}(u/h) u\^{}j) residuals},\left\{0\right\}\right\}
+Cell 82: ✓ — Out[259]= \left\{\text{Test 3 worst |br identity residual| on Q1},0,\text{worst |detRatio - predicted| },0,\text{num states checked},41\right\}
+
+## 2026-07-18 16:22:56 — ▶️ RUN CELLS 83–87
+Cell 84: ✓ — (no output)
+Cell 85: ✓ — Out[271]= \begin{pmatrix}1 & 1 & 0\\2 & 1 & 0\\3 & 1 & 0\end{pmatrix}
+Cell 86: ✓ — Out[278]= \left\{\text{Mirror Test1 (u\^{}j)},\left\{0\right\},\text{Mirror Test2 (k\^{}(u/h)u\^{}j)},\left\{0\right\}\right\}
+Cell 87: ✓ — Out[285]= \left\{\text{Mirror Test3 worst |br identity residual| on Q1},0,\text{num states checked},41\right\}
+
+## 2026-07-18 16:22:57 — ▶️ RUN CELLS 88–91
+Cell 89: ✓ — Out[294]= \left\{\text{OP2(E12)},1.\,+0.\times 10^{-30}\,\mathrm{i},\text{OP2(E21)},\left(2.603469709065218092712489006+0.6885776528619826437114966465\,\mathrm{i}\right)\,\varphi +\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right),\text{nontrivial generator \{a,b\}},\left\{2,1\right\}\right\}
+Cell 90: ✓ — Out[297]= \left(1.\,+0.\times 10^{-27}\,\mathrm{i}\right)-\left(0.360439875147226537266677651+0.932782448593374716484835982\,\mathrm{i}\right)\,k
+Cell 91: ✓ — Out[300]//TableForm= \begin{pmatrix}\left\{0,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & -0.36043987514722653-0.9327824485933747\,\mathrm{i} & 0.36043987514722653 +0.9327824485933747\,\mathrm{i} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.4685059330398573 -0.1713611156914601\,\mathrm{i} & 2.603469709065218 +0.6885776528619827… [1258 chars total]
+
+## 2026-07-18 16:23:10 — ▶️ RUN CELLS 92–108
+Cell 92: ✓ — Out[302]//TableForm= \begin{pmatrix}\left\{0,0\right\} & -1.\,+0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.973902234276272 +0.2269679230016555\,\mathrm{i} & 0.7391304347826086 +0.\,\,\mathrm{i} & 0.973902234276272 +0.2269679230016555\,\mathrm{i}\\\left\{1,0\right\} & 0.15191893851739566 -0.10600050418875033\,\mathrm{i} & -0.15191893851739566+0.10600050418875033\,\mathrm{i} & 0.7651595274649543 +… [1258 chars total]
+Cell 93: ✓ — Out[305]= \begin{pmatrix}\left\{0,0\right\} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 0.05448860910968355 -0.09540961504089102\,\mathrm{i}\\\left\{1,1\right\} & -0.0293413933141388+0.7363100318787654\,\mathrm{i}\\\left\{2,0\right\} & 0.11703059508534998 +0.\,\,\mathrm{i}\\\left\{2,1\right\} & 0.8158972359113332 +0.\,\,\mathrm{i}\\\left\{3,0\right\} & 0.05448860910968355 +0.09540961504089102\,… [541 chars total]
+Cell 96: ✓ — Out[311]= \left\{\text{O[k1,0]-FLdet[k1] (must be 0)},0,\text{O[0,k2]-FLdet2[k2] (expected NONZERO per Phase1 finding)},\left(-3.0719756421050755-0.5172165371705225\,\mathrm{i}\right)\,k2\right\}
+Cell 97: ✓ — Out[316]= \left\{\text{Fcand1},k1^2\,\left(\left(-2.2527492196701659-5.82989030370859198\,\mathrm{i}\right)\,k2-\left(0.4170744170089964+23.0487337186617355\,\mathrm{i}\right)\right)+k1\,\left(\left(0.67128913890100625-0.37524873225652243\,\mathrm{i}\right)\,k2+\left(9.51343802264711551-1.5262799733212005\,\mathrm{i}\right)\right)-\left(1.99115021541939352-0.72828474168870538\,\mathrm{i}\right)\,k… [1014 chars total]
+Cell 98: ✓ — Out[318]= \left(0.9252125034899888 -6.175727508765443\,\mathrm{i}\right)\,k1^2\,k2+\left(5.4271267482291075 +3.0890004366773067\,\mathrm{i}\right)\,k1\,k2
+Cell 99: ✓ — Out[323]= \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 7.991287939023577 -1.2820751775898085\,\mathrm{i}\\\left\{2,0\right\} & -0.3808070763995185-21.044496003995498\,\mathrm{i}\\\left\{0,1\right\} & 0.6123194936458246 +1.416862394550688\,\mathrm{i}\\\left\{1,1\right\} & -0.6248120089007682-3.051910425543801\,\mathrm{i}\\\left\{2,1\right\} & -1.8923093445229393-4.897107855115217\,\m… [421 chars total]
+Cell 100: ✓ — Out[328]= \left\{\text{Fcand2 (no P-insertion)},k1^2\,\left(\left(0.02466179161444501+1.36288164597304175\,\mathrm{i}\right)-\left(0.36043987514722654+0.93278244859337472\,\mathrm{i}\right)\,k2\right)+k1\,\left(\left(1.2351720155778515-0.69045766735200127\,\mathrm{i}\right)\,k2-\left(6.46913785540003854-1.0378703818584163\,\mathrm{i}\right)\right)+\left(5.38781822995835893-1.9706528304517910\,\mat… [788 chars total]
+Cell 101: ✓ — 2 kernel messages: Power::infy: Infinite expression 0       encountered.
+Infinity::indet: Indeterminate expression ----------------- encountered.                                                   1/3                    … [also: Power::infy] result: Out[331]//TableForm= \begin{pmatrix}2 & 1 & \left\{0,0\right\} & \mathrm{Indeterminate} & \mathrm{Indeterminate} & -4.970498218180917+4.515583419069149\,\mathrm{i}\\2 & 1 & \left\{1,1\right\} & \mathr…
+Cell 102: ✓ — Out[334]//TableForm= \begin{pmatrix}2 & 1 & \left\{0,0\right\} & \left(-7.771745024480887+7.060451775520925\,\mathrm{i}\right)\,k1^2-\left(3.7846186890458786 +9.794215710230434\,\mathrm{i}\right)\,k1 & \left(1.8923093445229393 +4.897107855115217\,\mathrm{i}\right)\,k2 & -4.970498218180917+4.515583419069149\,\mathrm{i}\\2 & 1 & \left\{1,1\right\} & \left(9.339255641812587 +10.661478687052961\,\math… [1258 chars total]
+Cell 103: ✓ — 2 kernel messages: Power::infy: Infinite expression 0       encountered.
+Infinity::indet: Indeterminate expression ----------------- encountered.                                                   1/3                    … [also: Power::infy] result: Out[338]= \left\{\text{Fcand1(k1,0)},\mathrm{Indeterminate},\text{FLdet[k1]},\frac{\left(2.45075493251774917289426756629+5.78551794268217244227029022731\,\mathrm{i}\right)\,\left(\left(0.0525946877178…
+Cell 104: ✓ — Out[343]= \left\{\text{Fcand1(k1,0)},\left(-8.51191121729+7.73287575414\,\mathrm{i}\right)\,k1^2-\left(4.5054984393+11.6597806074\,\mathrm{i}\right)\,k1+\left(1.000000000000+0.\times 10^{-12}\,\mathrm{i}\right),\text{FLdet[k1]},\frac{\left(2.45075493251774917289426756629+5.78551794268217244227029022731\,\mathrm{i}\right)\,\left(\left(0.05259468771783351844996683714+0.15021349717800998891606886537\… [960 chars total]
+Cell 107: ✓ — Out[348]= \left\{\text{STEP 0: det[$\lambda$1,$\lambda$2][k\^{}(u/h)Q1] vs O[k,k], worst |residual| (sample k)},0,\text{sample rows \{$\lambda$1,$\lambda$2,state,resid,ratio\}},\begin{pmatrix}1 & 1 & \left\{0,0\right\} & 0 & 1.\,\\1 & 1 & \left\{1,0\right\} & 0 & 1.\,\\1 & 1 & \left\{1,1\right\} & 0 & 1.\,\\1 & 1 & \left\{2,0\right\} & 0 & 1.\,\\2 & 1 & \left\{0,0\right\} & 0 & 1.\,\\2 & 1 & \left… [445 chars total]
+Cell 108: ✓ — Out[354]= \left\{\text{STEP 0 CONFIRMED: det[$\lambda$1,$\lambda$2][k\^{}(u/h)Q1] == O[k,k] identically},\text{worst residual over full sweep},0,\text{num states},41\right\}
+
+## 2026-07-18 16:23:21 — ▶️ RUN CELLS 109–123
+Cell 109: ✓ — 2 kernel messages: Power::infy: Infinite expression - encountered.                                  0
+Infinity::indet: Indeterminate expression 0 ComplexInfinity encountered.
+Power::infy: Infinite expression - encounter… [also: Power::infy] result: Out[358]= \begin{pmatrix}1 & 0 & \left\{1.\,\right\}\\1 & 1 & \left\{1.\,\right\}\\2 & 0 & \left\{1.\,\right\}\\2 & 1 & \left\{2.\,\right\}\\2 & 2 & \left\{2.\,\right\}\\3 & 0 & \left\{1.\,\right\}\\3…
+Cell 110: ✓ — Out[364]= \left\{\text{STEP 1 CONFIRMED: ⟨x0[$\lambda$]|E21\^{}m = $\gamma$\_m($\lambda$) xL1[$\lambda$][\{m\}], $\gamma$\_m($\lambda$)=$\lambda$!/($\lambda$-m)!},\text{worst deviation},0,\text{table \{$\lambda$,m,$\gamma$\_found,$\gamma$\_predicted,dev\}},\begin{pmatrix}1 & 0 & 1.\, & 1 & 0\\1 & 1 & 1.\, & 1 & 0\\2 & 0 & 1.\, & 1 & 0\\2 & 1 & 2.\, & 2 & 0\\2 & 2 & 2.\, & 2 & 0\\3 & 0 & 1.\, & 1 &… [489 chars total]
+Cell 111: ✓ — Out[369]= \left\{\text{STEP 2: x2[\{s1,m\}] vs xL1[$\lambda$1][\{s1\}]$\otimes$xL1[$\lambda$2][\{m\}], worst ratio-spread (constancy check)},0,\text{num cases},54,\text{sample rows},\begin{pmatrix}1 & 1 & 0 & 1 & 0.16 & 0\\1 & 1 & 1 & 1 & 1.\, & 0\\1 & 2 & 0 & 1 & 0.16 & 0\\1 & 2 & 0 & 2 & -0.68 & 0\\1 & 2 & 1 & 1 & 1.\, & 0\\1 & 2 & 1 & 2 & 1.\, & 0\\1 & 3 & 0 & 1 & 0.16 & 0\\1 & 3 & 0 & 2 & -0.6… [479 chars total]
+Cell 112: ✓ — Out[373]= \begin{pmatrix}1 & 0 & \frac{4}{25}\\1 & 1 & 1\\2 & 0 & \frac{2}{23}\\2 & 1 & \frac{25}{46}\\2 & 2 & 1\\3 & 0 & \frac{4}{67}\\3 & 1 & \frac{25}{67}\\3 & 2 & \frac{46}{67}\\3 & 3 & 1\end{pmatrix}
+Cell 113: ✓ — Out[378]= \left\{\text{c($\lambda$1,s1) hypothesis (m-independent) vs full sweep --- FAILS for m>=2, see next cell for the fix},\text{worst deviation over all 54 ($\lambda$1,$\lambda$2,s1,m) cases},1.68\right\}
+Cell 114: ✓ — Out[382]= \begin{pmatrix}1 & 0 & 1 & \frac{4}{25}\\1 & 0 & 2 & -\frac{17}{25}\\1 & 0 & 3 & -\frac{38}{25}\\1 & 1 & 1 & 1\\1 & 1 & 2 & 1\\1 & 1 & 3 & 1\\2 & 0 & 1 & \frac{2}{23}\\2 & 0 & 2 & -\frac{34}{575}\\2 & 0 & 3 & \frac{323}{575}\\2 & 1 & 1 & \frac{25}{46}\\2 & 1 & 2 & \frac{2}{23}\\2 & 1 & 3 & -\frac{17}{46}\\2 & 2 & 1 & 1\\2 & 2 & 2 & 1\\2 & 2 & 3 & 1\\3 & 0 & 1 & \frac{4}{67}\\3 & 0 & 2 & … [672 chars total]
+Cell 115: ✓ — 4 kernel messages: LinearSolve::nosol: Linear equation encountered that has no solution.
+LinearSolve::nosol: Linear equation encountered that has no solution.
+LinearSolve::nosol: Linear equation encountered that has no … [also: LinearSolve::nosol, LinearSolve::nosol, LinearSolve::nosol] result: Out[387]= \left\{\text{coeffs (rows=s1, cols=s1'=0..3)},\left\{\mathrm{LinearSolve}\left[\begin{pmatrix}0 & 0 & 0 & 0\\0 & 0 & 0 & \frac{1}{36}\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & \f…
+Cell 116: ✓ — Out[392]= \left\{\left\{0,2\right\}\to -0.02206359506813757300454250486697,\left\{1,1\right\}\to 0.1635301752109020116807268007787,\left\{2,0\right\}\to 0.8585334198572355613238157040883\right\}
+Cell 117: ✓ — Out[396]= \left\{\text{STEP 2 level-conservation check: \# off-level nonzero coeffs (want 0 everywhere)},0,\text{num ($\lambda$1,$\lambda$2,s1,m) cases},29\right\}
+Cell 119: ✓ — Out[404]= \left\{\text{m=0: Om-Cm (must be 0 per Phase1, C1pred/P1site2[$\theta$1] should equal exactly Cm's own norm here)},\left(2.5572121404875445 -0.4102640568287387\,\mathrm{i}\right)\,k1-\left(0.038411844228125346 +2.1227491621421546\,\mathrm{i}\right)\,k1^2,\text{m=1: Om\_1[k1]},\left(0.3604398751472265372666776506+0.9327824485933747164848359821\,\mathrm{i}\right)\,k1^2-\left(1.296101147801… [801 chars total]
+Cell 120: ✓ — Out[411]= \left\{\text{m=0: (B0-B1)/O\_0 ratio},\frac{\sqrt[3]{k1}\,\left(\left(-0.0292504903494856237+0.0205326892042810627\,\mathrm{i}\right)\,k1^2+\left(0.499242526583056932+0.532659421382621779\,\mathrm{i}\right)\,k1-\left(0.139388493663376676+0.206413542317126162\,\mathrm{i}\right)\right)}{\left(0.3604398751472265372666776506+0.9327824485933747164848359821\,\mathrm{i}\right)\,k1^2-\left(1.296… [1083 chars total]
+Cell 121: ✓ — Out[414]= \left\{\text{Cm[0]-Cm[1] shape},\left(-0.0225172879957976151-1.244370198497125076\,\mathrm{i}\right)\,k1^2+\left(5.434075798536032377-0.8718111207610696998\,\mathrm{i}\right)\,k1+\left(0.\times 10^{-20}+0.\times 10^{-20}\,\mathrm{i}\right),\text{ratio vs O\_0[k1] (want: clean constant)},\frac{\left(-0.0225172879957976151-1.244370198497125076\,\mathrm{i}\right)\,k1^2+\left(5.4340757985360… [753 chars total]
+Cell 122: ✓ — Out[416]= \left\{\text{Cm[0][k1] / O\_1[k1] (reversed-index hypothesis; want clean k1-independent constant)},\frac{\left(0.111318362779488714+0.0407158959953172346\,\mathrm{i}\right)\,k1^2-\left(0.21818047436770437-1.02534209918467083\,\mathrm{i}\right)\,k1+\left(0.360439875147226537-0.932782448593374716\,\mathrm{i}\right)}{\left(1.\,+0.\times 10^{-29}\,\mathrm{i}\right)\,k1^2-\left(2.963909584212… [539 chars total]
+
+## 2026-07-18 16:23:36 — ▶️ RUN CELLS 124–138
+Cell 125: ✓ — (no output)
+Cell 126: ✓ — Out[446]= \left\{\text{Symbolic-$\theta$,$\chi$1 port-fidelity: xL1Sym vs xL1},0,\text{x2Sym vs x2},0\right\}
+Cell 127: ✓ — Out[451]= \left\{\left\{0,0\right\}\to 0,\left\{0,1\right\}\to \frac{\theta A-\theta B}{\theta A-\theta B+1},\left\{1,0\right\}\to \frac{1}{\theta A-\theta B+1},\left\{1,1\right\}\to 0\right\}
+Cell 128: ✓ — Out[454]= 35
+Cell 129: ✓ — Out[460]= \left\{\left\{0,0\right\}\to 0,\left\{0,1\right\}\to \theta B-\theta A,\left\{1,0\right\}\to -1,\left\{1,1\right\}\to 0\right\}
+Cell 130: ✓ — Out[463]= 127
+Cell 131: ✓ — Out[466]= 127
+Cell 132: ✓ — Out[470]//MatrixForm= \begin{pmatrix}\frac{\theta A^2-2\,\theta A\,\theta B-\theta A+\theta B^2+\theta B}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)} & \frac{6\,\left(\theta A-\theta B\right)}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)} & \frac{6}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)}\\0 & \frac{\theta A-\theta B+1}{\the… [472 chars total]
+Cell 133: ✓ — Out[472]//MatrixForm= \begin{pmatrix}\frac{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)}{\theta A^2-2\,\theta A\,\theta B-\theta A+\theta B^2+\theta B} & -\frac{6\,\left(\theta A-\theta B+3\right)}{\theta A^2-2\,\theta A\,\theta B+\theta B^2-1} & \frac{6}{\left(\theta A-\theta B\right)\,\left(\theta A-\theta B+1\right)}\\0 & \frac{\theta A-\theta B+3}{\theta A-\theta B+1} & -… [453 chars total]
+Cell 134: ✓ — Out[478]= \left\{\text{equations},\left\{1.000000000000000000000+0.\times 10^{-21}\,\mathrm{i}⩵\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right)\,wc0+\left(2.603469709065218092712489006+0.6885776528619826437114966465\,\mathrm{i}\right)\,wc1,-1.0350620568640061670+0.16605926109734660949\,\mathrm{i}⩵\left(1.522150083623538480912456055-0.2442047957313920727733393355\,\mathrm{i}\right)\,wc0-\left(1.2961… [785 chars total]
+Cell 135: ✓ — Out[484]= \begin{pmatrix}0 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\0 & 1 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\1 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\1 & 1 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\2 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} … [510 chars total]
+Cell 136: ✓ — Out[489]= \left\{\text{Conjectured sum rule FAILS beyond the lucky L=1 case},\text{num failing cases},29,\text{num total cases},81,\text{sample failures},\begin{pmatrix}1 & 2 & 0 & 1 & \frac{1}{-\theta A+\theta B-1}\\1 & 2 & 0 & 2 & \frac{2}{\theta A-\theta B+1}\\1 & 3 & 0 & 1 & -\frac{2}{\theta A-\theta B+1}\end{pmatrix}\right\}
+Cell 138: ✓ — Out[496]= \left\{\text{BOXED: A[s1,m;s1,m] = Pochhammer[s1+$\theta$1-$\theta$2-m+1,m]/Pochhammer[$\lambda$1+$\theta$1-$\theta$2-m+1,m] --- verified at the live numeric $\theta$1,$\theta$2},\text{worst deviation},0,\text{num ($\lambda$1,$\lambda$2,s1,m) cases},81\right\}
+
+## 2026-07-18 16:23:47 — ▶️ RUN CELLS 139–154
+Cell 140: ✓ — Out[502]= \left\{\text{STEP 1a (WITH $\kappa$1\^{}(u/h) prefactor): worst |x2.Psi - Q1($\theta$1+s1)Q1($\theta$2+s2)/(Q1($\theta$1)Q1($\theta$2))|},0,\text{num cases},297\right\}
+Cell 141: ✓ — Out[509]= \left\{\text{STEP 1b (WITHOUT prefactor, bare q\_n): worst residual (expect NONZERO, confirming prefactor matters)},3.7396476326262356,\text{sample},\begin{pmatrix}\left\{0,0\right\} & 0 & 0 & 0\\\left\{1,0\right\} & 0 & 0 & 0\\\left\{1,1\right\} & 0 & 0 & 0\end{pmatrix}\right\}
+Cell 143: ✓ — Out[515]= \begin{pmatrix}\left\{0,0,\left\{\text{srng},\left\{0\right\},\text{sol},\left\{1.\,\right\},\text{maxResid},0.\times 10^{-28}\right\}\right\} & \left\{0,1,\left\{\text{srng},\left\{0,1\right\},\text{sol},\left\{11.50000000000000000000000000-4.431302171530629069010197265\times 10^{-38}\,\mathrm{i},-10.50000000000000000000000000+2.933894180666706878219239219\times 10^{-38}\,\mathrm{i}\rig… [1115 chars total]
+Cell 144: ✓ — Out[521]= \left\{\text{worst residual across full B-sweep (want \textasciitilde{}0)},0.\times 10^{-24},\text{num (rep,a,b) cases},37\right\}
+Cell 145: ✓ — Out[525]= \left\{\text{A-block ($\lambda$1=2,$\lambda$2=1, L=2, s,s'=1,2)},\begin{pmatrix}\frac{25}{46} & \frac{21}{46}\\0 & 1\end{pmatrix},\text{its inverse (should = B row)},\begin{pmatrix}\frac{46}{25} & -\frac{21}{25}\\0 & 1\end{pmatrix},\text{Step2's independently-solved B row \{1,1\}},\left\{\frac{46}{25},-\frac{21}{25}\right\},\text{match?},\left\{0,0\right\}\right\}
+Cell 147: ✓ — Out[532]= \left\{\text{det[$\lambda$1,$\lambda$2][k\^{}u Q1] - explicit residue-sum expansion (rep (2,1), state (1,0)), want 0},0\right\}
+Cell 148: ✓ — Out[538]= \left\{\text{TRUE sum rule (derived, Step 4): worst deviation},0,\text{num ($\lambda$1,$\lambda$2,s,t) cases},20,\text{sample},\begin{pmatrix}2 & 1 & 0 & 0 & 0\\2 & 1 & 0 & 1 & 0\\2 & 1 & 1 & 0 & 0\\2 & 1 & 1 & 1 & 0\\2 & 1 & 2 & 0 & 0\\2 & 1 & 2 & 1 & 0\end{pmatrix}\right\}
+Cell 150: ✓ — Out[546]= \left\{\text{STEP 3 assembly test (rep (2,1), 6 states x 3 grid points): worst |Oassembled-O2rot|},0,\text{num cases},18\right\}
+Cell 151: ✓ — Out[552]= \left\{\text{STEP 3 FULL-SWEEP ASSEMBLY CONFIRMED: O[k1,k2] = $\Sigma$ cA(k1)cB(k2) B-weighted Q-bilinears == O2rot exactly},\text{worst deviation},0,\text{num states x grid cases},82\right\}
+Cell 153: ✓ — Out[557]= \begin{pmatrix}0 & 0 & 1.\, & 1.\, & 0\\0 & 1 & -2.603469709065218-0.6885776528619827\,\mathrm{i} & 5.387818229958359 -1.970652830451791\,\mathrm{i} & -7.991287939023577+1.2820751775898085\,\mathrm{i}\\1 & 0 & 1.5221500836235384 -0.24420479573139206\,\mathrm{i} & -6.469137855400039+1.0378703818584163\,\mathrm{i} & 7.991287939023577 -1.2820751775898085\,\mathrm{i}\\1 & 1 & 1.2961011478017… [843 chars total]
+
+## 2026-07-18 16:23:56 — ▶️ RUN CELLS 155–160
+Cell 156: ✓ — Out[561]= \left\{\text{M matrix (rep (2,1), k1=7/3,k2=5/2)},\begin{pmatrix}1 & -\frac{115}{4}\\\frac{259}{12} & \frac{322}{15}\\-\frac{196}{45} & -\frac{245}{18}\end{pmatrix},\text{MatrixRank},2\right\}
+Cell 157: ✓ — Out[566]//TableForm= \begin{pmatrix}1 & 1 & \left\{\frac{7}{3},\frac{5}{2}\right\} & 2 & 2\\1 & 1 & \left\{\frac{11}{5},-\frac{4}{3}\right\} & 2 & 2\\1 & 1 & \left\{-\frac{2}{7},\frac{9}{4}\right\} & 2 & 2\\1 & 1 & \left\{\frac{13}{6},\frac{1}{9}\right\} & 2 & 2\\2 & 1 & \left\{\frac{7}{3},\frac{5}{2}\right\} & 2 & 2\\2 & 1 & \left\{\frac{11}{5},-\frac{4}{3}\right\} & 2 & 2\\2 & 1 & \left\{-\frac{… [1258 chars total]
+Cell 158: ✓ — Out[568]= \left\{\text{Det[M(k1,k2)] symbolic, rep (2,2)},\frac{213003\,k2^3\,\left(k1-k2\right)^2\,\left(17\,k1+46\,k2\right)}{7225},\text{identically zero?},\mathrm{False}\right\}
+Cell 159: ✓ — Out[572]= \left\{\text{rep (2,3): M dimensions},\left\{3,4\right\},\text{rank at sample point},3,\text{a 3x3 minor determinant (nonzero => rank>=3)},\frac{19563970545}{1405696}\right\}
+
+
+## 2026-07-18 18:05:05
+**Input:**
+```wolfram
+{θ1,θ2,h,Length[DownValues[Mmatrix]],Length[DownValues[O2rot]]}
+```
+**Output:**
+```
+Out= {1/3, 1/7, 1, 0, 0}
+```
+
+---
+
+## 2026-07-18 18:05:10 — 🔄 KERNEL RESTART
+
+## 2026-07-18 18:05:28 — ▶️ RUN CELLS 1–10
+Cell 1: ✓ — Out[8]= \left\{\frac{1}{3},\frac{1}{7},1,0.360439875147226537266677650596+0.932782448593374716484835982071\,\mathrm{i},0.36043987514722653726667765060-0.932782448593374716484835982071\,\mathrm{i},0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i},1\right\}
+Cell 3: ✓ — (no output)
+Cell 4: ✓ — (no output)
+Cell 5: ✓ — (no output)
+Cell 6: ✓ — (no output)
+Cell 8: ✓ — (no output)
+Cell 10: ✓ — (no output)
+
+## 2026-07-18 18:05:33 — ▶️ RUN CELLS 11–20
+Cell 11: ✓ — (no output)
+Cell 12: ✓ — Out[27]= \left\{0\right\}
+Cell 13: ✓ — (no output)
+Cell 14: ✓ — (no output)
+Cell 15: ✓ — Out[31]= \left\{0\right\}
+Cell 16: ✓ — (no output)
+Cell 17: ✓ — Out[34]= \begin{pmatrix}0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\end{pmatrix}
+Cell 18: ✓ — (no output)
+Cell 20: ✓ — (no output)
+
+## 2026-07-18 18:05:36 — ▶️ RUN CELLS 21–28
+Cell 21: ✓ — (no output)
+Cell 23: ✓ — (no output)
+Cell 25: ✓ — (no output)
+Cell 26: ✓ — (no output)
+Cell 27: ✓ — Out[52]= \begin{pmatrix}0 & \frac{1}{2} & 0 & 0 & 0 & 0\end{pmatrix}
+Cell 28: ✓ — Out[53]= \left\{0\right\}
+
+## 2026-07-18 18:05:39 — ▶️ RUN CELLS 29–36
+Cell 30: ✓ — Out[59]= \left\{\left(u-\frac{4}{3}\right)\,\left(u-\frac{8}{7}\right),\left(u-\frac{1}{3}\right)\,\left(u-\frac{1}{7}\right),\left(0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i}\right)\,u^2-\left(1.06415582186324025288257211128+0.\times 10^{-29}\,\mathrm{i}\right)\,u\right\}
+Cell 31: ✓ — Out[62]= \begin{pmatrix}1 & 1\\2 & 2\\3 & 3\end{pmatrix}
+Cell 32: ✓ — Out[65]= \text{max|C2-($\kappa$1+$\kappa$2)Id|}\to 0.\times 10^{-29}
+Cell 33: ✓ — Out[75]= \langle\!\lvert \left\{0,0\right\}\to 0.5664055180884988 +1.3769645669711723\,\mathrm{i},\left\{1,0\right\}\to -0.778123966451158+0.\,\,\mathrm{i},\left\{1,1\right\}\to 1.1900552523337025 +0.\,\,\mathrm{i},\left\{2,0\right\}\to 0.5664055180884988 -1.3769645669711723\,\mathrm{i}\rvert\!\rangle
+Cell 34: ✓ — 2 kernel messages: Psi::spurious: No genuine state at (M,n)=(2,2) for (λ1,λ2)=(2,1): weight sector M=2 has only 2 genuine state(s) (n=0..1), so n=2 does not exist. [also: Psi::spurious] result: Print: spurious-guard test (expect a Psi::spurious message and Missing[...]):[formula] | Out[84]= \left\{\left\{1.000000000000000000000000000+0.\times 10^{-29}\,\mathrm{i},-1.3004494881076436272092358…
+⚠️ stopped at Cell 34 — error detected (pass stopOnError:false to continue past errors)
+
+## 2026-07-18 18:05:49 — ▶️ RUN CELLS 35–42
+Cell 35: ✓ — Out[91]= \left\{1.03464899078135229594035121+0.381869568380946283899575941\,\mathrm{i},-2.37022278949001677248172619-0.20048970475590097847093779\,\mathrm{i},1.00000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right\}
+Cell 36: ✓ — Out[94]= \left\{-0.709231010958016926537225142+1.09596916251277206706752728\,\mathrm{i},-0.02291660900+0.\times 10^{-12}\,\mathrm{i}\right\}
+Cell 37: ✓ — (no output)
+Cell 38: ✓ — (no output)
+Cell 39: ✓ — (no output)
+Cell 40: ✓ — (no output)
+Cell 41: ✓ — (no output)
+Cell 42: ✓ — Out[109]= 0
+
+## 2026-07-18 18:05:52 — ▶️ RUN CELLS 43–47
+Cell 43: ✓ — (no output)
+Cell 44: ✓ — Out[113]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 45: ✓ — Out[115]= \left\{6,6\right\}
+Cell 46: ✓ — Out[116]= \begin{pmatrix}2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i} & 0 & 0 & 0 & 0 & 0\\0 & 7.36608403016431791181-0.968046299794461400266\,\mathrm{i} & 0 & 0 & 0 & 0\\0 & 0 & 2.68702160063169134012-1.3456153260557858257\,\mathrm{i} & 0 & 0 & 0\\0 & 0 & 0 & 7.3660840301643179118107+0.9680462997944614002659\,\mathrm{i} & 0 & 0\\0 & 0 & 0 & 0 & 2.687021600631691340118… [537 chars total]
+Cell 47: ✓ — Out[125]= \langle\!\lvert \text{states}\to \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix},\text{max|off-diagonal|}\to 5.065342385207116\times 10^{-34},\text{digits vanished (-Log10)}\to 33.29539119374288,\text{min|diagonal|}\to 3.0051232400647923,\text{diagonal values}\to \left\{2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i},7.36608403016431791181-0… [699 chars total]
+
+## 2026-07-18 18:05:55 — ▶️ RUN CELLS 48–54
+Cell 48: ✓ — (no output)
+Cell 49: ✓ — (no output)
+Cell 50: ✓ — Out[133]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 51: ✓ — Out[138]= \left\{1.00000000000000000000000000000,6\right\}
+Cell 52: ✓ — Out[143]= \langle\!\lvert \text{max|<PsiLeft|Psi>| off-diagonal}\to 0.\,,\text{digits vanished (-Log10)}\to \mathrm{Indeterminate}\rvert\!\rangle
+Cell 53: ✓ — Out[147]= \left\{7.366084030164317911810727273-0.9680462997944614002658874268\,\mathrm{i},1.00000000000000000000+0.\times 10^{-21}\,\mathrm{i}\right\}
+Cell 54: ✓ — Out[150]= \begin{matrix}\langle\!\lvert \text{M}\to 0,\text{n}\to 0,\text{braket}\to 2.909064289-5.804620064\,\mathrm{i},\text{G21 diagonal}\to 2.909064289-5.804620064\,\mathrm{i},\text{normRatio}\to 1.000000000+0.\times 10^{-10}\,\mathrm{i}\rvert\!\rangle \\\langle\!\lvert \text{M}\to 1,\text{n}\to 0,\text{braket}\to 7.366084030-0.968046300\,\mathrm{i},\text{G21 diagonal}\to 7.366084030-0.9680463… [1247 chars total]
+
+## 2026-07-18 18:05:59 — ▶️ RUN CELLS 55–62
+Cell 56: ✓ — (no output)
+Cell 57: ✓ — Out[158]= \begin{pmatrix}3 & 3\\3 & 3\end{pmatrix}
+Cell 58: ✓ — (no output)
+Cell 59: ✓ — Out[165]= \left\{0\right\}
+Cell 60: ✓ — Out[169]= \begin{matrix}\left\{1,1,0,1.\,,0.\,\right\}\\\left\{1,1,1,1.\,,0.\,\right\}\\\left\{1,2,0,1.\,,0.\,\right\}\\\left\{1,2,1,1.\,,0.\,\right\}\\\left\{1,3,0,1.\,,0.\,\right\}\\\left\{1,3,1,1.\,,0.\,\right\}\\\left\{2,1,0,1.\,,0.\,\right\}\\\left\{2,1,1,1.\,,0.\,\right\}\\\left\{2,1,2,1.\,,0.\,\right\}\\\left\{2,2,0,1.\,,0.\,\right\}\\\left\{2,2,1,1.\,,0.\,\right\}\\\left\{2,2,2,1.\,,0.\,\r… [898 chars total]
+Cell 61: ✓ — Out[170]= \langle\!\lvert \text{max spread (ratio non-constancy)}\to 0.\,,\text{max |ratio - 1| over sweep}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases checked}\to 27\rvert\!\rangle
+Cell 62: ✓ — Out[176]= \langle\!\lvert \text{max operator-level spread}\to 0.\,,\text{max |$\mu$ - $\mu$Site2|}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases}\to 27\rvert\!\rangle
+
+## 2026-07-18 18:06:17 — ▶️ RUN CELLS 63–70
+Cell 64: ✓ — (no output)
+Cell 65: ✓ — Out[185]= \langle\!\lvert \text{w\_0 ($\lambda$=1,2,3)}\to \left\{1,1,1\right\},\text{full weights w\_j}\to \left\{1\to \left\{1,-1\right\},2\to \left\{1,-2,1\right\},3\to \left\{1,-3,3,-1\right\}\right\},\text{br1[$\lambda$][1] ($\lambda$=1,2,3)}\to \left\{0,0,0\right\}\rvert\!\rangle
+Cell 66: ✓ — Out[187]= \left\{0,0\right\}
+Cell 67: ✓ — Out[190]= \sqrt[3]{k}\,\left(\left(-1.18561270626131985872+0.832253303224995280404\,\mathrm{i}\right)\,k^2-\left(0.761819910806671651081+0.812812473459294825632\,\mathrm{i}\right)\,k-\left(0.404410037536507329420+0.598870869485872613792\,\mathrm{i}\right)\right)
+Cell 68: ✓ — Out[194]= \begin{pmatrix}0 & 0 & 0\\0 & 0 & 0\\0 & 0 & 0\end{pmatrix}
+Cell 69: ✓ — Out[198]= \langle\!\lvert \text{OP(E12)}\to 1.\,+0.\times 10^{-30}\,\mathrm{i},\text{OP(E21)}\to \left(-0.03626734060947795145020244939-2.004237714666237867354326095\,\mathrm{i}\right)\,\varphi ^2-\left(1.522150083623538480912456055-0.2442047957313920727733393355\,\mathrm{i}\right)\,\varphi +\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right),\text{nontrivial generator \{a,b\}}\to \left\{2,1\right\},\… [464 chars total]
+Cell 70: ✓ — Out[201]= \left\{1,2\right\}
+
+## 2026-07-18 18:06:21 — ▶️ RUN CELLS 71–77
+Cell 71: ✓ — Out[207]= \langle\!\lvert \text{states}\to \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix},\text{$\varphi$ candidates per state}\to \begin{pmatrix}\left\{0,0\right\} & \left(-0.920793778924720536105378676-0.390049761817044163511250929\,\mathrm{i}\right)\,k^{4/3}+\left(0.695722366612934233848844287-0.718310788304406529935213657\,\mathrm{i}\right)\,\sqrt[3]{k}-\left(0.3604398751… [1247 chars total]
+Cell 72: ✓ — Out[213]= \langle\!\lvert \text{c\_sb solution(s)}\to \left\{\left\{\mathrm{cb}\to \frac{\left(-6.242239011314\times 10^{45}-4.511757007219\times 10^{45}\,\mathrm{i}\right)\,k^{4/3}-\left(5.999302657796\times 10^{45}+8.356648463050\times 10^{45}\,\mathrm{i}\right)\,\sqrt[3]{k}}{9.833530773718\times 10^{45}\,k^{4/3}-\left(3.54439660434\times 10^{45}-9.172544913427\times 10^{45}\,\mathrm{i}\right)\,… [841 chars total]
+Cell 73: ✓ — Out[216]= \langle\!\lvert \text{generator \{a,b\} tested}\to \left\{2,1\right\},\text{rep tested}\to \left\{1,2\right\},\text{FL shape (verified exact for all 6 states)}\to \text{FL[1,2][state][k] = k\^{}(1/3) (A\_state + B\_state k)},\text{c0(state) = OPg[state][0]}\to \begin{pmatrix}\left\{0,0\right\} & 1.\,+0.\times 10^{-28}\,\mathrm{i}\\\left\{1,0\right\} & 1.\,+0.\times 10^{-28}\,\mathrm{i}\\… [1247 chars total]
+Cell 74: ✓ — Out[220]= \left(1.000000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right)-\left(0.360439875147226537266677651+0.932782448593374716484835982\,\mathrm{i}\right)\,k
+Cell 75: ✓ — Out[227]= \langle\!\lvert \text{alphaTab \{state,D0,c0,Dc,c1,$\alpha$\}}\to \begin{pmatrix}\left\{0,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & -0.36043987514722653-0.9327824485933747\,\mathrm{i} & 0.36043987514722653 +0.9327824485933747\,\mathrm{i} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.7101545203859353 -0.2371533418544… [1247 chars total]
+Cell 76: ✓ — Out[235]= \langle\!\lvert \text{validation}\to \left\{\left\{1,1\right\}\to \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 0\\\left\{1,1\right\} & 0\\\left\{2,0\right\} & 0\end{pmatrix},\left\{2,1\right\}\to \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 0\\\left\{1,1\right\} & 0\\\left\{2,0\right\} & 0\\\left\{2,1\right\} & 0\\\left\{3,0\right\} & 0\end{pmatrix},\left\{1… [1247 chars total]
+Cell 77: ✓ — Out[237]= \langle\!\lvert \text{generator \{a,b\}}\to \left\{2,1\right\},\text{$\varphi$(k)}\to \text{$\alpha$ k},\text{$\alpha$ (universal value)}\to -1.\,+0.\,\,\mathrm{i},\text{normalization}\to \text{1-site FSoV determinant det1[f] = br1[f]/(f/.u->$\theta$1); Section C's det[$\lambda$1,$\lambda$2][f] restricted to 1 site},\text{max residual over rep sweep}\to 0,\text{reps validated}\to \begin{… [510 chars total]
+
+## 2026-07-18 18:06:33 — ▶️ RUN CELLS 78–82
+Cell 79: ✓ — (no output)
+Cell 80: ✓ — Out[245]= \left\{\text{Test 1 (symbolic monomials u\^{}j) residuals},\left\{0\right\}\right\}
+Cell 81: ✓ — Out[250]= \left\{\text{Test 2 (twisted monomials k\^{}(u/h) u\^{}j) residuals},\left\{0\right\}\right\}
+Cell 82: ✓ — Out[259]= \left\{\text{Test 3 worst |br identity residual| on Q1},0,\text{worst |detRatio - predicted| },0,\text{num states checked},41\right\}
+
+## 2026-07-18 18:06:37 — ▶️ RUN CELLS 83–87
+Cell 84: ✓ — (no output)
+Cell 85: ✓ — Out[271]= \begin{pmatrix}1 & 1 & 0\\2 & 1 & 0\\3 & 1 & 0\end{pmatrix}
+Cell 86: ✓ — Out[278]= \left\{\text{Mirror Test1 (u\^{}j)},\left\{0\right\},\text{Mirror Test2 (k\^{}(u/h)u\^{}j)},\left\{0\right\}\right\}
+Cell 87: ✓ — Out[285]= \left\{\text{Mirror Test3 worst |br identity residual| on Q1},0,\text{num states checked},41\right\}
+
+## 2026-07-18 18:06:38 — ▶️ RUN CELLS 88–91
+Cell 89: ✓ — Out[294]= \left\{\text{OP2(E12)},1.\,+0.\times 10^{-30}\,\mathrm{i},\text{OP2(E21)},\left(2.603469709065218092712489006+0.6885776528619826437114966465\,\mathrm{i}\right)\,\varphi +\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right),\text{nontrivial generator \{a,b\}},\left\{2,1\right\}\right\}
+Cell 90: ✓ — Out[297]= \left(1.\,+0.\times 10^{-27}\,\mathrm{i}\right)-\left(0.360439875147226537266677651+0.932782448593374716484835982\,\mathrm{i}\right)\,k
+Cell 91: ✓ — Out[300]//TableForm= \begin{pmatrix}\left\{0,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & -0.36043987514722653-0.9327824485933747\,\mathrm{i} & 0.36043987514722653 +0.9327824485933747\,\mathrm{i} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.4685059330398573 -0.1713611156914601\,\mathrm{i} & 2.603469709065218 +0.6885776528619827… [1258 chars total]
+
+## 2026-07-18 18:06:51 — ▶️ RUN CELLS 92–108
+Cell 92: ✓ — Out[302]//TableForm= \begin{pmatrix}\left\{0,0\right\} & -1.\,+0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.973902234276272 +0.2269679230016555\,\mathrm{i} & 0.7391304347826086 +0.\,\,\mathrm{i} & 0.973902234276272 +0.2269679230016555\,\mathrm{i}\\\left\{1,0\right\} & 0.15191893851739566 -0.10600050418875033\,\mathrm{i} & -0.15191893851739566+0.10600050418875033\,\mathrm{i} & 0.7651595274649543 +… [1258 chars total]
+Cell 93: ✓ — Out[305]= \begin{pmatrix}\left\{0,0\right\} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 0.05448860910968355 -0.09540961504089102\,\mathrm{i}\\\left\{1,1\right\} & -0.0293413933141388+0.7363100318787654\,\mathrm{i}\\\left\{2,0\right\} & 0.11703059508534998 +0.\,\,\mathrm{i}\\\left\{2,1\right\} & 0.8158972359113332 +0.\,\,\mathrm{i}\\\left\{3,0\right\} & 0.05448860910968355 +0.09540961504089102\,… [541 chars total]
+Cell 96: ✓ — Out[311]= \left\{\text{O[k1,0]-FLdet[k1] (must be 0)},0,\text{O[0,k2]-FLdet2[k2] (expected NONZERO per Phase1 finding)},\left(-3.0719756421050755-0.5172165371705225\,\mathrm{i}\right)\,k2\right\}
+Cell 97: ✓ — Out[316]= \left\{\text{Fcand1},k1^2\,\left(\left(-2.2527492196701659-5.82989030370859198\,\mathrm{i}\right)\,k2-\left(0.4170744170089964+23.0487337186617355\,\mathrm{i}\right)\right)+k1\,\left(\left(0.67128913890100625-0.37524873225652243\,\mathrm{i}\right)\,k2+\left(9.51343802264711551-1.5262799733212005\,\mathrm{i}\right)\right)-\left(1.99115021541939352-0.72828474168870538\,\mathrm{i}\right)\,k… [1014 chars total]
+Cell 98: ✓ — Out[318]= \left(0.9252125034899888 -6.175727508765443\,\mathrm{i}\right)\,k1^2\,k2+\left(5.4271267482291075 +3.0890004366773067\,\mathrm{i}\right)\,k1\,k2
+Cell 99: ✓ — Out[323]= \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 7.991287939023577 -1.2820751775898085\,\mathrm{i}\\\left\{2,0\right\} & -0.3808070763995185-21.044496003995498\,\mathrm{i}\\\left\{0,1\right\} & 0.6123194936458246 +1.416862394550688\,\mathrm{i}\\\left\{1,1\right\} & -0.6248120089007682-3.051910425543801\,\mathrm{i}\\\left\{2,1\right\} & -1.8923093445229393-4.897107855115217\,\m… [421 chars total]
+Cell 100: ✓ — Out[328]= \left\{\text{Fcand2 (no P-insertion)},k1^2\,\left(\left(0.02466179161444501+1.36288164597304175\,\mathrm{i}\right)-\left(0.36043987514722654+0.93278244859337472\,\mathrm{i}\right)\,k2\right)+k1\,\left(\left(1.2351720155778515-0.69045766735200127\,\mathrm{i}\right)\,k2-\left(6.46913785540003854-1.0378703818584163\,\mathrm{i}\right)\right)+\left(5.38781822995835893-1.9706528304517910\,\mat… [788 chars total]
+Cell 101: ✓ — 2 kernel messages: Power::infy: Infinite expression 0       encountered.
+Infinity::indet: Indeterminate expression ----------------- encountered.                                                   1/3                    … [also: Power::infy] result: Out[331]//TableForm= \begin{pmatrix}2 & 1 & \left\{0,0\right\} & \mathrm{Indeterminate} & \mathrm{Indeterminate} & -4.970498218180917+4.515583419069149\,\mathrm{i}\\2 & 1 & \left\{1,1\right\} & \mathr…
+Cell 102: ✓ — Out[334]//TableForm= \begin{pmatrix}2 & 1 & \left\{0,0\right\} & \left(-7.771745024480887+7.060451775520925\,\mathrm{i}\right)\,k1^2-\left(3.7846186890458786 +9.794215710230434\,\mathrm{i}\right)\,k1 & \left(1.8923093445229393 +4.897107855115217\,\mathrm{i}\right)\,k2 & -4.970498218180917+4.515583419069149\,\mathrm{i}\\2 & 1 & \left\{1,1\right\} & \left(9.339255641812587 +10.661478687052961\,\math… [1258 chars total]
+Cell 103: ✓ — 2 kernel messages: Power::infy: Infinite expression 0       encountered.
+Infinity::indet: Indeterminate expression ----------------- encountered.                                                   1/3                    … [also: Power::infy] result: Out[338]= \left\{\text{Fcand1(k1,0)},\mathrm{Indeterminate},\text{FLdet[k1]},\frac{\left(2.45075493251774917289426756629+5.78551794268217244227029022731\,\mathrm{i}\right)\,\left(\left(0.0525946877178…
+Cell 104: ✓ — Out[343]= \left\{\text{Fcand1(k1,0)},\left(-8.51191121729+7.73287575414\,\mathrm{i}\right)\,k1^2-\left(4.5054984393+11.6597806074\,\mathrm{i}\right)\,k1+\left(1.000000000000+0.\times 10^{-12}\,\mathrm{i}\right),\text{FLdet[k1]},\frac{\left(2.45075493251774917289426756629+5.78551794268217244227029022731\,\mathrm{i}\right)\,\left(\left(0.05259468771783351844996683714+0.15021349717800998891606886537\… [960 chars total]
+Cell 107: ✓ — Out[348]= \left\{\text{STEP 0: det[$\lambda$1,$\lambda$2][k\^{}(u/h)Q1] vs O[k,k], worst |residual| (sample k)},0,\text{sample rows \{$\lambda$1,$\lambda$2,state,resid,ratio\}},\begin{pmatrix}1 & 1 & \left\{0,0\right\} & 0 & 1.\,\\1 & 1 & \left\{1,0\right\} & 0 & 1.\,\\1 & 1 & \left\{1,1\right\} & 0 & 1.\,\\1 & 1 & \left\{2,0\right\} & 0 & 1.\,\\2 & 1 & \left\{0,0\right\} & 0 & 1.\,\\2 & 1 & \left… [445 chars total]
+Cell 108: ✓ — Out[354]= \left\{\text{STEP 0 CONFIRMED: det[$\lambda$1,$\lambda$2][k\^{}(u/h)Q1] == O[k,k] identically},\text{worst residual over full sweep},0,\text{num states},41\right\}
+
+## 2026-07-18 18:07:01 — ▶️ RUN CELLS 109–123
+Cell 109: ✓ — 2 kernel messages: Power::infy: Infinite expression - encountered.                                  0
+Infinity::indet: Indeterminate expression 0 ComplexInfinity encountered.
+Power::infy: Infinite expression - encounter… [also: Power::infy] result: Out[358]= \begin{pmatrix}1 & 0 & \left\{1.\,\right\}\\1 & 1 & \left\{1.\,\right\}\\2 & 0 & \left\{1.\,\right\}\\2 & 1 & \left\{2.\,\right\}\\2 & 2 & \left\{2.\,\right\}\\3 & 0 & \left\{1.\,\right\}\\3…
+Cell 110: ✓ — Out[364]= \left\{\text{STEP 1 CONFIRMED: ⟨x0[$\lambda$]|E21\^{}m = $\gamma$\_m($\lambda$) xL1[$\lambda$][\{m\}], $\gamma$\_m($\lambda$)=$\lambda$!/($\lambda$-m)!},\text{worst deviation},0,\text{table \{$\lambda$,m,$\gamma$\_found,$\gamma$\_predicted,dev\}},\begin{pmatrix}1 & 0 & 1.\, & 1 & 0\\1 & 1 & 1.\, & 1 & 0\\2 & 0 & 1.\, & 1 & 0\\2 & 1 & 2.\, & 2 & 0\\2 & 2 & 2.\, & 2 & 0\\3 & 0 & 1.\, & 1 &… [489 chars total]
+Cell 111: ✓ — Out[369]= \left\{\text{STEP 2: x2[\{s1,m\}] vs xL1[$\lambda$1][\{s1\}]$\otimes$xL1[$\lambda$2][\{m\}], worst ratio-spread (constancy check)},0,\text{num cases},54,\text{sample rows},\begin{pmatrix}1 & 1 & 0 & 1 & 0.16 & 0\\1 & 1 & 1 & 1 & 1.\, & 0\\1 & 2 & 0 & 1 & 0.16 & 0\\1 & 2 & 0 & 2 & -0.68 & 0\\1 & 2 & 1 & 1 & 1.\, & 0\\1 & 2 & 1 & 2 & 1.\, & 0\\1 & 3 & 0 & 1 & 0.16 & 0\\1 & 3 & 0 & 2 & -0.6… [479 chars total]
+Cell 112: ✓ — Out[373]= \begin{pmatrix}1 & 0 & \frac{4}{25}\\1 & 1 & 1\\2 & 0 & \frac{2}{23}\\2 & 1 & \frac{25}{46}\\2 & 2 & 1\\3 & 0 & \frac{4}{67}\\3 & 1 & \frac{25}{67}\\3 & 2 & \frac{46}{67}\\3 & 3 & 1\end{pmatrix}
+Cell 113: ✓ — Out[378]= \left\{\text{c($\lambda$1,s1) hypothesis (m-independent) vs full sweep --- FAILS for m>=2, see next cell for the fix},\text{worst deviation over all 54 ($\lambda$1,$\lambda$2,s1,m) cases},1.68\right\}
+Cell 114: ✓ — Out[382]= \begin{pmatrix}1 & 0 & 1 & \frac{4}{25}\\1 & 0 & 2 & -\frac{17}{25}\\1 & 0 & 3 & -\frac{38}{25}\\1 & 1 & 1 & 1\\1 & 1 & 2 & 1\\1 & 1 & 3 & 1\\2 & 0 & 1 & \frac{2}{23}\\2 & 0 & 2 & -\frac{34}{575}\\2 & 0 & 3 & \frac{323}{575}\\2 & 1 & 1 & \frac{25}{46}\\2 & 1 & 2 & \frac{2}{23}\\2 & 1 & 3 & -\frac{17}{46}\\2 & 2 & 1 & 1\\2 & 2 & 2 & 1\\2 & 2 & 3 & 1\\3 & 0 & 1 & \frac{4}{67}\\3 & 0 & 2 & … [672 chars total]
+Cell 115: ✓ — 4 kernel messages: LinearSolve::nosol: Linear equation encountered that has no solution.
+LinearSolve::nosol: Linear equation encountered that has no solution.
+LinearSolve::nosol: Linear equation encountered that has no … [also: LinearSolve::nosol, LinearSolve::nosol, LinearSolve::nosol] result: Out[387]= \left\{\text{coeffs (rows=s1, cols=s1'=0..3)},\left\{\mathrm{LinearSolve}\left[\begin{pmatrix}0 & 0 & 0 & 0\\0 & 0 & 0 & \frac{1}{36}\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & \f…
+Cell 116: ✓ — Out[392]= \left\{\left\{0,2\right\}\to -0.02206359506813757300454250486697,\left\{1,1\right\}\to 0.1635301752109020116807268007787,\left\{2,0\right\}\to 0.8585334198572355613238157040883\right\}
+Cell 117: ✓ — Out[396]= \left\{\text{STEP 2 level-conservation check: \# off-level nonzero coeffs (want 0 everywhere)},0,\text{num ($\lambda$1,$\lambda$2,s1,m) cases},29\right\}
+Cell 119: ✓ — Out[404]= \left\{\text{m=0: Om-Cm (must be 0 per Phase1, C1pred/P1site2[$\theta$1] should equal exactly Cm's own norm here)},\left(2.5572121404875445 -0.4102640568287387\,\mathrm{i}\right)\,k1-\left(0.038411844228125346 +2.1227491621421546\,\mathrm{i}\right)\,k1^2,\text{m=1: Om\_1[k1]},\left(0.3604398751472265372666776506+0.9327824485933747164848359821\,\mathrm{i}\right)\,k1^2-\left(1.296101147801… [801 chars total]
+Cell 120: ✓ — Out[411]= \left\{\text{m=0: (B0-B1)/O\_0 ratio},\frac{\sqrt[3]{k1}\,\left(\left(-0.0292504903494856237+0.0205326892042810627\,\mathrm{i}\right)\,k1^2+\left(0.499242526583056932+0.532659421382621779\,\mathrm{i}\right)\,k1-\left(0.139388493663376676+0.206413542317126162\,\mathrm{i}\right)\right)}{\left(0.3604398751472265372666776506+0.9327824485933747164848359821\,\mathrm{i}\right)\,k1^2-\left(1.296… [1083 chars total]
+Cell 121: ✓ — Out[414]= \left\{\text{Cm[0]-Cm[1] shape},\left(-0.0225172879957976151-1.244370198497125076\,\mathrm{i}\right)\,k1^2+\left(5.434075798536032377-0.8718111207610696998\,\mathrm{i}\right)\,k1+\left(0.\times 10^{-20}+0.\times 10^{-20}\,\mathrm{i}\right),\text{ratio vs O\_0[k1] (want: clean constant)},\frac{\left(-0.0225172879957976151-1.244370198497125076\,\mathrm{i}\right)\,k1^2+\left(5.4340757985360… [753 chars total]
+Cell 122: ✓ — Out[416]= \left\{\text{Cm[0][k1] / O\_1[k1] (reversed-index hypothesis; want clean k1-independent constant)},\frac{\left(0.111318362779488714+0.0407158959953172346\,\mathrm{i}\right)\,k1^2-\left(0.21818047436770437-1.02534209918467083\,\mathrm{i}\right)\,k1+\left(0.360439875147226537-0.932782448593374716\,\mathrm{i}\right)}{\left(1.\,+0.\times 10^{-29}\,\mathrm{i}\right)\,k1^2-\left(2.963909584212… [539 chars total]
+
+## 2026-07-18 18:07:18 — ▶️ RUN CELLS 124–138
+Cell 125: ✓ — (no output)
+Cell 126: ✓ — Out[446]= \left\{\text{Symbolic-$\theta$,$\chi$1 port-fidelity: xL1Sym vs xL1},0,\text{x2Sym vs x2},0\right\}
+Cell 127: ✓ — Out[451]= \left\{\left\{0,0\right\}\to 0,\left\{0,1\right\}\to \frac{\theta A-\theta B}{\theta A-\theta B+1},\left\{1,0\right\}\to \frac{1}{\theta A-\theta B+1},\left\{1,1\right\}\to 0\right\}
+Cell 128: ✓ — Out[454]= 35
+Cell 129: ✓ — Out[460]= \left\{\left\{0,0\right\}\to 0,\left\{0,1\right\}\to \theta B-\theta A,\left\{1,0\right\}\to -1,\left\{1,1\right\}\to 0\right\}
+Cell 130: ✓ — Out[463]= 127
+Cell 131: ✓ — Out[466]= 127
+Cell 132: ✓ — Out[470]//MatrixForm= \begin{pmatrix}\frac{\theta A^2-2\,\theta A\,\theta B-\theta A+\theta B^2+\theta B}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)} & \frac{6\,\left(\theta A-\theta B\right)}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)} & \frac{6}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)}\\0 & \frac{\theta A-\theta B+1}{\the… [472 chars total]
+Cell 133: ✓ — Out[472]//MatrixForm= \begin{pmatrix}\frac{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)}{\theta A^2-2\,\theta A\,\theta B-\theta A+\theta B^2+\theta B} & -\frac{6\,\left(\theta A-\theta B+3\right)}{\theta A^2-2\,\theta A\,\theta B+\theta B^2-1} & \frac{6}{\left(\theta A-\theta B\right)\,\left(\theta A-\theta B+1\right)}\\0 & \frac{\theta A-\theta B+3}{\theta A-\theta B+1} & -… [453 chars total]
+Cell 134: ✓ — Out[478]= \left\{\text{equations},\left\{1.000000000000000000000+0.\times 10^{-21}\,\mathrm{i}⩵\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right)\,wc0+\left(2.603469709065218092712489006+0.6885776528619826437114966465\,\mathrm{i}\right)\,wc1,-1.0350620568640061670+0.16605926109734660949\,\mathrm{i}⩵\left(1.522150083623538480912456055-0.2442047957313920727733393355\,\mathrm{i}\right)\,wc0-\left(1.2961… [785 chars total]
+Cell 135: ✓ — Out[484]= \begin{pmatrix}0 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\0 & 1 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\1 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\1 & 1 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\2 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} … [510 chars total]
+Cell 136: ✓ — Out[489]= \left\{\text{Conjectured sum rule FAILS beyond the lucky L=1 case},\text{num failing cases},29,\text{num total cases},81,\text{sample failures},\begin{pmatrix}1 & 2 & 0 & 1 & \frac{1}{-\theta A+\theta B-1}\\1 & 2 & 0 & 2 & \frac{2}{\theta A-\theta B+1}\\1 & 3 & 0 & 1 & -\frac{2}{\theta A-\theta B+1}\end{pmatrix}\right\}
+Cell 138: ✓ — Out[496]= \left\{\text{BOXED: A[s1,m;s1,m] = Pochhammer[s1+$\theta$1-$\theta$2-m+1,m]/Pochhammer[$\lambda$1+$\theta$1-$\theta$2-m+1,m] --- verified at the live numeric $\theta$1,$\theta$2},\text{worst deviation},0,\text{num ($\lambda$1,$\lambda$2,s1,m) cases},81\right\}
+
+## 2026-07-18 18:07:27 — ▶️ RUN CELLS 139–154
+Cell 140: ✓ — Out[502]= \left\{\text{STEP 1a (WITH $\kappa$1\^{}(u/h) prefactor): worst |x2.Psi - Q1($\theta$1+s1)Q1($\theta$2+s2)/(Q1($\theta$1)Q1($\theta$2))|},0,\text{num cases},297\right\}
+Cell 141: ✓ — Out[509]= \left\{\text{STEP 1b (WITHOUT prefactor, bare q\_n): worst residual (expect NONZERO, confirming prefactor matters)},3.7396476326262356,\text{sample},\begin{pmatrix}\left\{0,0\right\} & 0 & 0 & 0\\\left\{1,0\right\} & 0 & 0 & 0\\\left\{1,1\right\} & 0 & 0 & 0\end{pmatrix}\right\}
+Cell 143: ✓ — Out[515]= \begin{pmatrix}\left\{0,0,\left\{\text{srng},\left\{0\right\},\text{sol},\left\{1.\,\right\},\text{maxResid},0.\times 10^{-28}\right\}\right\} & \left\{0,1,\left\{\text{srng},\left\{0,1\right\},\text{sol},\left\{11.50000000000000000000000000-4.431302171530629069010197265\times 10^{-38}\,\mathrm{i},-10.50000000000000000000000000+2.933894180666706878219239219\times 10^{-38}\,\mathrm{i}\rig… [1115 chars total]
+Cell 144: ✓ — Out[521]= \left\{\text{worst residual across full B-sweep (want \textasciitilde{}0)},0.\times 10^{-24},\text{num (rep,a,b) cases},37\right\}
+Cell 145: ✓ — Out[525]= \left\{\text{A-block ($\lambda$1=2,$\lambda$2=1, L=2, s,s'=1,2)},\begin{pmatrix}\frac{25}{46} & \frac{21}{46}\\0 & 1\end{pmatrix},\text{its inverse (should = B row)},\begin{pmatrix}\frac{46}{25} & -\frac{21}{25}\\0 & 1\end{pmatrix},\text{Step2's independently-solved B row \{1,1\}},\left\{\frac{46}{25},-\frac{21}{25}\right\},\text{match?},\left\{0,0\right\}\right\}
+Cell 147: ✓ — Out[532]= \left\{\text{det[$\lambda$1,$\lambda$2][k\^{}u Q1] - explicit residue-sum expansion (rep (2,1), state (1,0)), want 0},0\right\}
+Cell 148: ✓ — Out[538]= \left\{\text{TRUE sum rule (derived, Step 4): worst deviation},0,\text{num ($\lambda$1,$\lambda$2,s,t) cases},20,\text{sample},\begin{pmatrix}2 & 1 & 0 & 0 & 0\\2 & 1 & 0 & 1 & 0\\2 & 1 & 1 & 0 & 0\\2 & 1 & 1 & 1 & 0\\2 & 1 & 2 & 0 & 0\\2 & 1 & 2 & 1 & 0\end{pmatrix}\right\}
+Cell 150: ✓ — Out[546]= \left\{\text{STEP 3 assembly test (rep (2,1), 6 states x 3 grid points): worst |Oassembled-O2rot|},0,\text{num cases},18\right\}
+Cell 151: ✓ — Out[552]= \left\{\text{STEP 3 FULL-SWEEP ASSEMBLY CONFIRMED: O[k1,k2] = $\Sigma$ cA(k1)cB(k2) B-weighted Q-bilinears == O2rot exactly},\text{worst deviation},0,\text{num states x grid cases},82\right\}
+Cell 153: ✓ — Out[557]= \begin{pmatrix}0 & 0 & 1.\, & 1.\, & 0\\0 & 1 & -2.603469709065218-0.6885776528619827\,\mathrm{i} & 5.387818229958359 -1.970652830451791\,\mathrm{i} & -7.991287939023577+1.2820751775898085\,\mathrm{i}\\1 & 0 & 1.5221500836235384 -0.24420479573139206\,\mathrm{i} & -6.469137855400039+1.0378703818584163\,\mathrm{i} & 7.991287939023577 -1.2820751775898085\,\mathrm{i}\\1 & 1 & 1.2961011478017… [843 chars total]
+
+## 2026-07-18 18:07:33 — ▶️ RUN CELLS 155–160
+Cell 156: ✓ — Out[561]= \left\{\text{M matrix (rep (2,1), k1=7/3,k2=5/2)},\begin{pmatrix}1 & -\frac{115}{4}\\\frac{259}{12} & \frac{322}{15}\\-\frac{196}{45} & -\frac{245}{18}\end{pmatrix},\text{MatrixRank},2\right\}
+Cell 157: ✓ — Out[566]//TableForm= \begin{pmatrix}1 & 1 & \left\{\frac{7}{3},\frac{5}{2}\right\} & 2 & 2\\1 & 1 & \left\{\frac{11}{5},-\frac{4}{3}\right\} & 2 & 2\\1 & 1 & \left\{-\frac{2}{7},\frac{9}{4}\right\} & 2 & 2\\1 & 1 & \left\{\frac{13}{6},\frac{1}{9}\right\} & 2 & 2\\2 & 1 & \left\{\frac{7}{3},\frac{5}{2}\right\} & 2 & 2\\2 & 1 & \left\{\frac{11}{5},-\frac{4}{3}\right\} & 2 & 2\\2 & 1 & \left\{-\frac{… [1258 chars total]
+Cell 158: ✓ — Out[568]= \left\{\text{Det[M(k1,k2)] symbolic, rep (2,2)},\frac{213003\,k2^3\,\left(k1-k2\right)^2\,\left(17\,k1+46\,k2\right)}{7225},\text{identically zero?},\mathrm{False}\right\}
+Cell 159: ✓ — Out[572]= \left\{\text{rep (2,3): M dimensions},\left\{3,4\right\},\text{rank at sample point},3,\text{a 3x3 minor determinant (nonzero => rank>=3)},\frac{19563970545}{1405696}\right\}
+
+## 2026-07-18 18:08:01 — 📥 BULK INSERT 2 CELL(S) at positions 161–162
+1. [markdown] (*Section M — Paul's single-tower ansatz. O[p,r] := (⟨x0[λ1]|e^{pE21}⊗⟨x0[λ2]|e^{rE21}).Psi[M,n]↵= O
+2. [code] (*O[p,r] and the site-1-tower measurement matrix (S=λ1+λ2 to start).*)↵ClearAll[Opr,towerMat];↵Opr[λ
+
+
+## 2026-07-18 18:08:02
+**Input:**
+```wolfram
+(*O[p,r] and the site-1-tower measurement matrix (S=λ1+λ2 to start).*)
+ClearAll[Opr,towerMat];
+Opr[λ1_,λ2_][M_,n_][p_,r_] := O2rot[λ1,λ2][M,n][-p,-r];
+towerMat[λ1_,λ2_][S_] := Table[
+  Q1[λ1,λ2][st[[1]],st[[2]]][θ1+s h] / Q1[λ1,λ2][st[[1]],st[[2]]][θ1]
+,{st,statesOf[λ1,λ2]},{s,0,S}];
+(*rep (2,1): S=λ1+λ2=3, matrix is 6 states x 4 unknowns — overdetermined by 2.*)
+mat21 = towerMat[2,1][3];
+{"towerMat dims (rep (2,1), S=3)", Dimensions[mat21], "MatrixRank", MatrixRank[mat21]}
+```
+**Output:**
+```
+Out[577]= \left\{\text{towerMat dims (rep (2,1), S=3)},\left\{6,4\right\},\text{MatrixRank},4\right\}
+```
+## 2026-07-18 18:08:34 — 📥 BULK INSERT 1 CELL(S) at positions 163–163
+1. [code] (*Solve for c_s at a sample (p,r), rep (2,1), S=λ1+λ2=3: b=O[p,r] per state, X=towerMat, exact↵  rat
+
+
+## 2026-07-18 18:08:35
+**Input:**
+```wolfram
+(*Solve for c_s at a sample (p,r), rep (2,1), S=λ1+λ2=3: b=O[p,r] per state, X=towerMat, exact
+  rational (p,r) for exact arithmetic.*)
+ClearAll[rhsVec,solveTower];
+rhsVec[λ1_,λ2_][p_,r_] := Table[Opr[λ1,λ2][st[[1]],st[[2]]][p,r], {st,statesOf[λ1,λ2]}];
+solveTower[λ1_,λ2_][S_][p_,r_] := Module[{Xm,bv,csol,resid},
+  Xm = towerMat[λ1,λ2][S];
+  bv = N[rhsVec[λ1,λ2][p,r],40];
+  csol = LeastSquares[Xm, bv];
+  resid = Max[Abs[Xm.csol - bv]];
+  {csol, resid}
+];
+{c21test, resid21test} = solveTower[2,1][3][7/3,5/2];
+{"c_s (rep (2,1), S=3, p=7/3,r=5/2)", Chop[c21test,10^-15], "max residual", resid21test}
+```
+**Output:**
+```
+Out[582]= \left\{\text{c\_s (rep (2,1), S=3, p=7/3,r=5/2)},\left\{13.7688078414687182186600+2.10326272230760132765845\,\mathrm{i},-3.12167136931824065325212+18.8662496625125701186869\,\mathrm{i},-7.51900595437450423013552-10.1245361864155291062487\,\mathrm{i},3.80567731087062145228106-0.708676905117290761157203\,\mathrm{i}\right\},\text{max residual},27.6845440371648442360677\right\}
+```
+## 2026-07-18 18:08:55 — 📥 BULK INSERT 1 CELL(S) at positions 164–164
+1. [code] (*Variant (a): extended range. Try S=λ1+λ2+1,...,λ1+λ2+4 for rep (2,1) (states available: 6, so↵  S
+
+
+## 2026-07-18 18:08:56
+**Input:**
+```wolfram
+(*Variant (a): extended range. Try S=λ1+λ2+1,...,λ1+λ2+4 for rep (2,1) (states available: 6, so
+  S can go up to 5 before the system becomes underdetermined against a single (p,r) sample — but
+  since towerMat is (p,r)-INDEPENDENT, rank must reach full column rank S+1<=6 for uniqueness;
+  beyond S=5 columns, an EXACT solve at one (p,r) can't distinguish extra freedom, but consistency
+  (existence) can still be checked via projecting out the column space).*)
+extendedTest = Table[
+  Module[{Xm,bv,csol,resid,rk},
+    Xm = towerMat[2,1][S];
+    rk = MatrixRank[Xm];
+    bv = N[rhsVec[2,1][7/3,5/2],40];
+    csol = LeastSquares[Xm, bv];
+    resid = Max[Abs[Xm.csol - bv]];
+    {S, Dimensions[Xm], rk, resid}
+  ]
+,{S,3,7}];
+extendedTest//TableForm
+```
+**Output:**
+```
+Out[584]//TableForm= \begin{pmatrix}3 & \left\{6,4\right\} & 4 & 27.6845440371648442360677\\4 & \left\{6,5\right\} & 4 & 27.6845440371648442360677\\5 & \left\{6,6\right\} & 4 & 27.684544037164844236068\\6 & \left\{6,7\right\} & 4 & 27.684544037164844236068\\7 & \left\{6,8\right\} & 4 & 27.684544037164844236068\end{pmatrix}
+```
+## 2026-07-18 18:09:30 — 📥 BULK INSERT 1 CELL(S) at positions 165–165
+1. [code] (*Sanity check FIRST: at r=0, O[p,0] is ALREADY KNOWN to equal Σ_{s=0}^{λ1} w1(s)(-p)^s Q1(θ1+sh)/Q1
+
+
+## 2026-07-18 18:09:30
+**Input:**
+```wolfram
+(*Sanity check FIRST: at r=0, O[p,0] is ALREADY KNOWN to equal Σ_{s=0}^{λ1} w1(s)(-p)^s Q1(θ1+sh)/Q1(θ1)
+  exactly (Section F's det1 dictionary). Verify this closes with S=λ1=2 for rep (2,1), confirming
+  the Opr/towerMat machinery itself is correct before diagnosing the general (p,r) failure.*)
+{c21r0, resid21r0} = solveTower[2,1][2][7/3,0];
+predW = Table[w1wt[2,1][s] (-7/3)^s, {s,0,2}];
+{"c_s at r=0, S=λ1=2 (rep (2,1), p=7/3)", Chop[N[c21r0],10^-10], "residual", resid21r0,
+ "predicted w1(s)(-p)^s", Chop[N[predW],10^-10], "match?", Chop[N[c21r0-predW],10^-8]}
+```
+**Output:**
+```
+Out[587]= \left\{\text{c\_s at r=0, S=$\lambda$1=2 (rep (2,1), p=7/3)},\left\{1.\,,4.666666666666667,5.444444444444445\right\},\text{residual},0.\times 10^{-23},\text{predicted w1(s)(-p)\^{}s},\left\{1.\,,-3.1733333333333333,-0.3219323671497585\right\},\text{match?},\left\{0,7.84,5.766376811594203\right\}\right\}
+```
+
+## 2026-07-18 18:09:55
+**Input:**
+```wolfram
+w1[1]
+w1[2]
+w1wt[2,1][0]
+w1wt[2,1][1]
+```
+**Output:**
+```
+Out[1]= {1, -1}
+Out[2]= {1, -2, 1}
+Out[3]= 1
+Out[4]= 34/25
+```
+## 2026-07-18 18:10:06 — ✏️ EDIT CELL 165
+(*Sanity check FIRST: at r=0, O[p,0] is ALREADY KNOWN to equal Σ_{s=0}^{λ1} w1[λ1][[s+1]](-p)^s Q1(θ1+sh)/Q1(θ1)
+  exactly (Section F's det1 dictionary, br1's single-site tower weights w1[λ]). Verify …
+
+
+## 2026-07-18 18:10:06
+**Input:**
+```wolfram
+(*Sanity check FIRST: at r=0, O[p,0] is ALREADY KNOWN to equal Σ_{s=0}^{λ1} w1[λ1][[s+1]](-p)^s Q1(θ1+sh)/Q1(θ1)
+  exactly (Section F's det1 dictionary, br1's single-site tower weights w1[λ]). Verify this closes
+  with S=λ1=2 for rep (2,1), confirming the Opr/towerMat machinery itself is correct before
+  diagnosing the general (p,r) failure.
+  (*why w1[λ1] not w1wt[λ1,λ2]*) w1wt[λ1,λ2][s] (Section K, Cell 147) is built from the TWO-SITE
+  measure mu[λ1,λ2][1] (used there for the det-residue-sum sum-rule derivation) — a DIFFERENT
+  object from Section F's single-site br1 tower weights w1[λ], which is what actually appears in
+  det1/FLdet. Confusing the two was the bug in the first version of this cell.*)
+{c21r0, resid21r0} = solveTower[2,1][2][7/3,0];
+predW = Table[w1[2][[s+1]] (-7/3)^s, {s,0,2}];
+{"c_s at r=0, S=λ1=2 (rep (2,1), p=7/3)", Chop[N[c21r0],10^-10], "residual", resid21r0,
+ "predicted w1[λ1][[s+1]](-p)^s", Chop[N[predW],10^-10], "match?", Chop[N[c21r0-predW],10^-8]}
+```
+**Output:**
+```
+Out= {"c_s at r=0, S=λ1=2 (rep (2,1), p=7/3)", {1., 4.666666666666667, 5.444444444444445}, "residual", 0``22.57763473576602, "predicted w1[λ1][[s+1]](-p)^s", {1., 4.666666666666667, 5.444444444444445}, "match?", {0, 0, 0}}
+```
+## 2026-07-18 18:11:05 — 📥 BULK INSERT 1 CELL(S) at positions 166–166
+1. [code] (*Variant (c): tower on θ2 instead of θ1 (site-ordering asymmetry — recall A,B depended on λ1↵  ONLY
+
+
+## 2026-07-18 18:11:05
+**Input:**
+```wolfram
+(*Variant (c): tower on θ2 instead of θ1 (site-ordering asymmetry — recall A,B depended on λ1
+  ONLY, so the "distinguished" site for this kind of object might be site 2, not site 1). Test
+  S=λ1+λ2=3 at the SAME sample point, rep (2,1).*)
+ClearAll[towerMat2];
+towerMat2[λ1_,λ2_][S_] := Table[
+  Q1[λ1,λ2][st[[1]],st[[2]]][θ2+s h] / Q1[λ1,λ2][st[[1]],st[[2]]][θ2]
+,{st,statesOf[λ1,λ2]},{s,0,S}];
+Mm2 = towerMat2[2,1][3];
+bv2 = N[rhsVec[2,1][7/3,5/2],40];
+csol2 = LeastSquares[Mm2, bv2];
+resid2 = Max[Abs[Mm2.csol2 - bv2]];
+{"θ2-tower: dims", Dimensions[Mm2], "rank", MatrixRank[Mm2], "residual", resid2}
+```
+**Output:**
+```
+Out[594]= \left\{\text{$\theta$2-tower: dims},\left\{6,4\right\},\text{rank},4,\text{residual},25.4178846095368977408093\right\}
+```
+## 2026-07-18 18:11:32 — 📥 BULK INSERT 1 CELL(S) at positions 167–167
+1. [code] (*Broaden "extended range" to allow shifted/negative-offset node sets (still θ1-tower, same↵  total
+
+
+## 2026-07-18 18:11:32
+**Input:**
+```wolfram
+(*Broaden "extended range" to allow shifted/negative-offset node sets (still θ1-tower, same
+  total node count as natural candidates, but different starting point) — test a scan of ranges
+  s=sMin..sMax for rep (2,1), same sample point, looking for ANY consistent (residual~0) choice.*)
+ClearAll[towerMatRange];
+towerMatRange[λ1_,λ2_][sMin_,sMax_] := Table[
+  Q1[λ1,λ2][st[[1]],st[[2]]][θ1+s h] / Q1[λ1,λ2][st[[1]],st[[2]]][θ1]
+,{st,statesOf[λ1,λ2]},{s,sMin,sMax}];
+rangeScan = Table[
+  Module[{Xm,bv,csol,resid,rk},
+    Xm = towerMatRange[2,1][sMin,sMax];
+    bv = N[rhsVec[2,1][7/3,5/2],40];
+    rk = MatrixRank[Xm];
+    csol = LeastSquares[Xm, bv];
+    resid = Max[Abs[Xm.csol - bv]];
+    {sMin,sMax, Dimensions[Xm][[2]], rk, resid}
+  ]
+,{sMin,-4,0},{sMax,sMin+3,sMin+7}];
+Flatten[rangeScan,1]//TableForm
+```
+**Output:**
+```
+Out[598]//TableForm= \begin{pmatrix}-4 & -1 & 4 & 4 & 27.684544037164844236068\\-4 & 0 & 5 & 4 & 27.6845440371648442360677\\-4 & 1 & 6 & 4 & 27.6845440371648442360677\\-4 & 2 & 7 & 4 & 27.6845440371648442360677\\-4 & 3 & 8 & 4 & 27.6845440371648442360677\\-3 & 0 & 4 & 4 & 27.6845440371648442360677\\-3 & 1 & 5 & 4 & 27.6845440371648442360677\\-3 & 2 & 6 & 4 & 27.6845440371648442360677\\-3 & 3 & 7 &… [1139 chars total]
+```
+## 2026-07-18 18:12:26 — 📥 BULK INSERT 1 CELL(S) at positions 168–168
+1. [code] (*Variant (b), properly tested: multiply (not divide) the TARGET by Q1(θ2) per state before↵  solvin
+
+
+## 2026-07-18 18:12:27
+**Input:**
+```wolfram
+(*Variant (b), properly tested: multiply (not divide) the TARGET by Q1(θ2) per state before
+  solving against the θ1-tower basis Q1(θ1+sh)/Q1(θ1) — genuinely different linear problem (not a
+  trivial row-rescaling of the original one, since it changes which functional the tower must
+  reproduce). Also try dividing by Q1(θ2) for completeness.*)
+Xm0 = towerMat[2,1][3];
+bvBase = N[rhsVec[2,1][7/3,5/2],40];
+q1th2 = N[Table[Q1[2,1][st[[1]],st[[2]]][θ2], {st,statesOf[2,1]}],40];
+bvMult = bvBase q1th2;
+bvDiv  = bvBase / q1th2;
+csolMult = LeastSquares[Xm0, bvMult];
+residMult = Max[Abs[Xm0.csolMult - bvMult]];
+csolDiv = LeastSquares[Xm0, bvDiv];
+residDiv = Max[Abs[Xm0.csolDiv - bvDiv]];
+{"multiply by Q1(θ2): residual", residMult, "divide by Q1(θ2): residual", residDiv}
+```
+**Output:**
+```
+Out[608]= \left\{\text{multiply by Q1($\theta$2): residual},19.7572259100834793810211,\text{divide by Q1($\theta$2): residual},18.310606875396829403204\right\}
+```
+## 2026-07-18 18:14:32 — 📥 BULK INSERT 1 CELL(S) at positions 169–169
+1. [code] (*Diagnose the rank cap precisely: for rep (2,1), the achievable θ1-tower column space has rank 4↵
+
+
+## 2026-07-18 18:14:32
+**Input:**
+```wolfram
+(*Diagnose the rank cap precisely: for rep (2,1), the achievable θ1-tower column space has rank 4
+  REGARDLESS of window (Cells 164,167) — matches max_state(M+1)=4 (state (3,0) has M=3, the highest
+  weight sector in this rep). Confirm this is the TRUE reason (not a coincidence) by checking the
+  rank achieved using ONLY states up to a given M, and separately confirm the r=0 anchor's success
+  (rank-3 subspace) is a genuine SUBSPACE of this rank-4 space. Then test O[p,r] failure at several
+  MORE (p,r) points and a second representation for robustness.*)
+(*(a) is r=0 really inside the rank-4 space, i.e. is the r=0 solution reproducible using ONLY
+  θ1-tower data with the SAME S=3 window that failed for r≠0?*)
+Xm3 = towerMat[2,1][3]; (*4 columns, rank 4*)
+bvR0 = N[rhsVec[2,1][7/3,0],40];
+csolR0S3 = LeastSquares[Xm3,bvR0];
+residR0S3 = Max[Abs[Xm3.csolR0S3-bvR0]];
+(*(b) O[p,r] failure at several more (p,r), rep (2,1)*)
+morePts = {{1,1},{2,-1},{-3,4},{0,7/2}};
+failScan = Table[
+  Module[{bv,csol,resid},
+    bv = N[rhsVec[2,1][pt[[1]],pt[[2]]],40];
+    csol = LeastSquares[Xm3,bv];
+    resid = Max[Abs[Xm3.csol-bv]];
+    {pt,resid}
+  ]
+,{pt,morePts}];
+(*(c) second rep: (1,2) — same qualitative test.*)
+Xm3b = towerMat[1,2][3];
+rk1_2 = MatrixRank[Xm3b];
+bv12 = N[rhsVec[1,2][7/3,5/2],40];
+csol12 = LeastSquares[Xm3b,bv12];
+resid12 = Max[Abs[Xm3b.csol12-bv12]];
+{"r=0 residual at S=3 window (should stay 0, confirming subspace nesting)", residR0S3,
+ "more (p,r) failures, rep(2,1)", failScan,
+ "rep (1,2): towerMat rank", rk1_2, "residual at (7/3,5/2)", resid12}
+```
+**Output:**
+```
+2 kernel messages: Set::write: Tag Times in 2 (rk1_) is Protected. [also: Set::write] result: Out[620]= \left\{\text{r=0 residual at S=3 window (should stay 0, confirming subspace nesting)},0.\times 10^{-23},\text{more (p,r) failures, rep(2,1)},\begin{pmatrix}\left\{1,1\right\} & 4.04518880433…
+```
+## 2026-07-18 18:14:44 — ✏️ EDIT CELL 169
+(*Diagnose the rank cap precisely: for rep (2,1), the achievable θ1-tower column space has rank 4
+  REGARDLESS of window (Cells 164,167) — matches max_state(M+1)=4 (state (3,0) has M=3, the highest
+  …
+
+
+## 2026-07-18 18:14:45
+**Input:**
+```wolfram
+(*Diagnose the rank cap precisely: for rep (2,1), the achievable θ1-tower column space has rank 4
+  REGARDLESS of window (Cells 164,167) — matches max_state(M+1)=4 (state (3,0) has M=3, the highest
+  weight sector in this rep). Confirm this is the TRUE reason (not a coincidence) by checking the
+  rank achieved using ONLY states up to a given M, and separately confirm the r=0 anchor's success
+  (rank-3 subspace) is a genuine SUBSPACE of this rank-4 space. Then test O[p,r] failure at several
+  MORE (p,r) points and a second representation for robustness.
+  (*why rkRep12 not rk1_2*) "rk1_2" silently parses as Times[rk1_,2] (Blank pattern times 2) — same
+  underscore-in-identifier gotcha as before; renamed to avoid it.*)
+(*(a) is r=0 really inside the rank-4 space, i.e. is the r=0 solution reproducible using ONLY
+  θ1-tower data with the SAME S=3 window that failed for r≠0?*)
+Xm3 = towerMat[2,1][3]; (*4 columns, rank 4*)
+bvR0 = N[rhsVec[2,1][7/3,0],40];
+csolR0S3 = LeastSquares[Xm3,bvR0];
+residR0S3 = Max[Abs[Xm3.csolR0S3-bvR0]];
+(*(b) O[p,r] failure at several more (p,r), rep (2,1)*)
+morePts = {{1,1},{2,-1},{-3,4},{0,7/2}};
+failScan = Table[
+  Module[{bv,csol,resid},
+    bv = N[rhsVec[2,1][pt[[1]],pt[[2]]],40];
+    csol = LeastSquares[Xm3,bv];
+    resid = Max[Abs[Xm3.csol-bv]];
+    {pt,resid}
+  ]
+,{pt,morePts}];
+(*(c) second rep: (1,2) — same qualitative test.*)
+Xm3b = towerMat[1,2][3];
+rkRep12 = MatrixRank[Xm3b];
+bv12 = N[rhsVec[1,2][7/3,5/2],40];
+csol12 = LeastSquares[Xm3b,bv12];
+resid12 = Max[Abs[Xm3b.csol12-bv12]];
+{"r=0 residual at S=3 window (should stay 0, confirming subspace nesting)", residR0S3,
+ "more (p,r) failures, rep(2,1)", failScan,
+ "rep (1,2): towerMat rank", rkRep12, "residual at (7/3,5/2)", resid12}
+```
+**Output:**
+```
+Out= {"r=0 residual at S=3 window (should stay 0, confirming subspace nesting)", 0``22.57763473576602, "more (p,r) failures, rep(2,1)", {{{1, 1}, 4.04518880433634545024478333679182823392`23.571662174886168}, {{2, -1}, 8.92888343029211987360144656308363921184`23.426020765200608}, {{-3, 4}, 39.33363888266671510111859404019820069192`23.879898766747296}, {{0, 7/2}, 5.3318082362908496984122066573075485121`23.345524998723956}}, "rep (1,2): towerMat rank", 4, "residual at (7/3,5/2)", 27.94146729657645870816812742102593166321`23.62181100339649}
+```
+## 2026-07-18 18:34:29 — 📥 BULK INSERT 1 CELL(S) at positions 170–170
+1. [code] (*Rule out one more reading: basis = BARE q1(θ1+sh)/q1(θ1) (no κ1^(u/h) prefactor at all), in case↵
+
+
+## 2026-07-18 18:34:30
+**Input:**
+```wolfram
+(*Rule out one more reading: basis = BARE q1(θ1+sh)/q1(θ1) (no κ1^(u/h) prefactor at all), in case
+  "handle the κ1^s...bookkeeping explicitly" meant using bare q1 as the tower object with κ1 powers
+  absorbed into c_s. This does NOT change the achievable column space (κ1^s is just an invertible
+  per-column rescaling, which cannot change RANK or reachability of a fixed target vector by more
+  than what a column rescaling allows — but verify directly rather than assume, since a rescaling of
+  s-index by a STATE-INDEPENDENT factor could interact with a state-DEPENDENT normalization q1(θ1)
+  in an unobvious way).*)
+towerMatBare[λ1_,λ2_][S_] := Table[
+  qbare[λ1,λ2][st[[1]],st[[2]]][θ1+s h] / qbare[λ1,λ2][st[[1]],st[[2]]][θ1]
+,{st,statesOf[λ1,λ2]},{s,0,S}];
+XmBare = towerMatBare[2,1][3];
+bvBareTest = N[rhsVec[2,1][7/3,5/2],40];
+csolBare = LeastSquares[XmBare,bvBareTest];
+residBare = Max[Abs[XmBare.csolBare-bvBareTest]];
+{"bare-q1 tower basis: rank", MatrixRank[XmBare], "residual at (7/3,5/2)", residBare}
+```
+**Output:**
+```
+Out[626]= \left\{\text{bare-q1 tower basis: rank},4,\text{residual at (7/3,5/2)},27.6845440371648442360677\right\}
+```
+## 2026-07-18 18:36:06 — 📥 BULK INSERT 1 CELL(S) at positions 171–171
+1. [code] (*KERNEL CHECK (task step 3), for the r=0 anchor where the system DOES close: is the c_s solution↵
+
+
+## 2026-07-18 18:36:06
+**Input:**
+```wolfram
+(*KERNEL CHECK (task step 3), for the r=0 anchor where the system DOES close: is the c_s solution
+  UNIQUE? towerMat[2,1][2] is 6x3 (6 states, 3 unknowns s=0,1,2) — compute its rank; if rank=3 (full
+  column rank), the map is injective and any consistent solution is unique (kernel of the map
+  c->Xc is trivial, matching the exact w1[λ1] match found in Cell 165 with no ambiguity).*)
+rankR0 = MatrixRank[towerMat[2,1][2]];
+nullR0 = NullSpace[towerMat[2,1][2]];
+{"rank of towerMat[2,1][2] (r=0 anchor, 3 unknowns)", rankR0,
+ "null space dimension (0 = unique solution)", Length[nullR0]}
+```
+**Output:**
+```
+Out[629]= \left\{\text{rank of towerMat[2,1][2] (r=0 anchor, 3 unknowns)},3,\text{null space dimension (0 = unique solution)},0\right\}
+```
+## 2026-07-18 18:36:42 — 📥 BULK INSERT 1 CELL(S) at positions 172–172
+1. [markdown] (*Section M final report — the r=0 ANCHOR closes exactly (uniquely); the GENERAL (p,r) ansatz, as↵li
+
+
+---
+
+## 2026-07-18 18:36:48 — 🔄 KERNEL RESTART
+
+## 2026-07-18 18:38:37 — ▶️ RUN CELLS 1–10
+Cell 1: ✓ — Out[8]= \left\{\frac{1}{3},\frac{1}{7},1,0.360439875147226537266677650596+0.932782448593374716484835982071\,\mathrm{i},0.36043987514722653726667765060-0.932782448593374716484835982071\,\mathrm{i},0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i},1\right\}
+Cell 3: ✓ — (no output)
+Cell 4: ✓ — (no output)
+Cell 5: ✓ — (no output)
+Cell 6: ✓ — (no output)
+Cell 8: ✓ — (no output)
+Cell 10: ✓ — (no output)
+
+## 2026-07-18 18:38:42 — ▶️ RUN CELLS 11–20
+Cell 11: ✓ — (no output)
+Cell 12: ✓ — Out[27]= \left\{0\right\}
+Cell 13: ✓ — (no output)
+Cell 14: ✓ — (no output)
+Cell 15: ✓ — Out[31]= \left\{0\right\}
+Cell 16: ✓ — (no output)
+Cell 17: ✓ — Out[34]= \begin{pmatrix}0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\end{pmatrix}
+Cell 18: ✓ — (no output)
+Cell 20: ✓ — (no output)
+
+## 2026-07-18 18:38:45 — ▶️ RUN CELLS 21–28
+Cell 21: ✓ — (no output)
+Cell 23: ✓ — (no output)
+Cell 25: ✓ — (no output)
+Cell 26: ✓ — (no output)
+Cell 27: ✓ — Out[52]= \begin{pmatrix}0 & \frac{1}{2} & 0 & 0 & 0 & 0\end{pmatrix}
+Cell 28: ✓ — Out[53]= \left\{0\right\}
+
+## 2026-07-18 18:38:48 — ▶️ RUN CELLS 29–36
+Cell 30: ✓ — Out[59]= \left\{\left(u-\frac{4}{3}\right)\,\left(u-\frac{8}{7}\right),\left(u-\frac{1}{3}\right)\,\left(u-\frac{1}{7}\right),\left(0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i}\right)\,u^2-\left(1.06415582186324025288257211128+0.\times 10^{-29}\,\mathrm{i}\right)\,u\right\}
+Cell 31: ✓ — Out[62]= \begin{pmatrix}1 & 1\\2 & 2\\3 & 3\end{pmatrix}
+Cell 32: ✓ — Out[65]= \text{max|C2-($\kappa$1+$\kappa$2)Id|}\to 0.\times 10^{-29}
+Cell 33: ✓ — Out[75]= \langle\!\lvert \left\{0,0\right\}\to 0.5664055180884988 +1.3769645669711723\,\mathrm{i},\left\{1,0\right\}\to -0.778123966451158+0.\,\,\mathrm{i},\left\{1,1\right\}\to 1.1900552523337025 +0.\,\,\mathrm{i},\left\{2,0\right\}\to 0.5664055180884988 -1.3769645669711723\,\mathrm{i}\rvert\!\rangle
+Cell 34: ✓ — 2 kernel messages: Psi::spurious: No genuine state at (M,n)=(2,2) for (λ1,λ2)=(2,1): weight sector M=2 has only 2 genuine state(s) (n=0..1), so n=2 does not exist. [also: Psi::spurious] result: Print: spurious-guard test (expect a Psi::spurious message and Missing[...]):[formula] | Out[84]= \left\{\left\{1.000000000000000000000000000+0.\times 10^{-29}\,\mathrm{i},-1.3004494881076436272092358…
+⚠️ stopped at Cell 34 — error detected (pass stopOnError:false to continue past errors)
+
+## 2026-07-18 18:41:01 — ▶️ RUN CELLS 35–42
+Cell 35: ✓ — Out[91]= \left\{1.03464899078135229594035121+0.381869568380946283899575941\,\mathrm{i},-2.37022278949001677248172619-0.20048970475590097847093779\,\mathrm{i},1.00000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right\}
+Cell 36: ✓ — Out[94]= \left\{-0.709231010958016926537225142+1.09596916251277206706752728\,\mathrm{i},-0.02291660900+0.\times 10^{-12}\,\mathrm{i}\right\}
+Cell 37: ✓ — (no output)
+Cell 38: ✓ — (no output)
+Cell 39: ✓ — (no output)
+Cell 40: ✓ — (no output)
+Cell 41: ✓ — (no output)
+Cell 42: ✓ — Out[109]= 0
+
+## 2026-07-18 18:41:04 — ▶️ RUN CELLS 43–47
+Cell 43: ✓ — (no output)
+Cell 44: ✓ — Out[113]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 45: ✓ — Out[115]= \left\{6,6\right\}
+Cell 46: ✓ — Out[116]= \begin{pmatrix}2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i} & 0 & 0 & 0 & 0 & 0\\0 & 7.36608403016431791181-0.968046299794461400266\,\mathrm{i} & 0 & 0 & 0 & 0\\0 & 0 & 2.68702160063169134012-1.3456153260557858257\,\mathrm{i} & 0 & 0 & 0\\0 & 0 & 0 & 7.3660840301643179118107+0.9680462997944614002659\,\mathrm{i} & 0 & 0\\0 & 0 & 0 & 0 & 2.687021600631691340118… [537 chars total]
+Cell 47: ✓ — Out[125]= \langle\!\lvert \text{states}\to \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix},\text{max|off-diagonal|}\to 5.065342385207116\times 10^{-34},\text{digits vanished (-Log10)}\to 33.29539119374288,\text{min|diagonal|}\to 3.0051232400647923,\text{diagonal values}\to \left\{2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i},7.36608403016431791181-0… [699 chars total]
+
+## 2026-07-18 18:41:08 — ▶️ RUN CELLS 48–54
+Cell 48: ✓ — (no output)
+Cell 49: ✓ — (no output)
+Cell 50: ✓ — Out[133]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 51: ✓ — Out[138]= \left\{1.00000000000000000000000000000,6\right\}
+Cell 52: ✓ — Out[143]= \langle\!\lvert \text{max|<PsiLeft|Psi>| off-diagonal}\to 0.\,,\text{digits vanished (-Log10)}\to \mathrm{Indeterminate}\rvert\!\rangle
+Cell 53: ✓ — Out[147]= \left\{7.366084030164317911810727273-0.9680462997944614002658874268\,\mathrm{i},1.00000000000000000000+0.\times 10^{-21}\,\mathrm{i}\right\}
+Cell 54: ✓ — Out[150]= \begin{matrix}\langle\!\lvert \text{M}\to 0,\text{n}\to 0,\text{braket}\to 2.909064289-5.804620064\,\mathrm{i},\text{G21 diagonal}\to 2.909064289-5.804620064\,\mathrm{i},\text{normRatio}\to 1.000000000+0.\times 10^{-10}\,\mathrm{i}\rvert\!\rangle \\\langle\!\lvert \text{M}\to 1,\text{n}\to 0,\text{braket}\to 7.366084030-0.968046300\,\mathrm{i},\text{G21 diagonal}\to 7.366084030-0.9680463… [1247 chars total]
+
+## 2026-07-18 18:41:12 — ▶️ RUN CELLS 55–62
+Cell 56: ✓ — (no output)
+Cell 57: ✓ — Out[158]= \begin{pmatrix}3 & 3\\3 & 3\end{pmatrix}
+Cell 58: ✓ — (no output)
+Cell 59: ✓ — Out[165]= \left\{0\right\}
+Cell 60: ✓ — Out[169]= \begin{matrix}\left\{1,1,0,1.\,,0.\,\right\}\\\left\{1,1,1,1.\,,0.\,\right\}\\\left\{1,2,0,1.\,,0.\,\right\}\\\left\{1,2,1,1.\,,0.\,\right\}\\\left\{1,3,0,1.\,,0.\,\right\}\\\left\{1,3,1,1.\,,0.\,\right\}\\\left\{2,1,0,1.\,,0.\,\right\}\\\left\{2,1,1,1.\,,0.\,\right\}\\\left\{2,1,2,1.\,,0.\,\right\}\\\left\{2,2,0,1.\,,0.\,\right\}\\\left\{2,2,1,1.\,,0.\,\right\}\\\left\{2,2,2,1.\,,0.\,\r… [898 chars total]
+Cell 61: ✓ — Out[170]= \langle\!\lvert \text{max spread (ratio non-constancy)}\to 0.\,,\text{max |ratio - 1| over sweep}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases checked}\to 27\rvert\!\rangle
+Cell 62: ✓ — Out[176]= \langle\!\lvert \text{max operator-level spread}\to 0.\,,\text{max |$\mu$ - $\mu$Site2|}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases}\to 27\rvert\!\rangle
+
+
+## 2026-07-18 18:46:12
+**Input:**
+```wolfram
+{θ1,θ2,h,Length[DownValues[FL]],Length[DownValues[O2rot]],Length[DownValues[Opr]]}
+```
+**Output:**
+```
+Out= {1/3, 1/7, 1, 0, 0, 0}
+```
+
+---
+
+## 2026-07-18 18:46:18 — 🔄 KERNEL RESTART
+
+## 2026-07-18 18:46:48 — ▶️ RUN CELLS 1–10
+Cell 1: ✓ — Out[8]= \left\{\frac{1}{3},\frac{1}{7},1,0.360439875147226537266677650596+0.932782448593374716484835982071\,\mathrm{i},0.36043987514722653726667765060-0.932782448593374716484835982071\,\mathrm{i},0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i},1\right\}
+Cell 3: ✓ — (no output)
+Cell 4: ✓ — (no output)
+Cell 5: ✓ — (no output)
+Cell 6: ✓ — (no output)
+Cell 8: ✓ — (no output)
+Cell 10: ✓ — (no output)
+
+## 2026-07-18 18:46:52 — ▶️ RUN CELLS 11–20
+Cell 11: ✓ — (no output)
+Cell 12: ✓ — Out[27]= \left\{0\right\}
+Cell 13: ✓ — (no output)
+Cell 14: ✓ — (no output)
+Cell 15: ✓ — Out[31]= \left\{0\right\}
+Cell 16: ✓ — (no output)
+Cell 17: ✓ — Out[34]= \begin{pmatrix}0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\end{pmatrix}
+Cell 18: ✓ — (no output)
+Cell 20: ✓ — (no output)
+
+## 2026-07-18 18:46:55 — ▶️ RUN CELLS 21–28
+Cell 21: ✓ — (no output)
+Cell 23: ✓ — (no output)
+Cell 25: ✓ — (no output)
+Cell 26: ✓ — (no output)
+Cell 27: ✓ — Out[52]= \begin{pmatrix}0 & \frac{1}{2} & 0 & 0 & 0 & 0\end{pmatrix}
+Cell 28: ✓ — Out[53]= \left\{0\right\}
+
+## 2026-07-18 18:46:58 — ▶️ RUN CELLS 29–36
+Cell 30: ✓ — Out[59]= \left\{\left(u-\frac{4}{3}\right)\,\left(u-\frac{8}{7}\right),\left(u-\frac{1}{3}\right)\,\left(u-\frac{1}{7}\right),\left(0.720879750294453074533355301191+0.\times 10^{-30}\,\mathrm{i}\right)\,u^2-\left(1.06415582186324025288257211128+0.\times 10^{-29}\,\mathrm{i}\right)\,u\right\}
+Cell 31: ✓ — Out[62]= \begin{pmatrix}1 & 1\\2 & 2\\3 & 3\end{pmatrix}
+Cell 32: ✓ — Out[65]= \text{max|C2-($\kappa$1+$\kappa$2)Id|}\to 0.\times 10^{-29}
+Cell 33: ✓ — Out[75]= \langle\!\lvert \left\{0,0\right\}\to 0.5664055180884988 +1.3769645669711723\,\mathrm{i},\left\{1,0\right\}\to -0.778123966451158+0.\,\,\mathrm{i},\left\{1,1\right\}\to 1.1900552523337025 +0.\,\,\mathrm{i},\left\{2,0\right\}\to 0.5664055180884988 -1.3769645669711723\,\mathrm{i}\rvert\!\rangle
+Cell 34: ✓ — 2 kernel messages: Psi::spurious: No genuine state at (M,n)=(2,2) for (λ1,λ2)=(2,1): weight sector M=2 has only 2 genuine state(s) (n=0..1), so n=2 does not exist. [also: Psi::spurious] result: Print: spurious-guard test (expect a Psi::spurious message and Missing[...]):[formula] | Out[84]= \left\{\left\{1.000000000000000000000000000+0.\times 10^{-29}\,\mathrm{i},-1.3004494881076436272092358…
+⚠️ stopped at Cell 34 — error detected (pass stopOnError:false to continue past errors)
+
+## 2026-07-18 18:47:08 — ▶️ RUN CELLS 35–42
+Cell 35: ✓ — Out[91]= \left\{1.03464899078135229594035121+0.381869568380946283899575941\,\mathrm{i},-2.37022278949001677248172619-0.20048970475590097847093779\,\mathrm{i},1.00000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right\}
+Cell 36: ✓ — Out[94]= \left\{-0.709231010958016926537225142+1.09596916251277206706752728\,\mathrm{i},-0.02291660900+0.\times 10^{-12}\,\mathrm{i}\right\}
+Cell 37: ✓ — (no output)
+Cell 38: ✓ — (no output)
+Cell 39: ✓ — (no output)
+Cell 40: ✓ — (no output)
+Cell 41: ✓ — (no output)
+Cell 42: ✓ — Out[109]= 0
+
+## 2026-07-18 18:47:11 — ▶️ RUN CELLS 43–47
+Cell 43: ✓ — (no output)
+Cell 44: ✓ — Out[113]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 45: ✓ — Out[115]= \left\{6,6\right\}
+Cell 46: ✓ — Out[116]= \begin{pmatrix}2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i} & 0 & 0 & 0 & 0 & 0\\0 & 7.36608403016431791181-0.968046299794461400266\,\mathrm{i} & 0 & 0 & 0 & 0\\0 & 0 & 2.68702160063169134012-1.3456153260557858257\,\mathrm{i} & 0 & 0 & 0\\0 & 0 & 0 & 7.3660840301643179118107+0.9680462997944614002659\,\mathrm{i} & 0 & 0\\0 & 0 & 0 & 0 & 2.687021600631691340118… [537 chars total]
+Cell 47: ✓ — Out[125]= \langle\!\lvert \text{states}\to \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix},\text{max|off-diagonal|}\to 5.065342385207116\times 10^{-34},\text{digits vanished (-Log10)}\to 33.29539119374288,\text{min|diagonal|}\to 3.0051232400647923,\text{diagonal values}\to \left\{2.9090642893150832630837933001-5.8046200635659338430425538562\,\mathrm{i},7.36608403016431791181-0… [699 chars total]
+
+## 2026-07-18 18:47:15 — ▶️ RUN CELLS 48–54
+Cell 48: ✓ — (no output)
+Cell 49: ✓ — (no output)
+Cell 50: ✓ — Out[133]= \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix}
+Cell 51: ✓ — Out[138]= \left\{1.00000000000000000000000000000,6\right\}
+Cell 52: ✓ — Out[143]= \langle\!\lvert \text{max|<PsiLeft|Psi>| off-diagonal}\to 0.\,,\text{digits vanished (-Log10)}\to \mathrm{Indeterminate}\rvert\!\rangle
+Cell 53: ✓ — Out[147]= \left\{7.366084030164317911810727273-0.9680462997944614002658874268\,\mathrm{i},1.00000000000000000000+0.\times 10^{-21}\,\mathrm{i}\right\}
+Cell 54: ✓ — Out[150]= \begin{matrix}\langle\!\lvert \text{M}\to 0,\text{n}\to 0,\text{braket}\to 2.909064289-5.804620064\,\mathrm{i},\text{G21 diagonal}\to 2.909064289-5.804620064\,\mathrm{i},\text{normRatio}\to 1.000000000+0.\times 10^{-10}\,\mathrm{i}\rvert\!\rangle \\\langle\!\lvert \text{M}\to 1,\text{n}\to 0,\text{braket}\to 7.366084030-0.968046300\,\mathrm{i},\text{G21 diagonal}\to 7.366084030-0.9680463… [1247 chars total]
+
+## 2026-07-18 18:47:18 — ▶️ RUN CELLS 55–62
+Cell 56: ✓ — (no output)
+Cell 57: ✓ — Out[158]= \begin{pmatrix}3 & 3\\3 & 3\end{pmatrix}
+Cell 58: ✓ — (no output)
+Cell 59: ✓ — Out[165]= \left\{0\right\}
+Cell 60: ✓ — Out[169]= \begin{matrix}\left\{1,1,0,1.\,,0.\,\right\}\\\left\{1,1,1,1.\,,0.\,\right\}\\\left\{1,2,0,1.\,,0.\,\right\}\\\left\{1,2,1,1.\,,0.\,\right\}\\\left\{1,3,0,1.\,,0.\,\right\}\\\left\{1,3,1,1.\,,0.\,\right\}\\\left\{2,1,0,1.\,,0.\,\right\}\\\left\{2,1,1,1.\,,0.\,\right\}\\\left\{2,1,2,1.\,,0.\,\right\}\\\left\{2,2,0,1.\,,0.\,\right\}\\\left\{2,2,1,1.\,,0.\,\right\}\\\left\{2,2,2,1.\,,0.\,\r… [898 chars total]
+Cell 61: ✓ — Out[170]= \langle\!\lvert \text{max spread (ratio non-constancy)}\to 0.\,,\text{max |ratio - 1| over sweep}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases checked}\to 27\rvert\!\rangle
+Cell 62: ✓ — Out[176]= \langle\!\lvert \text{max operator-level spread}\to 0.\,,\text{max |$\mu$ - $\mu$Site2|}\to 0.\,,\text{num ($\lambda$1,$\lambda$2,s1) cases}\to 27\rvert\!\rangle
+
+## 2026-07-18 18:47:29 — ▶️ RUN CELLS 63–70
+Cell 64: ✓ — (no output)
+Cell 65: ✓ — Out[185]= \langle\!\lvert \text{w\_0 ($\lambda$=1,2,3)}\to \left\{1,1,1\right\},\text{full weights w\_j}\to \left\{1\to \left\{1,-1\right\},2\to \left\{1,-2,1\right\},3\to \left\{1,-3,3,-1\right\}\right\},\text{br1[$\lambda$][1] ($\lambda$=1,2,3)}\to \left\{0,0,0\right\}\rvert\!\rangle
+Cell 66: ✓ — Out[187]= \left\{0,0\right\}
+Cell 67: ✓ — Out[190]= \sqrt[3]{k}\,\left(\left(-1.18561270626131985872+0.832253303224995280404\,\mathrm{i}\right)\,k^2-\left(0.761819910806671651081+0.812812473459294825632\,\mathrm{i}\right)\,k-\left(0.404410037536507329420+0.598870869485872613792\,\mathrm{i}\right)\right)
+Cell 68: ✓ — Out[194]= \begin{pmatrix}0 & 0 & 0\\0 & 0 & 0\\0 & 0 & 0\end{pmatrix}
+Cell 69: ✓ — Out[198]= \langle\!\lvert \text{OP(E12)}\to 1.\,+0.\times 10^{-30}\,\mathrm{i},\text{OP(E21)}\to \left(-0.03626734060947795145020244939-2.004237714666237867354326095\,\mathrm{i}\right)\,\varphi ^2-\left(1.522150083623538480912456055-0.2442047957313920727733393355\,\mathrm{i}\right)\,\varphi +\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right),\text{nontrivial generator \{a,b\}}\to \left\{2,1\right\},\… [464 chars total]
+Cell 70: ✓ — Out[201]= \left\{1,2\right\}
+
+## 2026-07-18 18:47:32 — ▶️ RUN CELLS 71–77
+Cell 71: ✓ — Out[207]= \langle\!\lvert \text{states}\to \begin{pmatrix}0 & 0\\1 & 0\\1 & 1\\2 & 0\\2 & 1\\3 & 0\end{pmatrix},\text{$\varphi$ candidates per state}\to \begin{pmatrix}\left\{0,0\right\} & \left(-0.920793778924720536105378676-0.390049761817044163511250929\,\mathrm{i}\right)\,k^{4/3}+\left(0.695722366612934233848844287-0.718310788304406529935213657\,\mathrm{i}\right)\,\sqrt[3]{k}-\left(0.3604398751… [1247 chars total]
+Cell 72: ✓ — Out[213]= \langle\!\lvert \text{c\_sb solution(s)}\to \left\{\left\{\mathrm{cb}\to \frac{\left(-6.242239011314\times 10^{45}-4.511757007219\times 10^{45}\,\mathrm{i}\right)\,k^{4/3}-\left(5.999302657796\times 10^{45}+8.356648463050\times 10^{45}\,\mathrm{i}\right)\,\sqrt[3]{k}}{9.833530773718\times 10^{45}\,k^{4/3}-\left(3.54439660434\times 10^{45}-9.172544913427\times 10^{45}\,\mathrm{i}\right)\,… [841 chars total]
+Cell 73: ✓ — Out[216]= \langle\!\lvert \text{generator \{a,b\} tested}\to \left\{2,1\right\},\text{rep tested}\to \left\{1,2\right\},\text{FL shape (verified exact for all 6 states)}\to \text{FL[1,2][state][k] = k\^{}(1/3) (A\_state + B\_state k)},\text{c0(state) = OPg[state][0]}\to \begin{pmatrix}\left\{0,0\right\} & 1.\,+0.\times 10^{-28}\,\mathrm{i}\\\left\{1,0\right\} & 1.\,+0.\times 10^{-28}\,\mathrm{i}\\… [1247 chars total]
+Cell 74: ✓ — Out[220]= \left(1.000000000000000000000000000+0.\times 10^{-27}\,\mathrm{i}\right)-\left(0.360439875147226537266677651+0.932782448593374716484835982\,\mathrm{i}\right)\,k
+Cell 75: ✓ — Out[227]= \langle\!\lvert \text{alphaTab \{state,D0,c0,Dc,c1,$\alpha$\}}\to \begin{pmatrix}\left\{0,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & -0.36043987514722653-0.9327824485933747\,\mathrm{i} & 0.36043987514722653 +0.9327824485933747\,\mathrm{i} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.7101545203859353 -0.2371533418544… [1247 chars total]
+Cell 76: ✓ — Out[235]= \langle\!\lvert \text{validation}\to \left\{\left\{1,1\right\}\to \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 0\\\left\{1,1\right\} & 0\\\left\{2,0\right\} & 0\end{pmatrix},\left\{2,1\right\}\to \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 0\\\left\{1,1\right\} & 0\\\left\{2,0\right\} & 0\\\left\{2,1\right\} & 0\\\left\{3,0\right\} & 0\end{pmatrix},\left\{1… [1247 chars total]
+Cell 77: ✓ — Out[237]= \langle\!\lvert \text{generator \{a,b\}}\to \left\{2,1\right\},\text{$\varphi$(k)}\to \text{$\alpha$ k},\text{$\alpha$ (universal value)}\to -1.\,+0.\,\,\mathrm{i},\text{normalization}\to \text{1-site FSoV determinant det1[f] = br1[f]/(f/.u->$\theta$1); Section C's det[$\lambda$1,$\lambda$2][f] restricted to 1 site},\text{max residual over rep sweep}\to 0,\text{reps validated}\to \begin{… [510 chars total]
+
+## 2026-07-18 18:47:54 — ▶️ RUN CELLS 78–82
+Cell 79: ✓ — (no output)
+Cell 80: ✓ — Out[245]= \left\{\text{Test 1 (symbolic monomials u\^{}j) residuals},\left\{0\right\}\right\}
+Cell 81: ✓ — Out[250]= \left\{\text{Test 2 (twisted monomials k\^{}(u/h) u\^{}j) residuals},\left\{0\right\}\right\}
+Cell 82: ✓ — Out[259]= \left\{\text{Test 3 worst |br identity residual| on Q1},0,\text{worst |detRatio - predicted| },0,\text{num states checked},41\right\}
+
+## 2026-07-18 18:47:58 — ▶️ RUN CELLS 83–87
+Cell 84: ✓ — (no output)
+Cell 85: ✓ — Out[271]= \begin{pmatrix}1 & 1 & 0\\2 & 1 & 0\\3 & 1 & 0\end{pmatrix}
+Cell 86: ✓ — Out[278]= \left\{\text{Mirror Test1 (u\^{}j)},\left\{0\right\},\text{Mirror Test2 (k\^{}(u/h)u\^{}j)},\left\{0\right\}\right\}
+Cell 87: ✓ — Out[285]= \left\{\text{Mirror Test3 worst |br identity residual| on Q1},0,\text{num states checked},41\right\}
+
+## 2026-07-18 18:48:00 — ▶️ RUN CELLS 88–91
+Cell 89: ✓ — Out[294]= \left\{\text{OP2(E12)},1.\,+0.\times 10^{-30}\,\mathrm{i},\text{OP2(E21)},\left(2.603469709065218092712489006+0.6885776528619826437114966465\,\mathrm{i}\right)\,\varphi +\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right),\text{nontrivial generator \{a,b\}},\left\{2,1\right\}\right\}
+Cell 90: ✓ — Out[297]= \left(1.\,+0.\times 10^{-27}\,\mathrm{i}\right)-\left(0.360439875147226537266677651+0.932782448593374716484835982\,\mathrm{i}\right)\,k
+Cell 91: ✓ — Out[300]//TableForm= \begin{pmatrix}\left\{0,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & -0.36043987514722653-0.9327824485933747\,\mathrm{i} & 0.36043987514722653 +0.9327824485933747\,\mathrm{i} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 1.\, +0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.4685059330398573 -0.1713611156914601\,\mathrm{i} & 2.603469709065218 +0.6885776528619827… [1258 chars total]
+
+## 2026-07-18 18:48:13 — ▶️ RUN CELLS 92–108
+Cell 92: ✓ — Out[302]//TableForm= \begin{pmatrix}\left\{0,0\right\} & -1.\,+0.\,\,\mathrm{i} & 1.\, +0.\,\,\mathrm{i} & 0.973902234276272 +0.2269679230016555\,\mathrm{i} & 0.7391304347826086 +0.\,\,\mathrm{i} & 0.973902234276272 +0.2269679230016555\,\mathrm{i}\\\left\{1,0\right\} & 0.15191893851739566 -0.10600050418875033\,\mathrm{i} & -0.15191893851739566+0.10600050418875033\,\mathrm{i} & 0.7651595274649543 +… [1258 chars total]
+Cell 93: ✓ — Out[305]= \begin{pmatrix}\left\{0,0\right\} & -1.\,+0.\,\,\mathrm{i}\\\left\{1,0\right\} & 0.05448860910968355 -0.09540961504089102\,\mathrm{i}\\\left\{1,1\right\} & -0.0293413933141388+0.7363100318787654\,\mathrm{i}\\\left\{2,0\right\} & 0.11703059508534998 +0.\,\,\mathrm{i}\\\left\{2,1\right\} & 0.8158972359113332 +0.\,\,\mathrm{i}\\\left\{3,0\right\} & 0.05448860910968355 +0.09540961504089102\,… [541 chars total]
+Cell 96: ✓ — Out[311]= \left\{\text{O[k1,0]-FLdet[k1] (must be 0)},0,\text{O[0,k2]-FLdet2[k2] (expected NONZERO per Phase1 finding)},\left(-3.0719756421050755-0.5172165371705225\,\mathrm{i}\right)\,k2\right\}
+Cell 97: ✓ — Out[316]= \left\{\text{Fcand1},k1^2\,\left(\left(-2.2527492196701659-5.82989030370859198\,\mathrm{i}\right)\,k2-\left(0.4170744170089964+23.0487337186617355\,\mathrm{i}\right)\right)+k1\,\left(\left(0.67128913890100625-0.37524873225652243\,\mathrm{i}\right)\,k2+\left(9.51343802264711551-1.5262799733212005\,\mathrm{i}\right)\right)-\left(1.99115021541939352-0.72828474168870538\,\mathrm{i}\right)\,k… [1014 chars total]
+Cell 98: ✓ — Out[318]= \left(0.9252125034899888 -6.175727508765443\,\mathrm{i}\right)\,k1^2\,k2+\left(5.4271267482291075 +3.0890004366773067\,\mathrm{i}\right)\,k1\,k2
+Cell 99: ✓ — Out[323]= \begin{pmatrix}\left\{0,0\right\} & 0\\\left\{1,0\right\} & 7.991287939023577 -1.2820751775898085\,\mathrm{i}\\\left\{2,0\right\} & -0.3808070763995185-21.044496003995498\,\mathrm{i}\\\left\{0,1\right\} & 0.6123194936458246 +1.416862394550688\,\mathrm{i}\\\left\{1,1\right\} & -0.6248120089007682-3.051910425543801\,\mathrm{i}\\\left\{2,1\right\} & -1.8923093445229393-4.897107855115217\,\m… [421 chars total]
+Cell 100: ✓ — Out[328]= \left\{\text{Fcand2 (no P-insertion)},k1^2\,\left(\left(0.02466179161444501+1.36288164597304175\,\mathrm{i}\right)-\left(0.36043987514722654+0.93278244859337472\,\mathrm{i}\right)\,k2\right)+k1\,\left(\left(1.2351720155778515-0.69045766735200127\,\mathrm{i}\right)\,k2-\left(6.46913785540003854-1.0378703818584163\,\mathrm{i}\right)\right)+\left(5.38781822995835893-1.9706528304517910\,\mat… [788 chars total]
+Cell 101: ✓ — 2 kernel messages: Power::infy: Infinite expression 0       encountered.
+Infinity::indet: Indeterminate expression ----------------- encountered.                                                   1/3                    … [also: Power::infy] result: Out[331]//TableForm= \begin{pmatrix}2 & 1 & \left\{0,0\right\} & \mathrm{Indeterminate} & \mathrm{Indeterminate} & -4.970498218180917+4.515583419069149\,\mathrm{i}\\2 & 1 & \left\{1,1\right\} & \mathr…
+Cell 102: ✓ — Out[334]//TableForm= \begin{pmatrix}2 & 1 & \left\{0,0\right\} & \left(-7.771745024480887+7.060451775520925\,\mathrm{i}\right)\,k1^2-\left(3.7846186890458786 +9.794215710230434\,\mathrm{i}\right)\,k1 & \left(1.8923093445229393 +4.897107855115217\,\mathrm{i}\right)\,k2 & -4.970498218180917+4.515583419069149\,\mathrm{i}\\2 & 1 & \left\{1,1\right\} & \left(9.339255641812587 +10.661478687052961\,\math… [1258 chars total]
+Cell 103: ✓ — 2 kernel messages: Power::infy: Infinite expression 0       encountered.
+Infinity::indet: Indeterminate expression ----------------- encountered.                                                   1/3                    … [also: Power::infy] result: Out[338]= \left\{\text{Fcand1(k1,0)},\mathrm{Indeterminate},\text{FLdet[k1]},\frac{\left(2.45075493251774917289426756629+5.78551794268217244227029022731\,\mathrm{i}\right)\,\left(\left(0.0525946877178…
+Cell 104: ✓ — Out[343]= \left\{\text{Fcand1(k1,0)},\left(-8.51191121729+7.73287575414\,\mathrm{i}\right)\,k1^2-\left(4.5054984393+11.6597806074\,\mathrm{i}\right)\,k1+\left(1.000000000000+0.\times 10^{-12}\,\mathrm{i}\right),\text{FLdet[k1]},\frac{\left(2.45075493251774917289426756629+5.78551794268217244227029022731\,\mathrm{i}\right)\,\left(\left(0.05259468771783351844996683714+0.15021349717800998891606886537\… [960 chars total]
+Cell 107: ✓ — Out[348]= \left\{\text{STEP 0: det[$\lambda$1,$\lambda$2][k\^{}(u/h)Q1] vs O[k,k], worst |residual| (sample k)},0,\text{sample rows \{$\lambda$1,$\lambda$2,state,resid,ratio\}},\begin{pmatrix}1 & 1 & \left\{0,0\right\} & 0 & 1.\,\\1 & 1 & \left\{1,0\right\} & 0 & 1.\,\\1 & 1 & \left\{1,1\right\} & 0 & 1.\,\\1 & 1 & \left\{2,0\right\} & 0 & 1.\,\\2 & 1 & \left\{0,0\right\} & 0 & 1.\,\\2 & 1 & \left… [445 chars total]
+Cell 108: ✓ — Out[354]= \left\{\text{STEP 0 CONFIRMED: det[$\lambda$1,$\lambda$2][k\^{}(u/h)Q1] == O[k,k] identically},\text{worst residual over full sweep},0,\text{num states},41\right\}
+
+## 2026-07-18 18:48:24 — ▶️ RUN CELLS 109–123
+Cell 109: ✓ — 2 kernel messages: Power::infy: Infinite expression - encountered.                                  0
+Infinity::indet: Indeterminate expression 0 ComplexInfinity encountered.
+Power::infy: Infinite expression - encounter… [also: Power::infy] result: Out[358]= \begin{pmatrix}1 & 0 & \left\{1.\,\right\}\\1 & 1 & \left\{1.\,\right\}\\2 & 0 & \left\{1.\,\right\}\\2 & 1 & \left\{2.\,\right\}\\2 & 2 & \left\{2.\,\right\}\\3 & 0 & \left\{1.\,\right\}\\3…
+Cell 110: ✓ — Out[364]= \left\{\text{STEP 1 CONFIRMED: ⟨x0[$\lambda$]|E21\^{}m = $\gamma$\_m($\lambda$) xL1[$\lambda$][\{m\}], $\gamma$\_m($\lambda$)=$\lambda$!/($\lambda$-m)!},\text{worst deviation},0,\text{table \{$\lambda$,m,$\gamma$\_found,$\gamma$\_predicted,dev\}},\begin{pmatrix}1 & 0 & 1.\, & 1 & 0\\1 & 1 & 1.\, & 1 & 0\\2 & 0 & 1.\, & 1 & 0\\2 & 1 & 2.\, & 2 & 0\\2 & 2 & 2.\, & 2 & 0\\3 & 0 & 1.\, & 1 &… [489 chars total]
+Cell 111: ✓ — Out[369]= \left\{\text{STEP 2: x2[\{s1,m\}] vs xL1[$\lambda$1][\{s1\}]$\otimes$xL1[$\lambda$2][\{m\}], worst ratio-spread (constancy check)},0,\text{num cases},54,\text{sample rows},\begin{pmatrix}1 & 1 & 0 & 1 & 0.16 & 0\\1 & 1 & 1 & 1 & 1.\, & 0\\1 & 2 & 0 & 1 & 0.16 & 0\\1 & 2 & 0 & 2 & -0.68 & 0\\1 & 2 & 1 & 1 & 1.\, & 0\\1 & 2 & 1 & 2 & 1.\, & 0\\1 & 3 & 0 & 1 & 0.16 & 0\\1 & 3 & 0 & 2 & -0.6… [479 chars total]
+Cell 112: ✓ — Out[373]= \begin{pmatrix}1 & 0 & \frac{4}{25}\\1 & 1 & 1\\2 & 0 & \frac{2}{23}\\2 & 1 & \frac{25}{46}\\2 & 2 & 1\\3 & 0 & \frac{4}{67}\\3 & 1 & \frac{25}{67}\\3 & 2 & \frac{46}{67}\\3 & 3 & 1\end{pmatrix}
+Cell 113: ✓ — Out[378]= \left\{\text{c($\lambda$1,s1) hypothesis (m-independent) vs full sweep --- FAILS for m>=2, see next cell for the fix},\text{worst deviation over all 54 ($\lambda$1,$\lambda$2,s1,m) cases},1.68\right\}
+Cell 114: ✓ — Out[382]= \begin{pmatrix}1 & 0 & 1 & \frac{4}{25}\\1 & 0 & 2 & -\frac{17}{25}\\1 & 0 & 3 & -\frac{38}{25}\\1 & 1 & 1 & 1\\1 & 1 & 2 & 1\\1 & 1 & 3 & 1\\2 & 0 & 1 & \frac{2}{23}\\2 & 0 & 2 & -\frac{34}{575}\\2 & 0 & 3 & \frac{323}{575}\\2 & 1 & 1 & \frac{25}{46}\\2 & 1 & 2 & \frac{2}{23}\\2 & 1 & 3 & -\frac{17}{46}\\2 & 2 & 1 & 1\\2 & 2 & 2 & 1\\2 & 2 & 3 & 1\\3 & 0 & 1 & \frac{4}{67}\\3 & 0 & 2 & … [672 chars total]
+Cell 115: ✓ — 4 kernel messages: LinearSolve::nosol: Linear equation encountered that has no solution.
+LinearSolve::nosol: Linear equation encountered that has no solution.
+LinearSolve::nosol: Linear equation encountered that has no … [also: LinearSolve::nosol, LinearSolve::nosol, LinearSolve::nosol] result: Out[387]= \left\{\text{coeffs (rows=s1, cols=s1'=0..3)},\left\{\mathrm{LinearSolve}\left[\begin{pmatrix}0 & 0 & 0 & 0\\0 & 0 & 0 & \frac{1}{36}\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & \f…
+Cell 116: ✓ — Out[392]= \left\{\left\{0,2\right\}\to -0.02206359506813757300454250486697,\left\{1,1\right\}\to 0.1635301752109020116807268007787,\left\{2,0\right\}\to 0.8585334198572355613238157040883\right\}
+Cell 117: ✓ — Out[396]= \left\{\text{STEP 2 level-conservation check: \# off-level nonzero coeffs (want 0 everywhere)},0,\text{num ($\lambda$1,$\lambda$2,s1,m) cases},29\right\}
+Cell 119: ✓ — Out[404]= \left\{\text{m=0: Om-Cm (must be 0 per Phase1, C1pred/P1site2[$\theta$1] should equal exactly Cm's own norm here)},\left(2.5572121404875445 -0.4102640568287387\,\mathrm{i}\right)\,k1-\left(0.038411844228125346 +2.1227491621421546\,\mathrm{i}\right)\,k1^2,\text{m=1: Om\_1[k1]},\left(0.3604398751472265372666776506+0.9327824485933747164848359821\,\mathrm{i}\right)\,k1^2-\left(1.296101147801… [801 chars total]
+Cell 120: ✓ — Out[411]= \left\{\text{m=0: (B0-B1)/O\_0 ratio},\frac{\sqrt[3]{k1}\,\left(\left(-0.0292504903494856237+0.0205326892042810627\,\mathrm{i}\right)\,k1^2+\left(0.499242526583056932+0.532659421382621779\,\mathrm{i}\right)\,k1-\left(0.139388493663376676+0.206413542317126162\,\mathrm{i}\right)\right)}{\left(0.3604398751472265372666776506+0.9327824485933747164848359821\,\mathrm{i}\right)\,k1^2-\left(1.296… [1083 chars total]
+Cell 121: ✓ — Out[414]= \left\{\text{Cm[0]-Cm[1] shape},\left(-0.0225172879957976151-1.244370198497125076\,\mathrm{i}\right)\,k1^2+\left(5.434075798536032377-0.8718111207610696998\,\mathrm{i}\right)\,k1+\left(0.\times 10^{-20}+0.\times 10^{-20}\,\mathrm{i}\right),\text{ratio vs O\_0[k1] (want: clean constant)},\frac{\left(-0.0225172879957976151-1.244370198497125076\,\mathrm{i}\right)\,k1^2+\left(5.4340757985360… [753 chars total]
+Cell 122: ✓ — Out[416]= \left\{\text{Cm[0][k1] / O\_1[k1] (reversed-index hypothesis; want clean k1-independent constant)},\frac{\left(0.111318362779488714+0.0407158959953172346\,\mathrm{i}\right)\,k1^2-\left(0.21818047436770437-1.02534209918467083\,\mathrm{i}\right)\,k1+\left(0.360439875147226537-0.932782448593374716\,\mathrm{i}\right)}{\left(1.\,+0.\times 10^{-29}\,\mathrm{i}\right)\,k1^2-\left(2.963909584212… [539 chars total]
+
+## 2026-07-18 18:48:39 — ▶️ RUN CELLS 124–138
+Cell 125: ✓ — (no output)
+Cell 126: ✓ — Out[446]= \left\{\text{Symbolic-$\theta$,$\chi$1 port-fidelity: xL1Sym vs xL1},0,\text{x2Sym vs x2},0\right\}
+Cell 127: ✓ — Out[451]= \left\{\left\{0,0\right\}\to 0,\left\{0,1\right\}\to \frac{\theta A-\theta B}{\theta A-\theta B+1},\left\{1,0\right\}\to \frac{1}{\theta A-\theta B+1},\left\{1,1\right\}\to 0\right\}
+Cell 128: ✓ — Out[454]= 35
+Cell 129: ✓ — Out[460]= \left\{\left\{0,0\right\}\to 0,\left\{0,1\right\}\to \theta B-\theta A,\left\{1,0\right\}\to -1,\left\{1,1\right\}\to 0\right\}
+Cell 130: ✓ — Out[463]= 127
+Cell 131: ✓ — Out[466]= 127
+Cell 132: ✓ — Out[470]//MatrixForm= \begin{pmatrix}\frac{\theta A^2-2\,\theta A\,\theta B-\theta A+\theta B^2+\theta B}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)} & \frac{6\,\left(\theta A-\theta B\right)}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)} & \frac{6}{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)}\\0 & \frac{\theta A-\theta B+1}{\the… [472 chars total]
+Cell 133: ✓ — Out[472]//MatrixForm= \begin{pmatrix}\frac{\left(\theta A-\theta B+2\right)\,\left(\theta A-\theta B+3\right)}{\theta A^2-2\,\theta A\,\theta B-\theta A+\theta B^2+\theta B} & -\frac{6\,\left(\theta A-\theta B+3\right)}{\theta A^2-2\,\theta A\,\theta B+\theta B^2-1} & \frac{6}{\left(\theta A-\theta B\right)\,\left(\theta A-\theta B+1\right)}\\0 & \frac{\theta A-\theta B+3}{\theta A-\theta B+1} & -… [453 chars total]
+Cell 134: ✓ — Out[478]= \left\{\text{equations},\left\{1.000000000000000000000+0.\times 10^{-21}\,\mathrm{i}⩵\left(1.\,+0.\times 10^{-30}\,\mathrm{i}\right)\,wc0+\left(2.603469709065218092712489006+0.6885776528619826437114966465\,\mathrm{i}\right)\,wc1,-1.0350620568640061670+0.16605926109734660949\,\mathrm{i}⩵\left(1.522150083623538480912456055-0.2442047957313920727733393355\,\mathrm{i}\right)\,wc0-\left(1.2961… [785 chars total]
+Cell 135: ✓ — Out[484]= \begin{pmatrix}0 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\0 & 1 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\1 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\1 & 1 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} & 4.04123637990545\\2 & 0 & 0.8405990749714453 -0.5416578210984777\,\mathrm{i} … [510 chars total]
+Cell 136: ✓ — Out[489]= \left\{\text{Conjectured sum rule FAILS beyond the lucky L=1 case},\text{num failing cases},29,\text{num total cases},81,\text{sample failures},\begin{pmatrix}1 & 2 & 0 & 1 & \frac{1}{-\theta A+\theta B-1}\\1 & 2 & 0 & 2 & \frac{2}{\theta A-\theta B+1}\\1 & 3 & 0 & 1 & -\frac{2}{\theta A-\theta B+1}\end{pmatrix}\right\}
+Cell 138: ✓ — Out[496]= \left\{\text{BOXED: A[s1,m;s1,m] = Pochhammer[s1+$\theta$1-$\theta$2-m+1,m]/Pochhammer[$\lambda$1+$\theta$1-$\theta$2-m+1,m] --- verified at the live numeric $\theta$1,$\theta$2},\text{worst deviation},0,\text{num ($\lambda$1,$\lambda$2,s1,m) cases},81\right\}
+
+## 2026-07-18 18:48:48 — ▶️ RUN CELLS 139–154
+Cell 140: ✓ — Out[502]= \left\{\text{STEP 1a (WITH $\kappa$1\^{}(u/h) prefactor): worst |x2.Psi - Q1($\theta$1+s1)Q1($\theta$2+s2)/(Q1($\theta$1)Q1($\theta$2))|},0,\text{num cases},297\right\}
+Cell 141: ✓ — Out[509]= \left\{\text{STEP 1b (WITHOUT prefactor, bare q\_n): worst residual (expect NONZERO, confirming prefactor matters)},3.7396476326262356,\text{sample},\begin{pmatrix}\left\{0,0\right\} & 0 & 0 & 0\\\left\{1,0\right\} & 0 & 0 & 0\\\left\{1,1\right\} & 0 & 0 & 0\end{pmatrix}\right\}
+Cell 143: ✓ — Out[515]= \begin{pmatrix}\left\{0,0,\left\{\text{srng},\left\{0\right\},\text{sol},\left\{1.\,\right\},\text{maxResid},0.\times 10^{-28}\right\}\right\} & \left\{0,1,\left\{\text{srng},\left\{0,1\right\},\text{sol},\left\{11.50000000000000000000000000-4.431302171530629069010197265\times 10^{-38}\,\mathrm{i},-10.50000000000000000000000000+2.933894180666706878219239219\times 10^{-38}\,\mathrm{i}\rig… [1115 chars total]
+Cell 144: ✓ — Out[521]= \left\{\text{worst residual across full B-sweep (want \textasciitilde{}0)},0.\times 10^{-24},\text{num (rep,a,b) cases},37\right\}
+Cell 145: ✓ — Out[525]= \left\{\text{A-block ($\lambda$1=2,$\lambda$2=1, L=2, s,s'=1,2)},\begin{pmatrix}\frac{25}{46} & \frac{21}{46}\\0 & 1\end{pmatrix},\text{its inverse (should = B row)},\begin{pmatrix}\frac{46}{25} & -\frac{21}{25}\\0 & 1\end{pmatrix},\text{Step2's independently-solved B row \{1,1\}},\left\{\frac{46}{25},-\frac{21}{25}\right\},\text{match?},\left\{0,0\right\}\right\}
+Cell 147: ✓ — Out[532]= \left\{\text{det[$\lambda$1,$\lambda$2][k\^{}u Q1] - explicit residue-sum expansion (rep (2,1), state (1,0)), want 0},0\right\}
+Cell 148: ✓ — Out[538]= \left\{\text{TRUE sum rule (derived, Step 4): worst deviation},0,\text{num ($\lambda$1,$\lambda$2,s,t) cases},20,\text{sample},\begin{pmatrix}2 & 1 & 0 & 0 & 0\\2 & 1 & 0 & 1 & 0\\2 & 1 & 1 & 0 & 0\\2 & 1 & 1 & 1 & 0\\2 & 1 & 2 & 0 & 0\\2 & 1 & 2 & 1 & 0\end{pmatrix}\right\}
+Cell 150: ✓ — Out[546]= \left\{\text{STEP 3 assembly test (rep (2,1), 6 states x 3 grid points): worst |Oassembled-O2rot|},0,\text{num cases},18\right\}
+Cell 151: ✓ — Out[552]= \left\{\text{STEP 3 FULL-SWEEP ASSEMBLY CONFIRMED: O[k1,k2] = $\Sigma$ cA(k1)cB(k2) B-weighted Q-bilinears == O2rot exactly},\text{worst deviation},0,\text{num states x grid cases},82\right\}
+Cell 153: ✓ — Out[557]= \begin{pmatrix}0 & 0 & 1.\, & 1.\, & 0\\0 & 1 & -2.603469709065218-0.6885776528619827\,\mathrm{i} & 5.387818229958359 -1.970652830451791\,\mathrm{i} & -7.991287939023577+1.2820751775898085\,\mathrm{i}\\1 & 0 & 1.5221500836235384 -0.24420479573139206\,\mathrm{i} & -6.469137855400039+1.0378703818584163\,\mathrm{i} & 7.991287939023577 -1.2820751775898085\,\mathrm{i}\\1 & 1 & 1.2961011478017… [843 chars total]
+
+## 2026-07-18 18:49:00 — ▶️ RUN CELLS 155–172
+Cell 156: ✓ — Out[561]= \left\{\text{M matrix (rep (2,1), k1=7/3,k2=5/2)},\begin{pmatrix}1 & -\frac{115}{4}\\\frac{259}{12} & \frac{322}{15}\\-\frac{196}{45} & -\frac{245}{18}\end{pmatrix},\text{MatrixRank},2\right\}
+Cell 157: ✓ — Out[566]//TableForm= \begin{pmatrix}1 & 1 & \left\{\frac{7}{3},\frac{5}{2}\right\} & 2 & 2\\1 & 1 & \left\{\frac{11}{5},-\frac{4}{3}\right\} & 2 & 2\\1 & 1 & \left\{-\frac{2}{7},\frac{9}{4}\right\} & 2 & 2\\1 & 1 & \left\{\frac{13}{6},\frac{1}{9}\right\} & 2 & 2\\2 & 1 & \left\{\frac{7}{3},\frac{5}{2}\right\} & 2 & 2\\2 & 1 & \left\{\frac{11}{5},-\frac{4}{3}\right\} & 2 & 2\\2 & 1 & \left\{-\frac{… [1258 chars total]
+Cell 158: ✓ — Out[568]= \left\{\text{Det[M(k1,k2)] symbolic, rep (2,2)},\frac{213003\,k2^3\,\left(k1-k2\right)^2\,\left(17\,k1+46\,k2\right)}{7225},\text{identically zero?},\mathrm{False}\right\}
+Cell 159: ✓ — Out[572]= \left\{\text{rep (2,3): M dimensions},\left\{3,4\right\},\text{rank at sample point},3,\text{a 3x3 minor determinant (nonzero => rank>=3)},\frac{19563970545}{1405696}\right\}
+Cell 162: ✓ — Out[577]= \left\{\text{towerMat dims (rep (2,1), S=3)},\left\{6,4\right\},\text{MatrixRank},4\right\}
+Cell 163: ✓ — Out[582]= \left\{\text{c\_s (rep (2,1), S=3, p=7/3,r=5/2)},\left\{13.7688078414687182186600+2.10326272230760132765845\,\mathrm{i},-3.12167136931824065325212+18.8662496625125701186869\,\mathrm{i},-7.51900595437450423013552-10.1245361864155291062487\,\mathrm{i},3.80567731087062145228106-0.708676905117290761157203\,\mathrm{i}\right\},\text{max residual},27.6845440371648442360677\right\}
+Cell 164: ✓ — Out[584]//TableForm= \begin{pmatrix}3 & \left\{6,4\right\} & 4 & 27.6845440371648442360677\\4 & \left\{6,5\right\} & 4 & 27.6845440371648442360677\\5 & \left\{6,6\right\} & 4 & 27.684544037164844236068\\6 & \left\{6,7\right\} & 4 & 27.684544037164844236068\\7 & \left\{6,8\right\} & 4 & 27.684544037164844236068\end{pmatrix}
+Cell 165: ✓ — Out[587]= \left\{\text{c\_s at r=0, S=$\lambda$1=2 (rep (2,1), p=7/3)},\left\{1.\,,4.666666666666667,5.444444444444445\right\},\text{residual},0.\times 10^{-23},\text{predicted w1[$\lambda$1][[s+1]](-p)\^{}s},\left\{1.\,,4.666666666666667,5.444444444444445\right\},\text{match?},\left\{0,0,0\right\}\right\}
+Cell 166: ✓ — Out[594]= \left\{\text{$\theta$2-tower: dims},\left\{6,4\right\},\text{rank},4,\text{residual},25.4178846095368977408093\right\}
+Cell 167: ✓ — Out[598]//TableForm= \begin{pmatrix}-4 & -1 & 4 & 4 & 27.684544037164844236068\\-4 & 0 & 5 & 4 & 27.6845440371648442360677\\-4 & 1 & 6 & 4 & 27.6845440371648442360677\\-4 & 2 & 7 & 4 & 27.6845440371648442360677\\-4 & 3 & 8 & 4 & 27.6845440371648442360677\\-3 & 0 & 4 & 4 & 27.6845440371648442360677\\-3 & 1 & 5 & 4 & 27.6845440371648442360677\\-3 & 2 & 6 & 4 & 27.6845440371648442360677\\-3 & 3 & 7 &… [1139 chars total]
+Cell 168: ✓ — Out[608]= \left\{\text{multiply by Q1($\theta$2): residual},19.7572259100834793810211,\text{divide by Q1($\theta$2): residual},18.310606875396829403204\right\}
+Cell 169: ✓ — Out[620]= \left\{\text{r=0 residual at S=3 window (should stay 0, confirming subspace nesting)},0.\times 10^{-23},\text{more (p,r) failures, rep(2,1)},\begin{pmatrix}\left\{1,1\right\} & 4.04518880433634545024478\\\left\{2,-1\right\} & 8.9288834302921198736014\\\left\{-3,4\right\} & 39.3336388826667151011186\\\left\{0,\frac{7}{2}\right\} & 5.3318082362908496984122\end{pmatrix},\text{rep (1,2): tow… [476 chars total]
+Cell 170: ✓ — Out[626]= \left\{\text{bare-q1 tower basis: rank},4,\text{residual at (7/3,5/2)},27.6845440371648442360677\right\}
+Cell 171: ✓ — Out[629]= \left\{\text{rank of towerMat[2,1][2] (r=0 anchor, 3 unknowns)},3,\text{null space dimension (0 = unique solution)},0\right\}
+
+## 2026-07-18 18:49:28 — 📥 BULK INSERT 2 CELL(S) at positions 173–174
+1. [markdown] (*REDIRECT — Paul supplied his own working formula (su(2), his eq. 238-239, ℓ=1,L=2, β=α=1):↵  (⟨↑|e
+2. [code] (*Cross-state elimination of C: for FIXED (T,r), solve O[p,r][state_i]·FL[state_j](T) =↵  O[p,r][sta
+
+
+## 2026-07-18 18:49:29
+**Input:**
+```wolfram
+(*Cross-state elimination of C: for FIXED (T,r), solve O[p,r][state_i]·FL[state_j](T) =
+  O[p,r][state_j]·FL[state_i](T) for p, using ONE pair, then check ALL OTHER pairs give the SAME p.*)
+ClearAll[solveCoupling];
+solveCoupling[λ1_,λ2_][T_,r_] := Module[{states,FLvals,Ovals,eqs,sols,pCandidates},
+  states = statesOf[λ1,λ2];
+  FLvals = Table[FL[λ1,λ2][st[[1]],st[[2]]][T], {st,states}];
+  Ovals = Table[Opr[λ1,λ2][st[[1]],st[[2]]][p,r], {st,states}];
+  (*use state 1 as reference, solve p from pairing with every other state*)
+  pCandidates = Table[
+    Module[{eq,sol},
+      eq = Ovals[[1]] FLvals[[i]] - Ovals[[i]] FLvals[[1]] == 0;
+      sol = NSolve[eq, p, WorkingPrecision->30];
+      {i, states[[i]], p/.sol}
+    ]
+  ,{i,2,Length[states]}];
+  pCandidates
+];
+(*rep (2,1), T=7/3, r=5/2 sample.*)
+pCand21 = solveCoupling[2,1][7/3,5/2];
+pCand21 // TableForm
+```
+**Output:**
+```
+2 kernel messages: NSolve::precw: The precision of the argument function ({(-11.45569554337990047323 + 2.70008684227044968952 I) ((1.901099687868066343166694126 + 2.331956121483436791212089955 I) - (2.979951213744064381… [also: NSolve::precw] result: Out[633]//TableForm= \begin{pmatrix}2 & \left\{1,0\right\} & \left\{-0.360439875147226537266677650589+0.932782448593374716484835982015\,\mathrm{i},0.220899450193933919307122410797-0.287240959241362798…
+```
+
+## 2026-07-18 18:49:37
+**Input:**
+```wolfram
+pCand21
+```
+**Output:**
+```
+Out= {{2, {1, 0}, {-0.3604398751472265372666776505892551745836968140321853043781`29.707347828414424 + 0.9327824485933747164848359820150137223925650442489347621531`30.120295363558725*I, 0.2208994501939339193071224107971100353878522277884962688134`29.935570760761575 - 0.2872409592413627982779083453686364061584141107120948173195`30.049622494207107*I}}, {3, {1, 1}, {-0.3604398751472265372666776506359255811570372401417942778905`29.707347828414424 + 0.9327824485933747164848359820375970253646960012413238638644`30.120295363558725*I, 0.1789805138623094861608805753468137683299975095184079100886`29.736816525980974 + 0.4280751514707218504416081095145540934774771587641777779875`30.11553079437402*I}}, {4, {2, 0}, {-2.027354048517321255721269193762454418657117566742732304648`29.959943948699156 + 2.4032053593522338620422260889396174774939379510554559397776`30.033805233874258*I, 0.0999667698001488976086889112801375155951002865451144929524`29.661873012615562 - 0.291285877434607902050114471851602062679563500852011441963`30.12633678253536*I}}, {5, {2, 1}, {-1.4534592034602140998550152561639904878933065479133399233488`30.145171759512497 - 0.2294061510126451110558671873287968390731857548685510708961`29.343373971621702*I, 0.1090659352459134356047190568295590890975395104500118736532`29.468756326520563 + 0.5126675212205921076812137042769255532187167034238617955399`30.14090300336992*I}}, {6, {3, 0}, {-0.6340432828130668926861423714150601412379695033122768756431`29.19327304716634 - 5.710847626030475987674937457200078054234235954562342531382`30.1478547139557*I, -0.3531572930556511008651934401593963873831972782416842669502`30.113607331863832 - 0.1520073050400028148816297234699652425341981870431148822553`29.747503611970764*I}}}
+```
+## 2026-07-18 18:50:11 — 📥 BULK INSERT 1 CELL(S) at positions 175–175
+1. [code] (*Joint solve: for FIXED r, (p,T,C) are 3 unknowns satisfying O[p,r][state_i]=C·FL[state_i][T] for↵
+
+
+## 2026-07-18 18:50:11
+**Input:**
+```wolfram
+(*Joint solve: for FIXED r, (p,T,C) are 3 unknowns satisfying O[p,r][state_i]=C·FL[state_i][T] for
+  EVERY state — use 3 states to solve simultaneously (nonlinear in T via FL, but AFFINE in p,C given
+  T), then check the REMAINING 3 states of rep (2,1) for consistency.*)
+ClearAll[jointSolve];
+jointSolve[λ1_,λ2_][r_] := Module[{states,eqs,sols},
+  states = statesOf[λ1,λ2];
+  eqs = Table[Opr[λ1,λ2][states[[i,1]],states[[i,2]]][p,r] == c Global`FLT[i], {i,1,3}];
+  eqs = eqs /. Global`FLT[i_] :> FL[λ1,λ2][states[[i,1]],states[[i,2]]][tt];
+  NSolve[eqs, {p,c,tt}, WorkingPrecision->30]
+];
+sols21 = jointSolve[2,1][5/2];
+Length[sols21]
+sols21[[1;;Min[3,Length[sols21]]]]
+```
+**Output:**
+```
+2 kernel messages: NSolve::precw: The precision of the argument function ({(1.901099687868066343166694126 + 2.331956121483436791212089955 I) - (2.979951213744064381468205485 - 5.227684790291951818644572297 I) p - (2.975… [also: NSolve::precw] result: Out[637]= 2 | Out[638]= \left\{\left\{p\to -0.36+0.93\,\mathrm{i},c\to 21+21\,\mathrm{i},\mathrm{tt}\to 0.36-0.93\,\mathrm{i}\right\},\left\{p\to -0.36+0.93\,\mathrm{i},c\to 19+22\,\mathrm{i},\mathrm{…
+```
+
+## 2026-07-18 18:50:23
+**Input:**
+```wolfram
+sols21
+κ1
+κ2
+```
+**Output:**
+```
+Out[1]= {{p -> -0.3604399051539879073`1.6425035616932673 + 0.9327824257577005694`1.8740763828430353*I, c -> 21.1979952303432754986`1.8740763828430353 + 21.288817579003628385`1.8363718305601333*I, tt -> 0.3604398751513760214`1.6425035343052212 - 0.932782448623959264`1.8740763828430353*I}, {p -> -0.3604399051539846662`1.6425035617376684 + 0.932782425757702345`1.8740763828430318*I, c -> 18.6948696842280562641`1.8740763828430353 + 21.7515617332618365138`1.8578055567171874*I, tt -> 0.3604398751515455951`1.6425035343497998 - 0.9327824486237882288`1.8740763828430353*I}}
+Out[2]= 0.3604398751472265372666776505955500912937645232622850024938`29.707347828414424 + 0.9327824485933747164848359820708679294578496404879183613065`30.120295363558725*I
+Out[3]= 0.360439875147226537266677650595550091293764523262285002494`29.421282762500656 - 0.9327824485933747164848359820708679294578496404879183613068`29.58721122792411*I
+```
+## 2026-07-18 18:50:51 — 📥 BULK INSERT 1 CELL(S) at positions 176–176
+1. [code] (*Robust elimination via Resultant (avoids NSolve's Newton-iteration precision loss near↵  degenerat
+
+
+## 2026-07-18 18:50:51
+**Input:**
+```wolfram
+(*Robust elimination via Resultant (avoids NSolve's Newton-iteration precision loss near
+  degenerate points). EqA(p,T):=O1·FL2(T)-O2·FL1(T)=0, EqB(p,T):=O1·FL3(T)-O3·FL1(T)=0 (both from
+  clearing c between pairs of states); Resultant[EqA,EqB,p] eliminates p, giving a polynomial in T
+  alone whose roots are candidate couplings.*)
+ClearAll[elimT];
+elimT[λ1_,λ2_][r_] := Module[{states,O1,O2,O3,FL1,FL2,FL3,eqA,eqB,resT},
+  states = statesOf[λ1,λ2];
+  O1 = Opr[λ1,λ2][states[[1,1]],states[[1,2]]][p,r];
+  O2 = Opr[λ1,λ2][states[[2,1]],states[[2,2]]][p,r];
+  O3 = Opr[λ1,λ2][states[[3,1]],states[[3,2]]][p,r];
+  FL1 = FL[λ1,λ2][states[[1,1]],states[[1,2]]][tt];
+  FL2 = FL[λ1,λ2][states[[2,1]],states[[2,2]]][tt];
+  FL3 = FL[λ1,λ2][states[[3,1]],states[[3,2]]][tt];
+  eqA = Simplify[O1 FL2 - O2 FL1];
+  eqB = Simplify[O1 FL3 - O3 FL1];
+  resT = Resultant[eqA,eqB,p] // Simplify;
+  {eqA, eqB, resT}
+];
+{eqA21, eqB21, resT21} = elimT[2,1][5/2];
+{"Resultant[EqA,EqB,p] (should be a polynomial in tt alone)", resT21, "Exponent in tt", Exponent[resT21,tt]}
+```
+**Output:**
+```
+Out[642]= \left\{\text{Resultant[EqA,EqB,p] (should be a polynomial in tt alone)},\left(5.60\times 10^{-15}+5.7\times 10^{-16}\,\mathrm{i}\right)\,\mathrm{tt}^{4/3}\,\left(\left(1.\,+0.\times 10^{-3}\,\mathrm{i}\right)\,\mathrm{tt}-\left(1.06-0.069\,\mathrm{i}\right)\right)\,{\left(\left(1.\,+0.\times 10^{-3}\,\mathrm{i}\right)\,\mathrm{tt}-\left(0.36-0.933\,\mathrm{i}\right)\right)}^5\,\left(\lef… [651 chars total]
+```
+## 2026-07-18 18:51:17 — 📥 BULK INSERT 1 CELL(S) at positions 177–177
+1. [code] (*Factor out the COMMON fractional prefactor T^(θ1/h) (from κ1^(u/h)·T^(u/h) evaluated at the↵  θ1-n
+
+
+## 2026-07-18 18:51:18
+**Input:**
+```wolfram
+(*Factor out the COMMON fractional prefactor T^(θ1/h) (from κ1^(u/h)·T^(u/h) evaluated at the
+  θ1-node, same for every state of a rep — tied to θ1 only, not the state) before eliminating, so
+  Resultant sees genuine polynomials.*)
+ClearAll[FLpoly];
+FLpoly[λ1_,λ2_][M_,n_][T_] := Simplify[FL[λ1,λ2][M,n][T] / T^(θ1/h)];
+(*smoke: confirm this is now a clean polynomial (no fractional powers of T).*)
+FLpoly[2,1][1,0][T] // Simplify
+```
+**Output:**
+```
+Out[645]= \left(-1.185612706261319859+0.8322533032249952804\,\mathrm{i}\right)\,T^2-\left(0.7618199108066716511+0.8128124734592948256\,\mathrm{i}\right)\,T-\left(0.4044100375365073294+0.5988708694858726138\,\mathrm{i}\right)
+```
+## 2026-07-18 18:51:29 — 📥 BULK INSERT 1 CELL(S) at positions 178–178
+1. [code] (*Redo elimination with FLpoly (clean polynomials, no fractional powers) — Resultant should now↵  gi
+
+
+## 2026-07-18 18:51:29
+**Input:**
+```wolfram
+(*Redo elimination with FLpoly (clean polynomials, no fractional powers) — Resultant should now
+  give a genuine polynomial in T.*)
+ClearAll[elimTpoly];
+elimTpoly[λ1_,λ2_][r_] := Module[{states,O1,O2,O3,FL1,FL2,FL3,eqA,eqB,resT},
+  states = statesOf[λ1,λ2];
+  O1 = Opr[λ1,λ2][states[[1,1]],states[[1,2]]][p,r];
+  O2 = Opr[λ1,λ2][states[[2,1]],states[[2,2]]][p,r];
+  O3 = Opr[λ1,λ2][states[[3,1]],states[[3,2]]][p,r];
+  FL1 = FLpoly[λ1,λ2][states[[1,1]],states[[1,2]]][tt];
+  FL2 = FLpoly[λ1,λ2][states[[2,1]],states[[2,2]]][tt];
+  FL3 = FLpoly[λ1,λ2][states[[3,1]],states[[3,2]]][tt];
+  eqA = Simplify[O1 FL2 - O2 FL1];
+  eqB = Simplify[O1 FL3 - O3 FL1];
+  resT = Resultant[eqA,eqB,p] // Simplify;
+  {eqA, eqB, resT}
+];
+{eqA21p, eqB21p, resT21p} = elimTpoly[2,1][5/2];
+{"Resultant (clean polynomial version)", resT21p, "Exponent in tt", Exponent[resT21p,tt]}
+```
+**Output:**
+```
+Out[649]= \left\{\text{Resultant (clean polynomial version)},\left(7.2096900227257981752515547669\times 10^{-10}-1\times 10^{-9}\,\mathrm{i}\right)\,\left(\left(1.\,+0.\times 10^{-1}\,\mathrm{i}\right)\,\mathrm{tt}-\left(1+0.\times 10^{-1}\,\mathrm{i}\right)\right)\,{\left(\left(1.\,+0.\times 10^{-1}\,\mathrm{i}\right)\,\mathrm{tt}-\left(0.3604676634583857275-0.9\,\mathrm{i}\right)\right)}^5\,\lef… [668 chars total]
+```
+## 2026-07-18 18:51:51 — 📥 BULK INSERT 1 CELL(S) at positions 179–179
+1. [code] (*Test T=1 directly (the candidate root found in the resultant): solve for p using state-pairing,↵
+
+
+## 2026-07-18 18:51:51
+**Input:**
+```wolfram
+(*Test T=1 directly (the candidate root found in the resultant): solve for p using state-pairing,
+  check consistency across ALL 6 states of rep (2,1), r=5/2 sample.*)
+Tval = 1;
+FLvalsT1 = Table[FL[2,1][st[[1]],st[[2]]][Tval], {st,statesOf[2,1]}];
+OvalsT1[pp_] := Table[Opr[2,1][st[[1]],st[[2]]][pp,5/2], {st,statesOf[2,1]}];
+(*solve p from state1 vs state2 ratio.*)
+eqT1 = OvalsT1[p][[1]] FLvalsT1[[2]] - OvalsT1[p][[2]] FLvalsT1[[1]] == 0;
+pSolT1 = NSolve[eqT1, p, WorkingPrecision->30];
+(*check consistency: for each candidate p, compute residual of ALL 6 O[p,r][state]/FL[state] - C
+  being equal (i.e. spread of ratios).*)
+consistCheck = Table[
+  Module[{pv,ratios,spread},
+    pv = p/.sol;
+    ratios = OvalsT1[pv]/FLvalsT1;
+    spread = Max[Abs[ratios - ratios[[1]]]];
+    {pv, ratios[[1]], spread}
+  ]
+,{sol,pSolT1}];
+consistCheck//TableForm
+```
+**Output:**
+```
+2 kernel messages: NSolve::precw: The precision of the argument function ({(-2.351842654604498839218 - 0.579430039720172159021 I) ((1.901099687868066343166694126 + 2.331956121483436791212089955 I) - (2.97995121374406438… [also: NSolve::precw] result: Out[656]//TableForm= \begin{pmatrix}-0.360439875147226537266677650605+0.932782448593374716484835982024\,\mathrm{i} & 0.\times 10^{-27}+0.\times 10^{-27}\,\mathrm{i} & 15.8018300251165013842\\0.8484789…
+```
+
+## 2026-07-18 18:52:01
+**Input:**
+```wolfram
+consistCheck
+```
+**Output:**
+```
+Out= {{-0.3604398751472265372666776506046790677033733542633701466781`29.707347828414424 + 0.93278244859337471648483598202444567040052156735816881392`30.120295363558725*I, 0``27.26559845777911 + 0``27.241036728160708*I, 15.80183002511650138419627368384399156405`21.49308424162044}, {0.8484789663621428335594333745767685646536138074113739854537`30.144339964179096 + 0.1441047912748553617304354611581160949615068141849192650605`29.374377304186787*I, -4.22313351003804772518225885133859546017`27.924897474471702 - 2.48637441470467120310184799779929184352`27.710810069374144*I, 12.67118670326289083051747836258355225039`21.574875849668196}}
+```
+## 2026-07-18 18:53:01 — 📥 BULK INSERT 1 CELL(S) at positions 180–180
+1. [code] (*Test T=κ2 EXACTLY (not a rounded numeric guess) — the multiplicity-5 root found in the↵  resultant
+
+
+## 2026-07-18 18:53:02
+**Input:**
+```wolfram
+(*Test T=κ2 EXACTLY (not a rounded numeric guess) — the multiplicity-5 root found in the
+  resultant. Solve for p via state-pairing, check consistency across ALL 6 states.*)
+Tvalκ2 = κ2;
+FLvalsTk = Table[FL[2,1][st[[1]],st[[2]]][Tvalκ2], {st,statesOf[2,1]}];
+OvalsTk[pp_] := Table[Opr[2,1][st[[1]],st[[2]]][pp,5/2], {st,statesOf[2,1]}];
+eqTk = OvalsTk[p][[1]] FLvalsTk[[2]] - OvalsTk[p][[2]] FLvalsTk[[1]] == 0;
+pSolTk = NSolve[eqTk, p, WorkingPrecision->30];
+consistCheckTk = Table[
+  Module[{pv,ratios,spread},
+    pv = p/.sol;
+    ratios = OvalsTk[pv]/FLvalsTk;
+    spread = Max[Abs[ratios - ratios[[1]]]];
+    {pv, ratios[[1]], spread}
+  ]
+,{sol,pSolTk}];
+consistCheckTk//TableForm
+```
+**Output:**
+```
+3 kernel messages: NSolve::precw: The precision of the argument function ({(0. 10    + 0. 10    I) ((1.901099687868066343166694126 + 2.331956121483436791212089955 I) - (2.979951213744064381468205485 - 5.2276847902919518… [also: Power::infy, NSolve::precw] result: Out[663]//TableForm= \begin{pmatrix}-0.776577576937402927802882824634 & \mathrm{ComplexInfinity} & \mathrm{Indeterminate}\end{pmatrix}
+```
+
+## 2026-07-18 18:54:19
+**Input:**
+```wolfram
+Factor[resT21p]
+```
+**Output:**
+```
+Out= 0``0.5161899144247263
+```
+
+## 2026-07-18 18:54:40
+**Input:**
+```wolfram
+statesOf[2,1]
+```
+**Output:**
+```
+Out= {{0, 0}, {1, 0}, {1, 1}, {2, 0}, {2, 1}, {3, 0}}
+```
+## 2026-07-18 18:54:55 — 📥 BULK INSERT 1 CELL(S) at positions 181–181
+1. [code] (*Redo elimination using states {1,0},{1,1},{2,0} (indices 2,3,4 — AVOIDING the M=0 state {0,0},↵  w
+
+
+## 2026-07-18 18:54:56
+**Input:**
+```wolfram
+(*Redo elimination using states {1,0},{1,1},{2,0} (indices 2,3,4 — AVOIDING the M=0 state {0,0},
+  which has deg q1=0 (Q1 constant) and may be causing a structural degeneracy in the elimination).*)
+elimTpoly2[λ1_,λ2_][r_] := Module[{states,Oa,Ob,Oc,FLa,FLb,FLc,eqA,eqB,resT},
+  states = statesOf[λ1,λ2];
+  Oa = Opr[λ1,λ2][states[[2,1]],states[[2,2]]][p,r];
+  Ob = Opr[λ1,λ2][states[[3,1]],states[[3,2]]][p,r];
+  Oc = Opr[λ1,λ2][states[[4,1]],states[[4,2]]][p,r];
+  FLa = FLpoly[λ1,λ2][states[[2,1]],states[[2,2]]][tt];
+  FLb = FLpoly[λ1,λ2][states[[3,1]],states[[3,2]]][tt];
+  FLc = FLpoly[λ1,λ2][states[[4,1]],states[[4,2]]][tt];
+  eqA = Simplify[Oa FLb - Ob FLa];
+  eqB = Simplify[Oa FLc - Oc FLa];
+  resT = Resultant[eqA,eqB,p] // Simplify;
+  {eqA, eqB, resT}
+];
+{eqA2, eqB2, resT2} = elimTpoly2[2,1][5/2];
+{"Resultant (states {1,0},{1,1},{2,0})", resT2, "is it identically 0?", resT2===0 || Chop[N[resT2/.tt->13/7],10^-10]===0}
+```
+**Output:**
+```
+Out[666]= \left\{\text{Resultant (states \{1,0\},\{1,1\},\{2,0\})},\left(14329-6305\,\mathrm{i}\right)\,\left(\left(1.\,+0.\times 10^{-5}\,\mathrm{i}\right)\,\mathrm{tt}-\left(0.95775-0.3310\,\mathrm{i}\right)\right)\,{\left(\left(1.\,+0.\times 10^{-5}\,\mathrm{i}\right)\,\mathrm{tt}-\left(0.3604-0.93278\,\mathrm{i}\right)\right)}^3\,\left(\left(1.\,+0.\times 10^{-5}\,\mathrm{i}\right)\,\mathrm{tt… [733 chars total]
+```
+## 2026-07-18 18:55:29 — 📥 BULK INSERT 1 CELL(S) at positions 182–182
+1. [code] (*T=κ2 is a genuine special point: T·κ1=1 exactly means T^(u/h)Q1(u)=(Tκ1)^(u/h)q1(u)=q1(u), the↵  B
+
+
+## 2026-07-18 18:55:30
+**Input:**
+```wolfram
+(*T=κ2 is a genuine special point: T·κ1=1 exactly means T^(u/h)Q1(u)=(Tκ1)^(u/h)q1(u)=q1(u), the
+  BARE untwisted polynomial (κ1κ2=χ2=1 exactly) — matches a Λ=0 pole in Paul's language, not the
+  informative root. Factor it out and find the OTHER root(s) at high precision.*)
+resT2reduced = Simplify[resT2 / (tt-κ2)^3 / (tt-κ1)]; (*strip the κ2^3 factor and any κ1 factor if present*)
+resT2reduced // Simplify
+otherRoots = NSolve[resT2reduced==0, tt, WorkingPrecision->40];
+otherRoots
+```
+**Output:**
+```
+2 kernel messages: NSolve::precw: The precision of the argument function ({------------------------------------------------------------------------------------------------------------------------------------------------… [also: NSolve::precw] result: Out[668]= \frac{\left(14300-6310\,\mathrm{i}\right)\,\mathrm{tt}^5+\left(4290-15000\,\mathrm{i}\right)\,\mathrm{tt}^4-\left(9370-10900\,\mathrm{i}\right)\,\mathrm{tt}^3+\left(3990+15100\,\mathrm{i}\ri…
+```
+## 2026-07-18 18:55:44 — 📥 BULK INSERT 1 CELL(S) at positions 183–183
+1. [code] (*Cleaner: get ALL roots of the FULL resultant directly (no manual imprecise factoring), then↵  filt
+
+
+## 2026-07-18 18:55:44
+**Input:**
+```wolfram
+(*Cleaner: get ALL roots of the FULL resultant directly (no manual imprecise factoring), then
+  filter out those near κ2 (the known spurious Λ=0 point) to isolate the genuine candidate(s).*)
+allRootsT = NSolve[resT2==0, tt, WorkingPrecision->40];
+allRootsT = tt/.allRootsT;
+distinctRootsT = DeleteDuplicates[Chop[allRootsT,10^-8], Abs[#1-#2]<10^-6&];
+genuineRoots = Select[distinctRootsT, Abs[#-κ2]>10^-4 && Abs[#-κ1]>10^-4 &];
+{"all distinct roots", distinctRootsT, "genuine (non-κ1,κ2) candidates", genuineRoots}
+```
+**Output:**
+```
+2 kernel messages: NSolve::precw: The precision of the argument function ({(14329. - 6305. I) ((-0.9578 + 0.3310 I) + (1.0000 + 0. I) tt) ((-0.3604 + 0.9328 I) + (1.0000 + 0. I) tt)  ((-0.12809 - 0.20204 I) + (1.0000 + … [also: NSolve::precw] result: Out[675]= \left\{\text{all distinct roots},\left\{-0.7860962566844919786096256684491978609626+0.5547445255474452554744525547445255474453\,\mathrm{i},-0.4685039370078740157480314960629921259843+0.17135…
+```
+
+## 2026-07-18 18:55:51
+**Input:**
+```wolfram
+genuineRoots
+```
+**Output:**
+```
+Out= {-0.7860962566844919786096256684491978609625668449197860962567`40.06275821830605 + 0.5547445255474452554744525547445255474452554744525547445256`39.911375515218765*I, -0.4685039370078740157480314960629921259842519685039370078741`40.12325187572833 + 0.171355498721227621483375959079283887468030690537084398977`39.68643667626069*I, 0.1280898876404494382022471910112359550561797752808988764044`39.879219411782 + 0.2020460358056265984654731457800511508951406649616368286445`40.077154900985015*I, 0.9577464788732394366197183098591549295774647887323943661972`40.12601628878301 - 0.3309859154929577464788732394366197183098591549295774647887`39.66457523834852*I}
+```
+## 2026-07-18 18:56:04 — 📥 BULK INSERT 1 CELL(S) at positions 184–184
+1. [code] (*The 4 genuine roots have repeating-decimal patterns — rationalize them, then test EACH for FULL↵
+
+
+## 2026-07-18 18:56:05
+**Input:**
+```wolfram
+(*The 4 genuine roots have repeating-decimal patterns — rationalize them, then test EACH for FULL
+  6-state consistency (the real verification).*)
+genuineRootsRat = Rationalize[genuineRoots, 10^-25];
+testConsistency[Tcand_] := Module[{FLvals,Ovals,eqRef,pSols,results},
+  FLvals = Table[FL[2,1][st[[1]],st[[2]]][Tcand], {st,statesOf[2,1]}];
+  Ovals[pp_] := Table[Opr[2,1][st[[1]],st[[2]]][pp,5/2], {st,statesOf[2,1]}];
+  eqRef = Ovals[p][[2]] FLvals[[3]] - Ovals[p][[3]] FLvals[[2]] == 0; (*use non-degenerate states 2,3*)
+  pSols = NSolve[eqRef, p, WorkingPrecision->30];
+  results = Table[
+    Module[{pv,ratios,spread},
+      pv = p/.sol;
+      ratios = Ovals[pv]/FLvals;
+      spread = Max[Abs[ratios-ratios[[1]]]];
+      {pv,ratios[[1]],spread}
+    ]
+  ,{sol,pSols}];
+  results
+];
+allTests = Table[{Tcand, testConsistency[Tcand]}, {Tcand,genuineRootsRat}];
+allTests // TableForm
+```
+**Output:**
+```
+2 kernel messages: NSolve::precw: The precision of the argument function ({(-4.541691109273399428597 - 0.161214415749599781314 I) ((7.508674272663045231781222516 + 1.7214441321549566092787416163 I) + (1.7181027858808976… [also: NSolve::precw] result: Out[679]//TableForm= \begin{pmatrix}-\frac{147}{187}+\frac{76\,\mathrm{i}}{137} & \begin{pmatrix}-7.98771842959443551594094471762+2.16546605458097969867976016316\,\mathrm{i} & 20.993118722988603573569…
+```
+
+## 2026-07-18 18:56:13
+**Input:**
+```wolfram
+Table[{allTests[[i,1]], allTests[[i,2,All,3]]}, {i,1,4}]
+```
+**Output:**
+```
+Out= {{-147/187 + (76*I)/137, {281.47431787189200661706437574955790309903`21.55325834474556, 14.07713558057919308789951856097502125519`22.990284032958943}}, {-119/254 + (67*I)/391, {433.58771800483860829228609502573330016855`23.057130553181835, 43.46103748736020766075566643974471911362`22.94770450123653}}, {57/445 + (79*I)/391, {44.81721102729618900028306925870457225953`24.206970241607834, 55.37739569006840917798253938406855562113`21.940723924410385}}, {68/71 - (47*I)/142, {10.55855315605064278530521088540409397077`22.79965437327681, 17.63399319653037512830294678117130088028`22.029464731182337}}}
+```
+## 2026-07-18 18:57:08 — 📥 BULK INSERT 1 CELL(S) at positions 185–185
+1. [code] (*More robust: compute pairwise elimination polynomials (in T alone) using state 2 as reference↵  ag
+
+
+## 2026-07-18 18:57:09
+**Input:**
+```wolfram
+(*More robust: compute pairwise elimination polynomials (in T alone) using state 2 as reference
+  against states 3,4,5,6 SEPARATELY, then find roots COMMON to ALL FOUR (not just a 3-state
+  resultant) — the TRUE consistent T must be a root of every one of them simultaneously.*)
+statesL = statesOf[2,1];
+refIdx = 2; (*state {1,0}*)
+pairResultants = Table[
+  Module[{Oref,Oj,FLref,FLj,eqP,resTj},
+    Oref = Opr[2,1][statesL[[refIdx,1]],statesL[[refIdx,2]]][p,5/2];
+    Oj = Opr[2,1][statesL[[j,1]],statesL[[j,2]]][p,5/2];
+    FLref = FLpoly[2,1][statesL[[refIdx,1]],statesL[[refIdx,2]]][tt];
+    FLj = FLpoly[2,1][statesL[[j,1]],statesL[[j,2]]][tt];
+    eqP = Simplify[Oref FLj - Oj FLref];
+    resTj = Resultant[eqP, D[eqP,p]/.p->p, p]; (*placeholder, real resultant needs pairing with another eq — instead just collect roots of THIS single eq in p for many T samples? Too slow. Use direct approach below.*)
+    eqP
+  ]
+,{j,{3,4,5,6}}];
+(*Instead: for each of the 4 candidate T's from before, directly check ALL 4 pairwise equations
+  (not just one) share a common p-root — i.e. does pairP[j][T,p]=0 for the SAME p, for j=3,4,5,6?*)
+checkCommonRoot[Tcand_] := Table[
+  Module[{eqPj,rts},
+    eqPj = pairResultants[[j-2]] /. tt->Tcand;
+    rts = p/.NSolve[eqPj==0,p,WorkingPrecision->30];
+    {j, rts}
+  ]
+,{j,{3,4,5,6}}];
+Table[{Tc, checkCommonRoot[Tc]}, {Tc, genuineRootsRat}] // TableForm
+```
+**Output:**
+```
+2 kernel messages: NSolve::precw: The precision of the argument function ({(-28.210761568625537 + 18.649534368430135 I) - (31.443835020525303 + 18.309446881119772 I) p - (2.595139161792717 + 3.156364786435206 I) p }) is… [also: NSolve::precw] result: Out[684]//TableForm= \begin{pmatrix}-\frac{147}{187}+\frac{76\,\mathrm{i}}{137} & \begin{pmatrix}3 & \left\{-7.98771842959443551215428927267+2.16546605458098000197401311282\,\mathrm{i},-0.360439875147…
+```
+
+## 2026-07-18 18:57:20
+**Input:**
+```wolfram
+Table[{genuineRootsRat[[i]], checkCommonRoot[genuineRootsRat[[i]]]}, {i,1,4}]
+```
+**Output:**
+```
+[message] NSolve::precw: The precision of the argument function ({(-28.210761568625537 + 18.649534368430135 I) - (31.443835020525303 + 18.309446881119772 I) p - (2.595139161792717 + 3.156364786435206 I) p }) is… [233 chars]
+[message] [NSolve::precw ×2 more suppressed — first instance shown above]
+[message] General::stop: Further output of NSolve::precw will be suppressed during this calculation.
+Out= {{-147/187 + (76*I)/137, {{3, {-7.9877184295944355121542892726715239138089793905453992070569`30.135115002942896 + 2.1654660545809800019740131128198049230255146251339838529545`29.568243635740536*I, -0.3604398751472265615145126464979078410979387840370969089354`29.707347828414424 + 0.9327824485933747305884330600618464361593665566306437821144`30.120295363558725*I}}, {4, {-7.9877745031587372901125820395978095726750002918353429334348`30.135113133016564 + 2.1656174399265463683743701537528078384253309398985908527474`29.568269077076987*I, -0.8587670926915252739551466425026653938900524082202771199269`30.129294999881004 - 0.2751485950663362582693728531621538044574387795984672569326`29.63498690524139*I}}, {5, {-0.3731857335739121174596662636652130835717342886002759675598`29.82291073749403 + 0.7002310456640634888826181856265478238868274903006907138224`30.09622706651244*I, 1.095495819701219134230909732660057402496365725331855977767`29.55000888940435 - 4.2266713756883085948078751597931592512676987154367267355702`30.136396647410052*I}}, {6, {-2.0440375576144116578590756113374941350458575152150455712696`30.065037868673244 - 1.4196307301139388006390943940135739502421192151180798375144`29.906724389067406*I, 0.492337492076547113306503835027837310542307482559403481744`30.14310713649716 + 0.0917163227215623840707124008879500732649718591282828034527`29.413290861215895*I}}}}, {-119/254 + (67*I)/391, {{3, {-4.0340558926646873302851258831060066541572719202820561632812`29.83563836048493 - 7.2874440379042366070067072846290809083638152192159817375944`30.09247168205264*I, -0.3604398751472265339434518198199396690690197010698067086483`29.707347828414424 + 0.9327824485933747008777722006025660525010301066722087253122`30.120295363558725*I}}, {4, {-4.0339153655536044412303294969718760423290585115100621576824`29.835617671694763 - 7.2876437070076316812548257910786511563191490082900611306689`30.092478021354385*I, -0.360392413949566820655936787945282894177761765107771733969`29.70729258904727 + 0.9327959722345952016741997126972498220736904491183423602226`30.120303610447536*I}}, {5, {-4.0342290912485447230952468817354570368619577335459890563999`29.835663555810747 - 7.2872045765985782246504357693250834036747745799667731808817`30.092463960826862*I, -0.3604359426843157786291162770330917314579527400978934108681`29.707343166343943 + 0.9327837800776050477909995122557161278129116145800679246863`30.12029605966958*I}}, {6, {-4.0342657197898103019286139504773406584426415699739985194352`29.835643015998137 - 7.287721024078541660997701726156803107933284132324386978753`30.09247025543694*I, -0.3604568645356879816786136776277944370084490829315339477245`29.707359452963278 + 0.9327977190668002490675446589677375345293434066767716432916`30.120293627779855*I}}}}, {57/445 + (79*I)/391, {{3, {-0.4373369434466416758187540175442106046859170803912456899445`29.505418744286622 - 1.8814177804475519494387403989912226035280975947082061169333`30.139087822986774*I, -0.3604398751472265344453718622243675696005312746413519155102`29.707347828414424 + 0.9327824485933747103547228281202392331094376787028684160554`30.120295363558725*I}}, {4, {-1.2469472755944250923956514263683237787332645302285603911782`29.590394278631457 + 4.3535960181098359126074656778345603702314730159008870253256`30.133394315166637*I, -0.4373289805255354549256832736182138379084282608827580000413`29.505409196806635 - 1.8814271194637243504661421940647073335511668444130762076496`30.13908833885709*I}}, {5, {-1.7032172226088559279658865535524378672132614201120073262293`30.080025044452718 - 1.0547610036913904747114876704878412083950784006320820967639`29.8719090693094*I, 0.2406810359897653719973050548569393161992180653325850522387`29.585344574979246 + 0.8509434513297804055686136433768660355822080495714914247845`30.13380340317444*I}}, {6, {-1.2198926405570556263632044763194673636892922100721942509865`30.13342366649606 - 0.3490873523893208798546160868337390305746329610864236315263`29.590036169610386*I, 0.9751174181114076689081753155963678674969264160956998524587`29.959514976202133 - 1.15784904684446270742828021392449007339344396233068260290
+[output truncated — 5492 chars total]
+```
