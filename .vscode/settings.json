@@ -3,5 +3,12 @@
     "wolfbook.collabMode": true,
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 1000,
-    "wolfbook.mcpEnabled": true
+    "wolfbook.mcpEnabled": true,
+    "python.defaultInterpreterPath": "${workspaceFolder}/Paul/Python/.venv/bin/python",
+    "workbench.colorCustomizations": {
+        "editor.wordHighlightBackground": "#3399ff18",
+        "editor.wordHighlightStrongBackground": "#3399ff28",
+        "editor.wordHighlightBorder": "#3399ff40",
+        "editor.wordHighlightStrongBorder": "#3399ff55"
+    }
 }
