@@ -9,46 +9,113 @@ freely each session rather than appending.
 Computing CG coefficients directly in the XXX spin chain (`Paul/Mathematica/XXX/`). The Gaudin
 subproject is parked.
 
-## State as of 2026-07-19 (gl(4) L=2 untwisted Casimir eigenvalues — DONE, exploratory findings mixed, in Experiments)
+## State as of 2026-07-20 (gl(4) L=2 untwisted Casimir eigenvalues — τ1,τ3 DONE exactly, τ2 partial, in Experiments)
 
-Follow-on to the twisted build below: new section appended to `Baxter_L2_XXX_SU4.wb` (cells 35–47),
-`z[k]→1` (untwisted/physical point), for the two-row-rectangular rep family `λ1=[S,S,0,0]`,
-`λ2=[P,P,0,0]`. Goal: closed-form eigenvalues `Λ_a(u)` of the untwisted transfer matrices via su(4)
-Casimir invariants of the irreps `μ` in `λ1⊗λ2=⊕N_μμ`. Design/plan (with gotchas/results recorded
-inline as found): `docs/superpowers/specs/2026-07-19-su4-l2-untwisted-casimir-eigenvalues-design.md`,
-`docs/superpowers/plans/2026-07-19-su4-l2-untwisted-casimir-eigenvalues.md`. All 5 tasks executed
-inline (subagents again lacked wolfbook tools this session).
+Follow-on to the twisted build below: new section appended to `Baxter_L2_XXX_SU4.wb` (now 70 cells,
+35 onward), `z[k]→1` (untwisted/physical point), for the two-row-rectangular rep family
+`λ1=[S,S,0,0]`, `λ2=[P,P,0,0]`. Goal: closed-form eigenvalues `Λ_a(u)` of the untwisted transfer
+matrices `τ1,τ2,τ3` via su(4) Casimir invariants of the irreps `μ` in `λ1⊗λ2=⊕N_μμ`. Design/plan:
+`docs/superpowers/specs/2026-07-19-su4-l2-untwisted-casimir-eigenvalues-design.md`,
+`docs/superpowers/plans/2026-07-19-su4-l2-untwisted-casimir-eigenvalues.md` (the plan's original 5
+tasks are DONE; everything below is follow-on work past the plan, done inline/live in the notebook
+in direct collaboration with Paul, not via a formal plan). Subagents lacked wolfbook tools this
+session (again) — a wolfbook-builder dispatch for the τ2/τ3 investigation partially worked (tools
+were attached that one time) and its findings were independently re-verified from primitives.
 
 **Exact-arithmetic simplification:** at `z=1` (vs. the twisted case's irrational `Zeta`-based twists)
-every quantity is exact rational — no precision-cascade concerns at all in this section.
+every quantity is exact rational — no precision-cascade concerns anywhere in this section.
 
-**Verified result:** on the "top" state `μ=λ1+λ2` (always multiplicity 1, by general representation
-theory — confirmed empirically too: this rep family is **fully multiplicity-free** across the whole
-`(S,P)∈{(1,1),(2,1),(1,2),(2,2)}` sweep, up to `dim=400`), `Λ_1(u) = ν[1](u)+ν[2](u)+ν[3](u)+ν[4](u)`
-exactly (`worst~0×10⁻²⁵`) — no Casimir needed, follows directly from the pseudovacuum `ν` formula
-already built for the twisted case.
+**Rep family is fully multiplicity-free** across the whole `(S,P)∈{(1,1),(2,1),(1,2),(2,2),(3,1)}`
+sweep tested (up to `dim=400`), so every `τ_a` acts as a scalar on each irrep block (Schur's lemma) —
+this is what makes closed forms in terms of Casimirs meaningful here at all.
 
-**Falsified conjecture (honest negative result, not a bug):** "each `u^j` coefficient of `Λ_1(u)` is
-an affine function of `C2(μ)` (quadratic Casimir) alone" — tested two independent ways (2-anchor
-extrapolation and least-squares over all 167 multiplicity-free data points across 3 rep pairs) —
-**fails** for `j=0` (constant term, deviation ~3–4.7) and `j=1` (subleading term, deviation ~1.25–2.0).
-Only `j=2` (leading term) is trivially constant (`=χ1=4`, already known, not a real test). **Stopped
-here per convention rather than searching further candidates unprompted** — next step (quadratic-in-C2,
-a second invariant like `H2` itself, or a cubic/quartic Casimir) needs a decision before continuing.
+### τ1 — DONE exactly
 
-**Three real bugs found and fixed while executing** (all documented inline in the plan, useful
-precedent for future notebook work): `ClearAll[f]` wipes a function's rules entirely, not just its
-memoized cache (had to re-insert the original defining code, not just clear+recall);
-`assoc[Key[list]]` single-bracket indexing silently returns `KeyAbsent` even for a genuine key here
-(use `assoc[list]`, no wrapper); computing `"field"->expr&/@list` *inline inside* an association
-literal silently binds to a scalar instead of a vector (compute to a local variable first, as
-`TauEigensystem4` already did). Also: `Table[...,{S=SP[[1]],P=SP[[2]]}]` is invalid iterator syntax
-(silently no-ops instead of erroring loudly — `S,P` need to be `Module` locals); `Flatten[list,2]`
-over-flattens when list rows have internal list structure (use depth matched to actual nesting).
+`Λ_1(u) = 4(u−θ1)(u−θ2) − 2P·h·(u−θ1) − 2S·h·(u−θ2) + (h²/2)(C2(μ) − C2(λ1) − C2(λ2))` (cell 48),
+verified over the full sweep, `worst ~ 1e-25`. All `μ`-dependence enters only through the quadratic
+Casimir eigenvalue `C2(μ)`, affine with slope `h²/2`. (This *resolved* an earlier false negative: a
+naive fit of "each `u^j` coeff of `Λ_1` = `A_j+B_j·C2(μ)` **pooled across all `(S,P)`**" failed for
+`j=0,1` — that was a pooling artifact, not a real falsification; the correct per-`(S,P)` formula
+above is exact. See cells 45–47 for the superseded pooled-fit attempt, kept for the record with an
+updated conclusion cell.)
 
-**Next natural steps:** decide whether to keep searching for a closed form on `j=0,1` (candidates:
-quadratic-in-`C2`, a second commuting invariant, cubic/quartic Casimirs `C3op`/`C4op` — not yet
-built) or treat the top-state result + falsification as the reportable outcome for this rep family.
+### τ3 — DONE exactly
+
+`Λ_3(u) = trivfactor[S,P]·( s3scalar[S,P](u)·Id + (h²/2)(C2(μ)−C2(λ1)−C2(λ2)) )` (cell 65), where
+`trivfactor[S,P] = (u−θ1)(u−θ2)(u−θ1−h(S+2))(u−θ2−h(P+2))` (Paul's own factorization of τ3's four
+trivial zeros, cells 58–63) and `s3scalar[S,P](u)` is an explicit state-independent degree-2
+polynomial. **The `h²` term is exactly the same quadratic-Casimir combination as τ1's** — verified
+as an exact operator identity on `(1,1),(2,1),(1,2)` including the `S↔P`-asymmetric case. So τ3
+carries no higher Casimir, only `C2` — the `Λ³ℂ⁴≅(Λ¹ℂ⁴)*⊗det` self-duality made concrete.
+
+### τ2 — PARTIAL (the self-dual middle case, genuinely harder)
+
+Writing `Λ_2(u) = Σ_k[α_k(S,P)+β_k(S,P)·C2(μ)]u^k`, with `u⁰` additionally carrying
+`+⅛C2(μ)²−¼C4(μ)` (universal coefficients, verified): **`α4=6,β4=0` (leading); `α3(S,P)=
+−6h(S+P+2)−12(θ1+θ2), β3=0`; `β2=h²` (universal constant); `α2(S,P)` fully resolved (messier
+polynomial, exact); `β1(S,P)=−(h³/2)(S+P+2)−h²(θ1+θ2)`** — all verified exactly against `tgCoeffs`
+across 5 `(S,P)` points via direct operator-level matching (`M_k = α_k·Id+β_k·C2op`, solved exactly,
+not curve-fit) — see cells 49–57 (the original agent-built investigation, confirming `τ2` uniquely
+reaches `C4` only in its constant term) plus a from-scratch re-derivation in the live session after a
+kernel restart (search for `solveABsym` in the transcript/notebook history).
+
+**Still open: `α0(S,P)` and `α1(S,P)`'s full `(S,P)`-dependence.** These need cubic (`α1`) and
+quartic (`α0`) polynomials in `(S,P)` — more unknowns than the 5 available `(S,P)` data points can
+resolve. Getting more points is expensive (`(4,1)`→dim 630, `(3,2)`→dim 1000, symbolic-in-`θ,h`
+computation at that size is impractical). An operator-level derivation was attempted instead: `T[i,j]`
+was expanded exactly in terms of `Ee1,Ee2` building blocks (verified to reproduce `T` and `tg[2,1]`
+bit-for-bit — see below) with the idea of reading off `α1,α0` structurally rather than by curve-fitting,
+but this did not pay off within the session (a residual-decomposition test against `{X1,X2,Y1,Y2,C2}`
+at a single `(S,P)` is underdetermined and not actually informative — would need to be done
+simultaneously across multiple `(S,P)` to mean anything). **Promising unexplored lead, added by Paul
+independently in cells 58–61**: `t1vac,t2vac,t3vac` — explicit vacuum-eigenvalue formulas built from
+`L1=L2=(u−θ1−hS)(u−θ2−hP)`, `L3=L4=(u−θ1)(u−θ2)` — `t2vac` sums all 6 pairs `Li(u)Lj(u−h)` in a
+specific descending-index order. An earlier attempt this session to derive the τ2 vacuum eigenvalue
+via `Σ_{i<j}ν_i(u)ν_j(u−h)` (ascending-index order) did **not** match `tg[2,1]` on the HWS (nonzero
+residual on pairs like `{1,3}`) — Paul's `t2vac` uses the opposite index order, which may be exactly
+the fix; reconciling this against the actual `qmin`/`tg[2,1]` construction is the natural next step
+and could resolve `α1,α0` cheaply (vacuum eigenvalues need no large-matrix computation at all).
+
+### General Casimir operator formulas (not just eigenvalues — the operators themselves)
+
+Cells 65–68 (note: cell 67, `X1/X2/Y1/Y2` definitions, was a **bugfix** — those operators were
+originally only ever created via scratch `evaluateExpression` calls and never actually saved to a
+notebook cell; a fresh-kernel run would have failed before the fix). General master formula (any `n`,
+verified `n=2,3,4`): `Cn_op[λ1,λ2] = Σ_{pat∈{1,2}^n} patternTerm[pat,λ1,λ2]`, where each of the `2ⁿ`
+site-assignment patterns collapses (via `(A⊗B)(C⊗D)=(AC)⊗(BD)` applied repeatedly) to `[ordered
+product of site-1 factors]⊗[ordered product of site-2 factors]`, cyclic indices tying both chains
+together. Reduced explicit forms with named cross terms:
+```
+C2op = (Csite[λ1]+Csite[λ2])Id + 2·Omega2                                    [1 cross term]
+C3op = (C3site[λ1]+C3site[λ2])Id + 2X1+2X2+Y1+Y2                              [4 cross terms]
+C4op = (C4site[λ1]+C4site[λ2])Id + 2Z1+2Z2+2Z3+2Z4+Z5+2Z6+Z7+2Z8               [8 cross terms]
+```
+Cross-term-type count grows 1→4→8 for `n=2,3,4` (matrix products aren't cyclic, only traces are, so
+patterns that look like rotations of each other are usually genuinely different operators) — itself a
+notable structural fact. Every formula verified as an **exact** operator identity (`==`, not
+tolerance) on asymmetric `λ1≠λ2` pairs (avoiding a `λ1=λ2` coincidence hiding real distinctions), plus
+`C3op`'s master formula also checked outside the `[S,S,0,0]` family (adjoint⊗fund) to confirm
+generality. Plain operator definition (cell 70, self-contained): `C2=Σ_ab E_ab.E_ba`,
+`C3=Σ_abc E_ab.E_bc.E_ca`, `C4=Σ_abcd E_ab.E_bc.E_cd.E_da`, `E_ab:=EE[λ1,λ2][a,b]`.
+
+### General Casimir eigenvalue formulas (cell 69, self-contained, no other cell needed)
+
+Single-site rep `[x,x,0,0]`: `Cₙ(x)=2x(x+2)ⁿ⁻¹` — `C2c[x]=2x(x+2)`, `C3c[x]=2x(x+2)²`,
+`C4c[x]=2x(x+2)³`, verified `x=1..5` against the operators. Combined two-site:
+`C2[S,P]=2S(S+2)+2P(P+2)`, `C3[S,P]=2S(S+2)²+2P(P+2)²`, `C4[S,P]=2S(S+2)³+2P(P+2)³`.
+
+**Real bugs found and fixed this session** (beyond the earlier three): `X1/X2/Y1/Y2` never persisted
+to a cell (see above); `T[i,j]` off-diagonal action on the HWS genuinely does vanish both directions
+(`T[i,j][u].HWS=0` for `i≠j`, confirmed identically in symbolic `u`) — useful building block, not a
+bug, but non-obvious and worth remembering; a hand-derived vacuum-formula attempt for τ2 had an
+index/shift-order bug not yet isolated (see τ2 section above).
+
+**Next natural steps:** reconcile Paul's `t2vac` (cell 61) against `tg[2,1]` on the HWS to get τ2's
+vacuum eigenvalue cheaply, then use it (plus the already-known `β1,β0` and the operator-level `T[i,j]`
+expansion) to pin down `α1(S,P),α0(S,P)` without more expensive `(S,P)` sweeps. Once τ2 is fully
+closed-form, the natural follow-on is the CG-overlap program this whole `z→1` limit was meant to feed
+into (see `HANDOFF.md`'s `su4 L2 untwisted` note in the twisted-case section below for the original
+motivation).
 
 ## State as of 2026-07-19 (gl(4) L=2 twisted Baxter solver: `Baxter_L2_XXX_SU4.wb` — DONE, in Experiments)
 
