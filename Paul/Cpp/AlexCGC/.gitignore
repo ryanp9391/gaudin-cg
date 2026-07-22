@@ -1,0 +1,4 @@
+# Compiled binaries are machine-specific -- rebuild with `bash build.sh`.
+/clebsch
+/cgc_hw_bench
+*.o
