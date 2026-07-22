@@ -7,7 +7,167 @@ freely each session rather than appending.
 ## Current focus
 
 Computing CG coefficients directly in the XXX spin chain (`Paul/Mathematica/XXX/`). The Gaudin
-subproject is parked.
+subproject proper (residue/representation groundwork) is still parked, but the `h→0` scaling limit
+of the XXX construction below is an active connection point, not a revival of that parked track.
+
+## State as of 2026-07-22 (C++ CGC reference benchmark set up — `Paul/Cpp/AlexCGC/`, UNCOMMITTED)
+
+Separate thread from the Baxter/Gaudin work below: set up the **state-of-the-art SU(N) CGC code**
+(Alex, Kalus, Huckleberry, von Delft, arXiv:1009.0437 — the Gelfand–Tsetlin pattern-calculus C++
+program from that paper's appendix) as a **reference benchmark** against Paul's Q-function CGC
+generating function (`Paul/Mathematica/Gaudin/Clean/CGGenFun.wb`). New directory `Paul/Cpp/AlexCGC/`
+— a C++ cross-check sibling to `Paul/Python/`. **Everything uncommitted** (Paul's choice: place,
+don't commit; a compiled binary is machine-specific — rebuild from source elsewhere).
+
+**Toolchain:** needs LAPACK/BLAS. `sudo apt-get install liblapack-dev libblas-dev` was run this
+session (installed, 3.10.0). Build all binaries with `bash Paul/Cpp/AlexCGC/build.sh` (plain g++).
+
+**What's there:**
+- `ClebschGordan.cpp` → `clebsch` — the authors' original source (downloaded, unmodified); an
+  interactive menu calculator (menu 5/6 = CGCs for S⊗S′). `hwcgc.sh` filters its output to just the
+  highest-weight state (always the largest index `Q(M″)=dim(S″)`).
+- `cgc_hw_bench.cpp` → `cgc_hw_bench` — modified copy that times ONLY the highest-weight-state solve
+  (`compute_highest_weight_coeffs`, the raising-op nullspace/SVD) and SKIPS building descendants
+  (3 clearly-commented `// added` edits: a `highest_weight_only` ctor flag, a scope timer, a new
+  benchmark `main`). Verified `max|hw_only − full| = 0` vs the full run in every case. Modes:
+  `cgc_hw_bench N S… S′… S″… [reps] [verify]` (per-irrep timing); `… decompose N S… S′…` (fast μ
+  list); `machine` flag = one parseable RESULT line.
+- `test.sh S [reps]` — for SU(4), times the highest-weight CGCs of EVERY μ in `[S,S,0,0]⊗[S,S,0,0]`
+  (summary table only, no coefficient dumps). `reps` default 51 (report min-over-reps, for the fast
+  small cases); use `reps=1` for large S (each solve already runs for seconds).
+- `results/` — `hw_timings.txt` (full per-μ tables S=1..8), `summary.csv`, `gen_results.sh`
+  (regenerates both). Machine: i5-1345U, 16 GB.
+
+**The benchmark result (the point of all this):** C++ cost is dominated by the SINGLET (0,0,0,0)
+— its highest-weight linear system is the largest — and total-over-all-μ hw-solve grows ~×5 per
+step in S: S4=0.057, S5=0.355, S6=2.49, S7=15.3, S8=80.2 s. It also has a **memory wall**: the
+singlet's dense SVD matrix is ≈ O(dim(ν)³) ≈ tens of GB by S=10 (dim[10,10,0,0]=1716), so the C++
+**cannot even run S=10** on a 16 GB laptop. Paul's GF (build-for-all-irreps time) is ~**flat**:
+S4=0.063, S6=0.139, S8=0.171, **S10=0.35 s**. ⇒ crossover ~S=4; GF ~470× faster at S=8, and at
+S=10 it's "0.35 s vs won't-run" — a scaling win in **both time and memory**, not a constant factor.
+
+**Open / next stage (Paul):** the GF timing is currently **build-only** — the explicit CGCs still
+need to be EXTRACTED from the generating function (Paul's stated next implementation stage). That is
+the one piece needed to make the head-to-head deliverable identical to the C++ (which outputs
+explicit coefficients); then drop GF per-μ times into a second CSV beside the C++ `results/` for a
+direct side-by-side. See memory `project_gf_cgc_vs_cpp_benchmark`.
+
+## State as of 2026-07-22 (gl(4) L=2 untwisted τ1,τ2,τ3 ALL DONE exactly via Baxter asymptotics; Gaudin h→0 limit + standalone `GaudinSolver.wb` — DONE)
+
+New notebook `Paul/Mathematica/XXX/Experiments/baxter_SU4_L2_XXX.wb` (Paul's own fresh build,
+independent of `Baxter_L2_XXX_SU4.wb`) closes out the τ2 gap left open in the 2026-07-20 entry
+below, via a genuinely different method — large-`u` asymptotic expansion of the untwisted Baxter
+(TQ) equation, rather than operator-level Casimir fits. **This supersedes that entry's "τ2 —
+PARTIAL" status: all three transfer matrices are now closed-form in Cas2(μ), Cas4(μ).**
+
+### The mechanism (Paul's idea, worked through live)
+
+- `n_k = μ_k` on the HWS (mode number = weight component) — verified directly against the main
+  notebook's `nvec` inversion.
+- Untwisted (`z_k→1`) Q-degree formula: `deg q_k = (S+P+3) − μ̂_k = (S+P)−μ_k+(k−1)`, `μ̂_k=μ_k+4−k`
+  the *same* shifted weights that appear in the paper's Casimir generating function (eq 2.13–2.15,
+  `G4[u]=Prod_i(u−h(μ_i+4−i))`). The `+(k−1)` staggering is forced, not just plausible: the
+  twisted-case `Mdeg` formula's denominator is (up to `z³`) the derivative of the twist
+  characteristic polynomial, which has a 4-fold zero at `z=1` — L'Hôpital-resolving that
+  degeneracy is exactly what produces the staggered degrees.
+- Key structural fact: `Σ_j(−1)^j C(4,j) j^m = 0` for `m=0,1,2,3` (a 4th finite difference) ⇒
+  large-`u` orders `1/u,1/u²,1/u³` of the Baxter equation are **state-blind** (independent of the
+  Q-data), and since the 4 Q-branches share one transfer matrix but have distinct leading powers
+  `p_k`, every power of `p` must vanish separately. Solving that system pins 5 of τ1/τ2/τ3's 7
+  unknown `u`-coefficients (`a[1],a[2],b[1],c[2],b[3]`) in terms of `S,P,θ` and one remaining
+  scalar `b[2]` — leaving only `b[2]` (τ2's `u²` coeff, carries Cas2) and `d[2]` (τ2's constant,
+  carries Cas4) as genuine Casimir-dependent data.
+- Pseudovacuum anchor (`μ_top=[S+P,S+P,0,0]`, all τ's = elementary-symmetric-in-ν vacuum
+  eigenvalues) gives `b2vac,c2vac,d2vac` independently — **cross-check passed exactly** (vacuum
+  `c[2]` matches the asymptotically-predicted `c[2]`, residual 0).
+
+### Result (τ1, τ2, τ3 all closed, all anchored at ΔCas = Cas(μ)−Cas(μ_top))
+
+```
+τ1(u) = τ1vac(u) + (h²/2)ΔCas2
+τ2(u) = τ2vac(u) + (h²/8)ΔCas2·[τ1vac(u)+τ1vac(u−h)] + h⁴(⅛ΔCas2²−¼ΔCas4) + h⁴(1+2S+2P)/4·ΔCas2
+τ3(u) = trivfactor(u)·[ 4u²−4u(θ1+θ2)+4θ1θ2−2hu(S+P+4) + b3vac + (h²/2)ΔCas2 ]
+```
+
+**The bug and how it was actually caught:** the first τ2 guess (fusion form
+`(h²/8)ΔCas2·[τ1vac(u)+τ1vac(u−h)]` matching u²,u¹ exactly, plus the "obviously right" quartic
+`h⁴(⅛ΔCas2²−¼ΔCas4)`) was missing the last `h⁴(1+2S+2P)/4·ΔCas2` term. Found by building the actual
+polynomial Baxter solver and testing it: for `μ={2,1,1,0}@(1,1)` (`deg q1=0`), a constant `q1`
+solved the equation at `μ_top` but **not** off-top — residual `=5·ν1(u−2h)ν1(u−3h)` exactly (a
+pure constant shift), which pinned the missing term via the actual solvability condition, and
+cross-checked against 27 irreps symbolically in `θ,h` (all exact) plus 4 more irreps with
+`deg q1≥1` to break a degeneracy where `Cas2²` and `Cas4` weren't separable. **Lesson: build the
+solver early — it's also the most direct correctness check.**
+
+### Baxter polynomial solver + gauge fixing (in `baxter_SU4_L2_XXX.wb`)
+
+`QsolveG[μ,S,P]` (note: `(μ,S,P)` order in *this* notebook — see naming-convention note below)
+solves the untwisted 4th-order Baxter (difference) equation for the four monic Q-polynomials,
+**gauge-fixed**: since `deg q1<...<deg q4` strictly, any lower-degree solution can be added to a
+higher one (`q_k → q_k+c·q_j`, `j<k`); removed by forcing the coefficient of `u^(deg q_j)` in `q_k`
+to vanish for every `j<k`. Verified exact (symbolic in `θ,h`) over full decompositions of every
+`(S,P)` up to `(3,2)`, and numerically (rational `θ1=1/3,θ2=1/7,h=1`) over **all 21 irreps at (5,5)**
+and **all 45 irreps at (8,8)** — every `q_k` solves the equation exactly, timing flat at
+~0.02–0.05s/irrep **independent of irrep dimension** (largest block tested: `dim=69825`, same cost
+as `dim=1`) since the solver only ever touches degree-≤19 polynomials, never the representation
+itself.
+
+Also built (Schur-polynomial machinery, reused verbatim in `GaudinSolver.wb` below): `irreps[S,P]`
+— full `[S,S,0,0]⊗[P,P,0,0]` tensor-product decomposition via `s_λ·s_μ=Σ c^ν_{λμ} s_ν`, peeling off
+the lex-highest monomial each step. Confirmed multiplicity-free throughout, dimension sums exact
+(`Σdim(μ)=dim([S,S,0,0])²`), box-count (`Total[μ]=2S+2P`) conserved on every irrep as expected.
+
+### Gaudin h→0 limit (derived in `baxter_SU4_L2_XXX.wb`, then built standalone)
+
+Writing `Q=Q0+h·Q1+...`, orders `h⁰..h³` of the cleared Baxter equation vanish identically (same
+alternating-binomial identity as above); order `h⁴` gives a **closed 4th-order ODE on Q0 alone**
+(no `Q1,Q2` needed) — the gl(4) 2-site Gaudin oper, entirely in `Cas2(μ),Cas4(μ),S,P,θ1,θ2`.
+Leading coefficient `8(u−θ1)²(u−θ2)²` (double singular points at the sites, as expected).
+Validated: the ODE's polynomial-solution degrees match `degQ[μ,S,P]` exactly (and *only* those
+degrees admit a solution) across every irrep of every `(S,P)` tested, symmetric and asymmetric.
+
+**New standalone notebook `Paul/Mathematica/XXX/Experiments/GaudinSolver.wb`** — deliberately
+minimal, gl(4) irrep/Casimir/degree machinery + the hardcoded `gaudinODE` only, **no** XXX transfer
+matrices or Baxter difference-equation machinery (by design, per Paul's request). Built across
+several rounds of naming/convention changes (all re-verified after each):
+- Sites renamed `θ1,θ2 → w1,w2`; spectral variable renamed `u → z`.
+- **Argument convention, applied everywhere: `(S,P,μ)`** — `degQ`, `GaudinSolve`, `BuildQs`,
+  `verifyGaudin`, `CheckAllIrreps` all take `S,P` first, `μ` (or the irrep list) last. (Note: this
+  is the *opposite* order from `QsolveG[μ,S,P]` in `baxter_SU4_L2_XXX.wb` — the two notebooks are
+  not argument-compatible; don't copy-paste calls between them without swapping.)
+- `GaudinSolve[S,P,μ]` returns **monic coefficient lists** (the practical/canonical form); `BuildQs
+  [S,P,μ]` is a thin wrapper returning the same four Q's as **explicit polynomials in z** (kept
+  purely for display/sharing, never used for internal verification/timing).
+- `CheckAllIrreps[S,P,irrList]` takes a **precomputed** irrep list rather than recomputing
+  `irreps[S,P]` internally — `irreps[8,8]` alone costs ~1.6s vs ~0.13s to actually solve all 45
+  irreps, so precompute-once-reuse is the efficient pattern. Verified at `(8,8)` (45 irreps) and
+  `(3,2)` (6 irreps).
+- **Verification convention, hard-won:** always reconstruct a coefficient list into a testable
+  function via `qf[x_]:=Sum[cf[[j+1]] x^j,{j,0,m}]` (SetDelayed), never
+  `Dot[coeffs,z^Range[...]]` wrapped in a pure `Function` — the latter has a genuine WL edge case
+  where symbolic `Derivative` of a length-1 (`deg=0`) Dot-built function spuriously returns a
+  wrapped `{0}` instead of `0`, causing false verification failures. Cost a full debugging round
+  before being isolated.
+
+**Assistant arithmetic error, corrected:** an earlier summary wrongly claimed
+`Σdim(μ)=8721²=76,055,441` for the `(8,8)` sweep — `8721` is `dimGL4[{16,16,0,0}]` (the *top*
+output irrep), not `dimGL4[{8,8,0,0}]` (the actual input irrep, `=825`). Correct identity:
+`Σdim(μ)=825²=680,625` — verified directly, matches the sweep. The sweep/solver results themselves
+were never wrong, only that one squared-dimension claim (caught by Paul).
+
+### Next natural steps
+
+- **τ2 is now closed** — this directly unblocks the CG-overlap program the whole `z→1` limit was
+  meant to feed (see the 2026-07-19/20 entries below for the original motivation). Natural next
+  step: extract CG coefficients using the now-complete Casimir-form transfer matrices.
+- Promote `baxter_SU4_L2_XXX.wb`'s Casimir-form τ1,τ2,τ3 + solver to `Clean/` once Paul is
+  satisfied (still in `Experiments/`).
+- `GaudinSolver.wb` is a clean, minimal, independently-reusable artifact — a natural next step is
+  extending it toward the Gaudin-side CG-overlap analog, or documenting it via
+  `wolfbook-docs-agent` once/if it's promoted to `Clean/`.
+- Kernel-state loss happened repeatedly this session (multiple `KERNEL RESTART` events between
+  turns) — always re-run cells top-to-bottom (`?symbolName` to check `DownValues` first) rather
+  than trust that a previous turn's definitions are still live.
 
 ## State as of 2026-07-20 (gl(4) L=2 untwisted Casimir eigenvalues — τ1,τ3 DONE exactly, τ2 partial, in Experiments)
 
