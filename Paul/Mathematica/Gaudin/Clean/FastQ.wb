@@ -9,7 +9,7 @@
   },
   {
    "kind": 2,
-   "value": "ClearAll[mm, res1, res0];\nmm[u_, n_, S1_, S2_, w_] := Exp[w u] u^n / ((u - 1)^S1 u^S2);\nres1[n_, S1_, S2_] := Exp[w] LaguerreL[S1 - 1, n - S2 - S1 + 1, -w];\nres0[n_, S1_, S2_] := If[S2 > n, (-1)^(S1 + S2 - n + 1) LaguerreL[S2 - n - 1, 1 - S1 - S2 + n, w], 0];",
+   "value": "ClearAll[mm, res1, res0];\nmm[u_, n_, S1_, S2_, w_] := Exp[w u] u^n / (u^(2 S1) (u - 1)^(2 S2));\nres1[n_, S1_, S2_] := Exp[w] LaguerreL[2 S2 - 1, n - 2 S1 - 2 S2 + 1, -w];\nres0[n_, S1_, S2_] := If[2 S1 > n, (-1)^(2 S1 + 2 S2 - n + 1) LaguerreL[2 S1 - n - 1, 1 - 2 S1 - 2 S2 + n, w], 0];",
    "languageId": "wolfram",
    "outputs": [],
    "metadata": {}
@@ -22,21 +22,63 @@
    "metadata": {}
   },
   {
+   "kind": 2,
+   "value": "doRes1[1,1,u]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"583381\" data-output-id=\"7\" data-out-n=\"21\" data-sub-idx=\"0\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"3\" data-sub-start=\"0\" data-sub-end=\"0\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[21]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrvozes1-ai1rssr\" data-page-width-em=\"25\" data-latex-b64=\"XG1hdGhybXtlfV53XCxcbGVmdCh3LTFccmlnaHQp\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord\"><span class=\"mord mathrm\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.7144em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.02691em;\">w</span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord mathnormal\" style=\"margin-right:0.02691em;\">w</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[21]= \\mathrm{e}^w\\,\\left(w-1\\right)",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "1c5f2cf5-5ce7-4255-be24-d9baa35e191c"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "Residue[Exp[ω u]u/u^2/(u-1)^2,{u,1}]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"583381\" data-output-id=\"8\" data-out-n=\"22\" data-sub-idx=\"0\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"4\" data-sub-start=\"0\" data-sub-end=\"0\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[22]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrvozits-n3dl24t\" data-page-width-em=\"25\" data-latex-b64=\"XG1hdGhybXtlfV57XG9tZWdhIH1cLFxsZWZ0KFxvbWVnYSAtMVxyaWdodCk=\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord\"><span class=\"mord mathrm\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.7144em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.03588em;\">ω</span></span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">ω</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[22]= \\mathrm{e}^{\\omega }\\,\\left(\\omega -1\\right)",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "cf8ebc82-d3f9-4735-931d-947822d16adf"
+    }
+   ],
+   "metadata": {}
+  },
+  {
    "kind": 1,
-   "value": "## Validation\n\n`res1`/`res0` vs. direct `Residue[f[u,n,S1,S2,w], {u,1}]` / `{u,0}`, for `n ∈ {0,...,4}`, `S2 ∈ {0,...,4}`, `S1 ∈ {1,...,4}` (S1=0 has no pole at u=1; `res1` has no guard for that edge case, unlike `res0`'s `If[S2>n,...,0]`).",
+   "value": "## Validation\n\n`res1`/`res0` vs. direct `Residue[f[u,n,S1,S2,w], {u,1}]` / `{u,0}`, for the new denominator `u^(2 S1) (u-1)^(2 S2)`: pole at `u=1` has order `2 S2`, pole at `u=0` has order `2 S1`. Swept over `n ∈ {0,...,4}`, `S1 ∈ {0,...,4}`, `S2 ∈ {1,...,4}` for `res1` and `S2 ∈ {0,...,4}` for `res0` (S2=0 has no pole at u=1; `res1` has no guard for that edge case, unlike `res0`'s `If[2 S1>n,...,0]`). All mismatches = 0.",
    "languageId": "markdown",
    "outputs": [],
    "metadata": {}
   },
   {
    "kind": 2,
-   "value": "mismatches1 = Reap[\n   Do[\n    diff = Simplify[res1[n, S1, S2] - Residue[mm[u, n, S1, S2, w], {u, 1}]];\n    If[diff =!= 0, Sow[{n, S1, S2, diff}]],\n    {n, 0, 4}, {S1, 1, 4}, {S2, 0, 4}\n    ]\n   ][[2]] // Flatten[#, 1] &;\nmismatches0 = Reap[\n   Do[\n    diff = Simplify[res0[n, S1, S2] - Residue[mm[u, n, S1, S2, w], {u, 0}]];\n    If[diff =!= 0, Sow[{n, S1, S2, diff}]],\n    {n, 0, 4}, {S1, 0, 4}, {S2, 0, 4}\n    ]\n   ][[2]] // Flatten[#, 1] &;\nPrint[\"mismatches (res1, res0) = \", {Length[mismatches1], Length[mismatches0]}];",
+   "value": "mismatches1 = Reap[\n   Do[\n    diff = Simplify[res1[n, S1, S2] - Residue[mm[u, n, S1, S2, w], {u, 1}]];\n    If[diff =!= 0, Sow[{n, S1, S2, diff}]],\n    {n, 0, 4}, {S1, 0, 4}, {S2, 1, 4}\n    ]\n   ][[2]] // Flatten[#, 1] &;\nmismatches0 = Reap[\n   Do[\n    diff = Simplify[res0[n, S1, S2] - Residue[mm[u, n, S1, S2, w], {u, 0}]];\n    If[diff =!= 0, Sow[{n, S1, S2, diff}]],\n    {n, 0, 4}, {S1, 0, 4}, {S2, 0, 4}\n    ]\n   ][[2]] // Flatten[#, 1] &;\nPrint[\"mismatches (res1, res0) = \", {Length[mismatches1], Length[mismatches0]}];",
    "languageId": "wolfram",
    "outputs": [
     {
      "items": [
       {
-       "data": "<div class=\"wl-print-output\"><div class=\"wl-print-line\"><span class=\"wl-ps\">mismatches (res1, res0) = </span><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrhb4jbf-tfd5ctk\" data-page-width-em=\"24\" data-latex-b64=\"XGxlZnRcezAsMFxyaWdodFx9\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "data": "<div class=\"wl-print-output\"><div class=\"wl-print-line\"><span class=\"wl-ps\">mismatches (res1, res0) = </span><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrvouxcz-y2tz1fu\" data-page-width-em=\"26\" data-latex-b64=\"XGxlZnRcezAsMFxyaWdodFx9\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
        "mime": "x-application/wolfram-language-html"
       },
       {
@@ -44,7 +86,7 @@
        "mime": "text/plain"
       }
      ],
-     "id": "b75d9041-e34c-47a0-a7ad-b34dd0fe79cc"
+     "id": "29bbd1a8-bd4e-489f-9e95-6fa61b596cb1"
     }
    ],
    "metadata": {}

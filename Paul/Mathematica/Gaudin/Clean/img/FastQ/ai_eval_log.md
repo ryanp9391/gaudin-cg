@@ -128,3 +128,79 @@ Out= Null
 ```
 Out= {0, 0}
 ```
+## 2026-07-22 06:14:08 — ✏️ EDIT CELL 2 [batch]
+ClearAll[mm, res1, res0];
+mm[u_, n_, S1_, S2_, w_] := Exp[w u] u^n / (u^(2 S1) (u - 1)^(2 S2));
+res1[n_, S1_, S2_] := Exp[w] LaguerreL[2 S2 - 1, n - 2 S1 - 2 S2 + 1, -w];
+res0[n_, S1_, S2_] := If[2 S1…
+
+
+## 2026-07-22 06:14:08
+**Input:**
+```wolfram
+ClearAll[mm, res1, res0];
+mm[u_, n_, S1_, S2_, w_] := Exp[w u] u^n / (u^(2 S1) (u - 1)^(2 S2));
+res1[n_, S1_, S2_] := Exp[w] LaguerreL[2 S2 - 1, n - 2 S1 - 2 S2 + 1, -w];
+res0[n_, S1_, S2_] := If[2 S1 > n, (-1)^(2 S1 + 2 S2 - n + 1) LaguerreL[2 S1 - n - 1, 1 - 2 S1 - 2 S2 + n, w], 0];
+```
+**Output:**
+```
+Out= (no output)
+```
+## 2026-07-22 06:14:08 — ✏️ EDIT CELL 5 [batch]
+mismatches1 = Reap[
+   Do[
+    diff = Simplify[res1[n, S1, S2] - Residue[mm[u, n, S1, S2, w], {u, 1}]];
+    If[diff =!= 0, Sow[{n, S1, S2, diff}]],
+    {n, 0, 4}, {S1, 0, 4}, {S2, 1, 4}
+    ]
+   ][[2]…
+
+
+## 2026-07-22 06:14:08
+**Input:**
+```wolfram
+mismatches1 = Reap[
+   Do[
+    diff = Simplify[res1[n, S1, S2] - Residue[mm[u, n, S1, S2, w], {u, 1}]];
+    If[diff =!= 0, Sow[{n, S1, S2, diff}]],
+    {n, 0, 4}, {S1, 0, 4}, {S2, 1, 4}
+    ]
+   ][[2]] // Flatten[#, 1] &;
+mismatches0 = Reap[
+   Do[
+    diff = Simplify[res0[n, S1, S2] - Residue[mm[u, n, S1, S2, w], {u, 0}]];
+    If[diff =!= 0, Sow[{n, S1, S2, diff}]],
+    {n, 0, 4}, {S1, 0, 4}, {S2, 0, 4}
+    ]
+   ][[2]] // Flatten[#, 1] &;
+Print["mismatches (res1, res0) = ", {Length[mismatches1], Length[mismatches0]}];
+```
+**Output:**
+```
+Out= Print: mismatches (res1, res0) =[formula]
+```
+
+## 2026-07-22 06:14:12
+**Input:**
+```wolfram
+{Length[mismatches1], Length[mismatches0]}
+```
+**Output:**
+```
+Out= {0, 0}
+```
+## 2026-07-22 06:14:24 — ✏️ EDIT CELL 4
+## Validation
+
+`res1`/`res0` vs. direct `Residue[f[u,n,S1,S2,w], {u,1}]` / `{u,0}`, for the new denominator `u^(2 S1) (u-1)^(2 S2)`: pole at `u=1` has order `2 S2`, pole at `u=0` has order `2 S1`. Swe…
+
+## 2026-07-22 06:14:28 — ▶️ RUN CELL 3
+**In [3]:** `doRes0[S1_,S2_,f_]:=Module[{nmax,coeffs,res},↵  nmax=Exponent[f,u];↵  coeffs=CoefficientList[f,u];↵  res=Plus@@(coeffs Table[res0[n,S1,S2],{n,0,nmax}]);↵  res↵  ]↵↵doRes1[S1_,S2_,f_]:=Module[{nmax,coe`
+**Out:** (no output)
+
+
+---
+
+## 2026-07-22 06:15:22 — 🔄 KERNEL RESTART
+
