@@ -318,3 +318,266 @@ gaudinMeasureResidue[Exp[k u], theta, h]
 ```
 Out= (E^(k*theta)*(-1 + E^(h*k)))/h
 ```
+
+## 2026-07-24 05:48:52
+**Input:**
+```wolfram
+ClearAll[Mg, Lg, fg, MChaing, applyMsg, EEg, eg, cleanupg];
+Mg[{i_, j_}][ff_] := D[ff, z] KroneckerDelta[i, j] + Lg[i, j][z] . ff;
+cleanupg[x_] := x //. Dot[a___, b_ + c_, d___] :> Dot[a, b, d] + Dot[a, c, d] //. Dot[a___, b_, d___] :> b Dot[a, d] /; FreeQ[b, fg | Lg] //. Dot[a___, b_*c_, d___] :> b Dot[a, c, d] /; FreeQ[b, Lg] //. Dot[a___, fg'''[z]] :> Dot[a] fg'''[z] //. Dot[a___, fg''[z]] :> Dot[a] fg''[z] //. Dot[a___, fg'[z]] :> Dot[a] fg'[z] //. Dot[a___, fg[z]] :> Dot[a] fg[z];
+applyMsg = {MChaing[{a__, b__, c__, d__}] :> Mg[a][Mg[b][Mg[c][Mg[d][fg[z]]]]] //. Dot[a___, b_ + c_, d___] :> Dot[a, b, d] + Dot[a, c, d]};
+EEg[II_, JJ_] := 1/4! Sum[Signature[s] Times @@ (eg[#] & /@ Transpose[{II[[s]], JJ}]), {s, Permutations[{1, 2, 3, 4}]}] MChaing[Transpose[{II, JJ}]] /. eg[{a_, b_}] :> KroneckerDelta[a, b];
+detOpOld = cleanupg[ExpandAll[Sum[EEg[II, JJ], {II, Tuples[Range[4], 4]}, {JJ, Tuples[Range[4], 4]}] //. applyMsg]];
+detOpNew = cleanupg[ExpandAll[Sum[Signature[s] Mg[{s[[1]], 1}][Mg[{s[[2]], 2}][Mg[{s[[3]], 3}][Mg[{s[[4]], 4}][fg[z]]]]], {s, Permutations[{1, 2, 3, 4}]}]]];
+Table[ExpandAll[Coefficient[detOpOld, d] - Coefficient[detOpNew, d]], {d, {fg'''[z], fg''[z], fg'[z], fg[z]}}]
+```
+**Output:**
+```
+Out[1]= (suppressed)
+Out[2]= (suppressed)
+Out[3]= (suppressed)
+Out[4]= (suppressed)
+Out[5]= (suppressed)
+Out[6]= (suppressed)
+Out[7]= (suppressed)
+Out[8]= {0, -1/2*Lg[1, 1][z] . Lg[2, 2][z] - Lg[1, 1][z] . Lg[3, 3][z]/2 - Lg[1, 1][z] . Lg[4, 4][z]/2 - Lg[1, 2][z] . Lg[2, 1][z]/2 - Lg[1, 3][z] . Lg[3, 1][z]/2 - Lg[1, 4][z] . Lg[4, 1][z]/2 + Lg[2, 1][z] . Lg[1, 2][z]/2 + Lg[2, 2][z] . Lg[1, 1][z]/2 - Lg[2, 2][z] . Lg[3, 3][z]/2 - Lg[2, 2][z] . Lg[4, 4][z]/2 - Lg[2, 3][z] . Lg[3, 2][z]/2 - Lg[2, 4][z] . Lg[4, 2][z]/2 + Lg[3, 1][z] . Lg[1, 3][z]/2 + Lg[3, 2][z] . Lg[2, 3][z]/2 + Lg[3, 3][z] . Lg[1, 1][z]/2 + Lg[3, 3][z] . Lg[2, 2][z]/2 - Lg[3, 3][z] . Lg[4, 4][z]/2 - Lg[3, 4][z] . Lg[4, 3][z]/2 + Lg[4, 1][z] . Lg[1, 4][z]/2 + Lg[4, 2][z] . Lg[2, 4][z]/2 + Lg[4, 3][z] . Lg[3, 4][z]/2 + Lg[4, 4][z] . Lg[1, 1][z]/2 + Lg[4, 4][z] . Lg[2, 2][z]/2 + Lg[4, 4][z] . Lg[3, 3][z]/2 + (3*Derivative[1][Lg[1, 1]][z])/2 + Derivative[1][Lg[2, 2]][z]/2 - Derivative[1][Lg[3, 3]][z]/2 - (3*Derivative[1][Lg[4, 4]][z])/2, (2*Lg[1, 1][z] . Derivative[1][Lg[2, 2]][z])/3 - Lg[1, 1][z] . Derivative[1][Lg[3, 3]][z]/3 - (4*Lg[1, 1][z] . Derivative[1][Lg[4, 4]][z])/3 - (2*Lg[1, 2][z] . Derivative[1][Lg[2, 1]][z])/3 - (2*Lg[1, 3][z] . Derivative[1][Lg[3, 1]][z])/3 - (2*Lg[1, 4][z] . Derivative[1][Lg[4, 1]][z])/3 - (2*Lg[2, 1][z] . Derivative[1][Lg[1, 2]][z])/3 + (2*Lg[2, 2][z] . Derivative[1][Lg[1, 1]][z])/3 - Lg[2, 2][z] . Derivative[1][Lg[3, 3]][z]/3 - (4*Lg[2, 2][z] . Derivative[1][Lg[4, 4]][z])/3 - (2*Lg[2, 3][z] . Derivative[1][Lg[3, 2]][z])/3 - (2*Lg[2, 4][z] . Derivative[1][Lg[4, 2]][z])/3 + Lg[3, 1][z] . Derivative[1][Lg[1, 3]][z]/3 + Lg[3, 2][z] . Derivative[1][Lg[2, 3]][z]/3 + (2*Lg[3, 3][z] . Derivative[1][Lg[1, 1]][z])/3 + (2*Lg[3, 3][z] . Derivative[1][Lg[2, 2]][z])/3 - (4*Lg[3, 3][z] . Derivative[1][Lg[4, 4]][z])/3 - (2*Lg[3, 4][z] . Derivative[1][Lg[4, 3]][z])/3 + (4*Lg[4, 1][z] . Derivative[1][Lg[1, 4]][z])/3 + (4*Lg[4, 2][z] . Derivative[1][Lg[2, 4]][z])/3 + (4*Lg[4, 3][z] . Derivative[1][Lg[3, 4]][z])/3 + (2*Lg[4, 4][z] . Derivative[1][Lg[1, 1]][z])/3 + (2*Lg[4, 4][z] . Derivative[1][Lg[2, 2]][z])/3 + (2*Lg[4, 4][z] . Derivative[1][Lg[3, 3]][z])/3 + Derivative[1][Lg[1, 1]][z] . Lg[2, 2][z]/3 + Derivative[1][Lg[1, 1]][z] . Lg[3, 3][z]/3 + Derivative[1][Lg[1, 1]][z] . Lg[4, 4][z]/3 - Derivative[1][Lg[1, 2]][z] . Lg[2, 1][z]/3 - Derivative[1][Lg[1, 3]][z] . Lg[3, 1][z]/3 - Derivative[1][Lg[1, 4]][z] . Lg[4, 1][z]/3 - Derivative[1][Lg[2, 1]][z] . Lg[1, 2][z]/3 + Derivative[1][Lg[2, 2]][z] . Lg[1, 1][z]/3 - (2*Derivative[1][Lg[2, 2]][z] . Lg[3, 3][z])/3 - (2*Derivative[1][Lg[2, 2]][z] . Lg[4, 4][z])/3 - Derivative[1][Lg[2, 3]][z] . Lg[3, 2][z]/3 - Derivative[1][Lg[2, 4]][z] . Lg[4, 2][z]/3 - Derivative[1][Lg[3, 1]][z] . Lg[1, 3][z]/3 + (2*Derivative[1][Lg[3, 2]][z] . Lg[2, 3][z])/3 + Derivative[1][Lg[3, 3]][z] . Lg[1, 1][z]/3 + Derivative[1][Lg[3, 3]][z] . Lg[2, 2][z]/3 - (5*Derivative[1][Lg[3, 3]][z] . Lg[4, 4][z])/3 - Derivative[1][Lg[3, 4]][z] . Lg[4, 3][z]/3 - Derivative[1][Lg[4, 1]][z] . Lg[1, 4][z]/3 + (2*Derivative[1][Lg[4, 2]][z] . Lg[2, 4][z])/3 + (5*Derivative[1][Lg[4, 3]][z] . Lg[3, 4][z])/3 + Derivative[1][Lg[4, 4]][z] . Lg[1, 1][z]/3 + Derivative[1][Lg[4, 4]][z] . Lg[2, 2][z]/3 + Derivative[1][Lg[4, 4]][z] . Lg[3, 3][z]/3 - (5*Lg[1, 1][z] . Lg[2, 2][z] . Lg[3, 3][z])/6 - (5*Lg[1, 1][z] . Lg[2, 2][z] . Lg[4, 4][z])/6 - Lg[1, 1][z] . Lg[2, 3][z] . Lg[3, 2][z]/6 - Lg[1, 1][z] . Lg[2, 4][z] . Lg[4, 2][z]/6 + (5*Lg[1, 1][z] . Lg[3, 2][z] . Lg[2, 3][z])/6 + Lg[1, 1][z] . Lg[3, 3][z] . Lg[2, 2][z]/6 - (5*Lg[1, 1][z] . Lg[3, 3][z] . Lg[4, 4][z])/6 - Lg[1, 1][z] . Lg[3, 4][z] . Lg[4, 3][z]/6 + (5*Lg[1, 1][z] . Lg[4, 2][z] . Lg[2, 4][z])/6 + (5*Lg[1, 1][z] . Lg[4, 3][z] . Lg[3, 4][z])/6 + Lg[1, 1][z] . Lg[4, 4][z] . Lg[2, 2][z]/6 + Lg[1, 1][z] . Lg[4, 4][z] . Lg[3, 3][z]/6 - Lg[1, 2][z] . Lg[2, 1][z] . Lg[3, 3][z]/6 - Lg[1, 2][z] . Lg[2, 1][z] . Lg[4, 4][z]/6 + Lg[1, 2][z] . Lg[2, 3][z] . Lg[3, 1][z]/6 + Lg[1, 2][z] . Lg[2, 4][z] . Lg[4, 1][z]/6 + Lg[1, 2][z] . Lg[3, 1][z] . Lg[2, 3][z]/6 - Lg[1, 2][z] . Lg[3, 3][z] . Lg[2, 1][z]/6 + Lg[1, 2][z] . Lg[4, 1][z] . Lg[2, 4][z]/6 - Lg[1, 2][z] . Lg[4, 4][z] . Lg[2, 1][z]/6 + Lg[1, 3][z] . Lg[2, 1][z] . Lg[3, 2][z]/6 - Lg[1, 3][z] . Lg[2, 2][z] 
+[output truncated — 73484 chars total]
+```
+
+## 2026-07-24 05:49:33
+**Input:**
+```wolfram
+coeffs[x_] := Table[ExpandAll[Coefficient[x, d]], {d, {fg'''[z], fg''[z], fg'[z], fg[z]}}];
+ref = coeffs[detOpOld];
+candB = cleanupg[ExpandAll[Sum[Signature[s] Mg[{1, s[[1]]}][Mg[{2, s[[2]]}][Mg[{3, s[[3]]}][Mg[{4, s[[4]]}][fg[z]]]]], {s, Permutations[{1, 2, 3, 4}]}]]];
+candC = cleanupg[ExpandAll[Sum[Signature[s] Mg[{s[[4]], 4}][Mg[{s[[3]], 3}][Mg[{s[[2]], 2}][Mg[{s[[1]], 1}][fg[z]]]]], {s, Permutations[{1, 2, 3, 4}]}]]];
+candD = cleanupg[ExpandAll[Sum[Signature[s] Mg[{4, s[[4]]}][Mg[{3, s[[3]]}][Mg[{2, s[[2]]}][Mg[{1, s[[1]]}][fg[z]]]]], {s, Permutations[{1, 2, 3, 4}]}]]];
+{"rowFwd(B)" -> (coeffs[candB] === ref), "colRev(C)" -> (coeffs[candC] === ref), "rowRev(D)" -> (coeffs[candD] === ref)}
+```
+**Output:**
+```
+Out[1]= (suppressed)
+Out[2]= (suppressed)
+Out[3]= (suppressed)
+Out[4]= (suppressed)
+Out[5]= (suppressed)
+Out[6]= {"rowFwd(B)" -> False, "colRev(C)" -> False, "rowRev(D)" -> False}
+```
+
+## 2026-07-24 05:50:27
+**Input:**
+```wolfram
+detOpFast = 1/4! cleanupg[ExpandAll[Sum[
+     Signature[iperm] Signature[jperm] Mg[{iperm[[1]], jperm[[1]]}][Mg[{iperm[[2]], jperm[[2]]}][Mg[{iperm[[3]], jperm[[3]]}][Mg[{iperm[[4]], jperm[[4]]}][fg[z]]]]],
+     {iperm, Permutations[{1, 2, 3, 4}]}, {jperm, Permutations[{1, 2, 3, 4}]}]]];
+coeffs[detOpFast] === ref
+```
+**Output:**
+```
+Out= True
+```
+
+## 2026-07-24 05:50:59
+**Input:**
+```wolfram
+tOld = First@AbsoluteTiming[cleanupg[ExpandAll[Sum[EEg[II, JJ], {II, Tuples[Range[4], 4]}, {JJ, Tuples[Range[4], 4]}] //. applyMsg]]];
+tNew = First@AbsoluteTiming[1/4! cleanupg[ExpandAll[Sum[Signature[iperm] Signature[jperm] Mg[{iperm[[1]], jperm[[1]]}][Mg[{iperm[[2]], jperm[[2]]}][Mg[{iperm[[3]], jperm[[3]]}][Mg[{iperm[[4]], jperm[[4]]}][fg[z]]]]], {iperm, Permutations[{1, 2, 3, 4}]}, {jperm, Permutations[{1, 2, 3, 4}]}]]]];
+{"old (s)" -> tOld, "new (s)" -> tNew, "speedup" -> tOld/tNew}
+```
+**Output:**
+```
+Out= {"old (s)" -> 9.90374, "new (s)" -> 0.321433, "speedup" -> 30.811211045536705}
+```
+## 2026-07-24 05:52:18 — ✏️ EDIT CELL 15
+(* Symmetrized quantum determinant det_q(\[PartialD]_z + L). The \[Epsilon]-\[Epsilon] sum over all
+   index tuples collapses: only permutations I,J\[Element]S_4 survive, with weight
+   Signature[I] S…
+
+## 2026-07-24 05:52:34 — ✏️ EDIT CELL 10
+The determinant is assembled by directly nesting `M[{i,j}]` into the operator composition $M_{i_1 j_1}\circ M_{i_2 j_2}\circ M_{i_3 j_3}\circ M_{i_4 j_4}$ acting on $f(z)$, summed over row/column inde…
+
+## 2026-07-24 05:52:37 — 🗑️ DELETE CODE CELL 11
+applyMs = {
+   MChain[{a__, b__, c__, d__}] :> M[a][M[b][M[c][M[d][f[z]]]]] //.
+     Dot[a___, b_ + c_, d___] :> Dot[a, b, d] + Dot[a, c, d]
+  };
+
+## 2026-07-24 05:52:37 — 🗑️ DELETE MARKDOWN CELL 12
+The $\epsilon$-$\epsilon$ contraction term: sums $\mathrm{sign}(\sigma)$ over permutations $\sigma$ matching $I_\sigma$ to $J$ (zero unless $I$ is a permutation of $J$), weighting the ordered operator…
+
+## 2026-07-24 05:52:37 — 🗑️ DELETE CODE CELL 13
+EE[II_, JJ_] :=
+  1/4! Sum[
+     Signature[\[Sigma]] Times @@ (e[#] & /@ Transpose[{II[[\[Sigma]]], JJ}]),
+     {\[Sigma], Permutations[{1, 2, 3, 4}]}
+    ] MChain[Transpose[{II, JJ}]] /. e[{a_, b_}] …
+
+## 2026-07-24 05:52:37 — 🗑️ DELETE MARKDOWN CELL 14
+Sums `EE[I,J]` over all index tuples $I,J\in\{1,\dots,4\}^4$, i.e. the identity $\det A = \frac{1}{N!}\sum_{I,J} \epsilon_I \epsilon_J\, A_{i_1 j_1}\cdots A_{i_N j_N}$ applied noncommutatively (scalar…
+
+## 2026-07-24 05:53:17 — ▶️ RUN CELL 9
+**In [9]:** `M[{i_, j_}][f_] := D[f, z] KroneckerDelta[i, j] + L[i, j][z] . f;`
+**Out:** (no output)
+
+## 2026-07-24 05:53:20 — ▶️ RUN CELL 11
+**In [11]:** `(* Symmetrized quantum determinant det_q(\[PartialD]_z + L). The \[Epsilon]-\[Epsilon] sum over all↵   index tuples collapses: only permutations I,J\[Element]S_4 survive, with weight↵   Signature[I] S`
+**Out:** (no output)
+
+
+## 2026-07-24 05:53:24
+**Input:**
+```wolfram
+refFromScratch = coeffs[detOpFast] /. Lg -> L /. fg -> f;
+notebookH = Table[ExpandAll[Coefficient[detOp, d]], {d, {f'''[z], f''[z], f'[z], f[z]}}];
+ExpandAll[notebookH - refFromScratch]
+```
+**Output:**
+```
+Out= {0, 0, 0, 0}
+```
+
+## 2026-07-24 05:53:35
+**Input:**
+```wolfram
+ClearAll[Mg, Lg, fg, MChaing, applyMsg, EEg, eg, cleanupg, detOpOld, detOpNew, detOpFast, candB, candC, candD, coeffs, ref, refFromScratch, notebookH, tOld, tNew]; "scratch cleared"
+```
+**Output:**
+```
+Out= scratch cleared
+```
+
+## 2026-07-24 06:52:16
+**Input:**
+```wolfram
+ClearAll[Mg, Lg, fg];
+Mg[{i_, j_}][ff_] := D[ff, z] KroneckerDelta[i, j] + Lg[i, j][z] . ff;
+raw = 1/4! Sum[Signature[ip] Signature[jp] Mg[{ip[[1]], jp[[1]]}][Mg[{ip[[2]], jp[[2]]}][Mg[{ip[[3]], jp[[3]]}][Mg[{ip[[4]], jp[[4]]}][fg[z]]]]], {ip, Permutations[Range[4]]}, {jp, Permutations[Range[4]]}];
+old7[e_] := e //. Dot[a___, b_ + c_, d___] :> Dot[a, b, d] + Dot[a, c, d] //. Dot[a___, b_, d___] :> b Dot[a, d] /; FreeQ[b, fg | Lg] //. Dot[a___, b_*c_, d___] :> b Dot[a, c, d] /; FreeQ[b, Lg] //. Dot[a___, fg'''[z]] :> Dot[a] fg'''[z] //. Dot[a___, fg''[z]] :> Dot[a] fg''[z] //. Dot[a___, fg'[z]] :> Dot[a] fg'[z] //. Dot[a___, fg[z]] :> Dot[a] fg[z];
+new2[e_] := Expand[e] //. Dot[x___, p_Plus, y___] :> Total[Dot[x, #, y] & /@ (List @@ p)] //. Dot[x___, s_, y___] /; FreeQ[s, Lg] :> s Dot[x, y];
+newExpandOnly[e_] := Expand[e] //. Dot[x___, s_, y___] /; FreeQ[s, Lg] :> s Dot[x, y];
+r7 = old7[ExpandAll[raw]];
+Table[ExpandAll[Coefficient[r7, d] - Coefficient[new2[raw], d]], {d, {fg'''[z], fg''[z], fg'[z], fg[z]}}] -> Table[ExpandAll[Coefficient[r7, d] - Coefficient[newExpandOnly[raw], d]], {d, {fg'''[z], fg''[z], fg'[z], fg[z]}}]
+```
+**Output:**
+```
+Out[1]= (suppressed)
+Out[2]= (suppressed)
+Out[3]= (suppressed)
+Out[4]= (suppressed)
+Out[5]= (suppressed)
+Out[6]= (suppressed)
+Out[7]= (suppressed)
+Out[8]= {0, 0, Lg[1, 1][z] . Derivative[1][Lg[2, 2]][z]/2 + Lg[1, 1][z] . Derivative[1][Lg[3, 3]][z]/2 + Lg[1, 1][z] . Derivative[1][Lg[4, 4]][z]/2 - Lg[1, 2][z] . Derivative[1][Lg[2, 1]][z]/3 - Lg[1, 3][z] . Derivative[1][Lg[3, 1]][z]/3 - Lg[1, 4][z] . Derivative[1][Lg[4, 1]][z]/3 - Lg[2, 1][z] . Derivative[1][Lg[1, 2]][z]/3 + Lg[2, 2][z] . Derivative[1][Lg[1, 1]][z]/2 + Lg[2, 2][z] . Derivative[1][Lg[3, 3]][z]/2 + Lg[2, 2][z] . Derivative[1][Lg[4, 4]][z]/2 - Lg[2, 3][z] . Derivative[1][Lg[3, 2]][z]/3 - Lg[2, 4][z] . Derivative[1][Lg[4, 2]][z]/3 - Lg[3, 1][z] . Derivative[1][Lg[1, 3]][z]/3 - Lg[3, 2][z] . Derivative[1][Lg[2, 3]][z]/3 + Lg[3, 3][z] . Derivative[1][Lg[1, 1]][z]/2 + Lg[3, 3][z] . Derivative[1][Lg[2, 2]][z]/2 + Lg[3, 3][z] . Derivative[1][Lg[4, 4]][z]/2 - Lg[3, 4][z] . Derivative[1][Lg[4, 3]][z]/3 - Lg[4, 1][z] . Derivative[1][Lg[1, 4]][z]/3 - Lg[4, 2][z] . Derivative[1][Lg[2, 4]][z]/3 - Lg[4, 3][z] . Derivative[1][Lg[3, 4]][z]/3 + Lg[4, 4][z] . Derivative[1][Lg[1, 1]][z]/2 + Lg[4, 4][z] . Derivative[1][Lg[2, 2]][z]/2 + Lg[4, 4][z] . Derivative[1][Lg[3, 3]][z]/2, 0} -> {(3*Lg[1, 1][z])/4 + (3*Lg[2, 2][z])/4 + (3*Lg[3, 3][z])/4 + (3*Lg[4, 4][z])/4, Lg[1, 1][z] . Lg[2, 2][z]/2 + Lg[1, 1][z] . Lg[3, 3][z]/2 + Lg[1, 1][z] . Lg[4, 4][z]/2 - (5*Lg[1, 2][z] . Lg[2, 1][z])/12 - (5*Lg[1, 3][z] . Lg[3, 1][z])/12 - (5*Lg[1, 4][z] . Lg[4, 1][z])/12 - (5*Lg[2, 1][z] . Lg[1, 2][z])/12 + Lg[2, 2][z] . Lg[1, 1][z]/2 + Lg[2, 2][z] . Lg[3, 3][z]/2 + Lg[2, 2][z] . Lg[4, 4][z]/2 - (5*Lg[2, 3][z] . Lg[3, 2][z])/12 - (5*Lg[2, 4][z] . Lg[4, 2][z])/12 - (5*Lg[3, 1][z] . Lg[1, 3][z])/12 - (5*Lg[3, 2][z] . Lg[2, 3][z])/12 + Lg[3, 3][z] . Lg[1, 1][z]/2 + Lg[3, 3][z] . Lg[2, 2][z]/2 + Lg[3, 3][z] . Lg[4, 4][z]/2 - (5*Lg[3, 4][z] . Lg[4, 3][z])/12 - (5*Lg[4, 1][z] . Lg[1, 4][z])/12 - (5*Lg[4, 2][z] . Lg[2, 4][z])/12 - (5*Lg[4, 3][z] . Lg[3, 4][z])/12 + Lg[4, 4][z] . Lg[1, 1][z]/2 + Lg[4, 4][z] . Lg[2, 2][z]/2 + Lg[4, 4][z] . Lg[3, 3][z]/2 + (3*Derivative[1][Lg[1, 1]][z])/4 + (3*Derivative[1][Lg[2, 2]][z])/4 + (3*Derivative[1][Lg[3, 3]][z])/4 + (3*Derivative[1][Lg[4, 4]][z])/4, (2*Lg[1, 1][z] . Derivative[1][Lg[2, 2]][z])/3 + (2*Lg[1, 1][z] . Derivative[1][Lg[3, 3]][z])/3 + (2*Lg[1, 1][z] . Derivative[1][Lg[4, 4]][z])/3 - Lg[1, 2][z] . Derivative[1][Lg[2, 1]][z]/2 - Lg[1, 3][z] . Derivative[1][Lg[3, 1]][z]/2 - Lg[1, 4][z] . Derivative[1][Lg[4, 1]][z]/2 - Lg[2, 1][z] . Derivative[1][Lg[1, 2]][z]/2 + (2*Lg[2, 2][z] . Derivative[1][Lg[1, 1]][z])/3 + (2*Lg[2, 2][z] . Derivative[1][Lg[3, 3]][z])/3 + (2*Lg[2, 2][z] . Derivative[1][Lg[4, 4]][z])/3 - Lg[2, 3][z] . Derivative[1][Lg[3, 2]][z]/2 - Lg[2, 4][z] . Derivative[1][Lg[4, 2]][z]/2 - Lg[3, 1][z] . Derivative[1][Lg[1, 3]][z]/2 - Lg[3, 2][z] . Derivative[1][Lg[2, 3]][z]/2 + (2*Lg[3, 3][z] . Derivative[1][Lg[1, 1]][z])/3 + (2*Lg[3, 3][z] . Derivative[1][Lg[2, 2]][z])/3 + (2*Lg[3, 3][z] . Derivative[1][Lg[4, 4]][z])/3 - Lg[3, 4][z] . Derivative[1][Lg[4, 3]][z]/2 - Lg[4, 1][z] . Derivative[1][Lg[1, 4]][z]/2 - Lg[4, 2][z] . Derivative[1][Lg[2, 4]][z]/2 - Lg[4, 3][z] . Derivative[1][Lg[3, 4]][z]/2 + (2*Lg[4, 4][z] . Derivative[1][Lg[1, 1]][z])/3 + (2*Lg[4, 4][z] . Derivative[1][Lg[2, 2]][z])/3 + (2*Lg[4, 4][z] . Derivative[1][Lg[3, 3]][z])/3 + Derivative[1][Lg[1, 1]][z] . Lg[2, 2][z]/3 + Derivative[1][Lg[1, 1]][z] . Lg[3, 3][z]/3 + Derivative[1][Lg[1, 1]][z] . Lg[4, 4][z]/3 - Derivative[1][Lg[1, 2]][z] . Lg[2, 1][z]/6 - Derivative[1][Lg[1, 3]][z] . Lg[3, 1][z]/6 - Derivative[1][Lg[1, 4]][z] . Lg[4, 1][z]/6 - Derivative[1][Lg[2, 1]][z] . Lg[1, 2][z]/6 + Derivative[1][Lg[2, 2]][z] . Lg[1, 1][z]/3 + Derivative[1][Lg[2, 2]][z] . Lg[3, 3][z]/3 + Derivative[1][Lg[2, 2]][z] . Lg[4, 4][z]/3 - Derivative[1][Lg[2, 3]][z] . Lg[3, 2][z]/6 - Derivative[1][Lg[2, 4]][z] . Lg[4, 2][z]/6 - Derivative[1][Lg[3, 1]][z] . Lg[1, 3][z]/6 - Derivative[1][Lg[3, 2]][z] . Lg[2, 3][z]/6 + Derivative[1][Lg[3, 3]][z] . Lg[1, 1][z]/3 + Derivative[1][Lg[3, 3]][z] . Lg[2, 2][z]/3 + Derivative[1][Lg[3, 3]][z] . Lg[4, 4][z]/3 - Derivative[1][Lg[3, 4]][z] . Lg[4, 3][z]/6 - Derivative[1][Lg[4, 1]][z] . Lg[1, 4][z]/6 - Derivative[1][Lg[4, 2]
+[output truncated — 53776 chars total]
+```
+
+## 2026-07-24 06:53:38
+**Input:**
+```wolfram
+strip = Dot[a___, last_] :> Dot[a] last /; FreeQ[last, Lg];
+r1 = Dot[a___, b_ + c_, d___] :> Dot[a, b, d] + Dot[a, c, d];
+r2 = Dot[a___, b_, d___] :> b Dot[a, d] /; FreeQ[b, fg | Lg];
+r3 = Dot[a___, b_*c_, d___] :> b Dot[a, c, d] /; FreeQ[b, Lg];
+Bver[e_] := e //. r1 //. r2 //. r3 //. strip;
+Cver[e_] := e //. r1 //. r2 //. strip;
+re = ExpandAll[raw];
+{"B (merge 4-7, keep r3)" -> (Table[ExpandAll[Coefficient[r7, d] - Coefficient[Bver[re], d]], {d, {fg'''[z], fg''[z], fg'[z], fg[z]}}] === {0, 0, 0, 0}),
+ "C (also drop r3)" -> (Table[ExpandAll[Coefficient[r7, d] - Coefficient[Cver[re], d]], {d, {fg'''[z], fg''[z], fg'[z], fg[z]}}] === {0, 0, 0, 0})}
+```
+**Output:**
+```
+Out[1]= (suppressed)
+Out[2]= (suppressed)
+Out[3]= (suppressed)
+Out[4]= (suppressed)
+Out[5]= (suppressed)
+Out[6]= (suppressed)
+Out[7]= (suppressed)
+Out[8]= {"B (merge 4-7, keep r3)" -> True, "C (also drop r3)" -> False}
+```
+
+## 2026-07-24 06:54:03
+**Input:**
+```wolfram
+ExpandAll[Bver[re] - r7] === 0
+```
+**Output:**
+```
+Out= True
+```
+## 2026-07-24 06:54:33 — ✏️ EDIT CELL 11
+(* Symmetrized quantum determinant det_q(\[PartialD]_z + L). The \[Epsilon]-\[Epsilon] sum over all
+   index tuples collapses: only permutations I,J\[Element]S_4 survive, with weight
+   Signature[I] S…
+
+
+## 2026-07-24 06:54:34
+**Input:**
+```wolfram
+(* Symmetrized quantum determinant det_q(\[PartialD]_z + L). The \[Epsilon]-\[Epsilon] sum over all
+   index tuples collapses: only permutations I,J\[Element]S_4 survive, with weight
+   Signature[I] Signature[J], so det_q = 1/4! \[Sum]_{I,J\[Element]S_4} sgn(I) sgn(J) M_{I_1 J_1}\[SmallCircle]\[CenterDot]\[SmallCircle]M_{I_4 J_4}.
+   Cleanup: distribute Dot over sums, pull scalar summands and scalar factors out
+   (L stays noncommutative, never crossing \[PartialD]/f), then strip the trailing
+   f-derivative to the right so its coefficient is a plain ordered product of L's. *)
+detOp =
+  (1/4! Sum[
+       Signature[iperm] Signature[jperm]
+        M[{iperm[[1]], jperm[[1]]}][M[{iperm[[2]], jperm[[2]]}][
+          M[{iperm[[3]], jperm[[3]]}][M[{iperm[[4]], jperm[[4]]}][f[z]]]]],
+       {iperm, Permutations[Range[4]]}, {jperm, Permutations[Range[4]]}] // ExpandAll) //.
+    Dot[a___, b_ + c_, d___] :> Dot[a, b, d] + Dot[a, c, d] //.
+    Dot[a___, b_, d___] :> b Dot[a, d] /; FreeQ[b, f | L] //.
+    Dot[a___, b_*c_, d___] :> b Dot[a, c, d] /; FreeQ[b, L] //.
+    Dot[a___, last_] :> Dot[a] last /; FreeQ[last, L]
+```
+**Output:**
+```
+Out= M[{1, 1}][M[{2, 2}][M[{3, 3}][M[{4, 4}][f[z]]]]]/24 - M[{1, 1}][M[{2, 2}][M[{3, 4}][M[{4, 3}][f[z]]]]]/24 - M[{1, 1}][M[{2, 2}][M[{4, 3}][M[{3, 4}][f[z]]]]]/24 + M[{1, 1}][M[{2, 2}][M[{4, 4}][M[{3, 3}][f[z]]]]]/24 - M[{1, 1}][M[{2, 3}][M[{3, 2}][M[{4, 4}][f[z]]]]]/24 + M[{1, 1}][M[{2, 3}][M[{3, 4}][M[{4, 2}][f[z]]]]]/24 + M[{1, 1}][M[{2, 3}][M[{4, 2}][M[{3, 4}][f[z]]]]]/24 - M[{1, 1}][M[{2, 3}][M[{4, 4}][M[{3, 2}][f[z]]]]]/24 + M[{1, 1}][M[{2, 4}][M[{3, 2}][M[{4, 3}][f[z]]]]]/24 - M[{1, 1}][M[{2, 4}][M[{3, 3}][M[{4, 2}][f[z]]]]]/24 - M[{1, 1}][M[{2, 4}][M[{4, 2}][M[{3, 3}][f[z]]]]]/24 + M[{1, 1}][M[{2, 4}][M[{4, 3}][M[{3, 2}][f[z]]]]]/24 - M[{1, 1}][M[{3, 2}][M[{2, 3}][M[{4, 4}][f[z]]]]]/24 + M[{1, 1}][M[{3, 2}][M[{2, 4}][M[{4, 3}][f[z]]]]]/24 + M[{1, 1}][M[{3, 2}][M[{4, 3}][M[{2, 4}][f[z]]]]]/24 - M[{1, 1}][M[{3, 2}][M[{4, 4}][M[{2, 3}][f[z]]]]]/24 + M[{1, 1}][M[{3, 3}][M[{2, 2}][M[{4, 4}][f[z]]]]]/24 - M[{1, 1}][M[{3, 3}][M[{2, 4}][M[{4, 2}][f[z]]]]]/24 - M[{1, 1}][M[{3, 3}][M[{4, 2}][M[{2, 4}][f[z]]]]]/24 + M[{1, 1}][M[{3, 3}][M[{4, 4}][M[{2, 2}][f[z]]]]]/24 - M[{1, 1}][M[{3, 4}][M[{2, 2}][M[{4, 3}][f[z]]]]]/24 + M[{1, 1}][M[{3, 4}][M[{2, 3}][M[{4, 2}][f[z]]]]]/24 + M[{1, 1}][M[{3, 4}][M[{4, 2}][M[{2, 3}][f[z]]]]]/24 - M[{1, 1}][M[{3, 4}][M[{4, 3}][M[{2, 2}][f[z]]]]]/24 + M[{1, 1}][M[{4, 2}][M[{2, 3}][M[{3, 4}][f[z]]]]]/24 - M[{1, 1}][M[{4, 2}][M[{2, 4}][M[{3, 3}][f[z]]]]]/24 - M[{1, 1}][M[{4, 2}][M[{3, 3}][M[{2, 4}][f[z]]]]]/24 + M[{1, 1}][M[{4, 2}][M[{3, 4}][M[{2, 3}][f[z]]]]]/24 - M[{1, 1}][M[{4, 3}][M[{2, 2}][M[{3, 4}][f[z]]]]]/24 + M[{1, 1}][M[{4, 3}][M[{2, 4}][M[{3, 2}][f[z]]]]]/24 + M[{1, 1}][M[{4, 3}][M[{3, 2}][M[{2, 4}][f[z]]]]]/24 - M[{1, 1}][M[{4, 3}][M[{3, 4}][M[{2, 2}][f[z]]]]]/24 + M[{1, 1}][M[{4, 4}][M[{2, 2}][M[{3, 3}][f[z]]]]]/24 - M[{1, 1}][M[{4, 4}][M[{2, 3}][M[{3, 2}][f[z]]]]]/24 - M[{1, 1}][M[{4, 4}][M[{3, 2}][M[{2, 3}][f[z]]]]]/24 + M[{1, 1}][M[{4, 4}][M[{3, 3}][M[{2, 2}][f[z]]]]]/24 - M[{1, 2}][M[{2, 1}][M[{3, 3}][M[{4, 4}][f[z]]]]]/24 + M[{1, 2}][M[{2, 1}][M[{3, 4}][M[{4, 3}][f[z]]]]]/24 + M[{1, 2}][M[{2, 1}][M[{4, 3}][M[{3, 4}][f[z]]]]]/24 - M[{1, 2}][M[{2, 1}][M[{4, 4}][M[{3, 3}][f[z]]]]]/24 + M[{1, 2}][M[{2, 3}][M[{3, 1}][M[{4, 4}][f[z]]]]]/24 - M[{1, 2}][M[{2, 3}][M[{3, 4}][M[{4, 1}][f[z]]]]]/24 - M[{1, 2}][M[{2, 3}][M[{4, 1}][M[{3, 4}][f[z]]]]]/24 + M[{1, 2}][M[{2, 3}][M[{4, 4}][M[{3, 1}][f[z]]]]]/24 - M[{1, 2}][M[{2, 4}][M[{3, 1}][M[{4, 3}][f[z]]]]]/24 + M[{1, 2}][M[{2, 4}][M[{3, 3}][M[{4, 1}][f[z]]]]]/24 + M[{1, 2}][M[{2, 4}][M[{4, 1}][M[{3, 3}][f[z]]]]]/24 - M[{1, 2}][M[{2, 4}][M[{4, 3}][M[{3, 1}][f[z]]]]]/24 + M[{1, 2}][M[{3, 1}][M[{2, 3}][M[{4, 4}][f[z]]]]]/24 - M[{1, 2}][M[{3, 1}][M[{2, 4}][M[{4, 3}][f[z]]]]]/24 - M[{1, 2}][M[{3, 1}][M[{4, 3}][M[{2, 4}][f[z]]]]]/24 + M[{1, 2}][M[{3, 1}][M[{4, 4}][M[{2, 3}][f[z]]]]]/24 - M[{1, 2}][M[{3, 3}][M[{2, 1}][M[{4, 4}][f[z]]]]]/24 + M[{1, 2}][M[{3, 3}][M[{2, 4}][M[{4, 1}][f[z]]]]]/24 + M[{1, 2}][M[{3, 3}][M[{4, 1}][M[{2, 4}][f[z]]]]]/24 - M[{1, 2}][M[{3, 3}][M[{4, 4}][M[{2, 1}][f[z]]]]]/24 + M[{1, 2}][M[{3, 4}][M[{2, 1}][M[{4, 3}][f[z]]]]]/24 - M[{1, 2}][M[{3, 4}][M[{2, 3}][M[{4, 1}][f[z]]]]]/24 - M[{1, 2}][M[{3, 4}][M[{4, 1}][M[{2, 3}][f[z]]]]]/24 + M[{1, 2}][M[{3, 4}][M[{4, 3}][M[{2, 1}][f[z]]]]]/24 - M[{1, 2}][M[{4, 1}][M[{2, 3}][M[{3, 4}][f[z]]]]]/24 + M[{1, 2}][M[{4, 1}][M[{2, 4}][M[{3, 3}][f[z]]]]]/24 + M[{1, 2}][M[{4, 1}][M[{3, 3}][M[{2, 4}][f[z]]]]]/24 - M[{1, 2}][M[{4, 1}][M[{3, 4}][M[{2, 3}][f[z]]]]]/24 + M[{1, 2}][M[{4, 3}][M[{2, 1}][M[{3, 4}][f[z]]]]]/24 - M[{1, 2}][M[{4, 3}][M[{2, 4}][M[{3, 1}][f[z]]]]]/24 - M[{1, 2}][M[{4, 3}][M[{3, 1}][M[{2, 4}][f[z]]]]]/24 + M[{1, 2}][M[{4, 3}][M[{3, 4}][M[{2, 1}][f[z]]]]]/24 - M[{1, 2}][M[{4, 4}][M[{2, 1}][M[{3, 3}][f[z]]]]]/24 + M[{1, 2}][M[{4, 4}][M[{2, 3}][M[{3, 1}][f[z]]]]]/24 + M[{1, 2}][M[{4, 4}][M[{3, 1}][M[{2, 3}][f[z]]]]]/24 - M[{1, 2}][M[{4, 4}][M[{3, 3}][M[{2, 1}][f[z]]]]]/24 + M[{1, 3}][M[{2, 1}][M[{3, 2}][M[{4, 4}][f[z]]]]]/24 - M[{1, 3}][M[{2, 1}][M[{3, 4}][M[{4, 2}][f[z]]]]]/24 - M[{1, 3}][M[{2, 1}][M[{4, 2}][M[{3, 4}][f[z]]]]]/24 + M[{1, 3}][M[{2, 1}][M[{4, 4}][M[{3, 2}][f[z]]]
+[output truncated — 31101 chars total]
+```
+## 2026-07-24 06:54:47 — ▶️ RUN CELL 9
+**In [9]:** `M[{i_, j_}][f_] := D[f, z] KroneckerDelta[i, j] + L[i, j][z] . f;`
+**Out:** (no output)
+
+## 2026-07-24 06:54:52 — ▶️ RUN CELL 11
+**In [11]:** `(* Symmetrized quantum determinant det_q(\[PartialD]_z + L). The \[Epsilon]-\[Epsilon] sum over all↵   index tuples collapses: only permutations I,J\[Element]S_4 survive, with weight↵   Signature[I] S`
+**Out:** (no output)
+
+
+## 2026-07-24 06:54:55
+**Input:**
+```wolfram
+Table[ExpandAll[Coefficient[detOp, d] - (Coefficient[r7, d] /. Lg -> L /. fg -> f)], {d, {f'''[z], f''[z], f'[z], f[z]}}]
+```
+**Output:**
+```
+Out= {L[1, 1][z] + L[2, 2][z] + L[3, 3][z] + L[4, 4][z], L[1, 1][z] . L[2, 2][z]/2 + L[1, 1][z] . L[3, 3][z]/2 + L[1, 1][z] . L[4, 4][z]/2 - L[1, 2][z] . L[2, 1][z]/2 - L[1, 3][z] . L[3, 1][z]/2 - L[1, 4][z] . L[4, 1][z]/2 - L[2, 1][z] . L[1, 2][z]/2 + L[2, 2][z] . L[1, 1][z]/2 + L[2, 2][z] . L[3, 3][z]/2 + L[2, 2][z] . L[4, 4][z]/2 - L[2, 3][z] . L[3, 2][z]/2 - L[2, 4][z] . L[4, 2][z]/2 - L[3, 1][z] . L[1, 3][z]/2 - L[3, 2][z] . L[2, 3][z]/2 + L[3, 3][z] . L[1, 1][z]/2 + L[3, 3][z] . L[2, 2][z]/2 + L[3, 3][z] . L[4, 4][z]/2 - L[3, 4][z] . L[4, 3][z]/2 - L[4, 1][z] . L[1, 4][z]/2 - L[4, 2][z] . L[2, 4][z]/2 - L[4, 3][z] . L[3, 4][z]/2 + L[4, 4][z] . L[1, 1][z]/2 + L[4, 4][z] . L[2, 2][z]/2 + L[4, 4][z] . L[3, 3][z]/2 + (3*Derivative[1][L[1, 1]][z])/2 + (3*Derivative[1][L[2, 2]][z])/2 + (3*Derivative[1][L[3, 3]][z])/2 + (3*Derivative[1][L[4, 4]][z])/2, (2*L[1, 1][z] . Derivative[1][L[2, 2]][z])/3 + (2*L[1, 1][z] . Derivative[1][L[3, 3]][z])/3 + (2*L[1, 1][z] . Derivative[1][L[4, 4]][z])/3 - (2*L[1, 2][z] . Derivative[1][L[2, 1]][z])/3 - (2*L[1, 3][z] . Derivative[1][L[3, 1]][z])/3 - (2*L[1, 4][z] . Derivative[1][L[4, 1]][z])/3 - (2*L[2, 1][z] . Derivative[1][L[1, 2]][z])/3 + (2*L[2, 2][z] . Derivative[1][L[1, 1]][z])/3 + (2*L[2, 2][z] . Derivative[1][L[3, 3]][z])/3 + (2*L[2, 2][z] . Derivative[1][L[4, 4]][z])/3 - (2*L[2, 3][z] . Derivative[1][L[3, 2]][z])/3 - (2*L[2, 4][z] . Derivative[1][L[4, 2]][z])/3 - (2*L[3, 1][z] . Derivative[1][L[1, 3]][z])/3 - (2*L[3, 2][z] . Derivative[1][L[2, 3]][z])/3 + (2*L[3, 3][z] . Derivative[1][L[1, 1]][z])/3 + (2*L[3, 3][z] . Derivative[1][L[2, 2]][z])/3 + (2*L[3, 3][z] . Derivative[1][L[4, 4]][z])/3 - (2*L[3, 4][z] . Derivative[1][L[4, 3]][z])/3 - (2*L[4, 1][z] . Derivative[1][L[1, 4]][z])/3 - (2*L[4, 2][z] . Derivative[1][L[2, 4]][z])/3 - (2*L[4, 3][z] . Derivative[1][L[3, 4]][z])/3 + (2*L[4, 4][z] . Derivative[1][L[1, 1]][z])/3 + (2*L[4, 4][z] . Derivative[1][L[2, 2]][z])/3 + (2*L[4, 4][z] . Derivative[1][L[3, 3]][z])/3 + Derivative[1][L[1, 1]][z] . L[2, 2][z]/3 + Derivative[1][L[1, 1]][z] . L[3, 3][z]/3 + Derivative[1][L[1, 1]][z] . L[4, 4][z]/3 - Derivative[1][L[1, 2]][z] . L[2, 1][z]/3 - Derivative[1][L[1, 3]][z] . L[3, 1][z]/3 - Derivative[1][L[1, 4]][z] . L[4, 1][z]/3 - Derivative[1][L[2, 1]][z] . L[1, 2][z]/3 + Derivative[1][L[2, 2]][z] . L[1, 1][z]/3 + Derivative[1][L[2, 2]][z] . L[3, 3][z]/3 + Derivative[1][L[2, 2]][z] . L[4, 4][z]/3 - Derivative[1][L[2, 3]][z] . L[3, 2][z]/3 - Derivative[1][L[2, 4]][z] . L[4, 2][z]/3 - Derivative[1][L[3, 1]][z] . L[1, 3][z]/3 - Derivative[1][L[3, 2]][z] . L[2, 3][z]/3 + Derivative[1][L[3, 3]][z] . L[1, 1][z]/3 + Derivative[1][L[3, 3]][z] . L[2, 2][z]/3 + Derivative[1][L[3, 3]][z] . L[4, 4][z]/3 - Derivative[1][L[3, 4]][z] . L[4, 3][z]/3 - Derivative[1][L[4, 1]][z] . L[1, 4][z]/3 - Derivative[1][L[4, 2]][z] . L[2, 4][z]/3 - Derivative[1][L[4, 3]][z] . L[3, 4][z]/3 + Derivative[1][L[4, 4]][z] . L[1, 1][z]/3 + Derivative[1][L[4, 4]][z] . L[2, 2][z]/3 + Derivative[1][L[4, 4]][z] . L[3, 3][z]/3 + L[1, 1][z] . L[2, 2][z] . L[3, 3][z]/6 + L[1, 1][z] . L[2, 2][z] . L[4, 4][z]/6 - L[1, 1][z] . L[2, 3][z] . L[3, 2][z]/6 - L[1, 1][z] . L[2, 4][z] . L[4, 2][z]/6 - L[1, 1][z] . L[3, 2][z] . L[2, 3][z]/6 + L[1, 1][z] . L[3, 3][z] . L[2, 2][z]/6 + L[1, 1][z] . L[3, 3][z] . L[4, 4][z]/6 - L[1, 1][z] . L[3, 4][z] . L[4, 3][z]/6 - L[1, 1][z] . L[4, 2][z] . L[2, 4][z]/6 - L[1, 1][z] . L[4, 3][z] . L[3, 4][z]/6 + L[1, 1][z] . L[4, 4][z] . L[2, 2][z]/6 + L[1, 1][z] . L[4, 4][z] . L[3, 3][z]/6 - L[1, 2][z] . L[2, 1][z] . L[3, 3][z]/6 - L[1, 2][z] . L[2, 1][z] . L[4, 4][z]/6 + L[1, 2][z] . L[2, 3][z] . L[3, 1][z]/6 + L[1, 2][z] . L[2, 4][z] . L[4, 1][z]/6 + L[1, 2][z] . L[3, 1][z] . L[2, 3][z]/6 - L[1, 2][z] . L[3, 3][z] . L[2, 1][z]/6 + L[1, 2][z] . L[4, 1][z] . L[2, 4][z]/6 - L[1, 2][z] . L[4, 4][z] . L[2, 1][z]/6 + L[1, 3][z] . L[2, 1][z] . L[3, 2][z]/6 - L[1, 3][z] . L[2, 2][z] . L[3, 1][z]/6 - L[1, 3][z] . L[3, 1][z] . L[2, 2][z]/6 - L[1, 3][z] . L[3, 1][z] . L[4, 4][z]/6 + L[1, 3][z] . L[3, 2][z] . L[2, 1][z]/6 + L[1, 3][z] . L[3, 4][z] . L[4, 1][z]/6 + L[1, 3][z] 
+[output truncated — 68792 chars total]
+```
+
+## 2026-07-24 06:56:08
+**Input:**
+```wolfram
+detOp7 = (1/4! Sum[Signature[ip] Signature[jp] M[{ip[[1]], jp[[1]]}][M[{ip[[2]], jp[[2]]}][M[{ip[[3]], jp[[3]]}][M[{ip[[4]], jp[[4]]}][f[z]]]]], {ip, Permutations[Range[4]]}, {jp, Permutations[Range[4]]}] // ExpandAll) //.
+   Dot[a___, b_ + c_, d___] :> Dot[a, b, d] + Dot[a, c, d] //.
+   Dot[a___, b_, d___] :> b Dot[a, d] /; FreeQ[b, f | L] //.
+   Dot[a___, b_*c_, d___] :> b Dot[a, c, d] /; FreeQ[b, L] //.
+   Dot[a___, f'''[z]] :> Dot[a] f'''[z] //. Dot[a___, f''[z]] :> Dot[a] f''[z] //.
+   Dot[a___, f'[z]] :> Dot[a] f'[z] //. Dot[a___, f[z]] :> Dot[a] f[z];
+ExpandAll[detOp - detOp7]
+```
+**Output:**
+```
+Out= 0
+```
+
+## 2026-07-24 06:56:18
+**Input:**
+```wolfram
+ClearAll[detOp7, Mg, Lg, fg, raw, old7, new2, newExpandOnly, r7, strip, r1, r2, r3, Bver, Cver, re]; "cleared"
+```
+**Output:**
+```
+Out= cleared
+```

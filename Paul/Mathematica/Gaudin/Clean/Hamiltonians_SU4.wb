@@ -79,42 +79,14 @@
   },
   {
    "kind": 1,
-   "value": "Expands a length-4 index chain `MChain[{a,b,c,d}]` into the nested operator composition $M_a\\circ M_b\\circ M_c\\circ M_d$ applied to $f(z)$, distributing `Dot` (noncommutative composition) over sums to keep the expansion linear.",
+   "value": "The determinant is assembled by directly nesting `M[{i,j}]` into the operator composition $M_{i_1 j_1}\\circ M_{i_2 j_2}\\circ M_{i_3 j_3}\\circ M_{i_4 j_4}$ acting on $f(z)$, summed over row/column index permutations $I,J\\in S_4$ with weight $\\mathrm{sgn}(I)\\,\\mathrm{sgn}(J)$ and normalized by $1/4!$. This is the collapsed form of the $\\epsilon$-$\\epsilon$ expansion $\\det A = \\frac{1}{N!}\\sum_{I,J}\\epsilon_I\\epsilon_J A_{i_1 j_1}\\cdots A_{i_N j_N}$: only permutation tuples survive (for non-permutations the $\\epsilon$ factor vanishes), and $\\det[\\delta_{I_a J_b}] = \\mathrm{sgn}(I)\\,\\mathrm{sgn}(J)$, so the $256^2$-tuple double sum reduces to the $24^2$ permutation pairs with no inner permutation sum. Because $L(z)$ does not commute with $\\partial_z$, the composition is kept ordered (Talalaev's construction) — scalars are pulled through `Dot` but $L$ never crosses past $\\partial_z$/$f$.",
    "languageId": "markdown",
    "outputs": [],
    "metadata": {}
   },
   {
    "kind": 2,
-   "value": "applyMs = {\n   MChain[{a__, b__, c__, d__}] :> M[a][M[b][M[c][M[d][f[z]]]]] //.\n     Dot[a___, b_ + c_, d___] :> Dot[a, b, d] + Dot[a, c, d]\n  };",
-   "languageId": "wolfram",
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "kind": 1,
-   "value": "The $\\epsilon$-$\\epsilon$ contraction term: sums $\\mathrm{sign}(\\sigma)$ over permutations $\\sigma$ matching $I_\\sigma$ to $J$ (zero unless $I$ is a permutation of $J$), weighting the ordered operator chain `MChain[Transpose[{I,J}]]`.",
-   "languageId": "markdown",
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "kind": 2,
-   "value": "EE[II_, JJ_] :=\n  1/4! Sum[\n     Signature[\\[Sigma]] Times @@ (e[#] & /@ Transpose[{II[[\\[Sigma]]], JJ}]),\n     {\\[Sigma], Permutations[{1, 2, 3, 4}]}\n    ] MChain[Transpose[{II, JJ}]] /. e[{a_, b_}] :> KroneckerDelta[a, b];",
-   "languageId": "wolfram",
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "kind": 1,
-   "value": "Sums `EE[I,J]` over all index tuples $I,J\\in\\{1,\\dots,4\\}^4$, i.e. the identity $\\det A = \\frac{1}{N!}\\sum_{I,J} \\epsilon_I \\epsilon_J\\, A_{i_1 j_1}\\cdots A_{i_N j_N}$ applied noncommutatively (scalars are pulled through `Dot`, but $L$ never crosses past $\\partial_z$/$f$), collapsing the result into a differential operator in $z$ acting on $f(z)$.",
-   "languageId": "markdown",
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "kind": 2,
-   "value": "detOp =\n  (Sum[EE[II, JJ], {II, Tuples[Range[4], 4]}, {JJ, Tuples[Range[4], 4]}] //. applyMs // ExpandAll) //.\n    Dot[a___, b_ + c_, d___] :> Dot[a, b, d] + Dot[a, c, d] //.\n    Dot[a___, b_, d___] :> b Dot[a, d] /; FreeQ[b, f | L] //.\n    Dot[a___, b_*c_, d___] :> b Dot[a, c, d] /; FreeQ[b, L] //.\n    Dot[a___, f'''[z]] :> Dot[a] f'''[z] //.\n    Dot[a___, f''[z]] :> Dot[a] f''[z] //.\n    Dot[a___, f'[z]] :> Dot[a] f'[z] //.\n    Dot[a___, f[z]] :> Dot[a] f[z]",
+   "value": "(* Symmetrized quantum determinant det_q(\\[PartialD]_z + L). The \\[Epsilon]-\\[Epsilon] sum over all\n   index tuples collapses: only permutations I,J\\[Element]S_4 survive, with weight\n   Signature[I] Signature[J], so det_q = 1/4! \\[Sum]_{I,J\\[Element]S_4} sgn(I) sgn(J) M_{I_1 J_1}\\[SmallCircle]\\[CenterDot]\\[SmallCircle]M_{I_4 J_4}.\n   Cleanup: distribute Dot over sums, pull scalar summands and scalar factors out\n   (L stays noncommutative, never crossing \\[PartialD]/f), then strip the trailing\n   f-derivative to the right so its coefficient is a plain ordered product of L's. *)\ndetOp =\n  (1/4! Sum[\n       Signature[iperm] Signature[jperm]\n        M[{iperm[[1]], jperm[[1]]}][M[{iperm[[2]], jperm[[2]]}][\n          M[{iperm[[3]], jperm[[3]]}][M[{iperm[[4]], jperm[[4]]}][f[z]]]]],\n       {iperm, Permutations[Range[4]]}, {jperm, Permutations[Range[4]]}] // ExpandAll) //.\n    Dot[a___, b_ + c_, d___] :> Dot[a, b, d] + Dot[a, c, d] //.\n    Dot[a___, b_, d___] :> b Dot[a, d] /; FreeQ[b, f | L] //.\n    Dot[a___, b_*c_, d___] :> b Dot[a, c, d] /; FreeQ[b, L] //.\n    Dot[a___, last_] :> Dot[a] last /; FreeQ[last, L]",
    "languageId": "wolfram",
    "outputs": [],
    "metadata": {}

@@ -156,6 +156,69 @@
   },
   {
    "kind": 2,
+   "value": "irr88[[-1]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"583387\" data-output-id=\"95\" data-out-n=\"86\" data-sub-idx=\"0\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"20\" data-sub-start=\"0\" data-sub-end=\"0\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[86]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrw8b67k-9jmyrb2\" data-page-width-em=\"38\" data-latex-b64=\"XGxlZnRcezgsOCw4LDhccmlnaHRcfQ==\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">8</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">8</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">8</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">8</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[86]= \\left\\{8,8,8,8\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "263f7a6c-e942-4a3c-8e7b-f0141394c815"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "det1[8,8,{8,8,8,8}]//AbsoluteTiming",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"583388\" data-output-id=\"102\" data-out-n=\"39\" data-sub-idx=\"0\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"21\" data-sub-start=\"0\" data-sub-end=\"0\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[39]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrw8ct05-ce3ihi7\" data-page-width-em=\"38\" data-latex-b64=\"XGxlZnRcezAuMDExMzAxLHdeezMwfS0xMjAwXCx3XnsyOH0rNDI4NDAwXCx3XnsyNn0tNTI0MTYwMDBcLHdeezI0fSsxNzg4Njk2MDAwXCx3XnsyMn0rNDAyNzYzNzA1MzQ0MDBcLHdeezIwfSs1OTc2NzI1Njk4OTQ0MDAwMFwsd157MTh9KzE3NTkyNzE4NjQ5NDI1OTIwMDAwXCx3XnsxNn0rMTQ4NzEwNDI5MTA1NjM4NDAwMDAwMFwsd157MTR9XHJpZ2h0XH0=\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1.2141em;vertical-align:-0.35em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">{</span></span><span class=\"mord\">0.011301</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.02691em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">30</span></span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">1200</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.02691em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">28</span></span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">428400</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.02691em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">26</span></span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">52416000</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.02691em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">24</span></span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">1788696000</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.02691em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">22</span></span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">40276370534400</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.02691em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">20</span></span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">59767256989440000</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.02691em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">18</span></span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">17592718649425920000</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.02691em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">16</span></span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">1487104291056384000000</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.02691em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">14</span></span></span></span></span></span></span></span></span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size1\">}</span></span></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[39]= \\left\\{0.011301,w^{30}-1200\\,w^{28}+428400\\,w^{26}-52416000\\,w^{24}+1788696000\\,w^{22}+40276370534400\\,w^{20}+59767256989440000\\,w^{18}+17592718649425920000\\,w^{16}+1487104291056384000000\\,w^{14}\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "5f96ecec-c08f-4479-83d6-66fee9a39758"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "18/(0.1)",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"583388\" data-output-id=\"104\" data-out-n=\"41\" data-sub-idx=\"0\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"22\" data-sub-start=\"0\" data-sub-end=\"0\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[41]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered wl-lb-pending\" data-lb-id=\"lb-mrw8egn2-e66lra1\" data-page-width-em=\"38\" data-latex-b64=\"MTgwLlws\" style=\"opacity:0.65;transition:opacity 0.35s\"><div class=\"wl-lb-content\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">180.</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span></span></span></span></span></div></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[41]= 180.\\,",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "14a4a4a5-57cd-4861-bf9e-6f6fca91d865"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
    "value": "Table[det1[10,10,mu]//AbsoluteTiming,{mu,irr10}]//AbsoluteTiming",
    "languageId": "wolfram",
    "outputs": [
