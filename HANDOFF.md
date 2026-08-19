@@ -10,6 +10,88 @@ Computing CG coefficients directly in the XXX spin chain (`Paul/Mathematica/XXX/
 subproject proper (residue/representation groundwork) is still parked, but the `h→0` scaling limit
 of the XXX construction below is an active connection point, not a revival of that parked track.
 
+## State as of 2026-08-19 (Matteo's gl(4) Q-space/normalisation notebook imported — read/analyzed only, NOT yet computed on)
+
+New material from Matteo, committed this session (`de97e03`), not yet acted on beyond a structural
+read-through. Four files, three of which are the *same* underlying notebook in different formats:
+
+- `Paul/Python/SU(4)_Paul_Normalisation_EXPLICIT.nb` — Matteo's original Mathematica notebook.
+- `Paul/Python/SU(4)_Paul_Normalisation_EXPLICIT.wb` — wolfbook copy of the same (open this with
+  `wolfbook-builder`/the wolfbook MCP tools to compute live, cell-by-cell, on either machine).
+- `Paul/Python/SU4_Paul_Normalisation_EXPLICIT.wl` — a flattened, **directly `Get`-able** script
+  version (presentation/output cells stripped; first line says so). Good for `grep`/quick reads or
+  a plain `wolframscript`/kernel run; NOT meant to be run top-to-bottom as one script — it's full of
+  bare unassigned "example of use" expressions (`Sol=SolveBaxAll[...]` etc.) meant for selective
+  cell evaluation, and later sections redefine earlier-named symbols in the 1-site block.
+- `Paul/Matteo_Files/SU(4)_Paul_Normalisation_SEND.wl` — **not directly runnable**: this is a raw
+  Mathematica "notebook-as-text" export where every cell, *including Input cells*, is wrapped in
+  `(* ::Input:: *) (*code*)` comment markers (presumably literally what Matteo emailed/sent). Do not
+  `Get[]` it expecting code to run — strip the cell-marker comments first, or just use the `.wb`/`.nb`
+  above, which already have live code.
+
+**What the notebook computes** (from reading `SU4_Paul_Normalisation_EXPLICIT.wl` top to bottom, not
+yet cross-checked with Paul or numerically re-verified beyond what the notebook's own test cells
+already assert): a Gaudin-side two-site (`w1=0,w2=1`) gl(4) FSoV construction —
+1. **Ψ-space**: GT-basis generators (`ps/dim/J0/Jp/Jm/JJ`, same machinery as
+   `Gaudin/Clean/Hamiltonians_SU4.wb`), Lax connection `LIndex`, explicit `H1..H4` and dual
+   `H1†..H3†` Hamiltonians (regulated traces of powers of `L`), and `EigenR/EigenL` — right/left
+   joint eigenvectors obtained by matching against the **Q-side** spectrum rather than a bare
+   `Eigensystem` call.
+2. **Q-space**: `h[rep1,rep2][k,1/2]` (residues at `w1,w2`, closed gl(4)-weight polynomials) plus
+   twist elementary-symmetric pieces build the 4th-order Baxter operator `BaxOp`; `SolveBaxAll`
+   solves all four Baxter equations for the monic `Q[i]` coefficients **and** the leftover
+   Hamiltonian unknowns simultaneously (spectrum + Q-functions in one solve). A dual sector `Q†`
+   is built two ways — directly via a dual Baxter equation, and via `Hodge` (Wronskian of the other
+   three `Q`'s) — with a "Check Q Hodge" block cross-checking the two agree.
+3. **Renormalised scalar product**: `OrthogRen` — a 12×12 residue-moment determinant (poles at
+   `z=0,1`) divided by a `Normalisation` built from boundary limits of `Q†_1`, `W(Q†_1,Q†_2)`,
+   `Q_4`; the analogous 1-site pieces are `OrthogRen1/OrthogRen2`.
+4. **Ψ-vector normalisation (the "EXPLICIT" part)**: `VacR/VacL` build the vacuum state as an
+   ordered `MatrixExp` product of the six raising/lowering `EMAll[a,b]` generators with parameters
+   `α_ab,β_ab`; `αr[12,24,34]`/`βr[...]` are then **closed-form rational functions of the twists
+   `φ`** that fix those parameters (leaving 3 free: `α13,α14,α23`), giving renormalised eigenvectors
+   `ReEigenR/ReEigenL` in the same normalisation as the Q-side `OrthogRen`.
+5. **`K` vectors** (final ~230 lines): `K22B`/`K22C` — explicit overlap vectors between a 1-site
+   and a 2-site factor (SU(2)⊗SU(3)-split), built the same way as `VacR/VacL` but with extra
+   `k3,k4`-dependent rational dressing. `TESTK22B/C` + the "Test reconstruction" cells verify, for
+   `{1,1,0,0}×{1,1,0,0}` only, that `K·Ψ` (solved for by expanding in `k2,k3,k4`) reproduces the
+   `ReEigenR` vector obtained independently via step 4 — i.e. this is a from-scratch construction and
+   check of exactly the kind of normalised-eigenvector ↔ Q-function overlap identity that the
+   `Gaudin/Clean/Hamiltonians_SU4.wb`/CG-overlap program on the XXX side has been chasing (see
+   memories `project_cg_overlap_dictionary`, `reference_fsov_determinant_normalization`) — but done
+   independently by Matteo on the Gaudin/FSoV side. **Not yet compared against that program in any
+   way; that comparison is the obvious first thing to do before extending this notebook.**
+
+**Two likely bugs, found by inspection, NOT yet fixed (present identically in `.wb`/`.nb`/`.wl`,
+so not a conversion artifact) — check before relying on either symbol:**
+- `VacR1[rep1_,β12_,...,β34_] := VacR1[rep1,β23,β12,β13,β14,β23,β24,β34] = ...` (1-site vacuum,
+  `.wb` line 2235/3829) — the memo-pattern LHS takes 8 arguments (extra leading `β23`, and `β23`
+  appears twice) against the 7-arg definition head, so it never matches an actual 7-arg call.
+  Effect: memoization is simply dead (recomputes + leaves junk defs behind each call); results are
+  still numerically correct, just uncached.
+- `K22C` (`.wb` line 4088) — in the first `KroneckerProduct` factor (built on `UPL1[rep1]`), only
+  the `E13` exponential uses `EM[...,rep1]`; the `E14`, `E23`, `E24` ones use `EM[...,rep2]` instead.
+  Only evaluates without error when `dim[rep1]==dim[rep2]` (true for the notebook's only test case,
+  `{1,1,0,0}×{1,1,0,0}`) — will break or silently misbehave for `rep1≠rep2` (e.g. `{p,p,0,0}×
+  {q,q,0,0}`, `p≠q`). Compare against the parallel, apparently-correct `K22B` just above it in the
+  notebook when fixing.
+
+**To pick this up on a different machine:** `git pull` gets all four files (pushed in `de97e03`).
+Needs a Wolfram kernel; use `wolfbook-builder`/wolfbook MCP tools against the `.wb` for live,
+checkpointed cell-by-cell computation (matches how `Gaudin/Clean/` work is normally done in this
+repo) rather than trying to batch-run the flattened `.wl`. No non-core-WL package dependencies were
+seen anywhere in the four files.
+
+**Next steps (none of this has been discussed with Paul yet — treat as an inbox item, not a plan):**
+- Fix the two bugs above if/when extending past `{1,1,0,0}×{1,1,0,0}`.
+- Work out how this notebook's `OrthogRen`/`ReEigenR`/`K22B`/`K22C` machinery relates to the
+  existing XXX-side CG-overlap dictionary and FSoV-determinant-normalisation work — likely the
+  actual point of importing it, but unconfirmed.
+- This currently sits under `Paul/Python/`, which per `CLAUDE.md` is meant for the sympy Python
+  cross-check port, not Mathematica notebooks — a Mathematica `.wb`/`.nb` pair there is a layout
+  mismatch. Don't relocate without asking Paul first (same rule already applied to
+  `Hamiltonians_SU4.wb`'s Gaudin/XXX placement).
+
 ## State as of 2026-07-22 (C++ CGC reference benchmark set up — `Paul/Cpp/AlexCGC/`, UNCOMMITTED)
 
 Separate thread from the Baxter/Gaudin work below: set up the **state-of-the-art SU(N) CGC code**
