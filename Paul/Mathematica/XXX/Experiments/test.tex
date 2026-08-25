@@ -1,0 +1,175 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\Qbar}{\overline Q}
+
+\begin{document}
+
+\section*{Special one-coordinate limits of the two-site wavefunction}
+
+Consider the spin-$S/2$ two-site XXX chain in the companion frame,
+with
+\[
+\chi=\lambda+\lambda^{-1},
+\qquad
+Q(u)=\lambda^{u/h}q_M(u),
+\qquad
+\deg q_M=M.
+\]
+Assume that $\lambda\neq\pm1$ and set
+\[
+R=\lambda,
+\qquad
+r=\lambda^{-1}.
+\]
+These are the two fixed points of the projective companion twist.
+
+\subsection*{Twist-weight basis}
+
+Define
+\[
+\phi_m(z)=(z-R)^m(z-r)^{S-m},
+\qquad 0\leq m\leq S.
+\]
+The companion-twist charge is diagonal in this basis.  Consequently,
+the wavefunction belonging to a Baxter polynomial of degree $M$ obeys
+the selection rule
+\[
+\Psi_M(z_1,z_2)
+=
+\sum_{\substack{0\leq a,b\leq S\\a+b=M}}
+C_{ab}\,\phi_a(z_1)\phi_b(z_2).
+\]
+
+\subsection*{The specialization $z_2=\lambda$}
+
+At $z_2=R$, only $\phi_0(R)$ is nonzero.  Therefore
+\[
+\boxed{
+\Psi_M(z,R)
+=
+\begin{cases}
+C_{M0}(R-r)^S\phi_M(z),&M\leq S,\\[2mm]
+0,&M>S.
+\end{cases}}
+\]
+Thus, for $M\leq S$, the complete two-site wavefunction collapses to
+the single known polynomial
+\[
+\phi_M(z)=(z-\lambda)^M(z-\lambda^{-1})^{S-M}.
+\]
+
+In the standard monic algebraic-Bethe-ansatz normalization,
+\[
+C_{M0}
+=
+(-h)^M\frac{S!}{(S-M)!}\,q_M(\theta_2).
+\]
+Hence
+\[
+\boxed{
+\Psi_M(z,\lambda)
+=
+(\lambda-\lambda^{-1})^S
+(-h)^M\frac{S!}{(S-M)!}\,
+q_M(\theta_2)
+(z-\lambda)^M(z-\lambda^{-1})^{S-M}}
+\]
+for $M\leq S$.  A different normalization of the full eigenvector
+only changes the overall scalar.
+
+This scalar is itself a single contour bracket.  With
+\[
+\Qbar(u)=Q(u-Sh),
+\qquad
+\Pi_S(u)=\prod_{k=0}^{S-1}Q_\theta(u-kh),
+\]
+one has
+\[
+q_M(\theta_2)
+=
+\lambda^{-\theta_2/h}
+\frac{\langle\Pi_S(u)\Qbar(u)\rangle_2}
+     {\langle\Pi_S(u)\rangle_2}.
+\]
+
+\subsection*{The specialization $z_2=\lambda^{-1}$}
+
+At $z_2=r$, only $\phi_S(r)$ is nonzero.  Thus
+\[
+\boxed{
+\Psi_M(z,r)
+=
+\begin{cases}
+0,&M<S,\\[2mm]
+C_{M-S,S}(r-R)^S\phi_{M-S}(z),&M\geq S.
+\end{cases}}
+\]
+Equivalently, for $M\geq S$ its $z$-dependence is
+\[
+\Psi_M(z,\lambda^{-1})
+\propto
+(z-\lambda)^{M-S}
+(z-\lambda^{-1})^{2S-M}.
+\]
+The coefficient is most naturally expressed through the dual, or hole,
+Baxter polynomial of degree $2S-M$.
+
+This point has the additional simplification that the Baxter exponential
+cancels inside the second bracket:
+\[
+r^{(u-\theta_2)/h}\Qbar(u)
+=
+\lambda^{\theta_2/h-S}q_M(u-Sh).
+\]
+
+\subsection*{A sector-independent projective limit}
+
+If one wants a generically nonzero simplification in every sector, the
+best point is projective infinity:
+\[
+\Psi_M(z,\infty)
+:=
+\lim_{w\to\infty}w^{-S}\Psi_M(z,w).
+\]
+Let
+\[
+d=\frac{\theta_1-\theta_2}{h},
+\qquad
+\delta_S(v)
+=
+\frac{1}{h^S S!}
+\prod_{k=0}^{S-1}(v-\theta_2-kh),
+\]
+and
+\[
+P_2(u)=\prod_{k=0}^{S}(u-\theta_2-kh).
+\]
+Then the higher-spin factorizing twist gives
+\[
+\boxed{
+\Psi_M(z,\infty)
+=
+-\frac{h^{-S}}{(d+1)_S}
+\left\langle\delta_S(v)\Qbar(v)\right\rangle_2
+\left\langle
+P_2(u)z^{(u-\theta_1)/h}\Qbar(u)
+\right\rangle_1.}
+\]
+The first factor selects the endpoint $v=\theta_2+Sh$, where
+$\Qbar(v)=Q(\theta_2)$.  The insertion $P_2(u)$ cancels the complete
+site-$2$ string in the first measure, leaving a genuine length-one
+Mellin--Baxter transform.
+
+The useful choices are therefore
+\begin{itemize}
+\item $z_0=\lambda$ for sectors $M\leq S$;
+\item $z_0=\lambda^{-1}$ for sectors $M\geq S$;
+\item $z_0=\infty$ for a sector-independent product of two
+      one-dimensional brackets.
+\end{itemize}
+The finite point $z_0=0$ is only triangular in the present
+$\mathcal F_{12}$ ordering and does not factorize completely.
+
+\end{document}

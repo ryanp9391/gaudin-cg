@@ -1,0 +1,159 @@
+{
+ "cells": [
+  {
+   "kind": 1,
+   "value": "# Length-1 XXX: Baxter contour transform as an sl(2) wave function\n\nEverything is explicit in this workbook; no external source file is loaded.\n\nConventions: `Qtheta(u)=u-theta`, `t(u)=chi u+IIB`, `chi=lambda+1/lambda`, `mu(u)=1/(Qtheta(u)Qtheta(u-h))`, and `T=chi T11+T12-T21`.\n\n`IIB` is the Baxter constant. We separately define the transfer-matrix constant `IIT` so their convention-dependent sign remains visible.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[chi,Qtheta,mu,t,u,h,theta,lambda,IIB,z];\nchi=lambda+1/lambda;\nQtheta[u_]:=u-theta;\nmu[u_]:=1/(Qtheta[u] Qtheta[u-h]);\nt[u_]:=chi u+IIB;",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## 1. Self-adjoint frame\n\nPut `Qbar(u)=Q(u-h)`. The translated equation is\n\n`Qtheta(u)Qbar(u-h)-t(u-h)Qbar(u)+Qtheta(u-h)Qbar(u+h)=0`.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[ORaw,OSA,q,qb];\nORaw[q_][u_]:=Expand[Qtheta[u+h]q[u-h]-t[u]q[u]+Qtheta[u]q[u+h]];\nOSA[qb_][u_]:=Expand[Qtheta[u]qb[u-h]-t[u-h]qb[u]+Qtheta[u-h]qb[u+h]];\ntranslationCheck=Simplify[OSA[(q[#-h]& )][u]-ORaw[q][u-h]];\n\nA[u_]:=Qtheta[u];\nDcoef[u_]:=Qtheta[u-h];\nadjointPlusCheck=Simplify[mu[u+h]A[u+h]/mu[u]-Dcoef[u]];\nadjointMinusCheck=Simplify[mu[u-h]Dcoef[u-h]/mu[u]-A[u]];\n\n<|\"translation residual\"->translationCheck,\n\"self-adjointness residuals\"->{adjointPlusCheck,adjointMinusCheck}|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "The last two zeros are the detailed-balance identities obtained when the contours are shifted by one Baxter step.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## 2. Mellin kernel and differential operator\n\nFor `K(u,z)=z^(u/h)`, shifts by `+h,-h` give `z,1/z`. After self-adjointness moves the Baxter operator onto the kernel, multiplication by `u` becomes `h z d/dz`. We set `theta=0` below.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[K,kernelImage,HBaxter,f];\nK[u_]:=z^(u/h);\nkernelShiftCheck=PowerExpand[{K[u+h]/K[u],K[u-h]/K[u]}];\n\nkernelImage=Expand[z^-1 Qtheta[u]+z Qtheta[u-h]-t[u-h]];\nexpectedKernelImage=(z+1/z-chi)u+h(chi-z)-IIB;\nkernelImageCheck=Simplify[(kernelImage/.theta->0)-expectedKernelImage];\n\nHBaxter[f_,z_]:=h((z^2+1-chi z)D[f,z]+(chi-z)f);\n\n<|\"kernel shifts\"->kernelShiftCheck,\n\"kernel image\"->(kernelImage/.theta->0),\n\"kernel residual\"->kernelImageCheck,\n\"HBaxter on f[z]\"->HBaxter[f[z],z]|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "Therefore `Psi(z)=<z^(u/h) Qbar(u)>` obeys `IIB Psi=HBaxter Psi`, assuming the contour shifts cross no additional singularities.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## 3. Usual fundamental sl(2) realization\n\nUse\n\n`E11=1-z d_z`, `E22=z d_z`, `E12=-d_z`, `E21=z^2 d_z-z`.\n\nThus `E21` is explicitly the usual operator you expected. The accompanying minus sign in `E12` is the basis convention that preserves the gl(2) commutator.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[E11,E22,E12,E21];\nE11[f_,z_]:=f-z D[f,z];\nE22[f_,z_]:=z D[f,z];\nE12[f_,z_]:=-D[f,z];\nE21[f_,z_]:=z^2 D[f,z]-z f;\n\ncommutatorCheck=Simplify[\n E12[E21[f[z],z],z]-E21[E12[f[z],z],z]\n -(E11[f[z],z]-E22[f[z],z])\n];\n\n<|\"E11 f\"->E11[f[z],z],\"E22 f\"->E22[f[z],z],\n\"E12 f\"->E12[f[z],z],\"E21 f\"->E21[f[z],z],\n\"[E12,E21]-(E11-E22)\"->commutatorCheck|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[Ccompanion];\nCcompanion[f_,z_]:=chi E11[f,z]+E21[f,z]-E12[f,z];\nrepresentationCheck=Simplify[HBaxter[f[z],z]-h Ccompanion[f[z],z]];\n\nbasis={1,z};\noperatorMatrix=Transpose[\n (Coefficient[Expand[HBaxter[#,z]],z,#]& /@ {0,1})& /@ basis\n];\nexpectedMatrix=h {{chi,1},{-1,0}};\nmatrixCheck=Simplify[operatorMatrix-expectedMatrix];\ncharacteristicPolynomial=Factor[\n Det[r IdentityMatrix[2]-operatorMatrix/h]/.chi->lambda+1/lambda\n];\n\nGcompanion={{chi,-1},{1,0}};\nbasisSign=DiagonalMatrix[{1,-1}];\ncompanionSimilarityCheck=Simplify[\n operatorMatrix/h-basisSign.Gcompanion.basisSign\n];\n\n<|\"HBaxter-h(chi E11+E21-E12)\"->representationCheck,\n\"matrix on {1,z}\"->operatorMatrix,\n\"matrix residual\"->matrixCheck,\n\"characteristic polynomial\"->characteristicPolynomial,\n\"companion similarity residual\"->companionSimilarityCheck|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## 4. Compare explicitly with the stated Lax convention\n\nFor `Lij(u)=u delta_ij-h Eji` and `T=chi T11+T12-T21`, the constant term is\n\n`IIT=-h(chi E11+E21-E12)`.\n\nHence `IIT=-HBaxter`. Taken literally, the stated Baxter equation and stated minus-sign Lax convention use opposite names for the constant: `IIB=-IIT`, or equivalently `t(u)=chi u-IIT`. This overall sign is displayed rather than absorbed.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[IIT,laxTransfer];\nIIT[f_,z_]:=-h(chi E11[f,z]+E21[f,z]-E12[f,z]);\nlaxTransfer[f_,u_,z_]:=chi u f+IIT[f,z];\nlaxSignCheck=Simplify[IIT[f[z],z]+HBaxter[f[z],z]];\n\nsameSignMatrix={{chi,1},{1,0}};\n\n<|\"T(u) on f\"->laxTransfer[f[z],u,z],\n\"IIT+HBaxter\"->laxSignCheck,\n\"dictionary\"->HoldForm[IIB==-IIT],\n\"det companion\"->Det[Gcompanion],\n\"det same-sign T12+T21 matrix\"->Det[sameSignMatrix]|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## 5. Two fundamental Baxter solutions\n\nAt `theta=0`, with fixed twist `lambda^(u/h)`, the degree-zero and degree-one solutions have Baxter constants `h/lambda` and `h lambda`.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[c,Q0,Q1,IIB0,IIB1];\nc=h/(lambda^2-1);\nQ0[u_]:=lambda^(u/h);\nQ1[u_]:=lambda^(u/h)(u-c);\nIIB0=h/lambda;\nIIB1=h lambda;\n\nbaxterResidual0=PowerExpand[FullSimplify[\n ORaw[Q0][u]/.{IIB->IIB0,theta->0},\n Assumptions->lambda!=0&&lambda^2!=1\n]];\nbaxterResidual1=PowerExpand[FullSimplify[\n ORaw[Q1][u]/.{IIB->IIB1,theta->0},\n Assumptions->lambda!=0&&lambda^2!=1\n]];\n\n<|\"Q0\"->Q0[u],\"IIB0\"->IIB0,\"residual0\"->baxterResidual0,\n\"Q1\"->Q1[u],\"IIB1\"->IIB1,\"residual1\"->baxterResidual1|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## 6. Contour residues are the wave functions\n\nAt `theta=0`, `mu(u)=1/(u(u-h))` has poles `0,h`. With `du/(2 Pi i)` normalization, `<F>=(F(h)-F(0))/h`. Use the same translated `Qbar(u)=Q(u-h)`.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[Qbar0,Qbar1,bracket];\nQbar0[u_]:=Q0[u-h];\nQbar1[u_]:=Q1[u-h];\nbracket[expr_]:=Simplify[\n ((expr/.u->h)-(expr/.u->0))/h,\n Assumptions->lambda!=0&&lambda^2!=1&&z>0\n];\n\npsi0=PowerExpand[FullSimplify[\n bracket[z^(u/h)Qbar0[u]],\n Assumptions->lambda>0&&lambda^2!=1&&z>0\n]];\npsi1=PowerExpand[FullSimplify[\n bracket[z^(u/h)Qbar1[u]],\n Assumptions->lambda>0&&lambda^2!=1&&z>0\n]];\n\nexpectedPsi0=(z-1/lambda)/h;\nexpectedPsi1=(lambda-z)/(lambda^2-1);\nwavefunctionChecks=FullSimplify[\n {psi0-expectedPsi0,psi1-expectedPsi1},\n Assumptions->lambda>0&&lambda^2!=1&&z>0\n];\n\n<|\"Psi0\"->psi0,\"expected Psi0\"->expectedPsi0,\n\"Psi1\"->psi1,\"expected Psi1\"->expectedPsi1,\n\"residuals\"->wavefunctionChecks|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "baxterEigenfunctionChecks=FullSimplify[{\n HBaxter[psi0,z]-IIB0 psi0,\n HBaxter[psi1,z]-IIB1 psi1},\n Assumptions->lambda>0&&lambda^2!=1&&z>0\n];\ntransferEigenfunctionChecks=FullSimplify[{\n IIT[psi0,z]+IIB0 psi0,\n IIT[psi1,z]+IIB1 psi1},\n Assumptions->lambda>0&&lambda^2!=1&&z>0\n];\n\n<|\"HBaxter Psi-IIB Psi\"->baxterEigenfunctionChecks,\n\"IIT Psi+IIB Psi\"->transferEigenfunctionChecks|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## 7. Numerical contour check\n\nFor `h=i`, a circle of radius `3/2` encloses the poles `0,i` without crossing them.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "hNum=I; lambdaNum=2.; zNum=1.4; radiusNum=3/2;\ncNum=hNum/(lambdaNum^2-1);\nqbar0Num[uu_]:=Exp[((uu-hNum)/hNum)Log[lambdaNum]];\nqbar1Num[uu_]:=Exp[((uu-hNum)/hNum)Log[lambdaNum]](uu-hNum-cNum);\nmuNum[uu_]:=1/(uu(uu-hNum));\n\nClearAll[contourBracket];\ncontourBracket[qfun_]:=NIntegrate[\n With[{uu=radiusNum Exp[I tt]},\n  Exp[(uu/hNum)Log[zNum]]qfun[uu]muNum[uu]radiusNum Exp[I tt]/(2 Pi)\n ],\n {tt,0,2 Pi},WorkingPrecision->30,AccuracyGoal->18,PrecisionGoal->18\n];\n\nnumericContourValues={contourBracket[qbar0Num],contourBracket[qbar1Num]};\nnumericExpectedValues={(zNum-1/lambdaNum)/hNum,\n (lambdaNum-zNum)/(lambdaNum^2-1)};\nnumericContourCheck=Chop[numericContourValues-numericExpectedValues,10^-12];\n\n<|\"contour values\"->numericContourValues,\n\"residue values\"->numericExpectedValues,\n\"difference\"->numericContourCheck|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Final report\n\nThe contour map `Psi(z)=<z^(u/h)Qbar(u)>` sends the self-adjoint Baxter equation to\n\n`IIB Psi=h(chi E11+E21-E12)Psi`,\n\nwith the usual `E21=z^2 d_z-z`. For `L=u-h E^t`, the exact sign dictionary is `IIB=-IIT`.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "finalReport=<|\n\"translation\"->translationCheck,\n\"self-adjointness\"->{adjointPlusCheck,adjointMinusCheck},\n\"kernel\"->kernelImageCheck,\n\"sl2 representation\"->representationCheck,\n\"matrix\"->matrixCheck,\n\"companion\"->companionSimilarityCheck,\n\"Lax/Baxter sign\"->laxSignCheck,\n\"Baxter solutions\"->{baxterResidual0,baxterResidual1},\n\"wave functions\"->wavefunctionChecks,\n\"Baxter eigenfunctions\"->baxterEigenfunctionChecks,\n\"transfer eigenfunctions\"->transferEigenfunctionChecks,\n\"numerical contour\"->numericContourCheck\n|>;\nfinalReport",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  }
+ ],
+ "metadata": {}
+}

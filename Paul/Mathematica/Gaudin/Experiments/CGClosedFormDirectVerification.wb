@@ -1,0 +1,96 @@
+{
+ "cells": [
+  {
+   "kind": 1,
+   "value": "# Direct sparse verification of the rectangular CG overlap formula\n\nFor `[s,s,0,0] x [p,p,0,0]` and `mu={s+p-a,s+p-b,b,a}`, this workbook independently constructs the tensor-product highest-weight state using sparse Gelfand-Tsetlin generators. It does not use Q-functions, Matteo's determinant, or the proposed closed form when constructing the state.\n\nThe construction restricts to the Cartan-weight `mu` before solving. If `A` is the vertical join of the three restricted total raising operators, the exact state is the unique vector in `NullSpace[A]`. A numerical diagonalization of `Transpose[A].A` supplies an independent projective cross-check.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Sparse GT implementation\n\nThe companion source file contains the sparse generator construction and keeps this verification workbook readable. `DirectHWSData[s,p,mu]` returns the exact sector state, the full sparse tensor state, raising residuals, direct monomial overlaps, the predicted overlaps, and the numerical diagonalization comparison.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "Get[FileNameJoin[{NotebookDirectory[],\"CGClosedFormDirectVerification.wl\"}]];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## A genuinely nontrivial example\n\nFor `s=p=2`, the irrep `mu={2,2,2,2}` has three compatible first-site monomial bras. The state below is obtained solely from the Cartan sector and highest-weight equations, normalized by `<0,2,2,0|Psi>=1`.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "example=VerifyCGFormula[2,2,{2,2,2,2}];\n<|\n \"Representation\"->example[\"Representation\"],\n \"TensorDimension\"->example[\"TensorDimension\"],\n \"WeightSectorDimension\"->example[\"WeightSectorDimension\"],\n \"RaisingConstraintDimensions\"->example[\"RaisingConstraintDimensions\"],\n \"HighestWeightNullity\"->example[\"HighestWeightNullity\"],\n \"DirectOverlaps\"->example[\"DirectOverlaps\"],\n \"ClosedFormOverlaps\"->example[\"ClosedFormOverlaps\"],\n \"OverlapResiduals\"->example[\"OverlapResiduals\"],\n \"RaisingResidual\"->example[\"RaisingResidual\"],\n \"SmallestGramEigenvalue\"->example[\"SmallestGramEigenvalue\"],\n \"DiagonalizedVectorProjectiveError\"->example[\"DiagonalizedVectorProjectiveError\"],\n \"FormulaExact\"->example[\"FormulaExact\"],\n \"HighestWeightExact\"->example[\"HighestWeightExact\"],\n \"EvaluationSeconds\"->example[\"EvaluationSeconds\"]\n|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Inspect the state itself\n\nThe exact HWS is stored only on its Cartan sector. `NormalizedSectorVector` gives its nonzero tensor-basis coefficients and `SectorSupport` gives their positions in the full Kronecker basis. `FullSparseState` is available when a full vector is useful.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "Thread[example[\"SectorSupport\"]->example[\"NormalizedSectorVector\"]]",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Exact sweep over many representations\n\nThis evaluates every output irrep for all ordered pairs `(s,p)` with `1<=s<=3` and `1<=p<=2`. Numerical diagonalization is disabled in the sweep; each channel is still constructed by its exact highest-weight nullspace and checked against every predicted overlap.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "smallSweep=Table[\n Module[{channels=RectangularIrreps[s,p],results},\n  results=Table[DirectHWSData[s,p,mu,\"NumericalDiagonalization\"->False],{mu,channels}];\n  <|\"s\"->s,\"p\"->p,\"ChannelCount\"->Length[channels],\n    \"AllHWSUnique\"->And@@(#1[\"HighestWeightNullity\"]==1&/@results),\n    \"AllHighestWeightExact\"->And@@Lookup[results,\"HighestWeightExact\"],\n    \"AllOverlapFormulasExact\"->And@@Lookup[results,\"FormulaExact\"]|>],\n {s,1,3},{p,1,2}];\nsmallSweep//TableForm",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Larger exact sweep: all ten channels at `s=p=3`\n\nThis is still a direct tensor-representation calculation. It is intentionally a verification benchmark rather than the fast production algorithm; the closed form itself has only `a+1` entries.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "{sweep33Seconds,sweep33Exact}=AbsoluteTiming[\n And@@Table[\n  With[{result=DirectHWSData[3,3,mu,\"NumericalDiagonalization\"->False]},\n   TrueQ[result[\"HighestWeightNullity\"]==1&&result[\"HighestWeightExact\"]&&result[\"FormulaExact\"]]],\n  {mu,RectangularIrreps[3,3]}]];\n<|\"ChannelCount\"->Length[RectangularIrreps[3,3]],\n  \"AllChannelsExact\"->sweep33Exact,\"EvaluationSeconds\"->sweep33Seconds|>",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## General use\n\nEvaluate `VerifyCGFormula[s,p,mu]` for any allowed channel. The output irrep must have the form `mu={s+p-a,s+p-b,b,a}` with `0<=a<=b<=Min[s,p]`. The expected direct overlaps are indexed by `{r,a-r,b-r,r}` and equal `(-1)^r/Binomial[b,r]` after the displayed projective normalization.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "VerifyCGFormula[2,3,{4,3,2,1}]",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  }
+ ],
+ "metadata": {}
+}

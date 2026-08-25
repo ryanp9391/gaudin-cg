@@ -1,0 +1,278 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\microtypesetup{expansion=false}
+
+\definecolor{assistantblue}{RGB}{32,82,147}
+\definecolor{usergreen}{RGB}{31,122,86}
+\definecolor{rulegray}{RGB}{205,210,216}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=assistantblue,
+  urlcolor=assistantblue,
+  pdfauthor={Conversation transcript},
+  pdftitle={Closed-form rectangular CG overlaps}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Closed-form rectangular CG overlaps}
+\fancyhead[R]{Conversation transcript}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.65em}
+\setlist[itemize]{topsep=0.25em,itemsep=0.2em,leftmargin=1.6em}
+
+\newcommand{\speaker}[2]{%
+  \par\vspace{0.7em}%
+  {\large\bfseries\color{#2}#1}\par
+  \vspace{0.15em}\color{rulegray}\hrule\color{black}\vspace{0.55em}%
+}
+
+\newcommand{\Assistant}{\speaker{Assistant}{assistantblue}}
+\newcommand{\User}{\speaker{User}{usergreen}}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Conversation transcript}\par
+  \vspace{0.35em}
+  {\Large Closed-form rectangular CG overlaps}\par
+\end{center}
+
+\vspace{0.8em}
+
+\emph{This transcript begins at the requested sentence. It contains the visible user and
+assistant messages only; internal tool calls and hidden instructions are omitted.}
+
+\emph{Notation for external readers: throughout this transcript, the abbreviated bra is
+defined by
+\[
+  \langle a,b,c,d\mid
+  \equiv \langle a,b,c,d,0,0,0,0\mid
+  := \langle \mathrm{HWS}\mid
+  \bigl(e_{13}^{(1)}\bigr)^a
+  \bigl(e_{14}^{(1)}\bigr)^b
+  \bigl(e_{23}^{(1)}\bigr)^c
+  \bigl(e_{24}^{(1)}\bigr)^d .
+\]
+Here the superscript \((1)\) means that every generator acts on the first tensor-product
+site only; the four trailing zeros indicate that no generator acts on the second site.}
+
+\Assistant
+
+The exact small cases expose a much simpler scaling law than the matrix implementation:
+every allowed output is
+\[
+  \mu=(s+p-a,\ s+p-b,\ b,\ a),
+  \qquad 0\leq a\leq b\leq \min(s,p),
+\]
+and its complete overlap sector has only \(a+1\) entries. Their projective values are
+\[
+  \frac{\langle r,a-r,b-r,r\mid\Psi_\mu\rangle}
+       {\langle0,a,b,0\mid\Psi_\mu\rangle}
+  =\frac{(-1)^r}{\binom{b}{r}}.
+\]
+I've checked this exactly against the existing GT-matrix reconstruction through
+\texttt{s=3,p=2}. The corresponding exponential overlap collapses to one Pl\"ucker power,
+so extraction is linear in \texttt{min(s,p)}, not in representation dimension.
+
+\User
+
+you crashed my pc, whats the conclusion?
+
+\Assistant
+
+Sorry --- the live Wolfbook editing bridge accumulated stuck processes while I was updating
+the notebook. I stopped them, but I should have backed off sooner. The workbook was not
+successfully updated.
+
+The mathematical conclusion is clean:
+
+For
+\[
+  [s,s,0,0]\otimes[p,p,0,0],
+\]
+every output irrep is uniquely parameterized by
+\[
+  \mu=(s+p-a,\ s+p-b,\ b,\ a),
+  \qquad 0\leq a\leq b\leq\min(s,p).
+\]
+
+Only these first-site bras can overlap:
+\[
+  (n_{13},n_{14},n_{23},n_{24})
+  =(r,a-r,b-r,r),\qquad r=0,\ldots,a.
+\]
+
+After fixing
+\[
+  \langle0,a,b,0\mid\Psi_\mu\rangle=1,
+\]
+all overlaps are
+\[
+  \boxed{
+    \langle r,a-r,b-r,r\mid\Psi_\mu\rangle
+    =\frac{(-1)^r}{\binom{b}{r}}
+  }.
+\]
+
+Equivalently, the complete exponential generating function is
+\[
+  \boxed{
+    \frac{u_{23}^{\,b-a}}{a!\,b!}
+    \left(u_{14}u_{23}-u_{13}u_{24}\right)^a
+  }.
+\]
+
+All other
+\(\langle n_{13},n_{14},n_{23},n_{24},0,0,0,0\mid\Psi_\mu\rangle\)
+vanish by Cartan weight.
+
+I verified this exactly against the existing explicit GT/tensor reconstruction through
+\(s=3,p=2\), including:
+\begin{itemize}
+  \item \(a=b=1:\ \{1,-1\}\),
+  \item \(a=1,b=2:\ \{1,-\tfrac12\}\),
+  \item \(a=b=2:\ \{1,-\tfrac12,1\}\).
+\end{itemize}
+
+Thus the overlap extraction itself is representation-free and costs only \(O(a)\). The
+Q-functions and bilinear-residue determinant can still be computed alongside it as Q-side
+verification, without constructing \texttt{dim[rep]}, generator matrices, Kronecker products,
+or \texttt{Psi}.
+
+What remains is only safely placing this API into the workbook and running the requested
+clean-kernel \(s=p=5\) timing. I did not complete that benchmark, so I cannot honestly claim
+the measured sub-second result yet.
+
+\User
+
+Wait so youre saying there is an exact closed form expression for the CG coefficients?
+
+\Assistant
+
+Yes---but specifically for the restricted first-site overlaps you asked for, not automatically
+for every CG coefficient in a conventional GT tensor basis.
+
+For an output irrep
+\[
+  \mu=(s+p-a,\ s+p-b,\ b,\ a),
+  \qquad 0\leq a\leq b\leq\min(s,p),
+\]
+the only Cartan-compatible overlaps are
+\[
+  \langle r,a-r,b-r,r,0,0,0,0\mid\Psi_\mu\rangle,
+  \qquad r=0,\ldots,a.
+\]
+
+Up to one overall normalization, they have the exact closed form
+\[
+  \frac{\langle r,a-r,b-r,r\mid\Psi_\mu\rangle}
+       {\langle0,a,b,0\mid\Psi_\mu\rangle}
+  =\frac{(-1)^r}{\binom{b}{r}}.
+\]
+
+So their generating function is simply
+\[
+  \frac{u_{23}^{b-a}}{a!\,b!}
+  (u_{14}u_{23}-u_{13}u_{24})^a
+\]
+when \(\langle0,a,b,0\mid\Psi_\mu\rangle=1\).
+
+This completely determines the HWS projectively because the output irrep occurs with
+multiplicity one. However:
+\begin{itemize}
+  \item it does not fix the absolute normalization;
+  \item it is not yet a closed formula for every component of the HWS in Matteo's/GT tensor basis;
+  \item the Q-determinant should supply/check the remaining normalization, but that identification
+        still needs to be established carefully.
+\end{itemize}
+
+So the surprising result is: the entire family of overlaps you requested appears to have a
+universal exact closed form, while the bilinear-residue machinery is mainly needed for the
+Q-normalization and comparison with Matteo's convention.
+
+\User
+
+Is this formula known anywhere in the literature?
+
+\Assistant
+
+I'll check whether this precise binomial overlap formula is published explicitly, and distinguish
+that from the well-known ingredients behind it---rectangular Littlewood--Richardson decomposition,
+Pl\"ucker relations, and standard monomial theory.
+
+\Assistant
+
+The underlying formula is classical, but I have not found this exact four-index overlap formula
+stated verbatim as an SU(4) Clebsch--Gordan formula.
+
+It is a direct consequence of the Pl\"ucker/standard-monomial realization:
+\begin{itemize}
+  \item \([s,s,0,0]\) is the degree-\(s\) component of the homogeneous coordinate ring of
+        \(\mathrm{Gr}(2,4)\).
+  \item \(\mathrm{Gr}(2,4)\) has one quadratic Pl\"ucker relation.
+  \item Products of rectangular Schur representations are multiplicity-free, so each permitted
+        highest-weight vector is unique up to scale. This rectangular multiplicity-free result is
+        classical; see Stembridge's
+        \href{https://deepblue.lib.umich.edu/handle/2027.42/41839}
+        {Multiplicity-Free Products of Schur Functions}.
+  \item Standard monomial theory constructs these representations and their bases using Pl\"ucker
+        coordinates; see Seshadri's
+        \href{https://link.springer.com/book/10.1007/978-981-10-1813-8}
+        {Introduction to the Theory of Standard Monomials}.
+\end{itemize}
+
+In our variables, the relevant standard monomial is simply
+\[
+  u_{23}^{\,b-a}
+  \det\begin{pmatrix}
+    u_{14}&u_{13}\\
+    u_{24}&u_{23}
+  \end{pmatrix}^{a}
+  =u_{23}^{\,b-a}(u_{14}u_{23}-u_{13}u_{24})^a.
+\]
+
+Expanding it and accounting for the factorials in the exponential basis gives
+\[
+  \frac{\langle r,a-r,b-r,r\mid\Psi_\mu\rangle}
+       {\langle0,a,b,0\mid\Psi_\mu\rangle}
+  =(-1)^r\frac{r!(b-r)!}{b!}
+  =\frac{(-1)^r}{\binom{b}{r}}.
+\]
+
+So I would describe it as:
+\begin{quote}
+  a simple specialization of the classical Pl\"ucker/standard-monomial highest-weight
+  construction, expressed in our unusual raising-operator overlap convention.
+\end{quote}
+
+General SU(\(N\)) CG literature usually presents algorithms or GT-basis coefficients rather than
+this restricted coherent-bra slice---for example the
+\href{https://arxiv.org/abs/1009.0437}{Alex--Kalus--Huckleberry--von Delft algorithm}.
+I did not locate a paper writing precisely
+\[
+  \langle r,a-r,b-r,r\mid\Psi\rangle
+  =\frac{(-1)^r}{\binom{b}{r}}
+\]
+with our normalization.
+
+Thus the closed form itself is probably not a fundamentally new representation-theory theorem.
+What may be new and relevant to this project is showing that Matteo's bilinear Q-residue
+determinant selects and normalizes exactly this standard-monomial state directly from the Gaudin
+Q-functions.
+
+
+\end{document}
