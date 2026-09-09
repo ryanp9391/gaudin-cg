@@ -1,0 +1,467 @@
+{
+ "cells": [
+  {
+   "kind": 1,
+   "value": "# SoV localization in the two site XXX chain\n\ngl(2) chain of length two in the companion twist frame. builds the SoV basis out of transfer\nmatrices, and asks which of those states factorize across the two sites.\n\n## representations\n\ngelfand-tsetlin patterns and the gl(n) generators, with an independent diagram on each site.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*build representations of gl(n)*)\nps[rep_] :=\n    ps[rep] =\n    Block[\n        {res = (Prepend[rep, #]& /@ (Tuples[Table[Range[rep〚1, i + 1〛, rep〚1, i〛], {i, 1, Length[rep〚1〛] - 1}]]))},\n        If[Length[res〚1, 1〛] == 1, Reverse @ Sort @ res, Reverse @ Sort @ Flatten[ps /@ res, 1]]\n    ];\ndim[rep_] := dim[rep] = Length[ps[{rep}]];\nJ0[k_][pat_] := J0[k][pat] = Sum[pat〚k, i〛, {i, 1, k}] - Sum[pat〚k - 1, i〛, {i, 1, k - 1}];\nJp[k_][pat_] :=\n    Jp[k][pat] =\n    -Sum[\n        Product[pat〚k, i〛 - i - pat〚k + 1, j〛 + j, {j, Range[k + 1]}]\n        / Product[pat〚k, i〛 - i - pat〚k, j〛 + j, {j, Complement[Range[k], {i}]}] v[ReplacePart[pat, {k, i} → pat〚k, i〛 + 1]],\n        {i, 1, k}\n    ];\nJm[k_][pat_] :=\n    Jm[k][pat] =\n    Sum[\n        Product[pat〚k, i〛 - i - pat〚k - 1, j〛 + j, {j, Range[k - 1]}]\n        / Product[pat〚k, i〛 - i - pat〚k, j〛 + j, {j, Complement[Range[k], {i}]}] v[ReplacePart[pat, {k, i} → pat〚k, i〛 - 1]],\n        {i, 1, k}\n    ];\nJJ[k_, l_, rep_] :=\n    JJ[k, l, rep] =\n    Which[\n        k == l,\n        DiagonalMatrix[J0[k] /@ ps[{rep}]],\n        l == k + 1,\n        Transpose[Table[Coefficient[Jp[k][ps[{rep}]〚i〛], v[#]]& /@ ps[{rep}], {i, 1, Length[ps[{rep}]]}]],\n        l == k - 1,\n        Transpose[Table[Coefficient[Jm[l][ps[{rep}]〚i〛], v[#]]& /@ ps[{rep}], {i, 1, Length[ps[{rep}]]}]],\n        l > k + 1,\n        JJ[k, k + 1, rep].JJ[k + 1, l, rep] - JJ[k + 1, l, rep].JJ[k, k + 1, rep],\n        l < k - 1,\n        JJ[k, k - 1, rep].JJ[k - 1, l, rep] - JJ[k - 1, l, rep].JJ[k, k - 1, rep]\n    ];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*representations on sites 1 and 2*)\nClearAll[Lam];\nLam[1] = {3, 0};\nLam[2] = {3, 0};",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## lax matrix\n\nlocal generators and the lax matrix on each site, together with the first yangian weight.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[Ee, LL, nu];\n\n(*Local Lie algebra generators on site n*)\nEe[n_][{i_, j_}] := Ee[n][{i, j}] = JJ[i, j, Lam[n]];\n\n(*Local Lax matrix on site n*)\nLL[n_][{i_, j_}][u_] := LL[n][{i, j}][u] = u IdentityMatrix[dim[Lam[n]]] KroneckerDelta[i, j] - h Ee[n][{j, i}];\n\n(*first Yangian weight*)\nnu[1][u_] = (u - w[1] - h Lam[1]〚1〛) (u - w[2] - h Lam[2]〚1〛);",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "Ee[1][{1, 1}]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"33\" data-out-n=\"154\" data-sub-idx=\"0\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"5\" data-sub-start=\"0\" data-sub-end=\"0\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[154]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"31\" data-latex-b64=\"XGJlZ2lue3BtYXRyaXh9MyAmIDAgJiAwICYgMFxcMCAmIDIgJiAwICYgMFxcMCAmIDAgJiAxICYgMFxcMCAmIDAgJiAwICYgMFxlbmR7cG1hdHJpeH0=\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:4.8em;vertical-align:-2.15em;\"></span><span class=\"minner\"><span class=\"mopen\"><span class=\"delimsizing mult\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.65em;\"><span style=\"top:-4.65em;\"><span class=\"pstrut\" style=\"height:6.8em;\"></span><span style=\"width:0.875em;height:4.800em;\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"0.875em\" height=\"4.800em\" viewBox=\"0 0 875 4800\"><path d=\"M863,9c0,-2,-2,-5,-6,-9c0,0,-17,0,-17,0c-12.7,0,-19.3,0.3,-20,1\nc-5.3,5.3,-10.3,11,-15,17c-242.7,294.7,-395.3,682,-458,1162c-21.3,163.3,-33.3,349,\n-36,557 l0,1284c0.2,6,0,26,0,60c2,159.3,10,310.7,24,454c53.3,528,210,\n949.7,470,1265c4.7,6,9.7,11.7,15,17c0.7,0.7,7,1,19,1c0,0,18,0,18,0c4,-4,6,-7,6,-9\nc0,-2.7,-3.3,-8.7,-10,-18c-135.3,-192.7,-235.5,-414.3,-300.5,-665c-65,-250.7,-102.5,\n-544.7,-112.5,-882c-2,-104,-3,-167,-3,-189\nl0,-1292c0,-162.7,5.7,-314,17,-454c20.7,-272,63.7,-513,129,-723c65.3,\n-210,155.3,-396.3,270,-559c6.7,-9.3,10,-15.3,10,-18z\"/></svg></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.15em;\"><span></span></span></span></span></span></span><span class=\"mord\"><span class=\"mtable\"><span class=\"col-align-c\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.65em;\"><span style=\"top:-4.81em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">3</span></span></span><span style=\"top:-3.61em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span><span style=\"top:-2.41em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span><span style=\"top:-1.21em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.15em;\"><span></span></span></span></span></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"col-align-c\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.65em;\"><span style=\"top:-4.81em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span><span style=\"top:-3.61em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">2</span></span></span><span style=\"top:-2.41em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span><span style=\"top:-1.21em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.15em;\"><span></span></span></span></span></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"col-align-c\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.65em;\"><span style=\"top:-4.81em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span><span style=\"top:-3.61em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span><span style=\"top:-2.41em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">1</span></span></span><span style=\"top:-1.21em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.15em;\"><span></span></span></span></span></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"col-align-c\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.65em;\"><span style=\"top:-4.81em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span><span style=\"top:-3.61em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span><span style=\"top:-2.41em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span><span style=\"top:-1.21em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.15em;\"><span></span></span></span></span></span></span></span><span class=\"mclose\"><span class=\"delimsizing mult\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.65em;\"><span style=\"top:-4.65em;\"><span class=\"pstrut\" style=\"height:6.8em;\"></span><span style=\"width:0.875em;height:4.800em;\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"0.875em\" height=\"4.800em\" viewBox=\"0 0 875 4800\"><path d=\"M76,0c-16.7,0,-25,3,-25,9c0,2,2,6.3,6,13c21.3,28.7,42.3,60.3,\n63,95c96.7,156.7,172.8,332.5,228.5,527.5c55.7,195,92.8,416.5,111.5,664.5\nc11.3,139.3,17,290.7,17,454c0,28,1.7,43,3.3,45l0,1209\nc-3,4,-3.3,16.7,-3.3,38c0,162,-5.7,313.7,-17,455c-18.7,248,-55.8,469.3,-111.5,664\nc-55.7,194.7,-131.8,370.3,-228.5,527c-20.7,34.7,-41.7,66.3,-63,95c-2,3.3,-4,7,-6,11\nc0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17\nc242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558\nl0,-1344c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,\n-470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z\"/></svg></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:2.15em;\"><span></span></span></span></span></span></span></span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[154]= \\begin{pmatrix}3 & 0 & 0 & 0\\\\0 & 2 & 0 & 0\\\\0 & 0 & 1 & 0\\\\0 & 0 & 0 & 0\\end{pmatrix}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "9b85b6a5-7ace-4c5c-92cd-837508f3aa9b"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## twist and monodromy\n\ncompanion twist, with eigenvalues z[1] and z[2].",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[G, T, Tt];\n\n(*twist matrix*)\nG = {{z[1] + z[2], -z[1] z[2]}, {1, 0}};\n\n(*monodromy matrix - polynomial*)\nT[{i_, j_}][u_] := T[{i, j}][u] = Sum[KroneckerProduct[LL[1][{i, k}][u - w[1]], LL[2][{k, j}][u - w[2]]], {k, 2}];\n\n(*monodromy matrix normalized by first Yangian weight*)\nTt[{i_, j_}][u_] := Tt[{i, j}][u] = T[{i, j}][u] / nu[1][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## transfer matrices\n\nthe {1,s} tower, built by fusion. the shifts run upwards, in steps of +h.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[t];\n(*t[{a,s}] corresponds to transfer matrix with a rows and s columns*)\n\nt[{1, 0}][u_] = IdentityMatrix[dim[Lam[1]] dim[Lam[2]]];\nt[{1, 1}][u_] = (z[1] + z[2]) Tt[{1, 1}][u] - z[1] z[2] Tt[{2, 1}][u] + Tt[{1, 2}][u];\nt[{2, 1}][u_] = z[1] z[2] (Tt[{1, 1}][u].Tt[{2, 2}][u - h] - Tt[{2, 1}][u].Tt[{1, 2}][u - h]);\n\n(*building transfer matrices in higher reps by fusion*)\nt[{1, s_ /; s >= 2}][u_] = t[{1, s - 1}][u].t[{1, 1}][u + (s - 1) h] - t[{2, 1}][u + (s - 1) h].t[{1, s - 2}][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## the B operator and the SoV basis\n\nx[{0,0}] is the lowest weight state on both sites, and the transfer matrices excite it.\nthe labels mu[n] count upwards from zero.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*B operator in companion frame is simply T[{1,1}][u]*)\nBB[u_] = T[{1, 1}][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*SoV basis. x[{0,0}] is SoV vacuum*)\nx[{0, 0}] = {Table[KroneckerDelta[dim[Lam[1]] dim[Lam[2]], ii], {ii, dim[Lam[1]] dim[Lam[2]]}]};\nx[{mu1_, mu2_}] := x[{0, 0}].t[{1, mu1}][w[1]].t[{1, mu2}][w[2]];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*SoV states built with transfer matrices above diagonalize B operator*)\nTable[x[{mu1, mu2}].BB[u] - (u - w[1] - h mu1) (u - w[2] - h mu2) x[{mu1, mu2}], {mu1, 0, 3}, {mu2, 0, 3}] // Simplify // Flatten // Union",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"34\" data-out-n=\"167\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"13\" data-sub-start=\"1\" data-sub-end=\"1\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[167]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"13\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[167]= \\left\\{0\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "d34284fd-8087-4b26-8e2f-1c0c2967cf1d"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## localization\n\nthe states with the second label unexcited turn out to factorize across the two sites.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*localization - the states x[{mu,0}] are localized to the first site of the chain*)\nTable[x[{mu1, 0}] - KroneckerProduct[{{v[mu1][1], v[mu1][2], v[mu1][3], v[mu1][4]}}, {{0, 0, 0, 1}}], {mu1, 0, 3}];\nSolve[% == 0]〚1〛",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"35\" data-out-n=\"169\" data-sub-idx=\"2\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"15\" data-sub-start=\"2\" data-sub-end=\"2\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[169]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"13\" data-line-broken=\"1\" data-latex-b64=\"XGJlZ2lue2FsaWduZWR9CiAgJlxsZWZ0XHt2XGxlZnQoMFxyaWdodClcbGVmdCgxXHJpZ2h0KVx0byAwLHZcbGVmdCgwXHJpZ2h0KVxsZWZ0KDJccmlnaHQpXHRvIDAgXHJpZ2h0LiBcXAogICZcbGVmdC4gLHZcbGVmdCgwXHJpZ2h0KVxsZWZ0KDNccmlnaHQpXHRvIDAsdlxsZWZ0KDBccmlnaHQpXGxlZnQoNFxyaWdodClcdG8gMSBccmlnaHQuIFxcCiAgJlxsZWZ0LiAsdlxsZWZ0KDFccmlnaHQpXGxlZnQoMVxyaWdodClcdG8gMCx2XGxlZnQoMVxyaWdodClcbGVmdCgyXHJpZ2h0KVx0byAwIFxyaWdodC4gXFwKICAmXGxlZnQuICx2XGxlZnQoMVxyaWdodClcbGVmdCgzXHJpZ2h0KVx0byBcZnJhY3sxfXszfSx2XGxlZnQoMVxyaWdodClcbGVmdCg0XHJpZ2h0KVx0byAwIFxyaWdodC4gXFwKICAmXGxlZnQuICx2XGxlZnQoMlxyaWdodClcbGVmdCgxXHJpZ2h0KVx0byAwLHZcbGVmdCgyXHJpZ2h0KVxsZWZ0KDJccmlnaHQpXHRvIFxmcmFjezF9ezZ9IFxyaWdodC4gXFwKICAmXGxlZnQuICx2XGxlZnQoMlxyaWdodClcbGVmdCgzXHJpZ2h0KVx0byAwLHZcbGVmdCgyXHJpZ2h0KVxsZWZ0KDRccmlnaHQpXHRvIDAgXHJpZ2h0LiBcXAogICZcbGVmdC4gLHZcbGVmdCgzXHJpZ2h0KVxsZWZ0KDFccmlnaHQpXHRvIFxmcmFjezF9ezZ9LHZcbGVmdCgzXHJpZ2h0KVxsZWZ0KDJccmlnaHQpXHRvIDAgXHJpZ2h0LiBcXAogICZcbGVmdC4gLHZcbGVmdCgzXHJpZ2h0KVxsZWZ0KDNccmlnaHQpXHRvIDAsdlxsZWZ0KDNccmlnaHQpXGxlZnQoNFxyaWdodClcdG8gMFxyaWdodFx9ClxlbmR7YWxpZ25lZH0=\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:14.4223em;vertical-align:-6.9612em;\"></span><span class=\"mord\"><span class=\"mtable\"><span class=\"col-align-r\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:7.4612em;\"><span style=\"top:-9.9426em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"></span></span><span style=\"top:-8.4426em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"></span></span><span style=\"top:-6.9426em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"></span></span><span style=\"top:-4.9612em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"></span></span><span style=\"top:-2.6537em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"></span></span><span style=\"top:-0.8277em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"></span></span><span style=\"top:1.1537em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"></span></span><span style=\"top:2.9797em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:6.9612em;\"><span></span></span></span></span></span><span class=\"col-align-l\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:7.4612em;\"><span style=\"top:-9.9426em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"><span class=\"mord\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">2</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mclose nulldelimiter\"></span></span></span></span><span style=\"top:-8.4426em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"><span class=\"mord\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen nulldelimiter\"></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">3</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">4</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">1</span><span class=\"mclose nulldelimiter\"></span></span></span></span><span style=\"top:-6.9426em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"><span class=\"mord\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen nulldelimiter\"></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">2</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mclose nulldelimiter\"></span></span></span></span><span style=\"top:-4.9612em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"><span class=\"mord\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen nulldelimiter\"></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">3</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.3214em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">3</span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.686em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">4</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mclose nulldelimiter\"></span></span></span></span><span style=\"top:-2.6537em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"><span class=\"mord\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen nulldelimiter\"></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">2</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">2</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">2</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.3214em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">6</span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.686em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span><span class=\"mclose nulldelimiter\"></span></span></span></span><span style=\"top:-0.8277em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"><span class=\"mord\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen nulldelimiter\"></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">2</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">3</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">2</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">4</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mclose nulldelimiter\"></span></span></span></span><span style=\"top:1.1537em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"><span class=\"mord\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen nulldelimiter\"></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">3</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.3214em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">6</span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.686em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">3</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">2</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mclose nulldelimiter\"></span></span></span></span><span style=\"top:2.9797em;\"><span class=\"pstrut\" style=\"height:3.3214em;\"></span><span class=\"mord\"><span class=\"mord\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen nulldelimiter\"></span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">3</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">3</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.03588em;\">v</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">3</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">(</span><span class=\"mord\">4</span><span class=\"mclose delimcenter\" style=\"top:0em;\">)</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:6.9612em;\"><span></span></span></span></span></span></span></span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[169]= \\begin{aligned}\n  &\\left\\{v\\left(0\\right)\\left(1\\right)\\to 0,v\\left(0\\right)\\left(2\\right)\\to 0 \\right. \\\\\n  &\\left. ,v\\left(0\\right)\\left(3\\right)\\to 0,v\\left(0\\right)\\left(4\\right)\\to 1 \\right. \\\\\n  &\\left. ,v\\left(1\\right)\\left(1\\right)\\to 0,v\\left(1\\right)\\left(2\\right)\\to 0 \\right. \\\\\n  &\\left. ,v\\left(1\\right)\\left(3\\right)\\to \\frac{1}{3},v\\left(1\\right)\\left(4\\right)\\to 0 \\right. \\\\\n  &\\left. ,v\\left(2\\right)\\left(1\\right)\\to 0,v\\left(2\\right)\\left(2\\right)\\to \\frac{1}{6} \\right. \\\\\n  &\\left. ,v\\left(2\\right)\\left(3\\right)\\to 0,v\\left(2\\right)\\left(4\\right)\\to 0 \\right. \\\\\n  &\\left. ,v\\left(3\\right)\\left(1\\right)\\to \\frac{1}{6},v\\left(3\\right)\\left(2\\right)\\to 0 \\right. \\\\\n  &\\left. ,v\\left(3\\right)\\left(3\\right)\\to 0,v\\left(3\\right)\\left(4\\right)\\to 0\\right\\}\n\\end{aligned}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "e5d6e46c-db6b-41f7-9e4e-25e1a8f5569e"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*even more interestingly, the states xx[mu,0] = x1[mu] x vacuum, and x1[mu] are the eigenstates (SoV states) of\nBB for a length 1 chain with inhom w[1] in rep Lam[1]*)",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## the length one chain\n\nthe same construction on site 1 alone, with inhomogeneity w[1] in rep Lam[1].",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*monodromy matrix for spin chain of length 1*)\nClearAll[Tt1];\nTt1[{i_, j_}][u_] := Tt1[{i, j}][u] = LL[1][{i, j}][u - w[1]] / (u - w[1] - h Lam[1]〚1〛);\n\nClearAll[t1];\n(*t1[{a,s}] corresponds to transfer matrix with a rows and s columns for length 1*)\n\nt1[{1, 0}][u_] = IdentityMatrix[dim[Lam[1]]];\nt1[{1, 1}][u_] = (z[1] + z[2]) Tt1[{1, 1}][u] - z[1] z[2] Tt1[{2, 1}][u] + Tt1[{1, 2}][u];\nt1[{2, 1}][u_] = z[1] z[2] (Tt1[{1, 1}][u].Tt1[{2, 2}][u - h] - Tt1[{2, 1}][u].Tt1[{1, 2}][u - h]);\n\n\n(*building transfer matrices in higher reps by fusion*)\nt1[{1, s_ /; s >= 2}][u_] = t1[{1, s - 1}][u].t1[{1, 1}][u + (s - 1) h] - t1[{2, 1}][u + (s - 1) h].t1[{1, s - 2}][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*SoV basis for length 1 built with length 1 transfer matrices*)\nClearAll[x1];\nx1[{0}] = {Table[KroneckerDelta[dim[Lam[1]], i], {i, dim[Lam[1]]}]};\nx1[{mu_}] := x1[{0}].t1[{1, mu}][w[1]];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## factorization\n\nx[{mu,0}] is exactly the length one state tensored with the site 2 vacuum, with no leftover\nscalar. nothing like this happens once the second label is excited.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*vacuum states for the two sites*)\nvac1 = {Table[KroneckerDelta[dim[Lam[1]], i], {i, dim[Lam[1]]}]};\nvac2 = {Table[KroneckerDelta[dim[Lam[2]], i], {i, dim[Lam[2]]}]};",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*showing the sov basis factorizes when only the first label is excited*)\nTable[x[{mu, 0}] - KroneckerProduct[x1[{mu}], vac2], {mu, 0, 3}] // Flatten // Union",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"36\" data-out-n=\"182\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"22\" data-sub-start=\"1\" data-sub-end=\"1\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[182]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"13\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[182]= \\left\\{0\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "8c7507ae-d2b1-4eea-adda-67a6a80fa76a"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*no factorization in general*)\nx[{0, 1}] - KroneckerProduct[{{v1[1], v1[2], v1[3], v1[4]}}, {{v2[1], v2[2], v2[3], v2[4]}}];\nSolve[% == 0, {v1[1], v1[2], v1[3], v1[4], v2[1], v2[2], v2[3], v2[4]}]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"37\" data-out-n=\"184\" data-sub-idx=\"2\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"23\" data-sub-start=\"2\" data-sub-end=\"2\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[184]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"13\" data-latex-b64=\"XHtcfQ==\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mopen\">{</span><span class=\"mclose\">}</span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[184]= \\{\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "a156f6a9-7bb2-4cc4-b980-be95db31452e"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## the mirror construction: building down from the maximal vacuum\n\neverything above starts from the lowest weight state and excites upwards. one can equally start\nfrom the maximal eigenvector of BB and come down. this is the same eigenbasis - BB has 16\ndistinct eigenvalues, so its left eigenvectors are unique up to normalization - but the states\nthat factorize are now the other ones, with site 1 splitting off instead of site 2.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*maximal vacuum: highest weight on both sites. its BB eigenvalue has the roots\n  pushed all the way up, to w[n] + h Lam[n]〚1〛*)\nClearAll[vacb1, vacb2, xb];\nvacb1 = {Table[KroneckerDelta[1, i], {i, dim[Lam[1]]}]};\nvacb2 = {Table[KroneckerDelta[1, i], {i, dim[Lam[2]]}]};\nxb[{0, 0}] = KroneckerProduct[vacb1, vacb2];\n\nxb[{0, 0}].BB[u] - (u - w[1] - h Lam[1]〚1〛) (u - w[2] - h Lam[2]〚1〛) xb[{0, 0}] // Simplify // Flatten // Union",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"38\" data-out-n=\"189\" data-sub-idx=\"5\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"25\" data-sub-start=\"7\" data-sub-end=\"7\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[189]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"13\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[189]= \\left\\{0\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "33184dfb-16f3-4896-83bb-00d45403390c"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*second Yangian weight - this is the BB eigenvalue on the lowest weight vacuum, so it plays\n  the role for the maximal vacuum that nu[1] played for the minimal one*)\nnu[2][u_] = (u - w[1] - h Lam[1]〚2〛) (u - w[2] - h Lam[2]〚2〛);\n\n(*monodromy normalized by the second Yangian weight, mirroring Tt above*)\nClearAll[Ttb];\nTtb[{i_, j_}][u_] := Ttb[{i, j}][u] = T[{i, j}][u] / nu[2][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[tb];\n(*mirror of the t tower. two changes only: normalize by nu[2] instead of nu[1], and let the\n  fusion shifts run downwards. tb[{2,1}] keeps its own -h shift, because that combination is\n  the quantum determinant - the mirrored version with +h is not central and the fusion fails*)\n\ntb[{1, 0}][u_] = IdentityMatrix[dim[Lam[1]] dim[Lam[2]]];\ntb[{1, 1}][u_] = (z[1] + z[2]) Ttb[{1, 1}][u] - z[1] z[2] Ttb[{2, 1}][u] + Ttb[{1, 2}][u];\ntb[{2, 1}][u_] = z[1] z[2] (Ttb[{1, 1}][u].Ttb[{2, 2}][u - h] - Ttb[{2, 1}][u].Ttb[{1, 2}][u - h]);\n\ntb[{1, s_ /; s >= 2}][u_] = tb[{1, s - 1}][u].tb[{1, 1}][u - (s - 1) h] - tb[{2, 1}][u - (s - 2) h].tb[{1, s - 2}][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*mirror SoV basis. the labels count downwards from Lam[n]〚1〛, and the transfer matrices are\n  evaluated at the roots of the maximal eigenvalue rather than at the inhomogeneities*)\nxb[{nu1_, nu2_}] := xb[{nu1, nu2}] = Simplify[xb[{0, 0}].tb[{1, nu1}][w[1] + h Lam[1]〚1〛].tb[{1, nu2}][w[2] + h Lam[2]〚1〛]];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*the mirror states diagonalize B as well, with the labels counting down*)\nTable[xb[{nu1, nu2}].BB[u] - (u - w[1] - h (Lam[1]〚1〛 - nu1)) (u - w[2] - h (Lam[2]〚1〛 - nu2)) xb[{nu1, nu2}], {nu1, 0, 3}, {nu2, 0, 3}] // Simplify // Flatten // Union",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"39\" data-out-n=\"199\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"29\" data-sub-start=\"1\" data-sub-end=\"1\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[199]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"13\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[199]= \\left\\{0\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "6f37c67c-5fb2-4cd0-952c-1bb2287d2f05"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "### the length one chain, mirrored\n\nsite 2 alone this time, with inhomogeneity w[2] in rep Lam[2], built down from its own maximal\nvacuum.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*monodromy for a length 1 chain on site 2, normalized by its second Yangian weight*)\nClearAll[Tt2b];\nTt2b[{i_, j_}][u_] := Tt2b[{i, j}][u] = LL[2][{i, j}][u - w[2]] / (u - w[2] - h Lam[2]〚2〛);\n\nClearAll[tb2];\n(*same mirrored tower as tb, on the length 1 chain*)\n\ntb2[{1, 0}][u_] = IdentityMatrix[dim[Lam[2]]];\ntb2[{1, 1}][u_] = (z[1] + z[2]) Tt2b[{1, 1}][u] - z[1] z[2] Tt2b[{2, 1}][u] + Tt2b[{1, 2}][u];\ntb2[{2, 1}][u_] = z[1] z[2] (Tt2b[{1, 1}][u].Tt2b[{2, 2}][u - h] - Tt2b[{2, 1}][u].Tt2b[{1, 2}][u - h]);\n\ntb2[{1, s_ /; s >= 2}][u_] = tb2[{1, s - 1}][u].tb2[{1, 1}][u - (s - 1) h] - tb2[{2, 1}][u - (s - 2) h].tb2[{1, s - 2}][u];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*SoV basis for the length 1 chain on site 2*)\nClearAll[x2b];\nx2b[{0}] = vacb2;\nx2b[{nu_}] := x2b[{0}].tb2[{1, nu}][w[2] + h Lam[2]〚1〛];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "### mirror factorization\n\nthe roles of the two sites are exchanged: it is now site 1 that splits off, sitting in its\nmaximal vacuum, and the factorization is again exact with no leftover scalar.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*showing the mirror basis factorizes when only the second label is excited*)\nTable[xb[{0, nu}] - KroneckerProduct[vacb1, x2b[{nu}]], {nu, 0, 3}] // Simplify // Flatten // Union",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"40\" data-out-n=\"210\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"34\" data-sub-start=\"1\" data-sub-end=\"1\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[210]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"13\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[210]= \\left\\{0\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "2c10f52e-f451-4213-bc3d-5f417f773da9"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*no factorization in general, exactly as before*)\nxb[{1, 0}] - KroneckerProduct[{{v1[1], v1[2], v1[3], v1[4]}}, {{v2[1], v2[2], v2[3], v2[4]}}];\nSolve[% == 0, {v1[1], v1[2], v1[3], v1[4], v2[1], v2[2], v2[3], v2[4]}]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"41\" data-out-n=\"212\" data-sub-idx=\"2\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"35\" data-sub-start=\"2\" data-sub-end=\"2\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[212]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"13\" data-latex-b64=\"XHtcfQ==\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mopen\">{</span><span class=\"mclose\">}</span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[212]= \\{\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "da246cd5-3acf-415e-8dd4-67167d004e47"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "### the two constructions agree\n\nBB has 16 distinct eigenvalues, so its left eigenvectors are fixed up to normalization and the\ntwo towers cannot be building different bases. what changes is only which end of the basis is\nreached cheaply, and hence which family factorizes.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*xb[{nu1,nu2}] is proportional to x[{Lam[1]〚1〛-nu1, Lam[2]〚1〛-nu2}], so each pair spans a\n  one dimensional space. the two factorizing families are opposite edges of one basis*)\nTable[MatrixRank[Simplify[Join[xb[{nu1, nu2}], x[{Lam[1]〚1〛 - nu1, Lam[2]〚1〛 - nu2}]]]], {nu1, 0, 3}, {nu2, 0, 3}] // Flatten // Union",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"42\" data-out-n=\"213\" data-sub-idx=\"1\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"37\" data-sub-start=\"2\" data-sub-end=\"2\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[213]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"13\" data-latex-b64=\"XGxlZnRcezFccmlnaHRcfQ==\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">1</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[213]= \\left\\{1\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "1dcc52da-1c4e-4381-9284-0ac795d02cd0"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(*localization also works on global rotations, not just the SoV vacuum*)",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "EE[{i_, j_}] := KroneckerProduct[Ee[1][{i, j}], IdentityMatrix[dim[Lam[2]]]] + KroneckerProduct[IdentityMatrix[dim[Lam[1]]], Ee[2][{i, j}]];",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "Table[\n    x[{0, 0}].MatrixExp[r EE[{2, 1}]].t[{1, mu}][w[1]]\n    - x[{0, 0}].MatrixExp[r EE[{2, 1}]].KroneckerProduct[t1[{1, mu}][w[1]], IdentityMatrix[dim[Lam[2]]]],\n    {mu, 0, 3}\n]\n// Simplify // Flatten // Union\n",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"51\" data-out-n=\"223\" data-sub-idx=\"0\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"40\" data-sub-start=\"0\" data-sub-end=\"5\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[223]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"18\" data-latex-b64=\"XGxlZnRcezBccmlnaHRcfQ==\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\">{</span><span class=\"mord\">0</span><span class=\"mclose delimcenter\" style=\"top:0em;\">}</span></span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[223]= \\left\\{0\\right\\}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "fa4ccbd6-3682-4c43-8f12-def3fcb9473b"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "{{0, 0, 0, 1}}.MatrixExp[r Ee[1][{2, 1}]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"928824\" data-output-id=\"52\" data-out-n=\"224\" data-sub-idx=\"0\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"41\" data-sub-start=\"0\" data-sub-end=\"0\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[224]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"18\" data-latex-b64=\"XGJlZ2lue3BtYXRyaXh9XGZyYWN7cl4zfXs2fSAmIFxmcmFje3JeMn17Mn0gJiByICYgMVxlbmR7cG1hdHJpeH0=\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1.8em;vertical-align:-0.65em;\"></span><span class=\"minner\"><span class=\"mopen delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size2\">(</span></span><span class=\"mord\"><span class=\"mtable\"><span class=\"col-align-c\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.939em;\"><span style=\"top:-2.939em;\"><span class=\"pstrut\" style=\"height:3.0179em;\"></span><span class=\"mord\"><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.0179em;\"><span style=\"top:-2.655em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">6</span></span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.394em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.02778em;\">r</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8913em;\"><span style=\"top:-2.931em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"sizing reset-size3 size1 mtight\"><span class=\"mord mtight\">3</span></span></span></span></span></span></span></span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.345em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.439em;\"><span></span></span></span></span></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"col-align-c\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.939em;\"><span style=\"top:-2.939em;\"><span class=\"pstrut\" style=\"height:3.0179em;\"></span><span class=\"mord\"><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.0179em;\"><span style=\"top:-2.655em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">2</span></span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.394em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.02778em;\">r</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8913em;\"><span style=\"top:-2.931em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"sizing reset-size3 size1 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.345em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.439em;\"><span></span></span></span></span></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"col-align-c\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.939em;\"><span style=\"top:-2.939em;\"><span class=\"pstrut\" style=\"height:3.0179em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.02778em;\">r</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.439em;\"><span></span></span></span></span></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"arraycolsep\" style=\"width:0.5em;\"></span><span class=\"col-align-c\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.939em;\"><span style=\"top:-2.939em;\"><span class=\"pstrut\" style=\"height:3.0179em;\"></span><span class=\"mord\"><span class=\"mord\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.439em;\"><span></span></span></span></span></span></span></span><span class=\"mclose delimcenter\" style=\"top:0em;\"><span class=\"delimsizing size2\">)</span></span></span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[224]= \\begin{pmatrix}\\frac{r^3}{6} & \\frac{r^2}{2} & r & 1\\end{pmatrix}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "5dc204ce-d413-47be-bf5f-09bfe307809b"
+    }
+   ],
+   "metadata": {}
+  }
+ ],
+ "metadata": {}
+}

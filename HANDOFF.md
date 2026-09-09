@@ -4,11 +4,339 @@ Where the last session left off. Read this first when picking the project back u
 history log (that's `git log` / `logbook.tex`) — only what's still open or in-flight. Overwrite
 freely each session rather than appending.
 
+## Project goal (Paul, 2026-08-27)
+
+**Generalize the localization/CG construction to su(3) GENERIC representations.** Rectangular reps
+are more or less understood. For generic (non-rectangular) reps localization *seems to stop
+working*, though some hints remain. Closing that gap is the goal of the project, not a side thread.
+
+gl(3) is the minimal setting where the question can even be posed: every gl(2) irrep is rectangular
+up to a determinant twist (`{l1,l2} = {l1-l2,0} (x) det^l2`), so su(2) work can exhibit the
+mechanism but never the obstruction. In gl(3), `{p,p,0}` and `{p,0,0}` are rectangular; `{l1,l2,l3}`
+with `l1>l2>l3` is not.
+
+Directly relevant prior work: the local-rotations thread (2026-07-18, `Experiments/XXX_CG_L2_V2.wb`
+Sections G-L, notes in `Experiments/local_rotations_notes.tex`) already established that
+localization fails for general reps, ruled out the spectral-parameter-insertion route, and
+identified the **product-covector <-> SoV-basis recoupling matrix `A`/`B`** as the object to
+generalize. Existing su(3) notebooks: `Paul/Mathematica/XXX/Experiments/su3_V1.wb`,
+`su3_V2_general.wb` (arbitrary gl(3) Young diagrams, full-sweep verified), `su3_V2_general_Paul.wb`,
+`su3_V2_fund_anti_fund.wb`. `Mathematica/su3/` exists but is empty.
+
 ## Current focus
 
 Computing CG coefficients directly in the XXX spin chain (`Paul/Mathematica/XXX/`). The Gaudin
 subproject proper (residue/representation groundwork) is still parked, but the `h→0` scaling limit
 of the XXX construction below is an active connection point, not a revival of that parked track.
+
+**Active thread (2026-09-09):** the twisted gl(4) L=2 Baxter solver in
+`Experiments/SU4_twisted_Baxter_L2.wb`, built from scratch and functional-only. Solver and
+Wronskian structure are done; the next step is the perturbative-in-twist expansion of the
+polynomial coefficients. Read that section first — it supersedes the 2026-09-02 plan below.
+
+## State as of 2026-09-09 (twisted gl(4) L=2 Baxter solver + Wronskian structure — new notebook)
+
+New notebook `Paul/Mathematica/XXX/Experiments/SU4_twisted_Baxter_L2.wb` (**uncommitted**, 37 cells,
+sections 1–7). Built step by step at Paul's direction. It replaces item 1 of the 2026-09-02 plan
+below: rather than wiring `Baxter_L2_XXX_SU4.wb` into the norm machinery, this is a fresh,
+**purely functional** twisted solver — no GT patterns, no monodromy matrices, no eigensystems;
+everything is a polynomial identity in `u`. Paul's instruction was explicit: ignore Matteo's
+notebooks entirely, and postpone the untwisting/norm thread until the twisted side is understood.
+
+### Conventions
+
+`z[j]` are the primary symbols with `z[j] = Exp[h phi[j]]`, so `Q_j(u) = z_j^(u/h) q_j(u) =
+Exp[phi_j u] q_j(u)`, `q_j` monic of degree `M_j = S+P-mu_j` (so `Sum_k M_k = 2(S+P)`). Sites
+`theta1, theta2`, shift `h`, site reps `{S,S,0,0} x {P,P,0,0}`. Everything is rational in `z`;
+`phi` enters only via a substitution. `mu` labels a gl(4) **weight** (the irrep, for a HWS).
+
+### Established (verified, not conjecture)
+
+- **Transfer-matrix ansatz: 12 free coefficients down to 5.** Two structural facts, both Paul's,
+  both then derived and checked symbolically in `S,P,theta,h,z`:
+  - `tau3 = nu_1(u-2h) nu_4(u) * (quadratic, leading chi_3)`. Because `nu_1=nu_2` and `nu_3=nu_4`
+    for rectangular reps, every term of `tau3 = Sum_{i<j<k} z_i z_j z_k nu_i(u-2h)nu_j(u-h)nu_k(u)`
+    shares that factor. Untwisted it reproduces the `trivfactor` of `baxter_SU4_L2_XXX.wb`.
+  - **Subleading coefficient, universal:**
+    `[u^(2a-1)] tau_a = -a (theta1+theta2+(a-1)h) chi_a - h Xi_a`,
+    `Xi_a = Sum_{|I|=a} z_I Sum_{i in I} n_i`, `n = mu` the global Cartan weight.
+    Compactly `Xi_a = Sum_i n_i z_i d(chi_a)/d(z_i) =: D_n chi_a` (verified exactly, `a=0..4`), so
+    the whole subleading term is a twist prefactor times `chi_a`, plus `h` times the weights acting
+    on `chi_a`. Checks: `a=0` gives 0; `a=4` reproduces the `u^7` coefficient of the independently
+    known quantum determinant; `a=1,2,3` reproduce the pseudovacuum eigenvalue **identically in u**.
+  - Leftover unknowns: `tc[1]` (in `tau1`), `tc[2..4]` (in `tau2`), `tc[5]` (the constant in
+    `tau3`'s quadratic).
+  - **This formula is not written down anywhere else in the repo** — checked. `paper/xxxCG.tex` is
+    gl(2)/single-site only; `logbook.tex` records only the degree predictor; `Baxter_L2_XXX_SU4.wb`'s
+    `alphaCoeffs` are numeric `1/u` coefficients used only to get `Mdeg`; `baxter_SU4_L2_XXX.wb`'s
+    `asympSol` is untwisted-only and not in universal form; the structure-constants paper gives
+    `tau±` as Q-ratios (C11)–(C12), not a large-`u` subleading. The general-`L` extension
+    `[u^(aL-1)]tau_a = -a(Theta + L(a-1)h/2) chi_a - h D_n chi_a`, `Theta = Sum_alpha theta_alpha`,
+    follows from the same derivation but is **untested** (only `L=2` verified).
+- **The degree formula is derived, not assumed.** For an arbitrary `q` of degree `M`, the top
+  coefficient of the Baxter residual is `charPoly[z_k] = 0` automatically, and the next one is
+  `h z_k Prod_{j!=k}(z_k - z_j) * (mu_k - S - P + M)` — zero iff `M_k = S+P-mu_k`, given
+  `Sum mu = 2(S+P)`. It degenerates exactly when twists collide, which is the untwisting limit.
+- **`TwistedSolve[S,P,mu,sub]`** solves the joint bilinear system (5 `tc` + `2(S+P)` q-coefficients;
+  `28+2(S+P)` equations, overdetermined by 23). One branch is *not* enough — for `mu_top` at (1,1)
+  branch 1 alone leaves a 2-parameter family; all four together are unique.
+- **Number of solutions = weight multiplicity**, checked against the product character
+  (`wtMultProd`). At (2,2): 1, 2, 3, 8, 12, 22. Expected — the twist breaks su(4), so every state
+  of that weight shares the same `M_k`.
+- **Validation on the six permuted vacua** `n = pi({S+P,S+P,0,0})` (multiplicity 1, hence rational
+  and exactly checkable — Paul's suggestion, and it is enough). At `(1,1),(2,1),(2,2),(3,3),(5,4)`:
+  30 states, all unique, Baxter residual **exactly 0** on all four branches, and `tau` matching an
+  independently computed pseudovacuum prediction. 0.03–0.2 s each. Repeated at (1,1) with **no
+  substitution at all** (`theta1,theta2,h,z_j` symbolic): same 1/0/0, ~3 min.
+  - **Shift ordering** for the permuted vacua is *not* the natural index order: the quantum-minor
+    shifts follow the Borel adapted to `pi`, `ord = Join[A, complement A]` with
+    `A = {i : n_i = S+P}`. Found empirically (searching all 24 permutations against the solver's
+    own output selects exactly these). Consistent with `tau4` being ordering-independent, as it
+    must be, being central.
+
+### Wronskians (Section 6) — the normalisation `N_I`
+
+With `Q_j = z_j^(u/h) q_j`, the `k x k` Casoratian factorises with the exponentials pulled out:
+
+    Q_I(u) = (Prod_{i in I} z_i)^(u/h) (Prod z_i)^(-(k-1)) W_I(u),
+    W_I(u) = det_{a,b} [ z_{i_a}^(k-b) q_{i_a}(u-(b-1)h) ]
+
+`W_I` has degree `Sum_{i in I} M_i` and leading coefficient **exactly the Vandermonde**
+`V_I = Prod_{a<a'}(z_{i_a}-z_{i_a'})` (immediate: the `q`'s are monic). Hence
+
+    N_I = V_I / (Prod_{i in I} z_i)^(|I|-1),      q_I = W_I / V_I    (monic, degree Sum M_i)
+
+and `q_I` is regular as `phi -> 0` **exactly when `I` is a lower set for the degrees `M`** (the
+`|I|` branches with smallest `M_i`, ties interchangeable). For a state that becomes highest weight
+on untwisting `M` is increasing, so the regular chain is `{1} ⊂ {1,2} ⊂ {1,2,3} ⊂ {1,2,3,4}` —
+i.e. `q_1, q_12, q_123, q_1234`, as Paul stated. For `I={1,2}`: `N_12 = (z_1-z_2)/(z_1 z_2)`.
+
+- **Divergence of the individual `q_k`:** `q_k = O(eps^(-(M_k - M_1)))`, finer pattern
+  `[u^j] q_k = O(eps^(-(M_k - max(j,M_1))))`. Mechanism: the untwisted equation admits the staggered
+  degrees `Mhat_k = M_k + (k-1)`, so a monic `q_k` of degree `M_k` must tend to an untwisted
+  solution of degree `<= M_k`, and for `k>=2` the only one available is branch 1 of degree `M_1`.
+  In the wedge the divergences cancel (the limit of `q_k` is *proportional to* `q_1`), leaving one
+  power of `eps` per colliding pair — exactly `V_I`.
+- **`q_1234` in closed form, state- and twist-independent:** from `C(u+h) = A_4(u) C(u)` plus
+  `nu_2=nu_1, nu_3=nu_4`, `W(u+h)/W(u) = nu_4(u)nu_4(u-h)/(nu_1(u)nu_1(u-h))`, which telescopes:
+
+      q_1234(u) = A(u) A(u-h),   A(u) = Prod_{j=1..S}(u-theta1-jh) Prod_{j=1..P}(u-theta2-jh)
+
+  degree `2(S+P) = Sum M_k`. Verified exactly (residual 0) on 20 states.
+
+### Vacuum factors and the divergence count (Section 7)
+
+Eq. (C6) of the structure-constants paper (`References/2603.26617v1.pdf`) reads
+`Q_ij = W(Q_i,Q_j)`, `Q_theta Q_ijk = W(Q_i,Q_j,Q_k)`, `Q_1234 = W(Q_1..Q_4)` with
+`Q_theta = Prod_alpha (u-theta_alpha)` of degree `L`. Here `L -> S+P` and `Q_theta -> A`:
+
+    W_12   = V_12 q~_12                deg q~_12   = M1+M2
+    W_123  = V_123 * A(u) * q~_123     deg q~_123  = M1+M2+M3 - (S+P)
+    W_1234 = V_1234 * A(u) A(u-h)      deg q~_1234 = 0
+
+Verified exactly (`PolynomialRemainder` = 0, quotient monic of exactly that degree) on all six
+vacuum weights at (2,1) and (3,1), the pseudovacuum at four `(S,P)`, and a genuine HWS. These
+degrees are also `Sum Mhat - k(k-1)/2` with `Mhat_k = M_k+(k-1)` after removing the `A`'s — the
+vacuum-factor count and the staggering are the same statement.
+
+**Uniform count for `p_k`.** Divide the `k x k` relation by `V_{1..k-1}`; this strips every
+divergence and leaves a `(k-1)`-th order difference operator `O_k` with *regular* coefficients:
+
+    O_k[q_k] = ( Prod_{i<k}(z_i - z_k) ) * (vacuum factor) * q~_{1..k}
+
+with (i) source of `eps`-order `k-1` and degree `Sum_{i<=k} M_i`; (ii) `O_k` at `eps=0` mapping
+degree `d` to `Sum_{i<k}M_i + d - (k-1)`, its polynomial kernel being exactly the untwisted
+`span{P_1..P_{k-1}}` of degrees `Mhat_1..Mhat_{k-1}`; (iii) the tower `g_0 ~ q_1` (degree `M_1`),
+`deg g_j = M_1 + j`. The source enters at `j = p+k-1`, so
+
+    Sum_{i<k}M_i + (M_1+p+k-1) - (k-1) = Sum_{i<=k}M_i   ==>   p_k = M_k - M_1
+
+uniformly in `k`. For `k=2` this is a fully independent first-order/`eps^1` derivation (two ways:
+monicity, and the inhomogeneity). Input (ii) is **verified explicitly for `k=3` only** — on state A
+the kernel sits at exactly `d = Mhat_1, Mhat_2 = 0, 2` and `deg O_3[f] = M1+M2+d-2` elsewhere; on
+the rational vacua `O_3` degenerates to the plain second difference `f(u)-2f(u-h)+f(u-2h)`. For
+`k=4` the pattern is asserted, not checked.
+
+### Test states (for reuse)
+
+`z_j = 1 + eps psi_j`, `psi = {1,1/3,1/5,1/7}`, `theta1=1/3, theta2=1/7, h=1` — rational in `eps`,
+so `TwistedSolve` runs with `eps` fully **symbolic** and results expand exactly; no numerics, no
+state tracking. States used: **A** = (1,1) `mu={2,1,1,0}`, `M={0,1,1,2}`; **B** = (1,1) lowest
+weight `{0,0,2,2}`, `M={2,2,0,0}` (flag reversed — regular chain is `{4}⊂{3,4}⊂...`); **C** = (1,1)
+singlet `{1,1,1,1}`, `M={1,1,1,1}` (control: all `M_k` equal, so nothing diverges); **D** = (3,1)
+`mu={3,3,1,1}`, `M={1,1,3,3}` (the only one with `M_1>0` *and* real divergence).
+
+Identifying which solution of a degenerate weight sector becomes highest weight: solve the
+**untwisted** problem first (`UntwSolve`, staggered degrees `Mhat`, standard gauge fixing) — it is
+unique and rational — then pick the twisted branch converging to that `tc0`, validated by
+`dist(tc,tc0) ~ eps`. Cheaper and far more robust than degree-spectrum matching on 7 algebraic
+branches.
+
+### Traps hit this session (all cost real time)
+
+- `Limit[]` applied to a whole rational expression is **unreliable** on the algebraic
+  (multiplicity>1) states — it returned *different branches on repeated runs* of identical code.
+  Take the limit coefficient-by-coefficient instead.
+- A helper that `Module`-localises the spectral variable returns expressions in a scoped `x$nnn`;
+  the caller's `CoefficientList` then silently reads **every coefficient as degree 0**. Pass the
+  variable in.
+- Detecting admissible untwisted degrees by nullspace **dimension** silently misses a jump when two
+  admissible degrees are adjacent (gave `{0,2,4,5}` instead of `{0,1,4,5}` for irrep `{2,2,0,0}`).
+  Test **monic solvability** instead; that agrees with `degQ` of `baxter_SU4_L2_XXX.wb`.
+- `RootReduce` is exact but far too slow to sweep with; bare `PossibleZeroQ` falls back to an
+  undecided numeric test and warns. Hence the rigorous checks are done on the **rational** (vacuum)
+  states, where `Expand[Together[...]]` collapses to a literal 0.
+- Dividing by `V ~ eps^6` is catastrophic numerically: the low coefficients of `q_1234` read as `0`
+  at small `eps` (visible in the accuracy annotations). Confirm such things exactly, not by `N[]`.
+- Kernel `abort` again did not take on a long `Solve`; a `restart` was needed (loses state) —
+  same as recorded on 2026-09-02.
+
+### Not done
+
+- **The actual perturbative expansion of the polynomial coefficients** — Paul's original step 2. He
+  interrupted it to understand the Wronskian first, and that is now understood, so this is the
+  immediate next step. The `q_j` stay `Exp[phi_j u] x` polynomial of fixed degree `M_j`
+  non-perturbatively; only the coefficients are expanded, and they need Laurent series (orders
+  `eps^(-(M_k-M_1))`, now known in advance).
+- Nothing is wired to `SU4_norm_untwisting_L2_general.wb` / the FSoV norm yet.
+- No scan over reps (item 3 of the 2026-09-02 plan).
+- Write-up: the subleading-`tau` formula and the `N_I`/vacuum-factor ledger are worth recording, but
+  `paper/xxxCG.tex` is currently gl(2)/single-site only, so adding a gl(4) L=2 section is a scope
+  decision Paul has not made. A `Clean/` promotion + `wolfbook-docs-agent` reference doc is the
+  other option.
+
+## State as of 2026-09-02 (untwisting the FSoV norm — gl(4) L=2; two notebooks, results below)
+
+Thread: **how to untwist the norm analytically**, started from Appendix N of the new reference
+`References/2603.26617v1.pdf` (Bargheer–Bercini–Lefundes–Ryan, "Structure Constants from Q-Systems
+and SoV"; Paul is an author). Also new: `References/SU4_twisted_any_L_Qs.nb` — Matteo/Paul's twisted
+Q-solver for any L, 6-dim `[1,1,0,0]` site rep.
+
+Two notebooks, both under `Paul/Mathematica/XXX/Experiments/`:
+
+- `SU4_norm_untwisting_L2.wb` — LR-symmetric branch (`z1 z4 = z2 z3 = 1`), staged untwisting
+  `phi1 -> 0` then `phi2 -> 0`. Ported solver validated against the paper's (P1).
+- `SU4_norm_untwisting_L2_general.wb` — general unimodular twists, independent `Q^3, Q^4`,
+  high-precision NSolve route. Validated twice: reproduces (P1) exactly, and reproduces the
+  first notebook's `B = -0.0274316528219221` to all digits.
+
+### Established (verified, not conjecture)
+
+- `B` (eq. (12)) is **exactly invariant** under `GL(2) x GL(2)` on `(Q1,Q2)` / `(Q^3,Q^4)`,
+  rescalings included: the row mixing gives `(det H)^{2L}`, the normalisation (15) gives
+  `(det H)^{-2L}`. So the rotation `Q2 -> Q2 + r Q1` is **pure gauge** — it cannot change `B`,
+  only whether the limit is computable entrywise. Checked numerically to 20+ digits.
+- **Untwisted degrees**: `lambdahat_j = lambda_j + (j-1)`. Verified on two states with different
+  predictions: `{0,1,0}` (`lambda={0,1,1,2}`) gives `lambdahat={0,2}` with
+  `Q1hat=1, Q2hat=u^2/2+1/3`; `{1,2,1}` (`lambda={1,1,1,1}`) gives `lambdahat={1,2}` with
+  `Q1hat=u, Q2hat=u^2+1/3`. Mechanism: subtracting the collision leaves the next order of the
+  `Exp[phi u]` expansion, raising the degree by one.
+- **The rotation**: fixed by a quadratic with a *double* root. For `{0,1,0}`, coefficients
+  `2I, -4I, 2I` i.e. `2I(c-1)^2`, giving `r = 1/phi2`, i.e. subtract the divergent multiple of
+  `Q1` (there `p2 = u - Cot[phi2]`, so `Q2 -> -Q1/phi2`).
+- **Why the rotation is mandatory**: for `{0,1,0}` the naive entrywise min-cost predicts
+  `phi2^(-2)` while the truth is `phi2^12` — 14 orders of cancellation.
+- **Everything is a contraction with a universal moment table.**
+  `M[(alpha,j,k),(beta,a,b)] = Sum_n c_n mu[n,alpha]`, `mu[n,alpha] = <u^n>_{L,alpha}`.
+  For `L=2`: `mu[n,1]` is nonzero **iff n is odd and n >= 2L-1** (parity selection rule, proved by
+  closing at infinity: `mu[n,1] = -I Binomial[-L,k] 4^(-k)`, `k=(n-2L+1)/2`); `mu[n,2]` has the
+  single zero `mu[1,2]=0`. This explains both previously-unexplained patterns: the `alpha=2`
+  vanishing (row `(2,1,4)` of `{0,1,0}` *is* `mu[beta-1,2]`) and the `a=-b` zeros in block `(2,3)`
+  (the surviving `u^3` coefficient is `I(a+b)/4`).
+- **Overall exponent**: along a ray, `det` (with (12)'s normalisation) vanishes as `eps^nu` with
+  `nu = -Sum_{j<k}(lambda_j - lambda_k) = -Sum_j (n+1-2j) lambda_j`. Verified: `{0,1,0}` gives
+  `nu=6` (measured ratios 5.963, 5.991, 5.998, 5.999) against `Sum lambda_jk = -6`; `{1,2,1}` gives
+  `0` against `0`. This is exactly Appendix L's (L1) prefactor `Prod z_jk^(lambda_jk)`, so
+  **(L1)'s `B`, not (12)'s, is the object with a uniform limit** — one determinant, not one per state.
+- **Closed results.** `{0,1,0}`: `B -> -32 phi1^2 phi2^4`, where `-32 = -4 * 8` and `8` is the
+  reduced minor built from untwisted Qs (`Q12hat = -I u`). `{1,2,1}`: corank 0, so the plain
+  untwisted 8x8 determinant already works and gives `B = 7776 = 6^5` exactly, matching the twisted
+  limit (7477.7, 7700.4, 7757.0, 7771.3, 7774.8 -> 7776).
+
+### Caveat and what's missing
+
+(L1) makes `B` finite, but when the corank is positive you have `0 * Infinity`: the untwisted
+determinant is literally 0 and the prefactor literally infinite. To *evaluate* the answer from
+untwisted Qs you still need the reduced minor, whose size is the corank.
+
+**Only two highest-weight states so far** (`{0,1,0}` = `[1,0,1]`, `{1,2,1}` = zero-weight
+subspace, 6 solutions = 2+3+1). At `L=2` every state with non-negative Dynkin labels is
+automatically LR-symmetric (`6 (x) 6 = 20' + 15 + 1`, all self-conjugate ⇒ `M = Nn`), so the
+6-dim site rep cannot supply more data. Hence the plan below.
+
+### Plan agreed for the next session (Paul, 2026-09-02)
+
+> **Status as of 2026-09-09:** item 1 is done, but *differently* — instead of wiring
+> `Baxter_L2_XXX_SU4.wb` into the norm machinery, a fresh functional solver was built
+> (`SU4_twisted_Baxter_L2.wb`, see the 2026-09-09 section above). Item 2 is the immediate
+> next step and is now much better set up (the `eps`-parametrisation makes exact symbolic
+> solves possible, and the divergence orders are known in advance). Item 3 is untouched.
+
+1. **Generalise the determinant to `[S,S,0,0] x [P,P,0,0]` site reps.** *Mostly already done*:
+   `Experiments/Baxter_L2_XXX_SU4.wb` (2026-07-19 entry below) is already a **twisted** gl(4) L=2
+   Baxter solver for two independent **generic Young-diagram** reps per site, with four distinct
+   diagonal twists and the rep-dependent vacuum factors
+   `nu[lam1,lam2][i][u] = (u - th1 - h lam1[[i]])(u - th2 - h lam2[[i]])`,
+   `qdetT = chi4 Prod_i nu[i][u-(4-i)h]`. Full-sweep verified: 152 states, 5 rep pairs,
+   worstTQ = worstCasoratian = 0 exactly. Same Q convention as here (`Q_k = z[k]^(u/h) q_k`).
+   So `[S,S,0,0] x [P,P,0,0]` is a special case and arbitrary Young diagrams come free — the task
+   is wiring it to the norm/bracket machinery in `SU4_norm_untwisting_L2_general.wb`, not deriving
+   new taus. (The other notebook, `baxter_SU4_L2_XXX.wb`, has Casimir-form taus for `[S,S,0,0]` but
+   **untwisted** — not the one to use here.)
+   **Precision trap** recorded in that entry: hardcoded `N[..., 30]` literals inside
+   `TauEigensystem4`'s `rSets`/`Kmix` silently capped the whole downstream chain regardless of
+   `z[k]`'s precision. Grep for bare precision literals before trusting a scan.
+2. **Build a perturbative-in-twist solver.** Every failure this session was NSolve
+   ill-conditioning plus state-tracking jumps as `eps -> 0`, because the solutions genuinely
+   coalesce there. A series solver in `eps` avoids it, and is structurally right: the leading
+   order *is* the degenerate untwisted problem, so this is degenerate perturbation theory and
+   `r` should drop out of the order-`eps^0` solvability condition instead of being fitted.
+3. **Scan over reps** to deduce the untwisting pattern. Per state record: `lambda_j`;
+   `lambdahat_j` (test `lambda_j + (j-1)`); corank and which entries vanish; `nu` against
+   `-Sum_{j<k} lambda_jk`. Compute `mu[n,alpha]` once per `L` and check whether the odd-`n`
+   rule and `mu[1,2]=0` persist at other `L`.
+
+### Performance notes (matter for the scan)
+
+- Do **not** use `Residue` for the FSoV bracket. Precompute `mu[n,alpha]` symbolically once and
+  contract with coefficient lists: ~0.1 s per 8x8 norm instead of minutes.
+- Symbolic `Solve` on the general (non-LR) system returns branches with `Sqrt` of perfect squares
+  that resist `PowerExpand`; that is why the reference notebook uses `NSolve`. The perturbative
+  solver should sidestep this entirely.
+- Kernel `abort` did not take on a long `NSolve` sweep; a `restart` was needed (and loses state).
+
+## State as of 2026-08-27 (su(2) SoV localization — teaching notebook, complete; FSoV link pending)
+
+`Mathematica/su2/su2-localization.wb` (uncommitted, along with `Mathematica/su2/su2-localization.md`).
+Paul wrote this notebook specifically to teach the localization structure of the SoV basis; Claude
+extended it this session with the mirror construction. **Read `Mathematica/su2/su2-localization.md`
+first** — it has the conventions, symbol tables, the verified-check table, and the traps.
+
+Established and symbolically verified (L=2 gl(2), companion twist, `Lam[1]=Lam[2]={3,0}`): the SoV
+basis built up from the minimal vacuum factorizes on the `mu2=0` edge, `x[{mu,0}] = x1[{mu}] (x)
+vac2`, exactly; the mirror basis built down from the maximal `B`-eigenvector factorizes on the other
+edge, `xb[{0,nu}] = vacb1 (x) x2b[{nu}]`, also exactly. Both towers build the same basis (`B` has 16
+distinct eigenvalues). 7 of the 16 states factorize, not all. Localization is a property of the
+vacuum, not of the operator.
+
+Localization is stronger than a vacuum statement: it holds on the whole orbit of the vacuum under
+the **global** (diagonal) su(2) rotation, `<0| Exp[r EE[{2,1}]] . t[{1,mu}][w1] == <0| Exp[r
+EE[{2,1}]] . (t1[{1,mu}][w1] (x) 1)`. Globality is essential — independent per-site parameters break
+it, restored exactly when they agree.
+
+**Next step, from Paul — to be set up explicitly in a later session.** The strategy (sketched, not
+yet implemented or verified; full write-up in `su2-localization.md` §7): globally rotated states
+`<Omega(r)|` have `<Omega(r)|Psi>` known exactly in Q-functions; localization means a transfer
+matrix acting on such a state hits **site 1 only**; certain **combinations of `t`'s sum up to global
+rotations**, so such a combination rotates site 1 alone and produces `<Omega(r'), Omega(r)|` with
+independent parameters per site; and since `t|Psi> = tau|Psi>` the same overlap is `tau` times the
+known one. Net: `<Omega(r'), Omega(r)|Psi>` in Q-functions — the two-parameter family CG
+coefficients are read off from. The crux is that the input orbit is one-parameter and the target is
+two-parameter, and localization is what breaks the diagonal constraint. Don't start building this
+ahead of that session.
+
+Standing constraint restated: **this project only ever deals with two sites.** Unequal reps behave
+identically, so the equal-rep choice is convenience, not a special case.
 
 ## State as of 2026-08-19 (Matteo's gl(4) Q-space/normalisation notebook imported — read/analyzed only, NOT yet computed on)
 
@@ -585,13 +913,21 @@ derivation record, same convention as other Clean promotions).
 
 ## Open threads / next steps
 
-- **Nothing queued.** Natural next steps if continuing:
-  - Write this up in `paper/xxxCG.tex` (still single-site only — no L=2 factorization, scalar
-    product, or the CG-overlap dictionary written up yet).
-  - Extract the actual CG coefficients from the overlap generating function (the `exp[-k E21]`
-    rotation generates the CG combinations — expanding in k gives per-state coefficients).
-  - Push the factorization to the s2≠0 case / general L.
-  - Run `logbook-agent` to log today.
+- **Next up (2026-09-09):** build the perturbative-in-twist solver in
+  `Experiments/SU4_twisted_Baxter_L2.wb` — keep `Q_j = Exp[phi_j u] x` (polynomial of fixed degree
+  `M_j`) non-perturbatively, expand only the polynomial coefficients, as Laurent series with the
+  now-known leading orders `eps^(-(M_k-M_1))`. Everything it needs (solver, degrees, `N_I`,
+  divergence orders, exact-in-`eps` test states) is in place.
+- Then: wire it to the FSoV norm (`SU4_norm_untwisting_L2_general.wb`), and scan over reps
+  (item 3 of the 2026-09-02 plan, still untouched).
+- Decide where the new gl(4) results get written up — `paper/xxxCG.tex` is gl(2)/single-site only,
+  so a gl(4) L=2 section is a scope call; alternatively promote to `Clean/` and run
+  `wolfbook-docs-agent`. Also still unwritten: L=2 factorization, scalar product, CG-overlap
+  dictionary.
+- Older, still open: extract the actual CG coefficients from the overlap generating function (the
+  `exp[-k E21]` rotation generates the CG combinations — expanding in k gives per-state
+  coefficients); push the factorization to the s2≠0 case / general L.
+- Run `logbook-agent` to log today.
 - `Experiments/XXX_CG_L2_V2.wb` still holds the full discovery narrative (bare-bracket attempt,
   obstruction report, per-state-scalar exploration) — useful if revisiting why the determinant
   normalization matters.
