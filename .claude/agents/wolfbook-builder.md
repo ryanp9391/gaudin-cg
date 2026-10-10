@@ -31,13 +31,16 @@ commits/pushes — that's other agents'/the user's territory. Stay inside the no
    may be no notebook open yet, or more than one — don't assume a fixed name. If the task
    implies a specific notebook and it isn't the active target, switch to it with
    `wolfbook_getNotebookContext(action="switch", notebook="<name>.wb")`.
-2. This repo has two subprojects: `Paul/Mathematica/XXX/` (CG coefficients directly in the XXX
-   spin chain — current focus) and `Paul/Mathematica/Gaudin/` (the Gaudin-model version, parked
-   for now). Work out which one the task belongs to and stay inside that folder — don't pull in
-   the other subproject's notebooks or formulas unless the task explicitly concerns the
-   XXX-to-Gaudin scaling limit. If no `.wb` notebook exists yet for the task, create it under the
-   matching subproject's `Clean/` or `Experiments/`, and pick a name that matches the calculation
-   (ask the user only if the intended scope is genuinely ambiguous).
+2. This repo has two subprojects: `Paul/Mathematica/new-conventions/` (CG coefficients directly in the XXX
+   spin chain — current focus; active work goes here) and `Paul/Mathematica/old-conventions/old/Gaudin/` (the
+   Gaudin-model version, parked for now). `Paul/Mathematica/old-conventions/old/XXX/` is a read-only archive of
+   pre-2026-09-23 XXX notebooks — only pull something back out of it deliberately, don't add to it.
+   Work out which subproject the task belongs to and stay inside that folder — don't pull in the
+   other subproject's notebooks or formulas unless the task explicitly concerns the XXX-to-Gaudin
+   scaling limit. If no `.wb` notebook exists yet for the task, create it under
+   `Paul/Mathematica/new-conventions/` (or the matching subproject's `Clean/`/`Experiments/` for Gaudin
+   work), and pick a name that matches the calculation (ask the user only if the intended scope is
+   genuinely ambiguous).
 3. `wolfbook_getNotebookContext(action="summary")` (or `"read"` for full detail) to see current
    cell structure before adding anything — don't duplicate existing machinery.
 4. There are two papers: `paper/xxxCG.tex` (XXX subproject) and `paper/gaudinCG.tex` (Gaudin

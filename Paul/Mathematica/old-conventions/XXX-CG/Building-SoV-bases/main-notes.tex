@@ -1,0 +1,520 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\emergencystretch=3em
+
+\newcommand{\nb}[1]{\texttt{#1}}
+\newcommand{\vac}{\langle 0|}
+\newcommand{\Om}{\langle\Omega|}
+
+\theoremstyle{definition}
+\newtheorem{result}{Result}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{Building SoV bases: localization on one site, $\mathfrak{gl}(3)$, $L=2$\\ \large rolling notes}
+\author{Notes for \nb{Building-SoV-bases/}}
+\date{started 2026-09-25}
+
+\begin{document}
+\maketitle
+
+\noindent Rolling record of what has been established. New results are appended; corrections are made in place and flagged. Unless stated otherwise the checks are exact (rational arithmetic) or at 60-digit precision, and ``all states'' means all 64 eigenstates of adjoint$\otimes$adjoint.
+
+\tableofcontents
+
+%======================================================================
+\section{Setup and conventions}
+
+Two sites, $\Lambda_1=\Lambda_2=[2,1,0]$ (adjoint, $\dim 8$) unless stated; one test with site 1 fundamental.
+Monodromy $T_{ij}(u)=\sum_k \mathcal L^{(1)}_{ik}(u-\theta_1)\mathcal L^{(2)}_{kj}(u-\theta_2)$, $\mathcal L_{ij}(u)=u\,\delta_{ij}-hE_{ji}$, twist on the right, $TG$. Site 1 is the left tensor factor (adjacent to the covector). GT basis with the highest weight $e_1$ first and the lowest weight $e_8$ last.
+
+\paragraph{Transfer matrices.} $t_a(u)=\sum_{|I|=a}z_I\,\mathrm{qminor}_{I,I}(u)$ (column $k$ at $u-(k-1)h$). Fused:
+\begin{align*}
+t_{10}(u)&=t_1(u), & t_{11}(u)&=t_2(u), & t_{20}(u)&=t_1(u)t_1(u+h)-t_2(u+h), & t_{21}(u)&=t_2(u)t_1(u+h)-t_3(u+h).
+\end{align*}
+Shifted tower (``$t^S$''): $t^S_{10}(u)=t_{10}(u)$, $t^S_{11}(u)=t_{11}(u+h)$, $t^S_{20}(u)=t_{20}(u-h)$, $t^S_{21}(u)=t_2(u+h)t_1(u-h)-t_3(u+h)$.
+Ratios $R(u)=t_{20}(u)t_{10}(u)^{-1}$, $R^S(u)=t^S_{20}(u)t^S_{10}(u)^{-1}$.
+$\nu_n(u)=\prod_s(u-\theta_s-h\Lambda_{s,n})$. $\nu$-normalised versions (used where stated): $R\to R/\nu_1(u+h)$ at $u=\theta_1$, $R^S\to R^S/\nu_3(u-h)$ and $t^S_{11}\to t^S_{11}/(\nu_3(u)\nu_3(u+h))$ at $u=\theta_2+2h$; $t_{10}\to t_{10}/\nu_1$, $t^S_{10}\to t^S_{10}/\nu_3$.
+$T:=\theta_{12}/h=(\theta_1-\theta_2)/h$.
+
+\paragraph{Frames.} Diagonal twist $G_d=\mathrm{diag}(z_1,z_2,z_3)$; companion twist $G_c$ (first row $(\chi_1,\chi_2,\chi_3)$, $\prod_a(\lambda-z_a)=\lambda^3-\chi_1\lambda^2-\chi_2\lambda-\chi_3$). $G_c=PG_dP^{-1}$ with $P$ the Vandermonde matrix (columns $(z_a^2,z_a,1)^T$), and $t_c=\Pi(P)\,t_d\,\Pi(P)^{-1}$ with $\Pi=\Pi_1\otimes\Pi_2$ the global representation (checked; $P^{-1},P^T,P^{-T}$ fail).
+
+\paragraph{Q-functions.} From the Baxter operators of \nb{L2-mathcalA.wb}: lower $Q_i=z_i^{u/h}q_i$ ($\deg q_i=2\lambda_1-\mu_i$), upper $Q^j=z_j^{-u/h}q^j$ ($\deg q^j=\mu_j$), monic. Wronskians $Q_{ab}(u)=Q_a(u)Q_b(u-h)-Q_b(u)Q_a(u-h)$, $Q^{ab}(u)=Q^a(u)Q^b(u+h)-Q^b(u)Q^a(u+h)$.
+
+\paragraph{Numerical points.} Point 1: $h=\tfrac13$, $\theta=(\tfrac27,-\tfrac5{11})$, $z=(2,-3,5)$. Point 2: $h=\tfrac12$, $\theta=(\tfrac3{13},-\tfrac4{17})$, $z=(3,-\tfrac72,\tfrac{11}4)$.
+
+\paragraph{Notebooks.} \nb{Companion-B-C-diagonalize.wb}, \nb{diagonalise-B-C-diagonal.wb} (L=1, cleaned from \nb{.nb}), \nb{new-sov-basis-tests.wb} (L=1 swapped bases), \nb{L2-localization-tests.wb} (everything below).
+
+%======================================================================
+\section{L=1 groundwork}
+
+\begin{itemize}
+\item \nb{diagonalise-B-C-diagonal.wb}: $\nu$ factors moved from $TG$ onto the fused transfer matrices ($t$ with $\nu_1$, $t^S$ with $\nu_3$, opposite shifts). Then the $y$ basis is regular at $\theta+2h$, and both the overlap matrix structure and the $s$-angle solve of the original notebook are reproduced by one definition. Overlap matrix normalised by $(z_1-z_2)(z_1-z_3)^2(z_2-z_3)$ is $h$-independent.
+\item Swapped bases $\bar x$ (built with $t^S$) and $\bar y$ (with $t$): the vacuum-orthogonality condition $\langle\bar x_A|\mathrm{vacR}\rangle=0$ ($A\neq$ vac) is solvable for rotated HW and LW vacua, but the full overlap matrix is dense (45 of 64 nonzero).
+\item Original $x,y$ with LW vacua: the solution is the rotparams pair in disguise (same overlap matrix).
+\end{itemize}
+
+%======================================================================
+\section{Site-2 localization (diagonal frame)}
+
+\begin{result}[localization pattern]
+With the global-rotated vacuum, $t$ at $\theta_1$ localizes on site 1 and $t^S$ at $\theta_2+h\Lambda_{2,1}=\theta_2+2h$ localizes on site 2. Adjoint$\otimes$adjoint: $t_{11},t_{21}$ localize, $t_{10},t_{20}$ and $t_{20}t_{10}^{-1}$ do not (same on both sites; mirror). With site 1 fundamental, $t_{10},t_{20}$ also localize (artifact of the small rep).
+\end{result}
+
+\begin{result}[ratio localizes with the right vacuum]
+With arbitrary rotation angles $R$ does not localize. In the companion frame with the \emph{unrotated lowest-weight} vacuum $e_8\otimes e_8$, $\{1,R,t_{11},Rt_{11}\}$ localize on each site (site 2 via $t^S$ at $\theta_2+2h$). Transporting by $\Pi(P)$: in the diagonal frame the vacuum is $\langle\Omega|=\langle\mathrm{lw}|\Pi(P)$, whose per-site factors are exactly the \emph{rotparams} vacuum $e_1^Te^{p_1E_{12}}e^{p_2E_{13}}e^{p_3E_{23}}$, $p_3=p_2(z_3-z_1)/(p_1(z_2-z_3))$ (the free $p_1,p_2$ = the $P\to PD$ freedom). Localization holds on the whole rotparams family.
+\end{result}
+
+\begin{result}[$1-kR$ as one-site rotations, $d_a=1-kz_a$]
+$\Om(1-kR(\theta_1))=d_1\,e_1^Te^{p_1\frac{d_2}{d_1}E_{12}}e^{p_2E_{13}}e^{p_3E_{23}}\otimes\langle\Omega_2|$ (the known $\langle v_1|$ of $\langle k_1^{u/h}Q_1\rangle$), and
+$\Om(1-kR^S(\theta_2+2h))=\langle\Omega_1|\otimes d_3\,e_1^Te^{p_1E_{12}}e^{p_2\frac{d_1}{d_3}E_{13}}e^{p_3\frac{d_2}{d_3}E_{23}}$.
+\end{result}
+
+\begin{result}[site-2 eigenvalues and brackets; points 1, 2]
+\begin{gather*}
+\mathrm{eig}\,R(\theta_1)=\frac{Q_1(\theta_1+2h)}{Q_1(\theta_1+h)},\qquad
+\mathrm{eig}\,R^S(\theta_2+2h)=\frac{Q^3(\theta_2)}{Q^3(\theta_2+h)},\qquad
+\mathrm{eig}\,t^S_{11}(\theta_2+2h)=\frac{Q^{23}(\theta_2+h)}{Q^{23}(\theta_2+2h)}
+\end{gather*}
+($\nu$-normalised operators, no extra constants). \emph{Correction:} the $t^S_{11}$ ratio was first recorded upside down.
+With $\langle\Omega|\Psi\rangle=1$:
+\[
+\frac{\oint\frac{Q^3(u)\,k^{-u/h}}{(u-\theta_2)(u-\theta_2-h)}}{\mathrm{Res}_{\theta_2+h}}=\Om(1-kR^S)|\Psi\rangle,\qquad
+\frac{\oint\frac{Q^{23}(u)\,k^{-u/h}}{(u-\theta_2-h)(u-\theta_2-2h)}}{\mathrm{Res}_{\theta_2+2h}}=\Om(1-k\,t^S_{11})|\Psi\rangle .
+\]
+$k^{+u/h}$ or the other normalising pole fail. Operator side: $\Om t^S_{11}(\theta_2+2h)=c_{12}\langle\Omega_1|\otimes\langle\Omega_2|t^{S,(2)}_{11}(\theta_2+2h)$ (single-site site-2 transfer matrix), $c_{12}=\frac{\theta_{21}+h}{\theta_{21}+2h}$ (mirror of $c_1=\frac{\theta_{12}-2h}{\theta_{12}-h}$).
+\end{result}
+
+\begin{result}[Hodge duality, no shift]
+$Q_{12}=(\tfrac1{z_2}-\tfrac1{z_1})\nu_1(u)(z_1z_2z_3)^{u/h}Q^3(u)$, $Q^{23}=(\tfrac1{z_3}-\tfrac1{z_2})\nu_3(u)(z_1z_2z_3)^{-u/h}Q_1(u)$. Hence, with $K=kz_1z_2z_3$, the site-2 brackets rewrite as $\oint Q_{12}K^{-u/h}/(\nu_1(u)(u-\theta_2)(u-\theta_2-h))$ and $\oint Q_1\nu_3K^{-u/h}/((u-\theta_2-h)(u-\theta_2-2h))$ (same normalising poles).
+\end{result}
+
+%======================================================================
+\section{Moving to one site on highest-weight states; the singlet}
+
+For $e_1^T\otimes\langle x|$ with $\langle x|=e_1^TN$, $N\in U(\mathfrak n_+)$: on highest-weight states of $V\otimes V$, $(e_1^T\otimes e_1^TN)|h\rangle=(e_1^TS(N)\otimes e_1^T)|h\rangle$, $S$ the antipode.
+
+\begin{result}[site-2 family]
+$\langle y|=e_1^TS(N)$ for $\Om(1-k_1R^S)(1-k_2t^S_{11})$ after undoing $g_0$: $k_2=0$ gives $(1-k_1z_3)e_1^Te^{-(p_3'-p_3)E_{23}}$ ($k_1$ moves along $E_{23}$; the site-1 family's $k_1$ along $E_{12}$). Reaches $(4,2,0),(4,1,1),(3,3,0)$ and both octets; singlet exactly $0$.
+\end{result}
+
+\begin{result}[products of site-1 and site-2 families]
+$\Om O_1(\theta_1)O_2(\theta_2+2h)$ reaches the singlet (e.g.\ $t_{11}\cdot t^S_{11}$), and the four-parameter family reaches all 6 highest-weight states with multiplicity. \textbf{But} these covectors are entangled (rank 2--4); only $R\cdot R^S$ stays a product state, with zero singlet overlap. Not usable for the one-body reduction.
+\end{result}
+
+\begin{result}[classification of localizing product states, probe set]
+$V_{\rm loc}(O;w)=\{v:(v\otimes w)O=v'\otimes w\}$. Nonzero only for $w$ extremal: bare extremal weight vectors give trivial (eigen-covector) localization; rotated extremal $w=e_1^Tg$ gives, in $g$'s frame: $t_{11}$: $\{w,e_1^TE_{12}g\}$; $R$: $\{w,\text{one }E_{23}/E_{13}\text{ mix}\}$; $Rt_{11},t_{21}$: $\{w\}$; site 2 mirror ($t^S_{11}$: $E_{23}$; $R^S$: $E_{12}/E_{13}$ mix). None invariant: localization is a one-step property.
+\end{result}
+
+%======================================================================
+\section{Transfer-matrix eigenvalues as Q-bilinears}
+
+\begin{result}[point 1]
+$\tau_1(x)=\frac{K}{\nu_2(x)}\sum_a\kappa_aQ_a(x+h)Q^a(x-h)$, $\tau_2(x)=K'\sum_a\kappa'_aQ^a(x+h)Q_a(x-2h)$, $\kappa:\kappa'=16:9:-25$ (monic normalisation), $K=-\tfrac1{120}$, $K'=-120$; $\tau_3$ state-independent. $t_{11}(\theta_1)$ is the single ratio $Q^a(\theta_1+h)/Q^a(\theta_1)$ (any $a$; Wronskian zeros make them equal).
+\end{result}
+
+%======================================================================
+\section{The true SoV basis (companion frame)}
+
+\begin{result}[$B$ and the Ryan--Volin wave functions; points 1, 2]
+$B(u)=T_{11}(u)QM_{12,12}(u+h)+T_{21}(u)QM_{12,13}(u+h)$ with the \emph{untwisted} $T$ (as in \nb{Companion-B-C-diagonalize.wb}): commuting, 64 distinct rational eigenvalues, three roots $\theta_s+r_ih$ per site. The recipe states $\langle x_{g_1|g_2}|=\vac O_{g_1}(\theta_1)O_{g_2}(\theta_2)$, $\vac=e_8^T\otimes e_8^T$, $O_{100}=1$, $O_{110}=t_{10}$, $O_{111}=t_{11}$, $O_{200}=R$, $O_{210}=t_{20}$, $O_{211}=Rt_{11}$, $O_{220}=Rt_{20}$, $O_{221}=Rt_{21}$ (companion-twisted $t$'s, unnormalised) are exactly the $B$ eigenvectors. Root labels $(r_1\le r_2\le r_3)$: $100\leftrightarrow\{-1,0,1\}$, $200\leftrightarrow\{-1,0,2\}$, $110\leftrightarrow\{-1,1,1\}$, $210\leftrightarrow\{-1,1,2\}$, $220\leftrightarrow\{-1,2,2\}$, $111\leftrightarrow\{0,1,1\}$, $211\leftrightarrow\{0,1,2\}$, $221\leftrightarrow\{0,2,2\}$.
+Wave functions (arXiv:2002.12341 eq.~5.22), all 64 states and labels:
+\[
+\langle x|\Psi\rangle\propto\prod_{s}Q_1(\theta_s+r^s_3h)\,D_s(r^s_1,r^s_2),\qquad D_s(a,b)=Q_1(\theta_s+ah)Q_2(\theta_s+bh)-Q_2(\theta_s+ah)Q_1(\theta_s+bh),
+\]
+i.e.\ $x_{11}$ = largest root, the determinant on the two smaller ones. A $B$ built from $TG_c$ does not separate.
+\end{result}
+
+\begin{result}[the 8-dim space localized on site 1: $\langle v|\otimes e_8^T$; points 1, 2]
+\begin{center}
+\begin{tabular}{cll}\toprule
+\# & localized covector & singlet\\\midrule
+1 & $\vac$ & 0\\
+2 & $\vac t_{11}(\theta_1)$ & 0\\
+3 & $\vac R(\theta_1)$ & 0\\
+4 & $\vac R(\theta_1)t_{11}(\theta_1)$ & 0\\
+5 & $\vac[t_{10}(\theta_1)-\frac1T R(\theta_2)]$ & 0\\
+6 & $\vac[t_{20}(\theta_1)-\frac2{T+1}R(\theta_1)R(\theta_2)]$ & 0\\
+7 & $\vac[R(\theta_1)t_{20}(\theta_1)-\frac{2(T-1)}{(T+1)(T-2)}t_{20}(\theta_1)R(\theta_2)]$ & 0\\
+8 & $\vac R(\theta_1)[t_{21}(\theta_1)-\frac1{T+1}t_{11}(\theta_1)R(\theta_2)]$ & $\neq0$\\\bottomrule
+\end{tabular}
+\end{center}
+Rows 5--8 pair $g_1^+|100$ with $g_1|200$ (site 2 excited by $R(\theta_2)$); neither member localizes alone. Coefficients (unnormalised $t$'s) depend only on $T$.
+\end{result}
+
+\begin{result}[the singlet functional in Q's; points 1, 2, all states, $\sim10^{-48}$]
+With $\langle 0|\Psi\rangle=1$ and $C$ state-independent,
+\[
+\vac R(\theta_1)\Big[t_{21}(\theta_1)-\tfrac1{T+1}t_{11}(\theta_1)R(\theta_2)\Big]|\Psi\rangle
+=C\,\frac{Q_1(\theta_1+2h)}{Q_1(\theta_1+h)}\,\frac{D_1(0,2)+\frac1{T-1}D_1(0,1)\,\rho_2}{D_1(-1,0)},\qquad\rho_2=\frac{Q_1(\theta_2+2h)}{Q_1(\theta_2+h)} .
+\]
+The $\frac1{T-1}$ is the Ryan--Volin-normalised localization coefficient (not fitted). Equivalently a $2\times2$ determinant of $(Q_1,Q_2)$ at $\theta_1$ and a ``dressed'' column $Q_i(\theta_1+2h)+\frac{\rho_2}{T-1}Q_i(\theta_1+h)$.
+\end{result}
+
+\begin{remark}[dead ends recorded]
+In the diagonal frame the site-1 localized states built from the mixed recipe (site 1 $t$ at $\theta_1$, site 2 $t^S$ at $\theta_2+2h$) are the same 8-dim space, with dressed combinations such as $X_1=t^S_{10}-\tfrac12R^S+(1-T)t_{10}(\theta_1)$ ($\nu$-normalised); their eigenvalues are not single ratios, products of ratios, reweighted bilinears, or site-1-only combinations. The companion-frame SoV basis is what makes the Q-form transparent.
+\end{remark}
+
+\subsection*{Towards a contour-integral form}
+The singlet functional is
+$F\propto Q_1(\theta_1+2h)\big[D_1(0,2)Q_1(\theta_2+h)+c\,D_1(0,1)Q_1(\theta_2+2h)\big]$, $c=\frac1{T-1}$: the two SoV terms differ by a correlated pair (second $D_1$ argument $p$, site-2 variable $q$) with $p+q=3$, weighted $1:c$.
+
+\begin{result}[negative: no factorized double contour]
+A double contour ($u$ around $\theta_1+h,\theta_1+2h$; $v$ around $\theta_2+h,\theta_2+2h$) with numerator $(u-v-\theta_{12})$ or its square (killing $p=q$) and insertions $(u-\theta_2-a)^{\pm1}$, $(v-\theta_1-b)^{\pm1}$, $(u-v-\theta_{12}-s)^{\pm1}$ (up to two factors; 573 cases) never gives $c=\frac1{T-1}$. Reason: at the poles all such insertions are degree 0 in $T$, while $c\to0$ as $T\to\infty$. The required $1/\theta_{12}$ fall-off is what cross-site residues of a single-variable bracket with poles on \emph{both} sites produce (as in \nb{L2-det-mathcalA}). Next ansatz.
+\end{result}
+
+%======================================================================
+\section{Replacing $t^{(1)}_{11}(\theta_1)$ by other one-body operators}
+
+Site-1 family: $\langle k_1^{u/h}Q_1\rangle\langle k_2^{u/h}Q_{12}\rangle\leftrightarrow(\langle v_1|\otimes\mathrm{vacL})\sum_m(-1)^m\binom{\lambda_2}{m}k_2^m\,t^{(1)}_{mm}(\theta_1)\otimes1$. After undoing $g_0$, $\langle v_1|g_0^{-1}=(1-k_1z_1)e_1^Te^{aE_{12}}$, and a one-body $M$ on site 1 becomes $g_0Mg_0^{-1}$.
+
+\begin{result}[point 2]
+\textbf{Linear:} for $M$ any linear combination of single-site quantum minors ($1\times1$ and $2\times2$, at $x=0,\pm h$), the singlet overlap is exactly $0$. Reason: the singlet needs two units into slot 3 ($(2,1,0)\to(0,1,2)$); the $k_1$ rotation is $E_{12}$ only; a quantum minor has distinct rows, so at most one $E_{j3}$; the span of minors is invariant under conjugation by $g_0$.
+\textbf{Quadratic:} nonzero for $t^{(1)}_{11}(\theta_1)^2$, $t^{(1)}_{11}(\theta_1)t^{(1)}_{11}(\theta_1+2h)$, $t^{(1)}_{11}(\theta_1-h)t^{(1)}_{11}(\theta_1+nh)$, fused $t^{(1)}_{22}$ at $\theta_1-2h,\theta_1-h,\theta_1+h$ (all conjugated by $g_0$); zero for $t^{(1)}_{22}(\theta_1)$, $t^{(1)}_{22}(\theta_1+2h)$, $t^{(1)}_{11}(\theta_1)t^{(1)}_{11}(\theta_1+h)$, and any single $t^{(1)}_{11}$.
+For the adjoint the $Q_{12}$ expansion stops at $m=\lambda_2=1$, which is why the family misses the singlet. Open: a Q-functional giving a quadratic one-body insertion when $\lambda_2=1$.
+\end{result}
+
+\begin{result}[negative: a $k_2^2$ term at $\theta_1+2h$; point 1 of \nb{L2-mathcalA}, cell 14; 2026-09-27]
+Extend $\langle k_2^{u/h}Q_{12}\rangle$ by a $k_2^2$ term at $\theta_1+2h$ and ask whether $\langle k_1Q_1\rangle\times$(that term) is still $\langle v\otimes\mathrm{vacL}|\Psi_A\rangle$.
+\begin{itemize}
+\item \textbf{With $Q_{12}$: trivially yes.} $Q_{12}(\theta_1+2h)=0$ for every state, since $Q_{12}\propto\nu_1Q^3$. The term vanishes.
+\item \textbf{With $Q^3$ (factor stripped): no.} $\langle k_1Q_1\rangle\,Q^3(\theta_1+2h)/N$ is outside the 8-dim product span. The relative residuals are $0.59$ and $0.057$ at $k_1^0$ and $k_1^1$ for $N=Q^3(\theta_1)$, and $0.070$ and $0.14$ for $N=Q^3(\theta_1+h)$.
+\item The result is still negative if any admixture of the other two $Q^3$ values is allowed.
+\item Sanity check: the $\theta_1+h$ terms, for both $Q_{12}$ and $Q^3$, lie in the span to $10^{-80}$.
+\end{itemize}
+The extra $Q^3$ sample (the one the singlet count needs) is therefore not a site-1 product overlap with $\mathrm{vacL}$ on site 2.
+\end{result}
+
+\begin{result}[companion $P$-bilinears on $e_8\otimes e_8$; \nb{L2-localization-tests}, cells 147--153; 2026-09-27]
+Write $t_a(u)=\sum_{r=0}^3\chi_rP_{a,r}(u)$ ($\chi_0=1$, $a=1$ fundamental, $a=2$ antisymmetric; $t$ is affine in $\chi$), untwisted $T$ in $G_c$. Test $X=P_{a,r}(u)P_{b,s}(v)-P_{b,r}(v)P_{a,s}(u)$ for $\langle0|X=c\,e_k^T\otimes e_8^T$, $\langle0|=e_8\otimes e_8$, all $a,b,r,s$, with $u,v$ symbolic (exact Solve). The solution sets are identical at points 1 and 2. GT labels: $e_3=(1,2,0)$, $e_5=(1,1,1)$ (the $gl_2$ singlet), $e_7=(0,2,1)$.
+\begin{itemize}
+\item Single $P$'s: $\langle0|$ is killed by $P_{1,2},P_{1,3},P_{2,3}$ and is an eigen-covector of $P_{1,1},P_{2,2}$. $P_{2,1}(u)$ localizes at $u=\theta_2,\theta_1,\theta_1+2h$, and $P_{2,0}(\theta_1)$ localizes to span$\{e_4,e_5\}$. $P_{1,0}$ never localizes.
+\item Nontrivial bilinears, up to $u\leftrightarrow v$ and $r\leftrightarrow s$:
+$(1,2,0,1)$ at $v=\theta_1$, any $u$, gives $e_5$ with $c\propto(u-\theta_1)(u-\theta_2)$;
+$(2,2,0,2)$ at $u=\theta_1$ gives $e_5$;
+$(2,2,1,2)$ at $u=\theta_1+2h$ gives $e_7$;
+$(2,2,0,1)$ at $(u,v)=(\theta_1+2h,\theta_1)$ gives $e_3$, i.e.\ $\langle0|\big[P_{2,0}(\theta_1{+}2h)P_{2,1}(\theta_1)-P_{2,0}(\theta_1)P_{2,1}(\theta_1{+}2h)\big]\propto e_3^T\otimes e_8^T$.
+$(1,2,1,2)$ localizes for all $u,v$, but only to $e_8$ (trivial). Nothing else localizes.
+\end{itemize}
+\end{result}
+
+\begin{result}[{the same scan for $[3,1,0]^{\otimes2}$}; \nb{L2-localization-tests}, cells 154--157; 2026-09-27]
+The scan is exact and identical at points 1 and 2. Vacuum $e_{15}=(0,1,3)$. Every adjoint solution carries over, with the same special points and the same weight shift from the vacuum:
+$(1,2,0,1)|_{v=\theta_1}$ and $(2,2,0,2)|_{u=\theta_1}\to e_{11}=(1,1,2)$ ($+\alpha_{13}$);
+$(2,2,1,2)|_{u=\theta_1+2h}\to e_{14}=(0,2,2)$ ($+\alpha_{23}$);
+$(2,2,0,1)|_{(\theta_1+2h,\theta_1)}\to e_9=(1,2,1)$ ($+\alpha_{13}+\alpha_{23}$).
+\textbf{New:} $(1,2,0,1)$ at $u=v=\theta_1+2h$ gives $e_{13}=(0,3,1)$, i.e.\ $+2\alpha_{23}$:
+$\langle0|\big[P_{1,0}P_{2,1}-P_{2,0}P_{1,1}\big](\theta_1{+}2h)\propto e_{13}^T\otimes e_{15}^T$.
+For the adjoint that weight is absent, and $\langle0|X=0$ exactly at that point.
+\end{result}
+
+\begin{result}[{the same scan for $[3,2,0]^{\otimes2}$}; \nb{L2-localization-tests}, cells 158--159; 2026-09-27]
+The scan is exact and identical at points 1 and 2. It has the same 14 localizing $(a,b,r,s)$ as the adjoint. Vacuum $e_{15}=(0,2,3)$.
+$(1,2,0,1)|_{v=\theta_1}$ and $(2,2,0,2)|_{u=\theta_1}\to e_{12}=(1,2,2)$ ($+\alpha_{13}$);
+$(2,2,1,2)|_{u=\theta_1+3h}\to e_{14}=(0,3,2)$ ($+\alpha_{23}$);
+$(2,2,0,1)|_{(\theta_1+3h,\theta_1)}\to e_{10}=(1,3,1)$ ($+\alpha_{13}+\alpha_{23}$).
+The second special point is $\theta_1+3h$ here, against $\theta_1+2h$ for $[2,1,0]$ and $[3,1,0]$. This is consistent with $\theta_1+(\lambda_2+1)h$ (conjecture from three reps).
+There is no $+2\alpha_{23}$ solution: the weight $(0,4,1)$ is absent from $[3,2,0]$.
+\end{result}
+
+\begin{result}[negative: the localized $P$-bilinears miss the singlet; \nb{L2-localization-tests}, cells 160--162; points 1, 2; 2026-09-27]
+Adjoint. For each localized bilinear, I mapped to the diagonal frame, $\langle v_c|\Pi(P)^{\otimes2}$. The site-2 factor is then $e_1^Tg_0$ (rotparams), and I undid $g_0^{\otimes2}$; the state stays a product with site 2 $\propto e_1^T$. Highest-weight sectors reached:
+$e_5$ states: octet (rank 1), $(4,1,1)$, $(4,2,0)$;
+$e_7$: $(3,3,0)$, $(4,2,0)$;
+$e_3$: octet (rank 1), $(3,3,0)$, $(4,1,1)$, $(4,2,0)$.
+\textbf{The singlet overlap is exactly $0$ for all of them.} This is structural. The singlet is $g\otimes g$-invariant, so its overlap is the companion-frame one. By weight, $e_k^T\otimes e_8^T$ meets the singlet only for $e_k=e_1$, and no localized bilinear has an $e_1$ component. The control $e_1\otimes e_8$ reaches all six sectors.
+\end{result}
+
+%======================================================================
+\section{Algebra generated by $t_{10},t_{11}$ at $\theta_1+rh$}
+
+\begin{result}[{dimension count, adjoint$^{\otimes2}$; \nb{transfer-algebra-dim}; point 1; 2026-09-29}]
+Generators $\mathbb 1$, $t_{\{1,0\}}(\theta_1+rh)$, $t_{\{1,1\}}(\theta_1+rh)$, $r\in\{-3,\dots,3\}$. The count is exact mod a large prime.
+\emph{Twisted}, $G=\mathrm{diag}(z)$. The linear span is $7=1+2+4$ (degrees 2 and 4 in $u$, scalar top coefficients). The generated algebra has dimension $64$, i.e.\ simple spectrum. It is already $64$ for a single $t_{11}(\theta_1+rh)$ with $r\neq0,3$.
+Exceptions: $t_{10}$ at any set of points gives $63$, with one pair unsplit in the zero-weight sector. $t_{11}(\theta_1)$ and $t_{11}(\theta_1+3h)$ alone give $55$ each.
+\emph{Untwisted}, $G=\mathbb 1$, by explicit product closure. The maximum is $6$ on the multiplicity spaces of $27\oplus10\oplus\overline{10}\oplus8^{2}\oplus1$.
+$t_{10}$ gives $4$: it is Casimir-like, so $10\sim\overline{10}$ and the octets are not split. A generic single $t_{11}$ gives $6$.
+$t_{11}(\theta_1)$ gives $5$ ($27\sim10$) and $t_{11}(\theta_1+3h)$ gives $5$ ($27\sim\overline{10}$).
+So the operator algebra is never the bottleneck. The limitation is the set of covectors $\langle0|\mathcal A$ reached from a (localized) vacuum.
+\end{result}
+
+\begin{result}[{site-1 localization by polynomials in $t_{10},t_{11}$ at $\theta_1+rh$, companion frame, $\langle0|=e_8^T\otimes e_8^T$; \nb{transfer-algebra-dim}; points 1 (all), 2 (monomials); 2026-09-29}]
+$W_d=\langle0|\cdot\{\text{monomials of degree}\le d\}$ and $V_1=\mathbb C^8\otimes e_8^T$. With all $r\in\{-3..3\}$, $(\dim W_d,\dim W_d\cap V_1)$ is $(1,1),(7,2),(24,3),(48,3),(64,8)$ for $d=0..4$.
+The only structured localized states are three pure monomials:
+$1\to e_8$; $t_{11}(\theta_1)\to e_5$, weight $(1,1,1)$; $t_{10}(\theta_1+h)\,t_{11}(\theta_1)\to \mathrm{span}(e_3,e_8)$, $e_3$ of weight $(1,2,0)$.
+$t_{11}(\theta_1)^2$ is not localized, and with $r=0$ alone only $1$ and $t_{11}(\theta_1)$ appear at any degree. None of the three has an $e_1$ component, so they miss the singlet.
+The localized dimension stays at $3$ until $W_d$ is (nearly) everything, then jumps to $8$, singlet included: all $r$ at $d=4$; $\{0,1\}$ at $d=5$; $\{0,3\}$ gives $6$ at $d=4$ with $\dim W=61$.
+That jump is the generic bound $\dim(W\cap V_1)\ge\dim W-56$, i.e.\ high-degree projector-like elements. It is not a new structural mechanism.
+\end{result}
+
+\begin{result}[{the singlet-reaching polynomial is row 8, and it is dense; \nb{transfer-algebra-dim}; point 1; 2026-09-29}]
+$\vac Y_8=c\,e_1^T\otimes e_8^T$ exactly (pure $e_1$), for $Y_8$ = row 8 of the site-1 table. $\vac$ is cyclic, so the degree-4 polynomial in $\{t_{10}(\theta_1),t_{10}(\theta_1+h),t_{11}(\theta_1+rh)_{r=0..3}\}$ that reproduces $\vac Y_8$ \emph{equals} $Y_8$ as an operator. This was checked; its eigenvalues are the known Q-form.
+As a polynomial it is dense: a greedy monomial basis gives $59$ terms with $44$-digit coefficients. The sparsest search over all $210$ monomials of degree $\le4$, modulo the other localized directions (L1 plus 8 rounds of reweighted L1), stalls at $55$ terms against $57$ constraints.
+The compactness of $Y_8$ comes from $t_{10}^{-1}$ in $R$ and from the $\theta_2$ point. Polynomials at $\theta_1+rh$ can only interpolate it over the spectrum. (The L1 search is a heuristic, not a proof of minimality.)
+\end{result}
+
+\begin{result}[{$e_1^T\otimes e_8^T$ in the two-site SoV basis, rederived from scratch; \nb{transfer-algebra-dim}; points 1, 2; 2026-09-29}]
+With the 64 recipe states rebuilt and rechecked as left $B(u)$-eigenvectors, the direct expansion has exactly two nonzero terms:
+$e_1^T\otimes e_8^T\propto\langle x_{221|100}|-\frac1{T+1}\langle x_{211|200}|$. The coefficients are $-77/248$ at point 1 and $-221/427$ at point 2. This is row 8.
+\end{result}
+
+\begin{result}[{negative: no contour form from the measure $\mu=1/(\nu_1(u)\nu_1(u+h))$; \nb{transfer-algebra-dim}; point 1; 2026-09-29}]
+The raw recipe states are $\langle x|=n_x\langle x_{RV}|$. All 64 $n_x$ are state-independent ($10^{-48}$, Baxter $q_{1,2}$ at $10^{-52}$) and rational.
+They are not site-factorised: the table has rank 3, and the cross ratios differ from 1 only on 5 pairs in $\{211,220,221\}^2$.
+For the row-8 pair, $n_{211|200}/n_{221|100}=-(T+1)/(T-1)$. This equals the $\mu$-residue ratio, but it is a product of two site-local ratios, and single-site $n$'s do not follow $\mu$ in general.
+The coefficient is degree $-1$ in $T$ in every normalisation. Same-site residue ratios are degree 0, and cross-site residues of a single integrand produce cross-site $D$'s, which are not SoV states.
+A $2\times2$ determinant of site-restricted brackets can kill the diagonal terms, but its off-diagonal ratio is still degree 0.
+\end{result}
+
+\begin{result}[{a site-1 rotation of the vacuum in the SoV basis; \nb{transfer-algebra-dim}; exact, points 1 and 2; 2026-09-29}]
+$\langle w|=(e_8^Te^{r_1E_{21}}e^{r_2E_{31}}e^{r_3E_{32}})\otimes e_8^T$ has 12 SoV components. In RV normalisation, relative to the vacuum, $\langle w|\Psi\rangle/\langle0|\Psi\rangle=\sum c_{g_1|g_2}\Phi_1(g_1)\Phi_2(g_2)/(\Phi_1(100)\Phi_2(100))$ with
+\begin{align*}
+&c_{100|100}=1,\quad c_{111|100}=-\tfrac{3(T-2)}{T-1}(r_2-r_1r_3),\quad c_{200|100}=r_3-\tfrac{T-1}{T}r_1,\\
+&c_{211|100}=\tfrac{(T-3)r_1r_2-2(T-2)r_3(r_2-r_1r_3)}{T-1},\\
+&c_{110|100}=\tfrac{2(T-2)}{T-1}r_1,\ \ c_{100|200}=\tfrac{T+1}{T(T-1)}r_1;\qquad c_{210|100}=\tfrac{T-2}{T-1}(r_2+r_1r_3),\ \ c_{200|200}=\tfrac{r_2+r_1r_3}{T-1};\\
+&c_{220|100}=\tfrac{T-2}{T}r_1r_2,\ \ c_{210|200}=\tfrac2Tr_1r_2;\qquad c_{221|100}=-\tfrac{2(T-2)}{T}r_2(r_2-r_1r_3),\ \ c_{211|200}=-\tfrac{2(T-2)}{T(T-1)}r_2(r_2-r_1r_3).
+\end{align*}
+The four pairs reproduce the localized-pair ratios $\frac{T+1}{2T(T-2)},\frac1{T-2},\frac2{T-2},\frac1{T-1}$. No powers of $h$ appear beyond $T$ (checked at $h=\frac13,\frac12$).
+\end{result}
+
+\begin{result}[{global rotation + $R\,t_{11}(\theta_1)$ is one-body and reaches the singlet; \nb{transfer-algebra-dim}; exact, points 1 and 2; 2026-09-29}]
+Take $\langle v_g|=(e_8^Tg)\otimes(e_8^Tg)$ in the companion frame, with $g=e^{r_1E_{21}}e^{r_2E_{31}}e^{r_3E_{32}}$ symbolic, and apply the 8 site-1-localizing combinations of the table.
+$1$, $t_{11}(\theta_1)$ and $R(\theta_1)t_{11}(\theta_1)$ stay one-body for all $r$: the result is $\langle a(r)|\otimes\langle e_8^Tg|$, with the rotated vacuum on site 2. $R(\theta_1)$ alone has rank 7, and rows 5--8 have rank 8.
+The singlet overlap is $0$ for $1$ and $t_{11}$, and $\propto P_1P_2$ for $R\,t_{11}$:
+\[
+P_1=r_1-r_3-\chi_1r_2+\chi_2r_1r_2+\chi_3r_2(r_2-r_1r_3),\qquad
+P_2=1+\chi_1r_1+\chi_2(r_2-r_1r_3)-\chi_3(r_1r_2+r_2r_3-r_1r_3^2),
+\]
+with $\chi$ the companion first row. The $R(\theta_1)$ overlap is $\propto P_1^2$.
+So a one-body, singlet-reaching covector comes from a single site-1 operator once the vacuum is globally rotated. At $g=1$ it reduces to $\vac Rt_{11}$ (row 4, singlet $0$).
+\end{result}
+
+\begin{result}[{the rotated vacuum as a twist-$w$ reference state; \nb{transfer-algebra-dim}; exact, point 1; 2026-09-29}]
+With standard matrix units, $\Pi(g)t_G\Pi(g)^{-1}=t_{gGg^{-1}}$. $\vac$ is a left eigenvector of $t_{\{1,0\}},t_{\{1,1\}}$ for upper-triangular (not lower) twists.
+Hence $\langle v_g|$ is a left eigenvector for twist $G_c(w)$ iff $gG_c(w)g^{-1}$ is upper triangular. There are 6 solutions, one per ordering; for $\mathrm{diag}=(w_1,w_2,w_3)$,
+$r_1=-1/w_1$, $r_2=1/(w_1w_2)$, $r_3=-(w_1+w_2)/(w_1w_2)$ ($g^{-1}$ carries the eigen-flag of $G_c(w)$). All 6 were verified on the 64-dim space.
+There, in the chain with twist $z$,
+\[
+P_1=\frac{\prod_b(w_1-z_b)}{w_1^3w_2},\qquad P_2=\frac{\prod_b(w_1-z_b)}{w_1^3},\qquad \langle v_g|R\,t_{11}(\theta_1)|s\rangle\propto\frac{\det(w_1-G_c(z))^2}{w_1^6w_2},
+\]
+nonzero unless $w_1$ is an eigenvalue of the chain's twist.
+\end{result}
+
+\begin{result}[{why earlier attempts missed the singlet; \nb{transfer-algebra-dim}; exact, point 1; 2026-09-29}]
+Undoing $g$ globally gives $\langle ag^{-1}|\otimes e_8^T$ with $(ag^{-1})_1=\mathrm{const}\cdot P_1P_2$: a genuine $e_1$ component.
+$\langle v_g|R(\theta_1)$ is one-body iff $P_1=0$ (all localization minors vanish there; fails off it). So any vacuum on which $R$ \emph{and} $t_{11}$ both localize has zero singlet overlap for $R\,t_{11}$.
+This covers the unrotated companion vacuum and, presumably, the diagonal rotparams family of \nb{L2-localization-tests} (inferred, not recomputed).
+Off $P_1=0$ only $1,t_{11},R\,t_{11}$ stay one-body, and $R\,t_{11}$ reaches the singlet.
+\end{result}
+
+\begin{result}[{rotated vacuum in other reps; \nb{transfer-algebra-dim}; exact, point 1, companion frame; 2026-09-29}]
+Squares of $[3,1,0]$ and $[3,2,0]$ contain no singlet, so the targets are the previously missed irreps with $\Lambda_3>\lambda_2$. Site-1 operators at $\theta_1$ were applied to $(\mathrm{lw}^Tg)^{\otimes2}$.
+$[3,1,0]^2$: at generic $r$, $t_{21}$ and $Rt_{11}$ are one-body and reach $[4,2,2]$ (missed at $r=0$) together with $[4,3,1],[5,2,1],[5,3,0],[6,1,1],[6,2,0]$. They still miss $[3,3,2]$ and $[4,4,0]$.
+$[3,2,0]^2$: only $t_{11}$ is one-body (it reaches $[5,4,1],[6,3,1],[6,4,0]$). $R$, $Rt_{11}$ and $t_{21}$ at $\theta_1$ do not localize even at $r=0$, so the $\lambda_2=2$ site-1 tower is needed (untried).
+\end{result}
+
+\begin{result}[{wider operator pool: all irreps reached one-body; \nb{transfer-algebra-dim}; point 1, generic $r$, exact; 2026-09-29}]
+The pool: fused $t_{10},t_{11},t_{20},t_{21},t_{22}$ ($t_{22}(x)=t_2(x)t_2(x+h)-t_3(x+h)t_1(x)$), $R=t_{20}t_{10}^{-1}$, and the companion pieces $P_{a,r}$, all at $\theta_1+nh$, $n=-1..4$. They act on the rotated vacuum $(\mathrm{lw}^Tg)^{\otimes2}$; we keep only one-body results.
+$[3,2,0]^2$: the union reaches every irrep. $[4,3,3]$ comes from $t_{22}(\theta_1)\,t_{10}(\theta_1+2h)$.
+$[3,1,0]^2$: singles and pairs miss $[3,3,2],[4,4,0]$. The 7 one-body triples $P_{2,r}(\theta_1)P_{1,s}(\theta_1+h)P_{1,s}(\theta_1+2h)$ reach both, so the union is all irreps. These are companion pieces, not full transfer matrices.
+Adjoint control: all 6, singlet included. Tested at one generic $r$, one point.
+\end{result}
+
+\begin{result}[{$[4,2,0]^{\otimes2}$, depth 2; \nb{transfer-algebra-dim}; point 1, generic $r$, exact; 2026-09-29}]
+Same pool, at $\theta_1+nh$, $n=-1..5$, computed as covector actions. One-body singles: $t_{11},t_{22},P_{2,r}$ at $\theta_1$. The one-body product $t_{22}(\theta_1)t_{10}(\theta_1+2h)$ reaches the previously missed $[6,3,3]$ and $[5,4,3]$.
+Missed at depth 2: $[4,4,4]$ ($=\det^4$, the singlet analog, since $[4,2,0]$ is self-dual up to $\det$) and $[6,6,0]$.
+Depth 3 does not help. It gives 27 one-body triples, all of the form $P_{2,r}(\theta_1)P_{2,s}(\theta_1+h)P_{1,q}(\theta_1+2h)$, and their reach adds nothing new: $[4,4,4]$ and $[6,6,0]$ are still missed.
+\end{result}
+
+%======================================================================
+\section{Summary: rotated vacuum + full transfer matrices, by representation}
+Companion frame, point 1, generic $r$, exact. Vacuum $\langle v_g|=(\mathrm{lw}^Tg)^{\otimes2}$. Only one-body results $\langle a|\otimes\langle\mathrm{lw}^Tg|$ are kept, and only full (fused) transfer matrices or $R=t_{20}t_{10}^{-1}$ are allowed; companion pieces $P_{a,r}$ are excluded. Data: \nb{transfer-algebra-dim-results.m}, key \texttt{reps}.
+\begin{center}
+\begin{tabular}{lll}\toprule
+rep & one-body full-$t$ operators (at $\theta_1$ unless stated) & previously missed irreps reached\\\midrule
+$[2,1,0]$ & $t_{11}$; $t_{21}\simeq Rt_{11}$ & singlet $[2,2,2]$\\
+$[3,1,0]$ & $t_{11}$; $t_{21}\simeq t_{11}t_{10}(\theta_1{+}h)$; $t_{11}R$ & $[4,2,2]$ only ($[3,3,2],[4,4,0]$ need $P_2P_1P_1$)\\
+$[3,2,0]$ & $t_{11}$; $t_{22}$; $t_{22}\,t_{10}(\theta_1{+}2h)$ & $[4,3,3]$; $t_{22}t_{10}(\theta_1{+}2h)$ reaches \emph{all} irreps\\
+$[4,2,0]$ & $t_{11}$; $t_{22}$; $t_{22}\,t_{10}(\theta_1{+}2h)$ & $[6,3,3],[5,4,3]$; not $[4,4,4],[6,6,0]$\\\bottomrule
+\end{tabular}
+\end{center}
+Note $t_{21}(u)=t_{11}(u)t_{10}(u+h)-t_3(u+h)$ with $t_3$ scalar, so $t_{21}(\theta_1)$ and $t_{11}(\theta_1)t_{10}(\theta_1+h)$ carry the same information. The candidate pattern (untested) is a fused $t$ at $\theta_1$ times $t_{10}(\theta_1+\lambda_2h)$. The gaps sit at $\lambda_1-\lambda_2=2$ ($[3,1,0]$, $[4,2,0]$).
+
+%======================================================================
+\section{$L=1$ left SoV basis for general representations (companion frame)}
+One site, $\Lambda=[\lambda_1,\lambda_2,0]$, companion twist, $B(u)=T_{11}(u)QM_{12,12}(u+h)+T_{21}(u)QM_{12,13}(u+h)$ with the untwisted $T$, as in \nb{Companion-B-C-diagonalize.wb}.
+
+\paragraph{Fused transfer matrices (CBR).} For a partition $\lambda$ with conjugate $\lambda'$,
+\[
+\mathbb T_\lambda(u)=\det_{1\le i,j\le\lambda_1}\mathbb T_{\lambda'_j+i-j,1}\big(u+h(i-1)\big),
+\]
+where $\mathbb T_{a,1}=t_a$ (antisymmetric), $\mathbb T_{0,1}=1$, and $\mathbb T_{a,1}=0$ for $a<0$ or $a>3$. The determinant is expanded with the factors in row order, which is safe because the $t$'s commute. This reproduces the hand-written $t_{00},t_{10},t_{11},t_{20},t_{21},t_{22}$ of the adjoint notebook (numerical point, entrywise zero difference).
+
+\begin{result}[{left $B$-eigenbasis for general $[\lambda_1,\lambda_2,0]$; \nb{Companion-B-C-diagonalize.wb} (adjoint), \nb{Companion-B-general-rep.wb} (general); 2026-09-29}]
+Label the states by GT patterns $\{\Lambda,\{\mu_{11},\mu_{12}\},\{\mu_{21}\}\}$. The vacuum $\vac$ is the lowest-weight pattern $\{\Lambda,\{\lambda_2,0\},\{0\}\}$ ($e_8^T$ for the adjoint). Then
+\[
+\langle x_\mu|=\vac\;\mathbb T_{\mu_{11},0}(\theta_1)\,\mathbb T_{\lambda_2,0}(\theta_1)^{-1}\;\mathbb T_{\mu_{21},\mu_{12}}(\theta_1)
+\]
+are left eigenvectors of $B(u)$, and they form a complete basis. The denominator is $\mathbb T_{\lambda_2,0}$, not $\mathbb T_{1,0}$. The two coincide for $\lambda_2=1$, and the adjoint notebook's $x$ basis is exactly this rule, with its label $\{\{a\},\{b,c\}\}=\{\{\mu_{11}\},\{\mu_{21},\mu_{12}\}\}$.
+
+Check: $h=\tfrac25$, $\theta_1=\tfrac13$, $\chi=(\tfrac5{11},-\tfrac27,\tfrac3{13})$, exact. The eigenvector test is $\mathrm{rank}\{\langle x|,\langle x|B(u)\}=1$ at $u=\tfrac37$ and $u=-\tfrac53$.
+\begin{center}
+\begin{tabular}{lcccc}\toprule
+rep & dim & $\mathbb T_{\mu_{11},0}/\mathbb T_{\lambda_2,0}$ & $\mathbb T_{\mu_{11}-\lambda_2+1,0}/\mathbb T_{1,0}$ & $\mathbb T_{\mu_{11},0}/\mathbb T_{1,0}$\\\midrule
+$[2,1,0]$ & 8 & 8 eigvecs, rank 8 & same & same\\
+$[3,1,0]$ & 15 & 15, rank 15 & same & same\\
+$[3,2,0]$ & 15 & 15, rank 15 & 7, rank 14 & 2, rank 15\\
+$[4,2,0]$ & 27 & 27, rank 27 & 8, rank 23 & 3, rank 27\\\bottomrule
+\end{tabular}
+\end{center}
+Not yet done: a symbolic check, and closed-form eigenvalues.
+\end{result}
+
+%======================================================================
+\section{$L=2$: the $L=1$ SoV-basis operators on the twist-$w$ vacuum}
+Companion frame, chain twist $\chi=(4,11,-30)$, point 1. Vacuum $\langle v_g|=(\mathrm{lw}^Tg)^{\otimes2}$ with $r=r(w)$, $w=(7/3,-1/2,4)$; it is a left eigenvector of $t_1,t_2$ with twist $G_c(w)$ in every rep tested. Apply the two-site $O_\mu(\theta_1)=\mathbb T_{\mu_{11},0}\mathbb T_{\lambda_2,0}^{-1}\mathbb T_{\mu_{21},\mu_{12}}(\theta_1)$ (CBR, chain twist) for every GT label $\mu$. Notebook: \nb{L2-twistw-vacuum-SoV-ops.wb}.
+
+\begin{result}[{site-1 localization; exact, point 1; 2026-09-29}]
+$\langle v_g|O_\mu=\langle a|\otimes\langle\mathrm{lw}^Tg|$ exactly for:
+\begin{center}
+\begin{tabular}{lll}\toprule
+rep & twist-$w$ vacuum & unrotated $\mathrm{lw}\otimes\mathrm{lw}$ (control)\\\midrule
+$[2,1,0]$ & $1,\ t_{11},\ Rt_{11}$ & same $+\ R$\\
+$[3,1,0]$ & $1,\ t_{11},\ \tfrac{T_{20}}{T_{10}}t_{11},\ \tfrac{T_{30}}{T_{10}}t_{11}$ & same $+\ \tfrac{T_{20}}{T_{10}},\ \tfrac{T_{30}}{T_{10}}$\\
+$[3,2,0]$ & $1,\ t_{11},\ T_{22},\ \tfrac{T_{30}}{T_{20}}T_{22}$ & same $+\ \tfrac{T_{30}}{T_{20}},\ \tfrac{T_{30}}{T_{20}}t_{11}$\\\bottomrule
+\end{tabular}
+\end{center}
+All other $O_\mu$ give reshape rank $2$ to $d$. On the rotated vacuum the bare ratio $\mathbb T_{\mu_{11},0}/\mathbb T_{\lambda_2,0}$ stops localizing, but survives when multiplied by the column $\mathbb T_{\lambda_2,\lambda_2}$.
+\end{result}
+
+\paragraph{What ``reach'' means here.} For a one-body operator $O$ the test uses the \emph{single} covector $\langle X|=\langle v_g|O(\theta_1)$. Irrep $\rho$ of $\Lambda\otimes\Lambda$ is \emph{reached} if $\langle X|\Pi(k)|\mathrm{hw}_\rho\rangle\neq0$ for one generic group element $k$ (on both sites). The rank of that functional over the multiplicity space of $\rho$ is computed, but only the zero cases (``missed'') are recorded below. So ``reaches every irrep'' means that $\langle X|$ has a nonzero component in every irrep, with at least one copy each. It does \emph{not} mean that $O$ generates all states, and the coverage of irreps with multiplicity $>1$ has not been recorded.
+
+\begin{result}[{irrep reach: the $\lambda_1-\lambda_2=2$ gap closes; generic $k$, exact, point 1; 2026-09-29}]
+The top operator $O_{\max}=\mathbb T_{\lambda_1,0}(\theta_1)\,\mathbb T_{\lambda_2,0}(\theta_1)^{-1}\,\mathbb T_{\lambda_2,\lambda_2}(\theta_1)$ is one-body on $\langle v_g|$ and reaches \emph{every} irrep of $\Lambda\otimes\Lambda$, for $\Lambda=[3,1,0]$ ($\tfrac{T_{30}}{T_{10}}t_{11}$) and $[3,2,0]$ ($\tfrac{T_{30}}{T_{20}}T_{22}$). Only full transfer matrices are used, so this closes the $[3,1,0]$ gap $[3,3,2],[4,4,0]$ of the summary table without companion pieces. Missed irreps of the other localizing operators:
+\begin{center}
+\begin{tabular}{lll}\toprule
+rep & operator & missed\\\midrule
+$[3,1,0]$ & $t_{11}$ & $[3,3,2],[4,2,2],[4,3,1],[4,4,0],[5,3,0]$\\
+ & $Rt_{11}$ & $[3,3,2],[4,4,0]$\\
+ & $\tfrac{T_{30}}{T_{10}}t_{11}$ & none\\
+$[3,2,0]$ & $t_{11}$ & $[4,3,3],[4,4,2],[5,3,2],[5,5,0],[6,2,2]$\\
+ & $T_{22}$ & $[4,3,3],[5,5,0]$\\
+ & $\tfrac{T_{30}}{T_{20}}T_{22}$ & none\\\bottomrule
+\end{tabular}
+\end{center}
+The vacuum alone reaches only the top irrep.
+\end{result}
+
+\begin{result}[{robustness, and $[4,2,0]$; 2026-09-29}]
+Five configurations (point, $w$, $k$): $(1,(\tfrac73,-\tfrac12,4),k_1)$, $(2,(\tfrac73,-\tfrac12,4),k_1)$, $(1,(-\tfrac52,3,\tfrac15),k_2)$, $(3,(\tfrac{11}3,-2,\tfrac57),k_2)$, $(2,(-\tfrac52,3,\tfrac15),k_1)$, with point 3: $h=\tfrac27$, $\theta=(\tfrac15,-\tfrac34)$, $z=(-2,\tfrac73,\tfrac32)$. For $[3,1,0]$, $[3,2,0]$ (exact) the one-body $O_\mu$ and their missed irreps are identical in all five.
+
+$[4,2,0]$ (dim 27): the $729\times729$ exact LU of $\mathbb T_{2,0}$ is too slow, so the solve and all rank tests are done mod $p$ ($p=$ \texttt{NextPrime[10\^{}9]}, \texttt{NextPrime[2 10\^{}9]}); this reproduces the exact $[3,1,0]$, $[3,2,0]$ results. Identical rows in all five configurations and both primes. One-body on the twist-$w$ vacuum:
+\begin{center}
+\begin{tabular}{ll}\toprule
+operator & irreps of $[4,2,0]^{\otimes2}$ missed\\\midrule
+$1$ & all 12 non-top: $[4,4,4],[5,4,3],[5,5,2],[6,3,3],[6,4,2],[6,5,1],[6,6,0],$\\
+ & \quad $[7,3,2],[7,4,1],[7,5,0],[8,2,2],[8,3,1]$\\
+$t_{11}$ & $[4,4,4],[5,4,3],[5,5,2],[6,3,3],[6,4,2],[6,5,1],[6,6,0],[7,3,2],[7,5,0],[8,2,2]$\\
+$T_{22}$ & $[4,4,4],[5,4,3],[5,5,2],[6,3,3],[6,5,1],[6,6,0],[7,5,0]$\\
+$\tfrac{T_{30}}{T_{20}}T_{22}$ & $[4,4,4],[6,6,0]$\\
+$\tfrac{T_{40}}{T_{20}}T_{22}$ & none\\\bottomrule
+\end{tabular}
+\end{center}
+So $O_{\max}$ reaches every irrep for $[3,1,0],[3,2,0],[4,2,0]$, including the singlet analogue $[4,4,4]$ and $[6,6,0]$ that the old pool (depth-3 companion triples included) missed. Notebook: \nb{L2-twistw-vacuum-SoV-ops.wb}, ``Modular version'' section.
+\end{result}
+
+\begin{result}[{single-site interpretation; $[2,1,0]$, $[3,1,0]$, $[3,2,0]$ exact, $[4,2,0]$ mod $p$; 2026-09-29}]
+Every one-body operator above acts on the twist-$w$ vacuum as the \emph{same} operator built for the site-1 chain alone, tensored with the identity:
+\[
+\langle v_g|O(\theta_1)=c_O\,\big(\langle s|O^{(L=1)}(\theta_1)\big)\otimes\langle s|,\qquad s=\mathrm{lw}^Tg,
+\]
+with $O^{(L=1)}$ the same CBR combination from $\mathcal L(u-\theta_1)G_c(z)$ (same $h,\theta_1$, twist). Checked for $1,t_{11},Rt_{11}$ ($[2,1,0]$) and $1,t_{11},\tfrac{T_{20}}{T_{10}}t_{11},\tfrac{T_{30}}{T_{10}}t_{11}$ ($[3,1,0]$). The constant is $w$-independent and is the site-2 lowest-weight factor, with $x=\theta_{12}$, lowest weight $(0,\lambda_2,\lambda_1)$:
+\[
+c_{t_{11}}=(x-\lambda_2h)(x-h-\lambda_1h)\ \ [=\mathcal L_{22}(u)\mathcal L_{33}(u-h)\text{ on lw}],\qquad
+c_{\frac{T_{n,0}}{T_{\lambda_2,0}}t_{11}}=c_{t_{11}}\prod_{k=1}^{n-\lambda_2}(x+kh-\lambda_1h).
+\]
+Points 1 (two $w$) and 2; at point 3 with $w_1=z_2$ (degenerate, $P_1=0$) the bare ratios also localize, with $c=(x-2h)$, $(x-2h)(x-h)$, fitting the same rule.
+
+$\lambda_2=2$: the same holds for $1,t_{11},T_{22},\tfrac{T_{30}}{T_{20}}T_{22}$ ($[3,2,0]$, exact, points 1, 2, two $w$) and additionally $\tfrac{T_{40}}{T_{20}}T_{22}$ ($[4,2,0]$, mod two primes, points 1, 2, 3, three $w$). One formula covers all four reps:
+\[
+c_{\mathbb T_{n,0}\mathbb T_{\lambda_2,0}^{-1}\mathbb T_{j,j}}=\prod_{i=0}^{j-1}(x+ih-\lambda_2h)(x+ih-h-\lambda_1h)\prod_{k=\lambda_2}^{n-1}(x+kh-\lambda_1h),
+\]
+i.e.\ $\mathcal L_{22}(u+ih)\mathcal L_{33}(u+ih-h)$ per column pair and $\mathcal L_{33}(u+kh)$ per extra row box, on the site-2 lowest weight. Notebook: \nb{L2-twistw-vacuum-SoV-ops.wb}, ``Single-site interpretation''.
+\end{result}
+
+\begin{result}[{$[4,1,0]^{\otimes2}$, the full pipeline; mod $p$ (two primes); 2026-09-29}]
+$L=1$: the left states $\vac\,\mathbb T_{\mu_{11},0}\mathbb T_{1,0}^{-1}\mathbb T_{\mu_{21},\mu_{12}}(\theta_1)$ are 24 independent $B$-eigenvectors (\nb{Companion-B-general-rep.wb}, exact). $L=2$ on the twist-$w$ vacuum, the one-body operators are exactly:
+\begin{center}
+\begin{tabular}{ll}\toprule
+operator & irreps of $[4,1,0]^{\otimes2}$ missed (of 11)\\\midrule
+$1$ & $[4,4,2],[5,3,2],[5,4,1],[5,5,0],[6,2,2],[6,3,1],[6,4,0],[7,2,1],[7,3,0],[8,1,1]$\\
+$t_{11}$ & $[4,4,2],[5,3,2],[5,4,1],[5,5,0],[6,2,2],[6,3,1],[6,4,0],[7,3,0]$\\
+$\tfrac{T_{20}}{T_{10}}t_{11}$ & $[4,4,2],[5,3,2],[5,4,1],[5,5,0],[6,4,0]$\\
+$\tfrac{T_{30}}{T_{10}}t_{11}$ & $[4,4,2],[5,5,0]$\\
+$\tfrac{T_{40}}{T_{10}}t_{11}$ & none\\\bottomrule
+\end{tabular}
+\end{center}
+So $O_{\max}=\tfrac{T_{40}}{T_{10}}t_{11}$ reaches every irrep, in the sense of the ``reach'' paragraph above. Identical in all five configurations. Each one-body operator is $c_O\,(\langle s|O^{(L=1)})\otimes\langle s|$ with the same $c_O$ formula (points 2, 3, three $w$, both primes). At point 1 the single-site $t_1(\theta_1)$ is accidentally singular for $[4,1,0]$ (eigenvalue $z\cdot m=0$ at weight $m=(3,2,0)$), so that comparison is skipped there.
+\end{result}
+
+\begin{result}[{the ratio operators are polynomial: $O_\mu=\mathbb T_{n,\lambda_2}(\theta_1)$; exact, operator level; 2026-09-29}]
+On the full two-site space (chain twist $G_c(z)$, no vacuum used),
+\[
+\mathbb T_{n,0}(\theta_1)\,\mathbb T_{\lambda_2,\lambda_2}(\theta_1)=\mathbb T_{\lambda_2,0}(\theta_1)\,\mathbb T_{n,\lambda_2}(\theta_1),
+\qquad\text{hence}\qquad
+\mathbb T_{n,0}\mathbb T_{\lambda_2,0}^{-1}\mathbb T_{\lambda_2,\lambda_2}(\theta_1)=\mathbb T_{n,\lambda_2}(\theta_1),
+\]
+with coefficient exactly $1$. Checked for $[2,1,0]$ ($n=1,2$), $[3,1,0]$ ($n=1,2,3$) and $[3,2,0]$ ($n=2,3$) at points 1 and 2. So $O_{\max}=\mathbb T_{\lambda_1,\lambda_2}(\theta_1)$, the transfer matrix in the site representation itself. In particular $R\,t_{11}(\theta_1)=\mathbb T_{2,1}(\theta_1)$, the adjoint singlet-reaching operator, and all the one-body operators of this section are the polynomial transfer matrices $\mathbb T_{n,\lambda_2}(\theta_1)$ (plus $1$ and $t_{11}$).
+\begin{itemize}
+\item The shift is exactly $s=0$. For $[3,1,0]$ and $s\in\{-3,\dots,3\}\setminus\{0\}$, $\mathbb T_{3,1}(\theta_1+sh)$ is proportional to $O_{\max}$ neither as an operator nor on the vacuum.
+\item The identity is special to $\theta_1$. It fails at $u=3/11$ and at $u=\theta_1+10^{-3}$. At $\theta_1$ the two-site quantum determinants $t_3(\theta_1)$ and $t_3(\theta_1+2h)$ vanish ($[3,1,0]$), which is presumably what kills the extra Jacobi--Trudi term.
+\item The generic-$u$ difference is \emph{not} $c\,t_3(u+ah)\,\mathbb T_{n-1,\lambda_2-1}(u+bh)$ for $a=0..2$, $b=-1..2$. Its exact form is open.
+\end{itemize}
+Notebook: \nb{L2-twistw-vacuum-SoV-ops.wb}, ``Is $O_{\max}$ a polynomial transfer matrix?''.
+\end{result}
+
+\begin{result}[{multiplicity coverage, $[2,1,0]^{\otimes2}$; exact, points 1 and 2; 2026-09-30}]
+Undoing the global rotation, every one-body covector is $\langle v_g|O(\theta_1)\,(g^{-1}\otimes g^{-1})=\langle v|\otimes\langle\mathrm{lw}|$ with $v=a\,g^{-1}$ (checked exactly, 18 cases). Irrep $\rho$ with copies $\mathrm{hw}_a$ is covered with multiplicity $r$ if $N_{(X,k),a}=\langle X|\Pi(k)|\mathrm{hw}_a\rangle$ over 4 generic $k$ has rank $r$ (the earlier reach test used one $X$ and one $k$, so its rank was at most $1$). Ranks, with $w\in\{(\tfrac73,-\tfrac12,4),(-\tfrac52,3,\tfrac15),(\tfrac{11}3,-2,\tfrac57)\}$:
+\begin{center}
+\begin{tabular}{lccccc}\toprule
+covectors & $1$ & $8^{\oplus2}$ & $\overline{10}$ & $10$ & $27$\\\midrule
+$\langle v_g|$ & 0 & 0 & 0 & 0 & 1\\
+$\langle v_g|t_{11}(\theta_1)$ & 0 & 1 & 0 & 1 & 1\\
+$\langle v_g|\mathbb T_{2,1}(\theta_1)$ & 1 & 2 & 1 & 1 & 1\\
+all of $V\otimes\langle\mathrm{lw}|$ (benchmark) & 1 & 2 & 1 & 1 & 1\\\bottomrule
+\end{tabular}
+\end{center}
+A single covector $\langle v_g|\mathbb T_{2,1}(\theta_1)$ at one $w$ separates both octets and has full multiplicity in every irrep. Rows are the same for one $w$ or three, and at points 1 and 2. The site-1 vectors $v$ (3 operators $\times$ 3 values of $w$) span only 5 of the 8 dimensions. Rank $=$ multiplicity is the generic value; the content is that $\mathbb T_{2,1}(\theta_1)$ has no forced zeros, unlike $1$ and $t_{11}$. Notebook: \nb{L2-twistw-vacuum-SoV-ops.wb}, ``Multiplicity coverage''.
+\end{result}
+
+\begin{result}[{highest-weight-space coverage, $[2,1,0]^{\otimes2}$; exact, points 1 and 2, 8 values of $w$; 2026-09-30; different (stronger) criterion than the $k$-test above}]
+The $k$-test above asks only whether $X$ has \emph{some} component in the $\rho$ multiplet: $\Pi(k)$ runs over the whole multiplet. It is not the criterion for CG coefficients, which is the restriction to the highest-weight space. For the singlet the two tests coincide, because $\Pi(k)$ acts trivially on it. The CG data are one number per lowest-weight state, $6=1+2+1+1+1$ for $8\otimes8$. Since $\langle\mathrm{lw}|$ has weight $(0,1,2)$, the covector $\langle v|\otimes\langle\mathrm{lw}|$ sees the lowest-weight state of $\rho$ only through $v$'s component at weight $\mathrm{rev}(\rho)-(0,1,2)$. Rank of $M_{(\rho,a),j}=(\langle v_j|\otimes\langle\mathrm{lw}|)|\mathrm{low}_{\rho,a}\rangle$:
+\begin{center}
+\begin{tabular}{lccccc}\toprule
+site-1 vectors & $27$ & $\overline{10}$ & $10$ & $8$ (need 2) & $1$\\\midrule
+$1$ & 1 & 0 & 0 & 0 & 0\\
+$t_{11}$ & 1 & 0 & 0 & 1 & 0\\
+$\mathbb T_{2,1}(\theta_1)$ & 1 & 1 & 0 & 1 & 1\\
+all three, 8 values of $w$ & 1 & 1 & $\mathbf 0$ & 2 & 1\\\bottomrule
+\end{tabular}
+\end{center}
+The $10=[4,1,1]$ is missed. The reason is that $v=a\,g^{-1}$ has identically zero components at weights $(2,0,1)$ and $(1,0,2)$, for all three operators and all $w$, and the $10$ needs exactly the $(1,0,2)$ component. The octet needs both $t_{11}$ and $\mathbb T_{2,1}$, which is 5 of the 6 directions. The result does not depend on the frame: $g$ is built from lowering generators only, so $g\otimes g$ fixes lowest-weight states, and keeping or undoing $g$ gives identical ranks. Checked literally in the $e_1$ frame too: undoing $g$ and applying $w_0=s_1s_2s_1$ on both sites gives exactly $\langle v'|\otimes\langle e_1|$, and pairing with highest-weight states gives the same ranks. Notebook: \nb{L2-twistw-vacuum-SoV-ops.wb}, ``Sharper test''.
+\end{result}
+
+%======================================================================
+\section{Open}
+\begin{itemize}
+\item A contour-bracket ($k$-deformed) form of the singlet functional; the dressed column looks like a two-pole bracket with a site-2 weight.
+\item The constant $C$ and the Ryan--Volin Gamma-factor normalisation.
+\item The site-2 mirror in the SoV basis; the explicit one-body covectors $v$.
+\item Symbolic $\theta,h,z$; other representations.
+\item Q-form of $\langle v_g|R\,t_{11}(\theta_1)|\Psi\rangle$ (and of $t_{22}(\theta_1)t_{10}(\theta_1+2h)$ for $\lambda_2=2$): an $r$-deformed bracket?
+\item $[3,1,0]$ and $[4,2,0]$ gaps ($\lambda_1-\lambda_2=2$): larger fused diagrams (three columns), other ratios; confirm fusion conventions with Paul first. \emph{Update 2026-09-29:} $[3,1,0]$ closed by $\tfrac{T_{30}}{T_{10}}t_{11}(\theta_1)$ on the twist-$w$ vacuum (section above); $[4,2,0]$ closed by $\tfrac{T_{40}}{T_{20}}T_{22}(\theta_1)$; both checked at 5 configurations.
+\item Confirm the rep scans at point 2 and at a second rotation $r$.
+\item $L=1$ general rep: the right basis $|y\rangle$ (analogue of the $t^S$ at $\theta_1+2h$ recipe) and the overlap matrix; symbolic check and eigenvalues of the left basis.
+\end{itemize}
+
+\end{document}

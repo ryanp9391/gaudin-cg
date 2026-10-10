@@ -1,0 +1,522 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newcommand{\gl}{\mathfrak{gl}}
+\newcommand{\Ident}{\mathbbm{1}}
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\vac}{\langle 0|}
+\newcommand{\Ev}[1]{\left\langle #1 \right\rangle}
+
+\title{Rotations of the SoV reference covector as determinants of $Q$-integrals\\
+\large $\gl(3)$ XXX chain, $L=2$, adjoint $\otimes$ fundamental}
+\author{Notes accompanying \texttt{su(3)-XXX-CG-adj-fund.wb}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For the $\gl(3)$ XXX chain of length two with site~1 in the adjoint $[2,1,0]$ and site~2 in the
+fundamental $[1,0,0]$ we ask which covectors $\vac g$, $g\in GL(3)$, can be written as a
+determinant of integrals of $Q$-functions. The functional SoV scalar product, paired with the dual
+$Q$-functions of the vacuum at a second twist $w$, realises a two-parameter family of global
+rotations, cut out by the single relation $b=a(c-a)$. Small determinants ($1\times1$ and
+$2\times2$) obtained from the same matrix by inserting a polynomial that cancels poles of the
+measure realise the $E_{32}$ rotations, locally on one site or globally on both. All statements
+below are verified numerically in the accompanying notebook; residuals are quoted throughout.
+\end{abstract}
+
+\section{Set-up and conventions}
+
+Sites carry $\lambda^{(1)}=[2,1,0]$ (dimension $8$) and $\lambda^{(2)}=[1,0,0]$ (dimension $3$), so
+$\dim=24$. We use the Lax matrix $L_{ij}(u)=u\,\delta_{ij}-h\,E_{ji}$ and the monodromy
+$T_{ij}(u)=\sum_k L^{(1)}_{ik}(u-\theta_1)L^{(2)}_{kj}(u-\theta_2)$, the companion twist
+\begin{equation}
+G=\begin{pmatrix}\chi_1&-\chi_2&\chi_3\\1&0&0\\0&1&0\end{pmatrix},
+\qquad \det(z-G)=z^3-\chi_1z^2+\chi_2z-\chi_3 ,
+\end{equation}
+and the twisted transfer matrices $\tau_a(u)=\sum_{|I|=a}\mathrm{qmin}^G_{I,I}(u)$, built from the
+untwisted quantum minors by Cauchy--Binet. The Yangian weights are
+\begin{equation}
+\nu_i(u)=\prod_{s=1,2}\big(u-\theta_s-h\lambda^{(s)}_i\big),
+\end{equation}
+so that $\nu_1=(u-\theta_1-2h)(u-\theta_2-h)$, $\nu_2=(u-\theta_1-h)(u-\theta_2)$ and
+$\nu_3=(u-\theta_1)(u-\theta_2)$. Numerically $\theta=(1/3,-8/57)$, $h=1$, and we write
+$t:=\theta_2-\theta_1=-9/19$. The chain twist is $z=(2,3,1/6)$, with $z'=(3/2,5/4,8/15)$ used as an
+independent control; both are unimodular.
+
+\subsection{SoV basis}
+
+The separating operator is built from the \emph{untwisted} monodromy,
+\begin{equation}
+\mathbf B(u)=T_{11}(u)\,\mathrm{qmin}_{12,12}(u+h)+T_{21}(u)\,\mathrm{qmin}_{12,13}(u+h),
+\end{equation}
+and has the non-degenerate spectrum $\mathbf B=\prod_{\alpha,k,j}(u-x^\alpha_{kj})$ with
+$x^\alpha_{kj}=\theta_\alpha+h(\mu^\alpha_{kj}-j+1)$; per site
+\begin{equation}
+(x_{11},x_{21},x_{22})=\theta+h\,(\lambda_{21},\ \lambda_{11},\ \lambda_{22}-1).
+\end{equation}
+The minimal label $x_0$ has $\vac=e_{24}$, the lowest-weight covector, and this is exact:
+$e_{24}\mathbf B=b_0(u)e_{24}$ holds symbolically. With $Q_i=z_i^{u/h}q_i$ and the wave function
+\begin{equation}
+\Psi_A(x)=\prod_{s=1,2} Q_1(x_{11})\big[Q_1(x_{21})Q_2(x_{22})-Q_2(x_{21})Q_1(x_{22})\big],
+\label{eq:psi}
+\end{equation}
+the covectors normalised on the vacuum alone satisfy
+\begin{equation}
+\bra{x}\Psi_A\rangle=\frac{\Psi_A(x)}{\Psi_A(x_0)}
+\end{equation}
+for all $24$ eigenstates, to the working precision $10^{-73}$. The twist exponential in $Q_i$ is
+necessary: dropping it produces $O(1)$ deviations.
+
+\subsection{Rotations}
+
+Since $\vac E_{ij}\neq0$ exactly for $i\ge j$, the open Bruhat cell is parametrised by
+\begin{equation}
+\bra{V_{abc}}=\vac e^{aE_{21}}e^{bE_{31}}e^{cE_{32}} .
+\end{equation}
+Three components of $\bra{V_{abc}}$ are linear ($a$, $b/2$, $c/2$) and the component along $e_{24}$
+is $1$, so $(a,b,c)$ can be read off any covector and substituted back as a test. An equivalent
+invariant test is that the line stabiliser $\{X\in\gl(3):\bra{V}\rho(X)\in\mathbb C\bra{V}\}$ has
+dimension~$6$ (it is $6$ for $e_{24}$, $1$ for a generic covector of the $24$-dimensional space).
+
+\section{The scalar product and the rotations it produces}
+
+With the ladder measure, whose five simple poles are $\theta_1+\{0,h,2h\}$ and $\theta_2+\{0,h\}$,
+rows $(\alpha,i,j)$ ($\alpha=1,2$, the second carrying $e^{2\pi iu/h}$) and columns
+$u^\beta(-Q^jQ_i,\ Q^jQ_i^{[-2]},\ Q^{j[2]}Q_i)$, the $6\times6$ determinant reproduces the
+physical scalar product,
+\begin{equation}
+C_{\rm vac}\,\frac{\det N^{AB}}{c^{\rm ref}_A\Psi^{\rm ref}_B}
+=\frac{\langle L_A|R_B\rangle}{\langle L_A|e_{24}\rangle\langle e_{24}|R_B\rangle},
+\end{equation}
+to $2\times10^{-78}$ over all $24\times24$ pairs, with $\Psi^{\rm ref}$ and $c^{\rm ref}$ the
+general-representation factors evaluated with each site's own $\lambda_2$. The ket reference was
+not assumed: solving for it returns $e_{24}$.
+
+\paragraph{Pairing with a rotated vacuum.} Replacing the dual $Q$-functions by those of the vacuum
+at a \emph{second} unimodular twist $w$ and leaving state $A$ abstract, the determinant normalised
+by $\Psi_A(x_0)$ expands over the SoV basis, and the resulting covector is a global rotation:
+\begin{equation}
+\boxed{\;a=-w_1w_2,\qquad b=w_1,\qquad c=-w_1(w_2+w_3)\;}
+\end{equation}
+exact on six twists and independent of $\theta$. Eliminating $w$ subject to $w_1w_2w_3=1$ leaves a
+single relation,
+\begin{equation}
+\boxed{\;b=a\,(c-a)\;}
+\label{eq:surface}
+\end{equation}
+so the construction covers a codimension-one surface in the three-dimensional rotation group, with
+inverse map $w=(b,-a/b,-1/a)$, automatically unimodular.
+
+\paragraph{The surface is rigid.} None of the following leaves \eqref{eq:surface}:
+all $225$ admissible $6\times6$ minors (they all give the \emph{same} covector, the left companion
+vacuum $\bra{\Omega^L_w}$, spanning a single line); the dressing by $e^{ku}$, which acts as the
+Cartan rescaling $(a,b,c)\mapsto(ae^{k},be^{2k},ce^{k})$; and the six ``vacua''
+$\tau_1=\sum_i w_{\sigma(i)}\nu_i$, which reproduce the same formula with $w$ permuted. Dual
+$Q$-functions taken from non-vacuum eigenstates do not give rotations at all.
+
+\paragraph{Caveat on ``expands into wave functions''.} A \emph{formal} expansion of the determinant
+in abstract $Q_A$-values does not exist: of its $242$ monomials only $96$ occur in the $24$
+$\Psi_A(x)$, carrying about $3\%$ of the weight. The operative criterion used throughout is
+twist-independence: solve the $c_x$ on shell at $z$ and at $z'$ and demand agreement. Single
+monomials of the correct degree fail this test, so it is discriminating.
+
+\section{Small determinants: the $E_{32}$ rotations}
+
+\subsection{One site}
+
+With the two-pole measure at the first site,
+\begin{equation}
+\frac{\Ev{e^{ku}q_1(u+h)}}{q_1(\theta_1+h)},\qquad
+\Ev{f}=\sum_{p\in\{\theta_1,\theta_1+h\}}\mathop{\rm Res}_{u=p}\frac{f(u)}{(u-\theta_1)(u-\theta_1-h)},
+\end{equation}
+the object expands over exactly two SoV labels and equals
+$\big(e_8\exp[a(k)\rho(E_{32})]\big)\otimes e_3$ with $a(k)=-\tfrac12e^{kh}$: a rotation of site~1
+only, site~2 untouched.
+
+\subsection{Two sites}
+
+Let the brackets act at each site's own $x_{11}$ points,
+\begin{equation}
+\Ev{f}_1=a_1f(\theta_1+h)+b_1f(\theta_1+2h),\qquad
+\Ev{f}_2=a_2f(\theta_2)+b_2f(\theta_2+h),
+\end{equation}
+and consider
+\begin{equation}
+\mathcal D=\det\begin{pmatrix}
+\Ev{e^{ku}q_1}_1&\Ev{e^{ku}u\,q_1}_1\\[2pt]
+\Ev{e^{ku}q_1}_2&\Ev{e^{ku}u\,q_1}_2\end{pmatrix}\Big/\big(q_1(\theta_1+h)q_1(\theta_2)\big).
+\end{equation}
+Then $\mathcal D\propto\vac e^{cE_{32}}\ket{\Psi_A}/\vac\Psi_A\rangle$ if and only if
+\begin{equation}
+\boxed{\;\frac{b_1}{a_1}=c\,e^{-kh}\,\frac{t}{t-2h},\qquad
+\frac{b_2}{a_2}=c\,e^{-kh}\,\frac{t-2h}{t}\;}
+\end{equation}
+verified for $c=1,-3/7,2$ and $k=0,\tfrac12$ with residual $\sim10^{-94}$ (equal weights give a
+covector that is not a rotation at all: stabiliser~$5$). Only the combination $ce^{-kh}$ enters.
+
+\paragraph{These weights are residues.} $\nu_1\nu_2$ vanishes exactly at the four $x_{11}$ points,
+one from each $\nu$ per site, so
+\begin{equation}
+\Ev{f}_s=\oint_{C_s}\frac{du}{2\pi i}\,\frac{e^{ku}f(u)}{\nu_1(u)\nu_2(u)}
+\qquad\Longrightarrow\qquad c=-e^{kh},
+\end{equation}
+with $C_s$ encircling that site's two poles. Real $k$ gives $c<0$; $c=+1$ is reached at the phase
+$k=i\pi/h$.
+
+\subsection{It is a minor of the scalar product}
+
+Two identifications make the two-site object an instance of the scalar-product matrix.
+First, $1/(\nu_1\nu_2)=(u-\theta_1)\times(\text{ladder measure})$: the polynomial factor
+$(u-\theta_1)$, which is the site-1 half of $\nu_3$, cancels the pole at $\theta_1$.
+Second, the rows $\alpha=1,2$ are full contours with ladder weights $(1,1)$ and
+$(e^{2\pi i\theta_1/h},e^{2\pi i\theta_2/h})$, so they span the same plane as the two per-site
+contours. Since the twist-$w$ vacuum has $\deg q^3=0$, the dual factor $Q^3=w_3^{-u/h}$ is itself
+the $e^{ku}$ insertion. Hence the object is the minor on rows $\{(1,1,3),(2,1,3)\}$ and columns
+$\{(r{=}1,\beta{=}0),(r{=}1,\beta{=}1)\}$ of the scalar-product matrix, dressed by $(u-\theta_1)$;
+numerically the two determinants agree up to the state-independent constant
+$e^{2\pi i\theta_2/h}-e^{2\pi i\theta_1/h}$ (checked to $10^{-73}$).
+
+The one-site object of the previous subsection is the same construction with more poles cancelled:
+the factor $(u-\theta_1)(u-\theta_2)(u-\theta_2-h)=\nu_3(u)(u-\theta_2-h)$ removes $\theta_1$ and
+\emph{both} $\theta_2$ poles, leaving no surviving pole at site~2 --- which is exactly why that
+rotation is local.
+
+\section{Products of one-site brackets}
+
+A one-site bracket is the two-term functional $B_s=Q_1(p_{s,1})+r_sQ_1(p_{s,2})$ on that site's two
+$x_{11}$ points, normalised by $Q_1(p_{s,1})$. The ratio $r_s$ is free: a two-pole measure
+$1/\big((u-p_{s,1})(u-p_{s,2})\big)$ dressed by $e^{k_su}$ gives $r_s=-e^{k_sh}$, and complex $k_s$
+reaches every nonzero value. The product $B_1B_2$ therefore has the \emph{rank-one} coefficient
+matrix $c_{ij}=r_1^{i-1}r_2^{j-1}$ on the four $x_{11}$ labels.
+
+Exactly (and for all $\theta$), the per-site rotation covector
+$(e_8e^{c_1E_{32}})\otimes(e_3e^{c_2E_{32}})$ has SoV support on precisely those four labels, and
+there
+\begin{equation}
+c=\begin{pmatrix}1&\frac{47}{28}c_2\\[2pt]c_1-\frac{19}{28}c_2&c_1c_2\end{pmatrix},
+\qquad
+\det c=-\frac{19\,c_2(28c_1-47c_2)}{784}.
+\end{equation}
+Rank one means $\det c=0$, whose two branches are
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+branch & weights & rotation\\
+\midrule
+$c_2=0$ & $r_1=c_1$, $r_2=0$ & $e^{c_1E_{32}}\otimes\Ident$, $c_1$ free (this is \S3.1)\\
+$c_1=\frac{t-2h}{t-h}c_2$ & $r_1=c_2$, $r_2=c_1$ & $e^{c_1E_{32}}\otimes e^{c_2E_{32}}$, ratio fixed\\
+\bottomrule
+\end{tabular}
+\end{center}
+so a product of two one-site brackets never produces independent $c_1,c_2$: what exists is a
+one-parameter family whose ratio is a pole ratio. In terms of dressings the locus is
+$k_2-k_1=h^{-1}\log\frac{t-2h}{t-h}=\log\frac{47}{28}$, and then $(c_1,c_2)=(-e^{k_2h},-e^{k_1h})$.
+Verified at two points of the locus and through the dressings at $k_1=0,\tfrac12$: twist-independent,
+$\sigma_2/\sigma_1\sim10^{-96}$ for the product test, per-site fit residuals $\sim10^{-94}$.
+
+Two negatives. Equal dressings $k_1=k_2$ --- in particular the residue ratios
+$\{r_1,r_2\}=\{-\frac{9}{47},-\frac{47}{9}\}$ of $1/(\nu_1\nu_2)$ --- give an object that is neither a
+product nor a rotation, although the $2\times2$ \emph{determinant} built from the same two brackets
+is the global $e^{cE_{32}}$ of \S3.2. And the one-site bracket on the \emph{fundamental} site
+($r_1=0$) is not a rotation of any kind: its pattern $\begin{pmatrix}1&r_2\\0&0\end{pmatrix}$ would
+need $c_1-\frac{19}{28}c_2=0$ together with $c_1c_2=0$. The two sites are not interchangeable.
+
+\section{Wronskian minors: two no-go results}
+
+A $2\times2$ minor with one $Q_1$ row and one $Q_2$ row, with columns supplying the shifts
+$\sigma=0,-h$, equals $\sum_{p,p'}v_pv'_{p'}W(p+\sigma_1,p'+\sigma_2)$: the diagonal terms cancel by
+antisymmetry of $W$, so such a minor is automatically a sum of Wronskians. With the site-2 poles
+cancelled it reaches the three labels with $x_{11}$ unmoved.
+
+\paragraph{No-go 1: one-site objects (exact).} An object whose integrand only sees site-1
+$Q$-values has $c_x$ supported on the eight labels with site~2 at its base value, since the site-2
+factor of $\Psi_A(x)$ cancels against the normalisation. Which rotations are supported inside a label
+set is decided by the ideal generated by the coefficients outside it; the Gr\"obner bases are
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+rotations supported inside & Gr\"obner basis & conclusion\\
+\midrule
+site-1-local, the eight site-2-base labels & $\langle b,a\rangle$ & only $E_{32}$\\
+site-1-local, the three Wronskian labels & $\langle c,b,a\rangle$ & nothing\\
+global $\vac g$, the eight site-2-base labels & $\langle c^2,b,19a+9c\rangle$ & nothing\\
+global $\vac g$, the three Wronskian labels & $\langle c,b,a\rangle$ & nothing\\
+\bottomrule
+\end{tabular}
+\end{center}
+Hence there is \emph{no} local $E_{21}$ or $E_{31}$ from a one-site object, whatever the measure or
+minor shape, and no global rotation either --- which is why the object of \S3.1 has global stabiliser
+$5$ and not $6$. Note that the general site-1-local rotation needs twelve labels, four of them with
+site~2 moved: a rotation acting as the identity on site~2 still requires site-2-shifted labels,
+because the $\bra{x}$ are not product states.
+
+\paragraph{The $E_{21}$ target.} $\vac e^{aE_{21}}$ is exactly linear in $a$, since
+$\vac E_{21}^2=0$:
+\begin{equation}
+c_{x_0}=1,\quad c_{(0,1,0|0,0,0)}=-\tfrac{20}{9}a,\quad c_{(1,0,0|0,0,0)}=-\tfrac{9}{28}a,\quad
+c_{(0,0,0|1,0,0)}=\tfrac{893}{252}a,
+\end{equation}
+with no doubly-moved label. The four labels share the frozen factor $W_2(\theta_2,\theta_2-h)$;
+dividing it out, the object must be the homogeneous degree-four expression
+\begin{multline}
+Q_1(\theta_1{+}h)W_1(\theta_1,\theta_1{-}h)Q_1(\theta_2)
++a\Big[-\tfrac{9}{28}Q_1(\theta_1{+}2h)W_1(\theta_1,\theta_1{-}h)Q_1(\theta_2)\\
+-\tfrac{20}{9}Q_1(\theta_1{+}h)W_1(\theta_1{+}h,\theta_1{-}h)Q_1(\theta_2)
++\tfrac{893}{252}Q_1(\theta_1{+}h)W_1(\theta_1,\theta_1{-}h)Q_1(\theta_2{+}h)\Big],
+\end{multline}
+i.e. three $Q_1$'s and one $Q_2$: a $4\times4$ minor with three $i=1$ rows and one $i=2$ row, and
+surviving poles at \emph{both} sites. The absence of cross terms excludes a product of independent
+brackets, which would carry $a^2$ and $a^3$; the cancellation must come from the antisymmetry of a
+genuine determinant.
+
+\paragraph{No-go 2: minors of the scalar product (numerical, complete).} All minors of the
+$6\times6$ matrix containing at least one $i=2$ row, of sizes $2$ to $5$, tested against the
+twist-$w$ vacuum with the two-twist criterion:
+\begin{center}
+\begin{tabular}{lrrl}
+\toprule
+shape (\#$i{=}1$, \#$i{=}2$) & minors & not identically zero & best twist mismatch\\
+\midrule
+$(1,1)$ & 540 & 532 & $2.04\times10^{-1}$\\
+$(2,1)$ & 1800 & 880 & $4.02\times10^{-1}$\\
+$(3,1)$ & 1800 & 9 & $7.94\times10^{-1}$\\
+$(2,2)$ & 3375 & 64 & $4.03\times10^{-1}$\\
+$(3,2)$ & 1800 & 0 & ---\\
+\bottomrule
+\end{tabular}
+\end{center}
+The best mismatch over all $9315$ minors is $O(10^{-1})$, so this is not a tolerance artefact: the
+filter accepts anything below $10^{-3}$ and re-tests it at $80$ digits, and nothing survives. Only
+the full $(4,2)$ minor, the whole $6\times6$, is an SoV expansion. This is the degree count:
+$\Psi_A(x)$ has degree six, four $Q_1$'s and two $Q_2$'s, and a sub-determinant expands into wave
+functions only if the missing factors are common to every label. Freezing a coordinate produces such
+a common factor; cutting a Wronskian in half does not.
+
+\section{Free row weights: the surface is rigid}
+
+The freedom left by the previous section is the one used in \S3 to get $E_{32}$: the rows need not
+carry the ladder measure. Write the $6\times6$ with free weights,
+\begin{equation}
+M_{mc}=\sum_pv^{(m)}_p\big[\text{column }c\text{ at pole }p\big],\qquad v^{(m)}\in\mathbb{C}^5,
+\end{equation}
+with base point $v^{(m)}_p=w_pe^{2\pi i(\alpha_m-1)p/h}$, which is the object of \S2 and gives
+$\bra{\Omega^L_w}$ on the surface \eqref{eq:surface}. The first-order response is \emph{exact} rather
+than a finite difference: a determinant is multilinear in its rows, so replacing row $m$'s weights by
+a single-pole row is precisely $\partial D/\partial v^{(m)}_p$. Both properties to be preserved are
+linear in a deformation $\delta\in\mathbb{C}^{30}$:
+\begin{enumerate}
+\item \emph{still an SoV expansion}: writing $c^{(z)}=c_0+\varepsilon A$ and
+$c^{(z')}=c_0/\kappa+\varepsilon B$, proportionality at first order reads $A-\kappa B\in\mathbb{C}c_0$,
+which is 23 conditions;
+\item \emph{still a rotation}: $\delta V\in W:=\operatorname{span}\{\bra{V_0}\rho(X):X\in\gl(3)\}$,
+four-dimensional, which is 20 conditions.
+\end{enumerate}
+Seven deformations are known to be allowed and harmless: rescaling each of the six rows, and the
+$e^{ku}$ dressing $v_p\to v_pe^{kp}$ on every row, which acts by $(a,b,c)\to(ae^k,be^{2k},ce^k)$ and
+multiplies $b-a(c-a)$ by $e^{2kh}$.
+
+At the base point the twist residual and the rotation residual vanish to 69 and 71 digits,
+$(a,b,c)=(-\tfrac{35}{6},\tfrac52,-\tfrac{263}{42})$ exactly, and $b-a(c-a)=0$ to 70 digits; the seven
+known directions satisfy all 44 conditions to $10^{-68}$. The outcome is
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+dimension of the allowed deformation space & $14$\\
+rank of \{allowed space, the 7 known directions\} & $14$ (so 7 directions are new)\\
+$\max\big|\delta[b-a(c-a)]\big|\big/\big|\delta(a,b,c)\big|$ over the 14 & $0$ to 57--65 digits\\
+rank of the induced $(\delta a,\delta b,\delta c)$ & $2$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Free weights are therefore a genuine extra freedom --- fourteen allowed directions, not seven --- but
+the extra freedom moves the rotation \emph{along} the surface: the rank-2 image is exactly the tangent
+of $b=a(c-a)$, so the weights reach the same two-parameter family as varying the dual twist $w$, and
+nothing more. This extends \S2's rigidity statement to the whole thirty-parameter weight family at
+first order, and shows that the surface is not an artefact of the FSoV measure.
+
+\section{Independent rotations on the two sites}
+
+The constraint $c_1/c_2=\frac{t-2h}{t-h}$ of \S4 came from the coefficient matrix of a \emph{product}
+being rank one. A genuine $2\times2$ determinant with free weights and a free insertion is not
+rank-one limited. Let site $s$ carry weights $v^{(s)}$ on its two $x_{11}$ points $p_{s,1},p_{s,2}$ and
+let the second column carry an insertion $g(u)$:
+\begin{equation}
+D=\det\begin{pmatrix}\Ev{Q_1}_1&\Ev{gQ_1}_1\\ \Ev{Q_1}_2&\Ev{gQ_1}_2\end{pmatrix}
+=\sum_{i,j}v^{(1)}_iv^{(2)}_j\big(g(p_{2,j})-g(p_{1,i})\big)Q_1(p_{1,i})Q_1(p_{2,j}),
+\end{equation}
+so with $c_{11}=1$ and the affine normalisation $g(p_{1,1})=0$, $g(p_{2,1})=1$,
+\begin{equation}
+c_{12}=S\delta,\qquad c_{21}=R(1-\gamma),\qquad c_{22}=RS(\delta-\gamma),
+\end{equation}
+where $R=v^{(1)}_2/v^{(1)}_1$, $S=v^{(2)}_2/v^{(2)}_1$, $\gamma=g(p_{1,2})$ and $\delta=g(p_{2,2})$.
+That is four unknowns against the three ratios of the target pattern, so $\gamma$ remains free and each
+target has a one-parameter family of realisations. Since the per-site rotation is supported on exactly
+those four labels, matching the three ratios matches the entire covector.
+
+Every target is hit exactly:
+\begin{center}
+\begin{tabular}{llllll}
+\toprule
+target $(c_1,c_2)$ & $\gamma$ & $\{R,S\}$ & rank & $\sigma_2/\sigma_1$ & achieved\\
+\midrule
+$(1,2)$ & $2$ & $\{\tfrac{5}{14},-\tfrac{157}{140}\}$ & 1 & $7\times10^{-94}$ & $(1,2)$\\
+$(2,\tfrac12)$ & $2$ & --- & 1 & $9\times10^{-95}$ & $(2,0.5)$\\
+$(-\tfrac37,\tfrac52)$ & $-1$ & --- & 1 & $3\times10^{-95}$ & $(-0.4285714,2.5)$\\
+$(\tfrac{47}{28},1)$ & $2$ & $\{-1,\tfrac{47}{28}\}$ & 1 & $8\times10^{-94}$ & $(1.6785714,1)$\\
+$(1,0)$ & $2$ & $\{-1,0\}$ & 1 & $1\times10^{-94}$ & $(1,0)$\\
+$(0,1)$ & $2$ & $\{\tfrac{19}{28},\tfrac{47}{56}\}$ & 1 & $7\times10^{-94}$ & $(0,1)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+All six are twist-independent, are genuine product covectors, and fit a per-site rotation in both
+representations to $10^{-94}$. All six have line-stabiliser dimension $5$: a per-site rotation with
+$c_1\neq c_2$ is not of the form $\vac g$, so it lies neither on nor off the surface
+\eqref{eq:surface}, which constrains global rotations only.
+
+Two corrections to \S4 follow. First, the constraint $c_1/c_2=\frac{t-2h}{t-h}$ belongs to the product
+construction and not to bracket objects in general. Second, $\Ident\otimes e^{c_2E_{32}}$, which no
+product of one-site brackets can produce, \emph{is} a determinant of $Q$-integrals, with
+$R=\tfrac{19}{28}$, $S=\tfrac{47}{56}$ and the cubic insertion
+$g(u)=\tfrac{23675}{11421}+\tfrac{31375}{5076}u-\tfrac{59147}{5922}u^2+\tfrac{37183}{11844}u^3$; the
+asymmetry between the two sites was an artefact of the product as well. As in \S3.2 each site's
+bracket is its own two-pole contour integral, and $g$ sits in the integrand at the same four points as
+$Q_1$.
+
+\section{A product that nearly works}
+
+A natural attempt at a per-site pair is to multiply the two objects already in hand: the $2\times2$
+determinant of \S3.2, which gives the global $e^{cE_{32}}$ with $c=-e^{kh}$, and the one-site bracket
+of \S3.1 at a \emph{different} parameter $k'$, normalising the product by
+$Q_1(\theta_1+h)^2Q_1(\theta_2)$. Since $E_{32}^{(1)}$ and $E_{32}^{(2)}$ commute, the hoped-for answer
+is $g_1g_2=e^{(c+c')E_{32}}\otimes e^{cE_{32}}$.
+
+Write $X_1=Q_1(\theta_1+2h)/Q_1(\theta_1+h)$ and $X_2=Q_1(\theta_2+h)/Q_1(\theta_2)$, so that on the four
+$x_{11}$ labels $\Psi_A(x)/\Psi_A(x_0)=X_1^{i-1}X_2^{j-1}$ and any covector supported there has degree
+at most one in each variable. Fitting the product over the 24 states against the six monomials
+$X_1^aX_2^b$, $a\le2$, $b\le1$, leaves residual $0$ to 72 digits, so the object is exactly
+\begin{equation}
+D(k,k')=G_c(X_1,X_2)\big(1+c'X_1\big),\qquad
+G_c=1+\tfrac{9c}{28}X_1+\tfrac{47c}{28}X_2+c^2X_1X_2,
+\end{equation}
+with $c=-e^{kh}$ and $c'=-e^{k'h}/z_1$ (the $z_1$ because the one-site bracket is written in $q_1$
+rather than $Q_1$). The target, by the exact pattern of \S4, is
+\begin{equation}
+P=1+\Big(\tfrac{9c}{28}+c'\Big)X_1+\tfrac{47c}{28}X_2+c(c+c')X_1X_2,
+\end{equation}
+and the difference is
+\begin{equation}
+D-P=\frac{cc'}{28}\,X_1\big(9X_1+19X_2+28c\,X_1X_2\big).
+\end{equation}
+The constant, $X_1$ and $X_2$ coefficients therefore agree exactly; the $X_1X_2$ coefficient overshoots
+by $\tfrac{19}{28}cc'$, and the monomials $X_1^2$, $X_1^2X_2$ appear with coefficients
+$\tfrac{9}{28}cc'$ and $c^2c'$. Those last two are fatal, and for a structural reason: the product
+carries $Q_1$ at a site-1 $x_{11}$ point twice, once from the determinant and once from the bracket,
+whereas $\Psi_A$ carries exactly one $Q_1(x_{11})$ per site. The normalisation
+$1/(Q_1(\theta_1+h)^2Q_1(\theta_2))$ is the right one for the product, but no normalisation removes a
+surplus power of $Q_1$ at one site. Measured on the 24 states: the two-twist rank is 2, so the object
+is not even an SoV expansion; 14 of the 24 labels are used; the line stabiliser has dimension 1; and
+after fitting the best state-independent constant the deviation from $\vac g_1g_2\ket{\Psi_A}$ is of
+order unity.
+
+The minimal correction is exact, with identically vanishing difference:
+\begin{equation}
+\vac g_1g_2 \;\longleftrightarrow\; G_c+c'X_1\big(1+cX_2\big).
+\end{equation}
+The one-site dressing must multiply only the site-2 leg $1+cX_2$, not the whole global object;
+multiplying the whole object is precisely what generates $X_1^2$. Since $1+cX_2$ is itself a one-site
+bracket on site 2 at the same parameter $c$, the correct object is a \emph{sum} of two products, i.e.
+an antisymmetric combination --- which is what a determinant produces for free, and is exactly the
+object of \S7.
+
+\section{The mechanism}
+
+Every object considered is of the form
+\begin{center}
+(minor of the scalar-product matrix) $\times$ (polynomial insertion $P(u)$),
+\end{center}
+and three statements organise the results.
+
+\paragraph{(i) $P$ selects poles, poles select coordinates.}
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+surviving poles at a site & contribution of that site\\
+\midrule
+none & untouched (identity)\\
+its two $x_{11}$ points & $x_{11}$ moves, i.e. $E_{32}$\\
+points inside the Wronskian block & $x_{21},x_{22}$ move, i.e. $E_{21},E_{31}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{(ii) The degree in $q$ per site.} By \eqref{eq:psi} an object built from $q_1$ alone can
+only move $x_{11}$, whatever the measure; this is why every $q_1$-only object lands on $E_{32}$.
+Moving $x_{21}$ or $x_{22}$ requires $q_2$ rows, i.e. a Wronskian-shaped minor.
+
+\paragraph{(iii) Rotation $=$ a pattern condition.} On the four $x_{11}$ labels,
+\begin{equation}
+\text{global }e^{cE_{32}}:\ \begin{pmatrix}1&\frac{47}{28}c\\[2pt]\frac{9}{28}c&c^2\end{pmatrix},
+\qquad
+e^{c_1E_{32}}\otimes e^{c_2E_{32}}:\
+\begin{pmatrix}1&\frac{47}{28}c_2\\[2pt]c_1-\frac{19}{28}c_2&c_1c_2\end{pmatrix},
+\end{equation}
+and the constants are pole ratios, $\frac{47}{28}=\frac{t-2h}{t-h}$, $\frac{9}{28}=\frac{t}{t-h}$.
+The weight-independent part of the condition is a cross-ratio of the four evaluation points,
+\begin{equation}
+\frac{c_{11}c_{22}}{c_{12}c_{21}}=\frac{t(t-2h)}{(t-h)^2}=\frac{784}{423},
+\end{equation}
+which holds automatically when the insertion and $q_1$ are evaluated at the same points, and fails
+otherwise. Inserting $e^{ku}$ multiplies the residue at $p$ by $e^{kp}$, so ratios between adjacent
+points pick up $e^{kh}$; this is why every parameter obtained is proportional to $e^{kh}$.
+
+\paragraph{Relation to the periodic factors of the thesis.} The polynomial insertion is the
+rational-measure analogue of the periodic functions $\rho_\alpha$ of
+\cite{RyanThesis}, eq.~(12.31), which multiply the measure $\mu_\alpha$ of (12.27) so that the
+bracket $\Ev{fg}_\alpha=\int_C du\,\mu_\alpha(u)f(u)g(u)$ of (12.28) picks up only the poles
+associated with $\theta_\alpha$.
+
+\section{Open}
+
+\begin{enumerate}
+\item \textbf{Per-site $E_{21}$, $E_{31}$.} Section 7 obtained independent per-site $E_{32}$ rotations
+the moment the weights \emph{and} the insertion were left free. That freedom has never been tried on
+an object with $Q_2$ rows, which is what moving $x_{21}$, $x_{22}$ requires, and the no-go results of
+\S5 do not cover it: they exclude objects built from a single site's $Q$-values and all minors of the
+scalar-product matrix, but not a two-site free-weight Wronskian object.
+\item \textbf{Finite weight deformations.} After \S6 the only surviving route to $E_{21}$, $E_{31}$ is
+a \emph{finite} (not infinitesimal) weight deformation of the $4\times4$ shape (three $i=1$ rows, one
+$i=2$ row), matched against the explicit degree-four target of \S5. First-order rigidity does not
+forbid a large-weight solution, but it makes one unlikely: sixteen parameters against forty-six
+conditions, so the structure has to conspire. Because the determinant is multilinear in its rows, the
+linear span of such objects is all of $\mathbb{C}^{24}$ and proves nothing; the content of the
+question is the factorisation (rank-one) condition.
+\item \textbf{Vary the dual state and the weights together.} \S2 rules out non-vacuum dual $Q$'s with
+the FSoV weights, and \S6 rules out infinitesimal weight deformations with a vacuum dual; the two
+knobs have never been turned at once.
+\item \textbf{Change the reference covector}, i.e. a different $B$ and hence a different SoV basis.
+The Weyl conjugates of \S2 stay on the same surface, but they keep the same $B$.
+\item \textbf{Classification.} Which coefficient patterns are attainable from a given set of
+surviving poles and a given minor shape? Section 5 gives the method: the reachable labels follow
+from the degree count, and which rotations sit inside a label set is a Gr\"obner computation. The cross-ratio condition suggests the answer is cut out
+by cross-ratios of the poles, hence by $\theta$.
+\item \textbf{Derivation.} $(a,b,c)(w)$ and the relation $b=a(c-a)$ are verified, not derived; a
+derivation should express them as a statement about the flag of the companion twist. Section 6 makes
+this more pressing: the relation now looks like a property of the construction rather than of the
+choice of measure.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+\bibitem{RyanThesis} P.~Ryan, \emph{Integrable systems, separation of variables and the Yang--Baxter
+equation}, PhD thesis, \texttt{arXiv:2201.12057}; copy in \texttt{Paul/Papers/}.
+\end{thebibliography}
+
+\end{document}

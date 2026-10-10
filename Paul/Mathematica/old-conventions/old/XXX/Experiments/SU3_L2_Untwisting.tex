@@ -1,0 +1,212 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\vac}{{\rm vac}}
+\newcommand{\untw}{{\rm untw}}
+\title{The SoV scalar product for $\mathfrak{gl}(3)$, $L=2$, adjoint sites:\\
+twisted matching and the untwisting limit}
+\author{Notes accompanying \texttt{SU3\_L2\_Baxter\_Twisted\_Final.wb} and \texttt{SU3\_L2\_Untwisting.wb}}
+\date{16 September 2026}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Setup}
+
+Two sites in the adjoint $[2,1,0]$ of $\mathfrak{gl}(3)$, inhomogeneities $\theta_1,\theta_2$, $h=1$,
+diagonal twist $K={\rm diag}(z_1,z_2,z_3)$, \emph{unimodular}: $z_1z_2z_3=1$. Monodromy
+$T(u)=L^{(1)}(u-\theta_1)L^{(2)}(u-\theta_2)$, $L_{ij}(u)=u\,\delta_{ij}-E_{ji}$, and
+$\nu_i(u)=\prod_s(u-\theta_s-\lambda^{\rm site}_i)$ with $\lambda^{\rm site}=(2,1,0)$.
+Transfer-matrix eigenvalues $T_1,T_2$, $T_3=\nu_1^{[-4]}\nu_2^{[-2]}\nu_3$, with $f^{[2n]}(u)=f(u+n)$.
+
+\paragraph{Q-functions.} For a state of weight $\mu$,
+$Q_i=z_i^{u}q_i$ with $q_i$ monic of degree $4-\mu_i$, and $Q^j=z_j^{-u}q^j$ with $q^j$ monic of degree $\mu_j$. They solve
+\begin{align}
+z\,\nu_1\nu_1^{[-2]}\nu_1^{[-4]}q^{[2]}-T_1\nu_1^{[-2]}\nu_1^{[-4]}q+z^{-1}T_2\nu_1^{[-4]}q^{[-2]}-z^{-2}T_3\,q^{[-4]}&=0,\\
+\nu_3^{[2]}\nu_3^{[4]}\nu_3^{[6]}g-y\,T_1^{[2]}\nu_3^{[4]}\nu_3^{[6]}g^{[2]}+y^2T_2^{[4]}\nu_3^{[6]}g^{[4]}-y^3T_3^{[6]}g^{[6]}&=0,\quad y=z_j^{-1}.
+\end{align}
+At zero twist the polynomial solutions are \emph{staggered}: $\deg q_i=(4-\lambda_i)+(i-1)$ and $\deg q^j=\lambda_j+(3-j)$.
+
+\paragraph{Reference states.} One site: $\langle0_1|=\langle{\rm hw}|e^{a_{12}E_{12}}e^{a_{13}E_{13}}e^{a_{23}E_{23}}$ and
+$|0_1\rangle=e^{b_{21}E_{21}}e^{b_{31}E_{31}}e^{b_{32}E_{32}}|{\rm hw}\rangle$. Two sites: tensor products. The $b$'s are fixed by
+\begin{equation}
+b_{21}=-\frac{z_1(z_1-z_3)}{a_{12}z_2(z_2-z_3)},\quad b_{32}=-\frac{z_2^2(z_1-z_3)}{a_{23}(z_1-z_2)z_3^2},
+\end{equation}
+with branch I: $b_{31}=-z_1^2/(a_{13}z_3^2)$, $a_{12}a_{23}/a_{13}=-z_2(z_1-z_3)/(z_1(z_2-z_3))$;
+or branch II: $b_{31}=-z_1/(a_{13}z_3)$, $a_{12}a_{23}/a_{13}=-(z_1-z_3)/(z_2-z_3)$.
+
+\paragraph{Physical scalar product.} With right eigenvectors $R_B$ and left eigenvectors $L_A$ ($L_AR_B=\delta_{AB}$),
+\begin{equation}
+S(A,B)=\frac{\langle L_A|R_B\rangle}{\langle L_A|0\rangle\langle0|R_B\rangle}.
+\end{equation}
+
+\section{Twisted matching (all 64 states)}
+
+\paragraph{Brackets.} $M(u)=1/(\nu_1\nu_2\nu_3)$ has six simple poles $\theta_s+n$, $n=0,1,2$. Each bracket is \emph{one} contour around both ladders:
+\begin{equation}
+\langle f\rangle_\alpha=\sum_{\rm poles}\operatorname{Res}M(u)\,e^{2\pi i(\alpha-1)u}f(u),\qquad\alpha=1,2.
+\end{equation}
+
+\paragraph{Determinant.} Rows $(\alpha,i,j)$ with $\alpha\in\{1,2\}$ and $(i,j)$ in a triple $\{(a,c),(a,d),(b,c)\}$, $a\neq b$, $c\neq d$.
+Columns $c_{1,2,3}=(-Q^jQ_i,\,Q^jQ_i^{[-2]},\,Q^{j[2]}Q_i)$ and $c_{4,5,6}=u\,c_{1,2,3}$.
+
+\paragraph{Normalization.} The triple has direct content $\{a,a,b\}$ and dual content $\{c,c,d\}$:
+\begin{align}
+\Psi^{\rm ref}_B&=\prod_s Q_{B,a}(\theta_s+1)\big[Q_{B,a}(\theta_s)Q_{B,b}(\theta_s-1)-Q_{B,b}(\theta_s)Q_{B,a}(\theta_s-1)\big],\\
+c^{\rm ref}_A&=\prod_s\tfrac14\Big[Q^c_A(\theta_s+1)\big(Q^c_AQ^{d[2]}_A-Q^d_AQ^{c[2]}_A\big)(\theta_s)
+-Q^c_A(\theta_s)\big(Q^c_AQ^{d[4]}_A-Q^d_AQ^{c[4]}_A\big)(\theta_s)\Big].
+\end{align}
+This is the L=1 coefficient multiplied over both inhomogeneities, with no on-shell simplification.
+
+\paragraph{Result} (90 digits, $\theta=(1/3,-8/57)$, $z=(5/2,7/3,6/35)$):
+\begin{equation}
+S(A,B)=C_\vac\,\frac{\det N^{AB}}{c^{\rm ref}_A\Psi^{\rm ref}_B},\qquad S(\vac,\vac)=1,
+\end{equation}
+\begin{itemize}
+\item holds for all $64\times64$ pairs and both branches; the residual is $10^{-78}$;
+\item holds for all 36 triples, with a triple-independent $C_\vac$ (agreement $10^{-75}$).
+\end{itemize}
+Six distinct global $(i,j)$ rows cannot work, because the reference monomial needs direct content $\{1,1,1,1,2,2\}$.
+
+\section{Untwisting: divergence and twist factors}
+
+Take $z_j=e^{\eps\varphi_j}$ with $\sum\varphi_j=0$, three directions $\varphi$, $\eps\to0$ (200 digits).
+Write $\varphi_{ij}=\varphi_i-\varphi_j$ and $V_\lambda(z)=\prod_{i<j}(z_i-z_j)^{\lambda_i-\lambda_j}$.
+Only the six states whose limit is a highest-weight vector are followed: $27,10,\overline{10},8_1,8_2,1$ with $\lambda=(4,2,0),(3,3,0),(4,1,1),(3,2,1)^{2},(2,2,2)$.
+
+\paragraph{Divergence.} $\langle0|R_A\rangle\sim\langle L_A|0\rangle\sim\eps^{k_A}$ with $k_A={\rm ht}(\lambda_\vac-\lambda_A)=0,1,1,2,2,4$.
+The eigenvectors converge to the untwisted highest-weight vectors $r_0$.
+The reference covector stays finite and lies in $27^*$, which is why it annihilates the other multiplets at zero twist.
+
+\paragraph{Row triple.} Use $\{(1,3),(1,2),(2,3)\}$. Here $Q_1,Q^3$ have finite limits, and $Q_2\to q_2$, $Q^2\to q^2$ (staggered, monic)
+after adding multiples of $Q_1$, $Q^3$. Those moves only add rows already present, so they are exact.
+
+\paragraph{Twist factors} (all to $10^{-18}$), with $n=\lambda_1-\lambda_2+1$ and $n'=\lambda_2-\lambda_3+1$:
+\begin{equation}
+\Psi^{\rm ref}\to\frac{(z_1-z_2)^2}{n^2}\Psi^{\rm ref}_\untw,\quad
+c^{\rm ref}\to\frac{(z_2-z_3)^2}{n'^2}c^{\rm ref}_\untw,\quad
+\det N_{\rm reg}\to V_{\lambda_A}(z)\,\hat D^0_A,\quad
+C_\vac\to\frac{\kappa}{V_{\lambda_\vac}(z)},
+\end{equation}
+with $\hat D^0_A$ independent of $\varphi$ and $\kappa=(c\Psi)^\untw_\vac/\hat D^0_\vac$.
+
+\paragraph{Rank of the untwisted $6\times6$.} It is $3,4,4,4,4,6$. The deficiency is in the \emph{columns}: all 36 triples and all 18 rows give the same rank. First-order perturbation therefore does not reach $\hat D^0_A$.
+
+\section{The precise relation (Appendix N mechanism)}
+
+Recombine the columns into the integral-of-motion basis
+\begin{equation}
+H=(c_1+c_3,\;c_5-c_6+5c_3,\;c_2-c_3),\qquad O=(c_4,\;c_6+c_3,\;c_3).
+\end{equation}
+$H$ are the three directions that survive at zero twist; $O$ are the three $O(\varphi)$ ones.
+
+\paragraph{Bare rows are at infinity.} As in Appendix N of arXiv:2603.26617, a bare-measure row ($\alpha=1$) is a contour around all finite poles, i.e.\ minus the residue at infinity.
+Writing $e^{\eps\varphi u}$ times a polynomial and expanding at large $u$ gives the vanishing power of row $(i,j)$ in column $O_1$: it is $4-\deg q_i-\deg q^j$ (untwisted degrees).
+Across $(H_1,H_2,H_3,O_1,O_2,O_3)$ the profile is $(n+2,n+2,n+2,n,n,n+1)$. This is confirmed numerically for all states.
+The periodic rows ($\alpha=2$) stay finite.
+
+\paragraph{Laplace split.} Since $O_1+O_2$ cancels at leading order, only one Laplace term survives:
+\begin{equation}
+\det N_{\rm reg}=-\det[A_1]_O\;\det[A_2]_H\,\big(1+O(\eps)\big),\qquad \det[A_2]_H\to\det[A_2]^\untw_H .
+\end{equation}
+
+\paragraph{Bare block.}
+\begin{equation}
+\det[A_1]_O=V_\lambda(z)\,E_\lambda\,(1+O(\eps)),\qquad
+E_\lambda=-\frac{(\lambda_1-\lambda_2+1)(\lambda_2-\lambda_3+1)}{(\lambda_1-\lambda_3+1)!\,(\lambda_1-\lambda_2)!\,(\lambda_2-\lambda_3)!}.
+\end{equation}
+\begin{itemize}
+\item The factorials are $(5-d_{ij})!$ with $d_{ij}=\deg q_i+\deg q^j$, cf.\ (N3)--(N4).
+\item The numerator $nn'$ is the product of the leading coefficients of the untwisted Casoratians $q_1\wedge q_2$ and $q^3\wedge q^2$.
+\item Values for $27,10,\overline{10},8,8,1$: $-\tfrac3{160},-\tfrac1{36},-\tfrac1{36},-\tfrac23,-\tfrac23,-1$.
+\end{itemize}
+
+\subsection*{Fully explicit form}
+
+\paragraph{Periodic bracket.} With $\theta_1-\theta_2\notin\mathbb Z$ and the six simple poles $p\in\{\theta_s+n\}$,
+\begin{equation}
+\langle f\rangle=\sum_p\frac{e^{2\pi ip}f(p)}{\prod_{p'\neq p}(p-p')}.
+\end{equation}
+
+\paragraph{The $3\times3$ matrix.} For $(i,j)=(1,3),(1,2),(2,3)$ (rows in this order), built from the untwisted monic $q_1,q_2,q^3,q^2$:
+\begin{equation}
+\mathcal N_{(i,j)}=\Big(\big\langle q^{j[2]}q_i-q^jq_i\big\rangle,\;
+\big\langle u\,q^jq_i^{[-2]}-(u-5)\,q^{j[2]}q_i\big\rangle,\;
+\big\langle q^jq_i^{[-2]}-q^{j[2]}q_i\big\rangle\Big).
+\end{equation}
+The residual gauge $q_2\to q_2+aq_1$, $q^2\to q^2+bq^3$ drops out.
+
+\paragraph{Result.}
+\begin{equation}
+\mathcal B_\lambda=E_\lambda\,\frac{\det\mathcal N}{c^{\rm ref}_\untw\,\Psi^{\rm ref}_\untw},\qquad
+\boxed{\;\lim_{\eps\to0}\frac{V_{\lambda_\vac}(z)}{V_{\lambda_A}(z)}\,S(A,A)=\frac{\mathcal B_{\lambda_A}}{\mathcal B_{\lambda_\vac}}\;}
+\end{equation}
+
+\paragraph{Evidence.}
+\begin{itemize}
+\item $\theta=(1/3,-8/57)$, three $\varphi$: split residual $O(\eps)$; $E_\lambda$ matches its numerical value to $10^{-18}$; the box matches the physical limit to $10^{-19}$.
+\item Independent point $\theta=(1/5,46/55)$, $\varphi=(3/2,1/2,-2)$: $E_\lambda$ to $10^{-13}$ for all six states.
+\item The explicit $\mathcal N$ reproduces the notebook's minor exactly.
+\item $E_\lambda$ is identified and independently validated, \emph{not derived}. The derivation needs the next order of the residue-at-infinity expansion.
+\end{itemize}
+
+\section{Comparison with bare untwisted eigenvectors}
+
+\paragraph{Left vectors.} In the Gelfand--Tsetlin basis $E_{ji}=S^{-1}E_{ij}^TS$ with $S={\rm diag}(1,1,1,2,6,9,4,9)$ per site. Hence the left highest-weight covector is $l_0=(S\otimes S)r_0$, and $\langle l_0|r_0\rangle=\|r_0\|^2_S$.
+
+\paragraph{$t$-dependence.} With $t=\theta_1-\theta_2$, the ratios are exact at 16 rational $t$ and even in $t$:
+\begin{equation}
+\frac{\mathcal B_A}{\mathcal B_\vac}=1,\ \ \frac{8}{1-t^2},\ \ \frac{8}{1-t^2},\ \ \frac{73728}{(1-t^2)^2(9-t^2)^2}\quad(27,10,\overline{10},1),
+\end{equation}
+\begin{equation}
+\frac{\mathcal B_{8_\pm}}{\mathcal B_\vac}=\frac{3(4+5t^2)(5t^2-10t+9)(5t^2+10t+9)\pm6(125t^4-350t^2+81)\sqrt{4+5t^2}}{t^2(1-t^2)^2(9-t^2)^2}.
+\end{equation}
+
+\paragraph{Normalization.} Fix $r_0$ by its $|{\rm hw}\rangle\otimes|{\rm extremal}\rangle$ component
+($|1,1\rangle,|1,3\rangle,|1,2\rangle,|1,8\rangle$). Then
+$\mathcal B_A/\mathcal B_\vac=\|r_0\|^2_S/(N_RN_L)$ with
+\begin{equation}
+N_RN_L=1,\quad\frac{(1-t)(1+t)}4,\quad\frac{(1-t)(1+t)}4,\quad\Big[\frac{(1-t)(1+t)(3-t)(3+t)}{32}\Big]^2,
+\end{equation}
+i.e.\ products of $(k\pm t)$, $k$ odd, of degree $2k_A$.
+For the octets the site-2 weight is zero (two-dimensional); with $|2,3\rangle$ the required normalization does not factorize. This is open.
+
+\section{Separate untwisted limits of $|R_A\rangle$ and $\langle L_A|$}
+
+Let $|R_A\rangle=R/\langle0|R\rangle$ with $R\to r_0$, and $\langle L_A|R_A\rangle=1$. Then
+$\langle0|R\rangle\eps^{-k}\to b_R\prod\varphi_{ij}^{a^R_{ij}}$ and
+$\langle L|0\rangle\eps^{-k}\to b_L\prod\varphi_{ij}^{a^L_{ij}}$. Both are \emph{monomials}, with $b_{R,L}$ independent of $\varphi$ to $10^{-20}$.
+Moreover $a^R+a^L$ equals the exponents of $V_{\lambda_\vac-\lambda_A}$. Therefore
+\begin{equation}
+|R_\untw\rangle=\lim_{\eps\to0}\prod_{i<j}(z_i-z_j)^{a^R_{ij}}|R_A\rangle=\frac{r_0}{b_R},\qquad
+\langle L_\untw|=\lim_{\eps\to0}\prod_{i<j}(z_i-z_j)^{a^L_{ij}}\langle L_A|=\frac{(Sr_0)^T}{b_L},
+\end{equation}
+and the boxed object equals $\langle L_\untw|R_\untw\rangle$.
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+state & $a^R$ on $(\varphi_{12},\varphi_{13},\varphi_{23})$ & $a^L$ & $b_R$ & $b_L$\\
+\midrule
+$27$ & $(0,0,0)$ & $(0,0,0)$ & $1$ & $1$\\
+$10$ & $(1,1,-1)$ & $(1,0,0)$ & $21/76$ & $10/57$\\
+$\overline{10}$ & $(0,0,1)$ & $(-1,1,1)$ & $-20/133$ & $-49/152$\\
+$8,8$ & $(1,1,0)$ & $(0,1,1)$ & numerical & numerical\\
+$1$ & $(2,2,0)$ & $(0,2,2)$ & numerical & numerical\\
+\bottomrule
+\end{tabular}
+\end{center}
+These numbers are at $\theta=(1/3,-8/57)$, branch I, $a_{13}=3/5$, $a_{23}=4/7$. The left/right split, and $b_R$, $b_L$ individually, very likely depend on these choices; only the product is fixed.
+
+\section{Open}
+\begin{enumerate}
+\item Derive $E_\lambda$ from the residue at infinity (next order, two-exponential regularized $Q_2$, $Q^2$).
+\item Find a natural octet normalization. Test whether $N_RN_L$ is an eigenvalue (or matrix element) of the adjoint$\otimes$adjoint $\check R(\theta_1-\theta_2)$.
+\item Find closed forms for $b_R$, $b_L$, and their dependence on $a_{13}$, $a_{23}$ and the branch.
+\item Relate the periodic minor $\det[A_2]^\untw_H$ to the earlier bare-row $3\times3$ norm $\hat N$.
+\item Do a cold top-to-bottom run of \texttt{SU3\_L2\_Untwisting.wb}, then promote it to \texttt{Clean/}.
+\end{enumerate}
+
+\end{document}

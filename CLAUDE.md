@@ -23,40 +23,34 @@ between them.
   for XXX derivations/formulas; check here before trusting a notebook ansatz.
 - `paper/gaudinCG.tex` — JHEP-format paper for the Gaudin subproject. Currently a stub
   (title/author only) — no Gaudin-specific derivations written up yet.
-- `logbook.tex` — single, shared dated research logbook (`DD-MM-YYYY` section headings) covering
-  both subprojects, research content only (no tooling/admin notes). Maintained via the
-  `logbook-agent` subagent, not edited by hand.
-- `Paul/Mathematica/XXX/` — XXX subproject notebooks.
-  - `Experiments/XXX_su2.wb` — single-site gl(N)/su(2) generator and GT-basis machinery (`ps`,
-    `dim`, `J0`, `Jp`, `Jm`, `JJ`, `Ee`, Lax matrix `L`); building blocks reused at multiple sites.
-  - `Experiments/su2_XXX_L2.wb` — two-site (L=2) XXX su(2) chain: independent gl(2) reps and
-    inhomogeneities per site, shared companion twist. Ports the single-site machinery from
-    `XXX_su2.wb` verbatim.
-  - `Experiments/Baxter_Solver_L2.wb` — standalone, self-contained numerical solver + validation
-    suite for the L=2 su(2) XXX Baxter (TQ) equation. The physics/derivation lives in
-    `su2_XXX_L2.wb`; this file is just the reusable solver.
-  - `Experiments/su3_V1.wb` — gl(3) analog of the su(2) Clean notebook's Section B: two-site
-    eigensystem + three-Q Baxter solver for symmetric reps `{S,0,0}` per site.
-  - `Experiments/su3_V2_general.wb` — generalizes `su3_V1.wb` from symmetric reps to arbitrary
-    gl(3) Young-diagram reps `λ={λ1,λ2,λ3}`, one independent diagram per site. Full-sweep verified
-    (102 states, worstTQ=worstCasoratian=0); next natural step is promotion to `Clean/`.
-  - `Experiments/su3_V2_general_Paul.wb` — Paul's personal exploratory fork of
-    `su3_V2_general.wb`; diverges from the shared notebook, not a drop-in replacement.
-  - `Clean/` — empty so far (nothing promoted yet); validated XXX definitions go here once
-    checked, same convention as `Gaudin/Clean/` below.
-- `Paul/Mathematica/Gaudin/` — Gaudin subproject notebooks.
-  - `Clean/FastQ.wb` — closed-form residue formulas (`res1`/`res0` via Laguerre polynomials) for
-    `f(u) = Exp[w u] u^n / ((u-1)^S1 u^S2)`, plus `doRes0`/`doRes1` generalizing to arbitrary
-    polynomials.
-  - `Clean/Hamiltonians_SU4.wb` — gl(4)/su(4) irrep construction via Gelfand-Tsetlin patterns:
-    `ps[rep]` (GT basis), `dim[rep]`, and generator matrix elements `J0`/`Jp`/`Jm`/`JJ`.
-  - `Experiments/ResidueBuilder.wb` — exploratory companion to `Clean/FastQ.wb`: validation
-    checks, benchmark comparisons of evaluation strategies, scaling/precision experiments that
-    motivated what was promoted to `Clean/`.
+- `Paul/Mathematica/new-conventions/` — **active** notebooks going forward (2026-10-01 convention
+  change). New conventions: Lax ℒ_ij(u) = u δ_ij + h E_ij (was u − h Σ E_ji⊗e_ij), companion
+  twist acting on the right (TG = ℒ·G), B/C built from the untwisted T. Reference:
+  `Companion-B-C-diagonalize-clean.wb` (gl(3), L=1, adjoint; final formulas + 37 passing checks,
+  self-contained, clears the kernel) with its write-up `Companion-B-C-diagonalize-clean.md`/`.tex`/`.pdf`.
+  `Companion-B-C-diagonalize.wb` is the working notebook (explorations); `Baxter-QQ-Wronskian.wb`
+  runs the Baxter/QQ/Wronskian/orthogonality checks for any rep. L=2 (adj⊗adj, diagonal frame):
+  `L2-diagonal-frame-overlap.wb` + `.md`. **Generator convention from end of 2026-10-01: Hermitian
+  EH_ij = R E_ij R⁻¹ (EH_ijᵀ = EH_ji)**; `*-EH.wb` notebooks use it; exact zero tests there need
+  `PossibleZeroQ` (surds). `Hermitian-structure-abstract.wb` + `.md`: abstract † computation. `paper/xxxCG.tex` still uses the OLD
+  conventions until it is updated — don't mix formulas from the two without converting.
+- `Paul/Mathematica/old-conventions/` — everything from before the 2026-10-01 convention change,
+  structure preserved (paths below are relative to it). Reference only; port deliberately.
+- `old-conventions/XXX-CG/` — the XXX notebooks from 2026-09-23 to 2026-09-30 (Building-SoV-bases,
+  L1/L2 mathcalA, etc.; HANDOFF.md paths into `Paul/Mathematica/XXX-CG/` now live here).
+- `old-conventions/old/` — archive of the pre-2026-09-23 Mathematica tree, kept for reference only
+  (not actively maintained, not where new work goes).
+  - `old/XXX/` — everything that used to be `Paul/Mathematica/XXX/`, structure preserved as-is:
+    `Clean/`, `Experiments/` (the ~90-notebook pile), `rotations/` (self-contained thread on which
+    covectors `⟨0|g` are determinants of Q-integrals — gl(3), L=2, adjoint ⊗ fundamental; start at
+    its `README.md`).
+  - `old/Gaudin/` — everything that used to be `Paul/Mathematica/Gaudin/`, structure preserved:
+    `Clean/` (`FastQ.wb` residue formulas, `Hamiltonians_SU4.wb` gl(4)/su(4) GT-basis/generators),
+    `Experiments/` (`ResidueBuilder.wb` and others).
 - `Paul/Python/` — Python cross-check port, orthogonal to the XXX/Gaudin split (not a third
   subproject). Reimplements select Mathematica notebook results independently in Python
   (`sympy`/`uv`-managed) as a correctness cross-check, starting with the gl(3) single-site
-  generators ported from `XXX/Experiments/su3_V2_general.wb` (`gl3_reps.py`, tested via
+  generators ported from `old/XXX/Experiments/su3_V2_general.wb` (`gl3_reps.py`, tested via
   `test_gl3_reps.py`). Design/plan docs under `docs/superpowers/specs/` and
   `docs/superpowers/plans/` (`*-gl3-python-port-*`).
 
@@ -65,15 +59,16 @@ debug logs) — tooling artifacts, not research content.
 
 ## Conventions
 
-- **Clean vs Experiments** (within each subproject): only promote a notebook/definition to
-  `Clean/` once it's validated. When extending a `Clean/` definition, check `Experiments/` first
-  for the exploratory work behind it rather than re-deriving from scratch.
+- **Clean vs Experiments** (within `old/XXX/` and `old/Gaudin/`): only promote a notebook/
+  definition to `Clean/` once it's validated. When extending a `Clean/` definition, check
+  `Experiments/` first for the exploratory work behind it rather than re-deriving from scratch.
+  Decide fresh whether `XXX-CG/` needs the same split once it has enough notebooks to warrant one.
 - Notebook cells use `(* ... *)` comments explaining *why*, not restating the code.
 - `paper/xxxCG.tex` / `paper/gaudinCG.tex` are the authoritative source for formulas in their
   respective subprojects; notebooks implement/check them, not the other way around.
-- `Hamiltonians_SU4.wb` (su(4) GT-basis/generators) currently lives under `Gaudin/Clean/` even
-  though the representation theory itself isn't Gaudin-specific — that's where it was placed
-  during the split, not a statement that it's unusable from XXX work. If XXX work ends up needing
+- `Hamiltonians_SU4.wb` (su(4) GT-basis/generators) lives under `old/Gaudin/Clean/` even though the
+  representation theory itself isn't Gaudin-specific — that's where it was placed during the
+  original split, not a statement that it's unusable from XXX work. If XXX-CG work ends up needing
   it, ask before duplicating or relocating it.
 
 ## Subagents (`.claude/agents/`)
@@ -81,12 +76,10 @@ debug logs) — tooling artifacts, not research content.
 - **wolfbook-builder** — do live Wolfram computation directly in the `.wb` notebooks via wolfbook
   MCP tools, instead of writing a standalone `.wl` script. Covers everything from routine
   extensions to ports/generalizations and long derivation chains where a subtle error would be
-  costly (e.g. L=1 to L=2). Stays out of `paper/*.tex` and git commits/pushes. When a task is
-  scoped to one subproject, work only under `Paul/Mathematica/XXX/` or `Paul/Mathematica/Gaudin/`
-  as appropriate — don't assume the other subproject's notebooks are relevant.
-- **logbook-agent** — invoke with "update the logbook". Reads today's transcripts + git diff,
-  writes a research-only entry into `logbook.tex`, compiles, commits, and pushes. The logbook
-  stays unified across both subprojects (not split).
+  costly (e.g. L=1 to L=2). Stays out of `paper/*.tex` and git commits/pushes. New work goes in
+  `Paul/Mathematica/new-conventions/`, not `old-conventions/`; the Gaudin subproject's notebooks
+  live under `Paul/Mathematica/old-conventions/old/Gaudin/` since it's parked. Don't assume the other subproject's notebooks
+  are relevant to a task scoped to one.
 - **wolfbook-docs-agent** — invoke with "document the Clean notebooks" or similar. Read-only over
   `Clean/*.wb` (never `Experiments/`): generates/refreshes a companion `<NotebookName>.md` AND
   `<NotebookName>.tex` reference (symbol-by-symbol purpose/signature/dependencies/verification

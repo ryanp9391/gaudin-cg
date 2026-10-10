@@ -1,0 +1,336 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,hyperref}
+\usepackage{geometry}
+\usepackage{url}
+\Urlmuskip=0mu plus 1mu
+\geometry{margin=1in}
+
+% Derivation notes for Clean/SU4_SoV_ScalarProduct_L2.wb.
+% Companion files: SU4_SoV_ScalarProduct_L2.md (symbol reference),
+% ../Experiments/SU4_twisted_Baxter_L2.wb Sections 11-12 (exploratory origin).
+
+\newcommand{\Ddet}{\mathcal{D}}
+\newcommand{\Op}{\mathcal{O}}
+\newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Mm}{\mathcal{M}}
+\newcommand{\qh}{\hat q}
+\newcommand{\shift}[1]{^{[#1]}}
+
+\title{The separated-variables scalar product for the twisted $\mathfrak{gl}(4)$ spin chain
+with rectangular representations}
+\author{Notes accompanying \texttt{Clean/SU4\_SoV\_ScalarProduct\_L2.wb}}
+\date{10 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We construct the functional separation-of-variables (FSoV) scalar product for the twisted
+$\mathfrak{gl}(4)$ spin chain of length $L=2$ with rectangular site representations
+$[S,S,0,0]\otimes[P,P,0,0]$, and show that it makes distinct transfer-matrix eigenstates
+orthogonal. The construction differs from the fundamental-representation case in three places: the
+measure is a ratio of rotated Gamma functions whose pole ladder grows with $S$; the contour must
+enclose poles that the measure alone does not carry; and the degree-four transfer matrix $T_{2,1}$
+must be split before all terms can be brought to a common measure. Everything below has been
+verified symbolically, non-perturbatively in the twist, at $(S,P)=(1,1)$ and $(2,2)$, including
+pairs of distinct states of equal weight.
+\end{abstract}
+
+\section{Setup and conventions}
+
+The chain has two sites with inhomogeneities $\theta_1,\theta_2$, shift $h$, and a diagonal twist
+with distinct eigenvalues $z_1,\dots,z_4$ subject to
+\begin{equation}
+z_1 z_2 z_3 z_4 = 1 .
+\label{eq:unimodular}
+\end{equation}
+Shifts are written $f\shift{\pm 2n}(u) = f(u \pm n h)$. The Yangian weights on the highest-weight
+vector are $\nu_i(u) = \prod_\alpha (u - \theta_\alpha - h\lambda^\alpha_i)$ with
+$\lambda^1 = \{S,S,0,0\}$, $\lambda^2 = \{P,P,0,0\}$, so for rectangular representations only two
+of them are distinct,
+\begin{equation}
+\nu_1 = \nu_2 = (u-\theta_1-Sh)(u-\theta_2-Ph) , \qquad
+\nu_3 = \nu_4 = (u-\theta_1)(u-\theta_2) .
+\label{eq:nus}
+\end{equation}
+This degeneracy is what produces the trivial factors exploited in Section~\ref{sec:align}.
+
+A state is labelled by a $\mathfrak{gl}(4)$ weight $\mu$ with $\sum_k \mu_k = 2(S+P)$; its Baxter
+polynomials have degrees
+\begin{equation}
+M_k = (S+P) - \mu_k .
+\end{equation}
+The transfer matrices $T_{a,1} = \tau_a$ are polynomials of degree $2a$ whose leading coefficient is
+the twist character $\chi_a$ and whose subleading coefficient is fixed,
+\begin{equation}
+[u^{2a-1}]\,\tau_a = -a\big(\theta_1+\theta_2+(a-1)h\big)\chi_a - h\, D_\mu \chi_a ,
+\qquad D_\mu \chi_a = \sum_i \mu_i z_i \partial_{z_i}\chi_a ,
+\end{equation}
+leaving exactly five free coefficients across $\tau_1,\tau_2,\tau_3$; $\tau_4$ is the quantum
+determinant and is central.
+
+\section{The Baxter operator and its dual}
+
+Dividing the Baxter equation by $\prod_{m=0}^{3}\nu_1(u-mh)$ and setting $G(u)=Q(u+h)$ gives a
+fourth-order difference operator,
+\begin{equation}
+\Op = 1 - \frac{T_{1,1}}{\nu_1}\Ddet^{-1}
+        + \frac{T_{2,1}}{\nu_1\nu_1\shift{-2}}\Ddet^{-2}
+        - \frac{T_{3,1}}{\nu_1\nu_1\shift{-2}\nu_1\shift{-4}}\Ddet^{-3}
+        + \frac{T_{4,1}}{\nu_1\nu_1\shift{-2}\nu_1\shift{-4}\nu_1\shift{-6}}\Ddet^{-4} ,
+\label{eq:O}
+\end{equation}
+and its dual, obtained by reversing the shifts and replacing $\nu_1 \to \nu_4$,
+\begin{equation}
+\Op^\dagger = 1 - \frac{T_{1,1}\shift{2}}{\nu_4\shift{2}}\Ddet^{1}
+        + \frac{T_{2,1}\shift{4}}{\nu_4\shift{2}\nu_4\shift{4}}\Ddet^{2}
+        - \frac{T_{3,1}\shift{6}}{\nu_4\shift{2}\nu_4\shift{4}\nu_4\shift{6}}\Ddet^{3}
+        + \frac{T_{4,1}\shift{8}}{\nu_4\shift{2}\nu_4\shift{4}\nu_4\shift{6}\nu_4\shift{8}}\Ddet^{4} .
+\label{eq:Odag}
+\end{equation}
+Crucially, \eqref{eq:O} is \emph{the same operator for all four branches}: the twist sits inside the
+Q-function, $\qh_i(u) = z_i^{u/h}q_i(u)$, not in the operator.
+
+The two families of solutions are
+\begin{equation}
+\Op\,\qh_i\shift{2} = 0 , \qquad \Op^\dagger \qh^{\,j} = 0 , \qquad i,j = 1,\dots,4 .
+\label{eq:twofamilies}
+\end{equation}
+The first family is the ordinary Baxter family, $\deg q_i = M_i$. The second is built from the
+Hodge duals: with $\bar\jmath = \{1,2,3,4\}\setminus\{j\}$, $\zeta_{\bar\jmath} = \prod_{m\neq j}z_m$,
+$W_{\bar\jmath}$ the $3\times 3$ Casoratian of the $\qh_i$, $i \in \bar\jmath$, and
+$V_{\bar\jmath}$ its Vandermonde leading coefficient,
+\begin{equation}
+\qh^{\,j}(u) = (-1)^j\,\zeta_{\bar\jmath}^{\,(u-h)/h}\;
+\frac{W_{\bar\jmath}}{V_{\bar\jmath}\,A}(u-h) , \qquad \deg \qh^{\,j} = \mu_j ,
+\label{eq:dual}
+\end{equation}
+where $A$ is the vacuum factor
+\begin{equation}
+A(u) = \prod_{k=1}^{S}(u-\theta_1-kh)\;\prod_{k=1}^{P}(u-\theta_2-kh) ,
+\label{eq:A}
+\end{equation}
+of degree $S+P$ --- $S$ factors carrying $\theta_1$ and $P$ carrying $\theta_2$. This $A$ is the
+rectangular-representation replacement for the $Q_\theta = \prod_\alpha(u-\theta_\alpha)$ of the
+fundamental case, which it reproduces at $S=P=1$. It is fixed by the QQ-relation, in the
+asymmetric shift convention,
+\begin{equation}
+F(u)\,Q^4(u-h) = \det\big[Q_1(u),\,Q_2(u-h),\,Q_3(u-2h)\big] ,
+\qquad F_j(u) = (-1)^j \frac{V_{\bar\jmath}}{\zeta_{\bar\jmath}}\,A(u) ,
+\label{eq:QQ}
+\end{equation}
+so demanding that $F$ be state-independent with the dual polynomial monic determines it uniquely.
+
+\paragraph{A shift that is easy to get wrong.} The object appearing in \eqref{eq:QQ} is the dual
+evaluated at $u-h$. The function that satisfies the dual equation \eqref{eq:twofamilies} is
+therefore the \emph{uncentred} one, as written in \eqref{eq:dual}. Using the centred version
+instead satisfies $\Op^\dagger q = 0$ only for $j=4$, and there only because its polynomial part
+happens to be constant.
+
+\section{The measure}
+
+The SoV measure is the ratio of rotated Gamma functions, $\Gamma[F(u+h)]/\Gamma[F(u)] = F(u)$,
+evaluated on the Yangian weights. Per site the ratio telescopes:
+\begin{equation}
+\mu(u) = \frac{\Gamma[\nu_1\shift{2}(u)]}{\Gamma[\nu_4\shift{2}(u)]}
+= \prod_{\alpha=1}^{2}\ \prod_{n=0}^{S_\alpha-1}\frac{1}{u-\theta_\alpha-nh} ,
+\qquad S_1 = S,\ S_2 = P .
+\label{eq:measure}
+\end{equation}
+Its poles form two one-sided ladders, $S_\alpha$ rungs per site, starting at $\theta_\alpha$ and
+spaced by $h$. At $S=P=1$ there is a single pole per site. For $[2,2,0,0]^{\otimes 2}$,
+\begin{equation}
+\mu(u) = \frac{1}{(u-\theta_1)(u-\theta_1-h)(u-\theta_2)(u-\theta_2-h)} .
+\end{equation}
+
+\section{The orthogonality identity}
+
+Let $A$ and $B$ be two states. Since $\Op^A$ annihilates $\qh^{\,j}_A$ from the left and $\Op^B$
+annihilates $\qh_i^{B[2]}$ from the right,
+\begin{equation}
+0 = \oint_{\Cc} du\ \mu(u)\ \qh^{\,j}_A(u)\ \big(\Op^A - \Op^B\big)\ \qh_i^{B[2]}(u) .
+\label{eq:identity}
+\end{equation}
+In the difference the identity term cancels, and so does the $T_4$ term because the quantum
+determinant is central. Because $\qh_i^{B[2]}(u) = \qh^B_i(u+h)$ brings every shift down one step,
+only three terms survive:
+\begin{align}
+I_1 &= -\oint_{\Cc} du\ \mu(u)\,\frac{\Delta T_1(u)}{\nu_1(u)}\ \qh^{\,j}_A(u)\,\qh^B_i(u) ,
+\label{eq:I1}\\
+I_2 &= +\oint_{\Cc} du\ \mu(u)\,\frac{\Delta T_2(u)}{\nu_1(u)\nu_1\shift{-2}(u)}\ \qh^{\,j}_A(u)\,\qh^B_i(u-h) ,
+\label{eq:I2}\\
+I_3 &= -\oint_{\Cc} du\ \mu(u)\,\frac{\Delta T_3(u)}{\nu_1(u)\nu_1\shift{-2}(u)\nu_1\shift{-4}(u)}\ \qh^{\,j}_A(u)\,\qh^B_i(u-2h) ,
+\label{eq:I3}
+\end{align}
+with $\Delta T_a = T^A_{a,1} - T^B_{a,1}$ and $\Delta T_4 = 0$.
+
+\paragraph{The contour.} $\Cc$ must enclose \emph{every} pole of the integrand, not merely the
+$S+P$ poles of $\mu$. The coefficients of $\Op$ contribute the extra factors $\nu_1(u-mh)$ in the
+denominators, and each of them extends the ladder of \eqref{eq:measure} by one rung per site.
+Enclosing only the poles of $\mu$ leaves a nonzero remainder --- this was the single most
+misleading point in the construction.
+
+\section{Bringing all terms to one measure}
+\label{sec:align}
+
+Because $\nu_1=\nu_2$ and $\nu_3=\nu_4$, the transfer matrix $T_{3,1}$ carries a state-independent
+prefactor, while $T_{1,1}$ carries none:
+\begin{equation}
+T_{1,1} = t_1 , \qquad T_{3,1} = \nu_4\,\nu_1\shift{-4}\,t_3 .
+\label{eq:trivialfactors}
+\end{equation}
+Substituting \eqref{eq:trivialfactors} into \eqref{eq:I3}, the factor $\nu_1\shift{-4}$ cancels the
+third denominator, and the effective measures of the three terms become contiguous pole ladders:
+\begin{equation}
+E_1 = \frac{\mu}{\nu_1} = \prod_\alpha \prod_{n=0}^{S_\alpha}\frac{1}{u-\theta_\alpha-nh} ,
+\quad
+E_2 = \frac{\mu}{\nu_1\nu_1\shift{-2}} = \prod_\alpha \prod_{n=0}^{S_\alpha+1}(\cdot) ,
+\quad
+E_3 = \frac{\mu\,\nu_4}{\nu_1\nu_1\shift{-2}} = \prod_\alpha \prod_{n=1}^{S_\alpha+1}(\cdot) .
+\label{eq:ladders}
+\end{equation}
+$E_1$ and $E_3$ have the same number of rungs, $S_\alpha+1$ per site, displaced by exactly one, so
+\begin{equation}
+\boxed{\,E_3(u+h) = E_1(u)\,}
+\label{eq:E3E1}
+\end{equation}
+identically. Shifting the integration variable $u\to u+h$ in $I_3$ therefore lands it on $E_1$:
+\begin{equation}
+I_3 = -\oint_{\Cc} du\ E_1(u)\ \Delta t_3\shift{2}(u)\ \qh^{\,j[2]}_A(u)\,\qh^{B[-2]}_i(u) .
+\end{equation}
+The shift is legitimate because $\Cc$ encloses every pole before and after: the ladder
+$n=1,\dots,S_\alpha+1$ simply becomes $n=0,\dots,S_\alpha$.
+
+\subsection{Splitting $T_{2,1}$}
+
+$T_{2,1}$ has no trivial factor, and $E_2$ has one rung \emph{more} per site than $E_1$, so no
+shift of $u$ can align $I_2$. Instead split the degree-four polynomial as
+\begin{equation}
+T_{2,1}(u) = \nu_1(u+p_1)\,t_{21}(u) + \nu_4(u+p_2)\,t_{22}(u) , \qquad
+\deg t_{21} = \deg t_{22} = 2 .
+\label{eq:split}
+\end{equation}
+Matching five coefficients with six unknowns leaves the one-parameter family
+$t_{21}\to t_{21}+c\,\nu_4$, $t_{22}\to t_{22}-c\,\nu_1$, which preserves both degrees.
+
+\paragraph{Choice of $p_1,p_2$.} With $p_1 = kh$, the factor $\nu_1(u+p_1)$ cancels the rung
+$n = S-k$ on site 1 and $n = P-k$ on site 2 simultaneously. For the surviving ladder to remain
+contiguous --- that is, to be $E_1$ up to a shift --- the cancelled rung must sit at an \emph{end}
+of the ladder, $n=0$ or $n=S_\alpha+1$, on both sites at once. Generically ($S\neq P$) this forces
+$k=-1$. Similarly $\nu_4(u+p_2)$ cancels the rung $n=-p_2/h$ on both sites, forcing $p_2=0$. Hence
+\begin{equation}
+p_1 = -h , \qquad p_2 = 0 , \qquad
+T_{2,1} = \nu_1\shift{-2}\,t_{21} + \nu_4\,t_{22} .
+\label{eq:p1p2}
+\end{equation}
+(For $S=P$ the alternatives $k=S$, $p_2=-(S+1)h$ also keep the ladder contiguous.)
+
+\paragraph{Gauge.} Since $\nu_1$ and $\nu_4$ are monic, $[u^4]T_{2,1}$ is the \emph{sum} of the two
+$u^2$ coefficients, whereas the ambiguity shifts them oppositely. Demanding that they be equal
+therefore fixes $c$ uniquely:
+\begin{equation}
+[u^2]\,t_{21} = [u^2]\,t_{22} = \tfrac12 [u^4]\,T_{2,1} = \tfrac12 \chi_2 .
+\label{eq:gauge}
+\end{equation}
+Because $\chi_2$ is state-independent, both $u^2$ terms cancel in the difference. Together with
+\eqref{eq:trivialfactors} this makes \emph{every} coefficient function linear,
+\begin{equation}
+\Delta t = \Delta I_2\, u + \Delta I_1 ,
+\label{eq:linear}
+\end{equation}
+the $\Delta I$ being differences of integrals of motion.
+
+With \eqref{eq:p1p2}, $I_{21}$ carries $E_1$ with no shift at all and $I_{22}$ carries $E_3$, hence
+lands on $E_1$ after the same $u\to u+h$ that aligned $I_3$. All four terms then share one measure:
+\begin{multline}
+0 = \oint_{\Cc} du\ E_1(u)\Big[
+ -\Delta t_1(u)\,\qh^{\,j}_A(u)\,\qh^B_i(u)
+ +\Delta t_{21}(u)\,\qh^{\,j}_A(u)\,\qh^{B[-2]}_i(u) \\
+ +\Delta t_{22}\shift{2}(u)\,\qh^{\,j[2]}_A(u)\,\qh^B_i(u)
+ -\Delta t_3\shift{2}(u)\,\qh^{\,j[2]}_A(u)\,\qh^{B[-2]}_i(u)\Big] .
+\label{eq:aligned}
+\end{multline}
+The four terms realise precisely the four shift combinations of the left dual against the right
+Q-function,
+\begin{equation}
+(0,0),\quad (0,-h),\quad (+h,0),\quad (+h,-h) ,
+\end{equation}
+which is the $a,b=\pm 1$ pattern familiar from the FSoV determinant.
+
+\section{The scalar product}
+
+By \eqref{eq:linear} the relation \eqref{eq:aligned} is linear in eight differences of integrals of
+motion: two coefficients for each of the four terms. The corresponding eight columns are the four
+shift patterns against the insertions $u^\beta$, $\beta=0,1$. For eight rows, take the four pairs
+$i\in\{1,2\}$, $j\in\{3,4\}$ against $\alpha=1,2$, where $\alpha=2$ inserts the $h$-periodic
+function $e^{2\pi i u/h}$ into the measure. Thus
+\begin{equation}
+\boxed{\;
+\Mm^{AB}_{(\alpha,i,j),(r,\beta)} = \oint_{\Cc} du\ E_1(u)\ e^{2\pi i u(\alpha-1)/h}\ u^\beta\
+\big[\qh^{\,j}_A\,\qh^B_i\big]_r(u) \;}
+\label{eq:M}
+\end{equation}
+with $r \in \{1,21,22,3\}$ labelling the shift patterns above. The periodic factor is admissible
+precisely because $e^{2\pi i(u+h)/h} = e^{2\pi i u/h}$: it is inert under every shift used in the
+alignment, so it provides a second independent functional on the same pole ladder --- the analogue
+of the $e^{2\pi u(\alpha-1)}$ device used at coincident inhomogeneities in the fundamental case.
+
+The vector of the eight $\Delta I$ annihilates $\Mm^{AB}$, and is nonzero exactly when the states
+differ. Hence
+\begin{equation}
+\det \Mm^{AB} = 0 \quad (A\neq B) , \qquad \det \Mm^{AA} \neq 0 .
+\label{eq:orthogonality}
+\end{equation}
+
+\section{Verification}
+
+All checks are exact: symbolic $\mathrm{Simplify}$ on algebraic numbers, with exact
+non-perturbative twisted solutions of the Baxter equation at a rational unimodular twist. No
+expansion in the twist is used anywhere. Note that a numerical test cannot certify
+\eqref{eq:orthogonality}: the determinants are identically zero, so a floating-point evaluation
+merely exhausts the working precision.
+
+\begin{center}
+\begin{tabular}{lll}
+\hline
+$(S,P)$ & pair & result \\
+\hline
+$(1,1)$ & $\{2,2,0,0\}$ vs $\{2,1,1,0\}$, both orderings & $\det = 0$ \\
+$(1,1)$ & $\{2,1,1,0\}$ \#1 vs \#2, both orderings (equal weight) & $\det = 0$ \\
+$(1,1)$ & each state against itself & $\det \neq 0$ \\
+$(2,2)$ & $\{4,4,0,0\}$ vs $\{4,3,1,0\}$, both orderings & $\det = 0$ \\
+$(2,2)$ & $\{4,3,1,0\}$ \#1 vs \#2, both orderings (equal weight) & $\det = 0$ \\
+$(2,2)$ & each of three states against itself & $\det \neq 0$ \\
+\hline
+\end{tabular}
+\end{center}
+
+Eight cross determinants vanish; five norms do not. The equal-weight rows are the decisive ones:
+there the two states share every degree $M_k$ and differ only in their integrals of motion, so
+nothing but the separated-variables structure can force the determinant to vanish. The relations
+\eqref{eq:twofamilies} were checked for all four branches at both sizes, as were the degrees
+$\deg \qh^{\,j} = \mu_j$.
+
+\section{Pitfalls}
+
+\begin{enumerate}
+\item \textbf{Unimodularity \eqref{eq:unimodular} is required.} With $\prod_j z_j \neq 1$ the
+pairing $\qh^{\,j}\qh_i$ retains a factor $(\prod_j z_j)^{u/h}$ from the normalisation of the Hodge
+dual, and nothing vanishes.
+\item \textbf{The contour must enclose the poles contributed by $\Op$}, not only those of $\mu$.
+\item \textbf{The dual is uncentred}, \eqref{eq:dual}; the centred variant solves $\Op^\dagger q=0$
+only for $j=4$, accidentally.
+\item \textbf{Empty checks.} If $M_i = 0$ the polynomial $q_i$ is constant and the integrand can
+lose all its poles, so that pair vanishes trivially rather than as a test. Prefer states with
+$M_1 > 0$.
+\end{enumerate}
+
+Several plausible alternatives were tried and fail; they are recorded in Section~12 of
+\texttt{SU4\_twisted\_Baxter\_L2.wb} (in \texttt{../Experiments/}). In particular: a measure with
+poles at $\theta_\alpha \pm (2l-1)h/2$ (which passes at $(1,1)$ by coincidence and fails at
+$(2,1)$ and $(2,2)$); one functional per pole with $\beta = 1,\dots,S+P$ (degenerate, norms
+included); and fitting a symmetric three-pole set $\theta-a h,\ \theta,\ \theta+b h$ by demanding
+the determinant vanish, which drives the fit to $a \approx 10^3$ where the determinant underflows
+trivially.
+
+\end{document}

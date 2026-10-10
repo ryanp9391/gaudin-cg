@@ -1,0 +1,295 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\emergencystretch=3em
+
+\newcommand{\nb}[1]{\texttt{#1}}
+
+\theoremstyle{definition}
+\newtheorem{result}{Result}
+\newtheorem{conjecture}{Conjecture}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{How much of $Q_1$ and $Q_{12}$ do the functionals see?\\
+Degrees, the Wronskian relation $Q_{ab}\propto F_\lambda Q^c$, and a sampling count for $[2,1,0]^{\otimes2}$, $[3,1,0]^{\otimes2}$, $[3,2,0]^{\otimes2}$, $[4,2,0]^{\otimes2}$}
+\author{Notes accompanying \nb{L2-mathcalA.wb}, cells 12--13}
+\date{2026-09-24}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The functionals $\langle k_1^{u/h}Q_1\rangle$ and $\langle k_2^{u/h}Q_{12}\rangle$ reach five of the six highest-weight states of $[2,1,0]^{\otimes2}$ and miss the singlet. These notes set up a simple way to see why. The CG wavefunction in SoV coordinates is built from the Q-functions, and to reconstruct a state one needs all of its Bethe roots. The $k$-expansions sample $Q_1$ and $Q_{12}$ only at a few shifted inhomogeneities. We give three things.
+\begin{enumerate}
+\item The degrees of all $q_i$, $q^j$ and $Q_{ab}$ in the untwisted chain.
+\item An exact relation $Q_{ab}(u)=(z_b^{-1}-z_a^{-1})\,F_\lambda(u)\,Q^c(u)$, with a state-independent $F_\lambda$. It is verified for all twisted states of $[2,1,0]^{\otimes2}$ (two points), $[3,1,0]^{\otimes2}$ and $[3,2,0]^{\otimes2}$ (one point each), and it shows that the state-dependent content of $Q_{12}$ is $q^3$ alone.
+\item A count of unknown roots against sampled ratios. It gives exactly the observed 5/6 for $[2,1,0]$, 8/10 for $[3,1,0]$ 9/10 for $[3,2,0]$ and 15/19 for $[4,2,0]$. Its $q^3$ part is the $\nu_3>\lambda_2$ rule.
+\end{enumerate}
+The conclusion is that new generating functions should sample the Q-functions at more points, in particular on site~2.
+\end{abstract}
+
+%======================================================================
+\section{Conventions}
+
+The conventions are those of \nb{L2-mathcalA.tex}. We take two sites with inhomogeneities $\theta_1,\theta_2$ and shift $h$, both in $V_\lambda$ with $\lambda=[2,1,0]$. The twist is $G=\mathrm{diag}(z_1,z_2,z_3)$ with $z_1z_2z_3=1$. We write
+\begin{equation}
+\nu_n(u)=\prod_{s=1}^2(u-\theta_s-h\lambda_n).
+\end{equation}
+For a state of total weight $\mu$, the twisted Q-functions are
+\begin{equation}
+Q_i(u)=z_i^{u/h}q_i(u),\quad \deg q_i=4-\mu_i;\qquad Q^j(u)=z_j^{-u/h}q^j(u),\quad \deg q^j=\mu_j .
+\end{equation}
+Here $q_i$ and $q^j$ are the monic solutions of the direct and dual Baxter equations. For the $2\times2$ Wronskians we use
+\begin{equation}
+Q_{ab}(u)=Q_a(u)\,Q_b(u-h)-Q_b(u)\,Q_a(u-h).
+\end{equation}
+In the untwisted chain ($G=1$), the Q-functions of a highest-weight state of weight $\Lambda$ are polynomials with staggered degrees (\nb{old/XXX/Experiments/SU3\_L2\_Untwisting.md}, \S1, \nb{untwU}):
+\begin{equation}\label{eq:stagger}
+\deg q_i=(4-\Lambda_i)+(i-1),\qquad \deg q^j=\Lambda_j+(3-j).
+\end{equation}
+The descendants in a multiplet share these Q-functions. So in the untwisted chain $Q_1,Q_{12}$ fix a state only up to its multiplet, and in the twisted chain they fix it completely.
+
+%======================================================================
+\section{Degrees}
+
+\paragraph{Wronskians.} In $Q_{ab}$ the leading terms of the two products cancel only when $\deg q_a=\deg q_b$. Write $a=\deg q_a$ and $b=\deg q_b$. The top surviving term is $(\deg q_a-\deg q_b)\,h\,u^{a+b-1}$ in the untwisted chain, and $(z_b^{-1}-z_a^{-1})\,u^{a+b}$ times the exponential in the twisted chain. Hence:
+\begin{align}
+\text{untwisted:}\quad &\deg Q_{12}=2+\Lambda_3,\qquad \deg Q_{13}=3+\Lambda_2,\qquad \deg Q_{23}=4+\Lambda_1,\\
+\text{twisted:}\quad &\deg q_{12}=2+\mu_3,\qquad \deg q_{13}=2+\mu_2,\qquad \deg q_{23}=2+\mu_1 .
+\end{align}
+Here $q_{ab}$ is the polynomial part of $Q_{ab}$. In every case the degree of $Q_{ab}$ equals $2+\deg q^c$, where $c$ is the complementary index. The next section explains the $2$.
+
+\paragraph{Table for $[2,1,0]^{\otimes2}$, untwisted.}
+The last column counts the unknown roots, $\deg q_1+\deg q^3=(4-\Lambda_1)+\Lambda_3=M_1+M_2$. This is the number of Bethe roots of the highest-weight state.
+\begin{center}
+\begin{tabular}{lcccccccc}\toprule
+irrep $\Lambda$ & dim & $\deg q_1$ & $\deg q_2$ & $\deg q_3$ & $\deg Q_{12}$ & $\deg Q_{13}$ & $\deg q^3$ & unknown roots\\\midrule
+$[4,2,0]$ & 27 & 0 & 3 & 6 & 2 & 5 & 0 & 0\\
+$[3,3,0]$ & 10 & 1 & 2 & 6 & 2 & 6 & 0 & 1\\
+$[4,1,1]$ & 10 & 0 & 4 & 5 & 3 & 4 & 1 & 1\\
+$[3,2,1]\times2$ & 8 & 1 & 3 & 5 & 3 & 5 & 1 & 2\\
+$[2,2,2]$ & 1 & 2 & 3 & 4 & 4 & 5 & 2 & 4\\\bottomrule
+\end{tabular}
+\end{center}
+$[4,2,0]$ and $[4,1,1]$ both have constant $Q_1$. So only $Q_{12}$ can separate them.
+
+%======================================================================
+\section{The Wronskian relation}
+
+\begin{result}[verified]\label{res:wron}
+For every eigenstate of the twisted $[\lambda_1,\lambda_2,0]^{\otimes2}$ chain, $\lambda\in\{[2,1,0],[3,1,0],[3,2,0]\}$, and every $(a,b,c)\in\{(1,2,3),(1,3,2),(2,3,1)\}$,
+\begin{equation}\label{eq:wron}
+\boxed{\;Q_{ab}(u)=\big(z_b^{-1}-z_a^{-1}\big)\,F_\lambda(u)\,Q^c(u),\qquad F_\lambda(u)=\prod_{s=1}^2\prod_{n=\lambda_2+1}^{\lambda_1}(u-\theta_s-nh),\;}
+\end{equation}
+with $q^c$ monic and no shift in the argument. For $[2,1,0]$, $F_\lambda=\nu_1$; for $[3,1,0]$, $F_\lambda=\prod_s(u-\theta_s-2h)(u-\theta_s-3h)$, of degree 4; for $[3,2,0]$, $F_\lambda=\prod_s(u-\theta_s-3h)$. In particular
+\begin{equation}
+Q_{12}(u)=\big(z_2^{-1}-z_1^{-1}\big)\,F_\lambda(u)\,Q^3(u).
+\end{equation}
+\end{result}
+
+\paragraph{Check.} This is cell 12 of \nb{L2-mathcalA.wb} for $Q_{12}$ and cell 13 for all three pairs. The exponentials match because $(z_az_b)^{u/h}=z_c^{-u/h}$ by unimodularity. For the polynomial parts, $q_{ab}$ is divided by $F_\lambda(u)\,q^c(u)$.
+\begin{itemize}
+\item The relative remainder is $0$ at 100-digit precision for every state.
+\item The quotient is the same constant for every state, and it equals $z_b^{-1}-z_a^{-1}$.
+\item The shift scan in cell 12 ($q^3(u+sh)$, $s=-3,\dots,3$) singles out $s=0$ for every state with $\deg q^3\geq1$.
+\item The roots of the cell-12 quotient are exactly the zeros of $F_\lambda$: $\theta_s+2h$ for $[2,1,0]$, $\theta_s+2h,\theta_s+3h$ for $[3,1,0]$, and $\theta_s+3h$ for $[3,2,0]$.
+\end{itemize}
+Runs:
+\begin{itemize}
+\item $[2,1,0]$ (64 states): point~1 ($h=1$, $\theta=(1/3,-8/57)$, $z=(5/2,7/3,6/35)$) and point~2 ($h=1/2$, $\theta=(2/7,-3/11)$, $z=(3/2,5/4,8/15)$).
+\item $[3,1,0]$ and $[3,2,0]$ (225 states each): point~1. The largest remainder is $2\times10^{-93}$ ($Q_{23}$ at $[3,2,0]$), i.e.\ precision noise.
+\end{itemize}
+The saved notebook outputs are for $[3,2,0]$, point~1.
+
+\begin{remark}[mechanism, not written out]
+$(Q_{23},Q_{31},Q_{12})$ is the cross product $\vec Q(u)\times\vec Q(u-h)$. It is orthogonal to $\vec Q(u)$ and $\vec Q(u-h)$, so it is proportional to the dual vector $(Q^1,Q^2,Q^3)$. The proportionality factor $F_\lambda(u)$ does not depend on the state, and it is the part of the Wronskian fixed by the quantum determinant. We have not derived the factor from the Baxter equations; \eqref{eq:wron} is verified, not proved. Its degree is forced: $\deg q_{12}-\deg q^3=(4\lambda_1-\mu_1-\mu_2)-\mu_3=2(\lambda_1-\lambda_2)$, using $|\mu|=2(\lambda_1+\lambda_2)$.
+\end{remark}
+
+\begin{conjecture}[not checked]
+\begin{enumerate}
+\item \emph{Other reps.} \eqref{eq:wron} holds for every $[\lambda_1,\lambda_2,0]$ and every $L$, with $F_\lambda=\prod_{s=1}^L\prod_{n=\lambda_2+1}^{\lambda_1}(u-\theta_s-nh)$.
+\item \emph{Untwisted chain.} The prefactor $z_2^{-1}-z_1^{-1}$ vanishes, and the leading-term count suggests
+\begin{equation}
+Q_{12}=(\deg q_1-\deg q_2)\,h\,F_\lambda(u)\,q^3(u)=-(\Lambda_1-\Lambda_2+1)\,h\,F_\lambda(u)\,q^3(u).
+\end{equation}
+\end{enumerate}
+\end{conjecture}
+
+\paragraph{Consequence.} The factor $F_\lambda$ carries no information about the state, so the unknowns in $Q_{12}$ are exactly the $\deg q^3$ roots of $q^3$. Also, every $Q_{ab}$ vanishes at $\theta_s+nh$, $n=\lambda_2+1,\dots,\lambda_1$, for every state. A functional that samples $Q_{12}$ there learns nothing.
+
+%======================================================================
+\section{What the functionals sample}
+
+\paragraph{The current functionals.} For $\lambda=[2,1,0]$ they sample the following points (\nb{L2-mathcalA.tex}, \nb{L2-det-mathcalA.tex}):
+\begin{center}
+\begin{tabular}{lll}\toprule
+functional & points sampled & data after normalization\\\midrule
+$\langle k_1^{u/h}Q_1\rangle$ (site-1 measure) & $Q_1(\theta_1+h)$, $Q_1(\theta_1+2h)$ & 1 ratio of $q_1$\\
+$2\times2$ determinant in $k_1$ & $Q_1(\theta_s+h)$, $Q_1(\theta_s+2h)$, $s=1,2$ & at most 2 ratios of $q_1$\\
+$\langle k_2^{u/h}Q_{12}\rangle$ (site-1 poles) & $Q_{12}(\theta_1)$, $Q_{12}(\theta_1+h)$ & 1 ratio of $q^3$\\\bottomrule
+\end{tabular}
+\end{center}
+By Result~\ref{res:wron},
+\begin{equation}
+\frac{Q_{12}(\theta_1+h)}{Q_{12}(\theta_1)}=\frac{\nu_1(\theta_1+h)}{\nu_1(\theta_1)}\,z_3^{-1}\,\frac{q^3(\theta_1+h)}{q^3(\theta_1)},
+\end{equation}
+with a known, state-independent prefactor. So the $k_2$ functional samples $q^3$ at $\theta_1$ and $\theta_1+h$. Neither point is a zero of $\nu_1$.
+
+\paragraph{The count.} One ratio fixes a monic linear polynomial, since $(\theta+h-r)/(\theta-r)$ determines the root $r$. One ratio does not fix a quadratic. Comparing with the table:
+\begin{center}
+\begin{tabular}{lccc}\toprule
+irrep & unknown roots ($q_1$ + $q^3$) & ratios sampled & reached?\\\midrule
+$[4,2,0]$ & $0+0$ & 2 & yes\\
+$[3,3,0]$ & $1+0$ & 2 & yes\\
+$[4,1,1]$ & $0+1$ & 2 & yes\\
+$[3,2,1]\times2$ & $1+1$ & 2 & yes\\
+$[2,2,2]$ & $2+2$ & 2 (3 with the determinant) & \textbf{no}\\\bottomrule
+\end{tabular}
+\end{center}
+The count predicts 5/6 highest-weight states, which is what was reached (\nb{xxx-210-cg-test.tex}). Even with both site ladders for $q_1$, the singlet's quadratic $q^3$ is sampled at only two points, $\theta_1$ and $\theta_1+h$.
+
+%======================================================================
+\section{The same count for $[3,1,0]^{\otimes2}$}\label{sec:310}
+
+Here $\lambda_1=3$, $\lambda_2=1$, $d=\lambda_1-\lambda_2=2$, and the untwisted degrees \eqref{eq:stagger} become
+\begin{equation}
+\deg q_1=6-\Lambda_1,\quad \deg q_2=7-\Lambda_2,\quad \deg q_3=8-\Lambda_3,\quad \deg q^3=\Lambda_3,\quad \deg Q_{12}=4+\Lambda_3 .
+\end{equation}
+By Result~\ref{res:wron}, $Q_{12}=F_\lambda q^3$ with $\deg F_\lambda=4$. The twisted degrees are the same with $\Lambda\to\mu$ (except $\deg q_{2,3}$, which lose the stagger).
+
+\paragraph{Points sampled.} For $[3,1,0]$ the functionals sample the following points (\nb{L2-mathcalA.tex}, \nb{L2-det-mathcalA.tex}).
+\begin{itemize}
+\item $\langle k_1^{u/h}Q_1\rangle$ (site-1 measure): $Q_1$ at $\theta_1+h,\theta_1+2h,\theta_1+3h$, i.e.\ poles $n=\lambda_2,\dots,\lambda_1$. It is polynomial of degree $d=2$ in $k_1$, so it gives 2 ratios of $q_1$.
+\item The $2\times2$ determinant adds the $\theta_2$ ladder, for at most 4 ratios of $q_1$.
+\item $\langle k_2^{u/h}Q_{12}\rangle$ (site-1 poles): $Q_{12}$ at $\theta_1,\theta_1+h$, i.e.\ $m=0,\dots,\lambda_2$. This gives 1 ratio of $q^3$. Neither point is a zero of $F_\lambda$ (those are at $\theta_s+2h,\theta_s+3h$).
+\end{itemize}
+The known data are therefore 2 ratios of $q_1$ (4 with the determinant) and 1 ratio of $q^3$.
+
+\paragraph{The count.} The ``reached'' column is from \nb{xxx-310-cg-test.tex}, section ``Highest-weight states reached''.
+\begin{center}
+\begin{tabular}{lcccccl}\toprule
+irrep $\Lambda$ & mult. & $\deg q_1$ & $q_1$ ratios & $\deg q^3$ & $q^3$ ratios & reached?\\\midrule
+$[6,2,0]$ & 1 & 0 & 2 & 0 & 1 & yes\\
+$[6,1,1]$ & 1 & 0 & 2 & 1 & 1 & yes\\
+$[5,3,0]$ & 1 & 1 & 2 & 0 & 1 & yes\\
+$[5,2,1]$ & 2 & 1 & 2 & 1 & 1 & yes\\
+$[4,4,0]$ & 1 & 2 & 2 & 0 & 1 & yes\\
+$[4,3,1]$ & 2 & 2 & 2 & 1 & 1 & yes\\
+$[4,2,2]$ & 1 & 2 & 2 & \textbf{2} & 1 & \textbf{no}\\
+$[3,3,2]$ & 1 & \textbf{3} & 2 (4 with det) & \textbf{2} & 1 & \textbf{no}\\\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item \emph{The reached states.} For every reached state, $\deg q_1\le2$ and $\deg q^3\le1$. So the sampled ratios are enough to fix both polynomials root by root.
+\item \emph{The missed states.} Both have $\deg q^3=2$, a quadratic sampled at only two points. For $[4,2,2]$ this is the only shortfall, since $q_1$ is covered. $[3,3,2]$ is also short on $q_1$ with the site-1 measure, but not with the determinant.
+\end{itemize}
+
+\paragraph{The $q^3$ part of the count is the $\nu_3>\lambda_2$ rule.} In general the $Q_{12}$ ladder has $\lambda_2+1$ points, so it gives $\lambda_2$ ratios of $q^3$, while $\deg q^3=\Lambda_3$. The $q^3$ count therefore fails exactly when $\Lambda_3>\lambda_2$. That is the rule observed in all four reps tested ($[2,1,0]$, $[3,1,0]$, $[3,2,0]$, $[4,2,0]$), whose ``missed'' half was derived in \nb{xxx-310-cg-test.tex}. The data-count and the exact-zero pictures agree on which states are missed. In the reconstruction language, the $k_2$ functional sees too few points of $q^3$.
+
+\paragraph{The $q_1$ part is not binding.} In $[3,2,0]^{\otimes2}$, the irrep $[4,4,2]$ has $\deg q_1=2$, but the site-1 $k_1$ ladder gives only $d=1$ ratio, and $[4,4,2]$ is still reached by the old family alone. Its multiplicity is 1, so ``reached'' only requires a nonzero overlap, not a reconstruction of $q_1$. The $q_1$ count is therefore at most a statement about reconstruction, and it does not predict which states the functionals miss (see also Section~\ref{sec:320}).
+
+%======================================================================
+\section{The same count for $[3,2,0]^{\otimes2}$}\label{sec:320}
+
+Here $\lambda_1=3$, $\lambda_2=2$, $d=1$. The untwisted degrees are $\deg q_1=6-\Lambda_1$ and $\deg q^3=\Lambda_3$, and $Q_{12}=F_\lambda q^3$ with $F_\lambda=\prod_s(u-\theta_s-3h)$ (Result~\ref{res:wron}).
+
+\paragraph{Points sampled.}
+\begin{itemize}
+\item $\langle k_1^{u/h}Q_1\rangle$ (site-1 measure): $Q_1$ at $\theta_1+2h,\theta_1+3h$, giving 1 ratio of $q_1$. The determinant gives at most 2.
+\item $\langle k_2^{u/h}Q_{12}\rangle$: $Q_{12}$ at $\theta_1,\theta_1+h,\theta_1+2h$, giving 2 ratios of $q^3$. None of these points is a zero of $F_\lambda$, which lie at $\theta_s+3h$.
+\end{itemize}
+
+\paragraph{The count.} ``Reached'' is from \nb{xxx-310-cg-test.tex}.
+\begin{center}
+\begin{tabular}{lcccccl}\toprule
+irrep $\Lambda$ & mult. & $\deg q_1$ & $q_1$ ratios & $\deg q^3$ & $q^3$ ratios & reached?\\\midrule
+$[6,4,0]$ & 1 & 0 & 1 & 0 & 2 & yes\\
+$[6,3,1]$ & 1 & 0 & 1 & 1 & 2 & yes\\
+$[6,2,2]$ & 1 & 0 & 1 & 2 & 2 & yes\\
+$[5,5,0]$ & 1 & 1 & 1 & 0 & 2 & yes\\
+$[5,4,1]$ & 2 & 1 & 1 & 1 & 2 & yes\\
+$[5,3,2]$ & 2 & 1 & 1 & 2 & 2 & yes\\
+$[4,4,2]$ & 1 & \textbf{2} & 1 (2 with det) & 2 & 2 & yes\\
+$[4,3,3]$ & 1 & \textbf{2} & 1 (2 with det) & \textbf{3} & 2 & \textbf{no}\\\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item \emph{The missed state.} $[4,3,3]$ is the only irrep with $q^3$ undersampled: a cubic seen at three points.
+\item \emph{The reached states.} Every one has $q^3$ fully covered, including $[6,2,2]$ and both $[5,3,2]$ states, where a quadratic $q^3$ is sampled at three points.
+\item \emph{$q_1$.} It is undersampled with the site-1 measure both for the missed $[4,3,3]$ and for the reached $[4,4,2]$, and the determinant covers both. So $q_1$ does not tell reached from missed.
+\end{itemize}
+
+\paragraph{Summary over the three reps checked here.} In every missed state $q^3$ is undersampled ($\Lambda_3>\lambda_2$). In every reached state it is fully covered. Undersampling $q_1$ alone never causes a miss.
+
+%======================================================================
+\section{The same count for $[4,2,0]^{\otimes2}$}\label{sec:420}
+
+Here $\lambda_1=4$, $\lambda_2=2$, $d=2$. The untwisted degrees are $\deg q_1=8-\Lambda_1$ and $\deg q^3=\Lambda_3$. Result~\ref{res:wron} has \emph{not} been checked at this rep, which has 729 states. The conjectured factor is $F_\lambda=\prod_s(u-\theta_s-3h)(u-\theta_s-4h)$, of degree 4, which matches the forced degree $2(\lambda_1-\lambda_2)$.
+
+\paragraph{Points sampled.}
+\begin{itemize}
+\item $\langle k_1^{u/h}Q_1\rangle$ (site-1 measure): $Q_1$ at $\theta_1+2h,\theta_1+3h,\theta_1+4h$, giving 2 ratios of $q_1$. The determinant gives at most 4.
+\item $\langle k_2^{u/h}Q_{12}\rangle$: $Q_{12}$ at $\theta_1,\theta_1+h,\theta_1+2h$, giving 2 ratios of $q^3$. These points avoid the conjectured zeros $\theta_s+3h,\theta_s+4h$.
+\end{itemize}
+
+\paragraph{The count.} ``Reached'' is from \nb{xxx-310-cg-test.tex}, Result on $[4,2,0]$.
+\begin{center}
+\begin{tabular}{lcccccl}\toprule
+irrep $\Lambda$ & mult. & $\deg q_1$ & $q_1$ ratios & $\deg q^3$ & $q^3$ ratios & reached?\\\midrule
+$[8,4,0]$ & 1 & 0 & 2 & 0 & 2 & yes\\
+$[8,3,1]$ & 1 & 0 & 2 & 1 & 2 & yes\\
+$[8,2,2]$ & 1 & 0 & 2 & 2 & 2 & yes\\
+$[7,5,0]$ & 1 & 1 & 2 & 0 & 2 & yes\\
+$[7,4,1]$ & 2 & 1 & 2 & 1 & 2 & yes\\
+$[7,3,2]$ & 2 & 1 & 2 & 2 & 2 & yes\\
+$[6,6,0]$ & 1 & 2 & 2 & 0 & 2 & yes\\
+$[6,5,1]$ & 2 & 2 & 2 & 1 & 2 & yes\\
+$[6,4,2]$ & 3 & 2 & 2 & 2 & 2 & yes\\
+$[5,5,2]$ & 1 & \textbf{3} & 2 (4 with det) & 2 & 2 & yes\\\midrule
+$[6,3,3]$ & 1 & 2 & 2 & \textbf{3} & 2 & \textbf{no}\\
+$[5,4,3]$ & 2 & \textbf{3} & 2 (4 with det) & \textbf{3} & 2 & \textbf{no}\\
+$[4,4,4]$ & 1 & \textbf{4} & 2 (4 with det) & \textbf{4} & 2 & \textbf{no}\\\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item \emph{Missed states.} All four have $\deg q^3>2$. For $[6,3,3]$, $q^3$ is the only undersampled polynomial.
+\item \emph{Reached states.} Every one has $q^3$ fully covered, including the multiplicity-3 space $[6,4,2]$.
+\item \emph{$q_1$.} It is undersampled with the site-1 measure in the reached $[5,5,2]$ and in the missed $[5,4,3]$, $[4,4,4]$, and the determinant covers all three. Again $q_1$ does not tell reached from missed.
+\end{itemize}
+
+\paragraph{Summary over all four reps.} For $[2,1,0]$, $[3,1,0]$, $[3,2,0]$ and $[4,2,0]$:
+\begin{itemize}
+\item a highest-weight state is missed if and only if the $Q_{12}$ ladder undersamples $q^3$, i.e.\ $\Lambda_3>\lambda_2$;
+\item undersampling $q_1$ on site~1 alone never causes a miss;
+\item whenever $q_1$ is undersampled on site~1, the determinant version covers it.
+\end{itemize}
+
+%======================================================================
+\section{Interpretation and caveats}
+
+\paragraph{The reconstruction viewpoint (Paul).} The CG wavefunction in SoV coordinates is a product of Q-functions evaluated on the lattice $\theta_s+nh$. To reconstruct a highest-weight state one needs all of its Bethe roots. The present functionals probe only a site-1 sub-ladder of that lattice. The missing data should come from new generating functions that sample the Q-functions at more points and localize to each site separately. Examples are site-2 ladders for $Q_{12}$, other shifts, and the $Q_{13}$ family.
+
+\paragraph{Caveats.}
+\begin{enumerate}
+\item \emph{Separation versus reconstruction.} Telling apart finitely many Bethe solutions can take less data than reconstructing the polynomials. So the count is a heuristic. It matches 5/6 here but is not a proof.
+\item \emph{An exact zero.} The singlet is missed through an exact zero: $\langle v_{\rm tot}\otimes v_1|\text{singlet}\rangle=0$. More generally the overlap vanishes whenever $\mu_3>\lambda_2$ (\nb{xxx-310-cg-test.tex}). A good new functional should both sample enough points and be nonzero at the missed weights.
+\item \emph{Sampling rule.} Sample $Q_{ab}$ away from the zeros $\theta_s+nh$, $n=\lambda_2+1,\dots,\lambda_1$, of $F_\lambda$, where it vanishes for every state (Result~\ref{res:wron}).
+\end{enumerate}
+
+%======================================================================
+\section*{Notebook map}
+\begin{center}
+\begin{tabular}{rl}\toprule
+cell & content (\nb{L2-mathcalA.wb})\\\midrule
+3--5 & chain, eigenstates, twisted $q_i$, $q^j$ (\nb{QsT})\\
+12 & $q_{12}$ against $q^3(u+sh)$, $s=-3..3$: best shift, remainder, quotient\\
+13 & all three $Q_{ab}$ against $F_\lambda Q^c$ (\nb{wronRes})\\\bottomrule
+\end{tabular}
+\end{center}
+To rerun, set \nb{repT} and \nb{ptIndexT}, then run cells 2--5, 12, 13. It takes about a minute for $[2,1,0]$ and a few minutes for $[3,1,0]$ or $[3,2,0]$.
+
+\end{document}

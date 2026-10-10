@@ -1,0 +1,110 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.6in,top=0.45in,bottom=0.45in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[hyphens]{url}
+\sloppy
+\pagestyle{empty}
+\newcommand{\vac}{{\rm vac}}
+\begin{document}
+
+\begin{center}
+{\large\bf Zero-twist SoV norm: $\mathfrak{gl}(3)$, $L=2$, general site representations}
+\end{center}
+
+\paragraph{Sites.} Site $s=1,2$ carries $\lambda^{(s)}=[\lambda^{(s)}_1,\lambda^{(s)}_2,\lambda^{(s)}_3]$ and inhomogeneity $\theta_s$; $h=1$ throughout, $\theta_1-\theta_2\notin\mathbb Z$.
+
+\paragraph{Formula.} With $z_j=e^{\epsilon\varphi_j}$, $\sum_j\varphi_j=0$, and $V_\mu(z)=\prod_{i<j}(z_i-z_j)^{\mu_i-\mu_j}$,
+\begin{equation}
+\boxed{\;\lim_{\epsilon\to0}\frac{V_{\mu_\vac}(z)}{V_{\mu}(z)}\,
+\frac{\langle L_\mu|R_\mu\rangle}{\langle L_\mu|0\rangle\langle0|R_\mu\rangle}
+=C_\vac\,E_{\mu}\,\frac{\det\mathcal N^\mu}{\bar\Psi_{\mu,0}\,\Psi_{\mu,0}},\qquad
+C_\vac=\frac{\bar\Psi_{\mu_\vac,0}\,\Psi_{\mu_\vac,0}}{E_{\mu_\vac}\det\mathcal N^{\mu_\vac}}\;}
+\end{equation}
+$|R_\mu\rangle$, $\langle L_\mu|$ ($\langle L_\mu|R_\mu\rangle=1$) is an eigenstate whose zero-twist limit is highest weight, of weight $\mu$; the vacuum has $\mu_\vac=\lambda^{(1)}+\lambda^{(2)}$.
+
+\paragraph{Q-functions.} $q_i$, $q^j$ are the monic polynomial solutions of the untwisted ($z=1$) direct and dual Baxter equations for the state $\mu$, with
+\begin{equation}
+\deg q_i=(D-\mu_i)+(i-1),\qquad \deg q^j=\mu_j-\Lambda_3+(3-j),\qquad D=\lambda^{(1)}_1+\lambda^{(2)}_1,\quad \Lambda_3=\lambda^{(1)}_3+\lambda^{(2)}_3 .
+\end{equation}
+Only $q_1,q_2,q^3,q^2$ enter; the result is invariant under $q_2\to q_2+a\,q_1$, $q^2\to q^2+b\,q^3$.
+
+\paragraph{Bracket.}
+\begin{equation}
+\langle f\rangle=\oint\frac{du}{2\pi i}\,M(u)\,e^{\frac{2\pi i}{h}u}\,f(u),
+\end{equation}
+where the contour encircles all poles of $M(u)$, and none of $f$, which is a polynomial.
+With $\nu_i(u)=\prod_s(u-\theta_s-\lambda^{(s)}_i h)$ and $\Gamma_h$ defined by
+$\Gamma_h[f(u+h)]=f(u)\,\Gamma_h[f(u)]$ (multiplicative in $f$ and commuting with shifts of $u$, e.g.\ $\Gamma_h[u-a]=h^{(u-a)/h}\,\Gamma\big(\tfrac{u-a}{h}\big)$),
+\begin{equation}
+M(u)=\frac{\Gamma_h[\nu_1(u)]}{\Gamma_h[\nu_3(u+h)]}
+=\prod_{s=1}^{2}\prod_{n=\lambda^{(s)}_3}^{\lambda^{(s)}_1}\frac{1}{u-\theta_s-nh},
+\end{equation}
+a ladder of $\lambda^{(s)}_1-\lambda^{(s)}_3+1$ simple poles per site. It differs from $1/(\nu_1\nu_2\nu_3)$ whenever a site has a gap in $\lambda^{(s)}$ (e.g.\ $[3,1,0]$).
+
+\paragraph{The $3\times3$ matrix.} Rows $(i,j)=(1,3),(1,2),(2,3)$ in this order, and
+\begin{equation}
+c=\big(\lambda^{(1)}_1-\lambda^{(1)}_3\big)+\big(\lambda^{(2)}_1-\lambda^{(2)}_3\big)+1,
+\end{equation}
+the number of poles of $M$ minus one:
+\begin{equation}
+\begin{aligned}
+\mathcal N^\mu_{(i,j)}=\Big(&
+\big\langle q^j(u{+}1)q_i(u)-q^j(u)q_i(u)\big\rangle,\;
+\big\langle u\,q^j(u)q_i(u{-}1)-(u-c)\,q^j(u{+}1)q_i(u)\big\rangle,\\
+&\big\langle q^j(u)q_i(u{-}1)-q^j(u{+}1)q_i(u)\big\rangle\Big).
+\end{aligned}
+\end{equation}
+
+\paragraph{Wave functions at the reference points.} One factor per site, at points set by $\lambda^{(s)}_2$ and $\lambda^{(s)}_3$:
+\begin{align}
+\Psi_{\mu,0}&=\prod_{s=1}^2 q_1\big(\theta_s{+}\lambda^{(s)}_2\big)\big[q_1(\theta_s{+}\lambda^{(s)}_3)\,q_2(\theta_s{+}\lambda^{(s)}_3{-}1)-q_2(\theta_s{+}\lambda^{(s)}_3)\,q_1(\theta_s{+}\lambda^{(s)}_3{-}1)\big],\\
+\bar\Psi_{\mu,0}&=\prod_{s=1}^2 q^3(\theta_s{+}\lambda^{(s)}_3)\big[q^3(\theta_s{+}\lambda^{(s)}_3)\,q^2\big(\theta_s{+}\lambda^{(s)}_2{+}1\big)-q^2(\theta_s{+}\lambda^{(s)}_3)\,q^3\big(\theta_s{+}\lambda^{(s)}_2{+}1\big)\big].
+\end{align}
+$\bar\Psi_{\mu,0}$ is $\Psi_{\mu,0}$ with $q_k\to q^{4-k}$ and shifted arguments; constants cancel against $C_\vac$.
+
+\paragraph{Weight factor.}
+\begin{equation}
+E_\mu=-\frac{(\mu_1-\mu_2+1)(\mu_2-\mu_3+1)}{(\mu_1-\mu_3+1)!\,(\mu_1-\mu_2)!\,(\mu_2-\mu_3)!}.
+\end{equation}
+
+\paragraph{Validity.} Checked for all 49 ordered pairs with $\lambda^{(s)}\in\{[1,0,0],[1,1,0],[2,0,0],[3,0,0],[2,1,0],[3,1,0],[2,2,0]\}$ at $\theta=(1/3,-8/57)$, to $10^{-16}$ (\texttt{SU3\_L2\_ZeroTwist\_Scan.wb}); the reference points are derived at $L=1$ by matching direct diagonalization (\texttt{SU3\_L1\_GeneralRep\_Normalization.wb}). For $\lambda^{(s)}_3\neq0$ (a site $\lambda'+(k,k,k)$ is the $\lambda'$ site at $\theta_s+k$): 8 pairs, e.g.\ $[3,2,1]\otimes[4,4,1]$. $E_\mu$ is identified, not derived.
+
+
+\newpage
+\begin{center}
+{\large\bf Simplified form of $\mathcal N$}
+\end{center}
+
+\paragraph{Notation.} Forward and backward differences, and one bilinear per row:
+\begin{equation}
+\nabla^+f(u)=f(u+1)-f(u),\qquad \nabla^-f(u)=f(u)-f(u-1),\qquad G_{ij}(u)=q^j(u)\,q_i(u-1).
+\end{equation}
+
+\paragraph{Column operations.} Writing $C_{1,2,3}$ for the columns of $\mathcal N^\mu$, the replacements
+$C_2\to C_2-c\,C_1$, then $C_3\to C_3+C_1$, then $C_1\to C_1-C_3$, and a sign pulled out of the third column, give
+\begin{equation}
+\boxed{\;\det\mathcal N^\mu=-\det\mathcal N''^\mu,\qquad
+\mathcal N''^\mu_{(i,j)}=\Big(\big\langle\nabla^+G_{ij}\big\rangle,\;\;
+\big\langle c\,q^j q_i-u\,\nabla^+G_{ij}\big\rangle,\;\;
+\big\langle q^j\,\nabla^-q_i\big\rangle\Big)\;}
+\end{equation}
+with the same rows $(i,j)=(1,3),(1,2),(2,3)$, the same bracket $\langle\cdot\rangle$ and the same $c$. They use
+\begin{equation}
+q_i\,\nabla^+q^j+q^j\,\nabla^-q_i=\nabla^+G_{ij},\qquad
+c\,q^j(u{+}1)q_i(u)=c\,q^jq_i+c\,q_i\,\nabla^+q^j .
+\end{equation}
+
+\paragraph{Formula.}
+\begin{equation}
+\lim_{\epsilon\to0}\frac{V_{\mu_\vac}(z)}{V_{\mu}(z)}\,
+\frac{\langle L_\mu|R_\mu\rangle}{\langle L_\mu|0\rangle\langle0|R_\mu\rangle}
+=\frac{\mathcal B_\mu}{\mathcal B_{\mu_\vac}},
+\end{equation}
+\begin{equation}
+\mathcal B_\mu=-E_{\mu}\,\frac{\det\mathcal N''^\mu}{\bar\Psi_{\mu,0}\,\Psi_{\mu,0}}.
+\end{equation}
+The parameter $c$ now enters only through the single term $c\,q^jq_i$.
+
+\paragraph{Check.} In \texttt{SU3\_310x210\_L2\_ZeroTwist.wb} (cell 9) and \texttt{SU3\_100x100\_L2\_ZeroTwist.wb}, $-\det\mathcal N''^\mu/\det\mathcal N^\mu=1$ to working precision ($\sim$246 digits) for all highest-weight states of $[3,1,0]\otimes[2,1,0]$ and $[1,0,0]^{\otimes2}$. This is an identity of column operations, independent of the site representations.
+
+\end{document}

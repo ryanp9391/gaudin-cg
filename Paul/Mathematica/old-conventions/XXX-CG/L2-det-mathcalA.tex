@@ -1,0 +1,185 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\emergencystretch=3em
+
+\newcommand{\vacL}{\langle\mathrm{vacL}|}
+\newcommand{\nb}[1]{\texttt{#1}}
+
+\theoremstyle{definition}
+\newtheorem{result}{Result}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{The same rotation on both sites: a $2\times2$ determinant of\\
+$\langle k_1^{u/h}u^bQ_1\rangle_\alpha$ in the gl(3) XXX chain at $L=2$}
+\author{Notes accompanying \nb{L2-det-mathcalA.wb}}
+\date{2026-09-23}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In \nb{L2-mathcalA.tex} the functional $\langle k_1^{u/h}Q_1\rangle$, with a measure built from site~1 only, was shown to be the overlap with $\langle v_1|\otimes\vacL$: the $L=1$ covector on site~1 and the vacuum on site~2. Here we replace it by a $2\times2$ determinant of two-site brackets $\langle k_1^{u/h}Q_1\rangle_\alpha$, $\langle k_1^{u/h}uQ_1\rangle_\alpha$, $\alpha=1,2$. We establish two results.
+\begin{enumerate}
+\item The determinant, suitably normalized, is $C\,\langle v_1\otimes v_1|\Psi_A\rangle$: the \emph{same} rotation on both sites. The constant $C$ has a closed form, $C=(-1)^d/\big((d!)^2h^{2d}\prod_{n=-d}^{d}(\theta_{12}-nh)\big)$ with $d=\lambda_1-\lambda_2$.
+\item Multiplying by the unchanged second factor $\langle k_2^{u/h}p(u)Q_{12}\rangle$ of \nb{L2-mathcalA.tex} still acts on site~1 only, through the one-site fused transfer matrices $t^{(1)}_{\{m,m\}}(\theta_1)$. The per-$m$ constants are the same as with $\langle v_1|\otimes\vacL$.
+\end{enumerate}
+Both are verified numerically, to $10^{-74}$ or better, for reps up to $[4,2,0]$. $C$ is fitted on part of the data and predicted on the rest.
+\end{abstract}
+
+\tableofcontents
+
+%======================================================================
+\section{Setup}
+
+Everything is as in \nb{L2-mathcalA.tex}; notebook cells 2--6 are copied from \nb{L2-mathcalA.wb} unchanged. Briefly: two sites in the same representation $V_\lambda$, $\lambda=[\lambda_1,\lambda_2,0]$, inhomogeneities $\theta_1,\theta_2$, shift $h$, unimodular diagonal twist $G=\operatorname{diag}(z_1,z_2,z_3)$, and
+\begin{equation}
+\mathcal L_{ij}(u)=u\,\delta_{ij}-hE_{ji},\qquad T_{ij}(u)=\sum_k\mathcal L^{(1)}_{ik}(u-\theta_1)\,\mathcal L^{(2)}_{kj}(u-\theta_2).
+\end{equation}
+Eigenstates are normalized by $(\vacL\otimes\vacL)|\Psi_A\rangle=1$, with $\vacL=e_1^Tg_0$, $g_0=e^{p_1E_{12}}e^{p_2E_{13}}e^{p_3E_{23}}$ and $p_3=p_2(z_3-z_1)/(p_1(z_2-z_3))$. Q-functions are $Q_i(u)=z_i^{u/h}q_i(u)$ with monic $q_i$ of degree $2\lambda_1-\mu_i$. We write $\theta_{12}=\theta_1-\theta_2$, $e_s=e^{2\pi i\theta_s/h}$, $d=\lambda_1-\lambda_2$, and use the two-site
+\begin{equation}
+\nu_1(u)=\prod_{s=1}^{2}(u-\theta_s-h\lambda_1).
+\end{equation}
+The $L=1$ covector (\nb{L1-mathcalA.tex}, Result~2) is
+\begin{equation}
+\langle v_1|=(1-k_1z_1)^{d}\,e_1^T\,e^{p_1'E_{12}}e^{p_2E_{13}}e^{p_3E_{23}},\qquad p_1'=p_1\,\frac{1-k_1z_2}{1-k_1z_1},
+\end{equation}
+with $p_3$ held at its $\vacL$ value. Numerical points 1--3 are those of \nb{L2-mathcalA.tex}: $(h,\theta_{12})=(1,\tfrac9{19})$, $(\tfrac12,\tfrac{43}{77})$, $(\tfrac34,\tfrac{32}{117})$.
+
+%======================================================================
+\section{The determinant}\label{sec:det}
+
+\paragraph{Definition.}
+For $\alpha=1,2$,
+\begin{equation}
+\langle f\rangle_\alpha=\oint\frac{e^{2\pi i(\alpha-1)u/h}\,f(u)\,du}{\prod_{k=0}^{d}\nu_1(u+kh)} .
+\end{equation}
+For the adjoint the measure is $1/(\nu_1(u)\nu_1(u+h))$. The contour encloses all poles, which sit at $x=\theta_s+nh$ with $s=1,2$ and $n=\lambda_2,\dots,\lambda_1$. They are simple for generic $\theta_{12}$. The object is
+\begin{equation}
+\mathcal D=\det\begin{pmatrix}\langle k_1^{u/h}Q_1\rangle_1&\langle k_1^{u/h}uQ_1\rangle_1\\[2pt]\langle k_1^{u/h}Q_1\rangle_2&\langle k_1^{u/h}uQ_1\rangle_2\end{pmatrix}.
+\end{equation}
+
+\paragraph{Reduction to sites (proved).}
+At a pole $x=\theta_s+nh$ we have $e^{2\pi i(\alpha-1)x/h}=e_s^{\alpha-1}$, since $n$ is an integer. So $\langle f\rangle_\alpha=B_1[f]\,e_1^{\alpha-1}+B_2[f]\,e_2^{\alpha-1}$, where $B_s[f]$ is the sum of residues at the poles of site $s$. The determinant factorizes:
+\begin{equation}
+\mathcal D=(e_2-e_1)\big(B_1[f]\,B_2[uf]-B_2[f]\,B_1[uf]\big),\qquad f=k_1^{u/h}Q_1 .
+\end{equation}
+Each $B_s$ is a weighted $d$-th finite difference over the poles of site $s$. Its weights, the residues of $1/\prod_k\nu_1(u+kh)$, contain factors $1/(x-\theta_{s'}-\dots)$ from the other site $s'$. This is where the $\theta_{12}$-dependence of $C$ comes from.
+
+\paragraph{Normalization.}
+We divide by $(e_2-e_1)$ and by the value of $f$ at the lowest pole of each site. At that pole $k_1^{x/h}=k_1^{\theta_s/h}k_1^{\lambda_2}$, so the factors $k_1^{\theta_s/h}$ drop out together with $z_1^{\theta_s/h}$ inside $Q_1$:
+\begin{equation}
+D_A=\frac{\mathcal D_A}{(e_2-e_1)\,k_1^{(\theta_1+\theta_2)/h+2\lambda_2}\,Q^A_1(\theta_1+\lambda_2h)\,Q^A_1(\theta_2+\lambda_2h)} .
+\end{equation}
+$D_A$ is a polynomial in $k_1$ of degree $2d$ (checked).
+
+\begin{remark}
+The normalization point is the lowest pole $\theta_s+\lambda_2h$, as at $L=1$. Normalizing at $\theta_s$ instead would not work: $Q_1(\theta_s)/Q_1(\theta_s+\lambda_2h)$ depends on the state, so it would spoil the proportionality below.
+\end{remark}
+
+\begin{result}[verified, 8 (rep, point) runs]\label{res:det}
+For every eigenstate,
+\begin{equation}
+\boxed{\;D_A=C\,\big(\langle v_1|\otimes\langle v_1|\big)|\Psi_A\rangle,\qquad C=\frac{(-1)^d}{(d!)^2\,h^{2d}\prod_{n=-d}^{d}(\theta_{12}-nh)}\;}
+\end{equation}
+So the determinant places the $L=1$ covector on \emph{both} sites. $C$ is the same for every state and every $k_1$.
+\end{result}
+
+\paragraph{Method.}
+The covector $v$ is fitted from $v\cdot\Psi_A=D_A$ for all $A$ (the $|\Psi_A\rangle$ form a basis). The ratio $v/(v_1\otimes v_1)$ is then taken componentwise, over all components where $v_1\otimes v_1\neq0$ (all 64 of them at $[2,1,0]$, point 1), at $k_1\in\{\tfrac17,\tfrac3{11},-3\}$. Finally $v-C\,v_1\otimes v_1$ is checked at every order in $k_1$.
+
+\begin{center}
+\begin{tabular}{llcccl}\toprule
+rep & point & $C$ & spread of $C$ & $|v-C\,v_1\otimes v_1|$ & role\\\midrule
+$[2,1,0]$ & 1 & $\tfrac{6859}{2520}$ & $10^{-89}$ & $10^{-90}$ & $\theta_{12}$ product, sign\\
+ & 2 & $-\tfrac{7304528}{63081}$ & $10^{-89}$ & $10^{-89}$ & power of $h$\\
+ & 3 & $\tfrac{1423656}{106817}$ & $10^{-89}$ & $10^{-88}$ & confirms $h^{-2}$\\
+$[3,1,0]$ & 1 & $\tfrac{2476099}{13739040}$ & $10^{-88}$ & $10^{-90}$ & $1/(d!)^2$, sign $(-1)^d$\\
+ & 2 & $-\tfrac{2706784157}{16085655}$ & $10^{-87}$ & $10^{-86}$ & prediction ($h^{-2d}$)\\
+$[3,2,0]$ & 1 & $\tfrac{6859}{2520}$ & $10^{-87}$ & $10^{-87}$ & prediction\\
+ & 3 & $\tfrac{1423656}{106817}$ & $10^{-86}$ & $10^{-86}$ & prediction\\
+$[4,2,0]$ & 1 & $\tfrac{2476099}{13739040}$ & $10^{-85}$ & $10^{-85}$ & prediction ($d=2$, $\lambda_2=2$)\\\bottomrule
+\end{tabular}
+\end{center}
+The chain dimension is 64 for $[2,1,0]^{\otimes2}$, 225 for $[3,1,0]^{\otimes2}$ and $[3,2,0]^{\otimes2}$, and 729 for $[4,2,0]^{\otimes2}$. For $[4,2,0]$ the single-site first factor was also re-verified ($\langle v_1\otimes\vacL|$, $10^{-85}$) and $D_A$ has degree $4=2d$ in $k_1$. In every run $C$ divided by the closed form is exactly $1$.
+
+\paragraph{How $C$ was found.}
+At $[2,1,0]$, point 1, $C=19^3/2520$ and $2520=9\cdot10\cdot28$, i.e.\ $C=-1/\big(\theta_{12}(\theta_{12}-h)(\theta_{12}+h)\big)$ at $\theta_{12}=\tfrac9{19}$, $h=1$. Point 2 ($h=\tfrac12$) left a factor $4=h^{-2}$, and point 3 ($h=\tfrac34$) confirmed it. At $[3,1,0]$, point 1 ($d=2$), $-C\prod_{n=-2}^{2}(\theta_{12}-nh)=-\tfrac14$, which fixed $(-1)^d/(d!)^2$. The closed form, with $h^{-2d}$, was then written down and predicted $[3,1,0]$ point 2, both $[3,2,0]$ runs and $[4,2,0]$ point 1. $[3,2,0]$ has $d=1$ but $\lambda_2=2$, and gives the same $C$ as the adjoint at the same point, so $C$ depends on $\lambda$ only through $d$.
+
+\begin{remark}
+$(d!)^2h^{2d}$ is $N_n^2$, the square of the $L=1$ normalization $N_n=(-1)^dd!\,h^d$ of \nb{L1-mathcalA.tex}. The sign $(-1)^d$ and the product $\prod_{n=-d}^{d}(\theta_{12}-nh)$ are presumably the cross-site factors in the residues of $1/\prod_k\nu_1(u+kh)$, partly cancelled by the $u$-column. This has not been worked out; $C$ is fitted, not derived.
+\end{remark}
+
+%======================================================================
+\section{Times the second factor}\label{sec:second}
+
+\paragraph{The factor.}
+It is exactly that of \nb{L2-mathcalA.tex}, Section~5: the contour encloses only $\theta_1,\dots,\theta_1+\lambda_2h$, the measure is
+\begin{equation}
+m(u)=\frac{p(u)}{\prod_{k=0}^{\lambda_2}\nu^{(1)}_3(u-kh)},\qquad p(u)=\prod_{n=\lambda_2+1}^{\lambda_1}\frac1{u-\theta_2-nh},\qquad \nu^{(1)}_3(u)=u-\theta_1,
+\end{equation}
+and it is normalized so that the $\theta_1$ term is 1:
+\begin{equation}
+F_A=\langle k_2^{u/h}Q_{12}\rangle_m=\sum_{m=0}^{\lambda_2}(-1)^m\binom{\lambda_2}{m}k_2^m\,\rho_m\,Y_{m,A},\qquad \rho_m=\frac{p(\theta_1+mh)}{p(\theta_1)},\quad Y_{m,A}=\frac{Q_{12}(\theta_1+mh)}{Q_{12}(\theta_1)} .
+\end{equation}
+The site-1 fused transfer matrices $t^{(1)}_{\{m,m\}}(\theta_1)$, $m=0,1,2$, are those of \nb{L2-mathcalA.tex}, acting as $t^{(1)}\otimes1$.
+
+\begin{result}[verified, 4 runs]\label{res:second}
+\begin{equation}
+\boxed{\;D_A\,F_A=C\,\big(\langle v_1|\otimes\langle v_1|\big)\sum_{m=0}^{\lambda_2}(-1)^m\binom{\lambda_2}{m}k_2^m\;t^{(1)}_{\{m,m\}}(\theta_1)\otimes1\;|\Psi_A\rangle\;}
+\end{equation}
+So $k_2$ still acts on site~1 only. Fitting the per-$m$ constants $c'_m$ in $C\langle v_1\otimes v_1|t^{(1)}_{\{m,m\}}\otimes1|\Psi_A\rangle=c'_m\,D_A\,Y_{m,A}$ gives $c'_m=\rho_m$ exactly: the same constants $c_m$ as with $\langle v_1|\otimes\vacL$. Rotating site~2 does not change them.
+\end{result}
+
+\begin{center}
+\begin{tabular}{llccc}\toprule
+rep & point & $c'_m=\rho_m$ ($m=0..\lambda_2$) & spread of $c'_m$ & final residual\\\midrule
+$[2,1,0]$ & 1 & $1,\ \tfrac{29}{10}$ & $10^{-83}$ & $10^{-83}$\\
+$[3,1,0]$ & 2 & $1,\ -\tfrac{145}{9}$ & $10^{-81}$ & $10^{-80}$\\
+$[3,2,0]$ & 3 & $1,\ \tfrac{925}{574},\ \tfrac{925}{223}$ & $10^{-85}$ & $10^{-85}$\\
+$[4,2,0]$ & 1 & $1,\ \tfrac{67}{29},\ \tfrac{1608}{145}$ & $10^{-72}$ & $10^{-74}$\\\bottomrule
+\end{tabular}
+\end{center}
+The spread is over all states and $k_1\in\{\tfrac17,\tfrac3{11},-3\}$. The final residual is the maximum over all coefficients of $k_1,k_2$. The four runs cover the adjoint, $p$ with two factors ($[3,1,0]$), the $t_{\{2,2\}}$ insertion ($[3,2,0]$), and both together ($[4,2,0]$).
+
+%======================================================================
+\section{Status and open points}
+\begin{itemize}
+\item \textbf{Proved:} the factorization $\mathcal D=(e_2-e_1)(B_1B_2'-B_2B_1')$.
+\item \textbf{Verified numerically:} Result~\ref{res:det} (8 runs, $\le10^{-85}$) and Result~\ref{res:second} (4 runs, $\le10^{-74}$).
+\item \textbf{Fitted:} $C$, on $[2,1,0]$ points 1--3 and $[3,1,0]$ point 1; four further runs were predictions.
+\item \textbf{Scope:} $\lambda_3=0$, $\lambda_2\le2$, $d\le2$ (up to $[4,2,0]$), the same rep on both sites, unimodular twist. Result~\ref{res:second} has only one point per rep.
+\item \textbf{Open:}
+  \begin{itemize}
+  \item a derivation of $C$;
+  \item the mirror second factor (site-2 poles), expected to give $t^{(2)}_{\{m,m\}}(\theta_2)$ on site~2;
+  \item $3\times3$ and larger determinants for $L\ge3$.
+  \end{itemize}
+\end{itemize}
+What the determinant family does for the CG problem is in \nb{xxx-210-cg-test.tex} (section ``The determinant family'') and \nb{xxx-310-cg-test.tex}.
+
+\paragraph{Pitfalls met.}
+\begin{itemize}
+\item The notebook shares its kernel with other XXX-CG notebooks. \nb{repT} and \nb{ptIndexT} persist; \nb{resultsD} (ledger) is never cleared. Calls issued while the kernel is busy are rejected, not queued.
+\item The per-$m$ table of Result~\ref{res:second} is held in the kernel variable \nb{resultsF} only; it is not a saved cell.
+\end{itemize}
+
+%======================================================================
+\section*{Notebook map (\nb{L2-det-mathcalA.wb})}
+\begin{center}
+\begin{tabular}{rl}\toprule
+cell & content\\\midrule
+1 & summary\\
+2--5 & GT machinery, chain, eigenstates, Q-functions (from \nb{L2-mathcalA.wb})\\
+6 & single-site first factor; defines $\langle v_1|$ (\nb{v1siteA2})\\
+7--8 & the $2\times2$ determinant, fit of $v$, ratio to $v_1\otimes v_1$ (Result~\ref{res:det})\\
+9 & ledger \nb{resultsD} and comparison with the closed form of $C$\\
+10--11 & times the second factor; $c'_m$ fit (Result~\ref{res:second})\\\bottomrule
+\end{tabular}
+\end{center}
+To rerun a case, set \nb{repT} and \nb{ptIndexT}, then run cells 3--11 (about a minute at dimension 225).
+
+\end{document}

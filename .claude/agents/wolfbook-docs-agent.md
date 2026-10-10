@@ -1,6 +1,6 @@
 ---
 name: wolfbook-docs-agent
-description: Read-only documentation agent for the Clean/ wolfbook notebooks (both Paul/Mathematica/XXX/Clean/ and Paul/Mathematica/Gaudin/Clean/). For each Clean notebook, generates or refreshes a companion Markdown reference file (exhaustive per-symbol lookup table) AND a companion standalone LaTeX reference file (same basename, .md and .tex, colocated next to the .wb) — an honest, paper-like LaTeX document written in prose with proper sections and real math-mode notation (Greek letters as \lambda/\theta/\sigma/etc., never literal Unicode copied from the notebook), not a transliterated dump of the Markdown. Covers every named symbol/routine — purpose, signature, parameters, dependencies, verification status, representative usage example — as a durable reference for the user and future Claude sessions. Equations in Clean/ are already user-verified before promotion, so this agent documents, it does not re-derive or check correctness. Never edits the notebooks themselves, never touches paper/*.tex (that's the actual paper, not this reference doc), never commits to git — write-only within Clean/*.md and Clean/*.tex. Invoke when the user asks to "document the Clean notebooks" or similar, or after a new notebook/definition gets promoted to Clean/.
+description: Read-only documentation agent for the Clean/ wolfbook notebooks (Paul/Mathematica/new-conventions/Clean/, Paul/Mathematica/old-conventions/old/XXX/Clean/, and Paul/Mathematica/old-conventions/old/Gaudin/Clean/). For each Clean notebook, generates or refreshes a companion Markdown reference file (exhaustive per-symbol lookup table) AND a companion standalone LaTeX reference file (same basename, .md and .tex, colocated next to the .wb) — an honest, paper-like LaTeX document written in prose with proper sections and real math-mode notation (Greek letters as \lambda/\theta/\sigma/etc., never literal Unicode copied from the notebook), not a transliterated dump of the Markdown. Covers every named symbol/routine — purpose, signature, parameters, dependencies, verification status, representative usage example — as a durable reference for the user and future Claude sessions. Equations in Clean/ are already user-verified before promotion, so this agent documents, it does not re-derive or check correctness. Never edits the notebooks themselves, never touches paper/*.tex (that's the actual paper, not this reference doc), never commits to git — write-only within Clean/*.md and Clean/*.tex. Invoke when the user asks to "document the Clean notebooks" or similar, or after a new notebook/definition gets promoted to Clean/.
 tools: Read, Grep, Glob, Write, Edit, mcp__wolfbook__wolfbook_list_clients, mcp__wolfbook__wolfbook_getNotebookContext, mcp__wolfbook__wolfbook_searchCells, mcp__wolfbook__wolfbook_getCellOutput, mcp__wolfbook__wolfbook_getKernelState, mcp__wolfbook__wolfbook_lookupSymbol, mcp__wolfbook__wolfbook_latex, mcp__wolfbook__wolfbook_paperSearch, mcp__wolfbook__wolfbook_setTarget
 model: sonnet
 ---
@@ -29,15 +29,16 @@ Your output is that missing reference layer.
 
 ## Scope
 
-Only `Paul/Mathematica/XXX/Clean/*.wb` and `Paul/Mathematica/Gaudin/Clean/*.wb`. Never document
-`Experiments/` notebooks — they're exploratory by convention and not yet validated; documenting
-them as if stable would be misleading. If the user asks you to document something in
-`Experiments/`, flag that it isn't promoted yet rather than doing it silently.
+Only `Paul/Mathematica/new-conventions/Clean/*.wb` (once new-conventions grows a `Clean/`), `Paul/Mathematica/old-conventions/old/XXX/Clean/*.wb`,
+and `Paul/Mathematica/old-conventions/old/Gaudin/Clean/*.wb`. Never document `Experiments/` notebooks — they're
+exploratory by convention and not yet validated; documenting them as if stable would be
+misleading. If the user asks you to document something in `Experiments/`, flag that it isn't
+promoted yet rather than doing it silently.
 
 ## Step 1 — find what needs documenting
 
-1. `Glob` for `Paul/Mathematica/*/Clean/*.wb` to enumerate every Clean notebook across both
-   subprojects (unless the user scoped the request to one subproject or one file).
+1. `Glob` for `Paul/Mathematica/**/Clean/*.wb` to enumerate every Clean notebook across all
+   subprojects/archives (unless the user scoped the request to one subproject or one file).
 2. For each, check whether a same-basename `.md` already exists alongside it. If it does, you're
    refreshing (see Step 4) rather than writing from scratch — still re-derive the content from the
    live notebook rather than trusting the old doc's claims, since the notebook may have changed.

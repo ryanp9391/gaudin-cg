@@ -1,0 +1,235 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,hyperref}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{url}
+\Urlmuskip=0mu plus 1mu
+\geometry{margin=1in}
+
+% Write-up for Experiments/SU3_Adjoint_Twisted_SoV_L2.wb.
+% Untwisted companion: SU3_Adjoint_SoV_ScalarProduct_L2.tex.
+
+\newcommand{\Op}{\mathcal{O}}
+\newcommand{\sh}[1]{^{[#1]}}
+\newcommand{\gl}{\mathfrak{gl}}
+\newcommand{\br}[1]{\langle #1\rangle}
+
+\title{The untwisted $3\times3$ norm as a minor of the twisted $6\times6$ norm\\
+for the $\gl(3)$ chain with two adjoint sites}
+\author{Notes accompanying \texttt{Experiments/SU3\_Adjoint\_Twisted\_SoV\_L2.wb}}
+\date{14 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+With a diagonal unimodular twist, the functional SoV orthogonality relation for the $\gl(3)$ chain
+with sites $[2,1,0]\otimes[2,1,0]$ is linear in six differences of integrals of motion. We choose a
+basis in which three of them tend to the three zero-twist differences and the other three are
+$O(\varphi)$. The first three columns of the twisted matrix then coincide with the untwisted matrix.
+We build six rows: three from regularised twisted $Q$-functions, which tend to the untwisted ones,
+and three from raw twisted $Q$-functions. The $6\times6$ norm then factorises as
+$\det M_6=\det N_{\rm untw}\cdot\det D\,(1+O(\varepsilon))$, uniformly over all states and for
+$76$ of the $84$ choices of the raw rows. The lower-right block scales as
+$\varepsilon^{2\pm\sum_{i<j}(\mu_i-\mu_j)}$. All statements are verified with $150$-digit numerics
+at $\varepsilon=10^{-3},10^{-4},10^{-5}$. Splitting $\Delta T_2=\nu_1\sh{-2}\delta_1+\nu_3\delta_2$, all
+integrals can be written over the single measure $1/(\nu_1\nu_2\nu_3)$; this changes the
+determinants only by a state-independent constant.
+\end{abstract}
+
+\tableofcontents
+
+\section{Setup}
+
+We use the chain of the companion notes: $\theta_1=\tfrac13$, $\theta_2=-\tfrac8{57}$, $h=1$,
+$L_{ij}(u)=u\delta_{ij}-hE_{ji}$, $T(u)=L^{(1)}(u-\theta_1)L^{(2)}(u-\theta_2)$, and
+$\nu_i(u)=(u-\theta_1-h\lambda_i)(u-\theta_2-h\lambda_i)$ with $\lambda=(2,1,0)$. The twist is
+\begin{equation}
+z_j=e^{\varphi_j},\qquad \varphi_j=\varepsilon\psi_j,\qquad \psi=(1,\tfrac13,-\tfrac43),\qquad z_1z_2z_3=1,
+\end{equation}
+and the transfer matrices are
+\begin{equation}
+T_a(u)=\sum_{|I|=a}z_I\,\mathrm{qmin}_{I,I}(u),\qquad z_I=\prod_{i\in I}z_i.
+\end{equation}
+The principal quantum minors are computed exactly once. At an exact generic twist we checked that
+the $T_a$ commute, that $T_3=z_1z_2z_3\,\nu_1\sh{-4}\nu_2\sh{-2}\nu_3=\nu_1\sh{-4}\nu_2\sh{-2}\nu_3$,
+and that the $T_a$ commute with the Cartan generators but not with $E_{12}$.
+
+\section{Integrals of motion}
+
+With twist, the leading coefficients of
+\begin{equation}
+T_1=\chi_1u^2+s_1u+c_1,\qquad T_2=\chi_2u^4+s_2u^3+c_{22}u^2+c_{21}u+c_{20}
+\end{equation}
+are state-independent, leaving six differences. At zero twist, $s_1$ and $s_2$ see only
+$\sum\mu_i$, and $[u^2]T_2-[u^0]T_1$ is state-independent (companion notes, Section~2). So
+$\Delta s_1$, $\Delta s_2$ and $\Delta c_{22}-\Delta c_1$ vanish at $\varphi=0$. We use
+\begin{equation}
+w=\big(\Delta c_1,\ \Delta c_{21},\ \Delta c_{20}\ \big|\ \Delta c_{22}-\Delta c_1,\ \Delta s_1,\ \Delta s_2\big),
+\end{equation}
+whose first three entries tend to $(\Delta t_1,\Delta t_{21},\Delta t_{20})$. Numerically,
+$\max|w_{4,5,6}|/\max|w_{1,2,3}|=9.5\cdot10^{-4}$ and $9.5\cdot10^{-5}$ at
+$\varepsilon=10^{-3}$ and $10^{-4}$.
+
+\section{Twisted $Q$-functions}
+
+With $Q_k=z_k^{u}q_k$ and $Q^j=z_j^{-u}q^j$ the Baxter equations become polynomial:
+\begin{align}
+&z\,\nu_1\nu_1\sh{-2}\nu_1\sh{-4}\,q\sh{2}-T_1\,\nu_1\sh{-2}\nu_1\sh{-4}\,q+z^{-1}T_2\,\nu_1\sh{-4}\,q\sh{-2}-z^{-2}T_3\,q\sh{-4}=0,\\
+&\nu_3\sh{2}\nu_3\sh{4}\nu_3\sh{6}\,g-y\,T_1\sh{2}\nu_3\sh{4}\nu_3\sh{6}\,g\sh{2}+y^2T_2\sh{4}\nu_3\sh{6}\,g\sh{4}-y^3T_3\sh{6}\,g\sh{6}=0,\qquad y=z_j^{-1}.
+\end{align}
+For each untwisted highest-weight state $U$ we diagonalise a generic combination of the twisted
+$T_a$-coefficients in the weight sector $\mu_U$. We select the eigenvector whose eigenvalues are
+closest to those of $U$, then solve for monic polynomials by least squares. The solutions exist
+with
+\begin{equation}
+\deg q_k=4-\mu_k,\qquad \deg q^j=\mu_j,
+\end{equation}
+with relative residuals $\sim10^{-131}$.
+
+\paragraph{Regularisation.} The untwisted degrees $4-\mu_k+(k-1)$ and $\mu_j+3-j$ are larger,
+so individual raw $Q$-functions cannot converge to untwisted ones. We define
+\begin{equation}
+R_k\in\mathrm{span}(Q_1,\dots,Q_k),\qquad R^j\in\mathrm{span}(Q^3,\dots,Q^j),
+\end{equation}
+fixed by matching the untwisted $q_k$ (resp.\ $q^j$) at $k$ (resp.\ $4-j$) of the points
+$\tfrac1{10},\tfrac7{20},\tfrac35$. Suppose the space of combinations that stay regular as
+$\varepsilon\to0$ has the same dimension, and the untwisted values at the matching points form an
+invertible matrix. Then $R_k=q_k+O(\varepsilon)$ uniformly on compact sets. These are exact twisted
+solutions.
+
+\section{The twisted system}
+
+The measure $E_2=\prod_\alpha\prod_{n=0}^{3}(u-\theta_\alpha-nh)^{-1}$ has simple poles, so the
+full-contour functional is the finite sum
+$\br{F}=\sum_p F(p)\big/\prod_{p'\neq p}(p-p')$. The twisted orthogonality identity reads
+\begin{equation}
+0=\br{E_2\,Q^j_A\big(-\Delta T_1\,\nu_1\sh{-2}Q_i^B+\Delta T_2\,Q_i^{B[-2]}\big)}=\sum_{c=1}^6w_c\,\br{F_c},
+\end{equation}
+where
+\begin{equation}
+\begin{aligned}
+F_1&=Q^j\big(u^2Q_i\sh{-2}-\nu_1\sh{-2}Q_i\big), & F_2&=Q^j\,u\,Q_i\sh{-2}, & F_3&=Q^j\,Q_i\sh{-2},\\
+F_4&=Q^j\,u^2\,Q_i\sh{-2}, & F_5&=-Q^j\,u\,\nu_1\sh{-2}Q_i, & F_6&=Q^j\,u^3\,Q_i\sh{-2}.
+\end{aligned}
+\end{equation}
+Columns $1$--$3$ are exactly those of the untwisted $3\times3$ matrix. We checked the identity for
+all $30$ ordered cross pairs, with all nine raw pairs $(i,j)$ and with the three regularised pairs
+of $\mathcal T_a$. The largest relative residual $|M\cdot w|/\sum_c|M_cw_c|$ is $\sim10^{-117}$.
+
+\subsection{Measure $1/(\nu_1\nu_2\nu_3)$}
+All terms can be placed on the single measure
+\begin{equation}
+M(u)=\frac{1}{\nu_1\nu_2\nu_3}=\prod_{\alpha=1}^2\frac{1}{(u-\theta_\alpha)(u-\theta_\alpha-h)(u-\theta_\alpha-2h)},
+\end{equation}
+with six simple poles. The $\Delta T_1$ term already sits on it, since $E_2\,\nu_1\sh{-2}=\mu/\nu_1=M$.
+With twist $\Delta T_2$ has degree $3$, and since $\nu_3$ and $\nu_1\sh{-2}$ have no common root it
+splits uniquely as
+\begin{equation}
+\Delta T_2=\nu_1\sh{-2}\,\delta_1+\nu_3\,\delta_2,\qquad \delta_1=a_1u+b_1,\quad \delta_2=a_2u+b_2 .
+\end{equation}
+The first piece gives $E_2\nu_1\sh{-2}=M$. The second has poles at $\theta_\alpha+\{1,2,3\}h$, and the
+full-contour shift $u\to u+h$ moves it onto $M$. The identity becomes
+\begin{equation}
+0=\br{-\Delta T_1\,Q^j_AQ^B_i+\delta_1\,Q^j_AQ_i^{B[-2]}+\delta_2\sh{2}\,Q^{j[2]}_AQ^B_i}_M
+=\sum_{c=1}^6 w'_c\,\br{G_c}_M,
+\end{equation}
+with $w'=(\Delta s_1,\Delta c_1,a_1,b_1,a_2,b_2)$ and
+\begin{equation}
+\begin{aligned}
+G_1&=-u\,Q^jQ_i, & G_2&=-Q^jQ_i, & G_3&=u\,Q^jQ_i\sh{-2},\\
+G_4&=Q^jQ_i\sh{-2}, & G_5&=(u+h)\,Q^{j[2]}Q_i, & G_6&=Q^{j[2]}Q_i .
+\end{aligned}
+\end{equation}
+Every column is a $u^0$ or $u^1$ insertion against $M$. At zero twist the $u^3$ and $u^2$
+coefficients give $a_2=-a_1$ and $b_1+b_2-6h\,a_1=\Delta c_1$, so the untwisted columns are
+$(G_2+G_6,\ G_3-G_5+6G_6,\ G_4-G_6)$, multiplying $(\Delta c_1,a_1,b_1)$. The three $O(\varphi)$
+directions are $\Delta s_1$, $a_1+a_2$ and $b_1+b_2-6a_1-\Delta c_1$.
+
+The map $w\mapsto w'$ is linear and state-independent, so each row over $M$ is the corresponding row
+over $E_2$ times a fixed matrix. Numerically ($\varepsilon=10^{-3}$, $10^{-4}$):
+\begin{itemize}
+\item the rewriting holds term by term for arbitrary $\Delta T_1$ (degree $1$) and $\Delta T_2$
+(degree $3$), all nine raw $(i,j)$ and all six states, to $\sim10^{-125}$;
+\item the identity holds for all $30$ cross pairs, raw and regularised rows, to $\sim10^{-118}$;
+\item the $O(\varphi)$ directions are $0.0070$ and $0.00070$ of $\max|w'|$;
+\item $\det M_6[M]/\det M_6[E_2]=-28512/361$ for all six states and for both twist triples below;
+\item the untwisted $\widehat N$ computed over $M$ coincides exactly with that over $E_2$.
+\end{itemize}
+The block-structure results of the next section therefore hold unchanged in this form.
+
+\section{Block structure of the norm}
+
+\subsection{Rows}
+The $6\times6$ matrix $M_6^{AA}$ has
+\begin{itemize}
+\item three \emph{good} rows, the regularised pairs
+$\mathcal T_a=\{(1,1),(2,1),(2,2)\}$, which are the rows of the untwisted norm;
+\item three \emph{twist} rows, raw pairs $(i,j)$.
+\end{itemize}
+Write $M_6=\begin{pmatrix}A&B\\C&D\end{pmatrix}$, with $A$ the good rows in columns $1$--$3$ and
+$D$ the twist rows in columns $4$--$6$. Then
+$\det M_6=\det A\,\det(D-CA^{-1}B)$.
+
+\subsection{Scaling of raw rows}
+For the vacuum, a raw row $(i\neq j)$ scales across the six columns as
+\begin{equation}
+\varepsilon^{(a,\ a,\ a+1,\ a-1,\ a-2,\ a-2)},
+\end{equation}
+where $a$ depends on the pair. For example, $a=4$ for $(1,2)$, $a=6$ for $(1,3)$, $a=0$ for $(2,1)$
+and $a=-2$ for $(3,1)$. Diagonal raw rows vanish identically in columns $1$--$4$. So columns $4$--$6$
+are always the least suppressed, and in a Laplace expansion the assignment of the twist rows to
+columns $4$--$6$ has the lowest power.
+
+\subsection{The minor and block dominance}
+The upper-left block converges to the untwisted matrix:
+\begin{equation}
+\max_A\left|\frac{\det A}{\det N^{AA}_{\rm untw}}-1\right|=0.093,\ 0.0093,\ 0.00093
+\qquad(\varepsilon=10^{-3},10^{-4},10^{-5}).
+\end{equation}
+For $76$ of the $84$ triples of raw rows, uniformly over all six states,
+\begin{equation}
+\boxed{\ \det M_6^{AA}=\det N^{AA}_{\rm untw}\cdot\det D^{AA}\cdot\big(1+O(\varepsilon)\big).\ }
+\end{equation}
+We accept a triple when the residual is below $10^{-3}$ at $\varepsilon=10^{-5}$ and at least five
+times smaller than at $10^{-4}$. The largest residual is $9.1\cdot10^{-4}$; for the two triples in
+Table~\ref{tab:pow} it is at most $2.3\cdot10^{-4}$. The eight failing triples are:
+\begin{itemize}
+\item the six sharing a direct or a dual index;
+\item $\{(1,1),(1,2),(2,3)\}$;
+\item $\{(1,1),(2,2),(3,3)\}$, for which $\det D=0$.
+\end{itemize}
+
+\subsection{Order of the lower-right block}
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+state & $\sum_{i<j}(\mu_i-\mu_j)$ & rows $\{(1,2),(1,3),(2,3)\}$ & rows $\{(2,1),(3,1),(3,2)\}$\\
+\midrule
+$\{4,2,0\}$ & 8 & $\varepsilon^{10}$ & $\varepsilon^{-6}$\\
+$\{3,3,0\}$ & 6 & $\varepsilon^{8}$ & $\varepsilon^{-4}$\\
+$\{4,1,1\}$ & 6 & $\varepsilon^{8}$ & $\varepsilon^{-4}$\\
+$\{3,2,1\}^{\times2}$ & 4 & $\varepsilon^{6}$ & $\varepsilon^{-2}$\\
+$\{2,2,2\}$ & 0 & $\varepsilon^{2}$ & $\varepsilon^{2}$\\
+\bottomrule
+\end{tabular}
+\caption{Power of $\det D$.}
+\label{tab:pow}
+\end{table}
+So $\det D\propto\varepsilon^{2\pm\sum_{i<j}(\mu_i-\mu_j)}$. The state-dependent part comes from the
+monic normalisation of the raw $Q$-functions, i.e.\ the factor $\prod(\varphi_i-\varphi_j)^{\mu_i-\mu_j}$.
+The universal $\varepsilon^2$ is the suppression carried by the three $O(\varphi)$ integrals of
+motion. The rows $i<j$ vanish identically at zero twist, so they probe only the twist.
+
+\section{Open points}
+\begin{enumerate}
+\item Determine the leading coefficient of $\det D$ on several rays $\psi$, and test for a product
+of powers of $\varphi_i-\varphi_j$ times a state-dependent constant.
+\item Normalise the twist rows so that $\det D$ is state-independent; then
+$\det M_6/\det M_6^{\rm vac}$ tends to the untwisted $\widehat N$.
+\item Relate $\det D$ and $\widehat N$ to the Hilbert-space norms $H$ of the companion notes. There,
+$\widehat N$ was shown not to be a $Q$-dressed $H$ at ladder points.
+\end{enumerate}
+
+\end{document}

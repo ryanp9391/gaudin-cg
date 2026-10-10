@@ -1,0 +1,241 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\emergencystretch=3em
+
+\newcommand{\vacL}{\langle\mathrm{vacL}|}
+\newcommand{\nb}[1]{\texttt{#1}}
+
+\theoremstyle{definition}
+\newtheorem{result}{Result}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{Which transfer matrices act on one site of a global rotation?\\
+$[2,1,0]^{\otimes2}$, $L=2$}
+\author{Notes accompanying \nb{L2-localizing-transfer.wb}}
+\date{2026-09-23}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Take a global rotation $\langle u\otimes u|$, $\langle u|=e_1^Tg$ with $g$ in the upper unipotent group, on the $L=2$ chain with both sites in $V=V_{[2,1,0]}$. We ask which fused transfer matrices $t_{\{\mu\}}(x)$ at the special points $x=\theta_s+nh$ act on $\langle u\otimes u|$ through one site only. The main answer is yes for $t_{\{2,1\}}(\theta_1)$. It maps $\langle u\otimes u|$ to $\tau^{\rm vac}\,\langle u^G\otimes u|$, where $\langle u^G|=e_1^TG^{-1}gG$ is the same rotation conjugated by the twist, on site~1 only; the constant is the vacuum eigenvalue. This is exact in the rotation parameters and was checked at two points of $(\theta,z,h)$. A scan of all fused transfer matrices with at most two rows and columns of the Young diagram finds two further one-site actions ($t_{\{1,1\}}$ at $\theta_1$ and at $\theta_2+3h$). The statement does not iterate. We use the $t_{\{2,1\}}(\theta_1)$ family in the CG count of \nb{xxx-210-cg-test.tex}: it adds no new highest-weight state.
+
+Two further questions are answered in Sections~\ref{sec:pairs}--\ref{sec:sov}.
+
+(i) For which product covectors $\langle v\otimes w|$ does $t_\lambda(\theta_1)$ act on site~1 only? $t_{\{2,1\}}(\theta_1)=R_{12}(\theta_{12})G_1$ exactly, and it localizes only for $v\propto w$ with $w$ a local highest-weight state of \emph{any} Borel, the same on both sites. $t_{\{1,1\}}(\theta_1)$ additionally allows a relative $E_{12}$ rotation, $v=e_1^Te^{aE_{12}}g$, $w=e_1^Tg$. Nothing localizes a relative $E_{13}$, $E_{23}$ or Weyl rotation.
+
+(ii) Which combinations of the 64 SoV basis covectors act on site~1 only, $\sum_xc_x\langle x|=\langle v\otimes\mathrm{vacL}|$? They form an 8-dimensional space built from only 12 labels. The minimal ones are 4 single labels and 4 pairs, and their site-1 covectors span all of $V^*$. This includes the weights $(1,0,2)$ and $(0,1,2)$ that the $\langle k_1Q_1\rangle\langle k_2Q_{12}\rangle$ family never reaches.
+\end{abstract}
+
+\tableofcontents
+
+%======================================================================
+\section{Setup}
+
+The conventions are those of \nb{L2-det-mathcalA.tex}. The monodromy is
+\begin{equation}
+T_{ij}(x)=\sum_k\mathcal L^{(1)}_{ik}(x-\theta_1)\,\mathcal L^{(2)}_{kj}(x-\theta_2),\qquad \mathcal L_{ij}(x)=x\,\delta_{ij}-hE_{ji},
+\end{equation}
+with the twist $G=\mathrm{diag}(z_1,z_2,z_3)$ multiplied on the right, $TG$. The antisymmetric transfer matrices are $t_a(x)=\sum_{|I|=a}z_I\operatorname{qminor}_{I,I}(x)$, where the $k$-th column of the quantum minor is evaluated at $x-(k-1)h$. The fused transfer matrices are those of \nb{L1-orthogonality-diagonal-frame.wb} (cell 5):
+\begin{align}
+t_{\{1,0\}}&=t_1(x), & t_{\{1,1\}}&=t_2(x), & t_{\{2,0\}}&=t_1(x)t_1(x+h)-t_2(x+h),\notag\\
+t_{\{2,1\}}&=t_2(x)t_1(x+h)-t_3(x+h), & t_{\{2,2\}}&=t_2(x)t_2(x+h)-t_3(x+h)t_1(x). &&
+\end{align}
+Covectors act from the left. The Gelfand--Tsetlin basis has $e_1$, the highest-weight vector, first. A global rotation is
+\begin{equation}
+\langle u|=e_1^T\,e^{aE_{12}}e^{bE_{13}}e^{cE_{23}},\qquad \langle u\otimes u|,
+\end{equation}
+with $a,b,c$ free. $\vacL$ is the special case $(a,b,c)=(p_1,p_2,p_3)$ with $p_3=p_2(z_3-z_1)/(p_1(z_2-z_3))$. As a test for ``acts on site~1 only'' we reshape $\langle u\otimes u|t(x)$ as an $8\times8$ matrix $M$ (site~1 $\times$ site~2) and ask whether $M=w\otimes u$ for some $w$, i.e.\ whether every row of $M$ is proportional to $u$. Site~2 only is the same test on the columns.
+
+The numeric points are points 1 and 2 of \nb{L2-det-mathcalA.tex}:
+\begin{center}
+\begin{tabular}{lccc}\toprule
+point & $h$ & $(\theta_1,\theta_2)$ & $(z_1,z_2,z_3)$\\\midrule
+1 & $1$ & $(1/3,\,-8/57)$ & $(5/2,\,7/3,\,6/35)$\\
+2 & $1/2$ & $(2/7,\,-3/11)$ & $(3/2,\,5/4,\,8/15)$\\\bottomrule
+\end{tabular}
+\end{center}
+All arithmetic is exact (rational, with symbolic rotation parameters where stated).
+
+%======================================================================
+\section{Results}
+
+\begin{result}[exact at point 1, symbolic in $a,b,c$]\label{res:main}
+\begin{equation}
+\langle u\otimes u|\,t_{\{2,1\}}(\theta_1)=\tau^{\rm vac}_{\{2,1\}}(\theta_1)\,\langle u^G\otimes u|,\qquad
+\langle u^G|=e_1^T\,G^{-1}gG=e_1^T\,e^{a\frac{z_2}{z_1}E_{12}}\,e^{b\frac{z_3}{z_1}E_{13}}\,e^{c\frac{z_3}{z_2}E_{23}}.
+\end{equation}
+Site~2 keeps $\langle u|$, and site~1 carries the same rotation conjugated by the twist. The constant does not depend on $a,b,c$, so it is the eigenvalue of $t_{\{2,1\}}(\theta_1)$ on $\langle e_1\otimes e_1|$ (which is a left eigenvector); at point~1 it is $210000/6859$.
+\end{result}
+
+\begin{result}[exact at point 2, symbolic in $p_1,p_2$]\label{res:pt2}
+With $u=\mathrm{vacL}$ and $G$ acting in $V$ as $\hat G=\mathrm{diag}(z^\mu)$,
+\begin{equation}
+\langle \mathrm{vacL}\otimes\mathrm{vacL}|\,t_{\{2,1\}}(\theta_1)=\tau\,\langle e_1^T\hat G^{-1}g_0\hat G\otimes\mathrm{vacL}|,\qquad \tau=\tfrac{1585575}{467489792}.
+\end{equation}
+This checks the $z$- and $h$-dependence of Result~\ref{res:main} at a second point.
+\end{result}
+
+\begin{remark}[mechanism]
+Suppose the fused Lax operator in the auxiliary representation $\{2,1\}$ is proportional to the permutation $P_{a1}$ at $x=\theta_1$ (regularity). Then, for $T=L_1L_2G$,
+\begin{equation}
+t(\theta_1)=\operatorname{tr}_a\!\big(P_{a1}R_{a2}(\theta_{12})G_a\big)=R_{12}(\theta_{12})\,G_1 .
+\end{equation}
+$\langle u\otimes u|$ lies in the top component $V_{2\lambda}\subset V\otimes V$, where $R_{12}$ is a scalar. So $\langle u\otimes u|t(\theta_1)\propto\langle u\otimes u|G_1=\langle uG\otimes u|$, which is Result~\ref{res:main}. With the opposite ordering one would get $G_1R_{12}$ instead, which is not local. This explains the asymmetry between the sites below. The factorization $t_{\{2,1\}}(\theta_1)=R_{12}G_1$ with an invariant $R_{12}$ is checked exactly at point 1 in Result~\ref{res:R}. The regularity of the fused Lax operator itself is not checked separately.
+\end{remark}
+
+\begin{result}[scan, exact at point 1]\label{res:scan}
+For $u$ at $(a,b,c)=(3/5,4/7,-2/9)$ and $x=\theta_s+nh$, $n=-3,\dots,3$, $s=1,2$ (the range of the saved cell-4 output; an earlier version of these notes said $n=-5,\dots,5$), the only one-site actions among $t_{\{1,0\}},t_{\{1,1\}},t_{\{2,0\}},t_{\{2,1\}},t_{\{2,2\}}$ are:
+\begin{center}
+\begin{tabular}{lll}\toprule
+operator & acts on & result\\\midrule
+$t_{\{2,1\}}(\theta_1)$ & site 1 & rank 1; $w$ is a rotation (Result~\ref{res:main})\\
+$t_{\{1,1\}}(\theta_1)$ & site 1 & rank 1; $w$ is \emph{not} of the form $c\,e_1^Te^{a'E_{12}}e^{b'E_{13}}e^{c'E_{23}}$\\
+$t_{\{1,1\}}(\theta_2+3h)$ & site 2 & rank 1\\
+$t_{\{2,2\}}(\theta_s)$, $t_{\{2,2\}}(\theta_s+2h)$ & -- & annihilates $\langle u\otimes u|$\\\bottomrule
+\end{tabular}
+\end{center}
+At all other points the rank of $M$ is 2--3 for $t_{\{1,0\}},t_{\{1,1\}}$, 2--6 for $t_{\{2,0\}}$, 2--8 for $t_{\{2,1\}}$ (rank 2 at $\theta_2+3h$, but on neither site alone) and 4--6 for $t_{\{2,2\}}$. In particular no $t_{\{2,1\}}(\theta_2+nh)$ acts on site~2 alone.
+\end{result}
+
+\begin{result}[the statement does not iterate]\label{res:iter}
+$\langle\mathrm{vacL}\otimes\mathrm{vacL}|\,t_{\{2,1\}}(\theta_1)^2$ has rank 4 as a site-1 $\times$ site-2 matrix (point 1). It is neither on one site nor proportional to $\langle e_1^T\hat G^{-2}g_0\hat G^2\otimes\mathrm{vacL}|$. After one step the two sites carry different rotations, $u^G\otimes u$, which is not in $V_{2\lambda}$, so $R_{12}$ is no longer a scalar on it.
+\end{result}
+
+%======================================================================
+\section{Use in the CG count}
+
+In \nb{xxx-210-cg-test.tex} the covectors are brought to the form $\langle c|\otimes e_1^T$ by undoing the reference rotation globally, and then untwisted. For this family,
+\begin{equation}
+\big(\langle \mathrm{vacL}\otimes\mathrm{vacL}|\,t_{\{2,1\}}(\theta_1)\big)(g_0^{-1}\otimes g_0^{-1})=\tau\,\langle v_t|\otimes e_1^T,\qquad
+\langle v_t|=e_1^T\hat G^{-1}g_0\hat G g_0^{-1}.
+\end{equation}
+As a $3\times3$ matrix,
+\begin{equation}
+G^{-1}g_0Gg_0^{-1}=\begin{pmatrix}1& p_1\big(\tfrac{z_2}{z_1}-1\big)&0\\0&1&\tfrac{p_2(z_1-z_3)}{p_1z_2}\\0&0&1\end{pmatrix}=e^{yE_{23}}e^{xE_{12}},
+\end{equation}
+with a vanishing $(1,3)$ entry because of the $\vacL$ relation. After untwisting, $v_t$ reaches 4 of the 6 highest-weight states of $V\otimes V$, all already reached by the earlier families; the singlet is missed. The reason (the zero $(1,3)$ entry caps the slot-3 weight at $\lambda_2$) is explained in \nb{xxx-210-cg-test.tex}, section ``Why the rule $\nu_3\le\lambda_2$''.
+
+%======================================================================
+\section{Product covectors: which pairs $\langle v\otimes w|$ localize at $\theta_1$?}\label{sec:pairs}
+
+For fixed $w$, the condition
+\begin{equation}
+\langle v\otimes w|\,t_\lambda(\theta_1)=\langle v'\otimes w|\quad\text{for some }v'
+\end{equation}
+is linear in $v$. Every row of the reshaped $8\times8$ matrix must be proportional to $w$, i.e.\ annihilate $\{q:\ w\cdot q=0\}$. So each $w$ has a \emph{localizing subspace} $V_{\rm loc}(w)\subset V^*$, computed exactly at point~1 (cell~11). A generic group element is taken as $g=n_-hn_+$ with rational parameters. Then $e_1^Tg$ is the highest-weight covector of a generic Borel, and $e_8^Tg$ the lowest-weight one.
+
+\begin{result}[mechanism, exact at point 1]\label{res:R}
+$t_{\{2,1\}}(\theta_1)\,(\hat G^{-1}\otimes1)$ commutes with the global $\mathfrak{gl}(3)$ generators $E^{(1)}_{ij}+E^{(2)}_{ij}$. So $t_{\{2,1\}}(\theta_1)=R_{12}(\theta_{12})\,G_1$ with $R_{12}$ $\mathfrak{gl}(3)$-invariant, which confirms the remark above. $t_{\{1,0\}}$, $t_{\{1,1\}}$ and $t_{\{2,0\}}$ at $\theta_1$ do not have this property.
+\end{result}
+
+\begin{result}[localizing subspaces, exact at point 1]\label{res:vloc}
+$\dim V_{\rm loc}(w)$ is:
+\begin{center}
+\begin{tabular}{lcccc}\toprule
+$w$ & $t_{\{1,0\}}$ & $t_{\{1,1\}}$ & $t_{\{2,0\}}$ & $t_{\{2,1\}}$\\\midrule
+generic covector & 0 & 0 & 0 & 0\\
+bare $e_1^T$, bare $e_8^T$ & 1$^*$ & 2 & 1$^*$ & 1$^*$\\
+$u=e_1^Tn_+$ (rotations used so far) & 0 & 2 & 0 & 1\\
+$e_1^Tg$, $g$ generic & 0 & 2 & 0 & 1\\
+$e_8^Tg$, $g$ generic & 0 & 2 & 0 & 1\\\bottomrule
+\end{tabular}
+\end{center}
+$^*$\,trivial: $e_1\otimes e_1$ and $e_8\otimes e_8$ are eigen-covectors of the diagonal-twist transfer matrices.
+\begin{itemize}
+\item $t_{\{2,1\}}(\theta_1)$: $V_{\rm loc}(w)=\mathrm{span}\{w\}$, and $v'\propto w\hat G$. Both sites must carry the \emph{same} local highest-weight state, for any Borel. This is the only way $v\otimes w$ lies in the Cartan component, where $R_{12}$ is a scalar. A mixed pair, e.g.\ $(e_1^T\otimes e_8^T)(g\otimes g)$ in any other relative Bruhat position, never localizes.
+\item $t_{\{1,1\}}(\theta_1)$: $V_{\rm loc}(e_1^T)=\mathrm{span}\{e_1^T,\,e_1^TE_{12}\}$, i.e.\ $v=e_1^Te^{aE_{12}}$. The subspace is covariant, $V_{\rm loc}(e_1^Tg)=V_{\rm loc}(e_1^T)\,g$. So the two sites may differ by a relative $E_{12}$ rotation and nothing else. This is the relative rotation carried by $\langle k_1^{u/h}Q_1\rangle$ (\nb{L2-mathcalA.tex}).
+\item $t_{\{1,0\}}$ and $t_{\{2,0\}}$ localize only on the trivial eigen-covectors.
+\end{itemize}
+\end{result}
+
+\begin{remark}
+No $t_\lambda(\theta_1)$ localizes a relative $E_{13}$, $E_{23}$ or Weyl rotation between the sites. So the relative $E_{13}$ needed to reach the singlet (\nb{xxx-210-cg-test.tex}) cannot come from a single transfer matrix at $\theta_1$. Section~\ref{sec:sov} shows that it does come from combinations that also involve $\theta_2$.
+\end{remark}
+
+%======================================================================
+\section{Minimal combinations of SoV covectors that act on site 1}\label{sec:sov}
+
+The SoV basis is the $L=1$ recipe of \nb{SU3\_L1\_Baxter\_Twisted.wb} (cell 11) applied on each site, starting from $\vacL\otimes\vacL$:
+\begin{equation}
+\langle x_{g_1|g_2}|=\langle\mathrm{vacL}\otimes\mathrm{vacL}|\,O_{g_1}(\theta_1)\,O_{g_2}(\theta_2),
+\end{equation}
+with the labels $g=n_{21}n_{11}n_{12}$ and
+\begin{align}
+&O_{100}=1,\quad O_{110}=t_{\{1,0\}},\quad O_{111}=t_{\{1,1\}},\quad O_{200}=t_{\{2,0\}}t_{\{1,0\}}^{-1},\quad O_{210}=t_{\{2,0\}},\notag\\
+&O_{211}=O_{200}\,t_{\{1,1\}},\quad O_{220}=O_{200}\,t_{\{2,0\}},\quad O_{221}=O_{200}\,t_{\{2,1\}},
+\end{align}
+all at $u=\theta_s$. The computation is at point~1, finite twist, with $p_1=3/5$, $p_2=4/7$ and $p_3$ from the $\vacL$ relation. We seek
+\begin{equation}
+\sum_xc_x\,\langle x|=\langle v\otimes\mathrm{vacL}|,
+\end{equation}
+i.e.\ site~2 stays in the reference, as it does for $\langle k_1^{u/h}Q_1\rangle$. This is linear in $c$. Minimal combinations are found by enumerating label subsets of increasing size (cell 15).
+
+\begin{result}[exact at point 1]\label{res:sov}
+The 64 covectors have rank 64. The localizing combinations form an \textbf{8-dimensional} space, and only \textbf{12} of the 64 labels ever appear in it. The minimal combinations are 4 single labels and 4 pairs, and they span the whole space. With labels written site~1\,$|$\,site~2:
+\begin{center}
+\begin{tabular}{llll}\toprule
+combination & coefficients & site-1 weights of $v\,g_0^{-1}$\\\midrule
+$100|100$ (vacuum) & $1$ & $(2,1,0)$\\
+$111|100$ & $1$ & $(2,1,0),(2,0,1),(1,1,1)$\\
+$200|100$ & $1$ & $(2,1,0),(1,2,0)$\\
+$211|100$ & $1$ & $(2,1,0),(2,0,1),(1,2,0),(1,1,1),(0,2,1)$\\
+$100|200,\ 110|100$ & $-\tfrac{19}{9},\ 1$ & $(2,1,0),(2,0,1),(1,2,0)$\\
+$200|200,\ 210|100$ & $-\tfrac{19}{14},\ 1$ & $(2,1,0),(2,0,1),(1,2,0),(1,1,1)$\\
+$210|200,\ 220|100$ & $-\tfrac{95}{203},\ 1$ & the above and $(0,2,1),(1,0,2)$\\
+$211|200,\ 221|100$ & $-\tfrac{19}{28},\ 1$ & all eight, including $(0,1,2)$\\\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item \textbf{Single labels:} site~2 in the vacuum label $100$, and $n_{11}=n_{12}$ on site 1 ($100,111,200,211$). These are site-1 operators $O_g(\theta_1)$ that already act on site 1 only.
+\item \textbf{Pairs:} $\{g|200,\ g^+|100\}$, where $g^+$ raises $n_{11}$ of $g$ by one ($100\to110$, $200\to210$, $210\to220$, $211\to221$). The site-2 label $\{2\},\{0,0\}$ is traded against one site-1 $n_{11}$ step. The coefficients carry the $19$ of $\theta_{12}=9/19$; the first is $-1/\theta_{12}$.
+\item The 8 site-1 covectors $v\,g_0^{-1}$ have rank 8. So after undoing $g_0\otimes g_0$, \emph{every} $v\otimes e_1^T$ is a combination of these 12 labels. This includes the weights $(1,0,2)$ and $(0,1,2)$, which the $\langle k_1Q_1\rangle\langle k_2Q_{12}\rangle$ family never reaches (\nb{xxx-210-cg-test.tex}). In particular
+\begin{equation}
+\langle x_{221|100}|-\tfrac{19}{28}\,\langle x_{211|200}|
+\end{equation}
+has a $(0,1,2)$ component, the one that pairs with the singlet.
+\end{itemize}
+\end{result}
+
+\begin{remark}
+Result~\ref{res:vloc} says that no single $t_\lambda(\theta_1)$ produces a relative $E_{13}$. Result~\ref{res:sov} shows that pairs mixing a site-2 label with a site-1 step do. The coefficients are only known numerically at one point. Their analytic form, and whether these pairs are Q-functionals, e.g.\ a $\langle k_1Q_1\rangle$-type bracket with site-2 poles, are open.
+\end{remark}
+
+%======================================================================
+\section{Status and open points}
+\begin{itemize}
+\item \textbf{Exact:} Results~\ref{res:main}--\ref{res:sov}, at the stated points; the rotation parameters are symbolic in Results~\ref{res:main} and~\ref{res:pt2}. Results~\ref{res:R}--\ref{res:sov} are at point~1 only.
+\item \textbf{Not checked:} other site representations; $t_{\{\mu\}}$ with larger diagrams; symbolic $\theta,z,h$; other points $\theta_s+nh$ in Section~\ref{sec:pairs}; the second site in Section~\ref{sec:sov} (site-2 localization); that the per-site $L=1$ recipe gives factorized $\langle x|\Psi\rangle$ at $L=2$.
+\item \textbf{Open:}
+  \begin{itemize}
+  \item the natural generalization: does $t_{\{\lambda\}}(\theta_1)$ act on site~1 as $G_1$ for any site representation $\lambda$ (the auxiliary diagram equal to the site one)?
+  \item what $t_{\{1,1\}}(\theta_1)$ does on site 1, since its result is not a rotation;
+  \item the analytic form of the pair coefficients in Result~\ref{res:sov} ($-19/9$, $-19/14$, $-95/203$, $-19/28$ at point~1), from a scan in $\theta,z,p$;
+  \item a Q-functional realization of those pairs, which would give the singlet-reaching functional.
+  \end{itemize}
+\end{itemize}
+
+\section*{Notebook map (\nb{L2-localizing-transfer.wb})}
+\begin{center}
+\begin{tabular}{rl}\toprule
+cell & content\\\midrule
+1 & question and conventions\\
+2 & GT machinery\\
+3 & $L=2$ chain at point 1, fused $t_{\{\mu\}}(x)$, commutation checks\\
+4 & scan over $x=\theta_s+nh$ (Result~\ref{res:scan})\\
+5 & site-1 covector $w$ and rotation fits for $t_{\{2,1\}},t_{\{1,1\}}$\\
+6 & symbolic $a,b,c$ (Result~\ref{res:main})\\
+7 & point 2, $u=\mathrm{vacL}$ (Result~\ref{res:pt2})\\
+8 & $t_{\{2,1\}}(\theta_1)^2$ (Result~\ref{res:iter})\\
+9 & summary\\
+10--11 & localizing subspaces $V_{\rm loc}(w)$, mechanism check (Results~\ref{res:R}, \ref{res:vloc})\\
+12--13 & extra $t_{\{1,1\}}$ direction, covariance, $v'$ of $t_{\{2,1\}}$; summary\\
+14--16 & minimal localizing SoV combinations (Result~\ref{res:sov}); summary\\\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

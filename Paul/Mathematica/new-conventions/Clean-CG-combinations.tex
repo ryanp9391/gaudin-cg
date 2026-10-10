@@ -1,0 +1,445 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,longtable,array}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\Om}{\Omega}
+\newcommand{\HW}{\mathrm{HW}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\tw}{\theta_{12}}
+\title{Clean CG functionals from localized transfer matrices\\[2pt]\large gl(3) XXX, $L=2$, new conventions --- log of 2026-10-02}
+\author{Paul Ryan (with Claude)}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+\noindent This note logs one day's thread. It starts from the small-twist ``CG chain'' and ends with an analytic formula for the adjoint. The notebooks are all in \texttt{Paul/Mathematica/new-conventions/}; they are listed in Section~\ref{sec:files}. Unless stated otherwise, every number is at the chain point P1, $h=\tfrac12$, $\theta=(\tfrac27,-\tfrac35)$. There
+\[
+t\equiv\theta_{12}/h=\tfrac{62}{35}.
+\]
+The second chain point, used for validation, is P2: $h=\tfrac13$, $\theta=(\tfrac15,-\tfrac49)$, $t=\tfrac{29}{15}$.
+
+\paragraph{Evidence levels.} ``Exact'' means a symbolic identity, or agreement to the working precision. ``Validated'' means fitted at P1 and then predicted correctly at P2. ``Fitted'' means numerical at one point. ``Open'' means not settled.
+
+\tableofcontents
+
+%======================================================================
+\section{Setup and the question}
+
+\paragraph{Conventions.} These are the new conventions with Hermitian generators $EH$:
+\begin{itemize}
+\item Lax operator $\mathcal L^{(s)}_{ij}(u)=(u-\theta_s)\delta_{ij}+hE^{(s)}_{ij}$, and monodromy $T(u)=\mathcal L^{(1)}(u)\mathcal L^{(2)}(u)\,\mathrm{diag}(z)$.
+\item $t_a$ is the sum of the principal quantum minors.
+\item CBR fusion: $T_\lambda(u)=\det_{i,j}t_{\lambda'_j+i-j}(u+(i-1)h)$, with $t_0=1$.
+\item $\nu_n(x)=\prod_s(x-\theta_s+h\Lambda_n)$.
+\item Direct and dual Q-functions: $Q_i=z_i^{-u/h}q_i$ with $\deg q_i=2\Lambda_1-\mu_i$, and $Q^j=z_j^{u/h}q^j$ with $\deg q^j=\mu_j$ (here $\Lambda_3=0$).
+\end{itemize}
+
+\paragraph{The bra.} The bra is $\bra{\Om}=\bra{\Om_{zw}}\otimes\bra{\Om_{zw}}$, the vacuum of the companion $w$-twist written in the frame where $z$ is diagonal. Explicitly $\bra{\Om_{zw}}=e_1^TR$, with
+\[
+R=e^{r_1E_{12}}e^{r_2E_{13}}e^{r_3E_{23}},\qquad
+r_1=\frac{w_1-z_1}{w_1-z_2},\quad
+r_2=\frac{(w_1-z_1)(z_1-w_2)z_{23}}{z_{12}(w_1-z_3)(w_2-z_3)},\quad
+r_3=\frac{(w_1-z_2)(z_2-w_2)z_{13}}{z_{12}(w_1-z_3)(z_3-w_2)}.
+\]
+The $r_i$ do not depend on the representation, and $w_3$ drops out of them.
+
+\paragraph{Normalization and twists.} States are normalized by $\langle x_0|\Psi\rangle=1$, where $x_0=(e_1^TP_{\rm phys}^{-1})^{\otimes2}$. The twists are small: $z=e^{\eps\varphi}$, $w=e^{\eps\omega}$. HW-limit states have $\Psi_B\to\eps^{-k}h_\mu$, with $h_\mu$ the HW CG vector.
+
+\paragraph{Q-side data.} For any insertion $X$ built from $t$'s,
+\[
+\bra{\Om}X\ket{\Psi_B}=X^B\langle\Om|\Psi_B\rangle .
+\]
+Here $\langle\Om|\Psi_B\rangle$ is the $6\times6$ determinant formula of \texttt{L2-diagonal-frame-overlap.md}. That formula is validated for the adjoint only.
+
+\paragraph{The question.} Can a closed Q-expression give the CG data directly, without reconstructing the whole eigenvector? Earlier work used the localized site-1 insertions $\bra\Om T_\lambda(\theta_1-\Lambda_1h)=f_\lambda\,\bra{v_\lambda}\otimes\bra{\Om_{zw}}$.
+
+%======================================================================
+\section{The contamination}
+
+\subsection{Mechanism (adjoint; \texttt{Minimal-ingredients-EH.wb}, Sections 5--6)}
+Undoing $R$ gives $\bra\Om T_\lambda(\theta_1-2h)=f_\lambda\,c_\lambda(R\otimes R)$, with $c_\lambda=\bra{v_\lambda}R^{-1}\otimes e_1^T$. Since raising operators kill HW vectors, $(R\otimes R)P_\HW=P_\HW$ exactly. This gives an exact split at any $\eps$:
+\[
+\frac{T^B_\lambda\langle\Om|\Psi_B\rangle}{f_\lambda}
+=\underbrace{c_\lambda\cdot P_\HW\Psi}_{\text{signal }S}
++\underbrace{c_\lambda\cdot(R\otimes R)(1-P_\HW)\Psi}_{\text{contamination }K},
+\qquad \kappa=\frac{S+K}{S}.
+\]
+
+\paragraph{Why it is first-order perturbation theory.} At $z=1$ the twist is trivial, so $c_\lambda\propto e_1\otimes e_1$, which is pure top weight. Its components on lower weights are $O(\eps)$ (factors $z_{ij}$). Hence:
+\begin{itemize}
+\item the signal $c\cdot h_\mu$ is small;
+\item the $O(1)$ top-weight part of $c$ meets the $O(\eps)$ correction $\psi_1$ of the eigenvector, which $R$ raises to the top weight;
+\item writing $c=a_0+\eps a_1$ and $\Psi=\psi_0+\eps\psi_1$ with $a_0\cdot\psi_0=0$, one gets $c\cdot\Psi=\eps(a_1\psi_0+a_0\psi_1)$.
+\end{itemize}
+
+\paragraph{Measured values.}
+\begin{itemize}
+\item $\kappa=\tfrac{t+1}{2}=\tfrac{97}{70}$ for $[3,3,0]$ and for $[4,1,1]$ with $(2,1)$.
+\item Octets: $(1.530,\,1.072)$ and $(0.642,\,0.772)$.
+\item Singlet with $(2,1)$: $\kappa\approx1.102=\tfrac{(t+1)(t+3)}{12}$.
+\item For $[3,3,0]$ the whole contamination is the $\nu=[4,2,0]$ term, with $\|c^{(420)}\|\sim\eps^0$ and $\|[(R\otimes R)\Psi_\perp]_{420}\|\sim\eps^{-2}$, against a signal $\eps^1\cdot\eps^{-3}$. The term divided by the signal is $\tfrac{27}{70}=\kappa-1$.
+\end{itemize}
+
+\subsection{Why projectors and $w$-expansions cannot remove it}
+These are arguments; the \texttt{[3,3,0]} counterexample is numerical.
+\begin{itemize}
+\item \textbf{Weight projectors.} $T_\lambda$ commutes with the Cartan and $\Psi$ has a fixed weight, so a weight projector on the left-hand side is trivial. It is nontrivial only in the frame with $R$ undone, where it would require $(R\otimes R)^{-1}$ to act on $\Psi$, and that is not a Q-quantity.
+\item \textbf{Torus degree.} Under the torus acting on $(r_1,r_2,r_3)$ with weights $(\alpha_1,\alpha_1+\alpha_2,\alpha_2)$, the component $c^{(\nu)}$ has degree $\mathrm{top}-\nu$ and $[(R\otimes R)\Psi]_\nu$ has degree $\nu-\mu$. Every term in $\sum_\nu c^{(\nu)}\cdot[(R\otimes R)\Psi]_\nu$ therefore has the same degree $\mathrm{top}-\mu$, and no expansion in $w$ separates the CG term from the $[4,2,0]$ term.
+\item \textbf{Counterexample.} For $[3,3,0]$ the left-hand side is exactly $\propto r_1$, a single monomial, and its coefficient is $\kappa\times$CG.
+\item \textbf{A third independent $r$ adds nothing.} Modulo the torus there is a single invariant, $\rho=r_2/(r_1r_3)=-\frac{(z_1-w_2)z_{23}}{(z_2-w_2)z_{13}}$. It already varies with $w_2$, so the missing direction is a torus direction, which acts by a known scale.
+\item \textbf{Coherent states see only the top irrep.} Any coherent bra $(e_1^Tg)^{\otimes2}$ lies in the dual of the top irrep. All access to other irreps comes from the insertions.
+\end{itemize}
+
+%======================================================================
+\section{Clean combinations}
+
+\subsection{Top-killing is exact, and is an eigenvalue difference}
+For $\mu\neq\mathrm{top}$ we have $e_1e_1\cdot P_\HW\Psi=0$, so
+\[
+\langle\Om|\Psi\rangle=e_1e_1\cdot(R\otimes R)\Psi_\perp .
+\]
+The top-weight contamination of $c_\lambda$ is therefore exactly $(c_\lambda\cdot e_1e_1)\langle\Om|\Psi\rangle$. In the bare frame $c_\lambda\cdot e_1e_1=\bra\Om X\ket{e_1e_1}=X^{\rm top}$, the eigenvalue on the top state. So the top-killed Q-number of $X$ is
+\[
+\boxed{(X^B-X^{\rm top})\,\langle\Om|\Psi_B\rangle .}
+\]
+In the bare frame, $S_X=W_X\cdot P_\HW\Psi$ and $K_X=W_X\cdot\Psi_\perp-X^{\rm top}\langle\Om|\Psi\rangle$ with $W_X=\bra\Om X$, so no $R\otimes R$ is needed. This holds for any representation.
+
+\paragraph{Clean combinations.} For each weight sector, collect the leading-order ratios $k_B=K/S_{\rm ref}$ of every HW-limit copy $B$. The clean combinations are the null space of these. For all three representations below the $k_B$ were found to be \emph{structural}: independent of $\varphi$ and $\omega$ up to $O(\eps)$. The HW part of $\Psi$, scale included, then follows by least squares over several $w$.
+
+\subsection{Adjoint $[2,1,0]^2$ (\texttt{Minimal-ingredients-EH.wb}, Section 7)}
+\begin{itemize}
+\item \textbf{Top-killing alone} gives $\kappa\to1$ for $[4,1,1]$, $[3,3,0]$ and both octets. The two top-killed $T$'s have rank 2 on the octet HW space, so the octet mixing is fixed by site 1 plus $\langle\Om|\Psi\rangle$.
+\item \textbf{The singlet} needs a specific ratio. At P1, $K_b/S=-\tfrac{18}{35}$ and $K_c/S=\tfrac{19}{105}$, which gives
+\[
+\beta=\frac{b}{c}=h\,\frac{2t-3}{t-1}=\tfrac{19}{54}\quad(\text{f-normalized basis}).
+\]
+At P2 the predictions $-\tfrac{14}{15}$, $\tfrac{13}{45}$, $\tfrac{13}{42}$ were confirmed (validated). Section~\ref{sec:adjoint} derives this analytically.
+\item \textbf{One combination for every state.} $v^*=(a,\beta,1)$ with $a=-3h^2z_2z_3(\beta-hz_3)$ gives $\kappa\to1$ for all five non-top HW states, at both P1 and P2.
+\end{itemize}
+
+\subsection{$[3,1,0]^2$ (\texttt{Minimal-ingredients-310-EH.wb})}
+\begin{itemize}
+\item \textbf{Localizing shapes.} An independent 120-digit scan (Appendix A: CBR shapes with $\lambda_1\le4$, shifts $c=-6..2$) finds that the only nontrivial site-1 local shapes are $T_{(1,1)}$, $T_{(2,2)}$ and $T_{(3,2)}$, all at $\theta_1-3h$. $T_{(3,3)}$ and every shape with $\lambda_1=4$ vanish on $\bra\Om$ there. The localization holds to $10^{-106}$.
+\item \textbf{Site 1 plus $\Omega$, sector-wide cleaning.}
+\begin{itemize}
+\item $[6,1,1]$, $[5,3,0]$ and $[5,2,1]$ are clean after top-killing.
+\item $v_1=3d_{(1,1)}-2d_{(2,2)}$ is clean on $[5,3,0]$, $[5,2,1]\times2$, $[4,4,0]$, $[4,3,1]\times2$ and $[4,2,2]$.
+\item $[5,2,1]$ has rank 2, so its mixing is fixed.
+\item $[4,3,1]$ is not fixed: the only combination clean on both copies is $v_1$, whose direction on $\HW_{[4,3,1]}$ is $w$-independent (rank exactly 1).
+\end{itemize}
+\item \textbf{Adding site 2,} $A=t_2(\theta_2+h)$ and $B=t_2(\theta_2+h)t_1(\theta_2-h)$, computed as $\bra\Om X(R\otimes R)^{-1}$ so no prefactors are needed. All ratios are structural; the HW rank is 2 for both $[5,2,1]$ (0.16) and $[4,3,1]$ (0.05). End to end, all 9 non-top HW states are recovered with scale and $O(\eps)$ errors: $\sim10^{-5}$ at $\eps=10^{-4}$, $\lesssim10^{-6}$ at $\eps=10^{-5}$.
+\item \textbf{Site 1 only, per-copy cleaning} (Section 9). All 9 states are recovered ($10^{-4}$--$10^{-6.5}$, at least 62 digits). Only $[4,3,1]$ needs copy-specific coefficients.
+\end{itemize}
+
+\subsection{$[4,2,0]^2$: the blind spot was wrong (\texttt{Blindspot-420-check-EH.wb})}
+\texttt{L2-420-localization.md} claimed that $\HW_{[5,4,3]}$ and $\HW_{[4,4,4]}$ lie exactly in the null space of the localized data. That claim is wrong.
+\begin{itemize}
+\item A site-1-local covector is $u\otimes e_1^T$, and $c\cdot h=u\cdot(1\otimes e_1^T)h$. The slice $(1\otimes e_1^T)h$ is never zero, because the largest site-2 weight in $h$ must be the site-2 highest weight.
+\item $T_{(3,2)}$ and $T_{(4,2)}$ have components at site-1 weight $(1,2,3)$, and $T_{(4,2)}$ also at $(0,2,4)$.
+\item The overlaps are $8\times10^{-3}$ on $[5,4,3]$ and $8\times10^{-4}$ on $[4,4,4]$ at the finite twist. At small twist they scale exactly as $\eps^3$ and $\eps^4$, while $\|u\|\approx2.5$.
+\item The old ``overlap singular value $=1.000$'' was printed at 3 digits and only shows near-containment in a numerical null space.
+\end{itemize}
+
+\subsection{$[4,2,0]^2$ clean combinations (\texttt{Minimal-ingredients-420-EH.wb}, 250 digits)}
+The insertions are: site 1, $T_{(1,1)},T_{(2,2)},T_{(3,2)},T_{(4,2)}$ at $\theta_1-4h$; site 2, $t_2(\theta_2+h)$, $T_{(2,2)}(\theta_2)$, $T_{(2,2)}(\theta_2)t_1(\theta_2-2h)$; plus $\langle\Om|\Psi\rangle$.
+\begin{itemize}
+\item \textbf{Leading order suffices.} For every HW state, each insertion's top-killed contamination has the same $\eps$-power as its signal, or a higher one. This includes $[5,4,3]$ ($\|\Psi\|\sim\eps^{-10}$) and $[4,4,4]$ ($\eps^{-12}$): the $\eps^{3,4}$ overlap suppression is compensated by the growth of $\Psi$.
+\item \textbf{Structural.} The spread over twist directions is $1.4\times10^{-3}$ at $\eps=10^{-5}$ and $1.4\times10^{-4}$ at $\eps=10^{-6}$.
+\item \textbf{Ranks.} Sector-wide clean spaces have full HW rank except for $[6,4,2]$ (multiplicity 3). Its copies' $k$'s span only 2 dimensions, and the common clean rank is 2, with the third singular value $\propto\eps$. The raw insertions do have rank 3 on it ($1,\ 0.11,\ 0.0074$).
+\item \textbf{Fair end-to-end test.} The clean spaces were fitted at $(\eps=10^{-6},\varphi,\omega)$ and tested at $\eps=10^{-4},10^{-5}$ and at another $\varphi$. All 18 non-top HW states are recovered with scale, with $O(\eps)$ errors and at least 115 correct digits. $[6,4,2]$ uses per-copy cleaning.
+\item \textbf{Site 1 only} (Section 3). All 18 are recovered ($10^{-4.6}$--$10^{-7.1}$, at least 118 digits). Sector-wide cleaning suffices for every multiplicity-1 sector, $[7,4,1]$ and $[5,4,3]$. Per-copy cleaning is needed for $[7,3,2]$, $[6,5,1]$ and $[6,4,2]$. So site 2 is not essential: it only reduces the number of sectors that need copy-specific coefficients.
+\end{itemize}
+
+\subsection{$[3,2,0]^2$, $[4,1,0]^2$, $[4,3,0]^2$ and the $\lambda_1=5$ reps, site 1 only}
+Both notebooks run the same $\Lambda$-generic code, the site-1-only pipeline of the previous two subsections, with two differences. First, the site-1 insertions come from an independent localization scan inside the notebook. Second, the covectors are computed directly as $\bra{\Om}T_\lambda(R\otimes R)^{-1}$, so no $f_\lambda$ are needed: the Q-number is $T^B_\lambda\langle\Om|\Psi\rangle$, with the eigenvalue built by CBR from the scalar $t$-eigenvalues. The clean spaces are fitted at P1 $(\eps=10^{-5},\varphi,\omega)$ and tested at $(10^{-4},\varphi)$ and $(10^{-5},\varphi')$.
+\begin{itemize}
+\item \textbf{$[3,2,0]^2$} (150 digits, about 3\,s).
+  \begin{itemize}
+  \item The insertions are $T_{(1,1)},T_{(2,1)},T_{(3,1)}$ at $\theta_1-3h$, as in \texttt{L2-320-localization.md}. The fitted $f$'s match the known ones.
+  \item All 9 non-top HW states are recovered with scale. The errors are $10^{-4.1}$--$10^{-5.7}$ at $10^{-4}$ and $10^{-5}$--$10^{-7.1}$ at $10^{-5}$, with at least 85 digits.
+  \item Only $[5,3,2]$ needs per-copy cleaning (sector clean dimension 1, HW rank 1). This mirrors $[4,3,1]$ in $[3,1,0]$, as $[3,2,0]\cong[3,1,0]^*\otimes\det^3$ suggests.
+  \item $[5,4,1]$ works sector-wide, and so does the bottom irrep $[4,3,3]$.
+  \end{itemize}
+\item \textbf{$[4,1,0]^2$} (200 digits, about 25\,s). No localization had been done for this rep before.
+  \begin{itemize}
+  \item For $\lambda_1\le4$ and $c=-6..1$, the site-1-local shapes are exactly $T_{(1,1)},T_{(2,2)},T_{(3,3)},T_{(4,3)}$ at $\theta_1-4h$. That is four shapes: the pattern ``$T_{(1,1)}$ plus $T_{(k,\lambda_1-\lambda_2)}$, $k=\lambda_1-\lambda_2..\lambda_1$'' misses $T_{(2,2)}$.
+  \item The prefactors are below. They were fitted at P1, each unique within the ansatz $\pm\prod_k(\tw-kh)^{n_k}$, and checked at P2 to $10^{-190}$:
+  \begin{align*}
+  f_{(1,1)}&=(\tw-3h)(\tw-5h),\\
+  f_{(2,2)}&=(\tw-2h)(\tw-3h)(\tw-4h)(\tw-5h),\\
+  f_{(3,3)}&=(\tw-h)(\tw-2h)(\tw-3h)^2(\tw-4h)(\tw-5h),\\
+  f_{(4,3)}&=(\tw-h)^2(\tw-2h)(\tw-3h)^2(\tw-4h)(\tw-5h).
+  \end{align*}
+  \item All 14 non-top HW states are recovered with scale. The errors are $10^{-3.8}$--$10^{-5.2}$ at $10^{-4}$ and $10^{-4.7}$--$10^{-6.3}$ at $10^{-5}$, with at least 123 digits.
+  \item Only $[6,3,1]$ needs per-copy cleaning (sector clean dimension 2, HW rank 1).
+  \item $[7,2,1]$ works sector-wide but is weakly conditioned: its second singular value is $0.0069$, the same at both $\eps$. $[5,4,1]$ and the bottom irrep $[4,4,2]$ also work sector-wide.
+  \end{itemize}
+\item \textbf{$[4,3,0]^2$} (\texttt{Minimal-ingredients-430-EH.wb}, 200 digits, about 25\,s). No localization had been done for this rep before.
+  \begin{itemize}
+  \item The site-1-local shapes are exactly $T_{(1,1)},T_{(2,1)},T_{(3,1)},T_{(4,1)}$ at $\theta_1-4h$, so here the pattern holds.
+  \item The prefactors were fitted at P1 (each unique) and checked at P2 to $10^{-192}$:
+  \begin{align*}
+  f_{(1,1)}&=(\tw-h)(\tw-5h), & f_{(2,1)}&=(\tw-h)(\tw-3h)(\tw-5h),\\
+  f_{(3,1)}&=(\tw-h)(\tw-2h)(\tw-3h)(\tw-5h), & f_{(4,1)}&=(\tw-h)^2(\tw-2h)(\tw-3h)(\tw-5h).
+  \end{align*}
+  \item All 14 non-top HW states are recovered with scale. The errors are $10^{-3.9}$--$10^{-5.3}$ at $10^{-4}$ and $10^{-4.9}$--$10^{-6.6}$ at $10^{-5}$, with at least 122 digits.
+  \item Only $[7,5,2]$ needs per-copy cleaning (sector clean dimension 2, HW rank 1). Under $[4,3,0]\cong[4,1,0]^*\otimes\det^4$, the map $\mu\mapsto(8-\mu_3,8-\mu_2,8-\mu_1)$ sends $[6,3,1]\mapsto[7,5,2]$, so the per-copy sector is mirrored. The conditioning is not: $[7,6,1]$, the image of $[7,2,1]$, has second singular value $0.13$ rather than $0.0069$.
+  \end{itemize}
+\item \textbf{$[5,1,0]^2$} (\texttt{Minimal-ingredients-510-EH.wb}, 250 digits, Sections 1--6 about 2.5\,min). This is the first rep with $\lambda_1=5$: dim 35, 1225 states, 18 HW states.
+  \begin{itemize}
+  \item The site-1-local shapes ($\lambda_1\le5$, $c=-7..1$) are exactly $T_{(1,1)},T_{(2,2)},T_{(3,3)},T_{(4,4)},T_{(5,4)}$ at $\theta_1-5h$. So for $[\lambda_1,1,0]$ they are $T_{(k,k)}$, $k=1..\lambda_1-1$, plus $T_{(\lambda_1,\lambda_1-1)}$, which holds for $\lambda_1=2..5$.
+  \item The prefactors, with $t=\tw/h$ (unique fits at P1, checked at P2 to $10^{-239}$):
+  \begin{align*}
+  f_{(1,1)}&=(t-4)(t-6), & f_{(2,2)}&=(t-3)(t-4)(t-5)(t-6),\\
+  f_{(3,3)}&=(t-2)(t-3)(t-4)^2(t-5)(t-6), & f_{(4,4)}&=(t-1)(t-2)(t-3)^2(t-4)^2(t-5)(t-6),\\
+  f_{(5,4)}&=(t-1)f_{(4,4)}.
+  \end{align*}
+  \item All 17 non-top HW states are recovered with scale.
+    \begin{itemize}
+    \item Fit at $10^{-5}$: errors $10^{-3.7}$--$10^{-5.8}$ at $(10^{-4},\varphi)$ and $10^{-4.2}$--$10^{-6.3}$ at $(10^{-5},\varphi')$, with at least 161 digits.
+    \item Refit at $10^{-6}$: errors $10^{-5.2}$--$10^{-7.3}$ at $(10^{-6},\varphi')$. They fall by about a decade, so the stalls at $10^{-5}$ came from the fit point.
+    \end{itemize}
+  \item Only $[8,3,1]$ needs per-copy cleaning. $[9,2,1]$ works sector-wide but is weakly conditioned (second singular value $0.0036$). For $[\lambda_1,1,0]$ the per-copy sector is always $[\lambda_1+3,3,1]$.
+  \end{itemize}
+\item \textbf{$[5,4,0]^2$} (\texttt{Minimal-ingredients-540-EH.wb}, 250 digits, about 3\,min; 18 HW states).
+  \begin{itemize}
+  \item The site-1-local shapes are $T_{(k,1)}$, $k=1..5$, at $\theta_1-5h$. The prefactors (checked at P2 to $10^{-241}$) are
+  \begin{align*}
+  f_{(1,1)}&=(t-1)(t-6), & f_{(2,1)}&=(t-1)(t-4)(t-6),\\
+  f_{(3,1)}&=(t-1)(t-3)(t-4)(t-6), & f_{(4,1)}&=(t-1)(t-2)(t-3)(t-4)(t-6),\\
+  f_{(5,1)}&=(t-1)f_{(4,1)}.
+  \end{align*}
+  \item All 17 non-top HW states are recovered.
+    \begin{itemize}
+    \item Fit at $10^{-5}$: $10^{-3.7}$--$10^{-5.1}$ at $(10^{-4},\varphi)$ and $10^{-4.7}$--$10^{-6.4}$ at $(10^{-5},\varphi')$, with at least 160 digits.
+    \item Refit at $10^{-6}$: $10^{-5.7}$--$10^{-7.4}$ at $(10^{-6},\varphi')$.
+    \end{itemize}
+  \item Only $[9,7,2]$ needs per-copy cleaning. It is the dual image of $[8,3,1]$, as predicted.
+  \end{itemize}
+\item \textbf{$[5,2,0]^2$} (\texttt{Minimal-ingredients-520-EH.wb}, 300 digits, about 9\,min; 28 HW states in 18 sectors, two of multiplicity 3).
+  \begin{itemize}
+  \item The site-1-local shapes are $T_{(1,1)},T_{(2,2)},T_{(3,3)},T_{(4,3)},T_{(5,3)}$ at $\theta_1-5h$. The prefactors (checked at P2 to $10^{-289}$) are
+  \begin{align*}
+  f_{(1,1)}&=(t-3)(t-6), & f_{(2,2)}&=(t-2)(t-3)(t-5)(t-6),\\
+  f_{(3,3)}&=(t-1)(t-2)(t-3)(t-4)(t-5)(t-6), & f_{(4,3)}&=(t-1)(t-2)^2(t-3)(t-4)(t-5)(t-6),\\
+  f_{(5,3)}&=(t-1)^2(t-2)^2(t-3)(t-4)(t-5)(t-6).
+  \end{align*}
+  \item All 27 non-top HW states are recovered.
+    \begin{itemize}
+    \item Fit at $10^{-5}$: $10^{-3.0}$--$10^{-5.7}$ at $(10^{-4},\varphi)$ and $10^{-3.3}$--$10^{-7.1}$ at $(10^{-5},\varphi')$, with at least 199 digits.
+    \item Refit at $10^{-6}$: $10^{-4.3}$--$10^{-8.1}$ at $(10^{-6},\varphi')$.
+    \end{itemize}
+  \item Per-copy cleaning is required for $[9,3,2]$, $[8,5,1]$, and the two multiplicity-3 sectors $[8,4,2]$ and $[7,5,2]$.
+  \item \textbf{Weakly conditioned sectors.} $[7,6,1]$ ($\sigma_2=0.025$) and $[7,4,3]$ ($\sigma_2=0.019$) have full sector rank, but their worst copy is amplified by $\sim1/\sigma_2$: $10^{-5.1}$ and $10^{-4.3}$ at $\eps=10^{-6}$, still $O(\eps)$. Per-copy cleaning gives $10^{-6.2}$ and $10^{-5.7}$, and then every state is at most $10^{-5.5}$. Rule of thumb: when $\sigma_{\min}\lesssim0.05$, prefer per-copy cleaning.
+  \end{itemize}
+\item \textbf{$[5,3,0]^2$} (\texttt{Minimal-ingredients-530-EH.wb}, 300 digits, about 8.5\,min; 28 HW states in 18 sectors, two of multiplicity 3).
+  \begin{itemize}
+  \item The site-1-local shapes are $T_{(1,1)},T_{(2,2)},T_{(3,2)},T_{(4,2)},T_{(5,2)}$ at $\theta_1-5h$. The prefactors (checked at P2 to $10^{-290}$) are
+  \begin{align*}
+  f_{(1,1)}&=(t-2)(t-6), & f_{(2,2)}&=(t-1)(t-2)(t-5)(t-6),\\
+  f_{(3,2)}&=(t-1)(t-2)(t-3)(t-5)(t-6), & f_{(4,2)}&=(t-1)(t-2)^2(t-3)(t-5)(t-6),\\
+  f_{(5,2)}&=(t-1)^2(t-2)^2(t-3)(t-5)(t-6).
+  \end{align*}
+  \item All 27 non-top HW states are recovered.
+    \begin{itemize}
+    \item Fit at $10^{-5}$: $10^{-3.7}$--$10^{-5.8}$ at $(10^{-4},\varphi)$ and $10^{-4.0}$--$10^{-7.4}$ at $(10^{-5},\varphi')$, with at least 198 digits.
+    \item Refit at $10^{-6}$: $10^{-5.0}$--$10^{-8.4}$. With per-copy cleaning for the weak $[7,6,3]$ ($\sigma_2=0.038$), every state is at most $10^{-5.5}$.
+    \end{itemize}
+  \item Per-copy cleaning is required for $[9,5,2]$, $[8,7,1]$, $[8,6,2]$ and $[8,5,3]$, exactly the dual images of $[5,2,0]$'s four.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Summary across all ten reps (site 1 + $\langle\Om|\Psi\rangle$ only)}
+Every rep with $\lambda_1\le5$ and $\lambda_1>\lambda_2>0$ has been run: $[2,1,0]$, $[3,1,0]$, $[3,2,0]$, $[4,1,0]$, $[4,2,0]$, $[4,3,0]$, $[5,1,0]$, $[5,2,0]$, $[5,3,0]$, $[5,4,0]$. \textbf{In every rep, all non-top HW CG states are recovered from Q-side numbers, scale included, with $O(\eps)$ errors.}
+\begin{itemize}
+\item \textbf{Site-1 insertions.} Write $d=\lambda_1-\lambda_2$. The insertions are $T_{(k,k)}$ for $k=1..d$ and $T_{(k,d)}$ for $k=d+1..\lambda_1$, all at $\theta_1-\lambda_1h$, which is $\lambda_1$ insertions in total. Independent scans confirm the rule in all ten reps, and nothing else is site-1 local in the scanned range. The leading prefactor is always $f_{(1,1)}=(\tw-dh)(\tw-(\lambda_1+1)h)$.
+\item \textbf{Sectors needing per-copy cleaning} (the sector clean space has deficient HW rank):
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+$\Lambda$ & per-copy sectors\\
+\midrule
+$[2,1,0]$ & none\\
+$[3,1,0]$ / $[3,2,0]$ & $[4,3,1]$ / $[5,3,2]$\\
+$[4,1,0]$ / $[4,3,0]$ & $[6,3,1]$ / $[7,5,2]$\\
+$[4,2,0]$ & $[7,3,2]$, $[6,5,1]$, $[6,4,2]$\\
+$[5,1,0]$ / $[5,4,0]$ & $[8,3,1]$ / $[9,7,2]$\\
+$[5,2,0]$ & $[9,3,2]$, $[8,5,1]$, $[8,4,2]$, $[7,5,2]$\\
+$[5,3,0]$ & $[8,7,1]$, $[9,5,2]$, $[8,6,2]$, $[8,5,3]$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\item \textbf{Duality.} Under $[\lambda_1,\lambda_2,0]\mapsto[\lambda_1,\lambda_1-\lambda_2,0]$, the per-copy sectors map exactly by $\mu\mapsto(2\lambda_1-\mu_3,2\lambda_1-\mu_2,2\lambda_1-\mu_1)$. For $[\lambda_1,1,0]$ the per-copy sector is always $[\lambda_1+3,3,1]$.
+\item \textbf{Weak conditioning.} Some full-rank sectors have small $\sigma_2$, and this is not dual-invariant. Examples: $[7,2,1]$ in $[4,1,0]$; $[9,2,1]$ in $[5,1,0]$; $[7,6,1]$ and $[7,4,3]$ in $[5,2,0]$; $[7,6,3]$ in $[5,3,0]$. Per-copy cleaning is the safer choice there.
+\end{itemize}
+
+\subsection{Closed forms of the clean coefficients (\texttt{Clean-coeffs-\{210,310,410\}-EH.wb})}
+\textbf{No universal combination exists.} In $[5,3,0]$ the contaminated states' $k$'s have full rank 5 (\texttt{Minimal-ingredients-530-EH.wb}, \S6d), so the coefficients depend on $\mu$, and in per-copy sectors on the copy.
+
+\textbf{Method.} Set $h=1$, $\theta=(t,0)$, and use the $f$-free one-site covectors, top-killed. The leading $\hat k$, $\hat s$, $\rho=K_{\rm ref}/S_{\rm ref}$ and $\lambda_c=t_2(u_0)$ are computed at $\eps_0,2\eps_0,4\eps_0$ ($\eps_0=10^{-8}$) and Richardson-extrapolated to $\eps\to0$, with error at most $10^{-23}$. They are then fitted as rational functions of $t$ over 20 points and validated on 5 held-out points. In multiplicity sectors the fit is in the form $A(t)+B(t)\lambda_c$.
+\begin{itemize}
+\item \textbf{Control $[2,1,0]$.} The pipeline reproduces $\hat k_{11}=-(t-1)/(2t-3)$ and $\rho=(2t-3)/3$ exactly.
+\item \textbf{$[3,1,0]$: everything is in closed form.}
+  \begin{itemize}
+  \item $[4,4,0]$: $\hat k=(-\tfrac16,-1,1)$.
+  \item $[4,2,2]$: $\hat k_{11}=-\tfrac{5t-11}{24(2t-5)}$, $\hat k_{22}=6\hat k_{11}$.
+  \item Bottom irrep $[3,3,2]$: $\hat k_{11}=-\tfrac{(t-1)(3t-7)}{4(7t^2-12)}$, $\hat k_{22}=-\tfrac{3(t-1)(3t-2)}{2(7t^2-12)}$, $\rho=\tfrac{7t^2-12}{20}$.
+  \item $[4,3,1]$: $\hat k_{11,c}=-\tfrac{(35t^2-104t+53)+\sigma_c(5t-13)\sqrt{1+3t^2}}{12(25t^2-65t+24)}$ and $\hat k_{22}=6\hat k_{11}$.
+  \item $6d_{11}-d_{22}$ is clean on every state except the bottom irrep.
+  \end{itemize}
+\item \textbf{$[4,1,0]$: everything is in closed form.}
+  \begin{itemize}
+  \item Layer 1 ($[6,4,0]$, $[6,3,1]\times2$, $[6,2,2]$) has exactly $\hat k_{22}=16\hat k_{11}$ and $\hat k_{33}=72\hat k_{11}$.
+  \item Layer 2 ($[5,5,0]$, $[5,4,1]\times2$, $[5,3,2]$) has the common clean combination $v_2=72d_{11}-9d_{22}+d_{33}$.
+  \item Bottom irrep $[4,4,2]$: $\hat k=\big(-\tfrac{(t-1)(t-2)(2t-7)}{18P},-\tfrac{2(t-1)^2(8t-19)}{9P},-\tfrac{2(t-1)(4t^2-5t+9)}{P},1\big)$ with $P=11t^3+61t-90$, and $\rho=P/90$.
+  \end{itemize}
+\item \textbf{Multiplicity sectors.} Each copy quantity is $P(t)+Q(t)\sigma_c\sqrt{D}$, i.e.\ linear in the copy's transfer eigenvalue. The discriminants are:
+  \begin{itemize}
+  \item $[3,1,0]$: $D_{[5,2,1]}=\tfrac14(256+105t^2)$, $D_{[4,3,1]}=16(1+3t^2)$;
+  \item $[4,1,0]$: $D_{[7,2,1]}=\tfrac94(100+21t^2)$, $D_{[6,3,1]}=4(25+24t^2)$, $D_{[5,4,1]}=\tfrac{25}4(4+21t^2)$.
+  \end{itemize}
+\item \textbf{Structure.} Contamination is organized in layers. Each layer's clean combinations annihilate the signal patterns of the shallower layers, and they are $t$-independent until the bottom irrep. Where the test is non-trivial, $\hat k_B$ lies in the span of the signal directions of the HW states above $B$ to $10^{-25}$.
+\item \textbf{The $\sqrt D$ coefficients as a transfer eigenvalue} (\texttt{Clean-coeffs-310-EH.wb}, \S4). Let $\tau_c$ be the untwisted eigenvalue of $t_2(\theta_1+h)$. On $[4,3,1]$:
+  \begin{itemize}
+  \item per unit signal, $K_{32}/S=\tfrac{19t(t-1)-\tau_c}{27t}$, $K_{11}/S=\tfrac{4t(t-1)(3t-23)-(3t-11)\tau_c}{1296t}$ and $\hat s_{22}=\tfrac{4t(t-1)-\tau_c}{24t}$, exact at all 25 $t$ to $10^{-22}$;
+  \item the clean combination is $v_c=48[19t(t-1)-\tau_c]d_{11}-[4t(t-1)(3t-23)-(3t-11)\tau_c]d_{32}$;
+  \item $\tau_c=4[t^2+2t-1\pm\sqrt{1+3t^2}]$, and $\hat k_{11}$ is a M\"obius function of $\tau_c$.
+  \end{itemize}
+\end{itemize}
+
+%======================================================================
+\section{The site-1 eigenvalues as single Q-functions}
+
+\subsection{Reduction to $2\times2$ determinants}
+Let $v(u)=(Q^1,Q^2,Q^3)(u)$. The quantum Weyl formula reads
+\[
+T_\lambda(x)=P_\lambda(x)\,\frac{\det[v(x+\lambda_1h),v(x+(\lambda_2-1)h),v(x-2h)]}{\det[v(x),v(x-h),v(x-2h)]},
+\qquad P_\lambda(x)=\prod_{(r,c)\in\lambda}\nu_3(x+(c-r)h).
+\]
+Two degeneracies hold near $\theta_1$:
+\begin{itemize}
+\item \textbf{3$\times$3 Casoratian.} The dual Baxter equation fixes $W(x)/W(x-h)=\chi_3\nu_1(x)\nu_2(x-h)/(\nu_3(x)\nu_3(x-h))$. Hence $\det[v(x),v(x-h),v(x-2h)]$ vanishes for $x=\theta_s+h,\dots,\theta_s-(\Lambda_1-1)h$.
+\item \textbf{Dual parallelism} $v(\theta_1-\Lambda_2h)\parallel\dots\parallel v(\theta_1)$, from the dual QQ relation below.
+\end{itemize}
+Together these put $v(\theta_1-(\Lambda_1+1)h),\dots,v(\theta_1)$ in one 2-plane, and
+\[
+\boxed{T_\lambda(\theta_1-\Lambda_1h)=P_\lambda\,\frac{\det_2[v(\theta_1+(\lambda_1-\Lambda_1)h),\,v(\theta_1+(\lambda_2-\Lambda_1-1)h)]}{\det_2[v(\theta_1-\Lambda_1h),\,v(\theta_1-(\Lambda_1+1)h)]}}\qquad(\lambda_1\le\Lambda_1,\ \lambda_3=0),
+\]
+with any fixed pair of rows. This is the $L=2$ version of the $L=1$ ``reduction at $\theta-2h$''. It was checked exactly on 34 states of $[3,1,0]^2$ (to $10^{-70}$) and on 91 states of $[4,2,0]^2$ (to $10^{-194}$), for all shapes and every row pair.
+
+\subsection{The dual QQ relation and single Q's}
+For $[4,2,0]$, all 91 states satisfy, to at least 226 digits (the shifts $0$ and $-1$ fail):
+\[
+\boxed{z_b\,q^a(u)q^b(u+h)-z_a\,q^b(u)q^a(u+h)=(z_b-z_a)\,G(u)\,q_c(u+h),\qquad G(u)=\prod_s\prod_{n=1}^{\Lambda_2}(u-\theta_s+nh).}
+\]
+As a consequence, the direct vectors $(Q_1,Q_2,Q_3)$ are parallel at $\theta_1-4h$, $\theta_1-3h$ and $\theta_1-2h$, and each consecutive $\det_2$ becomes a single direct $Q$. The localization factors $f_\lambda$ cancel all $\tw$-dependence.
+
+\paragraph{$[4,2,0]$ at $\theta_1-4h$} (exact to $10^{-225}$, all $c$ and $j$):
+\[
+\frac{T_{(1,1)}}{f_{(1,1)}}=10h^2\chi_3\,r_1,\qquad
+\frac{T_{(2,2)}}{f_{(2,2)}}=40h^4\chi_3^2\,r_1r_2,\qquad
+\frac{T_{(3,2)}}{f_{(3,2)}}=-80h^5\chi_3^2\,r_1r_2\rho_1,\qquad
+\frac{T_{(4,2)}}{f_{(4,2)}}=80h^6\chi_3^2\,r_1r_2\rho_0,
+\]
+with $r_1=\frac{Q_c(\theta_1-3h)}{Q_c(\theta_1-4h)}$, $r_2=\frac{Q_c(\theta_1-2h)}{Q_c(\theta_1-3h)}$, $\rho_k=\frac{Q^j(\theta_1-kh)}{Q^j(\theta_1-2h)}$.
+
+\paragraph{Adjoint at $\theta_1-2h$} (to $10^{-50}$, 18 states):
+\[
+T_{(1,1)}=3h^2\chi_3(\tw-h)(\tw-3h)\,r,\qquad
+T_{(2,1)}=-3h^3\chi_3(\tw-h)^2(\tw-3h)\,\rho\,r,
+\]
+with $r=\frac{Q_c(\theta_1-h)}{Q_c(\theta_1-2h)}$ and $\rho=\frac{Q^j(\theta_1)}{Q^j(\theta_1-h)}$. For the top state $r=1/z_1$ and $\rho=z_3$, which reproduces the known values $3h^2z_2z_3$ and $-3h^3z_2z_3^2$.
+
+%======================================================================
+\section{Clean combinations in Q-language ($[4,2,0]$, Section 6)}
+In the basis $X_\lambda=T_\lambda/f_\lambda$ (site 1), normalized to the $(4,2)$ entry, the leading signal ratios are simple rationals:
+\begin{center}
+\begin{tabular}{lllllll}
+\toprule
+$[8,3,1]$ & $[8,2,2]$ & $[7,5,0]$ & $[6,6,0]$ & $[6,3,3]$ & $[5,5,2]$ & $[4,4,4]$\\
+$(0,0,-1,1)$ & $(0,0,0,1)$ & $(1,2,-2,1)$ & $(0,2,-2,1)$ & $(0,0,-\tfrac15,1)$ & $(0,0,-\tfrac45,1)$ & $(0,0,0,1)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The contamination ratios are:
+\begin{itemize}
+\item zero for $[8,3,1]$ and $[7,5,0]$, whose only neighbour above is the top;
+\item $\tilde k^{[8,2,2]}=(t-1)\,\tilde s^{[8,3,1]}$, so the clean condition is $c_{32}=c_{42}$;
+\item $\tilde k^{[6,6,0]}=(t-1)\,\tilde s^{[7,5,0]}$, so the clean condition is $c_{11}+2c_{22}-2c_{32}+c_{42}=0$.
+\end{itemize}
+In words: the leading contamination is the signal pattern of the irrep one simple root above, times $(t-1)$. This holds in normalized form, at each $w$; the raw coefficient depends on $w$. For deeper states ($[6,3,3]$, $[5,5,2]$, $[5,4,3]$, $[4,4,4]$), $\tilde k$ is not a recognizable rational at P1 (open).
+
+%======================================================================
+\section{The adjoint clean combination, derived analytically}\label{sec:adjoint}
+\texttt{Adjoint-clean-analytic.wb} works exactly in the $E$ basis with $t$ symbolic and $h=1$; $h$ is restored by homogeneity.
+
+\paragraph{Mechanism.} $\bra{\Om(\eps)}$ lies in the 27, on which the untwisted $T_\lambda$ acts by $T^{\rm top}_\lambda$. Therefore $(W_\lambda-T^{\rm top}_\lambda\Om)$ vanishes at $\eps^0$ on the weight sector; this is checked. With $\Psi=h+\eps\psi_1+\dots$,
+\[
+S_\lambda=\Om(\eps)\cdot T_\lambda(\eps)\,h,\qquad K_\lambda=\eps^2\,(W_\lambda-T^{\rm top}_\lambda\Om)_1\cdot\psi_1+O(\eps^3),
+\]
+and only first-order perturbation theory is needed.
+\begin{itemize}
+\item $[4,1,1]$, $[3,3,0]$ and the octets have signal $O(\eps)$, so they are clean automatically.
+\item The singlet has $S_{(1,1)}\equiv0$ and $S_{(2,1)}=O(\eps^2)$. In raw eigenvalues, exactly and for both direction pairs tested,
+\[
+K_{(1,1)}/S_{(2,1)}=-\tfrac13,\qquad K_{(2,1)}/S_{(2,1)}=\tfrac{2t-3}{3}.
+\]
+\end{itemize}
+
+\paragraph{Result.} A single combination is clean for all six HW states:
+\[
+\boxed{\mathcal C=T_{(2,1)}(\theta_1-2h)+h(2\tw-3h)\,T_{(1,1)}(\theta_1-2h),\qquad\text{Q-number}=(\mathcal C^B-\mathcal C^{\rm top})\langle\Om|\Psi_B\rangle .}
+\]
+This is $\beta=h(2t-3)/(t-1)$ in the $f$-normalized basis, matching the fit. In Q's, dropping the state-independent factor $3h^3\chi_3(\tw-h)(\tw-3h)$:
+\[
+\Big\{r\big[(2\tw-3h)-(\tw-h)\rho\big]-z_1^{-1}\big[(2\tw-3h)-(\tw-h)z_3\big]\Big\}\,\langle\Om|\Psi_B\rangle .
+\]
+
+\paragraph{Rescaling the monodromy.} Under $T\to T/g$, the coefficient changes only through $g(\theta_1-h)$. The resulting clean coefficient $c$ in $\tilde T_{(2,1)}+c\,\tilde T_{(1,1)}$ is:
+\begin{center}
+\begin{tabular}{lcccccc}
+\toprule
+$g$ & none & $\nu_1$ & $\nu_2$ & $\nu_3$ & $f$-norm & $\prod_s(u-\theta_s-h/2)$\\
+$c$ & $2t-3$ & $\frac{2t-3}{t+1}$ & singular & $-\frac{2t-3}{t-1}$ & $\frac{2t-3}{t-1}$ & $-\tfrac43$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The half-shifted rescaling, i.e.\ each Lax divided by $(u-\theta_s-h/2)$, gives the $t$-free combination $\tilde T_{(2,1)}-\frac43\tilde T_{(1,1)}$. Among products of site factors, the site-2 half shift is forced.
+
+%======================================================================
+\section{Numerical traps found today}
+\begin{itemize}
+\item \textbf{Fake zeros.} A zero with low accuracy prints as an ``exact'' 0. At 120 digits the $[4,4,4]$ errors at $\eps\le10^{-5}$ had no correct digits; always report \texttt{Precision}. Taking \texttt{Log10} of such a zero gives \texttt{Indeterminate}.
+\item \textbf{Already-clean insertions.} Such an insertion has $k=O(\eps)$. A relative null-space cut treats that noise as a constraint and discards the useful insertion; use an absolute cut (\texttt{kTol}).
+\item \textbf{List-minus-vector threading.} Subtracting a vector from a list of vectors whose length happens to match threads element by element and gives a fake ``spread''.
+\item \textbf{Ill-conditioned $x_0$.} \texttt{Inverse}$[P_{\rm phys}]$ is badly conditioned at small $\eps$. Use the factorized inverse.
+\item \textbf{Nonzero-entry lookup.} \texttt{Position} with a pattern test returned position 0 (the head), which silently set $m_0=1$. Use \texttt{Ordering[Abs[h],-1]}.
+\item \textbf{Slow symbolic substitution.} Substituting symbolic $64\times64$ operators per state is far too slow. Substitute once and cache.
+\item \textbf{Shared kernel.} All new-conventions notebooks share one kernel and clear it on their first cell, so rerun a notebook before resuming work in it.
+\end{itemize}
+
+%======================================================================
+\section{Open}
+\begin{enumerate}
+\item The deep states of $[3,1,0]$ and $[4,2,0]$ need clean coefficients in closed form. They presumably require higher orders ($\psi_2,\dots$), and the multiplicity copies above them contribute algebraic data.
+\item Is there a principled rule for the copy-specific (per-copy) clean combinations, for example via the copy's eigenvalues?
+\item Derive the dual QQ factor $G$ and its $+h$ shift, rather than testing them. Check the single-Q form for $[3,1,0]$.
+\item Validate the $6\times6$ $\langle\Om|\Psi\rangle$ formula beyond the adjoint.
+\item Does the half-shift normalization make the $[3,1,0]$ and $[4,2,0]$ clean conditions $t$-free?
+\item Repeat everything at a second chain point for $[3,1,0]$ and $[4,2,0]$.
+\end{enumerate}
+
+%======================================================================
+\section{Files}\label{sec:files}
+\begin{itemize}
+\item \texttt{Minimal-ingredients-EH.wb} (23 cells): adjoint; chain, contamination, $v^*$, $\beta$ at P1 and P2.
+\item \texttt{Minimal-ingredients-310-EH.wb} (33 cells): $[3,1,0]$; Sections 1--10, plus Appendix A (localization scan).
+\item \texttt{Blindspot-420-check-EH.wb} (6 cells): correction of the $[4,2,0]$ blind spot.
+\item \texttt{Minimal-ingredients-420-EH.wb} (28 cells, 250 digits): $[4,2,0]$; Sections 1--6.
+\item \texttt{Adjoint-clean-analytic.wb} (11 cells): exact derivation, Q-form, rescalings.
+\item \texttt{Minimal-ingredients-\{320,410,430,510,540,520,530\}-EH.wb}: $\Lambda$-generic, site 1 only. Each contains the localization scan, the $f$ fit (checked at P2; not in 320), the structural test and the fair test. 510 onward add the $10^{-6}$ refit; 520 and 530 add the weak-sector comparison.
+\item A correction note was added to \texttt{L2-420-localization.md}. \texttt{HANDOFF.md} has the summary.
+\end{itemize}
+\end{document}

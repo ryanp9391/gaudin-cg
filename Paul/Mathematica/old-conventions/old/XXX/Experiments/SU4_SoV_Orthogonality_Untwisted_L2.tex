@@ -1,0 +1,295 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,hyperref}
+\usepackage{geometry}
+\usepackage{url}
+\usepackage{booktabs}
+\Urlmuskip=0mu plus 1mu
+\geometry{margin=1in}
+
+% Write-up for Experiments/SU4_SoV_Orthogonality_Untwisted_L2.wb.
+% Twisted construction: ../Clean/SU4_SoV_ScalarProduct_L2.tex (and .wb).
+
+\newcommand{\Op}{\mathcal{O}}
+\newcommand{\shift}[1]{^{[#1]}}
+
+\title{Orthogonality of separated-variables states at zero twist\\
+for the $\mathfrak{gl}(4)$ spin chain with rectangular representations}
+\author{Notes accompanying \texttt{Experiments/SU4\_SoV\_Orthogonality\_Untwisted\_L2.wb}}
+\date{11 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For the twisted $\mathfrak{gl}(4)$ chain of length $L=2$ with sites $[S,S,0,0]\otimes[P,P,0,0]$,
+orthogonality of transfer-matrix eigenstates follows from a linear system in eight differences of
+integrals of motion. We repeat the argument at zero twist. There, six of the eight differences
+become linear combinations of the remaining two, which are the differences of the quadratic and
+quartic Casimirs. The system collapses to a $2\times2$ matrix built from one direct and one dual
+Baxter polynomial on the two pole ladders of the measure. Its determinant vanishes for distinct
+states and does not vanish for each state. The same holds with each row integrated over the
+complete contour and a different pair of Q-functions in each row (Section~\ref{sec:full}). The
+identities for the integrals of motion are proved
+symbolically; the orthogonality and norm statements are verified exactly for every irrep at
+$(S,P)=(1,1),(2,1),(2,2)$.
+\end{abstract}
+
+\section{Setup}
+
+The chain has inhomogeneities $\theta_1,\theta_2$ and shift $h$, and $f\shift{\pm 2n}(u)=f(u\pm nh)$.
+The Yangian weights on the highest-weight vector are
+\begin{equation}
+\nu_1=\nu_2=(u-\theta_1-Sh)(u-\theta_2-Ph),\qquad \nu_3=\nu_4=(u-\theta_1)(u-\theta_2).
+\end{equation}
+At zero twist ($z_j=1$) the transfer matrices $T_{a,1}=\tau_a$ have leading coefficient
+$\binom{4}{a}$, and their subleading coefficient
+\begin{equation}
+[u^{2a-1}]\,\tau_a = -a\big(\theta_1+\theta_2+(a-1)h\big)\tbinom{4}{a} - h\tbinom{3}{a-1}\textstyle\sum_i\mu_i
+\label{eq:subl}
+\end{equation}
+no longer depends on the individual weights $\mu_i$, only on $\sum_i\mu_i=2(S+P)$. As in the twisted
+case, $\tau_3=\nu_1\shift{-4}\nu_4\,(4u^2+\cdots)$, $\tau_4$ is the quantum determinant, and five
+coefficients remain free: $tc_1$ in $\tau_1$, $tc_{2,3,4}$ (the $u^2,u^1,u^0$ coefficients) in
+$\tau_2$, and $tc_5$ in $\tau_3$.
+
+The Baxter operator $\Op$ and its dual $\Op^\dagger$ are those of the twisted notes with $z_j=1$. The
+measure is
+\begin{equation}
+\mu(u)=\prod_{\alpha=1}^2\prod_{n=0}^{S_\alpha-1}\frac{1}{u-\theta_\alpha-nh},\qquad S_1=S,\ S_2=P.
+\end{equation}
+
+\section{Q-functions at zero twist}
+
+The irreps in $[S,S,0,0]\otimes[P,P,0,0]$ are $\mu=\{S+P-j,\,S+P-k,\,k,\,j\}$ with
+$0\le j\le k\le\min(S,P)$, each with multiplicity one. For each irrep the direct solutions
+$\Op\,q_k\shift{2}=0$ are monic polynomials of staggered degrees
+\begin{equation}
+\deg q_k = (S+P)-\mu_k+(k-1),\qquad k=1,\dots,4,
+\end{equation}
+and the dual solutions $\Op^\dagger q^j=0$ are monic of degrees
+\begin{equation}
+\deg q^4=\mu_4,\quad \deg q^3=\mu_3+1,\quad \deg q^2=\mu_2+2,\quad \deg q^1=\mu_1+3.
+\end{equation}
+In each family a lower solution may be added to a higher one. This freedom is removed by setting to
+zero, in each polynomial, the coefficient of every lower degree of its family. With this gauge one
+exact solve fixes the five $tc$ and the $q_k$ uniquely, and the $q^j$ then follow linearly and
+uniquely. The Hodge-dual construction of the twisted case is not available, because its Vandermonde
+normalisation vanishes at $z_j=1$. So the duals are obtained directly from $\Op^\dagger$.
+
+\section{The orthogonality identity}
+
+For eigenstates $A$ and $B$, $\Op^A$ annihilates $q^j_A$ from the left and $\Op^B$ annihilates
+$q_i^{B[2]}$. With the contour enclosing all poles, the identity and quantum-determinant terms
+cancel in the difference, which leaves
+\begin{equation}
+0=\oint du\ \mu\,q^j_A\Big[-\frac{\Delta T_1}{\nu_1}\,q^B_i
++\frac{\Delta T_2}{\nu_1\nu_1\shift{-2}}\,q_i^{B[-2]}
+-\frac{\Delta T_3}{\nu_1\nu_1\shift{-2}\nu_1\shift{-4}}\,q_i^{B[-4]}\Big],
+\qquad \Delta T_a=T^A_{a,1}-T^B_{a,1}.
+\label{eq:identity}
+\end{equation}
+All poles lie on two ladders $\theta_\alpha+nh$, one per site. Inserting an $h$-periodic function
+such as $e^{2\pi i u/h}$ leaves the derivation unchanged, and such a function is constant on each
+ladder. So, for generic $\theta_1-\theta_2\notin h\mathbb Z$, \eqref{eq:identity} holds separately
+for the sum of residues over each ladder. We write $L_s[\cdot]$, $s=1,2$, for the sum of residues
+over the ladder of site $s$.
+
+With twist, the right-hand side is linear in eight independent differences: the five $\Delta tc$
+and three weight combinations entering the subleading coefficients. Distinct states make that
+vector nonzero, and the $8\times8$ matrix of the twisted notes has vanishing determinant.
+
+\section{The integrals of motion at zero twist}
+
+At $z_j=1$ the eigenvalues depend on the irrep only through its Casimirs. With the shifted weights
+$x_i=\mu_i+\tfrac52-i$ and $p_k=\sum_i x_i^k$,
+\begin{equation}
+C_2=p_2-5,\qquad
+C_4=p_4+4p_3-p_1p_2+\tfrac12 p_2-2p_1^2-10p_1-\tfrac{51}{4}.
+\end{equation}
+The closed forms from \texttt{baxter\_SU4\_L2\_XXX.wb} are
+\begin{align}
+\tau_1&=\tau_1^{vac}+\tfrac{h^2}{2}\Delta C_2,\\
+\tau_2&=\tau_2^{vac}+\tfrac{h^2}{8}\Delta C_2\big(\tau_1^{vac}+\tau_1^{vac[-2]}\big)
++h^4\big(\tfrac18\Delta(C_2^2)-\tfrac14\Delta C_4\big)+\tfrac{h^4(1+2S+2P)}{4}\Delta C_2,\\
+\tau_3&=\nu_1\shift{-4}\nu_4\big[\,4u^2+\cdots+\tfrac{h^2}{2}\Delta C_2\,\big].
+\end{align}
+There $\Delta$ is measured from the vacuum $[S+P,S+P,0,0]$, $\Delta(C_2^2)$ denotes the difference
+of the squares, and $\tau_1^{vac}=\sum_i\nu_i=2\nu_1+2\nu_4$. That notebook verified these forms
+against explicitly constructed transfer matrices and against the Baxter solver. Here they reproduce
+the Baxter-solved $tc$ of all twelve irreps at $(S,P)=(1,1),(2,1),(2,2)$.
+
+For any two states it follows, identically in $u$ and symbolically in $\theta_1,\theta_2,h,S,P$
+and two generic weights with $\sum\mu=2(S+P)$, that
+\begin{equation}
+\boxed{\;
+\Delta T_1=\Delta tc_1,\qquad
+\Delta T_2=\tfrac14\,\Delta tc_1\big(\tau_1^{vac}+\tau_1^{vac[-2]}\big)+\Delta c,\qquad
+\Delta T_3=\nu_4\,\nu_1\shift{-4}\,\Delta tc_1\;}
+\label{eq:ids}
+\end{equation}
+with the two independent invariants
+\begin{equation}
+\Delta tc_1=\tfrac{h^2}{2}\Delta C_2,\qquad
+\Delta c=h^4\Big(\tfrac18\Delta(C_2^2)-\tfrac14\Delta C_4+\tfrac{1+2S+2P}{4}\Delta C_2\Big).
+\label{eq:invariants}
+\end{equation}
+In terms of the five coefficients, \eqref{eq:ids} says
+\begin{equation}
+\Delta tc_5=\Delta tc_1,\qquad \Delta tc_2=2\,\Delta tc_1,\qquad
+\Delta tc_3=-\big(2(\theta_1+\theta_2)+(S+P+2)h\big)\Delta tc_1,\qquad
+\Delta tc_4=\Delta c+\tfrac14\Delta tc_1\big(\tau_1^{vac}(0)+\tau_1^{vac}(-h)\big).
+\end{equation}
+Together with \eqref{eq:subl}, which removes the three weight combinations, only two of the eight
+differences of the twisted system stay independent. The dependent coefficients enter only through
+the fixed combinations of $\nu_1$ and $\nu_4$ in \eqref{eq:ids}.
+
+\section{The $2\times2$ matrix}
+
+Substituting \eqref{eq:ids} into \eqref{eq:identity}, with
+\begin{equation}
+E_2=\frac{\mu}{\nu_1\nu_1\shift{-2}}\qquad\text{(poles at }\theta_\alpha+nh,\ n=0,\dots,S_\alpha+1),
+\end{equation}
+gives, for a fixed direct $q_i$ of $B$ and dual $q^j$ of $A$,
+\begin{equation}
+\boxed{\;
+N^{AB}\cdot\begin{pmatrix}\Delta tc_1\\ \Delta c\end{pmatrix}=0,\qquad
+\begin{aligned}
+N^{AB}_{s,1}&=L_s\Big[E_2\,q^j_A\Big(-\nu_1\shift{-2}\,q^B_i
++\tfrac12\big(\nu_1+\nu_1\shift{-2}+\nu_4+\nu_4\shift{-2}\big)\,q_i^{B[-2]}
+-\nu_4\,q_i^{B[-4]}\Big)\Big],\\
+N^{AB}_{s,2}&=L_s\Big[E_2\,q^j_A\,q_i^{B[-2]}\Big],
+\end{aligned}\;}
+\label{eq:N}
+\end{equation}
+with $s=1,2$. Hence
+\begin{equation}
+\det N^{AB}=0\quad\text{whenever }(\Delta tc_1,\Delta c)\neq0,
+\end{equation}
+and $\det N^{AA}$ plays the role of the norm. No splitting of $T_{2,1}$ and no alignment of
+measures is needed: each column is a single contour integral with the common factor $E_2$.
+
+\section{Verification}
+
+All statements below are exact. The identities \eqref{eq:ids}--\eqref{eq:invariants} are proved
+symbolically. The Q-functions and matrices are computed with rational $\theta_1=\tfrac13$,
+$\theta_2=\tfrac17$, $h=1$.
+
+\paragraph{Q-functions.} For all twelve irreps of $(1,1)$, $(2,1)$, $(2,2)$ the gauge-fixed solve is
+unique, $\Op\,q_k\shift{2}=0$ for $k=1,\dots,4$ and $\Op^\dagger q^j=0$ for $j=1,\dots,4$ hold
+identically in $u$, and all irreps have distinct $tc$.
+
+\paragraph{Choice of $(i,j)$.} Table~\ref{tab:survey} lists which pairs give a nonvanishing norm.
+Eight pairs work for every irrep. The other eight give $\det N^{AA}=0$ for every irrep. Among the
+failing pairs are the four pairings $i\in\{1,2\}$, $j\in\{3,4\}$ used in the twisted construction.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+$\det N^{AA}\neq0$ for all 12 irreps & $(i,j)\in\{(2,1),(2,2),(3,1),(3,2),(3,3),(4,1),(4,2),(4,3)\}$\\
+$\det N^{AA}=0$ for all 12 irreps & $(i,j)\in\{(1,1),(1,2),(1,3),(1,4),(2,3),(2,4),(3,4),(4,4)\}$\\
+\bottomrule
+\end{tabular}
+\caption{Norm survey over the direct index $i$ and dual index $j$.}
+\label{tab:survey}
+\end{table}
+
+\paragraph{Orthogonality and norms.} At $(i,j)=(2,1)$, for every ordered pair of irreps:
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+norms with $\det N^{AA}\neq0$ & 12 / 12\\
+cross pairs with $\det N^{AB}=0$ & 42 / 42\\
+cross pairs with $N^{AB}(\Delta tc_1,\Delta c)^T=0$ & 42 / 42\\
+\quad of which $N^{AB}\equiv0$ & 6\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Example, $(S,P)=(1,1)$, $(i,j)=(2,1)$.} The polynomials entering are
+$q_2^{\{2,1,1,0\}}=u^2-\tfrac{10}{21}u$,
+$q^1_{\{2,1,1,0\}}=u^5-\tfrac{130}{21}u^4+\tfrac{3097}{63}u$ and
+$q^1_{\{2,2,0,0\}}=u^5-\tfrac{22525}{1323}u^3+\tfrac{16640}{441}u^2$. Then
+\begin{equation}
+N^{AA}\big|_{A=\{2,1,1,0\}}=
+\begin{pmatrix}-\frac{150144211}{334305} & \frac{3235736}{334305}\\[3pt]
+\frac{692896376}{1820105} & -\frac{41930251}{1820105}\end{pmatrix},\qquad
+\det N^{AA}=\frac{1039313041}{156009},
+\end{equation}
+\begin{equation}
+N^{AB}\big|_{A=\{2,2,0,0\},\,B=\{2,1,1,0\}}=
+\begin{pmatrix}-\frac{320542493}{5014575} & \frac{320542493}{5014575}\\[3pt]
+\frac{1737705523}{27301575} & -\frac{1737705523}{27301575}\end{pmatrix},\qquad
+\det N^{AB}=0,
+\end{equation}
+and $(\Delta tc_1,\Delta c)=(2,2)$ spans the kernel of $N^{AB}$.
+
+\section{Variant: full-contour rows with different Q-functions}
+\label{sec:full}
+
+Instead of splitting the contour by ladder, one may integrate over the complete contour (both
+ladders, no periodic insertion) and use a different pair of Q-functions $(i_r,j_r)$ in each row
+$r=1,2$. With $\oint=L_1+L_2$,
+\begin{equation}
+\tilde N^{AB}_{r,1}=\oint E_2\,q^{j_r}_A\Big(-\nu_1\shift{-2}\,q^B_{i_r}
++\tfrac12\big(\nu_1+\nu_1\shift{-2}+\nu_4+\nu_4\shift{-2}\big)\,q_{i_r}^{B[-2]}
+-\nu_4\,q_{i_r}^{B[-4]}\Big),\qquad
+\tilde N^{AB}_{r,2}=\oint E_2\,q^{j_r}_A\,q_{i_r}^{B[-2]},
+\label{eq:Nfull}
+\end{equation}
+and again $\tilde N^{AB}\cdot(\Delta tc_1,\Delta c)^T=0$. Each row is the sum of the two ladder rows
+of \eqref{eq:N}. Because the contour encloses every finite pole, a row equals minus the residue at
+infinity of its integrand, so it can vanish identically when the degrees of the Q-functions are low.
+
+Exactly, with the same parameters and irreps:
+\begin{itemize}
+\item A full-contour row vanishes identically for every irrep exactly when $i<j$. This includes
+the four twisted pairings $i\in\{1,2\}$, $j\in\{3,4\}$.
+\item Among the ten remaining rows, $(1,1)$ and $(4,4)$ give a vanishing norm when paired, and so
+does any two of $(2,2),(3,2),(3,3)$. For the norm these rows are therefore linearly dependent.
+\item Every other pair of nonvanishing rows gives $\det\tilde N^{AA}\neq0$ for all twelve irreps.
+This is 41 of the 120 pairs of distinct rows. The other 79 pairs give $\det\tilde N^{AA}=0$ for all
+twelve irreps; no pair works for only some irreps.
+\end{itemize}
+At the rows $\big((i_1,j_1),(i_2,j_2)\big)=\big((1,1),(2,1)\big)$, that is $q^1_A$ against $q^B_1$
+and against $q^B_2$:
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+norms with $\det\tilde N^{AA}\neq0$ & 12 / 12\\
+cross pairs with $\det\tilde N^{AB}=0$ & 42 / 42\\
+cross pairs with $\tilde N^{AB}(\Delta tc_1,\Delta c)^T=0$ & 42 / 42\\
+\quad of which $\tilde N^{AB}\equiv0$ & 6\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The row $(1,1)$ is usable here, although on a single ladder $(1,1)$ gives a vanishing norm
+(Table~\ref{tab:survey}).
+
+\section{Remarks and open points}
+
+\begin{enumerate}
+\item \textbf{Vacuous pairs.} For six ordered cross pairs, all at $(S,P)=(2,2)$, the matrix
+vanishes identically. They form three unordered pairs:
+$\{4,4,0,0\}\leftrightarrow\{2,2,2,2\}$, $\{4,3,1,0\}\leftrightarrow\{3,2,2,1\}$ and
+$\{4,2,2,0\}\leftrightarrow\{3,3,1,1\}$. For these pairs \emph{every} row vanishes: all 16
+full-contour rows and all 32 single-ladder rows, for every $(i,j)$. So neither \eqref{eq:N} nor
+\eqref{eq:Nfull} tests orthogonality there, for any choice of Q-functions or contour. The vanishing
+is structural, like a selection rule, rather than an artefact of the choice. In the notation
+$\{4-j,4-k,k,j\}$ each pair satisfies $(j+k)_A+(j+k)_B=4$. The reason is not understood, and it is
+not a Casimir degeneracy ($\Delta C_2\neq0$).
+\item \textbf{Working $(i,j)$.} The pairs with nonvanishing norm are those with $i\ge j$, except
+$(1,1)$ and $(4,4)$. This is observed at three spins and not derived.
+\item \textbf{Degenerate states.} At zero twist the chain is $\mathfrak{gl}(4)$ symmetric.
+Descendants share the transfer-matrix eigenvalues of their highest weight, so $\Delta tc_1=\Delta c=0$
+and the argument separates only one state per irrep.
+\item \textbf{Relation to the twisted construction.} The three weight differences that disappear
+at $z_j=1$ are exactly the Cartan charges $\sum_i\mu_i z_i\partial_{z_i}\chi_a$ carried by the
+subleading coefficients with twist. The twisted pairings $i\in\{1,2\}$, $j\in\{3,4\}$ each give
+vanishing $2\times2$ norms at zero twist.
+\end{enumerate}
+
+\end{document}

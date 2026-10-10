@@ -1,0 +1,368 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\newcommand{\vacL}{\langle\mathrm{vacL}|}
+\newcommand{\vacR}{|\mathrm{vacR}\rangle}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\qmin}{\operatorname{qminor}}
+\newcommand{\nb}[1]{\texttt{#1}}
+
+\theoremstyle{definition}
+\newtheorem{result}{Result}
+\newtheorem{conjecture}{Conjecture}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{The functionals $\langle k_1^{u/h}Q_1\rangle$ and $\langle k_2^{u/h}Q_{12}\rangle$ as overlaps\\
+in the gl(3) XXX chain at $L=1$}
+\author{Notes accompanying \nb{L1-mathcalA.wb}}
+\date{2026-09-23}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For a single site of the twisted rational gl(3) spin chain in a rectangular-type representation $[\lambda_1,\lambda_2,0]$, we consider two contour-integral functionals of the Baxter Q-functions of a transfer-matrix eigenstate $|\Psi_A\rangle$: $\langle k_1^{u/h}Q_1\rangle$ with measure $1/\prod_k\nu_1(u+kh)$, and $\langle k_2^{u/h}Q_{12}\rangle$ with measure $1/\prod_k\nu_3(u-kh)$. Their product is an overlap $\langle v_{\rm tot}|\Psi_A\rangle$ with a state-independent covector $v_{\rm tot}$, which we determine.
+
+\begin{itemize}
+\item The $Q_1$ factor alone gives a rescaled copy of the reference covector $\vacL$ whose $E_{12}$ rotation parameter is shifted.
+\item The $Q_{12}$ factor acts as a binomial combination of fused transfer matrices $t_{\{m,m\}}(\theta)$.
+\item Geometrically, $\vacL$ is a flag (a line inside a plane). $k_1$ moves the line and $k_2$ moves the plane independently, so $v_{\rm tot}$ is the Borel--Weil projection of a line and a plane that are no longer incident. It is therefore not a coherent state.
+\end{itemize}
+
+The status of each claim is marked: proved, verified exactly, verified numerically, or fitted.
+\end{abstract}
+
+\tableofcontents
+
+%======================================================================
+\section{Setup and conventions}\label{sec:setup}
+
+Everything here is one site ($L=1$) with inhomogeneity $\theta\equiv\theta_1$, shift $h$, and a site representation $\lambda=[\lambda_1,\lambda_2,\lambda_3]$ of gl(3). All tests have $\lambda_3=0$.
+
+\paragraph{Representation.}
+The generators $E_{ij}$ act on $V_\lambda$ in the Gelfand--Tsetlin (GT) basis, ordered with the highest-weight pattern first, so that $e_1$ is the highest-weight vector. They satisfy the standard relations $[E_{ij},E_{kl}]=\delta_{jk}E_{il}-\delta_{li}E_{kj}$, which were checked in the notebook.
+
+The GT matrices for the fundamental $[1,0,0]$ are a rescaled copy of the plain matrix units (for example $E_{13}=2e_{13}$). Wherever a $3\times3$ auxiliary-space matrix is needed, we use the plain matrix units $e_{ij}$ instead.
+
+\paragraph{Lax operator, twist, transfer matrices.}
+\begin{equation}
+\mathcal L_{ij}(u)=u\,\delta_{ij}-h\,E_{ji},\qquad T_{ij}(u)=\mathcal L_{ij}(u-\theta),\qquad G=\operatorname{diag}(z_1,z_2,z_3).
+\end{equation}
+Quantum minors are defined with the rows antisymmetrized and the columns fixed, the $k$-th column being evaluated at $u-(k-1)h$:
+\begin{equation}
+\qmin_{I,J}(u)=\sum_{\sigma}\operatorname{sgn}(\sigma)\prod_{k=1}^{|I|}T_{I_{\sigma(k)},J_k}\big(u-(k-1)h\big).
+\end{equation}
+The twisted transfer matrices are
+\begin{equation}
+t^G_a(u)=\sum_{|I|=a}z_I\,\qmin_{I,I}(u),\qquad z_I=\prod_{i\in I}z_i,
+\end{equation}
+denoted \nb{tG[a][u]} in the notebook. These are polynomial in $u$, with $t^G_3(u)=z_1z_2z_3\,\nu_1(u-2h)\nu_2(u-h)\nu_3(u)$, where
+\begin{equation}
+\nu_n(u)=u-\theta-h\lambda_n .
+\end{equation}
+
+\paragraph{Normalized fused transfer matrices.}
+The combinations that appear below are
+\begin{align}
+t_{\{1,1\}}(u)&=\frac{t^G_2(u)}{\nu_1(u)\,\nu_1(u-h)},\\
+t_{\{2,2\}}(u)&=\frac{t^G_2(u)\,t^G_2(u+h)-t^G_3(u+h)\,t^G_1(u)}{\nu_1(u)\,\nu_1(u-h)\,\nu_1(u+h)\,\nu_1(u)} .
+\end{align}
+
+\paragraph{Reference covector and vector.}
+With free parameters $p_1,p_2$,
+\begin{align}
+\vacL&=e_1^T\,e^{p_1E_{12}}e^{p_2E_{13}}e^{p_3E_{23}}\equiv e_1^T\rho(g_0),&
+p_3&=\frac{p_2(z_3-z_1)}{p_1(z_2-z_3)},\\
+\vacR&=e^{r_1E_{32}}e^{r_2E_{31}}e^{r_3E_{21}}\,e_1,&
+r_1&=\frac{p_1(z_2-z_3)}{p_2(z_1-z_2)},\quad r_2=\frac{z_2-z_3}{p_2(z_1-z_2)},\quad r_3=\frac{z_1-z_3}{p_1(z_3-z_2)} .
+\end{align}
+
+\paragraph{Eigenstates and their normalization.}
+$|\Psi_A\rangle$ are the common right eigenvectors of $t^G_1,t^G_2$ (and hence of $t^G_3$ and the fused $t_{\{m,m\}}$). $\langle\Psi_A|$ are the right eigenvectors of $(t^G_a)^T$. They are normalized by
+\begin{equation}
+\vacL\Psi_A\rangle=1,\qquad \langle\Psi_A\vacR=1 .
+\end{equation}
+The $|\Psi_A\rangle$ form a basis of $V_\lambda$. Consequently, for any list of numbers $(\mathcal A_A)$ there is a unique covector $v$ with $\langle v|\Psi_A\rangle=\mathcal A_A$ for all $A$. The question is always what $v$ is.
+
+\paragraph{Q-functions.}
+For an eigenstate with weight $\mu$ and polynomial eigenvalues $t_a(u)$ of $t^G_a(u)$,
+\begin{equation}
+Q_i(u)=z_i^{u/h}q_i(u),\quad \deg q_i=\lambda_1-\mu_i,\qquad Q^j(u)=z_j^{-u/h}q^j(u),\quad \deg q^j=\mu_j,
+\end{equation}
+with $q_i$ and $q^j$ monic. These are the monic polynomial solutions of the direct and dual Baxter equations
+\begin{align}
+&z\,\nu_1(x)\nu_1(x-h)\nu_1(x-2h)\,q(x+h)-t_1(x)\,\nu_1(x-h)\nu_1(x-2h)\,q(x)\notag\\
+&\qquad+t_2(x)\,\nu_1(x-2h)\,q(x-h)/z-t_3(x)\,q(x-2h)/z^2=0,\qquad z=z_i,\\[2pt]
+&\nu_3(x+h)\nu_3(x+2h)\nu_3(x+3h)\,g(x)-y\,t_1(x+h)\,\nu_3(x+2h)\nu_3(x+3h)\,g(x+h)\notag\\
+&\qquad+y^2\,t_2(x+2h)\,\nu_3(x+3h)\,g(x+2h)-y^3\,t_3(x+3h)\,g(x+3h)=0,\qquad y=1/z_j .
+\end{align}
+These Baxter operators were checked for unimodular twist, $z_1z_2z_3=1$. We also use
+\begin{equation}
+Q_{12}(u)=Q_1(u)\,Q_2(u-h)-Q_2(u)\,Q_1(u-h).
+\end{equation}
+
+\paragraph{Numerical points.}
+The eigenvectors are computed numerically at 100 digits. There are two rational points with unimodular twist:
+\begin{itemize}
+\item \textbf{point 1:} $h=1$, $\theta=\tfrac13$, $z=(\tfrac52,\tfrac73,\tfrac6{35})$, $p=(\tfrac35,\tfrac47)$;
+\item \textbf{point 2:} $h=\tfrac12$, $\theta=\tfrac27$, $z=(\tfrac32,\tfrac54,\tfrac8{15})$, $p=(\tfrac23,\tfrac57)$.
+\end{itemize}
+At these points all the overlaps turn out to be rational functions of $k_1,k_2$ with rational coefficients, so they can be read off exactly after rationalizing.
+
+%======================================================================
+\section{The first factor: $\langle k_1^{u/h}Q_1\rangle$}\label{sec:first}
+
+\paragraph{Definition.}
+With $d=\lambda_1-\lambda_2$,
+\begin{equation}
+\langle f\rangle=\frac{N_n}{f(\theta+\lambda_2h)}\oint\mu(u)\,f(u),\qquad
+\mu(u)=\frac{1}{\nu_1(u)\,\nu_1(u+h)\cdots\nu_1(u+dh)} .
+\end{equation}
+The contour encircles all the poles $u=\theta+nh$, $n=\lambda_2,\dots,\lambda_1$, and the factor $2\pi i$ is absorbed into $N_n$.
+
+\begin{result}[proved]\label{res:fd}
+The residue of $\mu$ at the lowest pole is $1/\big((-1)^d d!\,h^d\big)$. Choosing $N_n=(-1)^d d!\,h^d$ makes the constant term equal to 1, and
+\begin{equation}
+\langle f\rangle=\sum_{m=0}^{d}(-1)^m\binom{d}{m}\frac{f(\theta+(\lambda_2+m)h)}{f(\theta+\lambda_2h)} .
+\end{equation}
+For $f=k_1^{u/h}Q_1$ this is a polynomial of degree $d$ in $k_1$, and it is independent of how $Q_1$ is normalized. For the adjoint:
+\begin{equation}
+\mathcal A^{(1)}_A=1-k_1z_1\,q^A_1(\theta+2h)/q^A_1(\theta+h).
+\end{equation}
+\end{result}
+
+\begin{result}[verified]\label{res:v1}
+For every eigenstate, $\langle k_1^{u/h}Q_1^A\rangle=\langle v_1|\Psi_A\rangle$ with
+\begin{equation}
+\langle v_1|=(1-k_1z_1)^{\lambda_1-\lambda_2}\;e_1^T\,e^{p_1'E_{12}}e^{p_2E_{13}}e^{p_3E_{23}},\qquad
+p_1'=p_1\,\frac{1-k_1z_2}{1-k_1z_1},
+\end{equation}
+where $p_3=p_3(p_1,p_2)$ is held at its $\vacL$ value and is not recomputed from $p_1'$.
+
+In words: $v_1$ is $\vacL$, rescaled, with only its $E_{12}$ rotation parameter shifted. At $k_1=0$ it reduces to $\vacL$.
+\end{result}
+
+\paragraph{How it was found.}
+For the adjoint, $\langle v_1|\rho(g_0)^{-1}$ was fitted in the basis $e_1^T\{1,E_{12},E_{13},E_{23}\}$. The fit gave exactly
+\begin{equation}
+\langle v_1|=e_1^T\big[(1-k_1z_1)+k_1p_1(z_1-z_2)E_{12}\big]\rho(g_0)
+\end{equation}
+at both rational points. Since $e_1^TE_{12}^2=0$ in the adjoint, this equals the exponential form above; the equality was checked exactly with symbolic $k_1,z,p$. The exponential form for $[3,1,0]$ and $[3,2,0]$ was then a prediction. It was confirmed at every order in $k_1$, to about $10^{-92}$, at point 1 (and for $[3,2,0]$ also at point 2). $[3,1,0]$ is the first case with $e_1^TE_{12}^2\neq0$, so it genuinely tests both the exponential and the power $(1-k_1z_1)^2$.
+
+\begin{table}[h]\centering
+\begin{tabular}{lccccc}\toprule
+rep & poles ($\theta+nh$) & $N_n$ ($h=1$) & $c_m$ & degree in $k_1$ & $|v_1-\text{closed form}|$\\\midrule
+$[2,1,0]$ & $n=1,2$ & $-1$ & $(1,-1)$ & 1 & $10^{-94}$\\
+$[3,1,0]$ & $n=1,2,3$ & $2$ & $(1,-2,1)$ & 2 & $10^{-92}$\\
+$[3,2,0]$ & $n=2,3$ & $-1$ & $(1,-1)$ & 1 & $10^{-93}$\\\bottomrule
+\end{tabular}
+\caption{First factor (notebook cells 11--13).}
+\end{table}
+
+%======================================================================
+\section{The second factor: $\langle k_2^{u/h}Q_{12}\rangle$}\label{sec:second}
+
+\paragraph{Definition.}
+\begin{equation}
+\langle g\rangle_2=\frac{N_{n,2}}{g(\theta)}\oint\frac{g(u)}{\nu_3(u)\,\nu_3(u-h)\cdots\nu_3(u-\lambda_2h)} .
+\end{equation}
+The poles are at $u=\theta,\theta+h,\dots,\theta+\lambda_2h$ (with $\lambda_3=0$), and $N_{n,2}$ makes the constant term equal to 1. As in Result~\ref{res:fd},
+\begin{equation}
+\langle k_2^{u/h}Q_{12}\rangle_2=\sum_{m=0}^{\lambda_2}(-1)^m\binom{\lambda_2}{m}k_2^m\,\frac{Q_{12}(\theta+mh)}{Q_{12}(\theta)} .
+\end{equation}
+For the adjoint this is $1-k_2Q_{12}(\theta+h)/Q_{12}(\theta)$. We checked that $Q_{12}(\theta)\neq0$ for every state.
+
+\begin{result}[verified]\label{res:vtot}
+For every eigenstate,
+\begin{equation}
+\langle k_1^{u/h}Q_1\rangle\,\langle k_2^{u/h}Q_{12}\rangle_2=\langle v_{\rm tot}|\Psi_A\rangle,\qquad
+\langle v_{\rm tot}|=\langle v_1|\,\sum_{m=0}^{\lambda_2}(-1)^m\binom{\lambda_2}{m}k_2^m\,t_{\{m,m\}}(\theta),
+\end{equation}
+with $t_{\{0,0\}}=1$ and the normalized $t_{\{m,m\}}$ of Section~\ref{sec:setup}.
+\end{result}
+
+Since the $|\Psi_A\rangle$ are eigenvectors of every $t_{\{m,m\}}$, Result~\ref{res:vtot} is equivalent to the second factor being $\sum_m r_m\,\tau^{A}_{\{m,m\}}(\theta)$ with state-independent $r_m$, where $\tau^A_{\{m,m\}}$ is the eigenvalue of $t_{\{m,m\}}$ on $|\Psi_A\rangle$. The $r_m$ were fitted by least squares over all states, order by order in $k_2$, and came out exactly binomial.
+
+\begin{table}[h]\centering
+\begin{tabular}{llccc}\toprule
+rep & $\langle v_{\rm tot}|=\langle v_1|\times$ & spread over states & $|v_{\rm tot}-\text{claim}|$ & points\\\midrule
+$[2,1,0]$ & $1-k_2t_{\{1,1\}}(\theta)$ & $10^{-88}$ & $10^{-88}$ & 1, 2\\
+$[3,1,0]$ & $1-k_2t_{\{1,1\}}(\theta)$ & $10^{-86}$ & $10^{-85}$ & 1\\
+$[2,2,0]$ & $1-2k_2t_{\{1,1\}}(\theta)+k_2^2t_{\{2,2\}}(\theta)$ & $10^{-87}$ & $10^{-87}$ & 1\\
+$[3,2,0]$ & $1-2k_2t_{\{1,1\}}(\theta)+k_2^2t_{\{2,2\}}(\theta)$ & $10^{-85}$ & $10^{-85}$ & 1, 2\\
+$[4,2,0]$ & $1-2k_2t_{\{1,1\}}(\theta)+k_2^2t_{\{2,2\}}(\theta)$ & $10^{-84}$ & $10^{-83}$ & 1\\\bottomrule
+\end{tabular}
+\caption{Second factor (notebook cells 14--17). With the polynomial $t^G_2$ instead of $t_{\{1,1\}}$, the adjoint coefficient reads $-k_2/(6h^2)$, because $\nu_1(\theta)\nu_1(\theta-h)=6h^2$.}
+\end{table}
+
+\begin{remark}
+$v_{\rm tot}$ is not a rescaled rotation of the highest-weight covector: $C\,e_1^Te^{aE_{12}}e^{bE_{13}}e^{cE_{23}}=v_{\rm tot}$ has no solution, even at $k_1=0$ (cell 19). This is explained in Section~\ref{sec:bw}.
+\end{remark}
+
+%======================================================================
+\section{Local structure: from $\langle v_1|$ to the highest-weight bra}\label{sec:local}
+
+\begin{result}[proved/verified symbolically]
+At $u=\theta$, $T_{ab}(\theta)=-hE_{ba}$ and $T_{ab}(\theta-h)=-h\delta_{ab}-hE_{ba}$. Hence
+\begin{equation}
+\qmin_{\{i,j\},\{i,j\}}(\theta)=h^2\big[E_{ii}(1+E_{jj})-E_{ij}E_{ji}\big],\qquad
+\nu_1(\theta)\nu_1(\theta-h)\,t_{\{1,1\}}(\theta)=h^2\sum_{i<j}z_iz_j\big[E_{ii}(1+E_{jj})-E_{ij}E_{ji}\big].
+\end{equation}
+\end{result}
+
+\begin{result}[proved; checked for the adjoint]\label{res:hw}
+Use $e_1^TE_{ab}=0$ for $a>b$ and $e_1^TE_{ii}=\lambda_i e_1^T$. On the highest-weight bra, the only $2\times2$ quantum minors at $u=\theta$ that do not vanish are those with column set $J=\{1,2\}$:
+\begin{align}
+e_1^T\,\qmin_{12,12}(\theta)&=h^2\lambda_2(1+\lambda_1)\,e_1^T,\\
+e_1^T\,\qmin_{13,12}(\theta)&=h^2(1+\lambda_1)\,e_1^TE_{23},\\
+e_1^T\,\qmin_{23,12}(\theta)&=h^2\,e_1^T\big(E_{12}E_{23}-(1+\lambda_2)E_{13}\big).
+\end{align}
+The quadratic term $E_{12}E_{23}$ is not in the tangent space of the highest-weight orbit. This is the local origin of the non-coherence of $v_{\rm tot}$.
+\end{result}
+
+\begin{result}[verified exactly for the adjoint]\label{res:chain}
+Write $\langle v_1|=c\,e_1^T\rho(g_1)$ with $c=(1-k_1z_1)^{\lambda_1-\lambda_2}$ and $g_1=e^{p_1'E_{12}}e^{p_2E_{13}}e^{p_3E_{23}}$.
+\begin{enumerate}
+\item \textbf{Covariance.} $\rho(g_1)\,t^G_2(\theta)\,\rho(g_1)^{-1}=t^{G_1}_2(\theta)$ with $G_1=g_1Gg_1^{-1}$, where $g_1$ is taken with plain matrix units in the auxiliary space. $G_1$ is upper triangular with diagonal $z$. The other three conjugation conventions fail.
+\item \textbf{Quantum Cauchy--Binet.} For any $3\times3$ twist $M$,
+\begin{equation}
+t^M_2(u)=\sum_{I,J}\qmin_{I,J}(u)\,\det M_{J,I},
+\end{equation}
+which reproduces $t^G_2$ exactly for $M=G$.
+\item \textbf{Combining} (1), (2) and Result~\ref{res:hw}:
+\begin{equation}
+\langle v_1|\,t^G_2(\theta)=c\sum_{I}\det(G_1)_{\{1,2\},I}\;e_1^T\,\qmin_{I,\{1,2\}}(\theta)\;\rho(g_1).
+\end{equation}
+\end{enumerate}
+All three steps were checked exactly at $k_1=1/7$, point 1 (cell 23).
+\end{result}
+
+%======================================================================
+\section{Geometric form: a non-incident line and plane}\label{sec:bw}
+
+\paragraph{Borel--Weil setup.}
+A highest-weight covector of $V_\lambda$ corresponds to a flag, a line $\ell$ inside a plane $\pi$. Here $\ell$ is a row vector in $\mathbb C^3$ and $\pi$ is an element of $\Lambda^2\mathbb C^3$. The covector depends on the flag as $\ell^{\lambda_1-\lambda_2}\otimes\pi^{\lambda_2}$.
+
+Let $W=V_{[\lambda_1-\lambda_2,0,0]}\otimes V_{[\lambda_2,\lambda_2,0]}$. It contains $V_\lambda$ exactly once. Let
+\begin{equation}
+P:\;\mathrm{Sym}^{\lambda_1-\lambda_2}(\mathbb C^3)\otimes\mathrm{Sym}^{\lambda_2}(\Lambda^2\mathbb C^3)\to V_\lambda
+\end{equation}
+be the equivariant projection. In the notebook it is built by fixing the embedding $V_\lambda\hookrightarrow W$ from equivariance under all nine generators, and removing the complement with Casimir projectors.
+
+The reference covector is the flag of $g_0$: $\vacL=P(\ell_0,\pi_0)$ with $\ell_0=e_1^T g_0$ and $\pi_0=(e_1\wedge e_2)\,g_0$.
+
+\begin{result}[verified; the $\kappa$ rule is fitted]\label{res:bw}
+With $G=\operatorname{diag}(z)$,
+\begin{equation}
+\langle v_{\rm tot}|\;\propto\;P\Big(\ell_0\,(1-k_1G)\;,\;\prod_{m=1}^{\lambda_2}\pi_0\,\big(1-\kappa_m k_2\,\Lambda^2G\big)\Big),
+\end{equation}
+where the $\lambda_2$ planes are symmetrized. $\Lambda^2G$ is diagonal in the $\Lambda^2$ basis, with entry $z_jz_k$ on the weight $e_j+e_k$.
+
+So $k_1$ deforms only the line and $k_2$ deforms only the plane(s). The $\kappa_m$ found are:
+\begin{center}
+\begin{tabular}{lcl}\toprule
+rep & $\kappa$'s & $\prod_m(1-\kappa_m y)$\\\midrule
+$[2,1,0]$ & $\tfrac12$ & $1-\tfrac12y$\\
+$[3,1,0]$ & $\tfrac13$ & $1-\tfrac13y$\\
+$[2,2,0]$ & $1,1$ & $1-2y+y^2$\\
+$[3,2,0]$ & $\tfrac13,1$ & $1-\tfrac43y+\tfrac13y^2$\\
+$[4,2,0]$ & $\tfrac{3\mp\sqrt3}{6}$ & $1-y+\tfrac16y^2$\\\bottomrule
+\end{tabular}
+\end{center}
+In all five cases the coefficient of $(-y)^m$ is $\binom{\lambda_2}{m}^2/\binom{\lambda_1}{m}$. That is,
+\begin{equation}\label{eq:2F1}
+\prod_{m=1}^{\lambda_2}(1-\kappa_m y)={}_2F_1(-\lambda_2,-\lambda_2;-\lambda_1;y).
+\end{equation}
+\end{result}
+
+\paragraph{Adjoint as a matrix.}
+For $[2,1,0]$, covectors are traceless $3\times3$ matrices $M$. The intertwiner is fixed up to scale by $\mathfrak{sl}(3)$ equivariance; the centre acts as a scalar on $V_\lambda$ but trivially on matrices, so it is left out.
+\begin{itemize}
+\item $\vacL$ and $v_1$ map to nilpotent rank-1 matrices $M=xy^T$ with $y\cdot x=0$. These are flags.
+\item $v_{\rm tot}$ maps to $M=x'y'^T-\tfrac13(y'\!\cdot x')\mathbb 1$ with $y'\!\cdot x'\neq0$.
+\end{itemize}
+Symbolically in $k_1,k_2$ (cell 20):
+\begin{itemize}
+\item the row factor $y'$ depends only on $k_1$, with components $\propto(\ell_0)_i(1-k_1z_i)$;
+\item the column factor $x'$ depends only on $k_2$, with components $\propto(\pi_0)_{jk}(1-\tfrac12k_2z_jz_k)$;
+\item the shift is $\tfrac13(y'\!\cdot x')=163k_2/2205$ at point 1.
+\end{itemize}
+
+\paragraph{How the $\kappa$'s were found.}
+\begin{itemize}
+\item \textbf{$\lambda_2=1$.} One $\kappa$ fits exactly.
+\item \textbf{$\lambda_2=2$.} A single squared plane fails. Two different planes, symmetrized by polarization $\pi_a\pi_b=\tfrac12[(\pi_a+\pi_b)^2-\pi_a^2-\pi_b^2]$, fit exactly. This works because every 2-vector in $\mathbb C^3$ is decomposable.
+\item \textbf{The rule.} A first guess, $\kappa=\{1/(\lambda_2d+1),1\}$, was falsified by $[4,2,0]$. The hypergeometric form \eqref{eq:2F1} was then read off from all five reps. It has therefore \emph{not} yet been tested on a rep it was not fitted to.
+\end{itemize}
+
+%======================================================================
+\section{Status and open points}
+
+\begin{itemize}
+\item \textbf{Proved:}
+  \begin{itemize}
+  \item the finite-difference form of both functionals and their normalization;
+  \item the local minor formulas of Result~\ref{res:hw}.
+  \end{itemize}
+\item \textbf{Verified exactly or to ${\sim}10^{-83}$ or better:}
+  \begin{itemize}
+  \item Result~\ref{res:v1} for $[2,1,0]$, $[3,1,0]$, $[3,2,0]$;
+  \item Result~\ref{res:vtot} for five reps;
+  \item Result~\ref{res:chain} for the adjoint;
+  \item the Borel--Weil form of Result~\ref{res:bw} for five reps, given the fitted $\kappa$'s.
+  \end{itemize}
+\item \textbf{Fitted, not predicted:} the ${}_2F_1$ rule \eqref{eq:2F1}. The first real test is $\lambda_2=3$ (for example $[3,3,0]$ or $[4,3,0]$). It needs $t_{\{3,3\}}$ and a symmetrized product of three planes, neither of which is built yet.
+\item \textbf{Scope:}
+  \begin{itemize}
+  \item all reps tested have $\lambda_3=0$;
+  \item the Baxter operators assume unimodular twist;
+  \item Results~\ref{res:vtot}--\ref{res:bw} were mostly checked at a single numerical point;
+  \item the convention $Q_{12}(u)=Q_1(u)Q_2(u-h)-Q_2(u)Q_1(u-h)$ was assumed, and it matches the bracket in $\Psi^{\rm ref}$ of the orthogonality notebook.
+  \end{itemize}
+\item \textbf{Open:} a derivation of the $\kappa_m$, and hence of \eqref{eq:2F1}, from the $\nu_3$ measure acting on $Q_{12}$, rather than a fit.
+\end{itemize}
+
+%======================================================================
+\section{Relation to the orthogonality notebook}
+
+The state normalization and the Q-functions are those of \nb{L1-orthogonality-diagonal-frame.wb}. There, the SoV scalar product
+\begin{equation}
+\det N^{AB}=\det_{(i,j)\in\{(1,3),(1,2),(2,3)\}}\;\sum_{n=\lambda_3}^{\lambda_1}w_n\big\{-Q^j_AQ_{i,B},\;Q^j_AQ^{[-2]}_{i,B},\;Q^{j[2]}_AQ_{i,B}\big\}\big|_{\theta+nh},\qquad w_n=\prod_{m\neq n}\frac1{n-m},
+\end{equation}
+satisfies
+\begin{equation}
+\langle\Psi_A|\Psi_B\rangle=\kappa\,\delta_{AB}\,\frac{\det N^{AA}}{c^{\rm ref}_A\Psi^{\rm ref}_A},
+\end{equation}
+with
+\begin{align}
+\Psi^{\rm ref}&=Q_1(\theta+\lambda_2h)\,Q_{12}(\theta),\\
+c^{\rm ref}&=Q^3(\theta+\lambda_2h)\big[Q^3(\theta+\lambda_1h)Q^2(\theta+(\lambda_1+1)h)-Q^2(\theta+\lambda_1h)Q^3(\theta+(\lambda_1+1)h)\big],\\
+\kappa&=\frac{(\lambda_1!)^3}{(z_2-z_1)^{\lambda_1-\lambda_2}(z_1-z_3)^{\lambda_1-\lambda_3}(z_2-z_3)^{\lambda_2-\lambda_3}} .
+\end{align}
+The $\kappa$ here is unrelated to the $\kappa_m$ of Section~\ref{sec:bw}. The two functionals studied in this note are evaluated at the same points that enter $\Psi^{\rm ref}$: $\theta+\lambda_2h$ for $Q_1$, and $\theta$ for $Q_{12}$.
+
+%======================================================================
+\section*{Notebook map (\nb{L1-mathcalA.wb})}
+\begin{center}
+\begin{tabular}{rl}\toprule
+cell & content\\\midrule
+1 & summary\\
+2--7 & GT machinery, $\lambda$ (set in cell 3), Lax/$t^G$, rotation parameters, $\vacL,\vacR$\\
+8--10 & numerical point switch, eigenstates, Baxter Q's\\
+11--13 & first factor: $\mathcal A^{(1)}$, $v_1$, its structure, closed form + table\\
+14--16 & second factor, $v_{\rm tot}$ components, simple operator fit (fails)\\
+17 & $t_{\{m,m\}}$ expansion fit (Result~\ref{res:vtot}) + table\\
+18 & summary of the structure (Sections~\ref{sec:local}--\ref{sec:bw})\\
+19 & local generator form of $t_{\{1,1\}}(\theta)$; coherent-state tests\\
+20 & adjoint matrix (line/plane) test\\
+21--22 & general projection $P$; single-$\kappa$ and two-plane fits\\
+23 & chain $\langle v_1|\to e_1^T$ (Result~\ref{res:chain})\\\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

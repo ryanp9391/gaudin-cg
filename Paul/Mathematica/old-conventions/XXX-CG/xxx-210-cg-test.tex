@@ -1,0 +1,290 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\emergencystretch=3em
+
+\newcommand{\vacL}{\langle\mathrm{vacL}|}
+\newcommand{\nb}[1]{\texttt{#1}}
+
+\theoremstyle{definition}
+\newtheorem{result}{Result}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{CG test for $[2,1,0]\otimes[2,1,0]$: which states do the functionals\\
+$\langle k_1^{u/h}Q_1\rangle\langle k_2^{u/h}Q_{12}\rangle$ reach after untwisting?}
+\author{Notes accompanying \nb{xxx-210-cg-test.wb}}
+\date{2026-09-23}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+At $L=2$ the product of the two functionals is the overlap of $|\Psi_A\rangle$ with a covector of the form $\langle v_{\rm tot}|\otimes\vacL$. This is the result of \nb{L2-mathcalA.tex}. For the adjoint we undo the reference rotation globally, which turns site~2 into the highest-weight bra $e_1^T$. We then untwist, $z_k=e^{\varphi_k\varepsilon}$, and ask which states of $V\otimes V$ the resulting family of covectors reaches. It reaches 6 of the 8 site-1 weight directions, and 5 of the 6 highest-weight states of $V\otimes V$. The one it misses is the singlet $[2,2,2]$. That component is exactly zero already at finite twist. In the limit $k_1$ and $k_2$ survive, and $k_1$ alone separates the two octets. We also test the determinant family of \nb{L2-det-mathcalA.tex}, $\langle v_{\rm tot}|\otimes\langle v_1|$: after undoing its site-2 rotation it reaches only 3 of the 6 highest-weight states, all already reached, so the singlet is still missed. Its overlap with the singlet vanishes identically, because an $N_+$ rotation on site~2 can be moved onto site~1. A $\hat t$ insertion on both sites would reach the singlet, but has not been realized by a functional. A third family, $\langle\mathrm{vacL}\otimes\mathrm{vacL}|t_{\{2,1\}}(\theta_1)$ (which acts on site~1 only, \nb{L2-localizing-transfer.tex}), reaches 4 of 6 and adds nothing. Finally we explain the rule behind all misses: the site-1 weight $\mu_3=\nu_3$ is capped at $\lambda_2$, for the $\hat t$ families because each quantum minor moves at most one unit into slot~3 (for any twist), and for the $t_{\{2,1\}}$ family because its rotation has no $E_{13}$ component. A hypothetical covector with an $E_{13}$ component reaches all 6. All results are exact and symbolic.
+\end{abstract}
+
+\tableofcontents
+
+%======================================================================
+\section{Setup}
+
+We use one site of the adjoint $V=V_{[2,1,0]}$ (dimension 8), in the conventions of \nb{L1-mathcalA.tex}. The Gelfand--Tsetlin basis has the highest-weight vector $e_1$ first, and $E_{ij}$ with $i<j$ raise. Everything is exact and symbolic in $z_k,\theta_1,h,p_1,p_2,k_1,k_2$.
+
+\paragraph{The covector.}
+By Results~3--4 of \nb{L2-mathcalA.tex}, for the adjoint
+\begin{equation}
+\langle k_1^{u/h}Q_1\rangle\,\langle k_2^{u/h}Q_{12}\rangle_m=\big(\langle v_{\rm tot}|\otimes\vacL\big)|\Psi_A\rangle,\qquad
+\langle v_{\rm tot}|=\langle v_1|\big(1-k_2\,\hat t\,\big),
+\end{equation}
+with
+\begin{equation}
+\langle v_1|=(1-k_1z_1)\,e_1^Te^{p_1'E_{12}}e^{p_2E_{13}}e^{p_3E_{23}},\quad p_1'=p_1\frac{1-k_1z_2}{1-k_1z_1},\qquad
+\hat t=\frac{t_2(\theta_1)}{\nu_1(\theta_1)\nu_1(\theta_1-h)} .
+\end{equation}
+Here $t_2=\sum_{|I|=2}z_I\operatorname{qminor}_{I,I}$ is the single-site transfer matrix, and $\nu_1(\theta_1)\nu_1(\theta_1-h)=6h^2$.
+
+\paragraph{Undoing the rotation.}
+Write $\vacL=e_1^Tg_0$ with $g_0=e^{p_1E_{12}}e^{p_2E_{13}}e^{p_3E_{23}}$ and $p_3=p_2(z_3-z_1)/(p_1(z_2-z_3))$. Acting with the global rotation $g_0^{-1}\otimes g_0^{-1}$ gives
+\begin{equation}
+\big(\langle v_{\rm tot}|\otimes\vacL\big)\,(g_0^{-1}\otimes g_0^{-1})=\langle v_{\rm new}|\otimes e_1^T,\qquad \langle v_{\rm new}|=\langle v_{\rm tot}|\,g_0^{-1}.
+\end{equation}
+The rotation is invertible, so it does not change which states can be reached; it only puts site~2 in the highest-weight bra. It is also exact:
+\begin{equation}\label{eq:v1g}
+\langle v_1|g_0^{-1}=(1-k_1z_1)\,e_1^T\,e^{(p_1'-p_1)E_{12}},\qquad p_1'-p_1=\frac{p_1k_1(z_1-z_2)}{1-k_1z_1}
+\end{equation}
+(verified symbolically).
+
+\paragraph{Untwisting and counting.}
+Set $z_k=e^{\varphi_k\varepsilon}$ and expand in $\varepsilon$.
+\begin{itemize}
+\item \textbf{Leading order.} The leading order of the whole vector is $\varepsilon^0$, and it is only $\tfrac12(1-k_1)(2-k_2)\,e_1^T$. So we take the leading order separately in each weight space of $V$.
+\item \textbf{Rank.} For each weight space, clear a common scalar denominator and collect the coefficient vectors of all monomials in the free parameters $(k_1,k_2,p_1,p_2,\varphi_1,\varphi_2,\varphi_3,\theta_1,h)$. Their span is exactly the span of the values of the family, and we compare its rank with the dimension. Every rank was cross-checked by evaluating the family at 25 random rational points.
+\end{itemize}
+
+%======================================================================
+\section{Results}
+
+\begin{result}[exact]\label{res:weights}
+The per-weight leading orders of $\langle v_{\rm new}|$ are:
+\begin{center}
+\begin{tabular}{lccl}\toprule
+weight of $V$ & dim & order & leading component(s)\\\midrule
+$(2,1,0)$ & 1 & $\varepsilon^0$ & $\tfrac12(1-k_1)(2-k_2)$\\
+$(2,0,1)$ & 1 & $\varepsilon^1$ & $(k_1-1)\,k_2\,p_2(\varphi_1-\varphi_3)/(2p_1)$\\
+$(1,2,0)$ & 1 & $\varepsilon^1$ & $\tfrac12k_1(2-k_2)\,p_1(\varphi_1-\varphi_2)$\\
+$(1,1,1)$ & 2 & $\varepsilon^2$ & $-\tfrac12k_2p_2(\varphi_1-\varphi_2)(\varphi_1-\varphi_3)\,\big(2k_1-1,\ 1\big)$\\
+$(0,2,1)$ & 1 & $\varepsilon^3$ & $k_1k_2\,p_1p_2(\varphi_1-\varphi_2)^2(\varphi_1-\varphi_3)$\\
+$(1,0,2)$ & 1 & -- & $0$ identically\\
+$(0,1,2)$ & 1 & -- & $0$ identically\\\bottomrule
+\end{tabular}
+\end{center}
+The two components of weights $(1,0,2)$ and $(0,1,2)$ vanish exactly in $\langle v_{\rm new}|$, before any expansion. So they are zero at finite twist too. The rank equals the dimension in every other weight space, including the 2-dimensional $(1,1,1)$. In total the family spans 6 of the 8 directions of $V$.
+\end{result}
+
+\begin{result}[exact]\label{res:hw}
+In $V\otimes V$ a covector $c\otimes e_1^T$ pairs with a state of total weight $\nu$ only through the site-1 component of weight $\nu-\lambda$.
+\begin{itemize}
+\item \textbf{All states.} The family reaches 6 of the 64 states. This count is trivial: covectors of this form can never reach more than 8.
+\item \textbf{Highest-weight states.} The highest-weight vectors of weight $\nu$ were computed as the common kernel of the total $E_{12},E_{23}$. The pairing rank is:
+\begin{center}
+\begin{tabular}{lccc}\toprule
+irrep of $V\otimes V$ & site-1 weight $\nu-\lambda$ & \# hw states & rank reached\\\midrule
+$[4,2,0]$ & $(2,1,0)$ & 1 & 1\\
+$[3,3,0]$ & $(1,2,0)$ & 1 & 1\\
+$[4,1,1]$ & $(2,0,1)$ & 1 & 1\\
+$[3,2,1]$ & $(1,1,1)$ & 2 & 2\\
+$[2,2,2]$ & $(0,1,2)$ & 1 & \textbf{0}\\\bottomrule
+\end{tabular}
+\end{center}
+So the family reaches \textbf{5 of the 6} highest-weight states. Both octets are separated. Only the singlet is missed, and the reason is Result~\ref{res:weights}: the singlet needs the site-1 lowest weight $(0,1,2)$, where $\langle v_{\rm new}|$ vanishes.
+\end{itemize}
+\end{result}
+
+\begin{result}[exact]\label{res:params}
+In the untwisting limit $k_1$ and $k_2$ survive, while $\theta_1$ and $h$ drop out.
+\begin{itemize}
+\item \textbf{One-dimensional weight spaces.} Every parameter is an overall factor. Several components exist only because of the $k$'s: they are proportional to $k_2$, $k_1$ or $k_1k_2$. At $k_1=k_2=0$ only $e_1^T$ is left.
+\item \textbf{The octet sector $(1,1,1)$.} Everything except $k_1$ factors out. The direction $(2k_1-1,1)$ is what gives rank 2. Freezing $k_1$ at a generic value drops the rank to 1. Freezing $k_2$, or $p_{1,2}$ and $\varphi$, or everything except $k_1$, keeps it at 2.
+\end{itemize}
+In this limit the $k$'s therefore act like CG generating-function variables. $k_2$ switches on the components reached through $\hat t$. $k_1$ moves along $E_{12}$ and is the only parameter that resolves the octet multiplicity. The $p$'s and $\varphi$'s only give normalizations that depend on the weight.
+\end{result}
+
+%======================================================================
+\section{Where the lower weights come from}
+
+\begin{result}[exact]\label{res:mech}\leavevmode
+\begin{enumerate}
+\item With a diagonal twist, $\hat t$ commutes with $E_{11},E_{22},E_{33}$. By \eqref{eq:v1g}, $\langle v_1|g_0^{-1}\propto e_1^Te^{aE_{12}}$ lives in the weights $(2,1,0)$ and $(1,2,0)$ only, and $\langle v_1|g_0^{-1}(1-k_2\hat t)$ would stay there; this was checked on $e_1^Te^{aE_{12}}\hat t$ with symbolic $a$.
+\item Write $\langle v_{\rm new}|=\langle v_1|g_0^{-1}\,\big(1-k_2\,g_0\hat t\,g_0^{-1}\big)$. By covariance, with $g_0$ in plain $3\times3$ matrix units,
+\begin{equation}
+g_0\,t^G_2\,g_0^{-1}=t^{G_1}_2,\qquad G_1=g_0Gg_0^{-1},\qquad t^M_2(u)=\sum_{I,J}\operatorname{qminor}_{I,J}(u)\,\det M_{J,I}.
+\end{equation}
+The last formula is quantum Cauchy--Binet. It reproduces $t^G_2$ for diagonal $G$, and the covariance holds exactly. Both were verified at $L=1$ in \nb{L1-mathcalA.tex} and are re-verified here, exactly and symbolically.
+\item The rotated twist is
+\begin{equation}
+G_1=\begin{pmatrix} z_1 & p_1(z_2-z_1) & 0\\ 0 & z_2 & p_2(z_1-z_3)/p_1\\ 0&0&z_3\end{pmatrix}.
+\end{equation}
+It is upper triangular. Its off-diagonal entries are $O(\varepsilon)$, and its $(1,3)$ entry vanishes because of the $\vacL$ relation for $p_3$.
+\end{enumerate}
+Every component of weight other than $(2,1,0)$ and $(1,2,0)$ therefore comes from the off-diagonal entries of $G_1$. The $\varepsilon$-orders in Result~\ref{res:weights} count these insertions, together with the $O(\varepsilon)$ shift $p_1'-p_1$ in \eqref{eq:v1g}.
+\end{result}
+
+\begin{remark}
+That weights $(1,0,2)$ and $(0,1,2)$ are never reached is now derived in Section~\ref{sec:why}. The zero $(1,3)$ entry of $G_1$ is \emph{not} the reason: a single quantum-minor insertion moves at most one unit into slot~3 for any twist, and $e_1^Te^{aE_{12}}$ starts with none. Reaching the singlet needs more insertions than $\lambda_2$ allows, or a rotation with an $E_{13}$ component.
+\end{remark}
+
+%======================================================================
+\section{The determinant family}\label{sec:det}
+
+\paragraph{The covector.}
+\nb{L2-det-mathcalA.tex} replaces the first factor by a $2\times2$ determinant of two-site brackets and finds, for the adjoint,
+\begin{equation}
+D_A\,\langle k_2^{u/h}p\,Q_{12}\rangle=C\,\big(\langle v_{\rm tot}|\otimes\langle v_1|\big)|\Psi_A\rangle,
+\end{equation}
+with the same $\langle v_{\rm tot}|=\langle v_1|(1-k_2\hat t)$ as above and a constant $C$. Site~2 now carries $\langle v_1|=(1-k_1z_1)\,e_1^Tg_1$ with $g_1=e^{p_1'E_{12}}e^{p_2E_{13}}e^{p_3E_{23}}=e^{aE_{12}}g_0$, $a=p_1'-p_1$, instead of $\vacL$.
+
+\paragraph{Undoing the rotation.}
+Undo $g_1$ globally: $(\langle v_{\rm tot}|\otimes\langle v_1|)(g_1^{-1}\otimes g_1^{-1})=\langle v'_{\rm new}|\otimes e_1^T$ with
+\begin{equation}
+\langle v'_{\rm new}|=(1-k_1z_1)\,\langle v_{\rm tot}|g_1^{-1}=(1-k_1z_1)\,\langle v_{\rm new}|\,e^{-aE_{12}}=(1-k_1z_1)^2\,e_1^T\big(1-k_2\,g_1\hat tg_1^{-1}\big),
+\end{equation}
+using $v_1g_1^{-1}=(1-k_1z_1)e_1^T$ (all three forms verified symbolically). The $E_{12}$ shift of $v_{\rm new}$ is absent.
+
+\begin{result}[exact]\label{res:nplus}
+$g_1\in N_+$ and $g_1\otimes g_1$ fixes every highest-weight vector of $V\otimes V$ (checked on all six). So undoing the rotation does not change any pairing with a highest-weight state.
+\end{result}
+
+\begin{result}[exact]\label{res:det}
+$v'_{\rm new}$ vanishes identically at the site-1 weights $(1,2,0)$, $(0,2,1)$, $(1,0,2)$, $(0,1,2)$. Its per-weight leading orders are
+\begin{center}
+\begin{tabular}{lcl}\toprule
+weight & order & leading component(s)\\\midrule
+$(2,1,0)$ & $\varepsilon^0$ & $\tfrac12(1-k_1)^2(2-k_2)$\\
+$(2,0,1)$ & $\varepsilon^1$ & $-\tfrac12(k_1-1)^2k_2\,p_2(\varphi_1-\varphi_3)/p_1$\\
+$(1,1,1)$ & $\varepsilon^2$ & $\tfrac12(k_1-1)k_2\,p_2(\varphi_1-\varphi_2)(\varphi_1-\varphi_3)\,(-1,\ 1)$\\\bottomrule
+\end{tabular}
+\end{center}
+The octet direction $(-1,1)$ is fixed, so the rank in $(1,1,1)$ is 1. Highest-weight states reached:
+\begin{center}
+\begin{tabular}{lcccc}\toprule
+irrep & \# hw & old $v_{\rm new}$ & new $v'_{\rm new}$ & combined\\\midrule
+$[4,2,0]$ & 1 & 1 & 1 & 1\\
+$[4,1,1]$ & 1 & 1 & 1 & 1\\
+$[3,3,0]$ & 1 & 1 & 0 & 1\\
+$[3,2,1]$ & 2 & 2 & 1 & 2\\
+$[2,2,2]$ & 1 & \textbf{0} & 0 & \textbf{0}\\\midrule
+total & 6 & 5 & 3 & 5\\\bottomrule
+\end{tabular}
+\end{center}
+The determinant family adds nothing, and the singlet is still missed.
+\end{result}
+
+\begin{result}[exact, finite twist]\label{res:singlet}
+$\langle v_{\rm tot}\otimes v_1|\,\text{singlet}\rangle=0$ identically. The reason is structural: by Result~\ref{res:nplus} the pairing equals that of $v_{\rm new}e^{-aE_{12}}\otimes e_1^T$, which needs the site-1 component of weight $(0,1,2)$. Right multiplication by $e^{-aE_{12}}$ can feed $(0,1,2)$ only from $(1,0,2)$, and $v_{\rm new}$ vanishes at both. More generally, any $N_+$ rotation on site~2 can be moved onto site~1 without changing highest-weight pairings.
+\end{result}
+
+\begin{remark}[a covector that would reach the singlet]
+A $\hat t$ insertion on \emph{both} sites, $\langle v_1|(1-k_2\hat t)\otimes\langle v_1|(1-k_2'\hat t)$, would. Its $k_2k_2'$ term pairs the two sites' $(1,1,1)$ components, whose weights add to $(2,2,2)$:
+\begin{equation}
+\langle v_1\hat t\otimes v_1\hat t\,|\,\text{singlet}\rangle=\tfrac12\,p_2^2(z_1-z_2)^2(z_1-z_3)^2\neq0,
+\end{equation}
+of order $\varepsilon^4$ and independent of $k_1$. The single-insertion terms vanish ($\langle v_1\hat t\otimes v_1|\text{singlet}\rangle$ is the $k_2$ coefficient of Result~\ref{res:singlet}, and the singlet is symmetric). This covector has \emph{not} been realized by a functional; it would need a second $\langle k_2^{u/h}p\,Q_{12}\rangle$ with site-2 poles.
+\end{remark}
+
+\paragraph{Reconstruction.}
+At finite twist, the overlap map $|A\rangle\mapsto\langle v_{\rm new}(\cdot)\otimes e_1^T|A\rangle$ has rank 5 on the six-dimensional span of all highest-weight vectors, also with the determinant family added (computed in \nb{xxx-310-cg-test.wb}, cell 8, with \nb{lamSwitchC}$=\{2,1,0\}$). Its kernel is the singlet. The same test for $[3,1,0]$ and $[3,2,0]$ is in \nb{xxx-310-cg-test.tex}.
+
+%======================================================================
+\section{The transfer-matrix family $\langle\mathrm{vacL}\otimes\mathrm{vacL}|\,t_{\{2,1\}}(\theta_1)$}\label{sec:t21}
+
+By \nb{L2-localizing-transfer.tex} (exact at two points, symbolic in the rotation parameters),
+\begin{equation}
+\langle\mathrm{vacL}\otimes\mathrm{vacL}|\,t_{\{2,1\}}(\theta_1)=\tau^{\rm vac}\,\langle e_1^T\hat G^{-1}g_0\hat G\otimes\mathrm{vacL}|,
+\end{equation}
+with $\hat G=\mathrm{diag}(z^\mu)$ the twist acting in $V$: the fused transfer matrix acts on site~1 only, by conjugating the rotation with the twist. Undoing $g_0\otimes g_0$ as before and dropping the scalar $\tau^{\rm vac}$ leaves $\langle v_t|\otimes e_1^T$ with
+\begin{equation}
+\langle v_t|=e_1^T\hat G^{-1}g_0\hat Gg_0^{-1},\qquad
+G^{-1}g_0Gg_0^{-1}=\begin{pmatrix}1& p_1\big(\tfrac{z_2}{z_1}-1\big)&0\\0&1&\tfrac{p_2(z_1-z_3)}{p_1z_2}\\0&0&1\end{pmatrix}=e^{yE_{23}}e^{xE_{12}} .
+\end{equation}
+The $(1,3)$ entry vanishes because of the $\vacL$ relation for $p_3$ (the same zero as $(G_1)_{13}$), and $x,y=O(\varepsilon)$.
+
+\begin{result}[exact]\label{res:t21}
+$\langle v_t|$ vanishes identically at the site-1 weights $(1,0,2)$ and $(0,1,2)$ (and in one direction of $(1,1,1)$), the same zero pattern as $\langle v_{\rm new}|$. Per-weight leading orders: $\varepsilon^0$ at $(2,1,0)$ (component 1), $\varepsilon^1$ at $(2,0,1)$ ($p_2(\varphi_1-\varphi_3)/p_1$) and $(1,2,0)$ ($-p_1(\varphi_1-\varphi_2)$), $\varepsilon^2$ at $(1,1,1)$ (rank 1). Highest-weight states reached:
+\begin{center}
+\begin{tabular}{lccc}\toprule
+irrep & \# hw & $v_t$ alone & old + det + $v_t$\\\midrule
+$[4,2,0]$ & 1 & 1 & 1\\
+$[3,3,0]$ & 1 & 1 & 1\\
+$[4,1,1]$ & 1 & 1 & 1\\
+$[3,2,1]$ & 2 & 1 & 2\\
+$[2,2,2]$ & 1 & 0 & 0\\\midrule
+total & 6 & 4 & 5\\\bottomrule
+\end{tabular}
+\end{center}
+So the family adds nothing, and $\langle v_t\otimes e_1^T|\text{singlet}\rangle=0$ exactly at finite twist.
+\end{result}
+
+%======================================================================
+\section{Why the rule $\nu_3\le\lambda_2$}\label{sec:why}
+
+After undoing the reference rotation, site~2 is $e_1^T$, so a covector $\langle c|\otimes e_1^T$ pairs with a highest-weight state of irrep $\nu$ only through the site-1 weight $\mu=\nu-\lambda$; with $\lambda_3=0$, $\mu_3=\nu_3$. All families have $\mu_3\le\lambda_2$ on site~1, which is exactly the rule observed here and in \nb{xxx-310-cg-test.tex} (missed irreps $=$ those with $\nu_3>\lambda_2$). There are two separate mechanisms.
+
+\begin{result}[the $\hat t$ families, exact]\label{res:whyA}
+For $v_{\rm new}$ and $v'_{\rm new}$ the rotation part is $e_1^Te^{aE_{12}}$, which has $\mu_3=0$. Each quantum minor $\operatorname{qminor}_{I,J}$ is weight-homogeneous and has $|I|=|J|$ with every index appearing at most once, so it changes $\mu_3$ by at most one, \emph{whatever the twist}. With at most $\lambda_2$ insertions ($\sum_{m\le\lambda_2}t_{\{m,m\}}$, each $t_{\{m,m\}}$ a polynomial of degree $m$ in minors up to central factors), $\mu_3\le\lambda_2$. Exact check: for a completely general $3\times3$ twist $M$ (all nine entries free), $e_1^Te^{aE_{12}}\,t^M_2(\theta_1)$ vanishes identically at $(1,0,2)$ and $(0,1,2)$. So the vanishing $(1,3)$ entry of $G_1$ is \emph{not} what limits these families; the number of insertions is.
+\end{result}
+
+\begin{result}[the $t_{\{2,1\}}$ family, exact]\label{res:whyB}
+$\langle v_t|=e_1^Te^{yE_{23}}e^{xE_{12}}$ (up to the Cartan normalization). Slot~3 is filled only by $E_{23}$ acting on $e_1^T$, i.e.\ by moving row-2 boxes, and $e_1^TE_{23}^k=0$ for $k>\lambda_2-\lambda_3$; $E_{12}$ does not change $\mu_3$. The row-1 boxes could reach slot 3 only through $E_{13}$, which would need a nonzero $(1,3)$ entry. Hence $\mu_3\le\lambda_2$.
+\end{result}
+
+\begin{result}[a hypothetical fix, exact]\label{res:v2}
+The covector $\langle v^{(2)}|=e_1^T\hat G^{-2}g_0\hat G^2g_0^{-1}$ has
+\begin{equation}
+\big(G^{-2}g_0G^2g_0^{-1}\big)_{13}=-\frac{p_2(z_1-z_2)(z_1-z_3)}{z_1^2}=-p_2(\varphi_1-\varphi_2)(\varphi_1-\varphi_3)\,\varepsilon^2+O(\varepsilon^3),
+\end{equation}
+which opens the $E_{13}$ direction. It has no identically vanishing components, its leading order at $(0,1,2)$ is $9p_2^2(\varphi_1-\varphi_2)^2(\varphi_1-\varphi_3)^2\,\varepsilon^4$, and
+\begin{equation}
+\langle v^{(2)}\otimes e_1^T|\text{singlet}\rangle=\frac{3p_2^2(z_1-z_2)^2(z_1-z_3)^2(z_1z_2+z_1z_3+z_2z_3)}{z_1^4z_2^2}\neq0 .
+\end{equation}
+Alone it reaches 5 of 6 (one $[3,2,1]$ and the singlet among them); together with all the other families it reaches \textbf{6 of 6}.
+\end{result}
+
+\begin{remark}
+$v^{(2)}$ is \emph{not} realized by $\langle\mathrm{vacL}\otimes\mathrm{vacL}|\,t_{\{2,1\}}(\theta_1)^2$: that covector has rank 4 as a site-1 $\times$ site-2 matrix (\nb{L2-localizing-transfer.tex}, Result~4), because after one step the two sites carry different rotations. What is needed is a functional whose relative rotation between the sites has an $E_{13}$ component, or more than $\lambda_2$ quantum-minor insertions (as the two-site $\hat t$ insertion in the remark of Section~\ref{sec:det}). This matches the twist-reconstruction result of 2026-09-19, where a single per-site $E_{31}$ rotation completed $\mathrm{adj}^{\otimes2}$.
+\end{remark}
+
+%======================================================================
+\section{Status and open points}
+\begin{itemize}
+\item \textbf{Exact and symbolic:} all of Results~\ref{res:weights}--\ref{res:v2}.
+\item \textbf{Inherited:} the one-site action of $t_{\{2,1\}}(\theta_1)$, from \nb{L2-localizing-transfer.tex} (exact at two numeric points), and the forms of $\langle v_{\rm tot}|\otimes\vacL$ and $\langle v_{\rm tot}|\otimes\langle v_1|$. They come from \nb{L2-mathcalA.tex} and \nb{L2-det-mathcalA.tex}, where they were verified numerically, and are not re-checked here.
+\item \textbf{Scope:} only the adjoint and two functional families, with the leading order taken separately in each weight space.
+\item \textbf{Open:}
+  \begin{itemize}
+  \item how to reach the singlet: the mechanism is now clear (Section~\ref{sec:why}), and a covector with an $E_{13}$ component does it, but no functional producing one is known yet;
+  \item the same count for $[3,1,0]^{\otimes2}$ and $[3,2,0]^{\otimes2}$: done in \nb{xxx-310-cg-test.tex} (8/10 and 9/10; missed exactly the irreps with $\nu_3>\lambda_2$);
+  \item the exact vanishing at $(1,0,2)$ and $(0,1,2)$: derived in Section~\ref{sec:why} (Results~\ref{res:whyA}, \ref{res:whyB}).
+  \end{itemize}
+\end{itemize}
+
+\section*{Notebook map (\nb{xxx-210-cg-test.wb})}
+\begin{center}
+\begin{tabular}{rl}\toprule
+cell & content\\\midrule
+1 & summary\\
+2 & GT machinery\\
+3 & exact $\langle v_{\rm tot}|$, $g_0$, $\langle v_{\rm new}|$; check of \eqref{eq:v1g}\\
+4 & untwisting, per-weight leading orders, ranks (Result~\ref{res:weights})\\
+5 & $V\otimes V$ and highest-weight counts (Result~\ref{res:hw})\\
+6 & leading components and parameter-freezing ranks (Result~\ref{res:params})\\
+7 & Cartan commutation, Cauchy--Binet, covariance, $G_1$ (Result~\ref{res:mech})\\
+8--9 & determinant family $v'_{\rm new}$: zeros, leading orders, counts (Results~\ref{res:nplus}, \ref{res:det})\\
+10 & finite-twist singlet checks (Result~\ref{res:singlet}, remark)\\
+11--13 & $t_{\{2,1\}}(\theta_1)$ family $v_t$: zeros, leading orders, counts (Result~\ref{res:t21})\\
+14--15 & why $\nu_3\le\lambda_2$; general-twist check; hypothetical $v^{(2)}$ (Results~\ref{res:whyA}--\ref{res:v2})\\\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

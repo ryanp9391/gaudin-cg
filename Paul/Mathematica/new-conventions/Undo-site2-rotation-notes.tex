@@ -1,0 +1,593 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,longtable,array}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\Om}{\Omega}
+\newcommand{\vac}{\mathrm{vac}}
+\newcommand{\eT}{e_1^{\mathsf T}}
+\newcommand{\E}[1]{E_{#1}}
+\newcommand{\Tt}[1]{T_{#1}}
+\newcommand{\thh}{\theta_{12}}
+\newcommand{\rep}[1]{[#1]}
+\newcommand{\ex}{\textbf{[exact]}}
+\newcommand{\nm}{\textbf{[numeric]}}
+\newcommand{\cj}{\textbf{[conjecture]}}
+\newcommand{\md}{\textbf{[modular]}}
+\newcommand{\nb}[1]{\texttt{#1}}
+\setlength{\emergencystretch}{3em}
+\title{Undoing the site-2 rotation of the two-rotation family, and the pole-set chain of determinant product states\\[2pt]\large gl(3) XXX, $L=2$, new conventions --- research notes of 2026-10-09 (late)}
+\author{Paul Ryan (with Claude)}
+\date{9 October 2026}
+\begin{document}
+\maketitle
+
+\noindent Research notes on the 2026-10-09 (late) thread. Audience: Paul Ryan and future Claude sessions. This file is the \LaTeX{} companion of \nb{Undo-site2-rotation-notes.md}; both have the same content. Primary sources: \nb{site1-Qform/7-undo-site2-rotation-span.md} (spec and running log, \S1--\S16, called ``the spec'' below), \nb{HANDOFF.md} (entry ``NEWEST (2026-10-09, late)''), \nb{Two-rotations-det-overlap.md}, \nb{L2-310-two-rotations.md}, \nb{old-conventions/XXX-CG/xxx-210-cg-test.tex}, and the result cells of the notebooks of Appendix~\ref{app:map}. All paths are under \nb{Paul/Mathematica/new-conventions/} unless stated. Cell numbers are 1-based positions in the \nb{.wb} file.
+
+\paragraph{Evidence tags.} Every claim carries one of: \ex{} (a symbolic identity, an exact-rational computation such as ranks or \texttt{Solve}, or agreement at 60-digit working precision with the residual quoted); \nm{} (true at the numeric point(s) stated, residual quoted, not proved); \cj{} (pattern or prediction not fully verified; the text says what is verified); \md{} (Gr\"obner evidence over $GF(1000003)$ only).
+
+\paragraph{Scope of this write-up.} No notebook, no other \nb{.md}/\nb{.tex}, \nb{HANDOFF.md}, \nb{CLAUDE.md} was edited, nothing was evaluated in a kernel and nothing was committed. One independent check was run outside the notebooks while writing (sympy, Section~\ref{sec:mech}): the $3\times3$ closed forms of the spec were re-derived symbolically and agree.
+
+\tableofcontents
+
+%======================================================================
+\section{Summary}\label{sec:summary}
+
+\paragraph{The question (Paul).} The two-rotation family of \nb{Two-rotations-det-overlap.md} \S5.6b/\S5.8 gives product covectors $\bra{v_1\otimes v_2}$ with a Q-determinant overlap, where $v_2=\bra0R$ is a rotation of the vacuum. Undo the rotation, $\bra{v_1}R^{-1}$, project on the weight spaces of the site-1 representation $V$ and expand in all free parameters. Do these projections span every weight space of $V$, so that all highest-weight (HW) CG coefficients $\langle\mu\otimes\mathrm{top}|\nu,\mathrm{HW}\rangle$ are reachable? The 2026-09-23 families (\nb{xxx-210-cg-test.tex}) reached only site-1 weights with $\mu_3\le\lambda_2$ and so missed the adjoint singlet, $[4,2,2]$ and $[3,3,2]$ of $[3,1,0]^{\otimes2}$, and so on.
+
+\paragraph{The mechanism.} In the diagonal frame $v_2=\eT\rho(n)$ with $n\in N_+$ (the vacuum Gauss element), and $\rho(n)\otimes\rho(n)$ fixes every HW ket. So the undo is exact at finite twist: $\langle v_1\otimes v_2|\mathrm{HW}\rangle=\langle v_1\rho(n)^{-1}\otimes\eT|\mathrm{HW}\rangle$. The undone covector is $\varphi=\eT g\,\rho(n\Delta n^{-1})=\delta^\Lambda\eT g'\rho(n')$ with $\Delta=\mathrm{diag}(1/(\omega-z_k))$ the resolvent torus at the $\det_6$ point $\omega=w_2$, $g$ the site-1 dressing ($g=1$ for the adjoint), and $n'=\Delta^{-1}n\Delta n^{-1}\in N_+$. The $(1,3)$ entry $b'$ of $n'$ vanishes iff $\omega=y$ ($y$ the ladder-1 insertion point), and $b'/(a'c')=(y-\omega)/(y-z_2)$. The old families sat exactly at $\omega=y$ (the ``$p_3$ relation''); the new family has $\omega=y(\thh-kh)/(\thh-h)\ne y$ for $k\ge2$, which opens the $E_{13}$ direction and with it all weights with $\mu_3>\lambda_2$. \ex
+
+\paragraph{Results per representation} (P1 numerics; tags in the body).
+\begin{center}\small
+\begin{tabular}{@{}p{2.4cm}p{3.6cm}cp{2.6cm}p{4.2cm}@{}}\toprule
+rep & points (pole set $P_k$) & directions spanned & HW reached (torus) & HW determined\\\midrule
+$[2,1,0]$ adjoint & $k=2$, $\{0,1,2\}$, pure rotations & 8/8 & 6/6 (singlet incl.) & 6/6 (5/6 at fixed $w_1$, torus)\\
+$[3,1,0]$ & B: $k=3$, $\{0..3\}$ & 12/15 & 10/10 & 9/10 ($[4,2,2]$ short by one direction)\\
+$[3,1,0]$ & A: $k=2$, $\{0,1,2\}$ & 15/15 & 10/10 & 10/10\\
+$[3,2,0]$ & B only: $k=3$, $\{0..3\}$ & 12/15 & 10/10 & 9/10 ($[4,4,2]$ short by one direction)\\
+$[4,1,0]$ & $k=2$ & 24/24 & 14/14 & 11/11 irreps\\
+$[4,1,0]$ & $k=3$ & 21/24 & 14/14 & 11/11 irreps\\
+$[4,1,0]$ & $k=4$ ($=$B) & 16/24 & 14/14 & 9/11 irreps ($[5,3,2]$, $[6,2,2]$ one direction each)\\\bottomrule
+\end{tabular}
+\end{center}
+(Reached $=$ nonzero overlap family; determined $=$ the undone covector has full rank on the site-1 weight space $\nu-\Lambda$ that carries the CG vector of $\nu$. See Section~\ref{sec:undo}.)
+
+\paragraph{The chain.} For $[\lambda_1,1,0]$ the product points of the recipe $\bra{\Om\otimes\Om}(c_0+\sum_\lambda c_\lambda T_\lambda(\theta_1-\lambda_1h))$ are indexed by the initial segments $P_k=\{0..k\}$, $k=2..\lambda_1$, at $y_k=w_2(\thh-h)/(\thh-kh)$, with overlap $\det_6\times\det_2^{(P_k)}[y_k]/W(\lambda_1,\lambda_1+1)$ and a site-1 dressing of $E_{13}$-degree $\lambda_1-k$. Exact on $[3,1,0]$ (all 11 subsets scanned) and $[4,1,0]$ (all 26 subsets scanned). On $[3,2,0]$ the $k=2$ curve collapses into the localizing span, so only $k=3$ survives. The criterion ``a non-trivial point $k$ exists iff $\lambda_2<k\le\lambda_1$'' is derived in Section~\ref{sec:chain} from three observed rules; it is verified on four representations and is a \cj{} beyond them.
+
+\paragraph{What is explicit.} Every overlap of a chain point is a product of two Q-determinants (a global $\det_6$ and a ladder-1 $\det_2$), and for $[3,1,0]$ every fused transfer-matrix eigenvalue at the site-1 point is a single Wronskian over a minor (Section~\ref{sec:dict}).
+
+\paragraph{What is open.} (i) $[3,2,0]$-type representations ($\lambda_2\ge2$; $d=\lambda_1-\lambda_2=1$ in particular): no point with a complete weight span exists in the $\theta_1-\lambda_1h$ recipe and the site-2 recipe is empty, so $[4,4,2]$ stays one direction short. (ii) $[4,2,0]$ not attempted. (iii) Closed forms of the dressing coefficients (known only for $[3,1,0]$ point A; a fit for $[3,2,0]$). (iv) The layer between covector counts and CG numbers, the untwisting/contamination step, has not been run for this family (Section~\ref{sec:layers}). (v) The $[4,1,0]$ outputs are not stored in the file (Appendix~\ref{app:tool}).
+
+%======================================================================
+\section{Setting and conventions}\label{sec:setting}
+
+\paragraph{Conventions (new, 2026-10-01).} Lax $\mathcal L_{ij}(u)=(u-\theta_s)\delta_{ij}+hE_{ij}$; $T(u)=\mathcal L^{(1)}\mathcal L^{(2)}$ with twist $M$ acting on the right ($T^M=T\cdot M$); $t_a$ the sum of principal quantum minors, $k$-th column at $u-(k-1)h$; CBR fusion $T_\lambda(x)=\det_{i,j}t_{\lambda'_j+i-j}(x+(i-1)h)$ with shapes labelled by row lengths $(\lambda_1,\lambda_2)$, $t_0=1$, $t_a=0$ outside $0..3$ (for instance $T_{(2,0)}=t_1t_1^{[+]}-t_2^{[+]}$, $T_{(2,1)}=t_2t_1^{[+]}-t_3^{[+]}$). Generators: the plain GT generators \nb{JJ} (not the Hermitian EH ones), so everything is exact rational. The GT basis has the HW vector $e_1$ first; covectors are rows acted on from the right; the ket $e_1$ is annihilated by $E_{ij}$ with $i<j$ (checked in each notebook), so these raise. Sources: \nb{L2-rotation-sov.wb} cells 2--21, \nb{L2-310-two-rotations.wb} cells 2--7, \nb{L2-310-two-rotations.md}.
+
+\paragraph{Notation for $t$.} In this file $\thh=\theta_1-\theta_2$ (so $\thh=31/35$ at P1, $\thh-h=27/70$, $\thh-2h=-8/70$, $\thh-3h=-43/70$). Caution: \nb{Two-rotations-det-overlap.md} \S1 and \nb{Clean-CG-combinations.md} write $t:=\theta_{12}/h=62/35$, whereas the $[3,1,0]$/$[4,1,0]$ notebooks and spec \S13 use $t=\theta_{12}$ in formulas such as $kh(kh-t)$. This file writes $\thh$ and $h$ explicitly.
+
+\paragraph{Numeric point P1.} $h=1/2$, $\theta=(2/7,-3/5)$, ket twist $z=(3/2,5/4,2/3)$, bra twist $w=(5/2,7/3,3/5)$, so $w_1=5/2$, $w_3=3/5$. Working precision for Q-side numbers: 60 digits. Other points: $h=1/3$, and $\theta=(1/5,-4/9)$, $z=(3/2,7/6,2/3)$, $w=(7/4,-2/5,9/7)$ (\nb{L2-310-two-rotations.md}, cell 12 of \nb{L2-310-two-rotations.wb}). Caution: at P1 $z_3=1/z_1$. The six values $w_2\in\{7/3,-8/9,4/27,3,-1/2,11/7\}$ (with $w_1=5/2$, $w_3=3/5$) are used throughout.
+
+\paragraph{Diagonal frame, GT basis, vacuum.} Ket twist $\mathrm{diag}(z)$; the SoV vacuum covector is $\Om\otimes\Om$ with the one-site vacuum
+\[
+\Om_w=\eT e^{r_1E_{12}}e^{r_2E_{13}}e^{r_3E_{23}}\qquad(\texttt{Om1[z,w]};\ \texttt{Rrot[z,w]}\text{ the product of the three exponentials in the rep}),
+\]
+with the representation-independent Gauss parameters ($w_3$ drops out; the second slot of $w=(w_1,y,w_3)$ is the variable $y$)
+\begin{align}
+r_1&=\frac{w_1-z_1}{w_1-z_2},\qquad
+r_2=\frac{(w_1-z_1)(z_1-y)(z_2-z_3)}{(z_1-z_2)(w_1-z_3)(y-z_3)},\nonumber\\
+r_3&=\frac{(w_1-z_2)(z_2-y)(z_1-z_3)}{(z_1-z_2)(w_1-z_3)(z_3-y)}
+\end{align}
+(spec \S2; \nb{rOm[zv,wv]} in cell 4 of the $[3,1,0]$ and $[4,1,0]$ notebooks). $\Om\otimes\Om$ is the exact left eigencovector of $t_a(G')$ with $G'=P_{\rm aux}G(w)P_{\rm aux}^{-1}$ (cell 4 of \nb{L2-320-two-rotations.wb}). $\Om_w=\eT\rho(n)$ with $n=\bigl(\begin{smallmatrix}1&r_1&r_2+r_1r_3\\0&1&r_3\\0&0&1\end{smallmatrix}\bigr)\in N_+$. \ex{} (cell 98 of \nb{L2-rotation-sov.wb}; cell 26 of \nb{L2-310-two-rotations.wb}: $v_2=\eT\rho(n)$, $\rho(n)=$ Rrot for all six $w_2$).
+
+\paragraph{Resolvent torus.} The resolvent $\rho((\omega-G^{\mathsf T})^{-1})$ is, in the diagonal frame, the torus element $\Delta=\rho\,\mathrm{diag}[1/(\omega-z_k)]$, $\delta_k=1/(\omega-z_k)$ (\nb{Dy[omega]}, \nb{rhodiag}; cell 111 of \nb{L2-rotation-sov.wb} builds the partner as \nb{g . rhodiag[Dy[w2G]]}). A weight-$\mu$ component (relative to $\eT$) is multiplied by $\delta^\mu$ under $\rho(\Delta)$. The torus of the ket twist, $\rho(D)\otimes\rho(D)$, commutes with the twisted transfer matrices and multiplies an eigenstate of total weight $\nu$ by the character $\chi_\nu(D)=\prod_iD_i^{\nu_i}$ (\nb{Two-rotations-det-overlap.md} \S5.8; cell 108 of \nb{L2-rotation-sov.wb}, 60 digits; exact rational in cell 121). So \emph{torus $=$ character} on every HW overlap.
+
+\paragraph{The two-rotation family $V$ (adjoint; \nb{Two-rotations-det-overlap.md} \S5.6b, \S5.8).} With $y$ free and $w_2$ slaved to it,
+\[
+\omega=w_2(y)=y\,\frac{\thh-2h}{\thh-h},\qquad v_2(y)=\Om_{(w_1,y)}=\eT\rho(n(y)),\qquad v_1(y)=v_2(y)\rho(\Delta(y)),\quad\Delta=\mathrm{diag}\Big(\frac1{\omega-z_k}\Big),
+\]
+and for every $y$ the overlap is $\langle v_1\otimes v_2|\Psi_B\rangle/\langle x_0|\Psi_B\rangle\propto\det_6^N[Q_B,Q_{\vac,(w_1,w_2(y))}]/\Psi_Q\times\det_2^{(1)}[Q_B;y]/\mathrm{minor}_1$ (state independence $10^{-50}$ on 64 states at $y=3,-1/2$; at fresh $w_1=-7/3,y=7/5$ and $w_1=9/4,y=-2/3$, cell 109) \nm. The torus orbit is the 3-dimensional variety
+\[
+\mathcal V=\{(g\,\rho((w_2(y(g))-G^{\mathsf T})^{-1}),\,g):\ g\text{ a rotation of }x_0\},
+\]
+since $w_1$ is a torus direction and $y$ is a torus invariant of the rotation (exact Jacobian ranks 3/4/3, cell 108); for a random $g$ (lower unipotent $\cdot$ torus $\cdot$ upper unipotent) the exact \texttt{Solve} gives exactly one $y(g)$ at both $w_1$ tried ($y(g)=1546301/1368484$) \ex{} (cell 111). There is no continuous $\kappa$-family (\nb{Two-rotations-det-overlap.md} \S5.8).
+
+For general representations the analogous points use $y_k=w_2(\thh-h)/(\thh-kh)$, i.e.\ $\omega=w_2=y_k(\thh-kh)/(\thh-h)$ (Sections~\ref{sec:310}, \ref{sec:chain}).
+
+\paragraph{Q-side objects.} Dual $Q^j(x)=z_j^{x/h}q^j(x)$, direct $Q_i(x)=z_i^{-x/h}q_i(x)$; $W(a,b)=Q^2(\theta_1-ah)Q^3(\theta_1-bh)-Q^3(\theta_1-ah)Q^2(\theta_1-bh)$ (dual Q's); $M=\mathrm{minor}_1$; $\det_6$ is the bracket determinant with poles $n=0..\lambda_1$ on both ladders and insertions $1$, $e^{2\pi ix/h}$; ladder-1 weights $w_n^P=1/\prod_{m\in P\setminus\{n\}}(m-n)h$ and
+\[
+\det\nolimits_2^{(P)}[y]=\sum_{n,m\in P}w_n^Pw_m^P\,y^{n+m}\big[Q^2(\theta_1-nh)Q^3(\theta_1-(m+1)h)-Q^3(\theta_1-nh)Q^2(\theta_1-(m+1)h)\big],
+\]
+that is $\det_{j\in\{3,2\}}[-\langle Q^jE\rangle_1,\langle Q^{j[-]}E\rangle_1]$ with $E(\theta_1-nh)=y^n$ (cell 67 of \nb{L2-310-two-rotations.wb}). For the adjoint $P=\{0,1,2\}$ and $\det_2^{(1)}$ is the same object.
+
+%======================================================================
+\section{The question, and why the undo is exact at finite twist}\label{sec:undo}
+
+\paragraph{Setup.} $\eT$ is the HW covector of $V$ (weight $\Lambda$). Every vacuum rotation of the family is $v_2=s\,\eT\rho(n)$ with $n\in N_+$. For $n\in N_+$, $\rho(n)\otimes\rho(n)$ fixes every HW ket of $V\otimes V$. Hence, with $\mu=\nu-\Lambda$ and $\varphi:=v_1\rho(n)^{-1}$,
+\[
+\langle v_1\otimes v_2|\nu,\mathrm{HW}\rangle=s\,\langle\varphi\otimes\eT|\nu,\mathrm{HW}\rangle=s\sum_{m\in V_\mu}\varphi_m\,\mathrm{CG}(\nu,\mathrm{HW}\,|\,m,\mathrm{top}).
+\]
+So the HW CG coefficients at site-1 weight $\mu$ are reachable iff the weight-$\mu$ projections of the undone covectors $\varphi$ span $V_\mu$. \ex{} This finite-twist statement is the old ``Result \texttt{res:nplus}'' of \nb{xxx-210-cg-test.tex}; it is re-checked here in cell 115 of \nb{L2-rotation-sov.wb} (adjoint, all 6 HW kets: $(\rho(n)\otimes\rho(n))\mathrm{HW}=\mathrm{HW}$ and the identity above), cell 27 of \nb{L2-310-two-rotations.wb} (10 HW kets), cell 12 of \nb{L2-320-two-rotations.wb} (10 HW kets; the rotated factor sits on site~1 so $\varphi$ lands on site~2, by the flip symmetry of $V\otimes V$), and cell 12 of \nb{L2-410-two-rotations.wb} (14 HW kets, all $k$, all six $w_2$). The untwisting limit enters only through the eigenstates, not through the covectors, so the count needs no untwisting.
+
+\paragraph{Reached versus determined.}
+\begin{itemize}
+\item \emph{Reached} (a HW state $\nu$): the overlap $\langle v_1\otimes v_2|\nu,\mathrm{HW}\rangle$ is not identically zero over the family. The ``HW rank'' is the rank of $M[i,\nu]=\langle\varphi(p_i)\otimes\eT|\mathrm{HW}_\nu\rangle$ over sample points $p_i$ of the family; rank equal to the number of HW kets means all are reached and independent.
+\item \emph{Determined} (an irrep $\nu$, ``fully determined'' in the notebooks): the rank of $\varphi$ on the weight space $V_{\nu-\Lambda}$ (HW frame) equals $\dim V_{\nu-\Lambda}$. Then the full CG vector $\langle m\otimes\mathrm{top}|\nu,\mathrm{HW}\rangle$, $m\in V_{\nu-\Lambda}$, is read off from the functionals $\varphi|_{\nu-\Lambda}$; if the rank is smaller only a subspace of combinations of CG components is accessible.
+\item For multiplicity-2 irreps the per-irrep column rank is also reported (``$(1,1,1,2,1)$'' in the adjoint).
+\end{itemize}
+
+\paragraph{Why the torus is needed for the joint HW rank but not for per-weight spans.} The torus multiplies the weight-$\mu$ components of a covector by $d^\mu/\chi(D)$ and column $\nu$ of the HW matrix by $\chi_\nu(D)$. A per-weight span involves a single weight, so the torus does not change it, and the per-weight spans of the whole 3-dim family $\mathcal V$ equal those of the 1-parameter slice $\varphi(y)$ at any fixed $w_1$; varying $w_1$ must not change any rank (checked, cells 120--121). The joint HW rank mixes columns of different weights, and at fixed $D$ the slice is rank-deficient because of cross-weight linear relations among $a',c',b',a'c'$ as functions of $y$ (adjoint: rank 3 of 4, cell 121); the torus separates columns of different weight through $\chi_\nu$. Per-irrep column ranks are already full at fixed torus (cell 120; cell 14 of the $[3,2,0]$ notebook; cell 14 of the $[4,1,0]$ notebook).
+
+\paragraph{Which frame.} The undo is stated in the HW frame. A lowest-weight (LW) frame also exists (cells 34--36 of \nb{L2-310-two-rotations.wb}; cell 18 of \nb{L2-320-two-rotations.wb}): $v_2=s\,e_{\rm low}^{\mathsf T}\rho(m)$ with $m\in N_-$ from the exact factorization $w_0^{-1}n=b_+m$, and $\rho(m)\otimes\rho(m)$ fixes all LW kets. The two frames measure different vectors (HW versus LW of each irrep) with unrelated normalizations, so they do not combine (Sections~\ref{sec:310}, \ref{sec:320}).
+
+%======================================================================
+\section{The $3\times3$ mechanism (representation independent)}\label{sec:mech}
+
+\paragraph{Setup.} Let $n\in N_+$ be the vacuum Gauss element, $\Delta=\mathrm{diag}(\delta_k)$, $\delta_k=1/(\omega-z_k)$, with $\omega$ the resolvent point (the second twist parameter $w_2$ of the $\det_6$ vacuum). Then
+\[
+\varphi=v_1\rho(n)^{-1}=\eT g\,\rho(n\Delta n^{-1})=\eT g\,\rho(\Delta)\rho(n'),\qquad n':=\Delta^{-1}n\Delta n^{-1}\in N_+,
+\]
+where $g\in U(\mathfrak n_+)$ is the site-1 dressing ($g=1$ for the adjoint, where $v_1=v_2\rho(\Delta)$ exactly). Since $\eT$ is a torus eigenvector, $\eT\rho(\Delta)=\delta^\Lambda\eT$, and the dressing coefficients are rescaled by torus weights (for the first-order dressing $\eT(\alpha+\beta E_{12})\rho(\Delta)=\delta^\Lambda\eT(\alpha+\beta(\delta_2/\delta_1)E_{12})$). Write
+\[
+n'=\begin{pmatrix}1&a'&b'\\0&1&c'\\0&0&1\end{pmatrix}=e^{c'E_{23}}e^{b'E_{13}}e^{a'E_{12}},\qquad
+a'=r_1\frac{\delta_2-\delta_1}{\delta_1},\quad c'=r_3\frac{\delta_3-\delta_2}{\delta_2},\quad b'=r_1r_3\frac{\delta_1-\delta_2}{\delta_1}-(r_2+r_1r_3)\frac{\delta_1-\delta_3}{\delta_1}.
+\]
+
+\paragraph{Results.} \ex{} (spec \S3(i)(ii) predicted; verified symbolically in cell 117 of \nb{L2-rotation-sov.wb} for the adjoint with $y$ symbolic; for $[3,1,0]$ in cell 31 of \nb{L2-310-two-rotations.wb} with symbolic $y,w_1,\thh,h$ and also symbolic $z$; for $[3,2,0]$ in cell 17 of \nb{L2-320-two-rotations.wb}; re-derived with sympy while writing these notes: lower entries of $n'$ vanish, the formulas for $a',b',c'$ hold, both identities below hold).
+\begin{enumerate}
+\item \textbf{$b'=0\iff\omega=y$.} From the $r$'s, $r_2/(r_1r_3)=(z_3-z_2)(y-z_1)/((z_1-z_3)(y-z_2))$, and $b'=0$ iff $r_2/(r_1r_3)=(z_3-z_2)(\omega-z_1)/((z_1-z_3)(\omega-z_2))$. Since $\omega\ne y$ on the family, $b'\ne0$ (the only zero at the numeric point is the isolated $y=0$, cell 123).
+\item \textbf{$b'/(a'c')=(y-\omega)/(y-z_2)$}, non-constant in $y$ and independent of $w_1$. This makes the two weight-$(1,1,1)$ monomials $b'\eT E_{13}$ and $a'c'\eT E_{23}E_{12}$ independent as functions of $y$ (rank 2 on the 2-dim adjoint octet weight space).
+\item For $[3,1,0]$ with $\omega=w_2$, $y=y^*$: $b'/(a'c')=(y^*-w_2)/(y^*-z_2)$ (cell 31). For $[3,2,0]$ (undone element $n''=n\Delta^{-1}n^{-1}\Delta$, exponents $r_1''=a''$, $r_3''=c''$, $r_2''=b''-a''c''$): $(b''-a''c'')/(a''c'')=(w_2-y^*)/(y^*-z_2)$, i.e.\ $b''/(a''c'')=(w_2-z_2)/(y^*-z_2)$ (cell 17 prints $(5-4W)/(5-4Y)$ at $z_2=5/4$); the $E_{13}$ exponent vanishes iff $w_2=y^*$.
+\end{enumerate}
+
+\paragraph{The old $p_3$ relation.} In the 2026-09-23 families the covector was $\eT g_0\ldots$ with $p_3=p_2(z_3-z_1)/(p_1(z_2-z_3))$; the element $G^{-1}g_0Gg_0^{-1}$ has zero $(1,3)$ entry by that relation (\nb{xxx-210-cg-test.tex}, Result \texttt{mech}; spec \S3(i)). This is the same algebra with $\Delta=\mathrm{diag}(z)$, i.e.\ exactly the degenerate case $b'=0$. The ``paper-like'' assignment (resolvent point at the vacuum's own $y$) would also give $b'\equiv0$. The new family has $\omega/y=(\thh-kh)/(\thh-h)$: the mismatch between the $\det_6$ twist and the ladder insertion is what opens $E_{13}$.
+
+\paragraph{The $(0,1,2)$ component (adjoint) \ex.} The weight components of $\varphi/\delta^\Lambda=\eT\rho(n')$ are fixed constant covectors times monomials in $(a',b',c')$: $(2,1,0)$: $1$; $(1,2,0)$: $a'$; $(2,0,1)$: $c'$; $(1,1,1)$ (dim 2): $b'\eT E_{13}+a'c'\eT E_{23}E_{12}$; $(0,2,1)$: $a'^2c'\,u+a'b'\,u'$; $(1,0,2)$: $b'c'\,u''$; $(0,1,2)$ (singlet direction): $3\,b'(a'c'-b')$, exact in $y$ (cell 118: exact fit and symbolic verification). Spec \S3(iii) predicted $-b'(b'+a'c')$ up to normalization; that sign/shape was wrong ($a'^2c'^2$ does not occur) and is corrected in cell 123, item 3. The conclusion (nonzero for generic $y$) is unchanged; the other components agree with spec \S3(iii).
+
+\paragraph{Untwisting leading orders \ex.} With $z_k=1+\varepsilon\varphi_k$: $a',c'=O(\varepsilon)$; $b',a'c'=O(\varepsilon^2)$ with ratio $b'/(a'c')\to(y-\omega)/(y-1)$, still non-constant; the $(0,1,2)$ component is $O(\varepsilon^4)$ (cell 119, full 8-component $\varphi$ with $\varphi=(3/7,-5/4,2/9)$, $y$ symbolic, series to $\varepsilon^7$).
+
+%======================================================================
+\section{Adjoint $[2,1,0]^{\otimes2}$ (\nb{L2-rotation-sov.wb} \S12, cells 113--123)}\label{sec:adj}
+
+\paragraph{Family.} $v_2(y)=\eT\rho(n(y))$, $v_1(y)=v_2(y)\rho(\Delta(y))$, $w_1=-7/3$ (and $9/4$, $5/2$ for consistency), $\omega=w_2(y)=y(\thh-2h)/(\thh-h)$; the 12 rational $y$'s for the numeric ranks are \nb{u12ys} $=\{7/5,-2/3,3,-1/2,11/9,4/7,-9/5,13/6,-3/11,8/3,1/6,-7/4\}$ (cell 116).
+
+\paragraph{Per-weight ranks \ex} (cells 116, 122, 123). Weights of $V$: $(0,1,2)$, $(0,2,1)$, $(1,0,2)$, $(1,1,1)$ [dim 2], $(1,2,0)$, $(2,0,1)$, $(2,1,0)$. Control = resolvent point set to $y$ ($\omega=y$).
+\begin{center}\small
+\begin{tabular}{@{}lcccccl@{}}\toprule
+weight $\mu$ & $\dim V_\mu$ & rank numeric ($w_1=-7/3$, 12 $y$) & rank exact in $y$ & rank union over 3 $w_1$ & rank control $\omega=y$ & untwisting order\\\midrule
+$(0,1,2)$&1&1&1&1&\textbf{0}&$\varepsilon^4$\\
+$(0,2,1)$&1&1&1&1&1&$\varepsilon^3$\\
+$(1,0,2)$&1&1&1&1&\textbf{0}&$\varepsilon^3$\\
+$(1,1,1)$&2&2&2&2&\textbf{1}&$\varepsilon^2$ ($y$-rank 2)\\
+$(1,2,0)$&1&1&1&1&1&$\varepsilon^1$\\
+$(2,0,1)$&1&1&1&1&1&$\varepsilon^1$\\
+$(2,1,0)$&1&1&1&1&1&$\varepsilon^0$\\\bottomrule
+\end{tabular}
+\end{center}
+So all 8 directions of $V$ are spanned and no component vanishes identically (rank-tested exactly in $y$ by numerator coefficient vectors, cell 116), unchanged for $w_1=9/4,5/2$ and for the union of the three $w_1$ (cell 120, check 12.9). The control reproduces exactly the old blind spot: $(0,1,2)$ and $(1,0,2)$ vanish identically and the 2-dim weight space is hit only once.
+
+\paragraph{HW count \ex} (cells 120, 121, 123). HW kets of adj$\otimes$adj: $[4,2,0]$ (the 27), $[4,1,1]$ and $[3,3,0]$ (the two decuplets), $[3,2,1]$ twice (two octets), $[2,2,2]$ (singlet); 6 kets.
+\begin{center}\small
+\begin{tabular}{@{}p{9.5cm}p{5.5cm}@{}}\toprule
+quantity & value\\\midrule
+HW rank at fixed $w_1$ and torus $D=1$ ($w_1=-7/3,9/4,5/2$), 12 $y$'s & 5, 5, 5\\
+per-irrep column ranks, fixed (order: 27, $[4,1,1]$, $[3,3,0]$, octets, singlet) & 1,1,1,2,1 (singlet column nonzero)\\
+union over the three $w_1$ & 6\\
+torus-completed (12 random $(y,D)$ pairs, rows built directly from $\langle v_1\rho(D)\otimes v_2\rho(D)|\mathrm{HW}\rangle$) & \textbf{6}, per irrep 1,1,1,2,1\\
+torus $=$ character on the HW overlaps & exact residual 0 (cell 121)\\
+control $\omega=y$: fixed torus, per $w_1$ & 4,4,4 (per irrep 1,1,1,1,0 at $w_1=-7/3$)\\
+control $\omega=y$: torus-completed & 4, per irrep 1,1,1,1,0 (singlet missing, one octet direction lost)\\
+rank of $\{a',c',b',a'c'\}$ as functions of $y$ & 3 (one relation)\\\bottomrule
+\end{tabular}
+\end{center}
+The rank 5 at fixed $w_1$ is a deficiency of the 1-parameter slice, not of the family: the single null vector lives on the columns $[4,1,1]$, $[3,3,0]$ and the two octets (different weights except the octet pair) and encodes the linear relation among $a',c',b',a'c'$. It is harmless for reading CG coefficients state by state (each state has a definite $\nu$).
+
+\paragraph{Comparison with 2026-09-23} (\nb{xxx-210-cg-test.tex}, Results 1, 2, 4). The old families reached 6 of the 8 site-1 weight directions ($(1,0,2)$ and $(0,1,2)$ vanish identically in $v_{\rm new}$), 5 of 6 HW states (the singlet $[2,2,2]$ is missed since it needs site-1 weight $(0,1,2)$), with leading orders $\varepsilon^0,\varepsilon^1,\varepsilon^1,\varepsilon^2,\varepsilon^3$ at $(2,1,0),(1,2,0),(2,0,1),(1,1,1),(0,2,1)$. Here the singlet direction is reached and the family reaches $6/6$. The old note explained the misses by the rule $\mu_3\le\lambda_2$ (each quantum minor moves at most one unit into slot 3 whatever the twist, and the rotation has no $E_{13}$ component) and said that a covector with an $E_{13}$ component would reach all 6, with $(G^{-2}g_0G^2g_0^{-1})_{13}=-p_2(z_1-z_2)(z_1-z_3)/z_1^2\ne0$ as the hypothetical fix. The new family realizes that fix: $b'\ne0$ is the $E_{13}$ exponent.
+
+%======================================================================
+\section{$[3,1,0]^{\otimes2}$ (\nb{L2-310-two-rotations.wb})}\label{sec:310}
+
+\paragraph{Rep data.} $\Lambda=(3,1,0)$, dim 15, 225 states, 12 distinct weights (dim 1 except $(2,1,1),(1,2,1),(1,1,2)$ of dim 2) \ex{} (cell 33; the spec \S7 plan said 10, corrected by spec \S8 and cell 33). HW states of $[3,1,0]^{\otimes2}$: 10 in 8 irreps $[6,2,0]$, $[6,1,1]$, $[5,3,0]$, $2\times[5,2,1]$, $[4,4,0]$, $2\times[4,3,1]$, $[4,2,2]$, $[3,3,2]$ (cell 27). Site-1 weights $\nu-\Lambda$ carrying the CG vectors: $(3,1,0)$, $(3,0,1)$, $(2,2,0)$, $(2,1,1)$, $(1,3,0)$, $(1,2,1)$, $(1,1,2)$, $(0,2,2)$ (cell 41).
+
+\paragraph{Product locus at $\theta_1-3h$ \ex} (\nb{L2-310-two-rotations.md}, cells 5--7; 105 quadrics, exact \texttt{Solve} 0.5 s). Site-1 localizers $\Tt{(1,1)},\Tt{(2,2)},\Tt{(3,2)}$; $\Tt{(3,3)}$ vanishes on $\bra\Om$; all other shapes with $\lambda_1\le3$ have rank 2 with $\Om_1$ in their site-2 span; the joint site-2 span is $\{\Om_1,\omega_2\}$ with $\omega_2$ a rotation and the pencil $\Om_1+\kappa\omega_2$ inside the rotation orbit (shapes with $\lambda_1=4$ add nothing, cell 8). The locus is the localizing span plus two isolated points A and B. A mixed-point span ($\theta_1-3h$ shapes plus $\lambda_1\le2$ shapes at $\theta_1-2h$, 3549 quadrics, \texttt{Solve} 29 s) gives no new point.
+
+The rotation test (exact, linear, \nb{rotRank}): $\phi\in GL(3)\eT$ iff $\mathrm{rank}\{\phi,\phi E_{ij}\ (9)\}=4$; generic 9 (the trace relation removes one); $\eT E_{12}$-type 5; $\eT(E_{12}+E_{23})$-type 6; $\eT E_{13}$-type 7.
+
+\subsection{Point B ($k=3$) and its undo}
+
+\paragraph{Factors \ex.} Site 2 is a torus-rotated vacuum with torus invariant $y^*=w_2(\thh-h)/(\thh-3h)$ at all three numeric points ($-63/43$ at P1), i.e.\ $v_2=\Om_{(w_1,y^*)}=\eT\rho(n)$ with $\rho(n)=$ Rrot, checked for all six $w_2$ (cell 26). Site 1:
+\[
+v_1\propto\eT(\alpha+\beta E_{12})\,R(z,(w_1,y^*))\,\rho(\Delta_{w_2}),\qquad\Delta=\mathrm{diag}(1/(w_2-z_k)),
+\]
+rotRank (site 1, site 2) $=(5,4)$ at all six $w_2$ (cell 25). The dressing $\eT(\alpha+\beta E_{12})=\alpha\eT e^{(\beta/\alpha)E_{12}}-(\beta^2/2\alpha)\eT E_{12}^2$ is a rotation minus the extremal $(1,3,0)$ covector (itself a rotation), i.e.\ a sum of two rotations (\nb{L2-310-two-rotations.md}, Open). The fitted $\beta/\alpha(w_2)$ (cells 25, 32; exact rationals; a fit, \emph{no closed form}):
+\begin{center}\small
+\begin{tabular}{@{}lcccccc@{}}\toprule
+$w_2$ & $7/3$ & $-8/9$ & $4/27$ & $3$ & $-1/2$ & $11/7$\\\midrule
+$y^*$ & $-63/43$ & $24/43$ & $-4/43$ & $-81/43$ & $27/86$ & $-297/301$\\
+$\beta/\alpha$ & $392/2335$ & $64/731$ & $-32/2409$ & $8/77$ & $1/23$ & $4312/2693$\\\bottomrule
+\end{tabular}
+\end{center}
+Other numeric points: $\beta/\alpha=294/2255$ ($h=1/3$), $5400/337687$ (third point). The coefficient vector $c$ on $(1,\Tt{10},\Tt{11},\Tt{20},\Tt{21},\Tt{22},\Tt{30},\Tt{31},\Tt{32})$ at P1 is $(81/1075,36/215,4/39,1,860/1053,4300/9477,-860/729,-92450/85293,-1849000/2302911)$ (normalized $c(\Tt{20})=1$).
+
+\paragraph{Undo \ex} (cells 26--27). $n=\mathrm{Rrot}(z,(w_1,y^*,w_3))$ is the Gauss element of $v_2$; $v_1=(\alpha\eT+\beta\eT E_{12})\rho(n)\rho\mathrm{diag}[\mathrm{Dy}[w_2]]$ reproduces the pipeline's site-1 covector exactly; $(\rho(n)\otimes\rho(n))\mathrm{HW}=\mathrm{HW}$ ($w_2=7/3,-1/2$); $\langle v_1\otimes v_2|\mathrm{HW}\rangle=s\langle\varphi\otimes\eT|\mathrm{HW}\rangle$ for all 10 HW kets ($s=1$, the $e_1$-component of $v_2$). $r_k$ at $w_2=7/3$: $(4/5,-1071/605,1401/484)$.
+
+\paragraph{Per-weight ranks over the six $w_2$ \ex} (cells 28, 32, 36, 39, 41). ``(c)'' is the control resolvent point $\to y^*$ with $\beta$, ``(c0)'' the same with $\beta=0$.
+\begin{center}\small
+\begin{tabular}{@{}lcccccccc@{}}\toprule
+weight $\mu$ & dim & (a) B & (b) $\beta{=}0$ & (c) & (c0) & LW (a) & A & A$\cup$B\\\midrule
+$(0,1,3)$&1&\textbf{0}&1&0&0&1&1&1\\
+$(0,2,2)$&1&1&1&1&0&1&1&1\\
+$(0,3,1)$&1&1&1&1&1&1&1&1\\
+$(1,0,3)$&1&\textbf{0}&1&0&0&1&1&1\\
+$(1,1,2)$&2&\textbf{1}&2&1&0&2&2&2\\
+$(1,2,1)$&2&2&2&2&1&2&2&2\\
+$(1,3,0)$&1&1&1&1&1&1&1&1\\
+$(2,0,2)$&1&1&1&1&0&1&1&1\\
+$(2,1,1)$&2&2&2&2&1&\textbf{1}&2&2\\
+$(2,2,0)$&1&1&1&1&1&1&1&1\\
+$(3,0,1)$&1&1&1&1&1&\textbf{0}&1&1\\
+$(3,1,0)$&1&1&1&1&1&\textbf{0}&1&1\\\midrule
+total directions (of 15)&&12&15&12&7&12&15&15\\\bottomrule
+\end{tabular}
+\end{center}
+(Totals are sums of the per-weight ranks; the notebooks' ``total rank (15)'' rows are ranks of a $6\times15$ matrix capped at 6 and are not used.) The rotation part alone spans everything (the spec \S3 prediction) \ex, but the actual dressed covector spans only 12 of 15 directions: the fitted dressing cancels the weights $(0,1,3)$, $(1,0,3)$ identically and one direction of $(1,1,2)$, for every $w_2$ (also for 12 random $w_2$). \textbf{Spec \S5's ``the dressing only adds'' is wrong} (corrected in spec \S8). This is consistent with site 1 lying in the $\eT E_{12}$ orbit (rotRank 5). Control (c0) reproduces the old blind spot: all components with $\mu_3\ge2$ vanish ($(0,1,3)$, $(0,2,2)$, $(1,0,3)$, $(1,1,2)$ both, $(2,0,2)$), plus one direction in each of $(1,2,1)$, $(2,1,1)$. Control (c) behaves as (a): the dressing alone rescues the HW count.
+
+\paragraph{HW count \ex} (cells 29--31, 33).
+\begin{center}\small
+\begin{tabular}{@{}p{2.6cm}p{2.6cm}p{2.8cm}p{6.2cm}@{}}\toprule
+variant & fixed torus, six $w_2$ & fixed torus, 12 random $w_2$ & torus-completed (12 random $(w_2,D)$)\\\midrule
+(a) point B & 6 (saturates at 6 rows) & 7 & \textbf{10/10}, all irreps incl.\ $[4,2,2]$, $[3,3,2]$\\
+(b) $\beta=0$ & 6 & -- & 10\\
+(c) $\omega=y^*$, $\beta$ & 6 & -- & 10\\
+(c0) $\omega=y^*$, $\beta=0$ & -- & 5 & \textbf{6}: $[3,3,2]$, $[4,2,2]$ zero; $[4,3,1]$, $[5,2,1]$ one direction short each\\\bottomrule
+\end{tabular}
+\end{center}
+The old families (2026-09-23) reached 8/10, missing $[4,2,2]$ and $[3,3,2]$ (site-1 weights $(1,1,2)$, $(0,2,2)$; \nb{xxx-310-cg-test.tex} as quoted in \S5 of \nb{xxx-210-cg-test.tex}: ``8/10 and 9/10; missed exactly the irreps with $\nu_3>\lambda_2$''). Per-irrep determination from B (rank on $\nu-\Lambda$ equal to its dimension): all nine determined except $[4,2,2]$, whose site-1 weight $(1,1,2)$ has dim 2 but rank 1: only one linear combination of its two CG components is fixed by the family. The missing weights $(0,1,3)$, $(1,0,3)$ carry no HW state and matter only for a complete site-1 basis. At fixed torus with 12 random $w_2$ the rank is 7 (cross-irrep relations only; each irrep separately has full rank).
+
+\paragraph{Lowest-weight frame \ex} (cells 34--36). $e_{\rm low}^{\mathsf T}$ is GT index 15 (weight $(0,1,3)$); $v_2=s\,e_{\rm low}^{\mathsf T}\rho(m)$ with $m\in N_-$, $m=(m_{21},m_{31},m_{32})$, $m_{31}=11/6$, $m_{32}=22/15$ for all $w_2$; $m_{21}=2335/1428,\,425/324,\,825/548,\,1925/1164,\,575/408,\,67325/41916$ at the six $w_2$; $s=925344/73205,\,104976/1331,\,177552/9317,\,754272/62557,\,528768/17303,\,27161568/1987183$. $(\rho(m)\otimes\rho(m))\mathrm{LW}=\mathrm{LW}$, $\langle f_1\otimes v_2|\mathrm{LW}\rangle=s\langle\varphi'\otimes e_{\rm low}^{\mathsf T}|\mathrm{LW}\rangle$; 10 LW kets with weights the reverses of the HW weights. Per-weight ranks of the LW-undone covector (table, column LW): $1,1,1,1,2,2,1,1,1,1,0,0$, the exact mirror of the HW frame $(0,1,1,0,1,2,1,1,2,1,1,1)$. $[4,2,2]$'s LW slice sits at $(2,1,1)$: rank 1 of 2. \textbf{$[4,2,2]$ is not determined in either frame}; the frames measure different vectors, so they do not combine. Torus-completed LW count 10/10.
+
+\subsection{Point A ($k=2$)}
+
+\paragraph{Factors.} Site-2 invariant $y_A=w_2(\thh-h)/(\thh-2h)$ (the adjoint's $y^*$; $-63/8,\,3,\,-1/2,\,-81/8,\,27/16,\,-297/56$ at the six $w_2$, found at every $w_2$), rotRank (site 1, site 2) $=(6,4)$ (cell 37). Site 2: $v_{2,A}\parallel\eT\rho(n_A)$ with $n_A$ the Gauss element of \nb{rOm}$(z,(w_1,y_A,w_3))$, $r(7/3)=(4/5,-630/451,1095/451)$; the exact \texttt{Solve} has exactly one solution at each $w_2$ (cell 38). $c_A=$ the adjoint's $c^*=(-2187/1600,-243/80,-27/43,1,320/1161)$ carried verbatim to the column-shifted shapes $(1,1),(2,1),(2,2),(3,1),(3,2)$; on $(1,\Tt{10},\Tt{11},\Tt{20},\Tt{21},\Tt{22},\Tt{30},\Tt{31},\Tt{32})$: $(0,0,-2187/1600,0,-243/80,-27/43,0,1,320/1161)$ (cell 49).
+
+\paragraph{Undo \ex} (cells 39--41). $n_A$ the plain Gauss element at $y_A$; undo exact. Per-weight ranks 15/15 (table, column A), nothing vanishes; A alone and A$\cup$B determine all HW states; torus-completed HW rank 10 for A and for A$\cup$B, per irrep all full. \textbf{Point A closes the $[4,2,2]$ gap.} Verdict for $[3,1,0]^{\otimes2}$: all 10 HW states are reached by B; 9 are fully determined by B; the tenth ($[4,2,2]$) needs A.
+
+\subsection{Dressing identifications}
+
+\paragraph{B, first order.} The dressed vacuum with $\beta/\alpha$ the six fitted values above; dressing combination of $\{1,E_{12}\}$, $E_{13}$-degree 0. Other orderings and the $(w_2,y^*)$, $D_{w_1}$, $(w_1,w_2)$ variants fail (\nb{L2-310-two-rotations.md}, result 2, cell 13).
+
+\paragraph{A, second order \ex} (cells 44--48, 61--63, 65). $f_{1,A}$ is not in $\mathrm{span}\{\eT,\eT E_{12},\eT E_{23},\eT E_{13}\}\rho(R)\rho(D)$ for any of the 15 subsets and any $D\in\{\rho(\mathrm{Dy}[w_2]),\rho(\mathrm{Dy}[y_A]),1\}$ (rank 5 versus 4 at all six $w_2$). With $D=\rho(\mathrm{Dy}[w_2])$ the undone covector $g=f_1D^{-1}R^{-1}$ occupies only the weights $(3,1,0)$, $(2,2,0)$, $(2,1,1)$ (no $E_{23}$ component) and lies in the 4-dim span $\{\eT,\eT E_{12},\eT E_{13},\eT E_{12}E_{23}\}$, in no 3-dim subset (dimensions of $\eT\cdot$words of length $\le k$: 1, 4, 9, 15). Exactly (rational equalities at 18 $w_2$ of P1, 10 one-parameter variations of $(h,\theta,z_k,w_1)$ and 28 random parameter points):
+\begin{align}
+f_{1,A}&\propto\eT\big(1+\beta E_{12}+\gamma(E_{13}+\tfrac12E_{12}E_{23})\big)\rho(n_A)\rho((w_2-G^{\mathsf T})^{-1}),\qquad v_{2,A}=\eT\rho(n_A),\nonumber\\
+\beta&=\frac{(z_1-z_2)(w_1-z_1)}{2z_2(w_1-z_2)}\cdot\frac{w_2}{w_2-z_1},\nonumber\\
+\gamma&=\frac{(\thh-h)(z_1-z_3)(z_2-z_3)(w_1-z_1)}{4(\thh-2h)z_2z_3(w_1-z_3)}\cdot\frac{w_2^2}{(w_2-z_1)(y_A-z_3)},\qquad y_A=w_2\frac{\thh-h}{\thh-2h}.
+\end{align}
+($\beta$ is independent of $h,\theta,z_3$; at P1 $K_{12}=\beta(w_2-z_1)/w_2=2/25$ and $K_{13}=\gamma(w_2-z_1)(y_A-z_3)/w_2^2=189/704$, cell 61.) The dressing is a second-order element of $U(\mathfrak n_+)$ with two parameters, $E_{12}$ and the weight-$(2,1,1)$ vector $E_{13}+\tfrac12E_{12}E_{23}$, together with the rotation and the resolvent torus; it is not an exponential $e^{aE_{12}+bE_{13}}$ (that would give an $E_{12}^2$ component at $(1,3,0)$). So B $=$ first-order dressing $\leftrightarrow$ pole set $\{0..3\}$, and A $=$ second-order dressing $\leftrightarrow$ pole set $\{0,1,2\}$.
+
+\subsection{The $\det_2$ identification of point A}
+
+(Cells 49--53, 56, 60, 64, 65. The statement ``A is not on the $\det_2$ curve'' of spec \S9 was true only for the pole set $\{0..3\}$; corrected by spec \S13.)
+\begin{itemize}
+\item \textbf{State-independence scan} (225 states). (i) $n=0..2$ with $Q^{j[-]}$ and minor $W(2,3)$: 22.8 (fails); with $M=W(3,4)$: $7\cdot10^{-48}$ (hit); (ii) $n=1..3$: 259 (fails); (iii) $n=0..3$ with $Q^{j[+]}$: 4.0 (fails), with $xQ^j$ and $M$: $7\cdot10^{-48}$ (hit; the same function as (i) up to a constant). So the polynomial $f_A$ of point A is the ladder-1 $\det_2$ over the pole set $\{0,1,2\}$ (one-site weights on that set, insertion $y_A^{-(x-\theta_1)/h}$, second column $Q^{j[-]}$), divided by the $[3,1,0]$ minor $M=W(3,4)$ (not $W(2,3)$). \nm
+\item \textbf{Symbolic $y$ curve.} For $P=\{0,1,2\}$ the curve lies in $\mathrm{span}\{1,\tau_\lambda(\theta_1-3h)\}$ to $10^{-47}$, supported exactly on $(\Tt{11},\Tt{21},\Tt{22},\Tt{31},\Tt{32})$, with $c(y)=(\tfrac{9800}{5031}y^4,\,-\tfrac{171500}{5031}y^3,\,\tfrac{12005000}{216333}y^2,\,-\tfrac{12005000}{135837}y^2,\,\tfrac{3361400000}{17522973}y)$ at P1, and $c(y)\parallel c_A$ only at $y=-63/8=y_A$. \ex
+\item \textbf{General form in $(h,\thh,y)$.} $c_A=\big(2h^2(\thh-h)(\thh-2h)(\thh-3h)y^4,\ 2h(\thh-h)(\thh-3h)y^3,\ (\thh-h)y^2,\ (\thh-3h)y^2,\ \tfrac{2}{3h}y\big)$ on $(\Tt{11},\Tt{21},\Tt{22},\Tt{31},\Tt{32})$ (the adjoint's \S5.4 monomials of \nb{Two-rotations-det-overlap.md} on the shifted shapes), exact at all three numeric points. Symbolically $f_A(y)=K\det_2^{(0..2)}[y]/M$ with $K=-96h^8(h-\thh)(2h-\thh)(3h-\thh)^2(4h-\thh)$, identically in $(h,\thh,y)$, where $h^4\det_2=\tfrac{y^4}4W(2,3)-\tfrac{y^3}2W(1,3)+\tfrac{3y^2}4W(1,2)+\tfrac{y^2}4W(0,3)-\tfrac y2W(0,2)$ (and $W(0,1)=0$). \ex
+\item \textbf{End-to-end.} $\langle\Phi_A|\Psi\rangle/\langle x_0|\Psi\rangle\propto\det_6/\Psi_Q\times\det_2^{(0..2)}[y_A]/M$ to $5\cdot10^{-45}$ over 225 states (controls $y=-63/43,2$ fail by 5.4 and 96). \nm
+\end{itemize}
+For B (cells 15--23, Q-side done by an Opus subagent from \nb{L2-310-Q-side-spec.md}, reviewed by the main session): with the rep-generic pole set $n=0..3$, vacuum triple $(\theta-4h,\theta-3h,\theta-h)$ and $\mathrm{minor}_1=W(3,4)$,
+\[
+\langle v_1\otimes v_2|\Psi_B\rangle/\langle x_0|\Psi_B\rangle\propto\det\nolimits_6^N[Q_B,Q_{\vac,(w_1,w_2)}]/\Psi_Q(x_0)\times\det\nolimits_2^{(0..3)}[Q_B;y^*]/\mathrm{minor}_1,
+\]
+state-independent to $5.1\cdot10^{-45}$ over 225 states, ratio$_4$/ratio$_6=1/\kappa$ to $4.6\cdot10^{-47}$ ($\kappa=34306448400/147008443$), wrong $y$'s ($-63/8$, 2) fail by 77 and 322. \nm{} The curve $f_y\in\mathrm{span}\{1,\tau_\lambda(\theta_1-3h)\}$ for every $y$ (residuals $\sim10^{-47}$; $T_{(3,3)}(\theta_1-3h)\equiv0$ so the basis has 9 functions; controls: random combination $10^{-54}$, non-member 0.9) and is graded by box number:
+\[
+c_\lambda(y)=a_\lambda\,y^{6-|\lambda|},\quad|\lambda|=\lambda_1+\lambda_2,\qquad a=\Big(\tfrac{16}9,-\tfrac{2240}{387},\tfrac{78400}{15093},\tfrac{19600}{387},-\tfrac{2744000}{45279},\tfrac{96040000}{1946997},\tfrac{2744000}{31347},-\tfrac{48020000}{407511},\tfrac{6722800000}{52568919}\Big)
+\]
+on $(1,\Tt{10},\Tt{11},\Tt{20},\Tt{21},\Tt{22},\Tt{30},\Tt{31},\Tt{32})$ (the adjoint curve was $y^{4-|\lambda|}$; the pattern is $y^{2\lambda_1-|\lambda|}$). The only nonzero $y$ with $c(y)\parallel c_B$ is $y=-63/43=y^*$ (exact \texttt{Solve}); no $y$ gives $c(y)\parallel c_A$ on $\{0..3\}$. \ex/\nm
+
+\paragraph{End-to-end residuals ($[3,1,0]$).} B $5.1\cdot10^{-45}$; A $5\cdot10^{-45}$; all 225 states, 60 digits.
+
+%======================================================================
+\section{The explicit Q-dictionary (cells 53--60, 65; spec \S13(c))}\label{sec:dict}
+
+Notation: $\nu_n(x)=\prod_s(x-\theta_s+h\Lambda_n)$ (so $\nu_3(\theta_1-kh)=kh(kh-\thh)$ for $\Lambda_3=0$), $t_3=\chi_3\nu_1(x)\nu_2(x-h)\nu_3(x-2h)$, and $Q$ the dual Q's. The dual Baxter equation at $x$, $A\,Q(x+h)-t_1B\,Q(x)+t_2C\,Q(x-h)-t_3Q(x-2h)=0$ with $A=\nu_3(x)\nu_3(x-h)\nu_3(x-2h)$, $B=\nu_3(x-h)\nu_3(x-2h)$, $C=\nu_3(x-2h)$, is solved by Cramer with any two dual Q's (written for the pair $(2,3)$, $W=W_{23}$ evaluated at the indicated points):
+\begin{align}
+t_1(x)&=\frac{\nu_3(x)\,W(x{+}h,x{-}h)-\dfrac{t_3(x)\,W(x{-}2h,x{-}h)}{\nu_3(x-h)\nu_3(x-2h)}}{W(x,x{-}h)},\\
+t_2(x)&=\frac{\nu_3(x)\nu_3(x-h)\,W(x{+}h,x)-\dfrac{t_3(x)\,W(x{-}2h,x)}{\nu_3(x-2h)}}{W(x,x{-}h)},\qquad t_3=\chi_3\nu_1(x)\nu_2(x-h)\nu_3(x-2h)\ (2\cdot10^{-46}).\nonumber
+\end{align}
+Verified on all 225 states: $\le2\cdot10^{-46}$ (pair $(2,3)$), $1.7\cdot10^{-43}$ (pairs $(1,3)$, $(1,2)$) at generic $x=3/11$, $\theta_1-3h$, $\theta_1-2h$, $\theta_1-h$ \nm.
+
+\paragraph{Vanishing factors at the special points.}
+\begin{itemize}
+\item $x=\theta_1-3h$: $\nu_1(x)=0$ (factor $x-\theta_1+3h$), so $t_3=0$ and only the first terms survive; nothing else vanishes at $\theta_1-2h$, $\theta_1-h$.
+\item $x=\theta_1$: $\nu_3(x)=0$, $\nu_2(x-h)=0$, so $t_3=0$, and $W_{ij}(\theta_1,\theta_1-h)\equiv0$ for all pairs ($Q(\theta_1)=\kappa Q(\theta_1-h)$, checked $10^{-50}$): Cramer degenerates, only $t_2(\theta_1)=\kappa\,\nu_3(\theta_1-h)\,t_1(\theta_1)$ holds ($10^{-50}$); $t_1,t_2$ separately as limits ($10^{-32}$).
+\item $x=\theta_1+h$: $\nu_3(x-h)=\nu_3(\theta_1)=0$ ($t_1$ drops out) and $t_2(\theta_1+h)=\chi_3\nu_1(\theta_1+h)\nu_2(\theta_1)\,Q^j(\theta_1-h)/Q^j(\theta_1)$ ($10^{-50}$, $j=1,2,3$); $t_1(\theta_1+h)$ as a limit only.
+\end{itemize}
+
+\paragraph{Single-Wronskian form \ex.} Symbolic in $h,\thh,\chi_3$ (also verified on all 225 states for the 8 nonzero shapes, $\le3\cdot10^{-46}$, and against the symbolic CBR output at P1): by CBR with $W(0,1)=0$ and the Pl\"ucker relations of the $2\times n$ matrix $(Q^2;Q^3)$,
+\begin{equation}
+\tau_{(\lambda_1,\lambda_2)}(\theta_1-3h)=C_\lambda\,\frac{W(\theta_1-(3-\lambda_1)h,\ \theta_1-(4-\lambda_2)h)}{W(\theta_1-3h,\ \theta_1-4h)},\qquad C_\lambda=\prod_{k=4-\lambda_1}^{3}kh(kh-\thh)\ \prod_{k=5-\lambda_2}^{4}kh(kh-\thh),
+\end{equation}
+independent of $z$ and $\chi_3$ ($kh(kh-\thh)=\nu_3(\theta_1-kh)$). Special values: $(3,3)\mapsto W(0,1)=0$, $(0,0)\mapsto1$. Examples:
+\begin{align*}
+\tau_{11}&=12h^2(3h-\thh)(4h-\thh)\frac{W(\theta_1-2h,\theta_1-3h)}{M},\\
+\tau_{32}&=72h^5(h-\thh)(2h-\thh)(3h-\thh)^2(4h-\thh)\frac{W(\theta_1,\theta_1-2h)}{M}.
+\end{align*}
+Ladder points needed: $\theta_1-nh$, $n\in\{0..4\}$; per shape $(1,0)$, $(1,1)$: $\{2,3,4\}$; $(2,1)$: $\{1,3,4\}$ (as the single $W(1,3)/M$); the rest $\{0..4\}$ before simplification, after it each is one $W(a,b)$ and $M$.
+
+\paragraph{Consequence.} Every overlap of the form $c\cdot(1,\tau_\lambda(\theta_1-3h))\cdot\langle\Om|\Psi\rangle$ (``T-polynomial $\times\det_6$'') is explicit in Q's. For $[3,1,0]$ both points are $\det_6\times\det_2^{(P)}[y_P]/M$ with $(P,y_P)=(\{0..3\},w_2(\thh-h)/(\thh-3h))$ and $(\{0,1,2\},w_2(\thh-h)/(\thh-2h))$. For other representations the analogous single-Wronskian dictionary has \emph{not} been derived (it was tested only indirectly through the $\det_2\leftrightarrow\tau$ expansions of Sections~\ref{sec:320}, \ref{sec:410}).
+
+\paragraph{Rep data for the Q-side} (poles $n=0..\lambda_1$ on both ladders, insertions $1$ and $e^{2\pi ix/h}$). The reference factor is $\Psi_Q=\prod_s\big[Q^2(\theta_s-n_{21}h)Q^3(\theta_s-n_1h)-Q^3(\theta_s-n_{21}h)Q^2(\theta_s-n_1h)\big]Q^3(\theta_s-n_{22}h)$ with the triple $(n_1,n_{21},n_{22})$:
+\begin{center}\small
+\begin{tabular}{@{}lllll@{}}\toprule
+rep & triple & minor & degrees & $\det_6$ accuracy\\\midrule
+$[2,1,0]$ & $(3,2,1)$ & $W(2,3)$ & -- & $10^{-50}$\\
+$[3,1,0]$ & $(4,3,1)$ & $W(3,4)$ & $\deg q^j=\mu_j$, $\deg q_i=6-\mu_i$; vacuum $q$ degrees $(0,4,6)$ & $5.1\cdot10^{-45}$\\
+$[3,2,0]$ & $(4,3,2)$ ($(4,3,1)$ fails by 22) & $W(3,4)$ ($W(2,3)$ 0.60, $W(2,4)$ 0.98, $W(3,5)$ 0.98; best other $(1,3)$ 0.59) & $\deg q^j=\mu_j$, $\deg q_i=6-\mu_i$ & $1.2\cdot10^{-44}$\\
+$[4,1,0]$ & $(5,4,1)$ & $W(4,5)$ (next best $(1,5)$ 0.82; $W(3,4)$ 0.69, $(3,5)$ 0.99, $(4,6)$ 0.98) & $\deg q^j=\mu_j$, $\deg q_i=8-\mu_i$; vacuum $q$ degrees $(0,6,8)$ ($2\cdot10^{-45}$) & $6.1\cdot10^{-43}$\\\bottomrule
+\end{tabular}
+\end{center}
+Pattern: triple $(\theta-(\lambda_1+1)h,\theta-\lambda_1h,\theta-\lambda_2h)$, minor $W(\lambda_1,\lambda_1+1)$ \cj{} for further reps (verified on the four rows; the $[3,1,0]$ triple was a guess from the GT-pattern dictionary $x_1=-(m_{11}+1)h$, $x_{21}=-m_{21}h$, $x_{22}=-m_{22}h$). For $[3,2,0]$ the other triples scanned fail: $(4,2,1)$ 74, $(3,2,1)$ 86, $(4,2,0)$ 225, $(3,2,0)$ 129, $(4,1,0)$ 3175.
+
+%======================================================================
+\section{$[3,2,0]^{\otimes2}$ (\nb{L2-320-two-rotations.wb})}\label{sec:320}
+
+\paragraph{Duality.} $[3,2,0]\cong[3,1,0]^*\otimes\det^3$ (weights map $\mu\mapsto(3-\mu_3,3-\mu_2,3-\mu_1)$). The roles of the two sites are swapped relative to $[3,1,0]$ and the dressing is along $E_{23}$.
+
+\paragraph{Rep data.} dim 15, 225 states, 12 distinct weights (dim 2 at $(1,2,2)$, $(2,1,2)$, $(2,2,1)$); cell 2 reports 36 weight sectors for the two-site space. HW states: $[6,4,0]$, $[6,3,1]$, $[6,2,2]$, $[5,5,0]$, $2\times[5,4,1]$, $2\times[5,3,2]$, $[4,4,2]$, $[4,3,3]$ (10, cell 12). Site weights $\nu-\Lambda$ ($\Lambda=(3,2,0)$): $(3,2,0)$, $(3,1,1)$, $(3,0,2)$, $(2,3,0)$, $(2,2,1)$, $(2,1,2)$, $(1,2,2)$, $(1,1,3)$ (cells 14, 19).
+
+\paragraph{Localization at $\theta_1-3h$ \ex} (cells 5, 21). Site-1 localizers $\Tt{(1,1)},\Tt{(2,1)},\Tt{(3,1)}$; $\Tt{(2,2)},\Tt{(3,2)},\Tt{(3,3)}$ vanish on $\bra\Om$; $\Tt{(1,0)},\Tt{(2,0)},\Tt{(3,0)}$ have rank 2 with $\Om_1$ in their site-2 span (matches \nb{L2-320-localization.md}). The joint site-2 span is 2-dim $\{\Om_1,\omega_2\}$ with $\omega_2$ of rotRank 5 (not a rotation, not an $\Om_{(p,q)}$); the pencil $\Om_1+\kappa\omega_2$ has rotRank 5 throughout.
+
+\paragraph{Single point \ex} (cells 6--9; 105 quadrics, exact \texttt{Solve} 5.5 s, 55 redundant raw components, 53 localizing plus 1 isolated nontrivial point). $c$ on $(1,\Tt{10},\Tt{11},\Tt{20},\Tt{21},\Tt{30},\Tt{31})=(81/1075,36/215,4/39,1,860/1053,-860/729,-92450/85293)$, the same numbers as $[3,1,0]$ point B on the common shapes; $c(\Tt{10})=c(\Tt{20})=c(\Tt{30})=0$ on the localizing components. \textbf{No analogue of point A} (it lives on $\Tt{22},\Tt{32}$, which vanish here). No continuous component. The pencil parameter is $\kappa=-50717940/541717$.
+
+\paragraph{Factors \ex} (cells 8--11, 20, 21).
+\begin{itemize}
+\item Site 1 $=\eT R(z,(w_1,y^*))\rho(\Delta_{w_2})$: a torus-rotated vacuum (rotRank 4), $y^*=w_2(\thh-h)/(\thh-3h)$ (the $k=3$ member of $w_2(\thh-h)/(\thh-kh)$; values for $k=1..4$ at $w_2=7/3$: $7/3,-63/8,-63/43,-21/26$), torus $(2,20/13,1)\propto\mathrm{Dy}[w_2]$.
+\item Site 2 $=\eT(1+bE_{23})R(z,(w_1,y^*))$ with \emph{no} torus factor (rotRank 5, $\eT E_{23}$ orbit type; $E_{12}$/$E_{13}$ dressings and $D\in\{\mathrm{Dy}[w_1],\mathrm{Dy}[w_2],\mathrm{Dy}[w_3],\mathrm{Dy}[y^*]\}$ all fail).
+\item \textbf{$b$ fit} (18 points: six $w_2$ plus twelve random; a fit, not derived): $b=\beta/\alpha=\frac{6125}{5676}\,\frac{w_2}{(w_2-z_3)(y^*-z_3)}$ at P1, $w_1=5/2$. Values at the six $w_2$: $-343/484$, $-125/22$, $125/308$, $-1125/2068$, $-375/286$, $-128625/113468$. (A lead for the open closed form of the $[3,1,0]$ $\beta/\alpha$; not derived.)
+\item Torus invariants $(y,d_1,d_2)$ of site 1 at the six $w_2$: $(-63/43,2,20/13)$, $(24/43,28/43,8/11)$, $(-4/43,28/73,8/17)$, $(-81/43,14/9,4/3)$, $(27/86,7/12,2/3)$, $(-297/301,38/3,76/27)$.
+\end{itemize}
+
+\paragraph{Undo \ex} (cells 12, 17). Site 1 $=s\,\eT\rho(n')$ with $n'=\Delta^{-1}n\Delta$, so $\varphi=f_2\rho(n')^{-1}=(\eT+b\eT E_{23})\rho(nn'^{-1})$ sits at site 2. Exact on all 10 HW kets, $(\rho(n')\otimes\rho(n'))\mathrm{HW}=\mathrm{HW}$; the $3\times3$ identity is item 3 of Section~\ref{sec:mech}.
+
+\paragraph{Per-weight ranks over six $w_2$ \ex} (cells 13, 18, 20).
+\begin{center}\small
+\begin{tabular}{@{}lcccccc@{}}\toprule
+weight $\mu$ & dim & (a) point & (b) $\beta{=}0$ & (c) $\omega{=}y^*$, $\beta$ & (c0) $\omega{=}y^*$, $\beta{=}0$ & LW (a)\\\midrule
+$(0,2,3)$&1&\textbf{0}&1&0&0&1\\
+$(0,3,2)$&1&\textbf{0}&1&0&0&1\\
+$(1,1,3)$&1&1&1&1&0&1\\
+$(1,2,2)$&2&\textbf{1}&2&1&0&2\\
+$(1,3,1)$&1&1&1&1&0&1\\
+$(2,0,3)$&1&1&1&1&1&1\\
+$(2,1,2)$&2&2&2&2&1&2\\
+$(2,2,1)$&2&2&2&2&1&\textbf{1}\\
+$(2,3,0)$&1&1&1&1&1&\textbf{0}\\
+$(3,0,2)$&1&1&1&1&1&1\\
+$(3,1,1)$&1&1&1&1&1&1\\
+$(3,2,0)$&1&1&1&1&1&\textbf{0}\\\bottomrule
+\end{tabular}
+\end{center}
+So (a): 12 of 15 directions ($(0,2,3)$, $(0,3,2)\equiv0$; $(1,2,2)$ rank 1 of 2); (b): 15/15; (c) as (a); (c0): the blind spot $\mu_1\le1$, the dual of $[3,1,0]$'s $\mu_3\ge2$ under $\mu\mapsto(3-\mu_3,3-\mu_2,3-\mu_1)$ (not ``$\mu_3=3$''), vanishing at $(0,2,3)$, $(0,3,2)$, $(1,1,3)$, $(1,2,2)$, $(1,3,1)$; LW frame: mirror, $(2,2,1)$ rank 1, $(2,3,0)$, $(3,2,0)\equiv0$. The LW frame does not repair the deficiency.
+
+\paragraph{HW counts \ex} (cells 14, 16, 19, 21). Fixed torus, six $w_2$: 6 of 6 rows for (a), (b), (c), (c0); fixed torus with 12 random $w_2$: 7; \textbf{torus-completed (12 random $(w_2,D)$): 10/10 for (a), (b), (c); 6 for (c0)} (lost entirely: $[4,3,3]$, $[4,4,2]$; one direction in each of the multiplicity-2 pairs $[5,3,2]$, $[5,4,1]$). LW frame: 10/10 torus-completed. (The old site-1$+$site-2 localization needed $\langle\Om|\Psi\rangle$ for $[4,3,3]$.) \textbf{Determination:} 9 of the 10 HW states (7 of 8 irreps) fully determined, all except $[4,4,2]$, whose site-2 weight $(1,2,2)$ has dim 2 but rank 1; the LW frame does not repair it ($(2,2,1)$ rank 1). There is only one family (no point A), hence 9/10, with the dual pattern of missing directions.
+
+\subsection{A2: the site-2 recipe is empty (cells 22--32; spec \S12)}
+
+Paul's avenue A2: look for a dual of $[3,1,0]$'s point A on the site-2 side, with insertions at $\theta_2+mh$. Result: \textbf{empty} \ex/\md.
+\begin{itemize}
+\item Site-2 locals at $\theta_2+mh$ ($m=-1,0,1,2,-3$; all nine shapes $\lambda_1\le3$): exactly $\Tt{(1,1)}(\theta_2+h)=t_2(\theta_2+h)$ and $\Tt{(2,2)}(\theta_2)$; rank-2 operators $\Tt{(2,0)}(\theta_2-h)$, $\Tt{(1,0)}(\theta_2)$, $\Tt{(3,2)}(\theta_2)$; $\Om_1$ lies in the site-1 span of every operator of rank $\le2$; $\bra\Om T=0$ for $\Tt{(3,3)}(\theta_2-h)$ and $\Tt{(2,2)},\Tt{(3,2)},\Tt{(3,3)}$ at $\theta_2-3h$. Ranks (shapes $(1,0),(1,1),(2,0),(2,1),(2,2),(3,0),(3,1),(3,2),(3,3)$): $m=-1$: 3,3,2,6,6,6,11,12,0; $m=0$: 2,3,6,8,1,10,12,2,4; $m=1$: 3,1,6,3,4,10,6,8,8; $m=2$: 3,3,6,8,6,10,12,12,10; $m=-3$: 3,3,6,8,0,10,12,0,0.
+\item $S_2=\mathrm{span}\{1,\Tt{(2,0)}(\theta_2-h),\Tt{(1,0)}(\theta_2),\Tt{(2,2)}(\theta_2),\Tt{(3,2)}(\theta_2),\Tt{(1,1)}(\theta_2+h)\}$: joint site-1 span 3-dim $(\Om_1,\omega,\omega')$ at every $w_2$; $\omega$ a rotation (rotRank 4; the pencil $\Om_1+\kappa\omega$ has rotRank 4 at 3 values of $\kappa$, so $\{\Om_1,\omega\}$ lies in the rotation cone, unlike the $\theta_1-3h$ case where the extra direction had rotRank 5); $\omega'$ has rotRank 7. The product locus of $S_2$ is only the localizing span (3 free coefficients: $1$, $\Tt{(2,2)}(\theta_2)$, $\Tt{(1,1)}(\theta_2+h)$; the others 0), the same at all six $w_2$. Enlargements: all nine shapes at $\theta_2+h$ (10 operators), at $\theta_2$ (10), rank $\le4$ operators at the five points (13): exact \texttt{Solve} with random $3\times3$ compressions, only the localizing span.
+\item Both points together (19 independent operators): exact \texttt{Solve} times out; a Gr\"obner basis over $GF(1000003)$ of the compressed minors (436 elements) shows every coefficient except $1,\Tt{(2,2)}(\theta_2),\Tt{(1,1)}(\theta_2+h)$ is nilpotent mod the ideal (order $\le4$), affine dimension 3, so the locus is the localizing span (\md{} evidence, not a symbolic proof). The 22-operator span (adding rank $\le4$ at $m=-1,2,-3$) timed out and is untested.
+\item Consequence: the predicted dual of $[3,1,0]$'s point A does not appear; $[3,2,0]$ stays at 9/10 determined. Likely reason: only two site-2 localizers versus three at $\theta_1-3h$.
+\end{itemize}
+
+\subsection{The Q-side and the collapsed $k=2$ curve (cells 33--41; spec \S15)}
+
+\begin{itemize}
+\item \textbf{Q-side port} (cells 34--35): 225 states, six Q's each, $\deg q^j=\mu_j$, $\deg q_i=6-\mu_i$, Baxter residual $4.5\cdot10^{-43}$, eigen-residual $4\cdot10^{-60}$, 8 s for the whole Q-solve.
+\item \textbf{Vacuum triple} $(\theta-4h,\theta-3h,\theta-2h)$ (cell 36): $1.2\cdot10^{-44}$, i.e.\ $\Psi_Q=\prod_sW_s(3,4)Q^3(\theta_s-2h)$; the other triples fail (Section~\ref{sec:dict}).
+\item \textbf{Minor} $W(3,4)$ (cell 37): $\det_2^{(0..3)}[y]/W(a,b)$ lies in $\mathrm{span}\{1,\tau_{10},\tau_{11},\tau_{20},\tau_{21},\tau_{30},\tau_{31}\}$ ($\tau_{22}=\tau_{32}=\tau_{33}=0$ exactly on the states) only for $W(3,4)$, residual $1.5\cdot10^{-45}$.
+\item \textbf{End-to-end} (cell 39): $\Phi_P=\sum_kc_{P,k}\bra\Om O_k$ is rank 1 (exact); $\langle\Phi_P|\Psi\rangle/\langle x_0|\Psi\rangle\propto\det_6/\Psi_Q^{(4,3,2)}\times\det_2^{(0..3)}[y^*]/W(3,4)$ to $1.2\cdot10^{-44}$ over 225 states with $y^*=-63/43$ (controls: wrong $y$ 77, 1692; wrong triples 22, 74, 86). \nm
+\item \textbf{Pole-subset scan} (cells 38, 40; all 11 subsets in span, residual $\le5\cdot10^{-46}$, rationalization $\le10^{-53}$):
+\end{itemize}
+\begin{center}\small
+\begin{tabular}{@{}llcccl@{}}\toprule
+$P$ & support & $y$-deg & $y$ hits $c_P$ & generic rank $\Phi$ & nonzero $y$ with $\Phi$ rank 1\\\midrule
+$\{0,1\}$ & none (zero curve) & -- & -- & 0 & --\\
+$\{0,2\}$ & $\Tt{11},\Tt{31}$ & 2..4 & none & 1 & all $y$ (localizing span)\\
+$\{0,3\}$ & $1,\Tt{21},\Tt{30}$ & 3..6 & none & 2 & none\\
+$\{1,2\}$ & $\Tt{11},\Tt{21}$ & 3..4 & none & 1 & all $y$ (localizing span)\\
+$\{1,3\}$ & $1,\Tt{11},\Tt{20}$ & 4..6 & none & 2 & none\\
+$\{2,3\}$ & $1,\Tt{10},\Tt{11}$ & 4..6 & none & 2 & none\\
+$\{0,1,2\}$ & $\Tt{11},\Tt{21},\Tt{31}$ & 2..4 & none & 1 & all $y$ (localizing span)\\
+$\{0,1,3\}$ & $1,\Tt{11},\Tt{20},\Tt{21},\Tt{30}$ & 3..6 & none & 2 & none\\
+$\{0,2,3\}$ & $1,\Tt{10},\Tt{11},\Tt{21},\Tt{30},\Tt{31}$ & 2..6 & none & 2 & none\\
+$\{1,2,3\}$ & $1,\Tt{10},\Tt{11},\Tt{20},\Tt{21}$ & 3..6 & none & 2 & none\\
+$\{0,1,2,3\}$ & $1,\Tt{10},\Tt{11},\Tt{20},\Tt{21},\Tt{30},\Tt{31}$ & 2..6 & $\mathbf{-63/43}$ & 2 & only $-63/43$ (non-local, $\parallel c_P$)\\\bottomrule
+\end{tabular}
+\end{center}
+The $\{0,1,2\}$ curve is $(\tfrac{9800}{5031}y^4,-\tfrac{171500}{5031}y^3,-\tfrac{12005000}{135837}y^2)$ on $(\Tt{11},\Tt{21},\Tt{31})$: \textbf{the $[3,1,0]$ point-A curve with the $\Tt{22},\Tt{32}$ entries removed (they vanish on $\bra\Om$), hence entirely inside the localizing span}, a rank-1 curve with site-2 factor $\Om_1$ (checked), not a new point. So $[3,2,0]$ has exactly one non-trivial product point (B at $y^*$, pole set $\{0..3\}$) and the would-be point A collapses (``the $k=2$ curve collapses''); this matches spec \S10/\S12 (no point A, 9/10 stays). Cells 8--13 of the notebook were not re-run for the A3 check.
+
+%======================================================================
+\section{$[4,1,0]^{\otimes2}$ (\nb{L2-410-two-rotations.wb}, 26 cells)}\label{sec:410}
+
+\paragraph{Caveat on provenance.} The notebook controller could not be associated for this new file, so the cells were evaluated in the shared kernel K1 by \texttt{ToExpression} of each cell's source (the sources are exactly what ran). \textbf{Outputs are not stored in the file}; cell 26 (markdown) holds all numbers, copied from those runs; rerun in VS Code to regenerate (about 1 min total). 53 Boolean checks in \texttt{checks}, all True. Timings: $T_\lambda(\theta_1-4h)$ for 14 shapes on 576 dims 11.6 s (exact sparse); exact product locus (276 quadrics, 14 unknowns) 4.5 s, 4 raw components; \nb{u21pipe} per $w_2$ 4.7 s; eigenstates (576, 60 digits) 0.6 s, eigenvalue polynomials 8.9 s, all 3456 Q's 13 s, $\det_6$ for all states 1.0 s, 21-pair minor scan 11 s, all 26 pole-subset curves 11 s.
+
+\paragraph{Rep data.} $\Lambda=(4,1,0)$, dim 24, 576 states, 18 weights (12 of dim 1, 6 of dim 2). \textbf{14 HW states in 11 irreps} (not 15 as the spec \S14 plan assumed): $[8,2,0]$, $[8,1,1]$, $[7,3,0]$, $2\times[7,2,1]$, $[6,4,0]$, $2\times[6,3,1]$, $[6,2,2]$, $[5,5,0]$, $2\times[5,4,1]$, $[5,3,2]$, $[4,4,2]$ (dimensions add to 576).
+
+\paragraph{Localization at $\theta_1-4h$ \ex} (cell 5). Site-1 localizers $\Tt{(1,1)},\Tt{(2,2)},\Tt{(3,3)},\Tt{(4,3)}$; $\Tt{(4,4)}$ vanishes on $\bra\Om$; all other shapes have rank 2 with $\Om_1$ in the site-2 span. The joint site-2 span is 2-dim $\{\Om_1,\omega_2\}$, $\omega_2$ a rotation (rotRank 4; the pencil $\Om_1+\kappa\omega_2$ rotRank 4; not a vacuum $\Om_{(p,q)}$).
+
+\paragraph{Product locus \ex} (cells 6--8). The localizing span plus \textbf{exactly three isolated points} (no continuous component), all with site-2 factor the torus-free vacuum rotation $\eT\rho(n_k)$, $n_k$ from \nb{rOm}$(z,(w_1,y_k,w_3))$: $y_k=w_2(\thh-h)/(\thh-kh)$, $k=2,3,4$: $-63/8$, $-63/43$, $-21/26$ at P1 ($\thh=31/35$), torus $d=(1,1)$; \textbf{$k=1$ does not occur}. Site-1 rotRank 6, 7, 5 for $k=2,3,4$ (site-2 rotRank 4). Supports of $c$: $k=2$ on $\Tt{22},\Tt{32},\Tt{33},\Tt{42},\Tt{43}$ (no identity); $k=3$ on the 9 shapes $\Tt{11},\Tt{21},\Tt{22},\Tt{31},\Tt{32},\Tt{33},\Tt{41},\Tt{42},\Tt{43}$; $k=4$ on all 14 live entries. The same three points at $6+18$ further $w_2$ (stable over 24 $w_2$).
+
+\paragraph{Dressing of site 1 \ex} (cells 8, 25). $f_1=g\rho(n_k)\rho(\Delta_{w_2})$ with $g$ in the span of the monomials $\eT E_{12}^aE_{13}^cE_{23}^b$; minimal, non-redundant sets (valid at all six $w_2$): $k=4$: $\{1,E_{12},E_{12}^2\}$ (3 monomials); $k=3$: $\{1,E_{13},E_{12},E_{12}E_{23},E_{12}E_{13},E_{12}^2,E_{12}^2E_{23}\}$ (7, $E_{13}$-degree 1); $k=2$: those plus $E_{13}^2$, $E_{12}E_{13}E_{23}$ (9, $E_{13}$-degree 2). The $E_{13}$-degree is $0,1,2$ for $k=4,3,2$, i.e.\ $\lambda_1-k$; the dressing order $1+E_{13}$-degree $=\lambda_1-k+1=1,2,3$ holds only in this sense: the $k=\lambda_1$ point already carries $E_{12}^2$ (for $[3,1,0]$ only $E_{12}$), and the minimal word length (words in $E_{12},E_{13},E_{23}$ applied to $e_1$) is $3,3,2$ for $k=2,3,4$, not $3,2,1$.
+
+\paragraph{Q-side \nm} (cells 18--23). All 576 states, six Q's each; $\deg q^j=\mu_j$, $\deg q_i=8-\mu_i$ exactly; Baxter residual $3.4\cdot10^{-40}$, eigen-residual $1.4\cdot10^{-58}$; vacuum $q$ degrees $(0,6,8)$ ($2\cdot10^{-45}$). $\det_6$ with 10 poles $n=0..4$: $\langle\Om|\Psi\rangle/\langle x_0|\Psi\rangle\propto\det_6/\Psi_Q$ for the triple $(5,4,1)$, i.e.\ $(\theta-5h,\theta-4h,\theta-h)$, $6.1\cdot10^{-43}$; the other candidates fail: $(5,4,2)$ 850, $(5,4,3)$ 3730, $(5,3,1)$ 1.7, $(4,3,1)$ 4.1; no other triple of the 126 scanned ($1\le n_1\le6$) works. Minor: only $W(4,5)$ puts $\det_2^{(0..4)}[y]/W(a,b)$ in $\mathrm{span}\{1,\tau_\lambda(\theta_1-4h)\}$ (14 functions, $\tau_{44}=0$): residual $3.4\cdot10^{-44}$; $W(3,4)$ 0.69, $(3,5)$ 0.99, $(4,6)$ 0.98, best other pair $(1,5)$ 0.82.
+
+\paragraph{Pole-set curves \ex/\nm} (cell 22). All 26 subsets $P\subseteq\{0..4\}$, $|P|\ge2$, with minor $W(4,5)$: every curve lies in the span (residual $\le3.3\cdot10^{-43}$) and rationalizes ($\le3\cdot10^{-53}$). Exactly three subsets hit a product point: $\{0,1,2\}$ at $y=-63/8=y_2$ ($c_2$), $\{0..3\}$ at $y=-63/43=y_3$ ($c_3$), $\{0..4\}$ at $y=-21/26=y_4$ ($c_4$); each is the only nonzero $y$ with $\Phi(c(y))$ of rank 1 and non-local site-2 factor. The only other rank-1 curve is $P=\{0,1\}$ (support $\Tt{33},\Tt{43}$, site-2 factor $\Om_1$: inside the localizing span, trivial). All other subsets have generic rank 2 and no rank-1 root.
+
+\paragraph{End-to-end \nm} (cell 23). $\langle\Phi_k|\Psi\rangle/\langle x_0|\Psi\rangle\propto\det_6/\Psi_Q^{(5,4,1)}\times\det_2^{(0..k)}[y_k]/W(4,5)$ over all 576 states, $6.1\cdot10^{-43}$ for $k=2,3,4$ ($\Phi_k$ rank 1). Controls: wrong $y$ ($-63/7$, 2): 146/380 ($k=2$), 888/6062 ($k=3$), 58196/961 ($k=4$); wrong pole set $\{0..j\}$ at $y_k$: 9.8 to $10^5$; triples $(5,4,2)$, $(4,3,1)$: 850 etc.
+
+\paragraph{Undo and ranks \ex} (cells 12--16). Undo exact: $(\rho(n_k)\otimes\rho(n_k))\mathrm{HW}=\mathrm{HW}$ and $\langle f_1\otimes f_2|\mathrm{HW}\rangle=s\langle\varphi\otimes\eT|\mathrm{HW}\rangle$ on all 14 HW kets, all $k$, all six $w_2$. Per-weight ranks of $\varphi$ over six $w_2$:
+\begin{center}\small
+\begin{tabular}{@{}cllllp{3.7cm}p{3.2cm}@{}}\toprule
+$k$ & pole set & dressing $S_k$ & directions & weights short & irreps determined & HW reached (torus, 18 random $(w_2,D)$)\\\midrule
+2 & $\{0..2\}$ & 9 monomials ($E_{13}$-deg 2) & \textbf{24/24} (all 18 weights full) & none & \textbf{11/11} & 14/14\\
+3 & $\{0..3\}$ & 7 ($E_{13}$-deg 1) & 21/24 & $(0,1,4),(1,0,4)$ rank 0 of 1; $(1,1,3)$ rank 1 of 2 & \textbf{11/11} & 14/14\\
+4 & $\{0..4\}$ & 3 ($E_{12}^2$ only extra) & 16/24 & $(0,1,4),(0,2,3),(1,0,4),(2,0,3)$ rank 0 of 1; $(1,1,3)$ rank 0 of 2; $(1,2,2),(2,1,2)$ rank 1 of 2 & 9/11: $[5,3,2]$ (site weight $(1,2,2)$) and $[6,2,2]$ ($(2,1,2)$) one direction short each & 14/14\\\bottomrule
+\end{tabular}
+\end{center}
+($y_k=w_2(\thh-h)/(\thh-kh)$.) Unions $\{2,3\}$ and $\{2,3,4\}$: all 18 weights full, 11/11 determined. Fixed torus ($D=1$) with 6 $w_2$ saturates at 6 rows; with 18 random $w_2$ the HW rank is 6, 7, 8 ($k=2,3,4$), i.e.\ only cross-irrep relations; each irrep separately has full rank. Each single $k$ reaches all 14 HW states once the torus is included (18 rows needed, since 14 HW kets need at least 14 rows).
+
+\paragraph{Verdict (cell 26).} The chain structure is confirmed. Corrections to the spec \S14 conjecture: (i) the dressing order $\lambda_1-k+1$ holds as $1+E_{13}$-degree, but $E_{12}^2$ already appears at $k=\lambda_1$ and the span sizes are 3, 7, 9; (ii) ``$k<\lambda_1$ spans every weight space'' is true only for $k=2$; $k=3$ is 3 directions short of full (but determines all 11 irreps), $k=\lambda_1=4$ is 8 directions short and misses one direction in each of $[5,3,2]$ and $[6,2,2]$ (two directions short for the HW determination, not one); (iii) the HW count is 14, not 15.
+
+%======================================================================
+\section{The pole-set chain}\label{sec:chain}
+
+\paragraph{Statement \cj{} (verified instances below).} For $\Lambda=[\lambda_1,1,0]$ the product points of the recipe
+\[
+\Phi(c)=\bra{\Om\otimes\Om}\Big(c_0+\sum_\lambda c_\lambda T_\lambda(\theta_1-\lambda_1h)\Big)\quad(\text{a product covector})
+\]
+(other than the localizing span) are in bijection with the initial segments $P_k=\{0..k\}$, $k=2..\lambda_1$ ($k=1$, $y=w_2$, the $\omega=y$ degeneracy, is excluded). The point $k$ sits at
+\[
+y_k=w_2\,\frac{\thh-h}{\thh-kh},\qquad\omega=w_2=y_k\,\frac{\thh-kh}{\thh-h},
+\]
+has site-2 factor the torus-free vacuum rotation $\eT\rho(n_k)$ ($n_k$ from \nb{rOm} at $(w_1,y_k,w_3)$), site-1 factor $g\rho(n_k)\rho(\Delta_{w_2})$ with $g$ in the span of monomials of $E_{13}$-degree $\le\lambda_1-k$, and overlap
+\[
+\langle v_1\otimes v_2|\Psi\rangle/\langle x_0|\Psi\rangle\propto\det\nolimits_6[Q_B,Q_{\vac,(w_1,w_2)}]/\Psi_Q\times\det\nolimits_2^{(P_k)}[Q_B;y_k]\big/W(\lambda_1,\lambda_1+1),
+\]
+with the rep-data triple $(\theta-(\lambda_1+1)h,\theta-\lambda_1h,\theta-\lambda_2h)$ in $\Psi_Q$. The spec \S14 version said ``dressing order $\lambda_1-k+1$''; \S16 corrected it to ``$E_{13}$-degree $\lambda_1-k$'' and the claim ``only $k<\lambda_1$ points give complete spans'' to ``only $k=2$ does''.
+
+\paragraph{Verified instances.}
+\begin{center}\small
+\begin{tabular}{@{}lp{8.5cm}p{4.2cm}@{}}\toprule
+rep & $k$'s present & where verified\\\midrule
+$[2,1,0]$ & $k=2$ (pure rotations) & \nb{Two-rotations-det-overlap.md} \S5; Section~\ref{sec:adj}\\
+$[3,1,0]$ & $k=2$ (A), $k=3$ (B); all 11 pole subsets $P\subseteq\{0..3\}$ scanned: only $\{0..3\}\to$B ($y=-63/43$) and $\{0,1,2\}\to$A ($y=-63/8$); $\{0,1\}$ trivially localizing (support $\Tt{22},\Tt{32}$); all others never produce a product covector; max in-span residual $5\cdot10^{-46}$, rationalization $1.6\cdot10^{-53}$ & \nb{L2-310-two-rotations.wb} cells 66--70\\
+$[4,1,0]$ & $k=2,3,4$ at $-63/8,-63/43,-21/26$; all 26 subsets scanned & \nb{L2-410-two-rotations.wb} cells 22, 26\\
+$[3,2,0]$ & only $k=3$; the $k=2$ curve collapses into the localizing span & \nb{L2-320-two-rotations.wb} cells 38, 40, 41\\\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{The scan table for $[3,1,0]$} (cell 70; support $=$ shapes with nonzero coefficient; $y$-degrees $=$ range of powers of $y$; rank $=$ generic rank of $\Phi(c(y))$; ``nonzero $y$ with $\Phi$ rank 1'' is the exact common-root set of all $2\times2$ minors of $\sum_kc_k(y)A_k$; $y=0$ is a root for every $P$ but $c(0)=0$, so $\Phi=0$ there):
+\begin{center}\small
+\begin{tabular}{@{}llcccl@{}}\toprule
+$P$ & support & $y$-deg & hits B/A & generic rank & nonzero $y$, $\Phi$ rank 1\\\midrule
+$\{0,1\}$ & $\Tt{22},\Tt{32}$ & 1..2 & none & 1 (loc.) & all $y$ (trivial: site 2 $=\Om_1$)\\
+$\{0,2\}$ & $\Tt{11},\Tt{22},\Tt{31}$ & 2..4 & none & 2 & none\\
+$\{0,3\}$ & $1,\Tt{21},\Tt{30}$ & 3..6 & none & 2 & none\\
+$\{1,2\}$ & $\Tt{11},\Tt{21},\Tt{22}$ & 2..4 & none & 2 & none\\
+$\{1,3\}$ & $1,\Tt{11},\Tt{20},\Tt{22}$ & 2..6 & none & 2 & none\\
+$\{2,3\}$ & $1,\Tt{10},\Tt{11}$ & 4..6 & none & 2 & none\\
+$\{0,1,2\}$ & $\Tt{11},\Tt{21},\Tt{22},\Tt{31},\Tt{32}$ & 1..4 & A at $\mathbf{-63/8}$ & 2 & only $-63/8$ ($=$A)\\
+$\{0,1,3\}$ & $1,\Tt{11},\Tt{20},\Tt{21},\Tt{22},\Tt{30},\Tt{32}$ & 1..6 & none & 2 & none\\
+$\{0,2,3\}$ & $1,\Tt{10},\Tt{11},\Tt{21},\Tt{22},\Tt{30},\Tt{31}$ & 2..6 & none & 2 & none\\
+$\{1,2,3\}$ & $1,\Tt{10},\Tt{11},\Tt{20},\Tt{21},\Tt{22}$ & 2..6 & none & 2 & none\\
+$\{0,1,2,3\}$ & all nine & 1..6 & B at $\mathbf{-63/43}$ & 2 & only $-63/43$ ($=$B)\\\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Three empirical rules and the derived criterion.} (Rules 1 and 3 are statements read off the four representations; the closed form of rule 2 is my compilation of the localizer lists and is tagged accordingly.) Let $d:=\lambda_1-\lambda_2$.
+\begin{enumerate}
+\item \textbf{Vanishing rule \cj{} (three reps; adjoint consistent).} $\bra\Om T_{(a,b)}(\theta_1-\lambda_1h)=0$ iff $b>d$. Evidence: $[3,1,0]$ ($d=2$): $\Tt{33}$ vanishes, $\Tt{22},\Tt{32}$ do not; $[3,2,0]$ ($d=1$): $\Tt{22},\Tt{32},\Tt{33}$ vanish and the shapes with $b\le1$ survive; $[4,1,0]$ ($d=3$): $\Tt{44}$ vanishes. For the adjoint ($d=1$) the notebooks only used shapes with $b\le1$.
+\item \textbf{Localizers \cj{} (derived from the four lists).} The site-1-local shapes at $\theta_1-\lambda_1h$ are $\{(a,\min(a,d)):a=1..\lambda_1\}$: adjoint $(1,1),(2,1)$; $[3,1,0]$ $(1,1),(2,2),(3,2)$; $[3,2,0]$ $(1,1),(2,1),(3,1)$; $[4,1,0]$ $(1,1),(2,2),(3,3),(4,3)$. (The four lists are as stated in the notebooks; the closed pattern $a\mapsto(a,\min(a,d))$ is an observation made while compiling these notes, not a claim in the sources.)
+\item \textbf{Support rule \nm{} (three instances).} The coefficient curve of point $k$ on $[\lambda_1,1,0]$ is supported on the support of the adjoint's curve shifted by $s=\lambda_1-k$ columns, $(a,b)\mapsto(a+s,b+s)$: $[3,1,0]$ $k=2$: $(1,\Tt{10},\Tt{11},\Tt{20},\Tt{21})\mapsto(\Tt{11},\Tt{21},\Tt{22},\Tt{31},\Tt{32})$ (cells 49, 64); $[4,1,0]$ $k=2$ ($s=2$): the adjoint shapes $(0,0),(1,0),(1,1),(2,0),(2,1)\mapsto\Tt{22},\Tt{32},\Tt{33},\Tt{42},\Tt{43}$; $[4,1,0]$ $k=3$ ($s=1$) reproduces the 9 shapes of $[3,1,0]$ B shifted: $\Tt{11},\Tt{21},\Tt{22},\Tt{31},\Tt{32},\Tt{33},\Tt{41},\Tt{42},\Tt{43}$; $k=\lambda_1$ is all live entries (B). On $[3,2,0]$ the $k=3$ support equals $[3,1,0]$ B minus the vanishing $\Tt{22},\Tt{32}$, with the same numerical $c$ on the common shapes (cell 21).
+\end{enumerate}
+
+\paragraph{Derived criterion \cj{} beyond the four reps.} A non-trivial point $k$ exists iff its shifted support contains a shape that survives (rule 1) and is not a localizer (rule 2). The entry $(1,0)$ of the adjoint curve is shifted to $(1+s,s)$, $s=\lambda_1-k$; it survives iff $s\le d$ and is non-local iff $s<d$ (for $s=d$, $(1+s,s)=(a,\min(a,d))$ is a localizer; for $s>d$ it vanishes). Hence the point exists iff $s<d$, i.e.\ iff
+\[
+\lambda_2<k\le\lambda_1\qquad(k\ge2\text{ always}).
+\]
+Check: $[3,1,0]$ $k=2,3>1$ \checkmark; $[4,1,0]$ $k=2,3,4>1$ \checkmark; $[3,2,0]$ $k=2$ is not $>\lambda_2=2$ (collapses, \checkmark), $k=3>2$ \checkmark.
+
+\paragraph{The ``$[3,2,0]$-type'' class.} $d=1$, i.e.\ $\lambda_2=\lambda_1-1$: only $k=\lambda_1$ survives, so only B-type points exist, with a dressed (non-rotation) factor for $\lambda_1\ge3$ and 9/10-type determination deficits. The adjoint ($\lambda_1=2$, $\lambda_2=1$) is excepted: there $k=\lambda_1=2$ is also the only point, but $E_{12}^2$ annihilates $\eT$, so the dressing $\eT(\alpha+\beta E_{12})$ is itself a rotation and the family is pure rotations with full span. (Observed on $[2,1,0]$, $[3,1,0]$ B, $[4,1,0]$ $k=4$: the dressing at $k=\lambda_1$ is the truncated exponential $\{1,E_{12},\ldots,E_{12}^{\lambda_1-2}\}$, i.e.\ $\{1\}$ for $\lambda_1=2$ (pure rotation), $\{1,E_{12}\}$ for 3, $\{1,E_{12},E_{12}^2\}$ for 4; \cj, three data points, an observation made while compiling, not stated in the sources.) For $[3,2,0]$ B the dressing is $\{1,E_{23}\}$ on site 2 (sites swapped).
+
+\paragraph{Predictions \cj{} (not verified).}
+\begin{itemize}
+\item $[4,2,0]$ ($d=2$, dim 27): non-trivial points exist for $k=3,4$ ($\lambda_2=2<k\le4$); $k=2$ collapses into the localizing span. The $k=4$ point is B-type; $k=3$ carries one more $E_{13}$ order. The per-weight spans and whether $[4,2,0]$ has all HW states determined from these points are \textbf{open}. \nb{L2-420-localization.md} and \nb{Blindspot-420-check-EH.wb} hold localization data for $[4,2,0]$ (not read for this note).
+\item $[\lambda,1,0]$: points $k=2..\lambda$; the $k=2$ point spans every weight space and determines all HW states (verified $\lambda=3,4$; adjoint trivially); $k=\lambda$ loses the most (verified $\lambda=3,4$).
+\item General $[\lambda_1,\lambda_2,0]$ with $d\ge2$: points $k=\lambda_2+1..\lambda_1$.
+\end{itemize}
+Not verified: any representation with $\lambda_2\ge2$ other than $[3,2,0]$; $L>2$.
+
+%======================================================================
+\section{What ``all CG coefficients'' would still need}\label{sec:layers}
+
+Three layers separate the present results from CG numbers.
+
+\paragraph{Layer 1: kinematic completeness (HW ket coverage).} The family reaches and determines the HW kets as in the summary table. This layer is \textbf{done} for the adjoint, $[3,1,0]$ (via A) and $[4,1,0]$ (via $k=2$), \textbf{incomplete} for $[3,2,0]$ ($[4,4,2]$ one direction short) and unattempted for $[4,2,0]$ and beyond. The old 2026-09-23 count (6 of 8 directions, 5 of 6 HW states; the rule $\mu_3\le\lambda_2$) is superseded by: undo the rotation, count per site-1 weight, and the $k=2$ point reaches everything.
+
+\paragraph{Layer 2: explicit Q-form.} The overlap of each chain point is $\det_6\times\det_2^{(P_k)}[y_k]/W(\lambda_1,\lambda_1+1)$ \nm{} (Q-checked), and for $[3,1,0]$ each fused $T$-eigenvalue is a single Wronskian over a minor (Section~\ref{sec:dict}). What remains is to express the per-weight projections of $\varphi$ (the ``coefficients of the free parameters'') through Q's: each $y$-coefficient (and each torus $D$-monomial) of $\det_6\cdot\det_2^{(P_k)}[y]$ as one HW CG functional. \nb{L2-310-two-rotations.md} (Open) and HANDOFF NEXT item (4) name this as the next step: put the $k=2$ point of $[3,1,0]$ through the Clean-CG pipeline.
+
+\paragraph{Layer 3: untwisting and contamination.} The overlaps are with the finite-twist eigenstate $\Psi_B$. The CG coefficients are HW components of the untwisted state, but $(R\otimes R)\Psi$ has components outside the HW subspace (``contamination'' $K$, \nb{Clean-CG-combinations.md} \S2): $\langle\Om|T_\lambda\Psi\rangle/f_\lambda=c_\lambda\cdot P_{\rm HW}\Psi$ (signal $S$) $+\,c_\lambda\cdot(R\otimes R)(1-P_{\rm HW})\Psi$ (contamination $K$), $\kappa=(S+K)/S$, with $\kappa=(t+1)/2=97/70$ for $[3,3,0]$ and $[4,1,1]$ (there $t=\theta_{12}/h$). The two points that matter here: (i) the undo of Section~\ref{sec:undo} is exact for HW kets, but the eigenstate $\Psi_B$ at finite twist is not a HW ket, so the leading-order untwisting needs a cleaning step; (ii) in \nb{Clean-CG-combinations} the cleaning is done by top-killed $(X^B-X^{\rm top})\langle\Om|\Psi_B\rangle$ and structurally cleaned insertion combinations (all ten reps $[\lambda_1,\lambda_2,0]$ with $\lambda_1\le5$, $\lambda_1>\lambda_2>0$; fitted coefficients, closed forms open; the adjoint derived analytically in \nb{Adjoint-clean-analytic.wb}, $\beta=h(2t-3)/(t-1)$ with $t=\theta_{12}/h$). This layer has \textbf{not been run with the $\det_6\times\det_2$ family}: it requires the untwisting limit of the chain points (do $y_k$ and the torus survive as free CG-generating parameters? the old note \nb{xxx-210-cg-test.tex}, Result 3, found that $k_1,k_2$ survived as generating-function variables while $\theta_1$ and $h$ dropped out) and the cleaning of the $E_{13}$-direction contributions. Here the leading untwisting orders per weight (adjoint $\varepsilon^0,\ldots,\varepsilon^4$, Section~\ref{sec:mech}) are a secondary check only.
+
+\paragraph{Pointers.} \nb{Clean-CG-combinations.md/.tex/.pdf}; \nb{Adjoint-clean-analytic.wb}; the \nb{Minimal-ingredients-*-EH.wb} notebooks and \nb{Clean-coeffs-210-EH.wb}, \nb{Clean-coeffs-310-EH.wb}, \nb{Clean-coeffs-410-EH.wb}; \nb{Two-rotations-det-overlap.md} \S6 (open questions); the 2026-09-19 twist-reconstruction thread (a single per-site $E_{31}$ rotation completes adj$^{\otimes2}$), cited from \nb{xxx-210-cg-test.tex}, Remark after Result ``a hypothetical fix''.
+
+%======================================================================
+\section{Open problems and suggested next steps}\label{sec:open}
+
+\begin{enumerate}
+\item \textbf{$[3,2,0]$-type reps ($\lambda_2\ge2$, $d=1$ in particular).} The $\theta_1-\lambda_1h$ recipe gives only point B; the site-2 recipe is empty (Section~\ref{sec:320}). Find the missing covector(s) for $[4,4,2]$ (site weight $(1,2,2)$, one direction): the dual/LW construction was tried (the LW frame does not repair it); products of insertions at both sites (spec \S11 A3: $T_\lambda(\theta_1-3h)\cdot T_\mu(\theta_2+mh)$, shapes at $\theta_1-h$, $\theta_1$, $\theta_1+h$) are untested; ``every product point is rotation $\otimes$ $\mathfrak n_+$-dressed rotation; generic dressing $\Rightarrow$ complete'' is the untested conjecture of A3.
+\item \textbf{$[4,2,0]$} (dim 27): which $k$ survive (prediction $k=3,4$; Section~\ref{sec:chain}), per-weight spans, HW determination.
+\item \textbf{Dressing polynomials.} Closed forms of $\beta/\alpha$ for $[3,1,0]$ point B (six fitted values; the $[3,2,0]$ fit $b=\frac{6125}{5676}w_2/((w_2-z_3)(y^*-z_3))$ is a lead), the coefficients of the minimal monomial sets for $[4,1,0]$ ($k=2$: 9, $k=3$: 7, $k=4$: 3 monomials), and the general $c_k(y)$ curve from the $\det_2$ residue expansion with the $\tau$-dictionary of Section~\ref{sec:dict} (the dictionary is known only for $[3,1,0]$; for $[3,2,0]$, $[4,1,0]$ the curves were fitted to $\mathrm{span}\{1,\tau_\lambda\}$).
+\item \textbf{Q-side reading of CG coefficients} (layers 2 and 3): put the $k=2$ point of $[3,1,0]$ through the Clean-CG pipeline; the untwisting of the family.
+\item \textbf{$[4,1,0]$ reproducibility:} rerun \nb{L2-410-two-rotations.wb} in VS Code so the outputs are stored (cell 26 holds the numbers).
+\item \textbf{Remaining numeric points:} the Q-side checks at the other two numeric points ($h=1/3$; $\theta=(1/5,-4/9)$) for $[3,1,0]$ (\nb{L2-310-two-rotations.md}, Open); the determinant identities of the chain are checked at P1 only for $[3,2,0]$ and $[4,1,0]$.
+\item The spec \S12 22-operator span for A2 timed out (untested); the 19-operator evidence is modular only.
+\end{enumerate}
+
+%======================================================================
+\appendix
+\section{Appendix}
+
+\subsection{Notebook and cell map}\label{app:map}
+All notebooks are in \nb{Paul/Mathematica/new-conventions/}; cells are 1-based.
+\begin{center}\small
+\begin{longtable}{@{}p{4.7cm}p{5.1cm}p{6.3cm}@{}}\toprule
+result & notebook & cells\\\midrule\endhead
+adjoint: setup, undo exactness, HW kets, per-weight ranks, closed forms, $(0,1,2)$ component, untwisting, HW count, torus, summary & \nb{L2-rotation-sov.wb} & 113 (intro), 114 (12.1), 115 (12.2), 116 (12.3--12.5), 117 (12.6), 118 (12.6b), 119 (12.7), 120 (12.8, 12.9), 121 (12.9b), 122 (result Grid), 123 (markdown summary)\\
+family $\mathcal V$, torus $=$ character, general rotation & \nb{L2-rotation-sov.wb} & 106 ($y$ free), 108 (torus), 109 (fresh $w_1$), 110 (no iteration), 111 (generic $g$), 112\\
+$[3,1,0]$ B: undo, ranks, HW count, $3\times3$, result & \nb{L2-310-two-rotations.wb} & 24 (intro), 25 (six $w_2$, $\beta/\alpha$), 26 (undo), 27 (HW kets), 28 (ranks), 29 (HW count), 30 (extra controls), 31 ($3\times3$), 32 (result Grid), 33 (markdown)\\
+$[3,1,0]$ LW frame, point A undo & \nb{L2-310-two-rotations.wb} & 34 ($m,s$), 35 (LW kets), 36 (LW ranks), 37 (A records), 38 ($v_{2,A}$), 39 (A ranks), 40 (A torus HW), 41 (result Grid), 42 (markdown)\\
+$[3,1,0]$ A1: dressing of A, $\det_2$ identification, Q-dictionary & \nb{L2-310-two-rotations.wb} & 43 (intro), 44--48 (records, dressing spans), 49--53 (polynomial, minors, curves, general form, Cramer), 54--60 (degeneracies, $\tau$-dictionary, end-to-end 56), 61--63 ($\beta,\gamma$), 64 (result Grid), 65 (markdown)\\
+$[3,1,0]$ pole-subset scan & \nb{L2-310-two-rotations.wb} & 66--69, 70 (result)\\
+$[3,1,0]$ Q-side for B, product points & \nb{L2-310-two-rotations.wb} & 5--13 (localization, locus, factors), 15--23 (Q-side, triple, $\det_2$ curve, end-to-end 21); \nb{L2-310-two-rotations.md}\\
+$[3,2,0]$ localization, point, factors, undo, ranks, HW, LW & \nb{L2-320-two-rotations.wb} & 1--21 (21 summary): 5 localization, 6--9 locus, 11 six $w_2$, 12 undo, 13 ranks, 14 HW fixed, 15--16 torus, 17 $3\times3$ and $b$ fit, 18--19 LW and per-irrep, 20 result Grid\\
+$[3,2,0]$ A2 site-2 recipe & \nb{L2-320-two-rotations.wb} & 22--32 (32 summary)\\
+$[3,2,0]$ Q-side, triple, minor, scan & \nb{L2-320-two-rotations.wb} & 33--41 (41 summary): 34--35 Q-side, 36 triple, 37 minor, 38 curves, 39 end-to-end, 40 scan\\
+$[4,1,0]$ everything & \nb{L2-410-two-rotations.wb} & 1--26: 5 localization, 6--8 locus and factors, 9--16 pipeline, undo, ranks, HW, torus; 17--23 Q-side, triple, minors, pole-set scan (22), end-to-end (23); 24 chain Grid; 25 dressing; 26 markdown (all numbers; outputs not stored)\\\bottomrule
+\end{longtable}
+\end{center}
+
+\subsection{Checks summary}
+\begin{itemize}
+\item Adjoint, \nb{L2-rotation-sov.wb} \S12: all Boolean \texttt{12.x} checks True (cell 122, last row).
+\item $[3,1,0]$: undo exact on 10 HW kets for all six $w_2$ (cells 26--27, 35); $3\times3$ identity symbolic including symbolic $z$; end-to-end $5.1\cdot10^{-45}$ (B), $5\cdot10^{-45}$ (A); Cramer $t_1,t_2\le2\cdot10^{-46}$; $\tau\leftrightarrow$ Wronskian $\le3\cdot10^{-46}$; 11 subsets in span $5\cdot10^{-46}$.
+\item $[3,2,0]$: 56 Boolean checks pass (cell 21); Baxter $4.5\cdot10^{-43}$; end-to-end $1.2\cdot10^{-44}$; 11 subsets in span $\le5\cdot10^{-46}$; A2: Gr\"obner modular only.
+\item $[4,1,0]$: 53 Boolean checks pass (cell 26); end-to-end $6.1\cdot10^{-43}$; 26 subsets in span $\le3.3\cdot10^{-43}$, rationalization $\le3\cdot10^{-53}$.
+\item Independent sympy check while writing (not a notebook cell): the formulas for $a',b',c'$, the vanishing of the lower entries of $n'$, $b'/(a'c')=(y-\omega)/(y-z_2)$, and $b'|_{\omega=y}=0$, with $(z_1,z_2,z_3,w_1,y,\omega)$ symbolic.
+\end{itemize}
+
+\subsection{Tooling notes}\label{app:tool}
+\begin{itemize}
+\item \textbf{Shared kernel K1.} Private kernels (K310, K2) cannot start on this machine; every notebook ends up on the shared default kernel K1, and the first cell of each notebook does a \texttt{ClearAll}, which wipes the other notebooks' live state (files intact). At the end of 2026-10-09, per HANDOFF: K1 held \nb{L2-320-two-rotations.wb} (all cells live); \nb{L2-rotation-sov.wb} and \nb{L2-310-two-rotations.wb} live state wiped (files saved: 123 and 70 cells; HANDOFF's ``42'' predates the A1/A3 cells). Rebuild for \nb{L2-rotation-sov.wb} \S12: cells 2--21 plus the text of \nb{oneSiteVac}/\nb{w2Of}; cells 63--111 need their own cells.
+\item \textbf{Controller association.} For \nb{L2-320-two-rotations.wb} and \nb{L2-410-two-rotations.wb} the agent had to associate the notebook controller through the wolfbook stdio bridge (320: succeeded, K1 restarted once; 410: failed, cells evaluated by \texttt{ToExpression} of the saved sources, \textbf{outputs not stored}).
+\item \textbf{The \texttt{y*)} comment gotcha.} The string \texttt{y*)} inside a \texttt{(* ... *)} comment closes the comment; write \texttt{yStar} or \texttt{yS} in comments. It bit cell 12 of the $[3,1,0]$ notebook twice on 2026-10-09 (memory note exists).
+\item \textbf{Memoized definitions.} After fixing a definition re-run everything downstream; the pipeline cells use fresh definitions (no shared memo) at explicit $(h,\theta,z,w)$.
+\item The 410 notebook's output cells are empty; the stable summaries are the result Grid cells (32, 41, 64, 70 of the $[3,1,0]$ notebook; 20 of the $[3,2,0]$ notebook) and the markdown result cells (33, 42, 65, 70; 21, 32, 41; 26).
+\end{itemize}
+
+\subsection{Source inconsistencies found while compiling, and how they were resolved}
+\begin{enumerate}
+\item \textbf{Spec \S3(iii) sign} of the $(0,1,2)$ component ($-b'(b'+a'c')$ predicted, $3b'(a'c'-b')$ found): the notebook (cell 118, exact) wins; spec \S6 and cell 123 record the correction.
+\item \textbf{Spec \S5 ``the dressing only adds''}: false for $[3,1,0]$ point B (12/15, not 15/15); corrected by spec \S8 and cell 33. Same for $[3,2,0]$.
+\item \textbf{Spec \S7 ``10 distinct weights''} for $[3,1,0]$: it is 12 (spec \S8, cell 33).
+\item \textbf{Spec \S9 ``A is not on the $\det_2$ curve''}: true only for the pole set $\{0..3\}$; A is a $\det_2$ over $\{0,1,2\}$ with minor $W(3,4)$ (spec \S13).
+\item \textbf{Spec \S14 conjecture} (dressing order $\lambda_1-k+1$; only $k<\lambda_1$ complete; 15 HW states for $[4,1,0]$): corrected by \S16 to $E_{13}$-degree $\lambda_1-k$, only $k=2$ complete, 14 HW states.
+\item \textbf{HANDOFF} says the $[3,1,0]$ notebook has 42 cells (``files saved: 123 and 42 cells''), while the spec cell references run to cell 70 and the file has 70 cells (A1 and A3(i) were added later the same day); the HANDOFF figure refers to an earlier moment.
+\item \textbf{$t=\theta_{12}$ versus $t=\theta_{12}/h$.} The adjoint notes (\nb{Two-rotations-det-overlap.md} \S1, \nb{Clean-CG-combinations.md}) write $t:=\theta_{12}/h=62/35$; the $[3,1,0]$/$[4,1,0]$ notebooks, spec \S13 and the formulas for $K$, $C_\lambda$ use $t=\theta_{12}=31/35$ (consistent with $y^*=w_2(\theta_{12}-h)/(\theta_{12}-3h)=-63/43$). This note writes $\theta_{12}$ explicitly wherever it matters.
+\item \textbf{$\omega_2$ rotRank.} The second site-2 direction $\omega_2$ at $\theta_1-\lambda_1h$ has rotRank 5 for $[3,2,0]$ (cells 6, 21) and rotRank 4 for $[4,1,0]$ (cell 26) and is a rotation for the adjoint ($\Om_{(w_1,z_2)}$, \nb{Two-rotations-det-overlap.md} \S5.2); for $[3,1,0]$ it is ``a rotation, pencil inside the orbit'' (\nb{L2-310-two-rotations.md}). Spec \S12 reports a different $\omega$ (at the site-2 points $\theta_2+mh$) with rotRank 4 and $\omega'$ with rotRank 7. These are different directions at different insertion points, not a contradiction; HANDOFF's ``$\omega_2$ of rotRank 5'' refers to $[3,2,0]$ at $\theta_1-3h$.
+\item \textbf{$[3,2,0]$ rotation placement.} Spec \S10 says ``site 1 $=$ pure rotation'' and the undo is ``of the site-1 rotation'' (so $\varphi$ lands on site 2); in $[3,1,0]$ the rotation is on site 2. Consistent via the flip symmetry of $V\otimes V$; the site carrying the CG vector is site 2 for $[3,2,0]$ and site 1 for the others.
+\item \textbf{``Total rank (15)'' rows} in the $[3,1,0]$/$[3,2,0]$ per-weight Grids are ranks of a $6\times15$ matrix (capped at 6); not used.
+\item \textbf{Not found in the sources} (not guessed): the vacuum $q$-degrees for $[3,2,0]$; the outcome of the A2 22-operator span (timed out); $\beta/\alpha(w_2)$ at the twelve extra random $w_2$ of the $[3,1,0]$ check (stated only as ``also 12 random $w_2$''); the Q-side checks of $[3,1,0]$ at the two other numeric points; the $T$-eigenvalue dictionary (single Wronskians, $C_\lambda$) for reps other than $[3,1,0]$; stored outputs of \nb{L2-410-two-rotations.wb}.
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,304 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\emergencystretch=3em
+
+\newcommand{\vacL}{\langle\mathrm{vacL}|}
+\newcommand{\vacR}{|\mathrm{vacR}\rangle}
+\newcommand{\qmin}{\operatorname{qminor}}
+\newcommand{\nb}[1]{\texttt{#1}}
+
+\theoremstyle{definition}
+\newtheorem{result}{Result}
+\newtheorem{conjecture}{Conjecture}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{Two sites: the scalar product, $\kappa_2$, and the functionals\\
+$\langle k_1^{u/h}Q_1\rangle$, $\langle k_2^{u/h}Q_{12}\rangle$ in the gl(3) XXX chain at $L=2$}
+\author{Notes accompanying \nb{L2-mathcalA.wb}}
+\date{2026-09-23}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We take the twisted rational gl(3) chain with two sites, both in the same representation $V_\lambda$ with $\lambda=[\lambda_1,\lambda_2,0]$. The reps tested are $[2,1,0]$, $[3,1,0]$ and $[3,2,0]$. Eigenstates are normalized against products of the one-site reference states of \nb{L1-mathcalA.wb}. We establish four results.
+\begin{enumerate}
+\item The physical scalar product $\langle\Psi_A|\Psi_B\rangle$ equals a $6\times6$ functional-SoV determinant, divided by products of the $L=1$ reference factors, times a single constant $\kappa_2$.
+\item $\kappa_2$ has a closed form: $\kappa_1^2$ times $\big[\prod_{n=-\lambda_1}^{\lambda_1}(\theta_{12}-nh)\big]^3/(e_1-e_2)^3$, up to a sign and a power of $h$.
+\item The functional $\langle k_1^{u/h}Q_1\rangle$, with the $L=1$ measure placed on site~1 only, is the overlap with $\langle v_1|\otimes\vacL$. Here $v_1$ is exactly the $L=1$ covector.
+\item The functional $\langle k_2^{u/h}Q_{12}\rangle$ is taken with a measure that has site-1 poles only and carries an extra site-2 factor $\prod_{n=\lambda_2+1}^{\lambda_1}(u-\theta_2-nh)^{-1}$. The product of the two functionals is then the overlap of $\langle v_1|\otimes\vacL$ with $\sum_m(-1)^m\binom{\lambda_2}{m}k_2^m\,t^{(1)}_{\{m,m\}}(\theta_1)\otimes1$. This is exactly the $L=1$ formula, with the site-1 transfer matrices.
+\end{enumerate}
+Each claim is marked as proved, verified, fitted or conjectured.
+\end{abstract}
+
+\tableofcontents
+
+%======================================================================
+\section{Setup and conventions}\label{sec:setup}
+
+Conventions are those of \nb{L1-mathcalA.wb} (see \nb{L1-mathcalA.tex}), applied on each site.
+
+\paragraph{Chain.}
+There are two sites with inhomogeneities $\theta_1,\theta_2$ and shift $h$. Both sites carry $V_\lambda$ with $\lambda_3=0$. The generators are in the Gelfand--Tsetlin basis, with the highest-weight vector $e_1$ first. The space is $V_\lambda\otimes V_\lambda$, ordered row-major: $E^{(1)}=E\otimes1$ and $E^{(2)}=1\otimes E$. Then
+\begin{equation}
+\mathcal L_{ij}(u)=u\,\delta_{ij}-hE_{ji},\qquad
+T_{ij}(u)=\sum_k\mathcal L^{(1)}_{ik}(u-\theta_1)\,\mathcal L^{(2)}_{kj}(u-\theta_2),\qquad G=\operatorname{diag}(z_1,z_2,z_3),
+\end{equation}
+with a unimodular twist, $z_1z_2z_3=1$.
+
+\paragraph{Transfer matrices.}
+In the quantum minors the rows are antisymmetrized and the $k$-th column is evaluated at $u-(k-1)h$. The twisted transfer matrices are $t^G_a(u)=\sum_{|I|=a}z_I\,\qmin_{I,I}(u)$. They are polynomials in $u$ of degree $2a$, and $t^G_3=z_1z_2z_3\,\nu_1(u-2h)\nu_2(u-h)\nu_3(u)$. We use two kinds of $\nu$:
+\begin{equation}
+\nu_n(u)=\prod_{s=1}^2\big(u-\theta_s-h\lambda_n\big),\qquad \nu^{(s)}_n(u)=u-\theta_s-h\lambda_n .
+\end{equation}
+Here $\nu_n$ is the full chain and $\nu^{(s)}_n$ is site $s$ alone. We also write $\theta_{12}=\theta_1-\theta_2$ and $e_s=e^{2\pi i\theta_s/h}$.
+
+\paragraph{Reference states and normalization.}
+The one-site $\vacL$ and $\vacR$ are those of \nb{L1-mathcalA.wb}. With free parameters $p_1,p_2$,
+\begin{equation}
+\vacL=e_1^Te^{p_1E_{12}}e^{p_2E_{13}}e^{p_3E_{23}},\quad p_3=\tfrac{p_2(z_3-z_1)}{p_1(z_2-z_3)};\qquad
+\vacR=e^{r_1E_{32}}e^{r_2E_{31}}e^{r_3E_{21}}e_1,
+\end{equation}
+with $r_1,r_2,r_3$ as in \nb{L1-mathcalA.tex}. The eigenstates $|\Psi_A\rangle$ are the joint right eigenvectors of $t^G_{1,2}$, and the $\langle\Psi_A|$ are the rows of the inverse eigenvector matrix. They are normalized by
+\begin{equation}
+\big(\vacL\otimes\vacL\big)|\Psi_A\rangle=1,\qquad \langle\Psi_A|\big(\vacR\otimes\vacR\big)=1 .
+\end{equation}
+With this normalization, $\langle\Psi_A|\Psi_B\rangle$ is diagonal but not the identity.
+
+\paragraph{Q-functions.}
+For each state of weight $\mu$,
+\begin{equation}
+Q_i(u)=z_i^{u/h}q_i(u),\quad\deg q_i=2\lambda_1-\mu_i,\qquad Q^j(u)=z_j^{-u/h}q^j(u),\quad\deg q^j=\mu_j .
+\end{equation}
+Here $q_i$ and $q^j$ are the monic solutions of the direct and dual Baxter equations of \nb{L1-mathcalA.tex}, with the $L=2$ values of $\nu$ and $t_a$. We also use $Q_{12}(u)=Q_1(u)Q_2(u-h)-Q_2(u)Q_1(u-h)$.
+
+\paragraph{Numerical points.}
+The eigenvectors are computed at 100 digits, and the Baxter equations are solved by least squares. The switch \nb{ptIndexT} selects one of three points:
+\begin{center}
+\begin{tabular}{cccccc}\toprule
+point & $h$ & $(\theta_1,\theta_2)$ & $\theta_{12}$ & $z$ & $(p_1,p_2)$\\\midrule
+1 & $1$ & $(\tfrac13,-\tfrac8{57})$ & $\tfrac9{19}$ & $(\tfrac52,\tfrac73,\tfrac6{35})$ & $(\tfrac35,\tfrac47)$\\
+2 & $\tfrac12$ & $(\tfrac27,-\tfrac3{11})$ & $\tfrac{43}{77}$ & $(\tfrac32,\tfrac54,\tfrac8{15})$ & $(\tfrac23,\tfrac57)$\\
+3 & $\tfrac34$ & $(\tfrac5{13},\tfrac19)$ & $\tfrac{32}{117}$ & $(2,\tfrac37,\tfrac76)$ & $(\tfrac35,\tfrac47)$\\\bottomrule
+\end{tabular}
+\end{center}
+Point 1 is point 1 of \nb{L1-mathcalA.wb}, with a second inhomogeneity added. The site rep is set by \nb{repT}. The chain dimension is 64 for $[2,1,0]^{\otimes2}$ and 225 for $[3,1,0]^{\otimes2}$ and $[3,2,0]^{\otimes2}$. All nine (rep, point) combinations were run. The transfer-matrix eigenvector residuals are ${\lesssim}10^{-95}$ and the Baxter residuals ${\lesssim}10^{-89}$.
+
+%======================================================================
+\section{The scalar product}\label{sec:sp}
+
+\paragraph{Determinant.}
+Every bracket is a single contour around all the poles
+\begin{gather}
+x_r\in\{\theta_s+nh:\ s=1,2,\ n=\lambda_3,\dots,\lambda_1\},\\
+\langle f\rangle_\alpha=\sum_r w_r\,e^{2\pi i(\alpha-1)x_r/h}f(x_r),\qquad w_r=\prod_{r'\neq r}\frac{1}{x_r-x_{r'}} .
+\end{gather}
+So $w_r$ are the residues of $1/\prod(u-x_r)$. For the adjoint these poles are exactly the poles of $1/(\nu_1\nu_2\nu_3)$. The $6\times6$ matrix $N^{AB}$ has
+\begin{itemize}
+\item rows $(\alpha,i,j)$, with $\alpha\in\{1,2\}$ and $(i,j)\in\{(1,3),(1,2),(2,3)\}$ (the triple of \nb{L1-orthogonality-} \nb{diagonal-frame.wb}), and
+\item columns $(\beta,\cdot)$, with $\beta\in\{0,1\}$, given by $\langle u^\beta\{-Q^j_AQ_{i,B},\ Q^j_AQ_{i,B}(u-h),\ Q^j_A(u+h)Q_{i,B}\}\rangle_\alpha$.
+\end{itemize}
+The layout (one contour around both ladders, with the periodic label $\alpha$ in place of per-site sums) is that of \nb{old/XXX/Experiments/} \nb{SU3\_L2\_Baxter\_Twisted\_Final.wb}.
+
+\paragraph{References.}
+The references are the $L=1$ factors of \nb{L1-orthogonality-diagonal-frame.wb}, multiplied over sites. They are not extracted from the determinant.
+\begin{align}
+\Psi^{\rm ref}_B&=\prod_{s=1}^2Q_1(\theta_s+\lambda_2h)\,Q_{12}(\theta_s),\\
+c^{\rm ref}_A&=\prod_{s=1}^2Q^3(\theta_s+\lambda_2h)\big[Q^3(\theta_s+\lambda_1h)Q^2(\theta_s+(\lambda_1+1)h)-Q^2(\theta_s+\lambda_1h)Q^3(\theta_s+(\lambda_1+1)h)\big].
+\end{align}
+
+\begin{result}[verified, all 3 reps $\times$ 3 points]\label{res:sp}
+\begin{equation}
+\langle\Psi_A|\Psi_B\rangle=\kappa_2\,\frac{\det N^{AB}}{c^{\rm ref}_A\,\Psi^{\rm ref}_B}\qquad\text{for all pairs }(A,B),
+\end{equation}
+with a single constant $\kappa_2$. It is fixed by $\langle\Omega|\Omega\rangle=1$, where $\Omega=e_1\otimes e_1$ is the unique state of weight $2\lambda$. The largest error $|S_Q-\langle\Psi_A|\Psi_B\rangle|$, relative to $\max_A|\langle\Psi_A|\Psi_A\rangle|$, ranges from $10^{-83}$ to $10^{-98}$ over the nine runs. The off-diagonal determinants vanish, which is orthogonality.
+\end{result}
+
+%======================================================================
+\section{The constant $\kappa_2$}\label{sec:kappa}
+
+\paragraph{Method (exact).}
+Only $\Omega$ enters, because $\kappa_2=c^{\rm ref}_\Omega\Psi^{\rm ref}_\Omega/\det N^{\Omega\Omega}$. Its eigenvalues $t_a(u)$ are computed with symbolic $z,\theta_1,\theta_2,h$. Its Baxter equations are then solved exactly at each rational point, with symbolic exponentials $z_i^{\theta_s/h}\to Z_{i,s}$ and $e^{2\pi i\theta_s/h}\to e_s$; the integer part of each pole is kept explicit. The fully symbolic $6\times6$ determinant has about $2\times10^6$ leaves and could not be simplified in 9 minutes, so the determinant is taken at exact rational points instead. All $Z_{i,s}$ cancel. At point 1 the exact value agrees with the numerical $\kappa_2$ of Section~\ref{sec:sp} to $10^{-87}$ (adjoint).
+
+\begin{result}[exact at 3 points per rep; the sign and the power of $h$ are fitted]\label{res:kappa}
+With the $L=1$ constant
+\begin{equation}
+\kappa_1=\frac{(\lambda_1!)^3}{(z_2-z_1)^{\lambda_1-\lambda_2}(z_1-z_3)^{\lambda_1-\lambda_3}(z_2-z_3)^{\lambda_2-\lambda_3}}
+\end{equation}
+of \nb{L1-orthogonality-diagonal-frame.wb},
+\begin{equation}
+\kappa_2=(-1)^{\lambda_1+1}\,h^{6\lambda_1}\,\kappa_1^2\,\frac{\Big[\prod_{n=-\lambda_1}^{\lambda_1}(\theta_{12}-nh)\Big]^3}{(e_1-e_2)^3}.
+\end{equation}
+\end{result}
+
+\paragraph{How it was found.}
+At point 1, for the adjoint, $\kappa_2(e_1-e_2)^3/\kappa_1^2$ is the rational number $-2^9 3^6 5^3 7^3 29^3 47^3/19^{15}$. With $\theta_{12}=9/19$ this is exactly $-[\theta_{12}(\theta_{12}^2-1)(\theta_{12}^2-4)]^3$: the primes $47,29,28,10,9$ correspond to $\theta_{12}+2,\theta_{12}-2,\theta_{12}+1,\theta_{12}-1,\theta_{12}$. The power of $h$ was then read off point 2 and predicted at point 3. The table lists $\kappa_2$ divided by the shape $\kappa_1^2[\prod(\theta_{12}-nh)]^3/(e_1-e_2)^3$:
+\begin{center}
+\begin{tabular}{lccc}\toprule
+rep & point 1 ($h=1$) & point 2 ($h=\tfrac12$) & point 3 ($h=\tfrac34$)\\\midrule
+$[2,1,0]$ & $-1$ & $-1/4096=-h^{12}$ & $-531441/16777216=-h^{12}$\\
+$[3,1,0]$ & $+1$ & $1/262144=h^{18}$ & $387420489/68719476736=h^{18}$\\
+$[3,2,0]$ & $+1$ & $h^{18}$ & $h^{18}$\\\bottomrule
+\end{tabular}
+\end{center}
+The product structure holds for all nine combinations. The sign $(-1)^{\lambda_1+1}$ and the power $h^{6\lambda_1}$ fit only two values of $\lambda_1$, and $[3,1,0]$ and $[3,2,0]$ give identical values. So the $\lambda_2$-dependence is carried entirely by $\kappa_1^2$, but it has not been tested independently. The $z$-dependence ($\kappa_1^2$) is tested with three twists per rep. A fully symbolic proof is open.
+
+%======================================================================
+\section{The first factor: $\langle k_1^{u/h}Q_1\rangle$}\label{sec:first}
+
+\paragraph{Definition.}
+This is the definition of \nb{L1-mathcalA.tex}, with the measure built from site~1 only. Write $d=\lambda_1-\lambda_2$. There are no $\theta_2$ poles.
+\begin{equation}
+\mathcal A_A=\langle k_1^{u/h}Q_1\rangle=\frac{N_n}{f(\theta_1+\lambda_2h)}\oint\frac{f(u)\,du}{\prod_{k=0}^{d}\nu^{(1)}_1(u+kh)},\qquad f=k_1^{u/h}Q_1^A .
+\end{equation}
+The poles are $\theta_1+nh$ with $n=\lambda_2,\dots,\lambda_1$, and $N_n=(-1)^dd!\,h^d$. The functional is a $d$-th finite difference and a polynomial of degree $d$ in $k_1$ (proved, as at $L=1$). For the adjoint, $\mathcal A_A=1-k_1z_1\,q_1(\theta_1+2h)/q_1(\theta_1+h)$, with the $L=2$ polynomial $q_1$.
+
+\begin{result}[verified, all 3 reps $\times$ 3 points]\label{res:first}
+\begin{equation}
+\mathcal A_A=\big(\langle v_1|\otimes\vacL\big)|\Psi_A\rangle,\qquad
+\langle v_1|=(1-k_1z_1)^{\lambda_1-\lambda_2}\,e_1^Te^{p_1'E_{12}}e^{p_2E_{13}}e^{p_3E_{23}},\quad p_1'=p_1\frac{1-k_1z_2}{1-k_1z_1},
+\end{equation}
+with $p_3$ held at its $\vacL$ value. So $v_1$ is exactly the $L=1$ covector of \nb{L1-mathcalA.tex} on site~1, and site~2 stays in the vacuum. The covector $v$ fitted from $v\cdot\Psi_A=\mathcal A_A$ equals this closed form at every order in $k_1$, to $10^{-88}$--$10^{-92}$. At $k_1=0$ it is $\vacL\otimes\vacL$. The smallest $|Q_1(\theta_1+\lambda_2h)|$ over the states is about $0.02$ (adjoint, point 1).
+\end{result}
+
+%======================================================================
+\section{The second factor: $\langle k_2^{u/h}Q_{12}\rangle$}\label{sec:second}
+
+\paragraph{Site-1 fused transfer matrices.}
+These are the twisted transfer matrices of site~1 alone, $t^{(1)}_a(u)=\sum_{|I|=a}z_I\qmin^{(1)}_{I,I}(u)$ with $T^{(1)}_{ij}(u)=(u-\theta_1)\delta_{ij}-hE_{ji}$. They are normalized as in \nb{L1-mathcalA.tex}, but with $\nu^{(1)}_1$:
+\begin{align}
+t^{(1)}_{\{1,1\}}(u)&=\frac{t^{(1)}_2(u)}{\nu^{(1)}_1(u)\,\nu^{(1)}_1(u-h)},&
+t^{(1)}_{\{2,2\}}(u)&=\frac{t^{(1)}_2(u)\,t^{(1)}_2(u+h)-t^{(1)}_3(u+h)\,t^{(1)}_1(u)}{\nu^{(1)}_1(u)\,\nu^{(1)}_1(u-h)\,\nu^{(1)}_1(u+h)\,\nu^{(1)}_1(u)} .
+\end{align}
+They act on the chain as $t^{(1)}\otimes1$. They do not commute with the $L=2$ transfer matrices, so they only make sense acting on the covector.
+
+\paragraph{The functional.}
+The contour encloses only $\theta_1,\theta_1+h,\dots,\theta_1+\lambda_2h$. The measure is
+\begin{equation}\label{eq:measure}
+m(u)=\frac{p(u)}{\prod_{k=0}^{\lambda_2}\nu^{(1)}_3(u-kh)},\qquad
+p(u)=\prod_{n=\lambda_2+1}^{\lambda_1}\frac{1}{u-\theta_2-nh}=\prod_{k=0}^{\lambda_1-\lambda_2-1}\frac{1}{\nu^{(2)}_1(u+kh)} ,
+\end{equation}
+where $p$ has no poles inside the contour. The functional is normalized so that the $\theta_1$ term equals 1:
+\begin{equation}\label{eq:F}
+\langle k_2^{u/h}Q_{12}\rangle_m=\sum_{m=0}^{\lambda_2}(-1)^m\binom{\lambda_2}{m}k_2^m\,\rho_m\,Y_{m,A},\qquad
+\rho_m=\frac{p(\theta_1+mh)}{p(\theta_1)},\quad Y_{m,A}=\frac{Q_{12}(\theta_1+mh)}{Q_{12}(\theta_1)} .
+\end{equation}
+This finite-difference form is exact for any $p$ without poles inside the contour (proved). $Q_{12}(\theta_1)\neq0$ for every state; its smallest value over the states is about $0.07$ (adjoint, point 1).
+
+\begin{result}[verified per state; the constants are closed forms, checked at 3 points]\label{res:cm}
+For each $m=0,\dots,\lambda_2$,
+\begin{equation}\label{eq:cm}
+\big(\langle v_1|\otimes\vacL\big)\,t^{(1)}_{\{m,m\}}(\theta_1)\otimes1\,|\Psi_A\rangle=c_m\,\mathcal A_A\,Y_{m,A},\qquad
+c_m=\prod_{n=\lambda_2+1}^{\lambda_1}\frac{\theta_{12}-nh}{\theta_{12}+mh-nh},
+\end{equation}
+with $c_m$ the same for every state and every $k_1$. For the adjoint, $c_1=\nu^{(2)}_1(\theta_1)/\nu^{(2)}_2(\theta_1)=(\theta_{12}-2h)/(\theta_{12}-h)$.
+\end{result}
+
+\begin{result}[verified, all 3 reps $\times$ 3 points]\label{res:second}
+The measure \eqref{eq:measure} gives $\rho_m=c_m$ for every $m$. Hence
+\begin{equation}
+\boxed{\;\langle k_1^{u/h}Q_1\rangle\,\langle k_2^{u/h}Q_{12}\rangle_m=\big(\langle v_1|\otimes\vacL\big)\sum_{m=0}^{\lambda_2}(-1)^m\binom{\lambda_2}{m}k_2^m\;t^{(1)}_{\{m,m\}}(\theta_1)\otimes1\;|\Psi_A\rangle\;}
+\end{equation}
+This is exactly the $L=1$ Result of \nb{L1-mathcalA.tex}, with the site-1 transfer matrices and with no $\theta$-, $h$- or $z$-dependent coefficients. It was checked from the residues of $m(u)$ directly, at every order in $k_1$ and $k_2$.
+\end{result}
+
+\begin{center}
+\begin{tabular}{llcccc}\toprule
+rep & point & $c_m$ ($m=0..\lambda_2$) & spread of $c_m$ & final residual & $\rho_m=c_m$\\\midrule
+$[2,1,0]$ & 1 & $1,\ \tfrac{29}{10}$ & $10^{-83}$ & $10^{-84}$ & yes\\
+ & 2 & $1,\ -\tfrac{68}{9}$ & $10^{-86}$ & $10^{-86}$ & yes\\
+ & 3 & $1,\ \tfrac{574}{223}$ & $10^{-88}$ & $10^{-88}$ & yes\\
+$[3,1,0]$ & 1 & $1,\ \tfrac{24}{5}$ & $10^{-80}$ & $10^{-81}$ & yes\\
+ & 2 & $1,\ -\tfrac{145}{9}$ & $10^{-81}$ & $10^{-82}$ & yes\\
+ & 3 & $1,\ \tfrac{925}{223}$ & $10^{-83}$ & $10^{-87}$ & yes\\
+$[3,2,0]$ & 1 & $1,\ \tfrac{48}{29},\ \tfrac{24}{5}$ & $10^{-77}$ & $10^{-79}$ & yes\\
+ & 2 & $1,\ \tfrac{145}{68},\ -\tfrac{145}{9}$ & $10^{-81}$ & $10^{-82}$ & yes\\
+ & 3 & $1,\ \tfrac{925}{574},\ \tfrac{925}{223}$ & $10^{-83}$ & $10^{-86}$ & yes\\\bottomrule
+\end{tabular}
+\end{center}
+The spread is taken over all states and over $k_1\in\{0,\tfrac17,\tfrac3{11},-3\}$. The final residual is $\max|\mathcal A_A\langle\cdot\rangle_m-\text{rhs}|$ over all coefficients of $k_1,k_2$.
+
+\paragraph{How it was found.}
+\begin{itemize}
+\item \textbf{Adjoint.} With the site-1 measure alone ($p=1$) the relation holds up to one constant, $c_1=29/10$ at point 1. This was identified as $(\theta_{12}-2h)/(\theta_{12}-h)$ and then predicted exactly at points 2 and 3 ($-68/9$ and $574/223$). The measure $p=1/\nu^{(2)}_1(u)$ was then found to absorb it; this is $r/(-k_2)=1$ in the notation of the earlier session.
+\item \textbf{$[3,1,0]$.} The adjoint $p$ fails: it gives $\rho_1=48/29$, while $c_1=24/5=(\theta_{12}-3h)/(\theta_{12}-h)$. No single linear factor produces this ratio, but the product $1/((u-\theta_2-2h)(u-\theta_2-3h))$ does. This fixed the general form \eqref{eq:measure}.
+\item \textbf{$[3,2,0]$} ($\lambda_2=2$). This is a real test. There are two independent constants $c_1,c_2$, and a single $p$ from \eqref{eq:measure} predicted both, $(48/29,\,24/5)$, before they were computed. All points 2 and 3 were predictions too.
+\end{itemize}
+
+\paragraph{Measures that do not work.}
+\begin{itemize}
+\item With the full two-site $1/(\nu_3(u)\nu_3(u-h))$ and the contour around the $\theta_1$ poles, $\rho_1=(\theta_{12}-h)/(\theta_{12}+h)$. This leaves $r=-k_2(\theta_{12}-h)^2/((\theta_{12}+h)(\theta_{12}-2h))$ for the adjoint (verified at point 3).
+\item $p=1/\nu^{(2)}_2(u)$ gives the inverse ratio. It was tried by mistake and is recorded here only as a trap.
+\end{itemize}
+
+\begin{remark}
+Since $p$ enters only through $\rho_m$, any $p$ with the same values at $\theta_1+mh$ works equally well. What is not automatic is that a single, state-independent $p$ matches all $c_m$ at once. Equation \eqref{eq:measure} is the site-2 analogue of the first-factor measure $\prod_{k=0}^{d}\nu^{(1)}_1(u+kh)^{-1}$, with one factor fewer.
+\end{remark}
+
+%======================================================================
+\section{Status and open points}
+\begin{itemize}
+\item \textbf{Proved:}
+  \begin{itemize}
+  \item the finite-difference forms of both functionals, including the $p$-dependence only through $\rho_m$.
+  \end{itemize}
+\item \textbf{Verified numerically} (all 3 reps $\times$ 3 points, $\le10^{-77}$):
+  \begin{itemize}
+  \item Results~\ref{res:sp}, \ref{res:first}, \ref{res:cm}, \ref{res:second};
+  \item the form of $\kappa_2$ (Result~\ref{res:kappa}).
+  \end{itemize}
+\item \textbf{Exact at rational points:} $\kappa_2$.
+\item \textbf{Fitted:}
+  \begin{itemize}
+  \item the sign $(-1)^{\lambda_1+1}$ and the power $h^{6\lambda_1}$ in $\kappa_2$ ($\lambda_1=2,3$ only);
+  \item the general form of $p$, which was read off $[3,1,0]$, point 1, and then predicted for the seven remaining (rep, point) combinations.
+  \end{itemize}
+\item \textbf{Scope:}
+  \begin{itemize}
+  \item $\lambda_3=0$ and $\lambda_2\le2$ only;
+  \item both sites carry the same rep;
+  \item the twist is unimodular;
+  \item the $\lambda_3$-dependence of the pole range in $\kappa_2$ ($\lambda_1$ vs $\lambda_1-\lambda_3$) is not fixed.
+  \end{itemize}
+\item \textbf{Open:}
+  \begin{itemize}
+  \item a derivation of $c_m$ and of $\kappa_2$, rather than fits;
+  \item $\lambda_2=3$ (e.g.\ $[3,3,0]$, $[4,3,0]$), which needs $t_{\{3,3\}}$;
+  \item different reps on the two sites;
+  \item the geometric (Borel--Weil) picture of \nb{L1-mathcalA.tex} at $L=2$.
+  \end{itemize}
+\end{itemize}
+
+\paragraph{Pitfalls met.}
+\begin{itemize}
+\item The fully symbolic $\det N^{\Omega\Omega}$ is too large to simplify. Evaluate it exactly at rational points instead.
+\item Test values $k_1=1/z_1$ make both sides of \eqref{eq:cm} vanish, and the fitted ratio becomes $0/0$ (this happened at point 2 with $k_1=2/3$).
+\item The closed-form $\langle v_1|$ contains $(1-k_1z_2)/(1-k_1z_1)$ inside exponentials. Apply \nb{Together} before comparing coefficients in $k_1$.
+\item The notebook shares its kernel with other XXX-CG notebooks. The switches \nb{repT} and \nb{ptIndexT} persist across runs, and \nb{resultsT} is deliberately never cleared.
+\end{itemize}
+
+%======================================================================
+\section*{Notebook map (\nb{L2-mathcalA.wb})}
+\begin{center}
+\begin{tabular}{rl}\toprule
+cell & content\\\midrule
+1 & summary of the final formulas\\
+2 & GT machinery\\
+3 & chain for \nb{repT} at point \nb{ptIndexT}; $t^G_a$ coefficients by exact interpolation\\
+4 & product references; eigenstates with $\vacL\otimes\vacL$ / $\vacR\otimes\vacR$ normalization\\
+5 & Baxter Q-functions\\
+6--7 & $6\times6$ FSoV determinant vs $\langle\Psi_A|\Psi_B\rangle$ (Result~\ref{res:sp})\\
+8 & exact $\kappa_2$ at the three points (Result~\ref{res:kappa})\\
+9 & first factor (Result~\ref{res:first})\\
+10 & second factor: $c_m$ fit and the measure \eqref{eq:measure} (Results~\ref{res:cm}, \ref{res:second})\\
+11 & ledger \nb{resultsT}, one row per (rep, point)\\\bottomrule
+\end{tabular}
+\end{center}
+To rerun a case, set \nb{repT} and \nb{ptIndexT}, then run cells 3--11. Each run takes about a minute at dimension 225.
+
+\end{document}

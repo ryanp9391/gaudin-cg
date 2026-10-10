@@ -1,0 +1,242 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,hyperref}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{url}
+\Urlmuskip=0mu plus 1mu
+\geometry{margin=1in}
+
+% Write-up for Experiments/SU3_Adjoint_SoV_ScalarProduct_L2.wb.
+% Twisted continuation: SU3_Adjoint_Twisted_SoV_L2.tex.
+
+\newcommand{\Op}{\mathcal{O}}
+\newcommand{\sh}[1]{^{[#1]}}
+\newcommand{\gl}{\mathfrak{gl}}
+\newcommand{\br}[1]{\langle #1\rangle}
+
+\title{Functional separation of variables at zero twist\\
+for the $\gl(3)$ spin chain with two adjoint sites}
+\author{Notes accompanying \texttt{Experiments/SU3\_Adjoint\_SoV\_ScalarProduct\_L2.wb}}
+\date{14 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We construct the functional SoV scalar product for the untwisted rational $\gl(3)$ spin chain of
+length two with adjoint representations $[2,1,0]$ at both sites. This is the first
+non-rectangular case. The transfer matrices are built explicitly on the $64$-dimensional space.
+Their highest-weight eigenvalues depend on three independent differences of integrals of motion,
+compared with two for the rectangular $\gl(4)$ chain. The orthogonality relation therefore gives a
+$3\times3$ matrix. Its determinant vanishes for every pair of distinct states, including the two
+octets, which share their weight, their Casimirs and $T_1$, and it is non-zero for each state.
+With every row integrated over the full contour, the vacuum-normalised norm depends on the
+inhomogeneities, unlike in $\gl(4)$. We compare it with the bilinear norm of the explicit
+eigenvectors. We show that it cannot be converted into that norm by values of the gauge-invariant
+$Q$-functions at pole-ladder points, and we record a bounded search that confirms this.
+\end{abstract}
+
+\tableofcontents
+
+\section{The chain}
+
+Each site carries the $8$-dimensional $\gl(3)$ irrep $\lambda=[2,1,0]$, realised in the
+Gelfand--Tsetlin basis. The generators are taken over unchanged from \texttt{SU4\_L1.wb}; that
+construction works for any rank. With inhomogeneities $\theta_1,\theta_2$ and shift $h$ we set
+$f\sh{\pm2n}(u)=f(u\pm nh)$ and
+\begin{equation}
+L_{ij}(u)=u\,\delta_{ij}-h\,E_{ji},\qquad
+T(u)=L^{(1)}(u-\theta_1)\,L^{(2)}(u-\theta_2).
+\end{equation}
+The transfer matrices are sums of principal quantum minors,
+\begin{equation}
+T_{a,1}(u)=\sum_{|I|=a}\ \sum_{\sigma\in S_a}\operatorname{sgn}\sigma\,
+T_{I_{\sigma1}I_1}(u)\,T_{I_{\sigma2}I_2}(u-h)\cdots T_{I_{\sigma a}I_a}(u-(a-1)h).
+\end{equation}
+With
+\begin{equation}
+\nu_i(u)=(u-\theta_1-h\lambda_i)(u-\theta_2-h\lambda_i),\qquad \lambda=(2,1,0),
+\end{equation}
+we verified the following exactly and symbolically in $u,\theta_1,\theta_2,h$:
+$[T_{a,1}(u),T_{b,1}(v)]=0$, the quantum determinant
+$T_{3,1}=\nu_1\sh{-4}\nu_2\sh{-2}\nu_3$ is central, and every $T_{a,1}$ commutes with the total
+$\gl(3)$ generators.
+
+\section{Highest-weight states and integrals of motion}
+
+The tensor product decomposes as $8\otimes8=27\oplus10\oplus\overline{10}\oplus8\oplus8\oplus1$,
+with highest weights $\{4,2,0\}$, $\{3,3,0\}$, $\{4,1,1\}$, $\{3,2,1\}^{\times2}$ and $\{2,2,2\}$.
+At zero twist the transfer matrices act on each highest-weight space. Only the $\{3,2,1\}$ space
+is two-dimensional.
+
+\paragraph{Operator identities.} As $64\times64$ matrices,
+\begin{align}
+[u^4]T_2&=3,\qquad [u^3]T_2=-6(3h+\theta_1+\theta_2),\\
+[u^2]T_2&=[u^0]T_1+3\big(10h^2+\theta_1^2+3\theta_1\theta_2+\theta_2^2+8h(\theta_1+\theta_2)\big),
+\end{align}
+while $[u^1]T_2$ and $[u^0]T_2$ do not lie in the span of $[u^0]T_1$ and the identity.
+The subleading coefficient of $T_1$ depends only on $\sum\mu_i=6$. Hence, for any two states,
+\begin{equation}
+\Delta T_1=\Delta t_1,\qquad \Delta T_2=\Delta t_1\,u^2+\Delta t_{21}\,u+\Delta t_{20},
+\label{eq:dT}
+\end{equation}
+with three independent constants $(\Delta t_1,\Delta t_{21},\Delta t_{20})$. $T_1$ does not
+distinguish $10$ from $\overline{10}$, nor the two octets. On the octet space, $T_2$ has eigenvalues
+differing by the constant $3h^3\sqrt{4h^2+5(\theta_1-\theta_2)^2}$.
+
+\paragraph{Parameter point.} We take $\theta_1=\tfrac13$, $\theta_2=-\tfrac8{57}$, $h=1$. Then
+$\theta_1-\theta_2=\tfrac9{19}\notin\mathbb Z$ and the square root equals $\tfrac{43}{19}$, so all
+eigenvalues and $Q$-functions are rational. The rational points of $4+5t^2=s^2$ are
+$t=(m-1)(m-5)/(m^2-5)$; we also use $t=-\tfrac7{11}$ and $t=-\tfrac{33}{19}$.
+
+\section{Baxter equations and $Q$-functions}
+
+The finite-difference operators are
+\begin{align}
+\Op&=1-\frac{T_{1}}{\nu_1}\mathcal D^{-1}+\frac{T_{2}}{\nu_1\nu_1\sh{-2}}\mathcal D^{-2}
+-\frac{T_{3}}{\nu_1\nu_1\sh{-2}\nu_1\sh{-4}}\mathcal D^{-3},\\
+\Op^\dagger&=1-\frac{T_{1}\sh{2}}{\nu_3\sh{2}}\mathcal D+\frac{T_{2}\sh{4}}{\nu_3\sh{2}\nu_3\sh{4}}\mathcal D^{2}
+-\frac{T_{3}\sh{6}}{\nu_3\sh{2}\nu_3\sh{4}\nu_3\sh{6}}\mathcal D^{3},
+\end{align}
+and we solve $\Op\,q_i\sh{2}=0$ and $\Op^\dagger q^j=0$. Once the eigenvalues are known these
+equations are linear in $q$. Each has a three-dimensional polynomial kernel. We fix the gauge by
+row reduction from the top degree, so that each solution is monic and has zero coefficient at the
+degrees of the lower solutions. The degrees are
+\begin{equation}
+\deg q_i=(4-\mu_i)+(i-1),\qquad \deg q^j=\mu_j+(3-j),
+\end{equation}
+as listed in Table~\ref{tab:deg}.
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+state & $\deg q_1,q_2,q_3$ & $\deg q^1,q^2,q^3$\\
+\midrule
+$\{4,2,0\}$ & $0,3,6$ & $6,3,0$\\
+$\{3,3,0\}$ & $1,2,6$ & $5,4,0$\\
+$\{4,1,1\}$ & $0,4,5$ & $6,2,1$\\
+$\{3,2,1\}$ (both) & $1,3,5$ & $5,3,1$\\
+$\{2,2,2\}$ & $2,3,4$ & $4,3,2$\\
+\bottomrule
+\end{tabular}
+\caption{Degrees of the gauge-fixed direct and dual Baxter polynomials.}
+\label{tab:deg}
+\end{table}
+
+\section{Measure and the orthogonality relation}
+
+For $\lambda=(2,1,0)$,
+\begin{equation}
+\frac{\Gamma[\nu_1\sh{2}]}{\Gamma[\nu_3\sh{2}]}\ \propto\ \mu(u)=\prod_{\alpha=1}^2\frac{1}{(u-\theta_\alpha)(u-\theta_\alpha-h)},
+\qquad \frac{\mu\sh2}{\mu}=\frac{\nu_1\sh2}{\nu_3\sh2}.
+\end{equation}
+The second relation is what makes $\oint\mu\,g\,\Op f=\oint\mu\,f\,\Op^\dagger g$ hold on a contour
+that encloses all poles. The identity and the quantum determinant cancel in $\Op^A-\Op^B$. With
+$E_2=\mu/(\nu_1\nu_1\sh{-2})=\prod_\alpha\prod_{n=0}^{3}(u-\theta_\alpha-nh)^{-1}$ and
+\eqref{eq:dT}, this gives
+\begin{equation}
+0=\oint E_2\,q^j_A\big(-\Delta T_1\,\nu_1\sh{-2}q_i^B+\Delta T_2\,q_i^{B[-2]}\big)
+=R^{AB}_{i,j}\cdot(\Delta t_1,\Delta t_{21},\Delta t_{20})^{T},
+\end{equation}
+where
+\begin{equation}
+R^{AB}_{i,j}=\Big(\oint E_2\,q^j_A\big(u^2q_i^{B[-2]}-\nu_1\sh{-2}q_i^B\big),\
+\oint E_2\,q^j_A\,u\,q_i^{B[-2]},\ \oint E_2\,q^j_A\,q_i^{B[-2]}\Big).
+\end{equation}
+Since $\theta_1-\theta_2\notin h\mathbb Z$, an $h$-periodic insertion separates the two pole
+ladders $\theta_s+nh$ ($n=0,\dots,3$), so the relation holds for each ladder separately. We
+checked it in its original form, $L_s[\mu\,q^j_A\,\Op^Aq_i^{B[2]}]=0$, for all $30$ ordered cross
+pairs, both ladders and all $(i,j)$: $540/540$.
+
+\section{The $3\times3$ matrix}
+
+\subsection{Rows on one ladder}
+Three rows $(s,i,j)$ stacked give $N^{AB}$ with $N^{AB}\Delta=0$. So $\det N^{AB}=0$ for distinct
+states, and $\det N^{AA}$ is the norm. Of the $816$ triples of rows, $732$ give $\det N^{AA}\neq0$
+for all six states and the remaining $84$ give zero for all six. The simplest working triple uses
+only the ladder of site~1. With
+\begin{equation}
+\br{f}=\oint_{C_1}\frac{du}{2\pi i}\,\frac{f(u)}{\prod_{\alpha}\prod_{n=0}^{3}(u-\theta_\alpha-nh)},
+\end{equation}
+where $C_1$ encircles $\theta_1+nh$, $n=0,\dots,3$, it reads
+\begin{equation}
+N^{AB}=\begin{pmatrix}
+\br{q^1_A(u^2q_1^{B[-2]}-\nu_1\sh{-2}q_1^B)} & \br{q^1_A\,u\,q_1^{B[-2]}} & \br{q^1_A\,q_1^{B[-2]}}\\
+\br{q^2_A(u^2q_1^{B[-2]}-\nu_1\sh{-2}q_1^B)} & \br{q^2_A\,u\,q_1^{B[-2]}} & \br{q^2_A\,q_1^{B[-2]}}\\
+\br{q^1_A(u^2q_2^{B[-2]}-\nu_1\sh{-2}q_2^B)} & \br{q^1_A\,u\,q_2^{B[-2]}} & \br{q^1_A\,q_2^{B[-2]}}
+\end{pmatrix}.
+\end{equation}
+With these rows, all six norms are non-zero and all $30$ cross determinants vanish. No cross matrix
+vanishes identically.
+
+\paragraph{The octets.} The two octets satisfy $T(8_1)-T(8_2)=(0,0,-\tfrac{129}{19})$, so the relation
+forces the third column of $N^{8_18_2}$ to vanish. We find $\operatorname{rank}N^{8_18_2}=2$ and
+\begin{equation}
+\det N^{8_18_1}=\frac{53291113880694676031}{410708765061000000}.
+\end{equation}
+For $8_1$ the functions entering are $q_1=u-\tfrac{434}{285}$,
+$q_2=u^3-\tfrac{41}{19}u^2+\tfrac{49084}{48735}$,
+$q^1=u^5-\tfrac{305}{57}u^4+\tfrac{325295}{9747}u^2-\tfrac{151058891}{8333685}$ and
+$q^2=u^3-\tfrac{84}{19}u^2+\tfrac{104791}{48735}$.
+
+\subsection{Rows over the full contour}
+Integrating every row over both ladders, $R_{i,j}$ vanishes identically exactly when $i<j$, as in
+$\gl(4)$. Of the $84$ triples of the six remaining rows, $19$ give non-zero norms for all six
+states at all three parameter points, and all $19$ give vanishing cross determinants.
+
+\paragraph{Gauge.} The staggering gauge leaves the freedom $q_2\to q_2+a\,q_1$,
+$q_3\to q_3+b\,q_1+c\,q_2$, $q^1\to q^1+d\,q^2+e\,q^3$ and $q^2\to q^2+f\,q^3$. Since $R_{i<j}=0$,
+\begin{equation}
+R_{21}\to R_{21}+a\,R_{11}+d\,R_{22},\qquad R_{32}\to R_{32}+c\,R_{22}+f\,R_{33},
+\end{equation}
+while $R_{11},R_{22},R_{33}$ are invariant. The only invariant triples with non-zero determinant are
+therefore $\mathcal T_a=\{R_{11},R_{21},R_{22}\}$ and $\mathcal T_b=\{R_{22},R_{32},R_{33}\}$.
+$\{R_{11},R_{22},R_{33}\}$ is also invariant, but its determinant vanishes. The two triples are
+exchanged by $10\leftrightarrow\overline{10}$ together with a sign flip on the octets.
+
+\section{Comparison with the Hilbert-space norm}
+
+In the weight sector $\mu_A$ let $\Psi_R$ be the joint null vector of all coefficients of
+$T_a-T_a^A$, and $\Psi_L$ the same for the transposed matrices. Every eigenline is
+one-dimensional, and $\Psi_R$ is the highest-weight vector. In pivot gauge (first non-zero
+component equal to one), $H_A=\Psi_L\cdot\Psi_R$. With $t=(\theta_1-\theta_2)/h$, computed
+symbolically,
+\begin{equation}
+\widehat N_A=\frac{\det\mathcal T_a^{AA}}{\det\mathcal T_a^{\rm vac}}:\qquad
+\widehat N_{10}=\widehat N_{1}=\frac{20}{3(49-25t^2)},\qquad
+\widehat N_{\overline{10}}=\frac{160(t^2-1)}{3(25t^2-49)},
+\end{equation}
+whereas $H=1,2,2,8$ for $\mathrm{vac},10,\overline{10},1$, independent of $\theta_\alpha$ and $h$.
+For the octets $H$ does depend on the parameters: $\tfrac{645}{128},\tfrac{86}{3}$ at $t=\tfrac9{19}$,
+$\tfrac{405}{32},\tfrac{162}{25}$ at $t=-\tfrac7{11}$, and $\tfrac{830}{27},\tfrac{249}{50}$ at
+$t=-\tfrac{33}{19}$ (with $h=\tfrac23$). The reason is that pivot gauge is not adapted to the octet
+plane. None of the $19$ working full-contour triples gives a parameter-independent $\widehat N$.
+
+\paragraph{$Q$-values at special points.} The $\theta_1\leftrightarrow\theta_2$ symmetry holds
+exactly for the gauge-invariant functions $q_1$, $q_{12}=\mathrm{monic}[q_1q_2\sh{-2}-q_1\sh{-2}q_2]$,
+the lowest dual $q^3$, and $q^{23}=\mathrm{monic}[q^2q^{3[2]}-q^{2[2]}q^3]$. It fails for the others.
+For the non-octet states these four functions have only trivial roots ($\theta_\alpha$,
+$\theta_\alpha+2h$) and midpoint roots $(\theta_1+\theta_2+kh)/2$. At points $\theta_\alpha+nh$
+they therefore evaluate to products of $(t\pm k)/2$, and cannot produce the factors $7\pm5t$ of
+$\widehat N$. Consistently, a bounded search of the ansatz
+\begin{equation}
+\widehat N_A\,\frac{\Pi_{\rm vac}}{\Pi_A}=c_A\,H_A,\qquad
+\Pi=q^{a}(x_1)\,q^{bc}(x_2)\,q_1(x_3)\,q_{12}(x_4),
+\end{equation}
+over all dual labels, $x_i\in\{\theta_\alpha+nh:\ n=-2,\dots,4\}$ and both orientations, with
+$c_A$ required independent of $t$, found no solution. The test was numerical: 30 digits, four
+values of $t$, $1254\times168\times2$ candidates.
+
+\section{Summary and open points}
+\begin{enumerate}
+\item The adjoint chain has three independent zero-twist differences of integrals of motion, and
+the $3\times3$ functional determinant proves orthogonality for all states, same-weight octets
+included.
+\item The full-contour vacuum-normalised norm depends on the inhomogeneities and is not a
+$Q$-dressed Hilbert norm in the tested class. A parameter-independent combination of rows, or rows
+with $u^\beta$ insertions, remains to be found.
+\item The relation to the twisted $6\times6$ norm is established in
+\texttt{SU3\_Adjoint\_Twisted\_SoV\_L2}: the present $\mathcal T_a$ matrix is its upper-left minor.
+\end{enumerate}
+
+\end{document}

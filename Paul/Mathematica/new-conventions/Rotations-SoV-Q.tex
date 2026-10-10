@@ -1,0 +1,307 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,longtable,array}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\Om}{\Omega}
+\newcommand{\vac}{\mathrm{vac}}
+\title{Global and local rotations of the SoV vacuum as Q-determinants\\[2pt]\large gl(3) XXX, adjoint, $L=1$ and $L=2$, new conventions --- log of 2026-10-02}
+\author{Paul Ryan (with Claude)}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+\noindent This note logs one thread. It starts from a single-site question (which sums over SoV states give a rotated extremal covector?) and ends with Q-determinant formulas at $L=2$, and an exact SoV-sum representation for a rotation acting on one site only. An intermediate claim of a single $6\times6$ for the site-1 vacuum was retracted (Section~\ref{sec:main}). The notebooks are in \texttt{Paul/Mathematica/new-conventions/}:
+\begin{itemize}
+\item \texttt{Rotation-e8-SoV.wb}: $L=1$, Sections 1--10e;
+\item \texttt{L2-rotation-sov.wb}: $L=2$, Sections 1--5b.
+\end{itemize}
+
+\paragraph{Evidence levels.} ``Exact'' means a symbolic identity, or agreement to the working precision (60 digits; residuals quoted). ``Numeric'' means exact at the numeric point(s) stated but not proved. ``Open'' means not settled.
+
+\paragraph{Numeric points.}
+\begin{itemize}
+\item $L=1$: $h=\tfrac12$, $\theta=\tfrac27$, ket twist $z=(\tfrac32,\tfrac54,\tfrac23)$, second twist $w=(\tfrac52,\tfrac73,\tfrac35)$.
+\item $L=2$: the same $h,z,w$ with $\theta=(\tfrac27,-\tfrac35)$, so $t=\theta_{12}/h=\tfrac{62}{35}$. A second twist $w'=(\tfrac74,-\tfrac25,\tfrac97)$ is used for one check.
+\item Caution: at these points $z_3=1/z_1$. One early statement was a coincidence of this; it is corrected in Section~\ref{sec:onedet}.
+\end{itemize}
+
+\tableofcontents
+
+%======================================================================
+\section{Setup}
+
+\paragraph{Conventions.} New conventions, $E$ (GT) basis, as in \texttt{Companion-B-C-diagonalize-clean}:
+\begin{itemize}
+\item $\mathcal L_{ij}(u)=u\delta_{ij}+hE_{ij}$, $T(u)=\mathcal L^{(1)}(u-\theta_1)\cdots\mathcal L^{(L)}(u-\theta_L)$.
+\item Companion twist $G(z)=\begin{pmatrix}\chi_1&-\chi_2&\chi_3\\1&0&0\\0&1&0\end{pmatrix}$ acting on the right; $t_a$ are the sums of principal quantum minors of $TG$. CBR: $T_{10}=t_1$, $T_{11}=t_2$, $T_{20}=t_1t_1^{[2]}-t_2^{[2]}$, $T_{21}=t_2t_1^{[2]}-t_3^{[2]}$.
+\item Direct and dual Q's: $Q_i=z_i^{-u/h}q_i$, $Q^j=z_j^{u/h}q^j$. The dual column is $v(x)=(Q^1,Q^2,Q^3)(x)$.
+\item $\rho$ is the representation $[2,1,0]$, i.e.\ adjoint $\otimes\det$, so $\sum_aE_{aa}=3$.
+\end{itemize}
+
+\paragraph{SoV basis at $L=1$.} In the companion frame, the B-eigencovectors $\bra{x_\mu}=\bra{x_0}O_\mu$ are built from $\bra{x_0}=e_1^T$ by fused $t$'s at $\theta-2h$:
+\[
+O_\mu\in\{1,\ T_{10},\ T_{11},\ T_{20}T_{10}^{-1},\ T_{20},\ T_{20}^2T_{10}^{-1},\ T_{20}T_{10}^{-1}T_{11},\ T_{20}T_{10}^{-1}T_{21}\}
+\]
+for $\mu=\{2|21\},\{2|11\},\{1|11\},\{2|20\},\{2|10\},\{2|00\},\{1|10\},\{1|00\}$.
+
+\textbf{Exact:} after simplification every $\bra{x_\mu}$ is a constant covector, free of $z$ and $\theta$. In GT components:
+\[
+\begin{gathered}
+x_{2|21}=e_1,\quad x_{2|11}=h(e_2+e_3),\quad x_{1|11}=6h^2e_5,\quad x_{2|20}=he_2,\\
+x_{2|10}=2h^2e_4,\quad x_{2|00}=h^3(-3e_6+4e_7),\quad x_{1|10}=9h^3e_6,\quad x_{1|00}=9h^4e_8.
+\end{gathered}
+\]
+
+\paragraph{Covectors as matrices.} There is a unique (up to scale) map $\varphi\mapsto X(\varphi)$ from covectors to traceless $3\times3$ matrices with $X(\varphi(E_{ab}-\delta_{ab}))=[X(\varphi),e_{ab}]$. It is normalized by $X(e_8^T)=e_{13}$. Then $X(\varphi\rho(g))\propto g^{-1}X(\varphi)g$, with a factor of $\det g$ because $\rho$ is adj$\otimes$det.
+
+%======================================================================
+\section{$L=1$: classification of rotated extremal covectors}
+
+\paragraph{The orbit.} $e_8^T$ (lowest weight) and $e_1^T$ (highest weight) lie in one orbit, the minimal nilpotent orbit:
+\[
+\{X\neq0:\ \mathrm{rank}\,X=1,\ \mathrm{tr}\,X=0\}=\{ab^T:\ b\cdot a=0\}.
+\]
+It is 4-dimensional, 3-dimensional projectively. For $e_8^T\rho(g)$, $a=g^{-1}e_1$ and $b=e_3^Tg$.
+
+\paragraph{Result (exact).} $\sum_\mu c_\mu\bra{x_\mu}=s\,e_8^T\rho(g)$ for some $g$ and $s\neq0$ if and only if $c=c(a,b)$ with $b\cdot a=0$, where
+\[
+c(a,b)=\Big(\tfrac{a_3b_1}{3},\ \tfrac{a_3b_2}{3h},\ \tfrac{a_3b_3}{6h^2},\ -\tfrac{a_2b_1+a_3b_2}{3h},\ \tfrac{a_1b_1-a_2b_2}{6h^2},\ \tfrac{a_1b_2}{6h^3},\ \tfrac{a_1b_2-2a_2b_3}{18h^3},\ \tfrac{a_1b_3}{9h^4}\Big).
+\]
+The coefficients are independent of the twist and of $\theta$. This was checked symbolically for $n_-$ and numerically (residual $10^{-49}$) for a random 9-parameter $g$.
+
+%======================================================================
+\section{$L=1$: when is the overlap a single determinant of Q's?}\label{sec:onedet}
+
+\paragraph{The determinant.}
+\[
+\det N[P,F]=\det_{(i,j)\in\{(1,3),(1,2),(2,3)\}}\Big(-\langle P^jF_i\rangle,\ \langle P^jF_i^{[2]}\rangle,\ \langle P^{j[-2]}F_i\rangle\Big),\qquad
+\langle f\rangle=\sum_{n=0}^{2}\frac{f(\theta-nh)}{\prod_{m\neq n}(m-n)h}.
+\]
+$P^j$ are the ket's dual Q's and $F_i$ are arbitrary bra-side functions. For $F$ the direct Q's of an eigen-bra of a companion twist, $\det N/\Psi_Q(x_0)$ is that bra's overlap (mixed-twist formula, row 18 of the clean notebook).
+
+\paragraph{The image (exact).} Define $\varphi_F$ by $\varphi_F\cdot\Psi_B=\det N[Q_B,F]/\Psi^B_Q(x_0)$.
+\begin{itemize}
+\item Only $F_1,F_2$ enter, at the points $\theta-2h,\dots,\theta+h$, and only through the flag $[F_1]\subset\mathrm{span}(F_1,F_2)\subset\mathbb C^4$.
+\item The image is therefore 6-dimensional and is cut out by 3 quadrics.
+\end{itemize}
+
+\paragraph{Intersection with the orbit (numeric, complete scan).} With $m(x)=(x^2,x,1)$:
+\begin{itemize}
+\item \textbf{(I)} $b\propto m(\beta)$. These are exactly the extremal eigen-bras of a companion $t(G(\alpha,\beta,\gamma))$, where $a\propto(1,-(\beta+\gamma),\beta\gamma)$ and $\alpha$ is free. Here $F$ is that twist's direct Q's; $\Om_{zw}P_{\rm phys}$ is one point. This component is $z$-independent.
+\item \textbf{(II$_k$)} $a\perp m(z_k)$. These are degenerate: they kill the two kets with $\mu_k=0$. \emph{Correction:} this was first written $a\perp(1,z_1,z_1^2)$, which is $\propto m(z_3)$ only because $z_3=1/z_1$ at the test point. A second ket twist confirms $m(z_3)$.
+\item \textbf{Row choices.} 72 of the 84 choices of three $(i,j)$ rows reproduce twisted overlaps, each with its own ket factor. The 12 failures have all $i$ equal, all $j$ equal, or $(i,j)$ forming a permutation. Every working choice gives only (I) $\cup$ (II$_k$), with each $k$ for 24 of the 72.
+\item \textbf{Generic rotations are not a single $\det N$.}
+\end{itemize}
+
+\paragraph{Two determinants always suffice (exact).} Let $\beta_{1,2}$ be the roots of $a\cdot m(x)=0$. Then $b=s_1m(\beta_1)+s_2m(\beta_2)$. So every rotation is $s_1\det N+s_2\det N$ over the eigen-bras $e_\alpha-e_{\beta_1}$ and $e_\alpha-e_{\beta_2}$ of one companion twist $(\alpha,\beta_1,\beta_2)$, with $\alpha$ free.
+
+\paragraph{Symmetries of the SoV basis.} Besides scalars, the only one is the twist rescaling $\mathrm{diag}(t,1,1/t)$, which maps $m(\beta)\to m(t\beta)$. It gives nothing new.
+
+%======================================================================
+\section{$L=1$: the twist torus and SoV-operator insertions}
+
+\paragraph{Torus (exact).} $t_1(u)-(u-\theta)\chi_1=h\,\rho_{\rm Lie}(G(z)^T)$. So $\eta=p(G^T)$, with $p$ quadratic, commutes with $t(z)$, and $\rho(\eta)\Psi_B=\prod_ip(z_i)^{\mu_i(B)}\Psi_B$.
+
+Every rotation is $\varphi_I\,\rho(p(G^T))$ with $\varphi_I$ in (I). This follows by expanding $b=\sum\beta_im(z_i)$: one quadratic condition puts $q(G)b$ on the moment curve. The ratio check is $10^{-44}$.
+
+\paragraph{Commutant expansion (exact).} Every $M$ commuting with $t(z)$ is $\sum_\mu c_\mu O_\mu$, where $c$ is the vector of SoV coefficients of $e_1^TM$. For $\rho(1+rG^T)$ this is cubic in $r$; at the numeric point (zero entries omitted):
+
+\begin{center}
+\begin{tabular}{lllllll}
+\toprule
+& $1$ & $T_{10}$ & $T_{20}T_{10}^{-1}$ & $T_{20}$ & $T_{20}^2T_{10}^{-1}$ & $T_{20}T_{10}^{-1}T_{11}$\\
+\midrule
+$r^0$ & 1 &&&&&\\
+$r^1$ & $2\chi_1$ & $1/h$ &&&&\\
+$r^2$ & 2215/144 & 41/6 & 41/6 & 4 &&\\
+$r^3$ & 3649/288 & 89/12 & 1147/72 & 41/3 & 4 & 4/3\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Prefactor.} Write $\prod_i(1+rz_i)^{\mu_i}=\sum_kr^ke_k$.
+\begin{itemize}
+\item $e_1=t_1(\theta)/h$.
+\item $e_2$ is quadratic in the $t$'s.
+\item $e_3=\prod z_i^{\mu_i}$ is not a single $T_\lambda(\theta+kh)$ (open).
+\end{itemize}
+
+%======================================================================
+\section{$L=1$: products of vacuum-building sums and the resolvent}
+
+\paragraph{Setup.} Define $M(w)=\sum_\mu c_\mu(w)O_\mu$ by $\bra{x_0}M(w)=\Om_w=e_1^TP_{pp}(w)$, the companion $w$-vacuum, which depends only on $(w_1,w_2)$. The $M$'s commute, so $\bra{x_0}M(w)M(y)$ is symmetric in $w\leftrightarrow y$.
+
+\paragraph{The coefficients (exact, $z$-free; $s_i=1/y_i$).}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+$O_\mu$ & $c_\mu(y)$ & at $y_2=\infty$\\
+\midrule
+$1$ & $1$ & $1$\\
+$T_{10}$ & $s_1/h$ & $s_1/h$\\
+$T_{11}$ & $s_1^2/2h^2$ & $s_1^2/2h^2$\\
+$T_{20}T_{10}^{-1}$ & $s_2/h$ & 0\\
+$T_{20}$ & $s_1(s_1+2s_2)/2h^2$ & $s_1^2/2h^2$\\
+$T_{20}^2T_{10}^{-1}$ & $s_1^2s_2/2h^3$ & 0\\
+$T_{20}T_{10}^{-1}T_{11}$ & $s_1^2(2s_1+3s_2)/6h^3$ & $s_1^3/3h^3$\\
+$T_{20}T_{10}^{-1}T_{21}$ & $s_1^3s_2/3h^4$ & 0\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{When the product is a rotation (complete polynomial solve in $s$).}
+\begin{itemize}
+\item \textbf{$y_2=\infty$, any $y_1$.} Then $M(y_1,\infty)\propto\rho\big((y_1-G(z)^T)^{-1}\big)$, the resolvent of the ket twist (operator identity, $10^{-60}$, two ket twists). Explicitly, with $T$'s at $\theta-2h$ and $s=1/y_1$:
+\[
+\rho\big((1-sG(z)^T)^{-1}\big)\ \propto\ 1+\frac sh\,T_{10}+\frac{s^2}{2h^2}\big(T_{11}+T_{20}\big)+\frac{s^3}{3h^3}\,T_{20}T_{10}^{-1}T_{11}.
+\]
+\item \textbf{$y_1=z_k$, any $y_2$.} Degenerate: $\Om_y$ kills 6 kets, leaving a pencil fixed by $z$ (the poles of the resolvent).
+\item \textbf{Nothing else.}
+\end{itemize}
+
+\paragraph{Every rotation of $x_0$ (numeric).} The map $(w_1,w_2,y_1)\mapsto[\Om_w\rho((y_1-G^T)^{-1})]$ has Jacobian rank 3, against rank 2 for $\Om_w$ alone. Explicit solves reach random $x_0\,\rho(e^{pE_{12}}e^{qE_{13}}e^{rE_{23}})$ to $10^{-38}$, with complex $(w,y_1)$. So
+\[
+\boxed{\ x_0\,\rho(g)\ \propto\ \bra{x_0}M(w)\,M(y_1,\infty)\ }\qquad\text{for generic }g.
+\]
+
+%======================================================================
+\section{$L=1$: the Q-form, $3\times3$ times an su(2)-like $2\times2$}
+
+\paragraph{Degeneration of the vacuum Q's (numeric).} As $y_2\to\infty$:
+\begin{itemize}
+\item the root of the vacuum $q_2$ tends to $\theta-2h$, at rate $O(1/y_2)$;
+\item $F_2=Q_2\to(1,1/y_1,0,0)$ at $\theta-2h,\dots,\theta+h$. Equivalently, $F_2\to y_1^{-x/h}/\Gamma((\theta-x)/h)$, which equals $F_1$ on $\{\theta-2h,\theta-h\}$ and vanishes on $\{\theta,\theta+h\}$. It is \emph{not} a delta function.
+\end{itemize}
+The resulting $\det N_\infty/\Psi_Q(x_0)\propto\prod_i(1-z_i/y_1)^{-\mu_i}$ ($10^{-54}$).
+
+\paragraph{Reduction to $2\times2$ (exact).} With $F_1=E\equiv y_1^{-x/h}$, $E(x+h)=E(x)/y_1$. A column operation therefore removes the $\langle PF^{[2]}\rangle$ column from the $F_1$ rows. The $F_2$ row then gives $\propto P^3(\theta-h)$, which cancels against $\Psi_Q(x_0)$:
+\[
+\prod_i\Big(1-\frac{z_i}{y_1}\Big)^{-\mu_i}\propto\frac{\det_{j=3,2}\big[-\langle Q^jE\rangle,\ \langle Q^{j[-2]}E\rangle\big]}{Q^2(\theta-2h)Q^3(\theta-3h)-Q^3(\theta-2h)Q^2(\theta-3h)}\qquad(10^{-55}).
+\]
+No $1\times1$ form, in a single dual or direct Q, works.
+
+\paragraph{Result.}
+\[
+\frac{\bra{x_0}\rho(g)\ket{\Psi_B}}{\langle x_0|\Psi_B\rangle}\ \propto\ \frac{\det N[Q_B,Q_{\vac,w}]}{\Psi_Q^B(x_0)}\cdot\frac{\det_2[(Q^3,Q^2);E]}{\text{minor}_2}.
+\]
+
+%======================================================================
+\section{$L=2$: global rotation, $6\times6$ times $4\times4$}
+
+\paragraph{Setup.} Diagonal frame, $x_0=(e_1^TP_{\rm phys}^{-1})^{\otimes2}$. The same rotation on both sites is $(\Om_{zw}\rho(D))^{\otimes2}$, with $D=\mathrm{diag}(1/(y_1-z_i))$, the resolvent in the diagonal frame. So the overlap is $\prod_i(y_1-z_i)^{-\mu_i}\,\langle\Om|\Psi_B\rangle$ ($10^{-56}$).
+
+\paragraph{Result (numeric, all 64 states, $10^{-50}$, three values of $y_1$).}
+\[
+\frac{\bra{x_0}\rho(g)^{\otimes2}\ket{\Psi_B}}{\langle x_0|\Psi_B\rangle}\ \propto\ \frac{\det_6N[Q_B,Q_{\vac,w}]}{\Psi_Q^B(x_0)}\times\frac{\det_{4\times4}\big[-\langle Q^jEx^{\beta-1}\rangle_k,\ \langle Q^{j[-2]}Ex^{\beta-1}\rangle_k\big]_{(j,k),(\cdot,\beta)}}{\prod_s\big[Q^2(\theta_s-2h)Q^3(\theta_s-3h)-Q^3(\theta_s-2h)Q^2(\theta_s-3h)\big]}.
+\]
+\begin{itemize}
+\item The $6\times6$ is the usual $\langle\Om_{z,w}|\Psi\rangle$ formula, with brackets over all poles and insertions $1$, $e^{2\pi ix/h}$.
+\item The su(2)-like factor is $2L\times2L$. Its rows are $j\in\{3,2\}$ times the two brackets $k$, and its columns are $\{-\langle PE\rangle,\langle P^{[-2]}E\rangle\}\times\{1,x\}$.
+\item It is the $y_2\to\infty$ degeneration of the $6\times6$ vacuum determinant (checked directly, $10^{-51}$).
+\item No single-Q $2\times2$ works (best residual 0.87).
+\end{itemize}
+
+%======================================================================
+\section{$L=2$: rotation on site 1 only}
+
+The object is $\Phi=(e_1^T\rho(g))\otimes e_1^T$ in the companion frame, where $x_0=e_1^T\otimes e_1^T$.
+
+\paragraph{No local $t$-algebra.} Only $T_{11},T_{21}$ at $\theta_1-2h$ localize, and only on $x_0$ itself. $T_{10}$, $T_{20}$, other points and general $a\otimes x_0^{(1)}$ all fail.
+
+\paragraph{$L=2$ SoV basis and wavefunction (exact).}
+\begin{itemize}
+\item The untwisted $B(u)$ has a simple spectrum. Its 64 eigen-covectors form an $8\times8$ grid: (site-1 root triple, site-2 root triple), each ladder carrying the 8 $L=1$ patterns.
+\item For all $64\times64$ entries, to $10^{-48}$ and for several row and $k$ choices:
+\[
+\frac{\langle x|\Psi_B\rangle}{\langle x_0|\Psi_B\rangle}=N_x\prod_{s=1,2}\frac{\det_2[v(x_{s,21}),v(x_{s,1})]\,v_k(x_{s,22})}{(\text{same at }\theta_s-3h,\theta_s-2h,\theta_s-h)} .
+\]
+Here $x_{s,1}<x_{s,21}<x_{s,22}$ are the sorted roots on ladder $s$.
+\end{itemize}
+
+\paragraph{SoV expansion of $\Phi$ (exact).} $\Phi$ is supported on 12 SoV states:
+\begin{itemize}
+\item the 8 with site 2 at the vacuum roots;
+\item 4 with site 2 at $\{2|20\}$ ($x_{2,22}:\theta_2-h\to\theta_2$). Their site-2 factor is $\lambda_2(B)=v_k(\theta_2)/v_k(\theta_2-h)$, independent of $k$ because $v(\theta_2)\parallel v(\theta_2-h)$.
+\end{itemize}
+Then
+\[
+\frac{\langle\Phi|\Psi_B\rangle}{\langle x_0|\Psi_B\rangle}=\sum_\nu c^{L=1}_\nu(g)\,W_\nu(B),\qquad W_\nu=\sum_xK_{\nu x}\,\psi^{(1)}_{x_1}(B)\,\lambda_2(B)^{[x_2\neq\vac]} ,
+\]
+with $c^{L=1}(g)=c(a,b)$ and $K$ $g$-independent, sparse and rational. In the normalization $K_{\{2|21\},\vac}=1$:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+$\nu$ & site 2 at vacuum & site 2 at $\{2|20\}$\\
+\midrule
+$\{2|21\}$ & $\{2|21\}$: 1 & ---\\
+$\{2|11\}$ & $\{2|11\}$: 8/27, $\{2|20\}$: $-35/124$ & $\{2|21\}$: $-3395/3348$\\
+$\{1|11\}$ & $\{1|11\}$: $-4/9$ & ---\\
+$\{2|20\}$ & $\{2|20\}$: $-1/2$ & ---\\
+$\{2|10\}$ & $\{2|10\}$: $-4/27$ & $\{2|20\}$: 35/54\\
+$\{2|00\}$ & $\{2|00\}$: 1/31, $\{1|10\}$: 35/108 & $\{2|10\}$: $-35/124$\\
+$\{1|10\}$ & $\{1|10\}$: 2/9 & ---\\
+$\{1|00\}$ & $\{1|00\}$: $-3/62$ & $\{1|10\}$: $-35/558$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The 31s and 35s come from $t=62/35$. The single-entry rows are exactly those with $x_\nu\otimes e_1^T$ already a B-eigencovector. The closed form of $K$ in $t$ is open.
+
+%======================================================================
+\section{$L=2$: is $\Om_w\otimes e_1^T$ a single $6\times6$? (claim retracted; ruled out for the natural ansatz)}\label{sec:main}
+
+\paragraph{SoV-vacuum bra data (exact, $10^{-51}$).} $F_0=(F_1=\delta_{\theta_s-2h},\ F_2=\delta_{\theta_s})$ on both ladders gives $\det_6[Q_B,F_0]/\Psi_Q(x_0)=$ const, i.e.\ it reproduces $x_0$.
+
+\paragraph{Per-ladder brackets.} These are the Section 7 brackets of \texttt{L2-diagonal-frame-overlap.wb}: the same residue weights, restricted to one ladder, with rows $(i,j;s)$. They reproduce $\Om_w\otimes\Om_w$ and $x_0$ ($10^{-51}$). Row pair $s$ may carry its own bra data $F^{(s)}$.
+
+\paragraph{RETRACTED: the claimed $6\times6$ for $\Om_w\otimes e_1^T$.} An earlier version of this note claimed that, with the $L=2$ $w$-vacuum Q's on ladder 1, some ladder-2 data $F^{(2)}$ give
+\[
+\frac{\langle\Om_w\otimes e_1^T|\Psi_B\rangle}{\langle x_0|\Psi_B\rangle}\ \propto\ \frac{\det_6^{\text{per-ladder}}\big[Q_B;\ F_{\vac,w}\ (\text{ladder }1),\ F^{(2)}\ (\text{ladder }2)\big]}{\Psi_Q^B(x_0)}\qquad(\text{claimed }10^{-44}).
+\]
+\textbf{This was wrong.}
+\begin{itemize}
+\item The fits minimized $|\det_6-\lambda T|$ with $\lambda$ free. Every ``solution'' had $\lambda\approx0$ and $\det_6\equiv0$: the trivial branch, where $F_2^{(2)}$ lies in the gauge direction $F_2\propto F_1$ and the $F_2$ row duplicates an $F_1$ row.
+\item The ``2-parameter family'', the ``$w$-independence'' (a joint fit at $w,w'$) and the ``rank drop'' were all properties of that trivial branch.
+\item With the scale fixed ($\lambda=1$), the question is reopened in Section~\ref{sec:redo}.
+\end{itemize}
+
+\paragraph{Redo with the scale fixed (numeric).}\label{sec:redo}
+\begin{itemize}
+\item \textbf{The test.} With $\lambda=1$, the det is quadratic in the ladder-2 $F_1$ and linear in $F_2$. So for each $F_1$ the best $F_2$ is a linear least-squares problem, and the residual is projective in $F_1$. Bilinear tensors are precomputed by polarization.
+\item \textbf{With the $L=2$ $w$-vacuum Q's on ladder 1.} The minimal relative residual over all ladder-2 data is $0.766$ (global scan of $\mathbb P^3$ plus refinement from 5 starts).
+\item \textbf{With the $L=1$ $w$-vacuum Q's on ladder 1.} The minimum is $0.774$.
+\item \textbf{The naive choice.} $F^{(2)}=F_0$ gives $A\otimes e_1+A'\otimes e_2$, with $e_2\propto x_{2|20}$ and $A\not\propto\Om_w$.
+\item \textbf{Conclusion.} No per-ladder $6\times6$ of the form [ladder 1 = $w$-vacuum Q's, ladder 2 = anything] reproduces $\Om_w\otimes e_1^T$.
+\item \textbf{Both ladders free} (Direction 1 of \texttt{site1-Qform/}). With all 16 bra-data numbers free, the minimal residual is $0.273$ (44 starts plus long refinement, $\|\det\|/\|T\|\approx0.96$). Replacing $F_2^{(1)}\otimes F_2^{(2)}$ by a general $4\times4$ matrix (a sum of determinants sharing the $F_1$ data) still leaves $0.269$. So the per-ladder bracket structure itself must change, through column insertions (Direction 2), or the answer is a genuine SoV sum (Direction 4).
+\item \textbf{Polynomial insertions} (Direction 2). General per-pole, per-column weights in the $6\times6$ bracket determinant, 36 numbers, include every polynomial insertion.
+\begin{itemize}
+\item Kill masks on the ladder-2 poles fail.
+\item A fit at a single $w$ overfits: the same weights fail at a second twist (0.996).
+\item A joint fit at two real twists $w,w''$ converges to a firm minimum of $0.121$.
+\end{itemize}
+So no $w$-independent insertion with the natural bra data works either.
+\item \textbf{Short sums of determinants} (Direction 3).
+\begin{itemize}
+\item A dictionary of 56 natural per-ladder determinants spans only rank 55, with residual $9.6\cdot10^{-4}$ for the full fit and no sparse path.
+\item All per-ladder determinants together span $\mathbb C^{64}$, so long sums are trivial and uninformative.
+\item Two free determinants get stuck at $0.107$, with large cancelling terms.
+\end{itemize}
+\textbf{Overall:} within this $6\times6$ bracket family, the site-1 vacuum has no compact determinant form. The exact 12-state SoV sum (Section~8) is the representation, pending a closed form for $K$ (Direction 4).
+\end{itemize}
+\textbf{Lesson.} In any det-matching fit, fix the overall scale, or check $|\det|\neq0$, before trusting a small residual.
+
+%======================================================================
+\section{Open}
+\begin{enumerate}
+\item \textbf{A Q-form for $\Om_w\otimes e_1^T$.} The natural per-ladder $6\times6$ ansatz is ruled out (Section~\ref{sec:main}). Options: modified ladder-1 data, mixed brackets, or a sum of determinants. The exact $12$-state SoV expansion of Section~8 is the fallback representation.
+\item \textbf{The full site-1 rotation.} Add the resolvent factor, i.e.\ the su(2)-like $4\times4$ with $E=y_1^{-x/h}$ on ladder 1 and vacuum-type data on ladder 2.
+\item \textbf{$K$ in closed form.} This needs a second numeric point.
+\item \textbf{Further checks.} A second numeric point $(h,\theta)$ for all $L=2$ statements. Explicit $c_0$-type constants (only state-independence was checked).
+\item \textbf{$e_3=\prod z_i^{\mu_i}$} as a natural insertion (Section 4).
+\end{enumerate}
+
+\end{document}

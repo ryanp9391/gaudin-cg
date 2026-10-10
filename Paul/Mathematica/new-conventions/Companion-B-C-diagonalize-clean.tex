@@ -1,0 +1,336 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,longtable,hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\usepackage[htt]{hyphenat}
+\newcommand{\nb}[1]{\texttt{#1}}
+\newcommand{\qmin}{\operatorname{qmin}}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\bra}[1]{\langle #1|}
+
+\title{SoV for the $\mathfrak{gl}(3)$ XXX chain at $L=1$ in the new conventions:\\
+Baxter equations, Wronskians, SoV bases, scalar products}
+\author{Reference notes for \nb{new-conventions/Companion-B-C-diagonalize-clean.wb}}
+\date{2026-10-01}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+These notes collect the results obtained on 2026-10-01 after the switch to the new conventions: a Lax matrix $u+hE_{ij}$ and a companion twist acting on the right. Everything is at one site ($L=1$), and the complete construction is for the adjoint $\lambda=(2,1,0)$. The results covered are the direct and dual Baxter equations and their asymptotics, the QQ relation, a Wronskian (quantum Weyl) formula for every fused transfer matrix, the reduction of these formulas at $x=\theta-2h$, the SoV wavefunctions in the B- and C-eigenbases, the functional orthogonality relation obtained from adjointness of the two Baxter operators, and the normalized formula for scalar products. The scalar-product formula holds between states with the same twist, between states with different twists, and in the frame where the twist is diagonal. Every statement below is checked in the clean notebook, which runs from an empty kernel and ends in a 37-line table in which every check passes. Results that hold beyond the adjoint, together with their limits, are in Section~\ref{sec:beyond}.
+\end{abstract}
+
+\tableofcontents
+
+%======================================================================
+\section{Files}
+
+\begin{center}
+\begin{tabular}{p{6.6cm}p{8.4cm}}
+\toprule
+\nb{Companion-B-C-diagonalize-clean.wb} & Final formulas and checks only. Self-contained (its first cell clears the kernel), works at general $h$, uses one numeric point, and ends in a summary table of checks.\\
+\nb{Companion-B-C-diagonalize.wb} & The full working notebook, including the explorations. Its notes record the failed operator forms, the ansatz scans and two bugs that were fixed.\\
+\nb{Baxter-QQ-Wronskian.wb} & Baxter, QQ, Wronskian and functional-orthogonality checks for a general rep (set by \nb{gbLam}), run for $[2,1,0]$, $[3,1,0]$, $[3,2,0]$ and $[2,1,1]$.\\
+\nb{Companion-B-C-diagonalize-convention-change.nb} (in \nb{old-conventions/old/Gaudin/}) & The original front-end notebook that was ported.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Numeric point of the clean notebook.} $h=\tfrac12$, $\theta=\tfrac27$, $z=(\tfrac32,\tfrac54,\tfrac23)$ (so $\chi_3=\tfrac54$), and second twist $w=(\tfrac52,\tfrac73,\tfrac35)$, at 60-digit precision. The working notebook also checked the same-twist results at $(h,\theta,z)=(1,\tfrac13,(\tfrac52,\tfrac73,\tfrac6{35}))$ and $(1,\tfrac13,(\tfrac52,\tfrac73,\tfrac35))$.
+
+%======================================================================
+\section{Conventions}\label{sec:conv}
+
+\paragraph{Representation.} The site carries the $\mathfrak{gl}(3)$ irrep $\lambda=(\lambda_1,\lambda_2,\lambda_3)$, here $(2,1,0)$ with dimension 8. The generators $E_{ij}$ act in the Gelfand--Tsetlin (GT) basis, ordered with the highest-weight pattern first.
+
+\paragraph{Lax matrix, twist, monodromy.}
+\begin{equation}
+\mathcal L_{ij}(u)=u\,\delta_{ij}+h\,E_{ij},\qquad T_{ij}(u)=\mathcal L_{ij}(u-\theta),\qquad
+G(z)=\begin{pmatrix}\chi_1&-\chi_2&\chi_3\\1&0&0\\0&1&0\end{pmatrix},\qquad T^G=\mathcal L\,G ,
+\end{equation}
+where $\chi_1=z_1+z_2+z_3$, $\chi_2=z_1z_2+z_1z_3+z_2z_3$ and $\chi_3=z_1z_2z_3$, so that the eigenvalues of $G$ are $z_1,z_2,z_3$. The old conventions, used in \nb{paper/xxxCG.tex} and in \nb{old-conventions/}, were instead $\mathcal L=u-h\sum E_{ji}\otimes e_{ij}$ with a diagonal twist.
+
+\paragraph{Quantum minors and transfer matrices.} Rows are antisymmetrized, and the $k$-th column is evaluated at $u-(k-1)h$:
+\begin{equation}
+\qmin_{I,J}[T](u)=\sum_{\sigma}\operatorname{sgn}\sigma\prod_{k}T_{I_{\sigma(k)},J_k}\big(u-(k-1)h\big),\qquad
+t_a(u)=\sum_{|I|=a}\qmin_{I,I}[T^G](u).
+\end{equation}
+
+\paragraph{Factors.} $\nu_n(u)=u-\theta+h\lambda_n$. In the old conventions $\nu_n=u-\theta-h\lambda_n$.
+
+\paragraph{Fused transfer matrices (CBR).} Let $\lambda'$ be the transposed Young diagram. Then
+\begin{equation}
+T_\lambda(u)=\det_{1\le i,j\le\lambda_1}t_{\lambda'_j+i-j}\big(u+(i-1)h\big),\qquad t_0=1,\quad t_a=0\ \ (a<0\text{ or }a>3).
+\end{equation}
+For example $T_{(2)}=t_1(u)t_1(u+h)-t_2(u+h)$, $T_{(2,1)}=t_2(u)t_1(u+h)-t_3(u+h)$ and $T_{(2,2)}=t_2(u)t_2(u+h)-t_3(u+h)t_1(u)$.
+
+\paragraph{Q-functions.} \emph{Direct} $Q_i(u)=z_i^{-u/h}q_i(u)$ and \emph{dual} $Q^j(u)=z_j^{+u/h}q^j(u)$, with $q_i$ and $q^j$ monic polynomials. The shift notation is $Q^{[2k]}(u)=Q(u+kh)$. The column vectors $v(p)=(Q^1,Q^2,Q^3)(p)$ (dual) and $u(p)=(Q_1,Q_2,Q_3)(p)$ (direct) are used throughout.
+
+\paragraph{Weights.} The weight $\mu$ of a transfer-matrix eigenstate is defined in the frame where the twist is diagonal. It is read off from $t_1(\theta)=h\sum_iz_i\mu_i$, which follows from $t_1(u)=\chi_1(u-\theta)+h\sum_{ik}E_{ik}G_{ki}$ and Section~\ref{sec:frames}.
+
+%======================================================================
+\section{Quantum determinant}
+\begin{equation}
+t_3(u)=\chi_3\,\nu_1(u)\,\nu_2(u-h)\,\nu_3(u-2h)\cdot\mathbf{1} .
+\end{equation}
+This is exact and symbolic, and was checked for $[2,1,0]$ and $[3,1,0]$. In the old conventions it read $\chi_3\nu_1(u-2h)\nu_2(u-h)\nu_3(u)$ with the old $\nu$.
+
+%======================================================================
+\section{B and C operators and the SoV bases}\label{sec:bases}
+
+Both operators are built from the \emph{untwisted} monodromy:
+\begin{align}
+B(u)&=T_{11}(u)\,\qmin_{12,12}[T](u+h)+T_{21}(u)\,\qmin_{12,13}[T](u+h),\\
+C(u)&=T_{11}(u)\,\qmin_{12,12}[T](u)+T_{21}(u)\,\qmin_{12,13}[T](u).
+\end{align}
+States are labelled by GT patterns $\mu=\{\{\mu_{11}\},\{\mu_{21},\mu_{22}\}\}$, eight in all for the adjoint.
+
+\paragraph{B-eigencovectors $\bra{x_\mu}$.} They are built from $\bra{x_0}=e_1^T$, with pattern $\{\{2\},\{2,1\}\}$, by fused transfer matrices at $\theta-2h$:
+\begin{align*}
+&\bra{x_{\{2\},\{1,1\}}}=\bra{x_0}T_{(1)},\quad \bra{x_{\{1\},\{1,1\}}}=\bra{x_0}T_{(1,1)},\quad \bra{x_{\{2\},\{2,0\}}}=\bra{x_0}T_{(2)}T_{(1)}^{-1},\\
+&\bra{x_{\{2\},\{1,0\}}}=\bra{x_{\{2\},\{2,0\}}}T_{(1)},\qquad \bra{x_{\{2\},\{0,0\}}}=\bra{x_{\{2\},\{2,0\}}}T_{(2)},\\
+&\bra{x_{\{1\},\{1,0\}}}=\bra{x_{\{2\},\{2,0\}}}T_{(1,1)},\qquad \bra{x_{\{1\},\{0,0\}}}=\bra{x_{\{2\},\{2,0\}}}T_{(2,1)}.
+\end{align*}
+Here every $T$ is evaluated at $\theta-2h$. The eigenvalue is
+\begin{equation}
+\bra{x_\mu}B(u)=(u-\theta+h\mu_{11}+h)(u-\theta+h\mu_{21})(u-\theta+h\mu_{22})\,\bra{x_\mu},
+\end{equation}
+so the B-roots are $x_1=\theta-(\mu_{11}+1)h$, $x_{21}=\theta-\mu_{21}h$ and $x_{22}=\theta-\mu_{22}h$.
+
+\paragraph{C-eigenvectors $\ket{y_\mu}$.} They are built from $\ket{y_{\rm low}}=e_8$, with pattern $\{\{1\},\{0,0\}\}$, using $t^S_{(1)}(v)=T_{(1)}(v)$, $t^S_{(1,1)}(v)=T_{(1,1)}(v+h)$, $t^S_{(2)}(v)=T_{(2)}(v-h)$ and $t^S_{(2,1)}(v)=t_2(v+h)t_1(v-h)-t_3(v+h)$, all at $v=\theta$:
+\begin{align*}
+&\ket{y_{\{2\},\{0,0\}}}=t^S_{(2)}T_{(1)}^{-1}\ket{y_{\rm low}},\quad \ket{y_{\{1\},\{1,0\}}}=t^S_{(1)}\ket{y_{\rm low}},\quad \ket{y_{\{1\},\{1,1\}}}=t^S_{(1,1)}\ket{y_{\rm low}},\\
+&\ket{y_{\{2\},\{1,0\}}}=t^S_{(1)}\ket{y_{\{2\},\{0,0\}}},\qquad \ket{y_{\{2\},\{2,0\}}}=t^S_{(2)}\ket{y_{\{2\},\{0,0\}}},\\
+&\ket{y_{\{2\},\{1,1\}}}=t^S_{(1,1)}\ket{y_{\{2\},\{0,0\}}},\qquad \ket{y_{\{2\},\{2,1\}}}=t^S_{(2,1)}\ket{y_{\{2\},\{0,0\}}}.
+\end{align*}
+The eigenvalue is
+\begin{equation}
+C(u)\ket{y_\mu}=(u-\theta+h\mu_{11})(u-\theta+h\mu_{21})(u-\theta+h\mu_{22}-h)\ket{y_\mu},
+\end{equation}
+so the C-roots are $y_1=\theta-\mu_{11}h$, $y_{21}=\theta-\mu_{21}h$ and $y_{22}=\theta-(\mu_{22}-1)h$.
+
+\paragraph{Overlap matrix.} In the order of the GT patterns
+\[\{2|21\},\ \{2|11\},\ \{1|11\},\ \{2|20\},\ \{2|10\},\ \{2|00\},\ \{1|10\},\ \{1|00\},\]
+\begin{equation}
+\langle x_\mu|y_\nu\rangle=h^4\begin{pmatrix}
+9&0&0&0&0&0&0&0\\0&9&0&3&0&0&0&0\\0&0&18&0&0&0&0&0\\0&0&0&6&0&0&0&0\\0&0&0&0&6&0&0&0\\0&0&0&0&0&6&3&0\\0&0&0&0&0&0&9&0\\0&0&0&0&0&0&0&9
+\end{pmatrix}.
+\end{equation}
+It is triangular and independent of $z$. In particular $\langle x_0|y_0\rangle=9h^4$, where $y_0\equiv y_{\{2\},\{2,1\}}$, and no off-diagonal entry involves $x_0$ or $y_0$.
+
+%======================================================================
+\section{Frames}\label{sec:frames}
+
+\begin{itemize}
+\item \textbf{Companion vacuum.} $\Omega_L=e_1^TP_{pp}$, with $P_{pp}=e^{E_{12}/z_1}e^{-E_{13}/(z_1z_2)}e^{(z_1+z_2)E_{23}/(z_1z_2)}$, satisfies $\Omega_L\,t_1(u)=\tau_{\rm vac}(u)\,\Omega_L$ with $\tau_{\rm vac}(u)=\sum_jz_j\nu_j(u)$.
+\item \textbf{Gauss factors.} $P_{\rm aux}$ (auxiliary space) and $P_{\rm phys}$ (physical space) are products of $e^{rE}$ factors with the parameters $r_i,s_i$ in the notebook. They satisfy $P_{\rm aux}G(z)P_{\rm aux}^{-1}=\operatorname{diag}(z)$ and $P_{\rm phys}\,t_1(z)\,P_{\rm phys}^{-1}=\sum_iz_i\mathcal L_{ii}(u-\theta)$. The second follows from the first by $\mathfrak{gl}(3)$ invariance of the Lax operator, $[\mathcal L,\ e_{ij}\otimes\mathbf{1}-\mathbf{1}\otimes E_{ji}]=0$.
+\item \textbf{A second twist $w$ in the $z$-diagonal frame.} $G_{P,zw}=P_{\rm aux}G(w)P_{\rm aux}^{-1}$ defines the transfer matrix \nb{tGPzw}, and $\Omega_{zw}$ is its vacuum covector, with eigenvalue $\tau_{\rm vac}(w)$. Numerically, $P_{\rm phys}(z)\,t_1(w)\,P_{\rm phys}(z)^{-1}=$ \nb{tGPzw}.
+\end{itemize}
+
+%======================================================================
+\section{Baxter equations}\label{sec:baxter}
+
+\paragraph{Direct equation} (on $Q_i$):
+\begin{multline}\label{eq:dir}
+\nu_1(x)\nu_1(x+h)\nu_1(x+2h)\,Q(x-h)-t_1(x)\,\nu_1(x+h)\nu_1(x+2h)\,Q(x)\\
++t_2(x+h)\,\nu_1(x+2h)\,Q(x+h)-t_3(x+2h)\,Q(x+2h)=0 .
+\end{multline}
+\paragraph{Dual equation} (on $Q^j$), in uniform form, where every $t_a$ sits at $x$:
+\begin{multline}\label{eq:dual}
+\nu_3(x)\nu_3(x-h)\nu_3(x-2h)\,Q(x+h)-t_1(x)\,\nu_3(x-h)\nu_3(x-2h)\,Q(x)\\
++t_2(x)\,\nu_3(x-2h)\,Q(x-h)-t_3(x)\,Q(x-2h)=0 .
+\end{multline}
+\paragraph{Solutions.} For every eigenstate,
+\begin{equation}
+Q_i=z_i^{-u/h}q_i,\quad \deg q_i=\lambda_1-\mu_i;\qquad Q^j=z_j^{+u/h}q^j,\quad \deg q^j=\mu_j-\lambda_3 .
+\end{equation}
+The wrong-sign exponentials give no polynomial solution, and the old forms written with the new $\nu$'s give none either. For the highest-weight state, $\mu=(2,1,0)$, the degrees are $(0,1,2)$ for the direct $Q$'s and $(2,1,0)$ for the dual ones.
+
+\paragraph{Relation to the old conventions.} Each new equation is an old one with $x$ shifted and the roles exchanged.
+\begin{itemize}
+\item \textbf{New dual is old direct.} The new dual equation is the old \emph{direct} equation with $\nu_1\to\nu_3$.
+\item \textbf{New direct is old dual.} Setting $x\to y+h$ in the new direct equation gives the old \emph{dual} form with $\nu_3\to\nu_1$.
+\item \textbf{Mirror form.} Equivalently, each new equation is the old one under $h\to-h$ followed by $t_a(u)\to t_a(u+(a-1)h)$.
+\item \textbf{Asymptotics.} They swap along with the forms: the old $Q_i\sim z^{+u/h}$ and $Q^j\sim z^{-u/h}$ become the new $Q_i\sim z^{-u/h}$ and $Q^j\sim z^{+u/h}$.
+\end{itemize}
+A structural explanation, not separately verified: $u+hE_{ij}=u-hE'_{ji}$ with $E'=-E^T$, which generates the dual rep. So the new Lax matrix for $\lambda$ is the old one for $\lambda^*=(-\lambda_3,-\lambda_2,-\lambda_1)$, up to the twist gauge. This accounts for the swap. For example $\deg q^j=\mu_j-\lambda_3=\lambda^*_1-\mu^*_j$, and the old $\nu^*_1$ equals the new $\nu_3$.
+
+%======================================================================
+\section{QQ relation}
+For every state and every cyclic $(a,b;c)$,
+\begin{equation}
+Q_a(u)Q_b(u+h)-Q_b(u)Q_a(u+h)=\Big(\frac1{z_b}-\frac1{z_a}\Big)\,\chi_3^{-u/h}\,F_\lambda(u)\,Q^c(u),\qquad F_\lambda(u)=\prod_{n=\lambda_2+1}^{\lambda_1}(u-\theta+nh).
+\end{equation}
+Here $q$'s are monic and the identity is checked on the polynomial parts. The factor $\chi_3^{-u/h}$ appears because $(z_az_b)^{-u/h}=\chi_3^{-u/h}z_c^{u/h}$, so it is absent when $\chi_3=1$. For the adjoint $F=\nu_1(u)$. The old relation had $F=\prod(u-\theta-nh)$ and the shift $-h$.
+
+%======================================================================
+\section{Wronskian (quantum Weyl) formula}\label{sec:wronskian}
+
+Let
+\begin{equation}
+D_{k_1k_2k_3}(x)=\det_{1\le j,c\le3}Q^j(x+k_ch),
+\end{equation}
+where in the notebook $z_j^{x/h}$ is stripped from row $j$; this cancels in every ratio below. The $4\times4$ determinant with rows $Q^1,Q^2,Q^3,Q$ and column shifts $(+h,0,-h,-2h)$ vanishes for $Q=Q^{1,2,3}$. Expanding it along the last row and matching with \eqref{eq:dual} gives
+\begin{equation}
+t_1=\nu_3(x)\frac{D_{1,-1,-2}}{D_{0,-1,-2}},\qquad t_2=\nu_3(x)\nu_3(x-h)\frac{D_{1,0,-2}}{D_{0,-1,-2}},\qquad t_3=\nu_3(x)\nu_3(x-h)\nu_3(x-2h)\frac{D_{1,0,-1}}{D_{0,-1,-2}}.
+\end{equation}
+More generally, for every Young diagram $\lambda$ inside the $3\times3$ box (19 diagrams), with $\lambda$ here labelling the fused transfer matrix:
+\begin{equation}\label{eq:weyl}
+T_\lambda(x)=\prod_{(r,c)\in\lambda}\nu_3\big(x+(c-r)h\big)\;\frac{\det_{j,k}Q^j\big(x+(\lambda_k-k+1)h\big)}{\det_{j,k}Q^j\big(x+(1-k)h\big)} .
+\end{equation}
+The prefactor is the content product, with one $\nu_3$ per box shifted by that box's content. The identity was checked as a polynomial identity (multiplied through by the denominator) with remainder $0$, and the prefactor is state-independent. As $h\to0$ the ratio of determinants becomes the Schur polynomial $s_\lambda(z)$. Also $D_{0,-1,-2}(x)=D_{1,0,-1}(x-h)/\chi_3$, and for the adjoint $D_{1,0,-1}\propto\nu_1\nu_2\nu_3(x)$.
+
+%======================================================================
+\section{Degenerate columns and the reduction at $x=\theta-2h$}\label{sec:reduction}
+
+\begin{itemize}
+\item \textbf{Dual columns.} The dual equation at $x=\theta+h$ loses its first two terms, since they contain $\nu_3(\theta)=0$. What is left gives $v(\theta)\parallel v(\theta-h)$. At $x=\theta-h$ the equation relates $v(\theta),\dots,v(\theta-3h)$, so $v(\theta-3h),v(\theta-2h),v(\theta-h)$ are dependent. Hence $v(\theta-3h),\dots,v(\theta)$ lie in one 2-plane.
+\item \textbf{Direct columns.} Likewise $u(\theta-2h)\parallel u(\theta-h)$, and $u(\theta-2h),\dots,u(\theta+h)$ lie in one 2-plane.
+\end{itemize}
+At $x=\theta-2h$ the numerator columns of \eqref{eq:weyl} sit at $\theta+(\lambda_1-2,\lambda_2-3,\lambda_3-4)h$ and the denominator columns at $\theta+(-2,-3,-4)h$. Therefore
+\begin{equation}
+T_\lambda(\theta-2h)=\begin{cases}P_\lambda(\theta-2h)\,\dfrac{\det_2\big[v(\theta+(\lambda_1-2)h),\,v(\theta+(\lambda_2-3)h)\big]}{\det_2\big[v(\theta-2h),\,v(\theta-3h)\big]} & \lambda_3=0,\ \lambda_1\le2,\\[8pt] 0 & \text{otherwise,}\end{cases}
+\end{equation}
+for any choice of the two rows in $\det_2$. The only nonzero cases are $\lambda=(1),(1,1),(2),(2,1)$, which are exactly the fused matrices that build $\bra{x_\mu}$. The case $(2,2)$ vanishes through the parallel pair, $\lambda_3\ge1$ because all three columns then lie in the plane, and $\lambda_1=3$ because $P_\lambda\ni\nu_3(\theta)=0$.
+
+%======================================================================
+\section{SoV wavefunctions}\label{sec:wf}
+
+\paragraph{Normalization.} $\ket{\Psi}$ is a right eigenvector of the $t_a$, normalized by $\langle x_0|\Psi\rangle=1$. $\bra{\Psi}$ is a right eigenvector of the transposed $t_a$, normalized by $\langle\Psi|y_0\rangle=1$.
+
+\paragraph{x side.} Every $\bra{x_\mu}$ is $\bra{x_0}$ times fused $t$'s at $\theta-2h$, so $\langle x_\mu|\Psi\rangle$ is a product of eigenvalues $T_\lambda(\theta-2h)$, read off from Section~\ref{sec:bases}; for example $\langle x_{\{2\},\{2,0\}}|\Psi\rangle=T_{(2)}/T_{(1)}$. Section~\ref{sec:reduction} then gives
+\begin{equation}
+\langle x_\mu|\Psi\rangle=N_\mu\,\frac{\det_2[v(x_{21}),\,v(x_1)]\;v_k(x_{22})}{\det_2[v(\theta-2h),\,v(\theta-3h)]\;v_k(\theta-h)} ,
+\end{equation}
+with B-roots $x_1,x_{21},x_{22}$. The step from $v(\theta-h)$ to $v(\theta)$ uses the parallel pair. $N_\mu$ is state-independent for every choice of the two rows and of $k$, and $N_\mu=n_\mu h^{k_\mu}$ with
+\[
+(n_\mu)=(1,-2,6,-1,2,-2,-6,6),\qquad k_\mu=5-\mu_{11}-\mu_{21}-\mu_{22},
+\]
+in the pattern order of Section~\ref{sec:bases}. These values were obtained at $h=1$ and $h=\tfrac12$.
+
+\paragraph{y side.} With the direct columns,
+\begin{equation}
+\frac{\langle\Psi|y_\mu\rangle}{\langle\Psi|y_{\rm low}\rangle}=N'_\mu\,\frac{\det_2[u(y_{21}),\,u(y_{22})]\;u_k(y_1)}{(\text{same at }y_{\rm low})},
+\end{equation}
+with C-roots $y_1,y_{21},y_{22}$, and $N'_\mu$ state-independent for every choice of rows and $k$. The other two ways of assigning the roots to the slots fail.
+
+%======================================================================
+\section{Functional orthogonality from adjointness}\label{sec:orth}
+
+\paragraph{Bracket.} Let $\langle F\rangle$ denote the sum of residues of $\mu F$ over \emph{all} poles of a rational measure $\mu$. The $Q$'s are polynomials times exponentials, which are entire, so this sum is invariant under $x\to x-kh$ term by term. Shifting each term of $\langle\mu\,P\,O[Q]\rangle$, where $O$ is \eqref{eq:dir}, turns it into $\langle\mu\varphi\,O^\dagger[P]\,Q\rangle$, where $O^\dagger$ is \eqref{eq:dual}, provided that
+\begin{equation}
+\varphi=\frac{\nu_1(x+h)\nu_1(x+2h)}{\nu_3(x-h)\nu_3(x-2h)},\qquad \frac{\mu(x+h)}{\mu(x)}=\frac{\nu_3(x)}{\nu_1(x+3h)}\ \Rightarrow\ \mu=\prod_{n=\lambda_3}^{\lambda_1+2}\frac1{x-\theta+nh}.
+\end{equation}
+All four terms give consistent conditions.
+
+\paragraph{Orthogonality.} For two states with the same twist, $O_BQ_B=0$ and $O^\dagger_AP_A=0$, so only the differences $\delta t_a=t^B_a-t^A_a$ survive. Here $\delta t_1=\delta I_1$ is a constant, $\delta t_2$ is linear and $\delta t_3=0$, so there are three unknowns. Writing $\delta t_2(y)=a\,\nu_1(y)+b\,\nu_3(y-h)$, keeping the $a$ part in direct form and moving the $b$ part to dual form, every term carries
+\[
+\rho=\mu\,\nu_1(x+h)\nu_1(x+2h)=\prod_{n=\lambda_3}^{\lambda_1}\frac1{x-\theta+nh}.
+\]
+For every pair $(i,j)$ this gives
+\begin{equation}
+-\delta I_1\langle P^jQ_i\rangle+a\langle P^jQ_i^{[2]}\rangle+b\langle P^{j[-2]}Q_i\rangle=0,\qquad
+\langle f\rangle=\sum_{n=\lambda_3}^{\lambda_1}\frac{f(\theta-nh)}{\prod_{m\ne n}(m-n)h}.
+\end{equation}
+It follows that
+\begin{equation}
+\det N=\det_{(i,j)\in\{(1,3),(1,2),(2,3)\}}\Big(-\langle P^jQ_i\rangle,\ \langle P^jQ_i^{[2]}\rangle,\ \langle P^{j[-2]}Q_i\rangle\Big)
+\end{equation}
+vanishes between different states with the same twist. This is the old relation with $h\to-h$; the poles have moved from $\theta+nh$ to $\theta-nh$.
+
+\paragraph{Row choices.} For $[2,1,0]$, $[3,1,0]$, $[3,2,0]$ and $[2,1,1]$, 77 of the 84 choices of three rows out of the nine pairs $(i,j)$ give a determinant that is nonzero on the diagonal and proportional to $\delta_{AB}$. The seven that fail have all rows with the same $i$, all with the same $j$, or are $\{(1,1),(2,2),(3,3)\}$.
+
+\paragraph{Orientation.} In a general scalar product, $P^j$ are the dual $Q$'s of the \emph{ket} and $Q_i$ the direct $Q$'s of the \emph{bra}. This is what the SoV expansion $\sum\langle\Psi_A|y\rangle M_{yx}\langle x|\Psi_B\rangle$ requires, because the ket's x-wavefunction is built from dual $Q$'s and the bra's y-wavefunction from direct $Q$'s. At equal twists both orientations agree on the diagonal and both vanish off it. At different twists only this one works; the other is off by factors of order 100.
+
+%======================================================================
+\section{Scalar products}\label{sec:norm}
+
+\paragraph{Reference wavefunctions.}
+\begin{align}
+\Psi_Q(x_0)&=\big[Q^2(\theta-2h)Q^3(\theta-3h)-Q^3(\theta-2h)Q^2(\theta-3h)\big]\,Q^3(\theta-h)\qquad(\text{ket, dual }Q\text{'s}),\\
+\Phi_Q(y_0)&=\big[Q_1(\theta-2h)Q_2(\theta)-Q_2(\theta-2h)Q_1(\theta)\big]\,Q_1(\theta-2h)\qquad(\text{bra, direct }Q\text{'s}).
+\end{align}
+These are the wavefunctions of Section~\ref{sec:wf} evaluated at $x_0$ and $y_0$. The choice of rows and of the single factor is fixed: among the 81 combinations of rows and single factors, only this one gives a state-independent ratio, at both $h=1$ points.
+
+\paragraph{The coefficient $c_0$.} Expanding $\det N$ with the $Q$'s as independent symbols, the four monomials of $\Psi_Q(x_0)\Phi_Q(y_0)$ all appear with the same coefficient,
+\begin{equation}
+c_0=\frac1{4h^6}.
+\end{equation}
+
+\paragraph{Formula.}
+\begin{equation}\label{eq:norm}
+\boxed{\ \langle\Psi_A|\Psi_B\rangle=\frac{1}{\langle x_0|y_0\rangle}\cdot\frac{\det N[\,Q^j_{\text{ket }B},\ Q_{i,\text{bra }A}\,]/c_0}{\Psi_Q^{B}(x_0)\,\Phi_Q^{A}(y_0)}\ },\qquad \langle x_0|y_0\rangle=9h^4 .
+\end{equation}
+The remaining constant $1/\langle x_0|y_0\rangle$ is the $(y_0,x_0)$ entry of the inverse of the triangular overlap matrix of Section~\ref{sec:bases}. It is what one expects from normalizing the bra at $y_0$ and the ket at $x_0$.
+
+\paragraph{Where it holds.}
+\begin{itemize}
+\item \textbf{Same twist.} For all 8 states at $(h,\chi_3)=(1,1)$, $(1,\tfrac72)$ and $(\tfrac12,\tfrac54)$. Equivalently $\kappa=1/(c_0\langle x_0|y_0\rangle)=4h^2/9$, which is $4/9$ at $h=1$ and $1/9$ at $h=\tfrac12$.
+\item \textbf{Different twists.} With $\langle\Psi_{A,w}|$ an eigenstate of $t(w)$ and $\ket{\Psi_{B,z}}$ of $t(z)$, both in the companion frame, \eqref{eq:norm} holds for all 64 entries, to about $10^{-51}$, with each state carrying its own twisted $Q$'s. Nothing else changes, because $x_0$ and $y_0$ are twist-independent: $x_0$ is a B-eigencovector, and $y_0$ is fixed by $\langle x_0|y_0\rangle=9h^4$. The smallest overlap is about $0.017$, so this is not a comparison of near-zero numbers.
+\end{itemize}
+
+%======================================================================
+\section{Diagonal frame}\label{sec:diag}
+
+Let $\ket{\Psi_{{\rm diag},B}}=P_{\rm phys}\ket{\Psi_{B,z}}$. Since $P_{\rm phys}\,t(w)\,P_{\rm phys}^{-1}=$ \nb{tGPzw}, the covector $\Omega_{zw}P_{\rm phys}$ is the $w$-vacuum bra in the companion frame. It is the weight-$(2,1,0)$ state with $t_1=\tau_{\rm vac}(w)$. Then
+\begin{equation}
+\Omega_{zw}\cdot\Psi_{{\rm diag},B}=\big(\Omega_{zw}P_{\rm phys}\cdot y_0\big)\,\frac{\det N\big[Q^j_{B,z},\,Q_{i,{\rm vac},w}\big]}{c_0\langle x_0|y_0\rangle\,\Psi_Q^{B,z}(x_0)\,\Phi_Q^{{\rm vac},w}(y_0)}
+\end{equation}
+for all 8 states, to about $10^{-53}$, with $|\Omega_{zw}\cdot\Psi|\ge0.6$. The prefactor normalizes the vacuum bra; it depends on $z,w$ but not on the state. So the overlap of the rotated twist-$w$ vacuum with any diagonal-frame eigenstate is the functional determinant. The state enters only through its own $Q$'s, in $\det N$ and in $\Psi_Q(x_0)$.
+
+%======================================================================
+\section{Beyond the adjoint}\label{sec:beyond}
+
+\nb{Baxter-QQ-Wronskian.wb} parametrizes everything by the rep and was run for $[2,1,0]$, $[3,1,0]$, $[3,2,0]$ and $[2,1,1]$ at $(h,\theta,z)=(1,\tfrac13,(\tfrac52,\tfrac73,\tfrac35))$.
+
+\begin{itemize}
+\item \textbf{Quantum determinant.} $t_3=\chi_3\nu_1(u)\nu_2(u-h)\nu_3(u-2h)$, checked symbolically.
+\item \textbf{Baxter equations.} Both hold, with $\deg q_i=\lambda_1-\mu_i$ and $\deg q^j=\mu_j-\lambda_3$. The $-\lambda_3$ was only visible at $[2,1,1]$.
+\item \textbf{QQ relation.} It holds with $F_\lambda=\prod_{n=\lambda_2+1}^{\lambda_1}(u-\theta+nh)$; for example $F=(u-\theta+2h)(u-\theta+3h)$ for $[3,1,0]$ and $F=u-\theta+3h$ for $[3,2,0]$.
+\item \textbf{Wronskians.} The formulas for $t_{1,2,3}$ hold for all four reps. The general-$T_\lambda$ formula \eqref{eq:weyl} was checked for the adjoint only.
+\item \textbf{Functional orthogonality.} $\delta t$ has exactly three unknowns, and for $A\ne B$ the $9\times3$ matrix has rank 2: its smallest singular value is $\lesssim10^{-39}$, against $\gtrsim1$ for $A=B$. The off-diagonal/diagonal ratio of $\det N$ is $\lesssim10^{-45}$. The measure $\rho$ was confirmed at $\lambda_3=1$.
+\item \textbf{Not done beyond the adjoint.} The SoV bases, the wavefunctions and the normalized formula \eqref{eq:norm}.
+\end{itemize}
+
+%======================================================================
+\section{Verification summary}
+
+The clean notebook ends in a table of 37 checks, all of which pass. The Boolean checks are exact and symbolic. The numeric checks are residuals at 60 digits, between $0$ and $10^{-51}$.
+
+\begin{longtable}{p{8.2cm}p{6.8cm}}
+\toprule
+Statement & Status\\\midrule
+quantum determinant; B/C eigenbases; $\langle x|y\rangle$; frames & exact, symbolic\\
+Baxter and dual Baxter equations, degree rules & numeric, 3 points (adjoint); 4 reps\\
+QQ relation & numeric, 3 points (adjoint); 4 reps\\
+Wronskians for $t_{1,2,3}$ & numeric (adjoint), 4 reps\\
+quantum Weyl formula, all 19 $\lambda\subseteq3\times3$ & numeric (adjoint)\\
+reduction at $\theta-2h$; degenerate columns & numeric (adjoint)\\
+SoV wavefunctions (x and y side) & numeric (adjoint), $h=1,\tfrac12$\\
+functional orthogonality & numeric, 4 reps\\
+norm formula \eqref{eq:norm}, same twist & numeric, $(h,\chi_3)=(1,1),(1,\tfrac72),(\tfrac12,\tfrac54)$\\
+mixed twists, 64 entries & numeric, one point\\
+diagonal frame $\Omega_{zw}\cdot\Psi$ & numeric, one point\\
+dual-rep explanation of the swap & structural argument only\\
+\bottomrule
+\end{longtable}
+
+%======================================================================
+\section{Pitfalls met along the way}
+\begin{itemize}
+\item \textbf{\nb{Ordering} and \nb{-Infinity}.} An exactly-zero polynomial has an empty coefficient list, so its \nb{Max} is \nb{-Infinity}, and \nb{Ordering} sorts \nb{-Infinity} after ordinary numbers. The clean notebook's \nb{maxc} therefore floors at 0.
+\item \textbf{Exponential prefactors.} When $z_j^{\theta/h}$ is stripped from the rows, it must be restored consistently. An early $\kappa$ value showed a spurious $z_3^{2\theta/h}$ dependence from a wrong restoring factor; with the full $Q$'s it is absent.
+\item \textbf{$h=1$ in the working notebook.} Several cells of the working notebook hard-code $h=1$ in shifts and exponentials. The clean notebook uses general $h$ throughout.
+\item \textbf{Labelling of $\det N$.} In the working notebook, \nb{detNN[A,B]} paired the dual $Q$'s of $A$ with the direct $Q$'s of $B$, which is harmless at equal twists. Read $\det N$ as (ket dual, bra direct).
+\end{itemize}
+
+%======================================================================
+\section{Open}
+\begin{itemize}
+\item \textbf{Beyond the adjoint.} The SoV bases and the normalized scalar product for $[3,1,0]$ and other reps, including the $\lambda$-dependence of $c_0$, $\langle x_0|y_0\rangle$ and the reference points.
+\item \textbf{The Casoratian.} A closed form for $D_{1,0,-1}$. Its roots in $x-\theta$ are $\{0,-1,-2\}$ for $[2,1,0]$, $\{0,\dots,-3\}$ for $[3,1,0]$, $\{0,-1,-1,-2,-3\}$ for $[3,2,0]$ and $\{-2\}$ for $[2,1,1]$; the degree is $|\lambda|-3\lambda_3$.
+\item \textbf{The paper.} Updating \nb{paper/xxxCG.tex}, which still uses the old conventions.
+\item \textbf{Proposed relabelling, not applied.} Swap the names direct$\leftrightarrow$dual and upper$\leftrightarrow$lower indices, and possibly also reverse $j\to4-j$ (with $z_j\to z_{4-j}$). With the reversal, the reference factors become $Q_1\cdot Q_{12}$-type and $Q^3\cdot(Q^3,Q^2)$-type, the old patterns, and the formulas take the old form with $\lambda\to\lambda^*$.
+\end{itemize}
+
+\end{document}
