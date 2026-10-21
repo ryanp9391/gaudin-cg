@@ -50,6 +50,13 @@ freely each session rather than appending.
   [14,7,0] with a degree-15 solvability polynomial for c₁; Jacobian rank 5 or 6 in every run; the pruning tolerance must scale with the precision
   (10^(−0.6·dps)) — a near-solution with inconsistency 1e-41 survived 1e-40 at (28,13,1) until fixed. Not done: the full [14,7,0] family.
 
+**ROUND 7 DISPATCHED (2026-10-21 evening; Paul: "Yes lets do Jacobi. Then get another agent to write up simple, readable, hep-th style notes
+on the slice engine thing"):** agent J (Sonnet) → `Paul/Python/gaudin_sl3/SPEC-jacobi-cg.md`, `jacobi_cg.py`, `RESULTS-jacobi-cg.md`: is V_red on
+the whole weight space a Jacobi chain with closed-form coefficients, is M_mu a sub-chain or a spectral subspace, is the slice of a copy the
+three-term-recurrence sequence p_k(V) at its Q-system eigenvalue (validated on all 344 + 2255 copies), and is that recurrence S's tridiagonal
+Baxter pencil (slice ∝ Q-polynomial coefficients?). Agent N (Sonnet) → `Paul/Mathematica/Gaudin/Slice-engine-notes.{tex,md,pdf}`: self-contained
+hep-th-style notes on the slice engine (the Jacobi result to be added when J returns). Both uncommitted until they return.
+
 **ASSESSMENT GIVEN TO PAUL (2026-10-21 evening), the state of the original goal.** "Beat the improved Munich code (10.9 s at a = 7)" is achieved
 — by the slice engine (0.10 s, ×100; a = 14 in 1 s), i.e. by representation theory, not by integrability: Munich's n_W³ cost was never
 intrinsic (the multiplicity problem lives in a w ≤ 8-dimensional slice; for m = 1, 28 of 113 irreps, the slice is fixed without any Q-data).
