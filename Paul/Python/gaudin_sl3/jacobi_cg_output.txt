@@ -1,0 +1,375 @@
+== J1/J2 structural argument and symbolic derivation of the closed forms
+  chain 1 (Phi raising): 24 of 36 terms have Phi != 0; in each of them exactly one factor has first index 3 and one has second index 3: {'E33 x gl2^(12) x gl2^(12) (shift 0)': 10, 'E_a3 x E_3b x gl2^(12) (net shift 0 or +-(1,-1))': 14}
+  chain 2 (Phi' lowering): 24 of 36 terms have Phi != 0; in each of them exactly one factor has first index 3 and one has second index 3: {'E33 x gl2^(12) x gl2^(12) (shift 0)': 10, 'E_a3 x E_3b x gl2^(12) (net shift 0 or +-(1,-1))': 14}
+  symbolic derivation of chain 1 (generic labels, 200 random-point comparisons): components [(0, -1, 1), (0, 0, 0), (0, 1, -1)], only the three weight-zero components: True
+  u = closed form: True,  d = closed form: True,  alpha = A0 + 3/16 (s-2l3+2) xi - K/(16 xi): True,  python-vs-symbolic random-point mismatches: 0  (2.3s)
+  symbolic derivation of chain 2 (generic labels, 200 random-point comparisons): components [(0, -1, 1), (0, 0, 0), (0, 1, -1)], only the three weight-zero components: True
+  u = closed form: True,  d = closed form: True,  alpha = A0 + 3/16 (s-2l1-2) xi - K/(16 xi): True,  python-vs-symbolic random-point mismatches: 0  (2.6s)
+== J1/J2: bandwidth of V_red (R operator) and closed-form chain vs R exact matrices, all dominant candidates
+  [4, 2, 0]   dominant candidates   13 (irreps  13, copies   19, irreps = closed-form irreps: True), states (sum w)     21, max w  3: max band of V_red (R operator) = 1, tridiagonal in 13/13, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [6, 3, 0]   dominant candidates   25 (irreps  25, copies   44, irreps = closed-form irreps: True), states (sum w)     50, max w  4: max band of V_red (R operator) = 1, tridiagonal in 25/25, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [8, 4, 0]   dominant candidates   41 (irreps  41, copies   85, irreps = closed-form irreps: True), states (sum w)     99, max w  5: max band of V_red (R operator) = 1, tridiagonal in 41/41, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [14, 7, 0]  dominant candidates  113 (irreps 113, copies  344, irreps = closed-form irreps: True), states (sum w)    412, max w  8: max band of V_red (R operator) = 1, tridiagonal in 113/113, chain-index mismatches 0, closed-form matrix mismatches 0  (0.1s)
+  [28, 14, 0] dominant candidates  421 (irreps 421, copies 2255, irreps = closed-form irreps: True), states (sum w)   2759, max w 15: max band of V_red (R operator) = 1, tridiagonal in 421/421, chain-index mismatches 0, closed-form matrix mismatches 0  (0.7s)
+  [20, 10, 0] dominant candidates  221 (irreps 221, copies  891, irreps = closed-form irreps: True), states (sum w)   1081, max w 11: max band of V_red (R operator) = 1, tridiagonal in 221/221, chain-index mismatches 0, closed-form matrix mismatches 0  (0.2s)
+  [10, 3, 0]  dominant candidates   57 (irreps  53, copies  108, irreps = closed-form irreps: True), states (sum w)    142, max w  4: max band of V_red (R operator) = 1, tridiagonal in 57/57, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [9, 1, 0]   dominant candidates   38 (irreps  26, copies   34, irreps = closed-form irreps: True), states (sum w)     62, max w  2: max band of V_red (R operator) = 1, tridiagonal in 38/38, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [5, 5, 0]   dominant candidates   12 (irreps   6, copies    6, irreps = closed-form irreps: True), states (sum w)     12, max w  1: max band of V_red (R operator) = 0, tridiagonal in 12/12, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [7, 7, 0]   dominant candidates   20 (irreps   8, copies    8, irreps = closed-form irreps: True), states (sum w)     20, max w  1: max band of V_red (R operator) = 0, tridiagonal in 20/20, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [3, 2, 1]   dominant candidates    5 (irreps   5, copies    6, irreps = closed-form irreps: True), states (sum w)      6, max w  2: max band of V_red (R operator) = 1, tridiagonal in 5/5, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [5, 3, 2]   dominant candidates    8 (irreps   8, copies   10, irreps = closed-form irreps: True), states (sum w)     11, max w  2: max band of V_red (R operator) = 1, tridiagonal in 8/8, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [6, 4, 1]   dominant candidates   18 (irreps  18, copies   28, irreps = closed-form irreps: True), states (sum w)     32, max w  3: max band of V_red (R operator) = 1, tridiagonal in 18/18, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [6, 4, 2]   dominant candidates   13 (irreps  13, copies   19, irreps = closed-form irreps: True), states (sum w)     21, max w  3: max band of V_red (R operator) = 1, tridiagonal in 13/13, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [7, 5, 3]   dominant candidates   13 (irreps  13, copies   19, irreps = closed-form irreps: True), states (sum w)     21, max w  3: max band of V_red (R operator) = 1, tridiagonal in 13/13, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [11, 6, 3]  dominant candidates   40 (irreps  39, copies   76, irreps = closed-form irreps: True), states (sum w)     92, max w  4: max band of V_red (R operator) = 1, tridiagonal in 40/40, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [9, 5, 2]   dominant candidates   32 (irreps  32, copies   60, irreps = closed-form irreps: True), states (sum w)     70, max w  4: max band of V_red (R operator) = 1, tridiagonal in 32/32, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  [12, 5, 0]  dominant candidates   84 (irreps  83, copies  218, irreps = closed-form irreps: True), states (sum w)    265, max w  6: max band of V_red (R operator) = 1, tridiagonal in 84/84, chain-index mismatches 0, closed-form matrix mismatches 0  (0.1s)
+  [13, 13, 0] dominant candidates   56 (irreps  14, copies   14, irreps = closed-form irreps: True), states (sum w)     56, max w  1: max band of V_red (R operator) = 0, tridiagonal in 56/56, chain-index mismatches 0, closed-form matrix mismatches 0  (0.0s)
+  TOTAL: 1230 sectors, 5232 weight-space states, 19 reps, closed-form mismatches 0
+== J1: exact chain tables, all irreps of [4,2,0] (alpha_k, u_k = M[k+1,k], d_k = M[k,k+1], u_k d_k; positions k = 0..w-1 ascending m1)
+  mu [8, 4, 0]    m 1  w 1  w1 1  t 4  s 6  m1 in [4,4]  cut m1 <= 6
+      alpha = ['-8']
+  mu [8, 3, 1]    m 1  w 1  w1 1  t 4  s 5  m1 in [4,4]  cut m1 <= 6
+      alpha = ['10']
+  mu [8, 2, 2]    m 1  w 1  w1 1  t 4  s 4  m1 in [4,4]  cut m1 <= 6
+      alpha = ['19']
+  mu [7, 5, 0]    m 1  w 1  w1 1  t 3  s 6  m1 in [4,4]  cut m1 <= 5
+      alpha = ['-10']
+  mu [7, 4, 1]    m 2  w 2  w1 2  t 3  s 5  m1 in [3,4]  cut m1 <= 5
+      alpha = ['25/6', '95/6']
+      u     = ['-20/3']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-10/3']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['200/9']
+  mu [7, 3, 2]    m 2  w 2  w1 2  t 3  s 4  m1 in [3,4]  cut m1 <= 5
+      alpha = ['13', '31']
+      u     = ['-5']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-3']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['15']
+  mu [6, 6, 0]    m 1  w 1  w1 1  t 2  s 6  m1 in [4,4]  cut m1 <= 4
+      alpha = ['-11']
+  mu [6, 5, 1]    m 2  w 2  w1 2  t 2  s 5  m1 in [3,4]  cut m1 <= 4
+      alpha = ['2/3', '58/3']
+      u     = ['-5/3']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-16/3']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['80/9']
+  mu [6, 4, 2]    m 3  w 3  w1 3  t 2  s 4  m1 in [2,4]  cut m1 <= 4
+      alpha = ['12', '21', '39']
+      u     = ['-8', '-5/3']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-16/3', '-5']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['128/3', '25/3']
+  mu [6, 3, 3]    m 1  w 2  w1 2  t 2  s 3  m1 in [2,3]  cut m1 <= 4
+      alpha = ['43/3', '89/3']
+      u     = ['-16/3']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-25/6']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['200/9']
+  mu [5, 5, 2]    m 1  w 2  w1 1  t 1  s 4  m1 in [3,4]  cut m1 <= 3
+      alpha = ['25', '43']
+      u     = ['0']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-6']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['0']
+  mu [5, 4, 3]    m 2  w 2  w1 2  t 1  s 3  m1 in [2,3]  cut m1 <= 3
+      alpha = ['179/6', '229/6']
+      u     = ['-4/3']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-20/3']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['80/9']
+  mu [4, 4, 4]    m 1  w 1  w1 1  t 0  s 2  m1 in [2,2]  cut m1 <= 2
+      alpha = ['40']
+== J1: exact chain tables, selected irreps of [14,7,0] (free: (21,14,7), (14,14,14), (28,14,0), (24,12,6); E12-cut: (20,15,7), (19,17,6); E23-spectral: (22,10,10), (23,10,9))
+  mu [28, 14, 0]  m 1  w 1  w1 1  t 14  s 21  m1 in [14,14]  cut m1 <= 21
+      alpha = ['-98']
+  mu [24, 12, 6]  m 5  w 5  w1 5  t 10  s 15  m1 in [10,14]  cut m1 <= 17
+      alpha = ['651', '719', '9065/11', '137157/143', '14583/13']
+      u     = ['-192', '-455/4', '-672/11', '-315/13']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-165/4', '-64', '-780/11', '-816/13']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['7920', '7280', '524160/121', '257040/169']
+  mu [23, 10, 9]  m 2  w 4  w1 4  t 9  s 12  m1 in [9,12]  cut m1 <= 16
+      alpha = ['5895/8', '34221/40', '19557/20', '4455/4']
+      u     = ['-1155/8', '-512/5', '-2925/44']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-325/8', '-2688/55', '-1785/52']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['375375/64', '1376256/275', '401625/176']
+  mu [22, 10, 10] m 1  w 4  w1 4  t 8  s 11  m1 in [8,11]  cut m1 <= 15
+      alpha = ['750', '880', '10954/11', '12300/11']
+      u     = ['-120', '-385/4', '-768/11']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-195/4', '-56', '-420/11']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['5850', '5390', '322560/121']
+  mu [21, 14, 7]  m 8  w 8  w1 8  t 7  s 14  m1 in [7,14]  cut m1 <= 14
+      alpha = ['777', '801', '849', '921', '1017', '1137', '1281', '1449']
+      u     = ['-441/2', '-120', '-165/2', '-384/7', '-65/2', '-168/11', '-105/26']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-189/2', '-120', '-1815/14', '-128', '-2535/22', '-1176/13', '-105/2']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['83349/4', '14400', '299475/28', '49152/7', '164775/44', '197568/143', '11025/52']
+  mu [20, 15, 7]  m 6  w 7  w1 6  t 6  s 14  m1 in [8,14]  cut m1 <= 13
+      alpha = ['850', '898', '970', '1066', '1186', '1330', '1498']
+      u     = ['-50', '-44', '-216/7', '-52/3', '-70/11', '0']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-162', '-1100/7', '-440/3', '-1404/11', '-98', '-56']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['8100', '48400/7', '31680/7', '24336/11', '6860/11', '0']
+  mu [19, 17, 6]  m 3  w 5  w1 3  t 5  s 15  m1 in [10,14]  cut m1 <= 12
+      alpha = ['5937/7', '19919/21', '3205/3', '15747/13', '17923/13']
+      u     = ['-64/7', '-65/12', '0', '35/13']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['-4455/28', '-448/3', '-130', '-1296/13']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['71280/49', '7280/9', '0', '-45360/169']
+  mu [14, 14, 14] m 1  w 1  w1 1  t 0  s 7  m1 in [7,7]  cut m1 <= 7
+      alpha = ['1470']
+== J3: exact tables of the SECOND chain (W2 of m1 <= mu2 - l3), E23-spectral irreps: [4,2,0] (6,3,3); [14,7,0] (22,10,10), (23,10,9); and a free one (21,14,7) (cont2 = cont1 there)
+  mu [6, 3, 3]    m 1  w 2  w2 1  t 3  s 4  m1 in [3,4]  cut m1 <= 3
+      alpha = ['31', '13']
+      u     = ['0']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['2']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['0']
+  mu [23, 10, 9]  m 2  w 4  w2 2  t 9  s 12  m1 in [9,12]  cut m1 <= 10
+      alpha = ['9015/8', '8025/8', '3441/4', '2775/4']
+      u     = ['165/8', '0', '-585/44']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['195/8', '336/11', '1155/52']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['32175/64', '0', '-4725/16']
+  mu [22, 10, 10] m 1  w 4  w2 1  t 10  s 13  m1 in [10,13]  cut m1 <= 10
+      alpha = ['1140', '11214/11', '125280/143', '9210/13']
+      u     = ['0', '-351/22', '-280/13']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['39/2', '280/11', '495/26']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['0', '-49140/121', '-69300/169']
+  mu [21, 14, 7]  m 8  w 8  w2 8  t 7  s 14  m1 in [7,14]  cut m1 <= 14
+      alpha = ['1281', '1257', '1209', '1137', '1041', '921', '777', '609']
+      u     = ['441/2', '120', '165/2', '384/7', '65/2', '168/11', '105/26']     (M[k+1,k], up step m1 -> m1+1)
+      d     = ['189/2', '120', '1815/14', '128', '2535/22', '1176/13', '105/2']     (M[k,k+1], down step m1+1 -> m1)
+      u d   = ['83349/4', '14400', '299475/28', '49152/7', '164775/44', '197568/143', '11025/52']
+== J3: the PRV subspace inside the chain
+  [4, 2, 0]: 13 irreps; types: free (w = w1 = m) 11, E12-cut (w > w1 = m) 1, E23-spectral (w = w1 > m) 1; never both: 13/13
+     u at the cut = 0 in 1/1 cut sectors (products beyond the cut: 0 negative, 0 zero, 0 positive); off-diagonal products on W1 all > 0 in 13/13 sectors (7 products); u<0 and d<0 on W1 in 13/13
+     PRV: dim M = m in 13/13, weight space = chain in 13/13, M_mu inside W1 in 13/13; m <= w1: 13/13; E12 effective <=> target weight exists: 13/13; E23 effective => target weight exists: 13/13; mu2 >= l1+l3 => m = w1: 13/13; mu2 <= l1+l3 => w = w1: 13/13
+     exact CHARPOLY (R file): continuant on W1 == CHARPOLY in 12/12 sectors with w1 = m; CHARPOLY divides the continuant in 1/1 sectors with w1 > m; smallest gap (min physical root - max other root) 18.0
+     rigorous rule (chain 1 on W1 if w1 = m, else chain 2 on W2) vs R's 50-digit eigenvalues: 13/13 sectors agree (max deviation 1e-48); empirical top-m rule of chain 1: 13/13 (max deviation 1e-48); Sturm oscillation (physical eigenvector i has i sign changes) 1/1; physical eigenvalues are the top ones: 1/1; random vectors of M_mu have >= w1-m sign changes in 1/1 E23-sectors (min margin 0)  [0.0s]
+  [6, 3, 0]: 25 irreps; types: free (w = w1 = m) 19, E12-cut (w > w1 = m) 3, E23-spectral (w = w1 > m) 3; never both: 25/25
+     u at the cut = 0 in 3/3 cut sectors (products beyond the cut: 0 negative, 0 zero, 0 positive); off-diagonal products on W1 all > 0 in 25/25 sectors (22 products); u<0 and d<0 on W1 in 25/25
+     PRV: dim M = m in 25/25, weight space = chain in 25/25, M_mu inside W1 in 25/25; m <= w1: 25/25; E12 effective <=> target weight exists: 25/25; E23 effective => target weight exists: 25/25; mu2 >= l1+l3 => m = w1: 25/25; mu2 <= l1+l3 => w = w1: 25/25
+     exact CHARPOLY (R file): continuant on W1 == CHARPOLY in 22/22 sectors with w1 = m; CHARPOLY divides the continuant in 3/3 sectors with w1 > m; smallest gap (min physical root - max other root) 24.0
+     rigorous rule (chain 1 on W1 if w1 = m, else chain 2 on W2) vs R's 50-digit eigenvalues: 25/25 sectors agree (max deviation 1e-47); empirical top-m rule of chain 1: 25/25 (max deviation 1e-47); Sturm oscillation (physical eigenvector i has i sign changes) 4/4; physical eigenvalues are the top ones: 4/4; random vectors of M_mu have >= w1-m sign changes in 3/3 E23-sectors (min margin 0)  [0.0s]
+  [8, 4, 0]: 41 irreps; types: free (w = w1 = m) 29, E12-cut (w > w1 = m) 6, E23-spectral (w = w1 > m) 6; never both: 41/41
+     u at the cut = 0 in 6/6 cut sectors (products beyond the cut: 1 negative, 0 zero, 0 positive); off-diagonal products on W1 all > 0 in 41/41 sectors (51 products); u<0 and d<0 on W1 in 41/41
+     PRV: dim M = m in 41/41, weight space = chain in 41/41, M_mu inside W1 in 41/41; m <= w1: 41/41; E12 effective <=> target weight exists: 41/41; E23 effective => target weight exists: 41/41; mu2 >= l1+l3 => m = w1: 41/41; mu2 <= l1+l3 => w = w1: 41/41
+     exact CHARPOLY (R file): continuant on W1 == CHARPOLY in 35/35 sectors with w1 = m; CHARPOLY divides the continuant in 6/6 sectors with w1 > m; smallest gap (min physical root - max other root) 30.0
+     rigorous rule (chain 1 on W1 if w1 = m, else chain 2 on W2) vs R's 50-digit eigenvalues: 41/41 sectors agree (max deviation 1e-47); empirical top-m rule of chain 1: 41/41 (max deviation 1e-47); Sturm oscillation (physical eigenvector i has i sign changes) 10/10; physical eigenvalues are the top ones: 10/10; random vectors of M_mu have >= w1-m sign changes in 6/6 E23-sectors (min margin 0)  [0.1s]
+  [14, 7, 0]: 113 irreps; types: free (w = w1 = m) 71, E12-cut (w > w1 = m) 21, E23-spectral (w = w1 > m) 21; never both: 113/113
+     u at the cut = 0 in 21/21 cut sectors (products beyond the cut: 13 negative, 0 zero, 0 positive); off-diagonal products on W1 all > 0 in 113/113 sectors (265 products); u<0 and d<0 on W1 in 113/113
+     PRV: dim M = m in 113/113, weight space = chain in 113/113, M_mu inside W1 in 113/113; m <= w1: 113/113; E12 effective <=> target weight exists: 113/113; E23 effective => target weight exists: 113/113; mu2 >= l1+l3 => m = w1: 113/113; mu2 <= l1+l3 => w = w1: 113/113
+     exact CHARPOLY (R file): continuant on W1 == CHARPOLY in 92/92 sectors with w1 = m; CHARPOLY divides the continuant in 21/21 sectors with w1 > m; smallest gap (min physical root - max other root) 48.0
+     rigorous rule (chain 1 on W1 if w1 = m, else chain 2 on W2) vs R's 50-digit eigenvalues: 113/113 sectors agree (max deviation 1e-46); empirical top-m rule of chain 1: 113/113 (max deviation 1e-46); Sturm oscillation (physical eigenvector i has i sign changes) 56/56; physical eigenvalues are the top ones: 56/56; random vectors of M_mu have >= w1-m sign changes in 21/21 E23-sectors (min margin 0)  [0.4s]
+  [28, 14, 0]: 421 irreps; types: free (w = w1 = m) 239, E12-cut (w > w1 = m) 91, E23-spectral (w = w1 > m) 91; never both: 421/421
+     u at the cut = 0 in 91/91 cut sectors (products beyond the cut: 161 negative, 0 zero, 0 positive); off-diagonal products on W1 all > 0 in 421/421 sectors (2086 products); u<0 and d<0 on W1 in 421/421
+     PRV: dim M = m in 421/421, weight space = chain in 421/421, M_mu inside W1 in 421/421; m <= w1: 421/421; E12 effective <=> target weight exists: 421/421; E23 effective => target weight exists: 421/421; mu2 >= l1+l3 => m = w1: 421/421; mu2 <= l1+l3 => w = w1: 421/421
+     rigorous rule (chain 1 on W1 if w1 = m, else chain 2 on W2) vs R's 50-digit eigenvalues: 421/421 sectors agree (max deviation 1e-45); empirical top-m rule of chain 1: 421/421 (max deviation 1e-45); Sturm oscillation (physical eigenvector i has i sign changes) 455/455; physical eigenvalues are the top ones: 455/455; random vectors of M_mu have >= w1-m sign changes in 91/91 E23-sectors (min margin 0)  [3.6s]
+  (w, w1, m) distribution of the 113 irreps of [14,7,0]^2 (count; type):
+     (1, 1, 1)  x 16  free
+     (2, 1, 1)  x  2  E12-cut
+     (2, 2, 1)  x  2  E23-spectral
+     (2, 2, 2)  x 14  free
+     (3, 1, 1)  x  2  E12-cut
+     (3, 2, 2)  x  2  E12-cut
+     (3, 3, 1)  x  2  E23-spectral
+     (3, 3, 2)  x  2  E23-spectral
+     (3, 3, 3)  x 12  free
+     (4, 1, 1)  x  2  E12-cut
+     (4, 2, 2)  x  2  E12-cut
+     (4, 3, 3)  x  2  E12-cut
+     (4, 4, 1)  x  2  E23-spectral
+     (4, 4, 2)  x  2  E23-spectral
+     (4, 4, 3)  x  2  E23-spectral
+     (4, 4, 4)  x 10  free
+     (5, 2, 2)  x  1  E12-cut
+     (5, 3, 3)  x  2  E12-cut
+     (5, 4, 4)  x  2  E12-cut
+     (5, 5, 2)  x  1  E23-spectral
+     (5, 5, 3)  x  2  E23-spectral
+     (5, 5, 4)  x  2  E23-spectral
+     (5, 5, 5)  x  8  free
+     (6, 4, 4)  x  1  E12-cut
+     (6, 5, 5)  x  2  E12-cut
+     (6, 6, 4)  x  1  E23-spectral
+     (6, 6, 5)  x  2  E23-spectral
+     (6, 6, 6)  x  6  free
+     (7, 6, 6)  x  1  E12-cut
+     (7, 7, 6)  x  1  E23-spectral
+     (7, 7, 7)  x  4  free
+     (8, 8, 8)  x  1  free
+  (w, m) distribution: [((1, 1), 16), ((2, 1), 4), ((2, 2), 14), ((3, 1), 4), ((3, 2), 4), ((3, 3), 12), ((4, 1), 4), ((4, 2), 4), ((4, 3), 4), ((4, 4), 10), ((5, 2), 2), ((5, 3), 4), ((5, 4), 4), ((5, 5), 8), ((6, 4), 2), ((6, 5), 4), ((6, 6), 6), ((7, 6), 2), ((7, 7), 4), ((8, 8), 1)]
+== J3: the second chain (V' = U V_red U^-1; the E23 constraint is a coordinate cut there)
+  [4, 2, 0]: 13 irreps: closed-form chain 2 == exact V' matrix (R generators) in 13, tridiagonal 13, u'(cut2) = 0 in 13, products > 0 on W2 in 13, u',d' < 0 on W2 in 7; w2 >= m in 13; w2 = m: free 11/11, E23-spectral 1/1, E12-cut 0/1 (there w2 > m is allowed)
+       physical polynomial (R CHARPOLY, exact) == continuant of V'|W2: free 11/11, E23-spectral 1/1; in E12-cut sectors CHARPOLY divides it: 1/1; free sectors: continuant(chain 1, W1) == continuant(chain 2, W2): 11/11
+  [6, 3, 0]: 25 irreps: closed-form chain 2 == exact V' matrix (R generators) in 25, tridiagonal 25, u'(cut2) = 0 in 25, products > 0 on W2 in 25, u',d' < 0 on W2 in 10; w2 >= m in 25; w2 = m: free 19/19, E23-spectral 3/3, E12-cut 0/3 (there w2 > m is allowed)
+       physical polynomial (R CHARPOLY, exact) == continuant of V'|W2: free 19/19, E23-spectral 3/3; in E12-cut sectors CHARPOLY divides it: 3/3; free sectors: continuant(chain 1, W1) == continuant(chain 2, W2): 19/19
+  [8, 4, 0]: 41 irreps: closed-form chain 2 == exact V' matrix (R generators) in 41, tridiagonal 41, u'(cut2) = 0 in 41, products > 0 on W2 in 41, u',d' < 0 on W2 in 13; w2 >= m in 41; w2 = m: free 29/29, E23-spectral 6/6, E12-cut 0/6 (there w2 > m is allowed)
+       physical polynomial (R CHARPOLY, exact) == continuant of V'|W2: free 29/29, E23-spectral 6/6; in E12-cut sectors CHARPOLY divides it: 6/6; free sectors: continuant(chain 1, W1) == continuant(chain 2, W2): 29/29
+  [14, 7, 0]: 113 irreps: closed-form chain 2 == exact V' matrix (R generators) in 113, tridiagonal 113, u'(cut2) = 0 in 113, products > 0 on W2 in 113, u',d' < 0 on W2 in 22; w2 >= m in 113; w2 = m: free 71/71, E23-spectral 21/21, E12-cut 0/21 (there w2 > m is allowed)
+       physical polynomial (R CHARPOLY, exact) == continuant of V'|W2: free 71/71, E23-spectral 21/21; in E12-cut sectors CHARPOLY divides it: 21/21; free sectors: continuant(chain 1, W1) == continuant(chain 2, W2): 71/71
+  [28, 14, 0]: 421 irreps: closed-form chain 2 == exact V' matrix (R generators) in 421, tridiagonal 421, u'(cut2) = 0 in 421, products > 0 on W2 in 421, u',d' < 0 on W2 in 43; w2 >= m in 421; w2 = m: free 239/239, E23-spectral 91/91, E12-cut 0/91 (there w2 > m is allowed)
+       eigenvalues of V'|W2 == R 50-digit eigenvalues: free 239/239, E23-spectral 91/91  [1.4s]
+== J3/J1 broad scan over all small reps
+  scan of all 968 reps [l1,l2,l3], 1 <= l1 <= 16, l3 >= 0 (68.3s): irreps = closed-form irreps in 968/968 reps; closed-form chain 1 == R exact V_red matrix: 39608/39608 dominant candidates, chain 2 == exact V' matrix: 39608/39608; 31976 irrep sectors (65780 copies): products on W1 > 0: 31976, on W2 > 0: 31976; u(cut1) = 0: 31976, u'(cut2) = 0: 31976; PRV dim = m and M_mu inside W1: 31976; E12 effective <=> target weight exists: 31976; never both effective: 31976; m <= w1: 31976; mu2 >= l1+l3 => m = w1: 31976; mu2 <= l1+l3 => m = w2: 31976; sectors with E12-cut 4956, with E23-spectral 4956; selection vs eigenvalues of R's V_red on M_mu: rigorous rule 31976/31976 (max rel. dev. 4.6e-14), top-m rule 31976/31976 (4.6e-14); closed-form multiplicity (w1 or w2) == Racah-Speiser on 39608/39608 dominant candidates
+== exact chain tables of all irreps of [4,2,0], [6,3,0], [8,4,0], [14,7,0] written to jacobi_cg_tables.txt
+  wrote C:\Users\pryan\git-projects\gaudin-cg\Paul\Python\gaudin_sl3\jacobi_cg_tables.txt
+  re-parsed from the file: continuant of the stored chain (chain 1 on W1 if w1 = m, else chain 2 on W2) == R exact CHARPOLY in 192 of 192 sectors
+== J4: direct PRV test of the recurrence slices (exact GT generators), all reps with l1 <= lmax, V from the Q-free rule
+  PRV test of the recurrence slices at V = physical eigenvalues (Q-free rule), all reps with l1 <= 10 (285 reps), 6796 copies, 50 digits: worst relative residual of E12^(l1-l2+1) v, E23^(l2-l3+1) v: 1.03e-39, of the exact eigen-equation V_red v = V v: 1.12e-46, failures: 0;  negative control: 587 non-physical eigenvalues of V_red|W1 (w1 > m sectors), 587 of them violate E23^(l2-l3+1) v = 0 (> 1e-10)  [3.3s]
+== J4: slice_from_V (three-term recurrence) vs R's slices, V from every source
+  [4, 2, 0]: 13 irreps, 19 copies; chain coefficients (closed forms, all irreps): 0.000 s; eigenvalues of V_red|W1 for all irreps (mpmath eigsy, 60 digits): 0.00 s
+     V from R eigenvalues (50 digits)                vs R in memory (50 digits):   19 copies, max |dev| 2.14e-49, max relative dev 4.42e-50 (worst ((6, 4, 2), 2)), support violations 0, max |V-V_R| 0.0, max amplification 0.0, recurrence time 0.000 s (8 us/copy at 50 digits)
+     V from chain only: chain 1 on W1 / chain 2 on W2 (Q-free) vs R in memory (50 digits):   19 copies, max |dev| 5.13e-49, max relative dev 2.94e-50 (worst ((6, 4, 2), 3)), support violations 0, max |V-V_R| 1.71e-49, max amplification 1.01e+3, recurrence time 0.000 s (7 us/copy at 50 digits)
+     V from chain only: top-m of V_red|W1 (Q-free)   vs R in memory (50 digits):   19 copies, max |dev| 5.13e-49, max relative dev 2.94e-50 (worst ((6, 4, 2), 3)), support violations 0, max |V-V_R| 1.71e-49, max amplification 1.01e+3, recurrence time 0.000 s (7 us/copy at 50 digits)
+     V from S pencil (b -> V)                        vs R in memory (50 digits):   19 copies, max |dev| 1.1e-49, max relative dev 1.1e-49 (worst ((7, 3, 2), 1)), support violations 0, max |V-V_R| 5.34e-49, max amplification 0.47, recurrence time 0.000 s (7 us/copy at 50 digits)
+     V from R file eigenvalues (30 digits)           vs R FILE slices (30 digits):       19 copies, max |dev| 4.06e-29, max relative dev 8.0e-30 (worst ((7, 3, 2), 1)), support violations 0, recurrence time 0.000 s
+     V from S pencil (b -> V)                        vs R FILE slices (30 digits):       19 copies, max |dev| 1.04e-29, max relative dev 6.61e-31 (worst ((5, 4, 3), 2)), support violations 0, recurrence time 0.000 s
+  [6, 3, 0]: 25 irreps, 44 copies; chain coefficients (closed forms, all irreps): 0.000 s; eigenvalues of V_red|W1 for all irreps (mpmath eigsy, 60 digits): 0.00 s
+     V from R eigenvalues (50 digits)                vs R in memory (50 digits):   44 copies, max |dev| 7.18e-48, max relative dev 1.36e-49 (worst ((9, 6, 3), 3)), support violations 0, max |V-V_R| 0.0, max amplification 0.0, recurrence time 0.000 s (9 us/copy at 50 digits)
+     V from chain only: chain 1 on W1 / chain 2 on W2 (Q-free) vs R in memory (50 digits):   44 copies, max |dev| 6.33e-48, max relative dev 8.38e-50 (worst ((9, 6, 3), 4)), support violations 0, max |V-V_R| 1.2e-48, max amplification 8.67e+3, recurrence time 0.000 s (8 us/copy at 50 digits)
+     V from chain only: top-m of V_red|W1 (Q-free)   vs R in memory (50 digits):   44 copies, max |dev| 6.33e-48, max relative dev 8.38e-50 (worst ((9, 6, 3), 4)), support violations 0, max |V-V_R| 1.2e-48, max amplification 8.67e+3, recurrence time 0.000 s (8 us/copy at 50 digits)
+     V from Q0 spectrum file + Newton polish on the chain (50 digits) vs R in memory (50 digits):   44 copies, max |dev| 6.33e-48, max relative dev 8.38e-50 (worst ((9, 6, 3), 4)), support violations 0, max |V-V_R| 1.2e-48, max amplification 8.67e+3, recurrence time 0.000 s (8 us/copy at 50 digits)
+     V from Q0 spectrum file                         vs R in memory (50 digits):   44 copies, max |dev| 1.41e-27, max relative dev 2.59e-29 (worst ((7, 6, 5), 2)), support violations 0, max |V-V_R| 4.08e-28, max amplification 0.904, recurrence time 0.000 s (9 us/copy at 50 digits)
+     V from S pencil (b -> V)                        vs R in memory (50 digits):   44 copies, max |dev| 3.21e-48, max relative dev 3.46e-49 (worst ((9, 6, 3), 1)), support violations 0, max |V-V_R| 2.51e-48, max amplification 1.38, recurrence time 0.000 s (9 us/copy at 50 digits)
+     V from R file eigenvalues (30 digits)           vs R FILE slices (30 digits):       44 copies, max |dev| 1.44e-27, max relative dev 2.58e-29 (worst ((7, 6, 5), 1)), support violations 0, recurrence time 0.000 s
+     V from Q0 spectrum file + Newton polish on the chain (50 digits) vs R FILE slices (30 digits):       44 copies, max |dev| 4.97e-29, max relative dev 4.0e-30 (worst ((9, 6, 3), 1)), support violations 0, recurrence time 0.000 s
+     V from Q0 spectrum file                         vs R FILE slices (30 digits):       44 copies, max |dev| 1.44e-27, max relative dev 2.58e-29 (worst ((7, 6, 5), 1)), support violations 0, recurrence time 0.000 s
+     V from S pencil (b -> V)                        vs R FILE slices (30 digits):       44 copies, max |dev| 4.97e-29, max relative dev 4.0e-30 (worst ((9, 6, 3), 1)), support violations 0, recurrence time 0.000 s
+  [8, 4, 0]: 41 irreps, 85 copies; chain coefficients (closed forms, all irreps): 0.001 s; eigenvalues of V_red|W1 for all irreps (mpmath eigsy, 60 digits): 0.01 s
+     V from R eigenvalues (50 digits)                vs R in memory (50 digits):   85 copies, max |dev| 4.38e-47, max relative dev 1.78e-48 (worst ((12, 8, 4), 1)), support violations 0, max |V-V_R| 0.0, max amplification 0.0, recurrence time 0.001 s (10 us/copy at 50 digits)
+     V from chain only: chain 1 on W1 / chain 2 on W2 (Q-free) vs R in memory (50 digits):   85 copies, max |dev| 3.32e-47, max relative dev 2.15e-49 (worst ((13, 7, 4), 4)), support violations 0, max |V-V_R| 4.45e-48, max amplification 3.63e+3, recurrence time 0.001 s (10 us/copy at 50 digits)
+     V from chain only: top-m of V_red|W1 (Q-free)   vs R in memory (50 digits):   85 copies, max |dev| 3.32e-47, max relative dev 2.15e-49 (worst ((13, 7, 4), 4)), support violations 0, max |V-V_R| 4.45e-48, max amplification 3.63e+3, recurrence time 0.001 s (10 us/copy at 50 digits)
+     V from Q0 spectrum file + Newton polish on the chain (50 digits) vs R in memory (50 digits):   85 copies, max |dev| 3.32e-47, max relative dev 2.15e-49 (worst ((13, 7, 4), 4)), support violations 0, max |V-V_R| 4.45e-48, max amplification 3.63e+3, recurrence time 0.001 s (10 us/copy at 50 digits)
+     V from Q0 spectrum file                         vs R in memory (50 digits):   85 copies, max |dev| 6.39e-27, max relative dev 6.54e-28 (worst ((12, 8, 4), 1)), support violations 0, max |V-V_R| 4.84e-28, max amplification 1.43, recurrence time 0.001 s (10 us/copy at 50 digits)
+     V from S pencil (b -> V)                        vs R in memory (50 digits):   85 copies, max |dev| 1.4e-47, max relative dev 3.55e-48 (worst ((13, 7, 4), 1)), support violations 0, max |V-V_R| 8.27e-48, max amplification 4.17, recurrence time 0.001 s (10 us/copy at 50 digits)
+     V from R file eigenvalues (30 digits)           vs R FILE slices (30 digits):       85 copies, max |dev| 6.44e-27, max relative dev 6.54e-28 (worst ((12, 8, 4), 1)), support violations 0, recurrence time 0.001 s
+     V from Q0 spectrum file + Newton polish on the chain (50 digits) vs R FILE slices (30 digits):       85 copies, max |dev| 4.62e-28, max relative dev 3.63e-30 (worst ((12, 8, 4), 2)), support violations 0, recurrence time 0.001 s
+     V from Q0 spectrum file                         vs R FILE slices (30 digits):       85 copies, max |dev| 6.44e-27, max relative dev 6.54e-28 (worst ((12, 8, 4), 1)), support violations 0, recurrence time 0.001 s
+     V from S pencil (b -> V)                        vs R FILE slices (30 digits):       85 copies, max |dev| 4.62e-28, max relative dev 3.63e-30 (worst ((12, 8, 4), 2)), support violations 0, recurrence time 0.001 s
+  [14, 7, 0]: 113 irreps, 344 copies; chain coefficients (closed forms, all irreps): 0.002 s; eigenvalues of V_red|W1 for all irreps (mpmath eigsy, 60 digits): 0.08 s
+     V from R eigenvalues (50 digits)                vs R in memory (50 digits):  344 copies, max |dev| 4.32e-45, max relative dev 1.46e-46 (worst ((22, 13, 7), 1)), support violations 0, max |V-V_R| 0.0, max amplification 0.0, recurrence time 0.006 s (17 us/copy at 50 digits)
+     V from chain only: chain 1 on W1 / chain 2 on W2 (Q-free) vs R in memory (50 digits):  344 copies, max |dev| 5.3e-45, max relative dev 6.27e-48 (worst ((22, 13, 7), 1)), support violations 0, max |V-V_R| 2.74e-47, max amplification 1.22e+6, recurrence time 0.006 s (17 us/copy at 50 digits)
+     V from chain only: top-m of V_red|W1 (Q-free)   vs R in memory (50 digits):  344 copies, max |dev| 5.3e-45, max relative dev 6.27e-48 (worst ((22, 13, 7), 1)), support violations 0, max |V-V_R| 2.74e-47, max amplification 1.22e+6, recurrence time 0.006 s (17 us/copy at 50 digits)
+     V from Q0 spectrum file + Newton polish on the chain (50 digits) vs R in memory (50 digits):  344 copies, max |dev| 5.3e-45, max relative dev 6.27e-48 (worst ((22, 13, 7), 1)), support violations 0, max |V-V_R| 2.74e-47, max amplification 1.22e+6, recurrence time 0.006 s (18 us/copy at 50 digits)
+     V from Q0 roots file + Newton polish on the chain (50 digits) vs R in memory (50 digits):  344 copies, max |dev| 5.3e-45, max relative dev 6.27e-48 (worst ((22, 13, 7), 1)), support violations 0, max |V-V_R| 2.74e-47, max amplification 1.22e+6, recurrence time 0.006 s (18 us/copy at 50 digits)
+     V from Q0 spectrum file                         vs R in memory (50 digits):  344 copies, max |dev| 1.39e-24, max relative dev 2.6e-27 (worst ((23, 12, 7), 1)), support violations 0, max |V-V_R| 4.63e-27, max amplification 16.8, recurrence time 0.006 s (17 us/copy at 50 digits)
+     V from Q0 roots file                            vs R in memory (50 digits):  344 copies, max |dev| 1.39e-24, max relative dev 2.6e-27 (worst ((23, 12, 7), 1)), support violations 0, max |V-V_R| 4.63e-27, max amplification 16.8, recurrence time 0.006 s (18 us/copy at 50 digits)
+     V from S pencil (b -> V)                        vs R in memory (50 digits):  344 copies, max |dev| 1.17e-44, max relative dev 7.63e-47 (worst ((21, 14, 7), 1)), support violations 0, max |V-V_R| 6.62e-47, max amplification 18.2, recurrence time 0.006 s (18 us/copy at 50 digits)
+     V from R file eigenvalues (30 digits)           vs R FILE slices (30 digits):      344 copies, max |dev| 1.35e-24, max relative dev 2.6e-27 (worst ((23, 12, 7), 1)), support violations 0, recurrence time 0.006 s
+     V from Q0 spectrum file + Newton polish on the chain (50 digits) vs R FILE slices (30 digits):      344 copies, max |dev| 3.58e-26, max relative dev 4.15e-30 (worst ((22, 12, 8), 3)), support violations 0, recurrence time 0.006 s
+     V from Q0 roots file + Newton polish on the chain (50 digits) vs R FILE slices (30 digits):      344 copies, max |dev| 3.58e-26, max relative dev 4.15e-30 (worst ((22, 12, 8), 3)), support violations 0, recurrence time 0.006 s
+     V from Q0 spectrum file                         vs R FILE slices (30 digits):      344 copies, max |dev| 1.35e-24, max relative dev 2.6e-27 (worst ((23, 12, 7), 1)), support violations 0, recurrence time 0.006 s
+     V from Q0 roots file                            vs R FILE slices (30 digits):      344 copies, max |dev| 1.35e-24, max relative dev 2.6e-27 (worst ((23, 12, 7), 1)), support violations 0, recurrence time 0.006 s
+     V from S pencil (b -> V)                        vs R FILE slices (30 digits):      344 copies, max |dev| 3.58e-26, max relative dev 4.15e-30 (worst ((22, 12, 8), 3)), support violations 0, recurrence time 0.006 s
+  [20, 10, 0]: 221 irreps, 891 copies; chain coefficients (closed forms, all irreps): 0.007 s; eigenvalues of V_red|W1 for all irreps (mpmath eigsy, 60 digits): 0.28 s
+     V from R eigenvalues (50 digits)                vs R in memory (50 digits):  891 copies, max |dev| 2.01e-42, max relative dev 8.18e-45 (worst ((31, 19, 10), 1)), support violations 0, max |V-V_R| 0.0, max amplification 0.0, recurrence time 0.020 s (23 us/copy at 50 digits)
+     V from chain only: chain 1 on W1 / chain 2 on W2 (Q-free) vs R in memory (50 digits):  891 copies, max |dev| 1.92e-42, max relative dev 2.64e-46 (worst ((30, 20, 10), 1)), support violations 0, max |V-V_R| 8.21e-47, max amplification 1.44e+5, recurrence time 0.020 s (22 us/copy at 50 digits)
+     V from chain only: top-m of V_red|W1 (Q-free)   vs R in memory (50 digits):  891 copies, max |dev| 1.92e-42, max relative dev 2.64e-46 (worst ((30, 20, 10), 1)), support violations 0, max |V-V_R| 8.21e-47, max amplification 1.44e+5, recurrence time 0.020 s (23 us/copy at 50 digits)
+     V from Q0 roots file + Newton polish on the chain (50 digits) vs R in memory (50 digits):  891 copies, max |dev| 1.92e-42, max relative dev 2.64e-46 (worst ((30, 20, 10), 1)), support violations 0, max |V-V_R| 8.21e-47, max amplification 1.44e+5, recurrence time 0.020 s (23 us/copy at 50 digits)
+     V from Q0 roots file                            vs R in memory (50 digits):  891 copies, max |dev| 4.64e-23, max relative dev 8.99e-25 (worst ((30, 20, 10), 1)), support violations 0, max |V-V_R| 4.97e-27, max amplification 388.0, recurrence time 0.020 s (23 us/copy at 50 digits)
+  [28, 14, 0]: 421 irreps, 2255 copies; chain coefficients (closed forms, all irreps): 0.016 s; eigenvalues of V_red|W1 for all irreps (mpmath eigsy, 60 digits): 0.96 s
+     V from R eigenvalues (50 digits)                vs R in memory (50 digits): 2255 copies, max |dev| 3.11e-38, max relative dev 4.05e-42 (worst ((43, 27, 14), 1)), support violations 0, max |V-V_R| 0.0, max amplification 0.0, recurrence time 0.071 s (31 us/copy at 50 digits)
+     V from chain only: chain 1 on W1 / chain 2 on W2 (Q-free) vs R in memory (50 digits): 2255 copies, max |dev| 3.11e-38, max relative dev 1.09e-43 (worst ((43, 27, 14), 1)), support violations 0, max |V-V_R| 3.61e-46, max amplification 1.59e+7, recurrence time 0.072 s (32 us/copy at 50 digits)
+     V from chain only: top-m of V_red|W1 (Q-free)   vs R in memory (50 digits): 2255 copies, max |dev| 3.11e-38, max relative dev 1.09e-43 (worst ((43, 27, 14), 1)), support violations 0, max |V-V_R| 3.61e-46, max amplification 1.59e+7, recurrence time 0.071 s (32 us/copy at 50 digits)
+     V from Q0 roots file + Newton polish on the chain (50 digits) vs R in memory (50 digits): 2255 copies, max |dev| 3.11e-38, max relative dev 1.09e-43 (worst ((43, 27, 14), 1)), support violations 0, max |V-V_R| 3.61e-46, max amplification 1.59e+7, recurrence time 0.071 s (32 us/copy at 50 digits)
+     V from Q0 roots file                            vs R in memory (50 digits): 2255 copies, max |dev| 9.87e-20, max relative dev 5.91e-23 (worst ((44, 26, 14), 1)), support violations 0, max |V-V_R| 4.99e-26, max amplification 3.91e+4, recurrence time 0.070 s (31 us/copy at 50 digits)
+     V from S pencil (sample of 6 irreps)            vs R in memory (50 digits):   37 copies, max |dev| 1.49e-38, max relative dev 1.23e-42 (worst ((42, 28, 14), 1)), support violations 0, max |V-V_R| 3.07e-46, max amplification 1.82e+4, recurrence time 0.001 s (36 us/copy at 50 digits)
+  [10, 3, 0] (other shape / lambda3 > 0):  108 copies, chain-only V: max relative dev 9.57e-49, max |V-V_R| 3.76e-48, support violations 0
+  [9, 1, 0]  (other shape / lambda3 > 0):   34 copies, chain-only V: max relative dev 1.4e-50, max |V-V_R| 1.71e-49, support violations 0
+  [12, 5, 0] (other shape / lambda3 > 0):  218 copies, chain-only V: max relative dev 1.85e-48, max |V-V_R| 1.37e-47, support violations 0
+  [3, 2, 1]  (other shape / lambda3 > 0):    6 copies, chain-only V: max relative dev 9.35e-51, max |V-V_R| 2.3e-54, support violations 0
+  [5, 3, 2]  (other shape / lambda3 > 0):   10 copies, chain-only V: max relative dev 3.54e-50, max |V-V_R| 3.42e-49, support violations 0
+  [6, 4, 1]  (other shape / lambda3 > 0):   28 copies, chain-only V: max relative dev 1.23e-49, max |V-V_R| 2.05e-48, support violations 0
+  [6, 4, 2]  (other shape / lambda3 > 0):   19 copies, chain-only V: max relative dev 8.97e-50, max |V-V_R| 1.03e-48, support violations 0
+  [7, 5, 3]  (other shape / lambda3 > 0):   19 copies, chain-only V: max relative dev 1.57e-49, max |V-V_R| 3.42e-48, support violations 0
+  [11, 6, 3] (other shape / lambda3 > 0):   76 copies, chain-only V: max relative dev 1.78e-48, max |V-V_R| 2.33e-47, support violations 0
+  [9, 5, 2]  (other shape / lambda3 > 0):   60 copies, chain-only V: max relative dev 6.86e-49, max |V-V_R| 8.89e-48, support violations 0
+  [12, 7, 3] (other shape / lambda3 > 0):  110 copies, chain-only V: max relative dev 2.5e-48, max |V-V_R| 2.74e-47, support violations 0
+  [15, 8, 4] (other shape / lambda3 > 0):  160 copies, chain-only V: max relative dev 5.74e-48, max |V-V_R| 4.38e-47, support violations 0
+  other shapes / lambda3 > 0 together: 848 copies, worst relative deviation 5.74e-48
+  [14, 7, 0] at 80 digits (R in memory 80 digits, V = physical eigenvalues of chain 1 / chain 2 at 80 digits): 344 copies, max |dev| 4.54e-75, max relative dev 6.55e-78, max |V-V_R| 1.73e-77
+  [28, 14, 0] at 80 digits (R in memory 80 digits, V = physical eigenvalues of chain 1 / chain 2 at 80 digits): 2255 copies, max |dev| 2.57e-68, max relative dev 1.05e-73, max |V-V_R| 2.94e-76
+== J5: the Q side (S's Baxter pencil, Q0's Q polynomials)
+  (1) the two three-term recursions, sector examples (chain sizes and the roots of the off-diagonal products; Baxter: roots in N, GT: roots in m1):
+     mu [28, 14, 0]  m 1: GT chain length w = 1 (W1: 1); Baxter chains d_j + 1 = [1, 16, 31];  Baxter product roots [-1, 0, 7, 15, 15, 30];  GT numerator roots [-2, -2, 5, 6, 6, 13, 13, 14, 21, 21], denominator roots ['9', '19/2', '19/2', '10']
+     mu [21, 14, 7]  m 8: GT chain length w = 8 (W1: 8); Baxter chains d_j + 1 = [8, 16, 24];  Baxter product roots [-1, 7, 7, 15, 15, 23];  GT numerator roots [-2, -2, -2, 6, 6, 6, 6, 14, 14, 14], denominator roots ['11/2', '6', '6', '13/2']
+     mu [22, 10, 10] m 1: GT chain length w = 4 (W1: 4); Baxter chains d_j + 1 = [11, 12, 25];  Baxter product roots [-1, 7, 10, 11, 15, 24];  GT numerator roots [-6, -5, -2, 2, 3, 6, 7, 11, 14, 15], denominator roots ['4', '9/2', '9/2', '5']
+     mu [14, 14, 14] m 1: GT chain length w = 1 (W1: 1); Baxter chains d_j + 1 = [15, 16, 17];  Baxter product roots [-1, 7, 14, 15, 15, 16];  GT numerator roots [-9, -2, -2, -1, -1, 6, 6, 7, 7, 14], denominator roots ['2', '5/2', '5/2', '3']
+     mu [24, 12, 6]  m 5: GT chain length w = 5 (W1: 5); Baxter chains d_j + 1 = [7, 14, 27];  Baxter product roots [-1, 6, 7, 13, 15, 26];  GT numerator roots [-4, -2, -1, 4, 6, 7, 9, 14, 15, 17], denominator roots ['6', '13/2', '13/2', '7']
+     [14,7,0]: max GT chain length w1 = 8, Baxter chain lengths d_1+1 up to 15, d_2+1 up to 23, d_3+1 up to 31; w1 = d_1+1 in 36 of 113 sectors
+  (2) S's echelon-pencil consistency polynomial g(b) (gcd of the three exact systems), mapped to V by b = 2q - 2V - eta, vs R's exact CHARPOLY and the chain continuant:
+     [4, 2, 0]: g -> V polynomial == R CHARPOLY (exact, monic) in 13/13 sectors; g already squarefree in 13/13; continuant on W1 == Q-side polynomial in 12/12 sectors with w1 = m; Q-side polynomial divides the continuant in 1/1 sectors with w1 > m (S pencil time 0.5 s)
+     [6, 3, 0]: g -> V polynomial == R CHARPOLY (exact, monic) in 25/25 sectors; g already squarefree in 25/25; continuant on W1 == Q-side polynomial in 22/22 sectors with w1 = m; Q-side polynomial divides the continuant in 3/3 sectors with w1 > m (S pencil time 2.7 s)
+     [8, 4, 0]: g -> V polynomial == R CHARPOLY (exact, monic) in 41/41 sectors; g already squarefree in 41/41; continuant on W1 == Q-side polynomial in 35/35 sectors with w1 = m; Q-side polynomial divides the continuant in 6/6 sectors with w1 > m (S pencil time 11.3 s)
+     [14, 7, 0]: g -> V polynomial == R CHARPOLY (exact, monic) in 113/113 sectors; g already squarefree in 113/113; continuant on W1 == Q-side polynomial in 92/92 sectors with w1 = m; Q-side polynomial divides the continuant in 21/21 sectors with w1 > m (S pencil time 243.5 s)
+  (3) regression of R's slices (R file, 30 digits) against Q0's QPOLY coefficients (q1,q2,q3): ratio constancy over the copies c = 1..m of each sector with m >= 2
+      (test A: z_c = s_j^(c) / q_i^(c) constant;  test B: z_c = s_j^(c) q_i0^(c) / q_i^(c) constant;  'constant' = (max z - min z)/max|z| < 1e-7;  j >= 2 slice components; the Q columns q_i are: the monomial coefficients (= Taylor coefficients at the site u=0), the Taylor coefficients at the site u=1, and the values at u = -1, 2, ..., 10, of q1, q2, q3)
+     [6, 3, 0]: 13 sectors with m >= 2 (32 copies): test A 1332 pairs, 0 hits; test B 87472 pairs, 33 hits; hits in 10 sectors; hits at the LAST slice component (j = w1): 33, at any other component: 0 []
+     [8, 4, 0]: 25 sectors with m >= 2 (69 copies): test A 3597 pairs, 2 hits; test B 272212 pairs, 99 hits; hits in 20 sectors; hits at the LAST slice component (j = w1): 66, at any other component: 35 [((11, 7, 6), 2, 2), ((12, 7, 5), 3, 2)]
+     [14, 7, 0]: 85 sectors with m >= 2 (316 copies): test A 26945 pairs, 0 hits; test B 2853126 pairs, 93 hits; hits in 44 sectors; hits at the LAST slice component (j = w1): 83, at any other component: 10 [((17, 13, 12), 2, 2), ((25, 9, 8), 2, 2)]
+  (4) the LAST slice component s_w1 (largest m1) against ratios s_w1 * q_k^[a](site) / q_k^[b](site) = const over the copies (Taylor coefficients of orders a != b of one q_k at the site u = 0 or u = 1):
+     [6, 3, 0]: 13 sectors with m >= 2: an exact relation of this type exists for the last component in 9 (4 without); most frequent (site, k, a, b): [((1, 2, 4, 0), 7), ((1, 3, 3, 7), 3), ((1, 3, 4, 8), 1), ((1, 3, 3, 5), 1)]
+     [8, 4, 0]: 25 sectors with m >= 2: an exact relation of this type exists for the last component in 17 (8 without); most frequent (site, k, a, b): [((1, 2, 5, 0), 11), ((1, 3, 4, 9), 4), ((1, 3, 5, 10), 1), ((1, 3, 7, 14), 1), ((1, 3, 9, 13), 1)]
+     [14, 7, 0]: 85 sectors with m >= 2: an exact relation of this type exists for the last component in 39 (46 without); most frequent (site, k, a, b): [((1, 2, 8, 0), 31), ((1, 3, 7, 15), 7), ((1, 3, 8, 16), 1), ((1, 3, 7, 9), 1), ((1, 3, 7, 11), 1)]
+== J5: Q0's closed forms (V = alpha - eta/2 for m = 1; mean of V over the copies) as consequences of the chains
+  lambda3 = 0 reps with l1 <= 15 (2.4s): m = 1 sectors 2510: V = alpha - eta/2 violated in 0; all 6255 sectors: mean of V over the copies = alpha - eta/2 violated in 0
+== J5/J3: which of S's three echelon Baxter systems carries what (single-system polynomials and their gcds)
+  [4, 2, 0]: 13 sectors checked: gcd of all three systems has degree m in 13; gcd(P1,P2) is exactly the continuant of V_red|W1 in 11 (degree w1 in 11, degree > m in 1); P3 alone has degree m in 6; P1 alone has degree > m in 6, P2 alone in 7  [0.0 s]
+       E23-spectral sectors (1): the system P2 ALONE has degree m in 1, gcd(P1,P2) has degree m in 1, gcd(P1,P3) has degree > m in 1;  E12-cut sectors (1): the system P3 ALONE has degree m in 1, gcd(P1,P3) has degree m in 1, gcd(P1,P2) has degree > m in 1
+  [6, 3, 0]: 25 sectors checked: gcd of all three systems has degree m in 25; gcd(P1,P2) is exactly the continuant of V_red|W1 in 19 (degree w1 in 19, degree > m in 3); P3 alone has degree m in 10; P1 alone has degree > m in 13, P2 alone in 15  [0.0 s]
+       E23-spectral sectors (3): the system P2 ALONE has degree m in 3, gcd(P1,P2) has degree m in 3, gcd(P1,P3) has degree > m in 3;  E12-cut sectors (3): the system P3 ALONE has degree m in 3, gcd(P1,P3) has degree m in 3, gcd(P1,P2) has degree > m in 3
+  [8, 4, 0]: 41 sectors checked: gcd of all three systems has degree m in 41; gcd(P1,P2) is exactly the continuant of V_red|W1 in 29 (degree w1 in 29, degree > m in 6); P3 alone has degree m in 15; P1 alone has degree > m in 24, P2 alone in 26  [0.0 s]
+       E23-spectral sectors (6): the system P2 ALONE has degree m in 6, gcd(P1,P2) has degree m in 6, gcd(P1,P3) has degree > m in 6;  E12-cut sectors (6): the system P3 ALONE has degree m in 6, gcd(P1,P3) has degree m in 6, gcd(P1,P2) has degree > m in 6
+  [14, 7, 0]: 57 sectors checked: gcd of all three systems has degree m in 57; gcd(P1,P2) is exactly the continuant of V_red|W1 in 15 (degree w1 in 15, degree > m in 21); P3 alone has degree m in 22; P1 alone has degree > m in 48, P2 alone in 35  [0.0 s]
+       E23-spectral sectors (21): the system P2 ALONE has degree m in 21, gcd(P1,P2) has degree m in 21, gcd(P1,P3) has degree > m in 21;  E12-cut sectors (21): the system P3 ALONE has degree m in 21, gcd(P1,P3) has degree m in 21, gcd(P1,P2) has degree > m in 21
+       mu [26, 8, 8]   m 1 w 2 w1 2 E23-spectral deg P1  9 P2  1 P3 13 | gcd12  1 gcd13  8 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [25, 9, 8]   m 2 w 3 w1 3 E23-spectral deg P1  9 P2  2 P3 12 | gcd12  2 gcd13  8 gcd23  2 gcd123  2 | gcd12 == continuant(W1): False
+       mu [24, 10, 8]  m 3 w 4 w1 4 E23-spectral deg P1  9 P2  3 P3 11 | gcd12  3 gcd13  8 gcd23  3 gcd123  3 | gcd12 == continuant(W1): False
+       mu [24, 9, 9]   m 1 w 3 w1 3 E23-spectral deg P1  9 P2  1 P3 10 | gcd12  1 gcd13  7 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [23, 11, 8]  m 4 w 5 w1 5 E23-spectral deg P1  9 P2  4 P3 10 | gcd12  4 gcd13  8 gcd23  4 gcd123  4 | gcd12 == continuant(W1): False
+       mu [23, 10, 9]  m 2 w 4 w1 4 E23-spectral deg P1 10 P2  2 P3 10 | gcd12  2 gcd13  8 gcd23  2 gcd123  2 | gcd12 == continuant(W1): False
+       mu [22, 12, 8]  m 5 w 6 w1 6 E23-spectral deg P1  9 P2  5 P3  9 | gcd12  5 gcd13  8 gcd23  5 gcd123  5 | gcd12 == continuant(W1): False
+       mu [22, 11, 9]  m 3 w 5 w1 5 E23-spectral deg P1  9 P2  3 P3  8 | gcd12  3 gcd13  7 gcd23  3 gcd123  3 | gcd12 == continuant(W1): False
+       mu [22, 10, 10] m 1 w 4 w1 4 E23-spectral deg P1 11 P2  1 P3  9 | gcd12  1 gcd13  8 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [21, 13, 8]  m 6 w 7 w1 7 E23-spectral deg P1  9 P2  6 P3  8 | gcd12  6 gcd13  8 gcd23  6 gcd123  6 | gcd12 == continuant(W1): False
+       mu [21, 12, 9]  m 4 w 6 w1 6 E23-spectral deg P1 10 P2  4 P3  8 | gcd12  4 gcd13  8 gcd23  4 gcd123  4 | gcd12 == continuant(W1): False
+       mu [21, 11, 10] m 2 w 5 w1 5 E23-spectral deg P1 11 P2  2 P3  8 | gcd12  2 gcd13  8 gcd23  2 gcd123  2 | gcd12 == continuant(W1): False
+       mu [20, 20, 2]  m 1 w 2 w1 1 E12-cut      deg P1  3 P2 14 P3  1 | gcd12  3 gcd13  1 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [20, 19, 3]  m 2 w 3 w1 2 E12-cut      deg P1  4 P2 13 P3  2 | gcd12  4 gcd13  2 gcd23  2 gcd123  2 | gcd12 == continuant(W1): False
+       mu [20, 18, 4]  m 3 w 4 w1 3 E12-cut      deg P1  5 P2 12 P3  3 | gcd12  5 gcd13  3 gcd23  3 gcd123  3 | gcd12 == continuant(W1): False
+       mu [20, 17, 5]  m 4 w 5 w1 4 E12-cut      deg P1  6 P2 11 P3  4 | gcd12  6 gcd13  4 gcd23  4 gcd123  4 | gcd12 == continuant(W1): False
+       mu [20, 16, 6]  m 5 w 6 w1 5 E12-cut      deg P1  7 P2 10 P3  5 | gcd12  7 gcd13  5 gcd23  5 gcd123  5 | gcd12 == continuant(W1): False
+       mu [20, 15, 7]  m 6 w 7 w1 6 E12-cut      deg P1  8 P2  9 P3  6 | gcd12  8 gcd13  6 gcd23  6 gcd123  6 | gcd12 == continuant(W1): False
+       mu [20, 13, 9]  m 5 w 6 w1 6 E23-spectral deg P1  9 P2  5 P3  6 | gcd12  5 gcd13  6 gcd23  5 gcd123  5 | gcd12 == continuant(W1): False
+       mu [20, 12, 10] m 3 w 5 w1 5 E23-spectral deg P1 11 P2  3 P3  7 | gcd12  3 gcd13  7 gcd23  3 gcd123  3 | gcd12 == continuant(W1): False
+       mu [20, 11, 11] m 1 w 4 w1 4 E23-spectral deg P1 11 P2  1 P3  6 | gcd12  1 gcd13  6 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [19, 19, 4]  m 1 w 3 w1 1 E12-cut      deg P1  5 P2 12 P3  1 | gcd12  5 gcd13  1 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [19, 18, 5]  m 2 w 4 w1 2 E12-cut      deg P1  6 P2 12 P3  2 | gcd12  6 gcd13  2 gcd23  2 gcd123  2 | gcd12 == continuant(W1): False
+       mu [19, 17, 6]  m 3 w 5 w1 3 E12-cut      deg P1  7 P2 10 P3  3 | gcd12  7 gcd13  3 gcd23  3 gcd123  3 | gcd12 == continuant(W1): False
+       mu [19, 16, 7]  m 4 w 6 w1 4 E12-cut      deg P1  8 P2 10 P3  4 | gcd12  8 gcd13  4 gcd23  4 gcd123  4 | gcd12 == continuant(W1): False
+       mu [19, 15, 8]  m 5 w 6 w1 5 E12-cut      deg P1  9 P2  7 P3  5 | gcd12  7 gcd13  5 gcd23  5 gcd123  5 | gcd12 == continuant(W1): False
+       mu [19, 13, 10] m 4 w 5 w1 5 E23-spectral deg P1 11 P2  4 P3  6 | gcd12  4 gcd13  6 gcd23  4 gcd123  4 | gcd12 == continuant(W1): False
+       mu [19, 12, 11] m 2 w 4 w1 4 E23-spectral deg P1 12 P2  2 P3  6 | gcd12  2 gcd13  6 gcd23  2 gcd123  2 | gcd12 == continuant(W1): False
+       mu [18, 18, 6]  m 1 w 4 w1 1 E12-cut      deg P1  7 P2 12 P3  1 | gcd12  7 gcd13  1 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [18, 17, 7]  m 2 w 5 w1 2 E12-cut      deg P1  8 P2 11 P3  2 | gcd12  8 gcd13  2 gcd23  2 gcd123  2 | gcd12 == continuant(W1): False
+       mu [18, 16, 8]  m 3 w 5 w1 3 E12-cut      deg P1  9 P2  7 P3  3 | gcd12  7 gcd13  3 gcd23  3 gcd123  3 | gcd12 == continuant(W1): False
+       mu [18, 15, 9]  m 4 w 5 w1 4 E12-cut      deg P1 10 P2  6 P3  4 | gcd12  6 gcd13  4 gcd23  4 gcd123  4 | gcd12 == continuant(W1): False
+       mu [18, 13, 11] m 3 w 4 w1 4 E23-spectral deg P1 11 P2  3 P3  4 | gcd12  3 gcd13  4 gcd23  3 gcd123  3 | gcd12 == continuant(W1): False
+       mu [18, 12, 12] m 1 w 3 w1 3 E23-spectral deg P1 13 P2  1 P3  5 | gcd12  1 gcd13  5 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [17, 17, 8]  m 1 w 4 w1 1 E12-cut      deg P1  9 P2  7 P3  1 | gcd12  7 gcd13  1 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [17, 16, 9]  m 2 w 4 w1 2 E12-cut      deg P1 10 P2  6 P3  2 | gcd12  6 gcd13  2 gcd23  2 gcd123  2 | gcd12 == continuant(W1): False
+       mu [17, 15, 10] m 3 w 4 w1 3 E12-cut      deg P1 11 P2  5 P3  3 | gcd12  5 gcd13  3 gcd23  3 gcd123  3 | gcd12 == continuant(W1): False
+       mu [17, 13, 12] m 2 w 3 w1 3 E23-spectral deg P1 13 P2  2 P3  4 | gcd12  2 gcd13  4 gcd23  2 gcd123  2 | gcd12 == continuant(W1): False
+       mu [16, 16, 10] m 1 w 3 w1 1 E12-cut      deg P1 11 P2  5 P3  1 | gcd12  5 gcd13  1 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [16, 15, 11] m 2 w 3 w1 2 E12-cut      deg P1 12 P2  4 P3  2 | gcd12  4 gcd13  2 gcd23  2 gcd123  2 | gcd12 == continuant(W1): False
+       mu [16, 13, 13] m 1 w 2 w1 2 E23-spectral deg P1 13 P2  1 P3  2 | gcd12  1 gcd13  2 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+       mu [15, 15, 12] m 1 w 2 w1 1 E12-cut      deg P1 13 P2  3 P3  1 | gcd12  3 gcd13  1 gcd23  1 gcd123  1 | gcd12 == continuant(W1): False
+== J6: complexity (Q-free chain pipeline and recurrence vs R slice engine; Lambda = [2a,a,0])
+    a   dimV irreps copies max w | t_irr ms t_chn ms | t_eigF ms t_recF ms  us/cp F |  t_rec30 us/cp 30 |   t_float t_Qfree30  t_fast30 |  R t_a s  R t_b s | float64 dev vs mp: forward / twisted (us/copy twisted)
+    1      8      5      6     2 |     0.03     0.04 |     0.03     0.00     0.62 |     0.03      4.7 |      0.10       0.3       0.3 |    0.001    0.002 | 2.2e-16 / 2.1e-16 (1.13)
+    2     27     13     19     3 |     0.06     0.13 |     0.12     0.01     0.58 |     0.11      5.8 |      0.33       1.2       1.4 |    0.003    0.005 | 9.5e-16 / 8.1e-16 (1.54)
+    3     64     25     44     4 |     0.13     0.31 |     0.34     0.03     0.64 |     0.30      6.7 |      0.80       4.1       3.7 |      nan      nan | 3.8e-15 / 1.9e-15 (1.98)
+    4    125     41     85     5 |     0.20     0.59 |     0.66     0.06     0.70 |     0.71      8.3 |      1.50      10.3       9.1 |    0.018    0.027 | 1.0e-14 / 3.6e-15 (2.41)
+    5    216     61    146     6 |     0.30     1.01 |     1.09     0.12     0.82 |     1.71     11.7 |      2.52      23.0      16.8 |      nan      nan | 6.2e-14 / 6.2e-15 (2.77)
+    6    343     85    231     7 |     0.41     1.61 |     1.75     0.21     0.89 |     2.80     12.1 |      3.97      43.3      29.3 |      nan      nan | 2.3e-13 / 6.7e-15 (3.29)
+    7    512    113    344     8 |     0.54     2.49 |     2.51     0.33     0.97 |     4.69     13.6 |      5.88      75.1      49.8 |    0.090    0.146 | 3.9e-13 / 8.1e-15 (3.69)
+    8    729    145    489     9 |     0.68     3.52 |     3.51     0.50     1.03 |     8.03     16.4 |      8.21     122.1      76.2 |      nan      nan | 8.0e-12 / 1.1e-14 (4.06)
+    9   1000    181    670    10 |     0.86     4.77 |     4.67     0.88     1.31 |    36.55     54.5 |     11.17     221.5     144.2 |      nan      nan | 1.6e-11 / 9.1e-15 (4.48)
+   10   1331    221    891    11 |     1.08     6.76 |     6.35     1.14     1.27 |    18.75     21.0 |     15.31     287.1     176.3 |    0.287    0.510 | 7.2e-11 / 2.1e-14 (5.01)
+   11   1728    265   1156    12 |     1.29     8.66 |     8.19     1.63     1.41 |    25.12     21.7 |     19.77     417.6     234.4 |      nan      nan | 4.1e-10 / 1.8e-14 (5.54)
+   12   2197    313   1469    13 |     1.48    10.46 |     9.90     2.24     1.52 |    35.94     24.5 |     24.08     530.0     319.4 |      nan      nan | 4.6e-10 / 1.8e-14 (5.80)
+   13   2744    365   1834    14 |     1.70    13.07 |    12.26     3.06     1.67 |    49.79     27.1 |     30.09     749.4     482.1 |      nan      nan | 2.9e-09 / 2.8e-14 (6.36)
+   14   3375    421   2255    15 |     2.09    17.24 |    15.59     4.08     1.81 |    66.47     29.5 |     39.01     968.1     577.2 |    0.893    1.727 | 2.9e-08 / 2.7e-14 (7.09)
+   20   9261    841   6181    21 |     4.16    45.80 |    40.84    14.49     2.34 |   290.04     46.9 |    105.30    3736.5    2154.2 |      nan      nan | 5.0e-05 / 3.7e-14 (9.60)
+   30  29791   1861  19871    31 |     8.69   149.02 |   135.04    64.45     3.24 |  1372.25     69.1 |    357.19   18023.0   10045.1 |      nan      nan | 7.2e+01 / 7.4e-14 (13.74)

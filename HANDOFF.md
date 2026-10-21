@@ -50,6 +50,29 @@ freely each session rather than appending.
   [14,7,0] with a degree-15 solvability polynomial for c₁; Jacobian rank 5 or 6 in every run; the pruning tolerance must scale with the precision
   (10^(−0.6·dps)) — a near-solution with inconsistency 1e-41 survived 1e-40 at (28,13,1) until fixed. Not done: the full [14,7,0] family.
 
+**ROUND 7 RESULT — AGENT J (`Paul/Python/gaudin_sl3/jacobi_cg.py`, `RESULTS-jacobi-cg.md` §7 theorems T1–T6, `jacobi_cg_tables.txt`): THE
+CG SLICE OF EVERY COPY IS A THREE-TERM RECURRENCE AT ITS Q-SYSTEM EIGENVALUE, WITH CLOSED FORMS.** (1) The weight space V_Λ[μ−Λ] is a chain in
+the GT entry m₁ (= m₁₂; t = μ₁−λ₁, s = m₁+m₂ fixed, lo = max(λ₂, s−λ₂, t, s−t) ≤ m₁ ≤ hi = min(λ₁, s−λ₃)); V_red is tridiagonal structurally
+(24 of the 36 terms survive, each with exactly one index-3 factor on each side, so (m₁,m₂) shifts by 0 or ±(1,−1)); the off-diagonals and the
+diagonal are explicit rational functions of the GT labels, derived by computer algebra (u = −(λ₁−m₁)(λ₂−m₁−1)(λ₃−m₁−2)(t+1−m₂)(μ₁−λ₂−m₁)/((x+1)(x+2)),
+d analogous, α = A₀ + (3/16)(s−2λ₃+2)ξ − K/(16ξ), x = m₁−m₂, ξ = x(x+2); full forms in RESULTS), exact against R's V_red on 39 608 dominant weights
+of 968 reps (all λ₁ ≤ 16, λ₃ ≥ 0 included). (2) M_μ: the E₁₂ string condition is a coordinate cut of the chain (initial segment W1 = {m₁ ≤ μ₁−λ₂},
+where u vanishes: the recurrence truncates); the E₂₃ condition is the same cut in the Weyl-reflected chain V′ = U V_red U⁻¹; never both active:
+μ₂ ≥ λ₁+λ₃ ⇒ M_μ = W1, μ₂ ≤ λ₁+λ₃ ⇒ U M_μ = W2 (closed-form multiplicity = Racah–Speiser on all 39 608). In chain 1 the E₂₃ sectors are the
+spectral subspace of the m LARGEST eigenvalues of the irreducible Jacobi matrix (exact on 31 976 sectors). [14,7,0]: 71 whole-chain, 21 E₁₂-cut,
+21 E₂₃ sectors. (3) The continuant = R's CHARPOLY exactly; S's Q-system consistency polynomial = CHARPOLY in all 192 sectors; the Baxter system
+that alone has the right degree: P₂ on E₂₃ sectors, P₃ on E₁₂-cut sectors — gcd(P₁,P₂) over-counts exactly on the 21 E₁₂-cut sectors (this IS
+Q0's pencil bug, C(a,2)+a+1 = 29). Q0's closed forms (V = alpha − eta/2 for m = 1; mean over copies = alpha − eta/2) follow from the chain.
+(4) `slice_from_V`: p₀ = 1, p_{k+1} = ((V−α_k)p_k − u_{k−1}p_{k−1})/d_k reproduces ALL 3638 copies of [4,2,0]…[28,14,0] vs R to 1e-42…1e-50 (R's
+precision), 848 copies of 12 further reps (nine with λ₃ > 0), and an independent PRV/eigen test on 6796 copies of 285 reps with 0 failures;
+17–32 µs per copy at 50 digits; **all 344 copies of [14,7,0]² in 5.9 ms, all 2255 of [28,14,0]² in 40–50 ms (×13–23 faster than the slice
+engine).** The slice direction is a polynomial of degree k−1 in the accessory parameter a₁ = V + eta₁/2 of the copy's oper. (5) NOT the same
+recurrence as S's tridiagonal Baxter pencil (lengths, coefficients differ); shared exactly: the dictionary V = q − b/2 − eta/2 and the physical
+characteristic polynomial; no copy-independent map from Q-polynomial coefficients to the interior slice components (only the last component
+has a ratio relation). **Honest reading: the eigenvector comes from representation theory (the chain); the Q-functions supply V, and V is also
+the spectrum of a ≤ 15×15 Jacobi matrix — the Q-system step is replaceable.** Not done: the Weyl operator U for slices in E₂₃ sectors (chain 2
+gives eigenvalues only), proof of the top-m rule, norm/sign, λ₃ > 0 Q-data.
+
 **ROUND 7 DISPATCHED (2026-10-21 evening; Paul: "Yes lets do Jacobi. Then get another agent to write up simple, readable, hep-th style notes
 on the slice engine thing"):** agent J (Sonnet) → `Paul/Python/gaudin_sl3/SPEC-jacobi-cg.md`, `jacobi_cg.py`, `RESULTS-jacobi-cg.md`: is V_red on
 the whole weight space a Jacobi chain with closed-form coefficients, is M_mu a sub-chain or a spectral subspace, is the slice of a copy the
