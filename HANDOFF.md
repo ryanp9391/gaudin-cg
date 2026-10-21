@@ -4,6 +4,26 @@ Where the last session left off. Read this first when picking the project back u
 history log (that's `git log`) — only what's still open or in-flight. Overwrite
 freely each session rather than appending.
 
+## >>> NEWEST (2026-10-21 afternoon): ROUND 6 DISPATCHED — beat the Munich code with Q-functions for general reps, [14,7,0]² benchmark <<<
+
+**Paul:** "the goal of the project is to beat the munich code using Q-function technology for general reps, e.g. [14,7,0]^2 … set up a
+complete plan of attack, then get cheaper sonnet agents to implement." **Plan (read first): `Paul/Mathematica/Gaudin/Gaudin-sl3-round6-plan.md`**
+— §0 what "beat" must mean (complexity table: Munich O(n_W³) dies at a = 8; the new slice/PRV engine is the real floor; the Q-route must
+deliver the w-dimensional slice with cost independent of n_W), §1 status of every Q-route ingredient and what breaks at λ₁ = 14, §2 the
+two engines, §3 the five work packages with acceptance tests, §4 round 7, §5 risks, §6 binding conventions, §7 decisions for Paul.
+**Five SONNET agents dispatched (background, all `general-purpose`, model sonnet); each writes its own self-contained brief first:**
+R `Paul/Python/gaudin_sl3/SPEC-slice-engine.md` → `slice_engine.py`, `RESULTS-slice-engine.md`, `ref/cg-slices-*.txt`;
+Q0 `Paul/Mathematica/Gaudin/Experiments/Gaudin-Qsystem-scale-spec.md` → `Gaudin-Qsystem-scale.wl/.md`, `ref/qsystem-spectrum-*.txt` (the only
+agent on kernel K1; it loads `Experiments/gl3-GT-tools.wl` then `Minimal_complete_working-fast.wl`);
+K `SPEC-kernel-L14.md` → `kernel_L14.py`, `RESULTS-kernel-L14.md`, `kernel_*.npz`; S `SPEC-bethe-series-scale.md` → `bethe_series_scale.py`,
+`RESULTS-bethe-series-scale.md`; D `SPEC-gauss-dictionary.md` → `gauss_dictionary.py`, `RESULTS-gauss-dictionary.md`.
+**New today, committed:** `Paul/Mathematica/Gaudin/Experiments/gl3-GT-tools.wl` = the notebook's GT machinery (ps, ee, V, computeHWS,
+findweight, computeV with the Subscript bug fixed and pencilSolve as the solver) extracted so no agent needs to parse the .nb; verified:
+`Get[tools]; Get[fast]` → computeV[{4,2,0},{4,2,0}][{4,2,0}] has 3 roots = fastEig's V-spectrum, the [6,3,0] singlet 1 root.
+**When the agents return:** reconcile R ↔ Q0 (V_red eigenvalues vs pencil roots per irrep at a = 7), then round 7 = assembly
+(`cg_from_Q_general`), validation at [4,2,0]/[6,3,0]/[8,4,0]/[14,7,0] against R, the benchmark table, the depth question (plan §4).
+Earlier today (below): Munich cost breakdown done on Ubuntu (gap = linear algebra), fast .wl, the sweep.
+
 ## >>> NEWEST (2026-10-21): why is our sl(3) CG pipeline ~16× faster than the Munich C++ — and is integrability the reason? <<<
 
 **Paul's question:** our pipeline computes the highest-weight-state CGCs of all 113 irreps in
