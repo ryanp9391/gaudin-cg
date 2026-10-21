@@ -86,6 +86,21 @@ Conventions: GT normalisation is the notebook's (rational JJp matrix elements, n
 code's orthonormal one, so compare CGC *vectors* only up to normalisation and basis change. Don't edit
 `Minimal_complete_working.nb` raw (it's a Mathematica .nb); the `.wl` is the working copy.
 
+## Done (2026-10-21, Ubuntu): experiments 2–3 above — C++ cost breakdown + OpenBLAS → gap is linear algebra, NOT integrability
+
+`Paul/Cpp/AlexCGC/cgc_hw_prof.cpp` = copy of `cgc_hw_bench.cpp` with per-phase timers (prints a `PROF` line) and
+`HW_MODE=orig|compact|eig`. Here compact stores only the n_states columns actually used, with the same dgesvd. eig is
+compact plus the lowest mult+1 eigenvectors of A·Aᵀ, found with dsyrk + dsyevr. Build: `g++ cgc_hw_prof.cpp -O2 -o cgc_hw_prof -llapack -lblas`.
+OpenBLAS was built from source in a session scratchpad (no sudo). For a permanent build, `sudo apt install libopenblas-dev` and link `-lopenblas`.
+- a=7 singlet, original: alloc+memset 1.25 s, fill 0.013 s, **dgesvd 19.1 s**; total 20.5 s. The real system is 2080×4032
+  (67 MB), but `hw_system` is allocated as n_coeff×dim² = 4.4 GB of mostly zeros; this is the cause of the a=8 OOM.
+- a=7 timings (singlet / sum over all 113 mu): orig 20.5 s / 206 s; compact+OpenBLAS 7.0 / 69 s; eig with reference BLAS 1.7 / 18 s;
+  **eig+OpenBLAS 0.45 / 10.9 s**. That is about as fast as our 12.7 s (i7, Windows), so the 16× is linear algebra.
+- Check: in every irrep the null eigenvalues are ≤4e-14 and the next eigenvalue is ≈1, so multiplicities are exact.
+  After the fix the remaining cost (~0.1 s per irrep) is bookkeeping: the dim² loop and std::map set().
+- Per-mu data: `results/full_decomp_2aa0_a7_cgc_hw_prof_{eig,ob_compact,ob_eig}.txt`.
+- Still open: experiments 4–5 (the cost of diagonalising V; the Q-only scaling/crossover). a=8 with eig should now fit in memory.
+
 ## Done (2026-10-21): SU(3) [2a,a,0] timing sweep (Munich CGC code, Ubuntu i5-1345U, 15 GB)
 
 `Paul/Cpp/AlexCGC/results/`: `sweep_2aa0.csv` (single mu=[2a,a,0]), `full_decomp_2aa0_a{7,8}.txt` (per-mu).
