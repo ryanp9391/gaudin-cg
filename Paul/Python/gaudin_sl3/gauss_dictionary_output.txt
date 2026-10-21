@@ -1,0 +1,278 @@
+=== D1(c): untwist_limit.gf_polys reproduced exactly (adjoint, sympy Poly equality component by component)
+  phi=['1/3', '-2/7', '5/11']: 8 components, polynomial on 7, None on [3], c-hat equal: True -> reproduced: True
+  phi=['-2/5', '3/8', '7/11']: 8 components, polynomial on 7, None on [3], c-hat equal: True -> reproduced: True
+=== D1(d): components where c-hat * phi_nu is NOT a polynomial; the leftover is (omega1p - phi2)^order; assertion: C_nu = 0 on every W4 HW ket
+  (2, 1, 0) phi=['1/3', '-2/7', '5/11']: 12 W4 slices (6 HWBASIS kets + branches); uncleared nu: [(3, '0|2,0', (0, 2, 1), 'pole^1')]; max |C_nu| over all of them = 0.0
+  (2, 1, 0) phi=['-2/5', '3/8', '7/11']: 12 W4 slices (6 HWBASIS kets + branches); uncleared nu: [(3, '0|2,0', (0, 2, 1), 'pole^1')]; max |C_nu| over all of them = 0.0
+  (3, 1, 0) phi=['1/3', '-2/7', '5/11']: 20 W4 slices (10 HWBASIS kets + branches); uncleared nu: [(8, '0|3,0', (0, 3, 1), 'pole^1')]; max |C_nu| over all of them = 0.0
+  (3, 1, 0) phi=['-2/5', '3/8', '7/11']: 20 W4 slices (10 HWBASIS kets + branches); uncleared nu: [(8, '0|3,0', (0, 3, 1), 'pole^1')]; max |C_nu| over all of them = 0.0
+  (3, 2, 0) phi=['1/3', '-2/7', '5/11']: 20 W4 slices (10 HWBASIS kets + branches); uncleared nu: [(0, '0|2,0', (0, 2, 3), 'pole^1'), (6, '0|3,0', (0, 3, 2), 'pole^2'), (7, '1|3,0', (1, 2, 2), 'pole^1'), (10, '1|3,1', (1, 3, 1), 'pole^1')]; max |C_nu| over all of them = 0.0
+  (3, 2, 0) phi=['-2/5', '3/8', '7/11']: 20 W4 slices (10 HWBASIS kets + branches); uncleared nu: [(0, '0|2,0', (0, 2, 3), 'pole^1'), (6, '0|3,0', (0, 3, 2), 'pole^2'), (7, '1|3,0', (1, 2, 2), 'pole^1'), (10, '1|3,1', (1, 3, 1), 'pole^1')]; max |C_nu| over all of them = 0.0
+=== fast exact pole-order analysis (Lambda-only tensor T, Taylor expansion at omega1p = phi2) vs the sympy truth (cancel of c-hat * phi_nu): same uncleared set and same orders, both phi
+  (4, 1, 0) phi=['1/3', '-2/7', '5/11']: uncleared (sympy) {15: 1} ; fast {15: 1} ; agree: True
+  (4, 1, 0) phi=['-2/5', '3/8', '7/11']: uncleared (sympy) {15: 1} ; fast {15: 1} ; agree: True
+  (4, 2, 0) phi=['1/3', '-2/7', '5/11']: uncleared (sympy) {6: 1, 15: 2, 16: 1, 20: 1} ; fast {6: 1, 15: 2, 16: 1, 20: 1} ; agree: True
+  (4, 2, 0) phi=['-2/5', '3/8', '7/11']: uncleared (sympy) {6: 1, 15: 2, 16: 1, 20: 1} ; fast {6: 1, 15: 2, 16: 1, 20: 1} ; agree: True
+  (4, 3, 0) phi=['1/3', '-2/7', '5/11']: uncleared (sympy) {0: 2, 1: 1, 4: 1, 10: 3, 11: 2, 12: 1, 15: 2, 16: 1, 19: 1} ; fast {0: 2, 1: 1, 4: 1, 10: 3, 11: 2, 12: 1, 15: 2, 16: 1, 19: 1} ; agree: True
+  (4, 3, 0) phi=['-2/5', '3/8', '7/11']: uncleared (sympy) {0: 2, 1: 1, 4: 1, 10: 3, 11: 2, 12: 1, 15: 2, 16: 1, 19: 1} ; fast {0: 2, 1: 1, 4: 1, 10: 3, 11: 2, 12: 1, 15: 2, 16: 1, 19: 1} ; agree: True
+  (5, 2, 0) phi=['1/3', '-2/7', '5/11']: uncleared (sympy) {15: 1, 27: 2, 28: 1, 33: 1} ; fast {15: 1, 27: 2, 28: 1, 33: 1} ; agree: True
+  (5, 2, 0) phi=['-2/5', '3/8', '7/11']: uncleared (sympy) {15: 1, 27: 2, 28: 1, 33: 1} ; fast {15: 1, 27: 2, 28: 1, 33: 1} ; agree: True
+=== structure: uncleared components vs the PRV supports (all irreps), fast exact pole-order analysis, both phi
+  (2, 1, 0)  dim     8: #uncleared    1 (max pole order  1; phi-independent: True), #nu with n1 > l1-l2:    2, |union of PRV supports|    6, intersection with uncleared: 0  (0.0s)
+  (3, 1, 0)  dim    15: #uncleared    1 (max pole order  1; phi-independent: True), #nu with n1 > l1-l2:    3, |union of PRV supports|   11, intersection with uncleared: 0  (0.0s)
+  (3, 2, 0)  dim    15: #uncleared    4 (max pole order  2; phi-independent: True), #nu with n1 > l1-l2:    6, |union of PRV supports|   10, intersection with uncleared: 0  (0.0s)
+  (4, 2, 0)  dim    27: #uncleared    4 (max pole order  2; phi-independent: True), #nu with n1 > l1-l2:    9, |union of PRV supports|   20, intersection with uncleared: 0  (0.0s)
+  (6, 3, 0)  dim    64: #uncleared   10 (max pole order  3; phi-independent: True), #nu with n1 > l1-l2:   24, |union of PRV supports|   47, intersection with uncleared: 0  (0.0s)
+  (8, 4, 0)  dim   125: #uncleared   20 (max pole order  4; phi-independent: True), #nu with n1 > l1-l2:   50, |union of PRV supports|   92, intersection with uncleared: 0  (0.0s)
+  (14, 7, 0) dim   512: #uncleared   84 (max pole order  7; phi-independent: True), #nu with n1 > l1-l2:  224, |union of PRV supports|  378, intersection with uncleared: 0  (0.2s)
+  (28, 14, 0) dim  3375: #uncleared  560 (max pole order 14; phi-independent: True), #nu with n1 > l1-l2: 1575, |union of PRV supports| 2507, intersection with uncleared: 0  (6.0s)
+=== D1(e): gauss_covector (Fractions) vs N1 nu_general.Rep.phi_u (Chain-based, mp) and the other Gauss ordering (matrix-entry coordinates), exact
+  (2, 1, 0): max |gauss_covector - Rep.phi_u| over 12 (phi, point) combinations = 0.0
+  (3, 1, 0): max |gauss_covector - Rep.phi_u| over 12 (phi, point) combinations = 0.0
+  (3, 2, 0): max |gauss_covector - Rep.phi_u| over 12 (phi, point) combinations = 0.0
+  (2, 1, 0)  terms == sweep (exact): True ; (a,g,c)-ordering == (x23,x13,x12)-ordering with x13 = g+ac (exact): True ; [E13,E31] = E11-E33 and [E12,E21] = E11-E22: True
+  (3, 1, 0)  terms == sweep (exact): True ; (a,g,c)-ordering == (x23,x13,x12)-ordering with x13 = g+ac (exact): True ; [E13,E31] = E11-E33 and [E12,E21] = E11-E22: True
+  (3, 2, 0)  terms == sweep (exact): True ; (a,g,c)-ordering == (x23,x13,x12)-ordering with x13 = g+ac (exact): True ; [E13,E31] = E11-E33 and [E12,E21] = E11-E22: True
+  (4, 2, 0)  terms == sweep (exact): True ; (a,g,c)-ordering == (x23,x13,x12)-ordering with x13 = g+ac (exact): True ; [E13,E31] = E11-E33 and [E12,E21] = E11-E22: True
+  (8, 4, 0)  terms == sweep (exact): True ; (a,g,c)-ordering == (x23,x13,x12)-ordering with x13 = g+ac (exact): True ; [E13,E31] = E11-E33 and [E12,E21] = E11-E22: True
+  (14, 7, 0) terms == sweep (exact): True ; (a,g,c)-ordering == (x23,x13,x12)-ordering with x13 = g+ac (exact): True ; [E13,E31] = E11-E33 and [E12,E21] = E11-E22: None
+--- stage polys finished in 39.3s
+=== D2: dim M_mu = Racah-Speiser multiplicity for every irrep; sum m dim V_mu = dim^2
+  (2, 1, 0)  dim     8:   5 irreps,    6 copies, max m  2, max w  2; dim M_mu == m for all: True (mismatches []); sum m dim V_mu = 64 = dim^2: True; PRV for all irreps 0.00s (0.0 ms/irrep)
+  (3, 1, 0)  dim    15:   8 irreps,   10 copies, max m  2, max w  2; dim M_mu == m for all: True (mismatches []); sum m dim V_mu = 225 = dim^2: True; PRV for all irreps 0.00s (0.0 ms/irrep)
+  (3, 2, 0)  dim    15:   8 irreps,   10 copies, max m  2, max w  2; dim M_mu == m for all: True (mismatches []); sum m dim V_mu = 225 = dim^2: True; PRV for all irreps 0.00s (0.0 ms/irrep)
+  (4, 2, 0)  dim    27:  13 irreps,   19 copies, max m  3, max w  3; dim M_mu == m for all: True (mismatches []); sum m dim V_mu = 729 = dim^2: True; PRV for all irreps 0.00s (0.0 ms/irrep)
+  (6, 3, 0)  dim    64:  25 irreps,   44 copies, max m  4, max w  4; dim M_mu == m for all: True (mismatches []); sum m dim V_mu = 4096 = dim^2: True; PRV for all irreps 0.00s (0.0 ms/irrep)
+  (8, 4, 0)  dim   125:  41 irreps,   85 copies, max m  5, max w  5; dim M_mu == m for all: True (mismatches []); sum m dim V_mu = 15625 = dim^2: True; PRV for all irreps 0.00s (0.1 ms/irrep)
+  (14, 7, 0) dim   512: 113 irreps,  344 copies, max m  8, max w  8; dim M_mu == m for all: True (mismatches []); sum m dim V_mu = 262144 = dim^2: True; PRV for all irreps 0.03s (0.2 ms/irrep)
+  (28, 14, 0) dim  3375: 421 irreps, 2255 copies, max m 15, max w 15; dim M_mu == m for all: True (mismatches []); sum m dim V_mu = 11390625 = dim^2: True; PRV for all irreps 0.69s (1.6 ms/irrep)
+=== D2: W4 exact slices (every HWBASIS ket and every BRANCH slice) satisfy the PRV conditions and span M_mu (exact ranks; surd branches checked in mp)
+  (2, 1, 0) mu=(4, 2, 0): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (2, 1, 0) mu=(4, 1, 1): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (2, 1, 0) mu=(3, 3, 0): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (2, 1, 0) mu=(3, 2, 1): m=2  HW-ket slices 2: PRV violations 0, outside W_mu 0, rank(slices)=2 rank(basis)=2 rank(both)=2; branch slices in span(M_mu): rel. residual 0.0
+  (2, 1, 0) mu=(2, 2, 2): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 1, 0) mu=(6, 2, 0): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 1, 0) mu=(6, 1, 1): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 1, 0) mu=(5, 3, 0): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 1, 0) mu=(5, 2, 1): m=2  HW-ket slices 2: PRV violations 0, outside W_mu 0, rank(slices)=2 rank(basis)=2 rank(both)=2; branch slices in span(M_mu): rel. residual 0.0
+  (3, 1, 0) mu=(4, 4, 0): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 1, 0) mu=(4, 3, 1): m=2  HW-ket slices 2: PRV violations 0, outside W_mu 0, rank(slices)=2 rank(basis)=2 rank(both)=2; branch slices in span(M_mu): rel. residual 0.0
+  (3, 1, 0) mu=(4, 2, 2): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 1.93e-63
+  (3, 1, 0) mu=(3, 3, 2): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 2, 0) mu=(6, 4, 0): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 2, 0) mu=(6, 3, 1): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 2, 0) mu=(6, 2, 2): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 2, 0) mu=(5, 5, 0): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 2, 0) mu=(5, 4, 1): m=2  HW-ket slices 2: PRV violations 0, outside W_mu 0, rank(slices)=2 rank(basis)=2 rank(both)=2; branch slices in span(M_mu): rel. residual 0.0
+  (3, 2, 0) mu=(5, 3, 2): m=2  HW-ket slices 2: PRV violations 0, outside W_mu 0, rank(slices)=2 rank(basis)=2 rank(both)=2; branch slices in span(M_mu): rel. residual 0.0
+  (3, 2, 0) mu=(4, 4, 2): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+  (3, 2, 0) mu=(4, 3, 3): m=1  HW-ket slices 1: PRV violations 0, outside W_mu 0, rank(slices)=1 rank(basis)=1 rank(both)=1; branch slices in span(M_mu): rel. residual 0.0
+--- stage prv finished in 0.7s
+=== D1(f): timing, Lambda = [2a,a,0] (dim = (a+1)^3); times in seconds (exact = Fractions, mp = 50 digits); medians over 5 points
+    a    dim    setup   T-tens cov exact  cov mp50      chat   T size |  #irr   maxm   maxw  PRVall
+    1      8    0.000    0.000    0.0000    0.0001   0.00001       12 |     5      2      2    0.00
+    2     27    0.000    0.000    0.0002    0.0002   0.00001       56 |    13      3      3    0.00
+    3     64    0.001    0.001    0.0005    0.0005   0.00001      172 |    25      4      4    0.00
+    4    125    0.002    0.001    0.0013    0.0012   0.00002      411 |    41      5      5    0.00
+    5    216    0.004    0.003    0.0027    0.0024   0.00002      860 |    61      6      6    0.00
+    6    343    0.006    0.008    0.0055    0.0045   0.00002     1574 |    85      7      7    0.01
+    7    512    0.009    0.010    0.0100    0.0076   0.00002     2708 |   113      8      8    0.02
+    8    729    0.013    0.016    0.0170    0.0118   0.00003     4305 |   145      9      9    0.03
+    9   1000    0.020    0.044    0.0449    0.0346   0.00004     6612 |   181     10     10    0.07
+   10   1331    0.026    0.036    0.0573    0.0265   0.00003     9616 |   221     11     11    0.07
+   11   1728    0.136    0.051    0.0671    0.0524   0.00004    13744 |   265     12     12    0.18
+   12   2197    0.043    0.070    0.0961    0.0529   0.00003    18817 |   313     13     13    0.22
+   13   2744    0.166    0.100    0.1916    0.1397   0.00004    25440 |   365     14     14    0.34
+   14   3375    0.108    0.255    0.2558    0.1820   0.00004    33530 |   421     15     15    0.52
+--- stage timing finished in 8.9s
+=== D3: the (m+1)-point dictionary on the leading polynomials L_B of N1 (records nu_general_res_<lam>[2].pkl, 200-digit data); dps = 120
+    per branch record: rep, phi (1/2), mu, copy | m, w | m+1 points: residual, correct digits of the slice | m+2 pts | 2m+2 pts | abs. scale max|raw*X_B - exact slice|/max | held-out: L_B at the 64 grid points of N1 vs prediction c-hat<phi_u|raw> | identity-only: digits | cond(A)
+    (correct digits: componentwise vs the exact W4 slice after normalising both on the first nonzero entry of the exact slice; "exact" = identical at working precision; for m = 1 the slice is the PRV vector itself)
+  (2, 1, 0) 1 (4, 2, 0) #1 | m=1 w=1 | res 2.3e-121 dig exact | dig exact | dig exact | scale 5.8e-121 | held-out 6.2e-121 | id-only dig exact | cond 1.0
+  (2, 1, 0) 1 (4, 1, 1) #1 | m=1 w=1 | res 3.4e-55 dig exact | dig exact | dig exact | scale 4.4e-55 | held-out 4.4e-55 | id-only dig exact | cond 1.0
+  (2, 1, 0) 1 (3, 3, 0) #1 | m=1 w=1 | res 3.0e-55 dig exact | dig exact | dig exact | scale 1.2e-55 | held-out 1.2e-55 | id-only dig exact | cond 1.0
+  (2, 1, 0) 1 (3, 2, 1) #1 | m=2 w=2 | res 2.2e-66 dig 65 | dig 65 | dig 63 | scale 2.7e-66 | held-out 1.9e-66 | id-only dig 120 | cond 3.84
+  (2, 1, 0) 1 (3, 2, 1) #2 | m=2 w=2 | res 1.8e-66 dig 64 | dig 64 | dig 62 | scale 1.7e-66 | held-out 3.0e-66 | id-only dig exact | cond 3.84
+  (2, 1, 0) 1 (2, 2, 2) #1 | m=1 w=1 | res 1.5e-85 dig exact | dig exact | dig exact | scale 5.2e-63 | held-out 2.7e-85 | id-only dig exact | cond 1.0
+  (2, 1, 0) 2 (4, 2, 0) #1 | m=1 w=1 | res 3.7e-120 dig exact | dig exact | dig exact | scale 3.7e-120 | held-out 3.8e-120 | id-only dig exact | cond 1.0
+  (2, 1, 0) 2 (4, 1, 1) #1 | m=1 w=1 | res 1.9e-60 dig exact | dig exact | dig exact | scale 1.8e-62 | held-out 2.3e-62 | id-only dig exact | cond 1.0
+  (2, 1, 0) 2 (3, 3, 0) #1 | m=1 w=1 | res 1.1e-53 dig exact | dig exact | dig exact | scale 8.4e-54 | held-out 8.4e-54 | id-only dig exact | cond 1.0
+  (2, 1, 0) 2 (3, 2, 1) #1 | m=2 w=2 | res 5.9e-66 dig 65 | dig 65 | dig 63 | scale 3.2e-66 | held-out 4.7e-66 | id-only dig 121 | cond 1.49
+  (2, 1, 0) 2 (3, 2, 1) #2 | m=2 w=2 | res 5.0e-66 dig 64 | dig 64 | dig 62 | scale 2.0e-66 | held-out 5.2e-66 | id-only dig exact | cond 1.49
+  (2, 1, 0) 2 (2, 2, 2) #1 | m=1 w=1 | res 5.6e-84 dig exact | dig exact | dig exact | scale 1.1e-61 | held-out 9.6e-84 | id-only dig exact | cond 1.0
+  (3, 1, 0) 1 (6, 2, 0) #1 | m=1 w=1 | res 2.4e-92 dig exact | dig exact | dig exact | scale 2.2e-92 | held-out 2.2e-92 | id-only dig exact | cond 1.0
+  (3, 1, 0) 1 (6, 1, 1) #1 | m=1 w=1 | res 7.6e-92 dig exact | dig exact | dig exact | scale 7.2e-92 | held-out 7.2e-92 | id-only dig exact | cond 1.0
+  (3, 1, 0) 1 (5, 3, 0) #1 | m=1 w=1 | res 1.8e-103 dig exact | dig exact | dig exact | scale 2.2e-103 | held-out 2.2e-103 | id-only dig exact | cond 1.0
+  (3, 1, 0) 1 (5, 2, 1) #1 | m=2 w=2 | res 1.0e-100 dig 99 | dig 99 | dig 97 | scale 1.6e-100 | held-out 1.0e-100 | id-only dig 120 | cond 4.02
+  (3, 1, 0) 1 (5, 2, 1) #2 | m=2 w=2 | res 2.9e-101 dig 99 | dig 99 | dig 97 | scale 2.0e-101 | held-out 6.0e-101 | id-only dig 120 | cond 4.02
+  (3, 1, 0) 1 (4, 4, 0) #1 | m=1 w=1 | res 6.2e-114 dig exact | dig exact | dig exact | scale 4.1e-114 | held-out 4.1e-114 | id-only dig exact | cond 1.0
+  (3, 1, 0) 1 (4, 3, 1) #1 | m=2 w=2 | res 1.2e-112 dig 113 | dig 112 | dig 109 | scale 1.0e-112 | held-out 9.6e-113 | id-only dig 121 | cond 3.53
+  (3, 1, 0) 1 (4, 3, 1) #2 | m=2 w=2 | res 3.9e-112 dig 110 | dig 110 | dig 107 | scale 2.8e-112 | held-out 6.2e-112 | id-only dig exact | cond 3.53
+  (3, 1, 0) 1 (4, 2, 2) #1 | m=1 w=2 | res 0.0 dig exact | dig 120 | dig exact | scale 4.4e-121 | held-out 4.1e-121 | id-only dig 120 | cond 1.0
+  (3, 1, 0) 1 (3, 3, 2) #1 | m=1 w=1 | res 0.0 dig exact | dig exact | dig exact | scale 1.4e-121 | held-out 2.2e-121 | id-only dig exact | cond 1.0
+  (3, 1, 0) 2 (6, 2, 0) #1 | m=1 w=1 | res 1.1e-91 dig exact | dig exact | dig exact | scale 9.3e-92 | held-out 9.3e-92 | id-only dig exact | cond 1.0
+  (3, 1, 0) 2 (6, 1, 1) #1 | m=1 w=1 | res 1.3e-91 dig exact | dig exact | dig exact | scale 3.6e-92 | held-out 3.6e-92 | id-only dig exact | cond 1.0
+  (3, 1, 0) 2 (5, 3, 0) #1 | m=1 w=1 | res 2.3e-102 dig exact | dig exact | dig exact | scale 1.9e-102 | held-out 1.9e-102 | id-only dig exact | cond 1.0
+  (3, 1, 0) 2 (5, 2, 1) #1 | m=2 w=2 | res 1.6e-101 dig 101 | dig 101 | dig 100 | scale 1.9e-101 | held-out 1.6e-101 | id-only dig 121 | cond 1.42
+  (3, 1, 0) 2 (5, 2, 1) #2 | m=2 w=2 | res 1.2e-101 dig 99 | dig 99 | dig 99 | scale 8.9e-102 | held-out 2.6e-101 | id-only dig 120 | cond 1.42
+  (3, 1, 0) 2 (4, 4, 0) #1 | m=1 w=1 | res 2.4e-113 dig exact | dig exact | dig exact | scale 2.1e-113 | held-out 2.1e-113 | id-only dig exact | cond 1.0
+  (3, 1, 0) 2 (4, 3, 1) #1 | m=2 w=2 | res 7.9e-114 dig 114 | dig 113 | dig 110 | scale 9.3e-114 | held-out 9.1e-114 | id-only dig 121 | cond 1.46
+  (3, 1, 0) 2 (4, 3, 1) #2 | m=2 w=2 | res 1.5e-113 dig 111 | dig 111 | dig 108 | scale 1.3e-113 | held-out 2.0e-113 | id-only dig exact | cond 1.46
+  (3, 1, 0) 2 (4, 2, 2) #1 | m=1 w=2 | res 3.2e-121 dig exact | dig exact | dig exact | scale 4.4e-121 | held-out 4.5e-121 | id-only dig 120 | cond 1.0
+  (3, 1, 0) 2 (3, 3, 2) #1 | m=1 w=1 | res 7.0e-122 dig exact | dig exact | dig exact | scale 4.0e-121 | held-out 2.2e-121 | id-only dig exact | cond 1.0
+  (3, 2, 0) 1 (6, 4, 0) #1 | m=1 w=1 | res 8.2e-114 dig exact | dig exact | dig exact | scale 5.9e-114 | held-out 5.9e-114 | id-only dig exact | cond 1.0
+  (3, 2, 0) 1 (6, 3, 1) #1 | m=1 w=1 | res 5.0e-115 dig exact | dig exact | dig exact | scale 4.0e-115 | held-out 4.0e-115 | id-only dig exact | cond 1.0
+  (3, 2, 0) 1 (6, 2, 2) #1 | m=1 w=1 | res 0.0 dig exact | dig exact | dig exact | scale 4.4e-122 | held-out 1.9e-121 | id-only dig exact | cond 1.0
+  (3, 2, 0) 1 (5, 5, 0) #1 | m=1 w=1 | res 4.4e-121 dig exact | dig exact | dig exact | scale 1.9e-121 | held-out 3.0e-121 | id-only dig exact | cond 1.0
+  (3, 2, 0) 1 (5, 4, 1) #1 | m=2 w=2 | res 2.8e-120 dig 120 | dig 119 | dig 119 | scale 3.9e-120 | held-out 3.0e-120 | id-only dig 121 | cond 4.49
+  (3, 2, 0) 1 (5, 4, 1) #2 | m=2 w=2 | res 1.1e-121 dig 119 | dig 119 | dig 118 | scale 2.3e-121 | held-out 4.9e-121 | id-only dig 119 | cond 4.49
+  (3, 2, 0) 1 (5, 3, 2) #1 | m=2 w=2 | res 3.8e-121 dig 120 | dig 119 | dig 118 | scale 8.1e-121 | held-out 6.9e-121 | id-only dig 120 | cond 3.53
+  (3, 2, 0) 1 (5, 3, 2) #2 | m=2 w=2 | res 1.2e-121 dig 120 | dig 120 | dig 116 | scale 1.5e-121 | held-out 2.9e-121 | id-only dig 119 | cond 3.53
+  (3, 2, 0) 1 (4, 4, 2) #1 | m=1 w=2 | res 7.7e-122 dig exact | dig exact | dig exact | scale 1.2e-121 | held-out 1.6e-121 | id-only dig exact | cond 1.0
+  (3, 2, 0) 1 (4, 3, 3) #1 | m=1 w=1 | res 0.0 dig exact | dig exact | dig exact | scale 1.4e-121 | held-out 1.7e-121 | id-only dig exact | cond 1.0
+  (3, 2, 0) 2 (6, 4, 0) #1 | m=1 w=1 | res 2.1e-113 dig exact | dig exact | dig exact | scale 2.3e-113 | held-out 2.3e-113 | id-only dig exact | cond 1.0
+  (3, 2, 0) 2 (6, 3, 1) #1 | m=1 w=1 | res 1.0e-113 dig exact | dig exact | dig exact | scale 1.8e-113 | held-out 1.8e-113 | id-only dig exact | cond 1.0
+  (3, 2, 0) 2 (6, 2, 2) #1 | m=1 w=1 | res 4.3e-121 dig exact | dig exact | dig exact | scale 2.9e-121 | held-out 3.4e-121 | id-only dig exact | cond 1.0
+  (3, 2, 0) 2 (5, 5, 0) #1 | m=1 w=1 | res 2.6e-119 dig exact | dig exact | dig exact | scale 2.6e-119 | held-out 2.6e-119 | id-only dig exact | cond 1.0
+  (3, 2, 0) 2 (5, 4, 1) #1 | m=2 w=2 | res 1.1e-120 dig 120 | dig 119 | dig 120 | scale 2.0e-120 | held-out 1.8e-120 | id-only dig exact | cond 1.75
+  (3, 2, 0) 2 (5, 4, 1) #2 | m=2 w=2 | res 1.1e-120 dig 118 | dig 118 | dig 119 | scale 1.4e-120 | held-out 1.8e-120 | id-only dig exact | cond 1.75
+  (3, 2, 0) 2 (5, 3, 2) #1 | m=2 w=2 | res 2.9e-121 dig 120 | dig 120 | dig 118 | scale 1.0e-122 | held-out 1.4e-121 | id-only dig 121 | cond 1.46
+  (3, 2, 0) 2 (5, 3, 2) #2 | m=2 w=2 | res 3.6e-122 dig 119 | dig 119 | dig 117 | scale 1.5e-121 | held-out 1.5e-121 | id-only dig exact | cond 1.46
+  (3, 2, 0) 2 (4, 4, 2) #1 | m=1 w=2 | res 1.1e-121 dig exact | dig exact | dig exact | scale 1.2e-121 | held-out 3.2e-121 | id-only dig exact | cond 1.0
+  (3, 2, 0) 2 (4, 3, 3) #1 | m=1 w=1 | res 1.1e-121 dig exact | dig exact | dig exact | scale 1.4e-121 | held-out 1.2e-121 | id-only dig exact | cond 1.0
+  SUMMARY: 52 branch records (26 branches x 2 phi); worst slice error: m+1 points 4.25e-65, m+2 4.0e-65, 2m+2 1.57e-63; worst residual (m+1) 1.12e-53; worst abs-scale deviation 8.42e-54; worst held-out prediction error 8.44e-54; identity-only worst 3.1e-120
+    (2, 1, 0): 12 records, worst residual 1.12e-53, worst slice error 4.25e-65, worst held-out 8.44e-54
+    (3, 1, 0): 20 records, worst residual 1.26e-91, worst slice error 5.71e-100, worst held-out 9.25e-92
+    (3, 2, 0): 20 records, worst residual 2.11e-113, worst slice error 1.51e-119, worst held-out 2.31e-113
+  multiplicity-2 sectors: 20 branch records (both copies of each sector, both phi): worst slice error (m+1 points) 4.25e-65, worst cond(A) 4.49; every copy matches ITS OWN exact slice (the two copies are different vectors of the 2-dim M_mu)
+--- stage branches finished in 0.8s
+=== D3(i): conditioning of the dictionary matrix (rows scaled to unit norm) with the default points vs greedily chosen points (column-pivoted QR over a pool of 40), real branches (copy 1 of each sector, phi)
+    rep        mu          m  w | cond default (m+1 pts) | cond chosen (m+1 pts) | cond default (2m+2 pts)
+    (2, 1, 0)  (3, 2, 1)   2  2 | 3.84                   | 1.4                   | 2.1
+    (3, 1, 0)  (5, 2, 1)   2  2 | 4.02                   | 1.52                  | 2.8
+    (3, 1, 0)  (4, 3, 1)   2  2 | 3.53                   | 1.35                  | 1.96
+    (3, 2, 0)  (5, 4, 1)   2  2 | 4.49                   | 1.39                  | 2.02
+    (3, 2, 0)  (5, 3, 2)   2  2 | 3.53                   | 1.43                  | 1.96
+    (m = 1: cond = 1 trivially; the slice is the PRV vector itself and the data only fix the scale and test consistency)
+=== D3(ii): noise amplification on the real branches with m = 2: relative noise delta on every L_B value (uniform in [-delta, delta], 4 trials); amplification = worst direction error / delta
+    direction error = ||s - c e||/||s|| (Euclidean in the GT coordinates, scale free); phi and phi'; the 12 branch records of the 6 sectors with m = 2 (both copies)
+    m=2, points 2m+2 default delta=1e-10: worst amplification 1.15
+    m=2, points 2m+2 default delta=1e-20: worst amplification 0.869
+    m=2, points 2m+2 default delta=1e-40: worst amplification 1.24
+    m=2, points m+1 chosen   delta=1e-10: worst amplification 0.517
+    m=2, points m+1 chosen   delta=1e-20: worst amplification 0.575
+    m=2, points m+1 chosen   delta=1e-40: worst amplification 0.678
+    m=2, points m+1 default  delta=1e-10: worst amplification 1.55
+    m=2, points m+1 default  delta=1e-20: worst amplification 1.14
+    m=2, points m+1 default  delta=1e-40: worst amplification 1.44
+=== D3(i,ii) at scale: synthetic data (random exact element of M_mu; L = c-hat <phi_u|s> exactly), one irrep per multiplicity m (the one with the largest w), delta = 1e-20 relative noise (3 trials)
+    amplification = worst direction error/delta (and, in brackets, the same for the componentwise error relative to the first nonzero entry)
+    rep        mu            m  w | cond: default, chosen, default 2m+2 | amplification: m+1 default, m+1 chosen, 2m+2 default
+    (8, 4, 0)  (13, 6, 5)    2  3 | 4.33      1.53      3.03      | 2.76      (30.4     ) 0.762     (8.42     ) 0.908     (10.0)
+    (8, 4, 0)  (12, 7, 5)    3  4 | 32.2      2.25      4.91      | 4.3       (40.4     ) 0.201     (1.68     ) 0.0891    (0.837)
+    (8, 4, 0)  (13, 8, 3)    4  4 | 208.0     2.47      15.9      | 9.58      (13.8     ) 1.52      (1.82     ) 2.62      (4.27)
+    (8, 4, 0)  (12, 8, 4)    5  5 | 83.7      3.84      17.3      | 15.1      (78.1     ) 1.29      (5.06     ) 3.75      (18.9)
+    (14, 7, 0) (21, 11, 10)  2  5 | 5.3       1.62      3.61      | 0.0985    (4.82     ) 0.207     (10.1     ) 0.087     (4.26)
+    (14, 7, 0) (22, 11, 9)   3  5 | 36.5      2.27      8.61      | 3.5       (40.7     ) 0.16      (3.27     ) 0.967     (11.3)
+    (14, 7, 0) (21, 12, 9)   4  6 | 247.0     3.86      20.9      | 2.87      (22.1     ) 0.728     (6.43     ) 2.11      (19.9)
+    (14, 7, 0) (22, 12, 8)   5  6 | 113.0     5.44      39.4      | 2.78      (8.33     ) 0.672     (2.65     ) 3.76      (10.7)
+    (14, 7, 0) (21, 13, 8)   6  7 | 2.08e+3   4.58      20.2      | 360.0     (1.22e+4  ) 1.45      (24.8     ) 1.8       (193.0)
+    (14, 7, 0) (22, 14, 6)   7  7 | 2.02e+4   7.89      31.9      | 1.52e+3   (9.33e+3  ) 1.91      (9.63     ) 1.56      (5.77)
+    (14, 7, 0) (21, 14, 7)   8  8 | 1.83e+5   7.15      50.2      | 2.87e+3   (9.97e+3  ) 1.15      (3.13     ) 1.5       (3.55)
+    (28, 14, 0) (43, 21, 20)  2  8 | 7.44      1.41      5.99      | 3.19      (5.29e+3  ) 0.0724    (120.0    ) 1.14      (1.89e+3)
+    (28, 14, 0) (42, 22, 20)  3  9 | 67.1      2.35      17.9      | 4.91      (964.0    ) 0.233     (49.9     ) 0.641     (178.0)
+    (28, 14, 0) (43, 22, 19)  4  9 | 496.0     2.93      76.4      | 65.2      (4.9e+3   ) 0.451     (35.5     ) 9.75      (864.0)
+    (28, 14, 0) (42, 23, 19)  5 10 | 428.0     5.69      149.0     | 23.6      (639.0    ) 0.832     (29.7     ) 6.65      (186.0)
+    (28, 14, 0) (43, 23, 18)  6 10 | 5.39e+3   9.45      113.0     | 619.0     (1.98e+4  ) 0.831     (50.8     ) 9.88      (430.0)
+    (28, 14, 0) (42, 24, 18)  7 11 | 3.58e+4   14.3      117.0     | 3.35e+3   (4.91e+4  ) 1.66      (17.8     ) 3.97      (68.4)
+    (28, 14, 0) (43, 24, 17)  8 11 | 3.3e+5    20.0      332.0     | 2.96e+4   (1.22e+5  ) 3.34      (15.4     ) 17.3      (76.0)
+    (28, 14, 0) (42, 25, 17)  9 12 | 1.46e+5   24.4      300.0     | 3.28e+3   (7.6e+3   ) 1.46      (3.17     ) 10.2      (26.8)
+    (28, 14, 0) (43, 25, 16) 10 12 | 3.19e+5   22.8      863.0     | 2.36e+3   (1.35e+4  ) 5.01      (33.1     ) 24.1      (203.0)
+    (28, 14, 0) (42, 26, 16) 11 13 | 2.57e+6   26.2      508.0     | 3.34e+5   (4.64e+5  ) 2.48      (4.21     ) 33.2      (51.0)
+    (28, 14, 0) (43, 26, 15) 12 13 | 2.66e+7   32.9      1.17e+3   | 6.14e+5   (1.3e+6   ) 1.39      (4.81     ) 29.4      (93.5)
+    (28, 14, 0) (42, 27, 15) 13 14 | 2.63e+7   29.4      340.0     | 1.33e+6   (5.83e+7  ) 5.45      (63.6     ) 7.47      (88.0)
+    (28, 14, 0) (43, 28, 13) 14 14 | 9.8e+6    73.5      464.0     | 3.19e+5   (2.79e+6  ) 7.38      (53.5     ) 15.7      (109.0)
+    (28, 14, 0) (42, 28, 14) 15 15 | 3.14e+8   49.2      70.9      | 3.91e+7   (6.85e+7  ) 8.47      (18.1     ) 4.14      (7.7)
+--- stage cond finished in 7.2s
+=== D3(i) which points: worst cond(D A) over ALL irreps of multiplicity m (m >= 2), for four point rules (dps 40):
+    default = the first m+1 `default_points`; chosen = per-irrep greedy choice (pivoted QR, pool of 40); shared = prefix of length m+1 of ONE ordered list `shared_points(lam, phi)` for the whole Lambda; default2 = first 2m+2 default points
+  (8, 4, 0) (shared list of 40 points built in 0.1s)
+      m  #irr | default    chosen     shared     default2  
+      2    12 | 15.7       1.53       2.73       3.84      
+      3     8 | 144.0      2.63       3.02       9.22      
+      4     4 | 573.0      3.15       4.33       17.1      
+      5     1 | 83.7       3.84       4.38       17.3      
+    worst over all m: default 573.0, chosen 3.84, shared 4.38, default2 17.3
+  (14, 7, 0) (shared list of 40 points built in 0.2s)
+      m  #irr | default    chosen     shared     default2  
+      2    24 | 31.0       1.62       6.74       5.85      
+      3    20 | 635.0      2.78       19.8       26.1      
+      4    16 | 6.74e+3    3.86       43.3       55.9      
+      5    12 | 1.42e+3    6.24       40.2       85.0      
+      6     8 | 1.97e+4    7.5        12.3       75.0      
+      7     4 | 6.5e+4     7.89       13.6       46.1      
+      8     1 | 1.83e+5    7.15       10.4       50.2      
+    worst over all m: default 1.83e+5, chosen 7.89, shared 43.3, default2 85.0
+  (28, 14, 0) (shared list of 48 points built in 0.9s)
+      m  #irr | default    chosen     shared     default2  
+      2    52 | 68.6       2.72       16.6       10.8      
+      3    48 | 3.46e+3    7.38       56.7       110.0     
+      4    44 | 9.83e+4    19.9       37.8       426.0     
+      5    40 | 4.13e+4    44.8       172.0      1.23e+3   
+      6    36 | 1.96e+6    72.4       261.0      2.35e+3   
+      7    32 | 3.11e+7    74.4       736.0      1.47e+3   
+      8    28 | 4.25e+8    91.8       942.0      3.54e+3   
+      9    24 | 1.23e+8    86.9       2.08e+3    3.88e+3   
+     10    20 | 2.23e+8    64.1       1.63e+3    5.15e+3   
+     11    16 | 1.12e+9    70.5       3.02e+3    4.28e+3   
+     12    12 | 6.43e+9    73.2       345.0      4.31e+3   
+     13     8 | 1.5e+9     91.5       148.0      1.66e+3   
+     14     4 | 5.4e+7     73.5       478.0      1.05e+3   
+     15     1 | 3.14e+8    49.2       499.0      70.9      
+    worst over all m: default 6.43e+9, chosen 91.8, shared 3.02e+3, default2 5.15e+3
+--- stage points finished in 29.8s
+=== D3(iii): synthetic scale test (SYNTHETIC data: random exact element of M_mu -> L(w_k) = c-hat <phi_u|s> -> recover), every irrep; exact path = Fractions, numeric path = mp 50 digits
+    columns: rep, dim, #irreps, #copies, max m, max w | exact recovery (m+1 default points) | numeric, default m+1: worst direction error, worst residual, worst cond | numeric, chosen m+1 (pool 40): worst direction error, worst cond | time/irrep (mean, max): exact, numeric
+    (4, 2, 0)     27   13    19   3   3 |  13/13  | 2.07e-50 1.89e-51 27.0 | 1.78e-51 1.69 | 0.0004 0.0007 s, 0.0005 0.0008 s
+    (6, 3, 0)     64   25    44   4   4 |  25/25  | 8.02e-50 2.02e-51 181.0 | 2.55e-51 3.2 | 0.0006 0.0015 s, 0.0007 0.0016 s
+    (8, 4, 0)    125   41    85   5   5 |  41/41  | 2.3e-49 2.42e-51 573.0 | 2.47e-51 3.84 | 0.0010 0.0040 s, 0.0010 0.0023 s
+    (14, 7, 0)   512  113   344   8   8 | 113/113 | 1.12e-47 4.13e-51 1.83e+5 | 5.86e-51 7.89 | 0.0030 0.0179 s, 0.0023 0.0057 s
+    (28, 14, 0)  3375  421  2255  15  15 | 421/421 | 6.03e-43 4.03e-51 6.43e+9 | 3.09e-50 91.8 | 0.0475 0.7661 s, 0.0114 0.0414 s
+--- stage scale finished in 54.7s
+=== misc: robustness of the interface (real branches, N1 records, phi)
+  (a) [3,1,0] (5,2,1)#2: exact-rational inputs vs mpf inputs (phi and points as mpf): max |slice difference| = 3.73e-60, residuals 7.22e-61 / 8.39e-61
+  (b) values rounded to double precision (float64) -- what a machine-precision kernel (WP-K) would deliver; slice error vs exact (componentwise, first-nonzero normalisation) and direction error:
+      (2, 1, 0) (3, 2, 1) m+1 default : slice error 5.28e-17, direction error 5.0e-17, residual 3.25e-18
+      (2, 1, 0) (3, 2, 1) m+1 chosen  : slice error 1.38e-17, direction error 1.31e-17, residual 3.15e-18
+      (2, 1, 0) (3, 2, 1) 2m+2 default: slice error 2.12e-17, direction error 2.01e-17, residual 3.3e-17
+      (3, 1, 0) (5, 2, 1) m+1 default : slice error 2.09e-16, direction error 1.57e-16, residual 4.74e-17
+      (3, 1, 0) (5, 2, 1) m+1 chosen  : slice error 1.86e-17, direction error 1.4e-17, residual 4.5e-17
+      (3, 1, 0) (5, 2, 1) 2m+2 default: slice error 1.18e-16, direction error 8.91e-17, residual 3.76e-17
+      (3, 1, 0) (4, 3, 1) m+1 default : slice error 7.14e-17, direction error 7.07e-17, residual 4.62e-17
+      (3, 1, 0) (4, 3, 1) m+1 chosen  : slice error 1.93e-17, direction error 1.91e-17, residual 3.47e-17
+      (3, 1, 0) (4, 3, 1) 2m+2 default: slice error 4.96e-17, direction error 4.91e-17, residual 3.43e-17
+      (3, 2, 0) (5, 4, 1) m+1 default : slice error 5.65e-17, direction error 5.41e-17, residual 9.93e-18
+      (3, 2, 0) (5, 4, 1) m+1 chosen  : slice error 6.88e-17, direction error 6.59e-17, residual 1.09e-17
+      (3, 2, 0) (5, 4, 1) 2m+2 default: slice error 3.4e-17, direction error 3.26e-17, residual 3.65e-17
+      (3, 2, 0) (5, 3, 2) m+1 default : slice error 7.73e-17, direction error 7.66e-17, residual 9.17e-18
+      (3, 2, 0) (5, 3, 2) m+1 chosen  : slice error 1.81e-17, direction error 1.79e-17, residual 3.17e-17
+      (3, 2, 0) (5, 3, 2) 2m+2 default: slice error 2.33e-17, direction error 2.31e-17, residual 6.7e-17
+  (c) all copies of an irrep at once (slices_from_points) and coordinates x_j = v[f_j]:
+      (3, 1, 0) (5, 2, 1) copy 1: residual 1.26e-60, slice error 1.63e-60; coordinates of the exact slice ['0.0983443', '0.056458'] (membership error 0.0), x/(coords) ratio spread 2.88e-60, free indices [7, 10]
+      (3, 1, 0) (5, 2, 1) copy 2: residual 7.22e-61, slice error 1.49e-59; coordinates of the exact slice ['-0.0538008', '0.29989'] (membership error 0.0), x/(coords) ratio spread 2.72e-60, free indices [7, 10]
+      (3, 2, 0) (5, 4, 1) copy 1: residual 2.32e-60, slice error 1.94e-62; coordinates of the exact slice ['0.203746', '0.0423435'] (membership error 0.0), x/(coords) ratio spread 2.33e-61, free indices [5, 11]
+      (3, 2, 0) (5, 4, 1) copy 2: residual 1.03e-60, slice error 7.47e-60; coordinates of the exact slice ['-0.0701153', '0.224918'] (membership error 0.0), x/(coords) ratio spread 2.26e-60, free indices [5, 11]
+      (2, 1, 0) (3, 2, 1) copy 1: residual 2.66e-61, slice error 2.33e-61; coordinates of the exact slice ['0.208887', '0.0493116'] (membership error 0.0), x/(coords) ratio spread 1.01e-60, free indices [2, 4]
+      (2, 1, 0) (3, 2, 1) copy 2: residual 0.0, slice error 6.22e-61; coordinates of the exact slice ['-0.0797878', '0.337987'] (membership error 0.0), x/(coords) ratio spread 1.56e-61, free indices [2, 4]
+  (d) negative control: feed the L_B of branch B into the dictionary of ANOTHER irrep with the same m, w (m+2 points); residuals right vs wrong:
+      (2, 1, 0): right irrep: worst residual 2.1e-53 (8 cases); wrong irrep: smallest residual 0.522 (12 cases)
+      (3, 1, 0): right irrep: worst residual 3.13e-59 (14 cases); wrong irrep: smallest residual 0.347 (38 cases)
+      (3, 2, 0): right irrep: worst residual 3.36e-59 (14 cases); wrong irrep: smallest residual 0.409 (38 cases)
+--- stage misc finished in 0.1s
+=== cross-check against WP-R (slice_engine.py, ref/cg-slices-<lam>.txt): PRV bases (exact), COPY slices (30 digits) in M_mu, dictionary round trip on the copies of R (identity -> L at shared_points[:m+1] -> slice)
+  (4, 2, 0) :  13 sectors (same irrep set as mine: True),  19 PRV basis vectors,  19 COPY slices | dim M_mu, w, WSPACE mismatches: 0, 0 | PRVBASIS != mine in 0 sectors | COPY in M_mu: max |v - sum v[f_j] b_j| = 0.0 | dictionary round trip on the copies of R: max |slice - R| = 7.35e-40, worst residual 1.24e-41 | 0.0s
+  (6, 3, 0) :  25 sectors (same irrep set as mine: True),  44 PRV basis vectors,  44 COPY slices | dim M_mu, w, WSPACE mismatches: 0, 0 | PRVBASIS != mine in 0 sectors | COPY in M_mu: max |v - sum v[f_j] b_j| = 2.0e-30 | dictionary round trip on the copies of R: max |slice - R| = 5.71e-29, worst residual 4.28e-30 | 0.1s
+  (8, 4, 0) :  41 sectors (same irrep set as mine: True),  85 PRV basis vectors,  85 COPY slices | dim M_mu, w, WSPACE mismatches: 0, 0 | PRVBASIS != mine in 0 sectors | COPY in M_mu: max |v - sum v[f_j] b_j| = 6.07e-30 | dictionary round trip on the copies of R: max |slice - R| = 1.41e-28, worst residual 3.2e-31 | 0.1s
+  (14, 7, 0): 113 sectors (same irrep set as mine: True), 344 PRV basis vectors, 344 COPY slices | dim M_mu, w, WSPACE mismatches: 0, 0 | PRVBASIS != mine in 0 sectors | COPY in M_mu: max |v - sum v[f_j] b_j| = 7.01e-29 | dictionary round trip on the copies of R: max |slice - R| = 1.46e-26, worst residual 9.04e-31 | 1.4s
+--- stage crossR finished in 1.7s

@@ -19,3 +19,6 @@ __pycache__/
 
 # Gaudin Python caches (hundreds of MB of states/Q-functions; rebuilt by the scripts)
 Paul/Python/gaudin_sl3/*.pkl
+
+# large numeric caches of the Gaudin Python agents (rebuildable; kernel_N_L14.npz alone is 0.42 GB)
+*.npz

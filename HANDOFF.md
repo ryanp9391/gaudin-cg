@@ -4,10 +4,48 @@ Where the last session left off. Read this first when picking the project back u
 history log (that's `git log`) — only what's still open or in-flight. Overwrite
 freely each session rather than appending.
 
-## >>> NEWEST (2026-10-21 afternoon): ROUND 6 DISPATCHED — beat the Munich code with Q-functions for general reps, [14,7,0]² benchmark <<<
+## >>> NEWEST (2026-10-21 evening): ROUND 6 — R, Q0, K, D RETURNED (S pending); the slice engine does [14,7,0]² in 0.1 s; exact kernel through λ₁ = 14; a BUG in today's pencilSolve found and fixed <<<
 
-**Paul:** "the goal of the project is to beat the munich code using Q-function technology for general reps, e.g. [14,7,0]^2 … set up a
-complete plan of attack, then get cheaper sonnet agents to implement." **Plan (read first): `Paul/Mathematica/Gaudin/Gaudin-sl3-round6-plan.md`**
+**Results so far (each agent's RESULTS/report has the numbers; all files uncommitted until this commit, `*.npz` now gitignored):**
+- **R (`slice_engine.py`, `RESULTS-slice-engine.md`, `ref/cg-slices-{420,630,840,1470}.txt`):** the PRV/Zhelobenko slice engine. ALL 113 irreps /
+  344 copies of [14,7,0]²: **0.10 s** (n_W-free part: PRV spaces, exact V_red, eigen) / **0.17 s** incl. every full HW vector; a = 8 (Munich OOM): 0.24 s;
+  [28,14,0]² (a = 14, 421 irreps, 2255 copies, n_W up to 25 425): 1.0 / 2.0 s; a = 20: 3.9 / 9.1 s; scaling ≈ a^3.3 + output. 0 mismatches vs W4's 45
+  exact branches (kets entry for entry, eigenvalues 1e-50, G-norms 1e-49); a Munich-style brute-force null space agrees on every irrep ≤ [14,7,0];
+  exact-arithmetic twin: 0 HW violations for all 2255 vectors at a = 14. **Exact relation: alpha₁(W4) = eigenvalue(V_red) + eta₁/2, eta₁ = |Λ|² +
+  cas₂(Λ) − cas₂(μ)/2** (= W4's eta = H⁰θ₁₂). Surprise: V_red is tridiagonal (Jacobi) in the GT basis in every sector (421/421 at a = 14); singlet
+  V = λ₁λ₂(λ₁+1), top V = −λ₁λ₂ (exact a ≤ 10). Float64 HW residual 2.6e-14 at a = 7, 5e-12 at a = 14 (`hw_from_slice_rounded` cures it).
+- **Q0 (`Experiments/Gaudin-Qsystem-scale.{wl,md}`, `ref/qsystem-spectrum-{630,840,1470}.txt`, `ref/qsystem-roots-a7-a10-a14.txt`):** **today's
+  `pencilSolve` was WRONG on C(a,2)+a+1 irreps per [2a,a,0]² (29/113 at a = 7)** — (i) q₁ with no unknowns (M₁ = 0, μ₁ = 2λ₁): CoefficientArrays took V
+  as the unknown, P₁ = 0, GCD = P₂ alone; (ii) μ₃ ≥ λ₂+1, μ₂ ≤ 2λ₁−1: P₁, P₂ share roots where the third system is inconsistent. The session's earlier
+  claim "exact multiplicity on all 113 irreps" was only ever tested on ν = λ and the singlet — corrected. **Fix (both in Q0's `qsSolve` and, minimally,
+  in the shipped `pencilSolve`): GCD of ALL THREE consistency polynomials + the no-unknowns guard.** Patched `pencilSolve` re-verified by the session:
+  113/113 irreps = multiplicity at a = 7, roots = fastEig to 6e-12, 30.8 s; Q0's `qsSolve`: 113/113 (3.0 s), 221/221 at a = 10 (11 s), 421/421 at a = 14
+  (38 s CPU, 0.05–0.28 s per irrep, NO n_W dependence), roots real and simple, Baxter residuals ≤ 2e-63; = R's 492 branches to 30 digits. Exact
+  Laurent map (equal sites): S₂ = h₂ − h₁′, S₃ = h₃ − h₂′/2 + h₁″/3; H₁ = −H₂ = eta, a₁ = V + eta/2, a₂ = a₁ − 2alpha, b₁ = −b₂ = 2(alpha − a₁),
+  alpha = (μ₁+2)(μ₂+1)μ₃/2; multiplicity 1: V = alpha − eta/2; mean of a₁ over copies = alpha on every sector (numerical identity, no proof).
+  deg q_k = M_k = (4a−μ₁, 4a−μ₂+1, 4a−μ₃+2) (indicial polynomial at ∞); exponents {0, a+1, 2a+2} at both sites.
+- **K (`kernel_L14.py`, `RESULTS-kernel-L14.md`, caches `kernel_N_L{8,14}.npz`, `kernel_Theta_{420,840,1470}.npz`, 0.48 GB, gitignored):** the one-row
+  master kernel EXACTLY through λ₁ = 14 by the operator route in modular arithmetic (M(1) integer unit block-triangular, N = M⁻¹ by block forward
+  substitution mod 12 primes + Garner lift; float64 alone fails from L = 8). M⁽¹⁴⁾ 14400², N⁽¹⁴⁾ 48M nonzeros, |N| ≤ 4.8e66 (300 s, 8.8 GB);
+  Θ^{[14,7,0]}: 92 pairs, 8464 entries, 1.69M monomials, a-degree 21, t-degree 41, |coef| up to 1.3e51; Θ^{[8,4,0]}: 84k monomials. Reproduces
+  rep_300/400/500/600 and all block kernels exactly; universality M⁽ᴸ⁾|_{L′} = M⁽ᴸ′⁾ for all 78 pairs L′ < L ≤ 14; exchange rule and top-state sum rule
+  exact mod 22 primes; G1's corner (C3) and first-order (C4) closed forms hold at λ₁ = 8, 14. **Round-7 warning: jet-index contractions cancel by
+  1e26–1e29 at [14,7,0]; the ε^{N_B} coefficient must be computed from the exact coefficients (`G_eps_coefficients`, `eval_Theta_entry_mp`) at
+  mpmath precision — double is useless there.** Loaders documented in RESULTS.
+- **D (`gauss_dictionary.py`, `RESULTS-gauss-dictionary.md`):** general-Λ Gauss covector e₁ᵀρ_Λ(n′) and ĉ (10 ms/point at [14,7,0], 0.3 s at
+  [28,14,0]); reproduces `gf_polys` exactly; the uncleared ĉ-components (pole at ω̂₁′ = φ₂) never meet the PRV supports (all Λ ≤ [28,14,0]); PRV bases
+  identical to R's in all 192 sectors; **m+1-point dictionary** recovers all 26 known slices to 53–116 digits from N1's L_B, constant 1 confirmed
+  independently, wrong irrep rejected (residual ≥ 0.35 vs ≤ 1e-53). **For m = 1 the slice is the PRV vector — Q-data only fix the scale; the
+  direction is Q-determined only for m ≥ 2 (316/344 copies at [14,7,0]).** Pitfall: point choice (cond up to 6e9 naive) → `shared_points`.
+  Interface for round 7: `slice_from_points(lam, mu, phi, points, values) -> (x, residual, slice)`; pass dps explicitly.
+- **S (`bethe_series_scale.py`, RESULTS on disk, NOT yet reported):** was warned (SendMessage) that a Python port of the pencil must include the
+  three-polynomial GCD + guard, and that Q0's ref files give the order-0 data.
+**Next (round 7, plan §4):** assembly `cg_from_Q_general` = Q0's order-0 → S's series → ν-series → K's exact kernel pieces at D's `shared_points`
+→ contraction at mpmath precision → D's dictionary; validate vs R's `cg-slices-*` (pair copies by V_red eigenvalue = a₁ − eta₁/2); the benchmark
+table; then the depth law and the kernel's loop terms. Paul's decisions (plan §7) still open.
+
+**Original dispatch note (2026-10-21 afternoon).** Paul: "the goal of the project is to beat the munich code using Q-function technology for general
+reps, e.g. [14,7,0]^2 … set up a complete plan of attack, then get cheaper sonnet agents to implement." **Plan (read first): `Paul/Mathematica/Gaudin/Gaudin-sl3-round6-plan.md`**
 — §0 what "beat" must mean (complexity table: Munich O(n_W³) dies at a = 8; the new slice/PRV engine is the real floor; the Q-route must
 deliver the w-dimensional slice with cost independent of n_W), §1 status of every Q-route ingredient and what breaks at λ₁ = 14, §2 the
 two engines, §3 the five work packages with acceptance tests, §4 round 7, §5 risks, §6 binding conventions, §7 decisions for Paul.

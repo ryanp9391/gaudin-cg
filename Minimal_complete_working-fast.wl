@@ -25,15 +25,22 @@ charPoly[A_, b_, V_] := Module[{aug = Transpose[Append[Transpose[A], b]], n, m, 
     Expand@InterpolatingPolynomial[Transpose[{pts, Det[RA /. V -> #] & /@ pts}], V]];
   PolynomialGCD[proj[], proj[]]];
 
-(* Q1's pencil alone has spurious roots (e.g. 2a+1 for the singlet); GCD with Q2's removes them *)
-pencilSolve[baxs_, qs_, V_] := Module[{sys, P, roots},
+(* Each Q_k's pencil alone has spurious roots (e.g. 2a+1 for Q1 on the singlet); the spectrum is the GCD of ALL THREE
+   consistency polynomials. Two bugs found by agent Q0 (round 6, 2026-10-21) in the first version, which used GCD(P1,P2) only:
+   (i) when q_k has no unknowns (M1 = 0 on the irreps with mu1 = 2 lam1) CoefficientArrays[eqs, {}] silently took V as the
+   unknown, so P1 was 0 and the GCD was P2 alone; (ii) on the irreps with mu3 >= lam2+1, mu2 <= 2 lam1 - 1, P1 and P2 share roots
+   at which the third Baxter system is inconsistent. Together C(a,2)+a+1 wrong irreps per [2a,a,0]^2 (29 of 113 at a = 7).
+   Correct but 6-9x slower than qsSolve in Experiments/Gaudin-Qsystem-scale.wl, which is the solver to use at scale. *)
+pencilSolve[baxs_, qs_, V_] := Module[{sys, polys, P, roots},
   sys = Table[Module[{eqs = DeleteCases[Flatten[CoefficientList[baxs[[k]], u]], 0], vars},
       vars = Union@Cases[eqs, c[k, _], Infinity];
-      {vars, Normal@CoefficientArrays[eqs, vars]}], {k, Length[baxs]}];
-  P = PolynomialGCD @@ (charPoly[#[[2, 2]], #[[2, 1]], V] & /@ sys[[;; 2]]);
+      {vars, If[vars === {}, {eqs, {}}, Normal@CoefficientArrays[eqs, vars]]}], {k, Length[baxs]}];
+  (* no unknowns: the equations are themselves polynomials in V and must all vanish *)
+  polys = Table[If[sys[[k, 1]] === {}, PolynomialGCD @@ sys[[k, 2, 1]], charPoly[sys[[k, 2, 2]], sys[[k, 2, 1]], V]], {k, Length[baxs]}];
+  P = PolynomialGCD @@ polys;
   roots = V /. NSolve[P == 0, V, WorkingPrecision -> 50];
-  Table[Prepend[Table[qs[[k]] /. Thread[sys[[k, 1]] ->
-        LeastSquares[sys[[k, 2, 2]] /. V -> v, -(sys[[k, 2, 1]] /. V -> v)]], {k, Length[qs]}], v],
+  Table[Prepend[Table[If[sys[[k, 1]] === {}, qs[[k]], qs[[k]] /. Thread[sys[[k, 1]] ->
+        LeastSquares[sys[[k, 2, 2]] /. V -> v, -(sys[[k, 2, 1]] /. V -> v)]]], {k, Length[qs]}], v],
    {v, roots}]];
 
 (* the 36 terms {coeff, {a,b}, {c,d}, {e,f}} of the notebook's V = sum coeff ee[a,b][1] ee[c,d][1] ee[e,f][2]:
