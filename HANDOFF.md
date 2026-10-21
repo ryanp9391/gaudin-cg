@@ -38,11 +38,32 @@ freely each session rather than appending.
   independently, wrong irrep rejected (residual ≥ 0.35 vs ≤ 1e-53). **For m = 1 the slice is the PRV vector — Q-data only fix the scale; the
   direction is Q-determined only for m ≥ 2 (316/344 copies at [14,7,0]).** Pitfall: point choice (cond up to 6e9 naive) → `shared_points`.
   Interface for round 7: `slice_from_points(lam, mu, phi, points, values) -> (x, residual, slice)`; pass dps explicitly.
-- **S (`bethe_series_scale.py`, RESULTS on disk, NOT yet reported):** was warned (SendMessage) that a Python port of the pencil must include the
-  three-polynomial GCD + guard, and that Q0's ref files give the order-0 data.
-**Next (round 7, plan §4):** assembly `cg_from_Q_general` = Q0's order-0 → S's series → ν-series → K's exact kernel pieces at D's `shared_points`
-→ contraction at mpmath precision → D's dictionary; validate vs R's `cg-slices-*` (pair copies by V_red eigenvalue = a₁ − eta₁/2); the benchmark
-table; then the depth law and the kernel's loop terms. Paul's decisions (plan §7) still open.
+- **S (`bethe_series_scale.py`, `RESULTS-bethe-series-scale.md`, `SPEC-bethe-series-scale.md`; caches gitignored):** the ε-series solver at scale.
+  Its own echelon Baxter pencil (a tridiagonal three-term recursion, linear in b/2; both pencil fixes included) gives #roots = multiplicity on all
+  113 irreps of [14,7,0] and agrees with W4 (40 branches), R (492 branches) and Q0 (473 branches, ≤ 5e-27). Acceptance: all 26 branches × 2
+  directions of [2,1,0]/[3,1,0]/[3,2,0] match W5's exact series to orders 0..10 at ≤ 4e-99. Scale: [4,2,0] 19 branches to order 14 in 17 s;
+  [6,3,0] 44 branches to order 20 in 2.3 min; [8,4,0] 85 branches to order 26 in 6 min; 14 sample branches of [14,7,0] to order ≤ 44 (the eight
+  copies of the multiplicity-8 irrep (21,14,7) included). **Depth law measured on 188 branches with K's exact kernels: N_B = 4λ₁ − 2λ₂ − k_B holds,
+  lower orders of ΣGνν cancel to ≤ 1e-91, and the depth needed EQUALS N_B for every branch with k_B ≥ 1 (N_B/2 = 2λ₁ − λ₂ for the top state): at
+  [14,7,0] 21 (top), 28 (the (21,14,7) copies), 41 ((28,13,1)).** Cost at [14,7,0]: 20–85 s per branch (series only; top state to order 40: 67 s),
+  pencil 238 s for all 113 irreps in Python; parallel over branches. Degenerate structure: the lag grows, top-state lag = 2·min(λ₂, λ₁−λ₂) = 14 at
+  [14,7,0] with a degree-15 solvability polynomial for c₁; Jacobian rank 5 or 6 in every run; the pruning tolerance must scale with the precision
+  (10^(−0.6·dps)) — a near-solution with inconsistency 1e-41 survived 1e-40 at (28,13,1) until fixed. Not done: the full [14,7,0] family.
+
+**ASSESSMENT GIVEN TO PAUL (2026-10-21 evening), the state of the original goal.** "Beat the improved Munich code (10.9 s at a = 7)" is achieved
+— by the slice engine (0.10 s, ×100; a = 14 in 1 s), i.e. by representation theory, not by integrability: Munich's n_W³ cost was never
+intrinsic (the multiplicity problem lives in a w ≤ 8-dimensional slice; for m = 1, 28 of 113 irreps, the slice is fixed without any Q-data).
+The Q-route as formulated (jet formula + ε-series to depth N_B ≈ 40 + a contraction that cancels by 1e26–1e29 and needs ~60-digit arithmetic
+over 8464 kernel entries) costs 20–85 s per copy for the series alone → hours for the 344 copies of [14,7,0]², against 11 s; it only "wins" where
+Munich cannot run at all (a ≥ 9), and there the slice engine is 3–4 orders faster still. The Q-system SPECTRUM, however, already beats Munich
+(3 s at a = 7, 38 s at a = 14, no n_W dependence). **Recommended round-7 priorities:** (1) R's Jacobi structure: V_red is tridiagonal in every
+sector and S's Baxter pencil is itself a tridiagonal three-term recursion — if the slice of a copy is the orthogonal-polynomial sequence p_k(V)
+of a three-term recurrence evaluated at its Q-system eigenvalue V, then "CG from Q-functions" = Q-system eigenvalue + a recurrence: elegant,
+n_W-free and as fast as the slice engine, bypassing the ε-series and the kernel; test this first (compare R's V_red recurrence coefficients with
+S's pencil; closed forms). (2) The end-to-end assembly of the jet-formula route at [4,2,0]/[6,3,0]/[8,4,0] and a sample of [14,7,0] copies — as
+the theoretical result (the formula), validated against R, with the measured cost stated honestly. (3) The benchmark table for the paper:
+Munich original / improved / sparse null space / slice engine / Q-spectrum / Q-route, a = 7 → 14. Paul's decisions (plan §7) and the
+reframing of the goal are open.
 
 **Original dispatch note (2026-10-21 afternoon).** Paul: "the goal of the project is to beat the munich code using Q-function technology for general
 reps, e.g. [14,7,0]^2 … set up a complete plan of attack, then get cheaper sonnet agents to implement." **Plan (read first): `Paul/Mathematica/Gaudin/Gaudin-sl3-round6-plan.md`**
