@@ -4,6 +4,19 @@ Where the last session left off. Read this first when picking the project back u
 history log (that's `git log`) — only what's still open or in-flight. Overwrite
 freely each session rather than appending.
 
+## >>> FOR TOMORROW (2026-10-21 night, Paul: "set up a plan for the guy tomorrow to implement", NOT started): the slice engine + Gaudin missing-label operators for gl(4) <<<
+
+**Plan: `Paul/Mathematica/Gaudin/gl4-slice-engine-plan.md`** — why gl(4) (the SU(3) state of the art, Draayer–Akiyama/ndsu3lib, is SU(3)-specific:
+one missing label and an SU(3) zero-pattern prescription; for N ≥ 4 only the Munich null-space code exists, and its own SU(4) [S,S,0,0]² sweep in
+`Paul/Cpp/AlexCGC/results/hw_timings.txt` is the benchmark), what carries over (the slice theorem with three string conditions, the level
+recursion), what changes (three commuting missing-label operators — one cubic, two quartic — from the two-site gl(4) Gaudin cdet; reduction to the
+slice by normal-ordering the site-2 factors; a 3-parameter GT lattice instead of a chain), the assets (old gl(4) notebooks `Hamiltonians_SU4.wb`,
+`GaudinSolver.wb`, the July-2026 τ₁,τ₂,τ₃ closed forms), six Sonnet work packages G1–G6 in dependency order with acceptance tests (G1 alone — pure
+representation theory on the multiplicity-free rectangular family — already gives the SU(4) headline against Munich's 80 s at S = 8), risks.
+New code goes to `Paul/Python/gaudin_gl4/`. This revives the project's original gl(4) interest: update CLAUDE.md's goal statement and the
+memory when it starts.
+
+
 ## >>> DONE (2026-10-21 night, Ubuntu): ndsu3lib benchmark on [14,7,0]² — ndsu3lib is FASTER than our engines for the HW coefficients; the "orders of magnitude faster" claim holds only vs Munich <<<
 
 **Everything in `Paul/Cpp/ndsu3lib-bench/`** (`RESULTS.md` = build notes, driver, what each timing covers, same-machine table, span check,
