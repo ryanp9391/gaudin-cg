@@ -4,6 +4,88 @@ Where the last session left off. Read this first when picking the project back u
 history log (that's `git log`) — only what's still open or in-flight. Overwrite
 freely each session rather than appending.
 
+## >>> NEWEST (2026-10-21): why is our sl(3) CG pipeline ~16× faster than the Munich C++ — and is integrability the reason? <<<
+
+**Paul's question:** our pipeline computes the highest-weight-state CGCs of all 113 irreps in
+[14,7,0]⊗[14,7,0] (a=7) in **12.7 s**; the Munich code (Alex–Kalus–Huckleberry–von Delft,
+`Paul/Cpp/AlexCGC/cgc_hw_bench`) takes **~206 s** (Paul's figure). Find out *why* and, ultimately,
+**whether integrability is the reason**. Settle it with measurements; the diagnosis below comes from reading the code.
+
+### What "our approach" is (all in `Minimal_complete_working-fast.wl`, repo root)
+Load it after the GT/generator and vertex-operator cells of `Minimal_complete_working.nb` (it needs `ps`, `J0`,
+`ee`, `findweight`, `V`). Read the file's header first.
+- `fastEig[λ,μ][ν, MachinePrecision]` works as follows:
+  - Sparse single-site matrices E_ij are read off the notebook's own `ee`. A two-site vector is a D₁×D₂ matrix X
+    (site 1 acts from the left, site 2 as X·Eᵀ).
+  - The constraint matrix A of total E₁₂, E₂₃ on the weight-ν pairs is assembled sparsely, keeping only the
+    nonzero rows.
+  - The highest-weight space is the k lowest eigenvectors of the sparse Gram matrix AᵀA, found by shift-invert
+    Arnoldi. k comes from Racah–Speiser (`multRS`); the solver asks for k+20 and doubles until exactly k
+    eigenvalues are ~0 (k or k+5 silently missed null vectors on 37/113 irreps).
+  - The Gaudin vertex operator V (= ½ Σ_{σ,τ∈S₃} sgnσ sgnτ e¹_{σ₁τ₁}e¹_{σ₂τ₂}e²_{σ₃τ₃}) becomes a mult×mult
+    matrix on that space, and its eigenvectors are the CGCs in the SoV eigenbasis.
+  - Exact mode (no 2nd argument) uses `NullSpace[…, Method -> "OneStepRowReduction"]` instead.
+- `pencilSolve`: the leading-order Q-system/Baxter solver. Each Baxter equation is linear in its Q coefficients and
+  affine in V, so the spectrum = roots of GCD(P₁,P₂) of exact consistency polynomials. It replaces `NSolve`.
+- **Verified in-kernel (2026-10-21):**
+  - The eigenvectors equal the notebook's `eigenvec` to ~1e-40 for a = 1–4.
+  - The V eigenvalues equal the Q-system spectrum.
+  - Machine mode agrees with exact mode on all 113 irreps: eigenvalues to 6e-15 relative, eigenvectors to 9e-14.
+  - Multiplicities agree on all 113 irreps (344 copies counting multiplicity); dimensions sum to 512².
+- **Timings, a=7 (i7-12700KF, this Windows machine):**
+  - Your notebook's original `Table[eigenvec…,{σ,8}]` for ν=λ: 118.5 s. `fastEig` for the same: 0.36 s.
+  - All 113 irreps: 36.3 s exact, **12.7 s machine** (median 0.10 s; worst 0.30 s at (15,14,13)).
+- **Original-notebook bug (fixed only in the .wl, not the .nb):** `Subscript[h,i,j,k]` escapes `Block`, and
+  `h[2]`/`h[3]` are immediate `Set`s, so `computeV` silently reuses the previous λ,μ's coefficients.
+  For example, a = 1,2,3 in a row gave 2,2,2 solutions instead of 2,3,4.
+
+### Current answer (to be confirmed): **no — what was timed doesn't use integrability to go faster**
+Both codes solve the *same* problem: the null space of the raising operators on the weight-ν subspace of λ⊗μ in the
+GT basis. The difference is numerical linear algebra. In `compute_highest_weight_coeffs`
+(`Paul/Cpp/AlexCGC/cgc_hw_bench.cpp` ~L723–867):
+1. `hw_system` is a **dense** n_coeff × (dimS·dimS′) array, allocated and memset. That's ≈4.4 GB for the a=7
+   singlet (n_coeff≈2080, 512²=262 144).
+2. `dgesvd` with `JOBU="A"` does a **full dense SVD**, including all 2080×2080 left vectors, to extract k null
+   vectors: ~10¹⁰–10¹¹ flops per near-singlet irrep.
+3. It links **reference netlib LAPACK/BLAS** (`build.sh`: `-llapack -lblas`): single-threaded and unoptimised.
+4. Minor costs: `pattern::index()` takes up to dim S steps per call (it steps back through the earlier patterns);
+   coefficients are stored in a `std::map<vector<int>,double>`.
+
+Ours stays sparse (A ≈ 4000×2080 with a few nonzeros per column) and finds only k+20 eigenvectors.
+The integrable part — diagonalising V, the Gaudin/SoV ingredient — is *extra* work (~13 ms per vector) that the
+Munich code doesn't do: its SVD returns an arbitrary orthonormal basis of each multiplicity space. So integrability
+currently **adds** cost but gives a canonical basis (the SoV eigenbasis, matching the Q-system). It is not where the
+16× comes from.
+
+**Where integrability *could* genuinely win (untested):** skipping the GT-basis null space altogether.
+- The Q-system cost scales with the Q-degrees (~a): `pencilSolve` takes 0.05 s at a=7 and 0.2 s at a=14, and the
+  pencil size is the number of Bethe roots.
+- The null-space cost scales with dim of the weight space (nW ≈ 2000 near the singlet at a=7, growing faster).
+- If CGCs can be read off from Q's directly (the project's jet formula / `Paul/Python/gaudin_sl3/cg_from_Q.py`;
+  memory `project-gaudin-sl3-pipeline`), *that* would be an integrability speedup.
+
+### Experiments for the next agent (in order)
+1. **Pin down the 206 s.** Ask Paul how it was measured. `cgc_hw_bench` runs 1 untimed warm-up plus `reps`
+   timed solves (default 11; `test.sh` uses 51). The fair figure is Σ `hw_solve_s` over the 113 irreps with
+   `reps=1`. List the irreps with `./cgc_hw_bench decompose 3 14 7 0 14 7 0` (needs the Ubuntu box; the Windows
+   machine has no g++/LAPACK).
+2. **Break down the C++ cost.** Time the alloc+memset, the matrix fill and `dgesvd` separately (add timers like the
+   existing `// added` ones). Check that the near-singlet irreps dominate and that the time scales like
+   n_coeff²·n_states.
+3. **Relink with OpenBLAS** (`-lopenblas`), then swap `dgesvd` JOBU="A" for a null-space-only route: e.g. JOBU="O",
+   or `dsyevr` on AᵀA for the lowest k, or sparse storage. If C++ then matches or beats 12.7 s, the gap is
+   confirmed as linear algebra, not integrability.
+4. **Ablate ours.** Time `fastEig` with the V step removed (null space only) against the full call: this
+   quantifies what the integrable step costs. Also try the same machine-precision Gram/Arnoldi route on the C++
+   side's matrix for a like-for-like comparison.
+5. **The real integrability test.** Compare the scaling in a (and across ν) of `pencilSolve` (Q's only) against
+   the GT null space, then check whether `cg_from_Q.py` (or the jet formula) can produce the CGCs from Q's for
+   general [2a,a,0]². Report the crossover a, if any.
+
+Conventions: GT normalisation is the notebook's (rational JJp matrix elements, non-unitary), not the Munich
+code's orthonormal one, so compare CGC *vectors* only up to normalisation and basis change. Don't edit
+`Minimal_complete_working.nb` raw (it's a Mathematica .nb); the `.wl` is the working copy.
+
 ## >>> FOR THE UBUNTU MACHINE (2026-10-21): run the SU(3) [2a,a,0] timing sweep <<<
 
 Paul's ask: time how long the Munich (Alex–Kalus–Huckleberry–von Delft, arXiv:1009.0437) code takes to
