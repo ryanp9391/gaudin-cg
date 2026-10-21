@@ -41,7 +41,7 @@
 \newcommand{\src}[1]{\path{#1}}
 
 \title{\vspace{-1.6cm}The slice engine: why the highest-weight Clebsch--Gordan problem of $\mathrm{gl}(3)$ is tiny}
-\author{Paul Ryan\\ \small (project notes, compiled from the round-6 computations of 2026-10-21)}
+\author{Paul Ryan\\ \small (project notes, compiled from the round-6 and round-7 computations of 2026-10-21)}
 \date{21 October 2026}
 
 \begin{document}
@@ -51,7 +51,9 @@
 For two copies of an irreducible representation $V_\Lambda$ of $\mathrm{gl}(3)$ the highest-weight (HW) Clebsch--Gordan vectors of $V_\Lambda\otimes V_\Lambda$ are normally found as a null space on a weight space of dimension $n_W$ (about 2000 for $\Lambda=[14,7,0]$).
 The classical Zhelobenko (Parthasarathy--Ranga Rao--Varadarajan) criterion says that a HW vector is determined by a \emph{slice} of dimension $w\le8$, and that the allowed slices form an explicit $m$-dimensional null space, $m$ being the multiplicity.
 Used as an algorithm, together with a reduction to the slice of the Gaudin vertex operator (whose eigenbasis is the one separation of variables singles out), it gives all 344 HW vectors of the 113 irreps of $[14,7,0]\otimes[14,7,0]$ in 0.10~s (0.17~s with every full vector written out), against 206~s for the standard dense algorithm, which runs out of memory one size later.
-We describe the construction, its checks, two structural observations (the reduced vertex operator is tridiagonal; for 28 of the 113 irreps the slice is fixed by symmetry alone) and the consequence for the Gaudin/SoV programme behind it: the speed-up is representation theory, not integrability.
+A closed-form refinement shows that the reduced vertex operator is a Jacobi matrix on an explicit chain in the GT basis (of length at most 8 for $[14,7,0]$): the multiplicity space is a sub-chain, the slice of each copy is the three-term recurrence of that chain evaluated at the copy's eigenvalue, and the slices of all 344 copies take 6~ms.
+The Q-functions supply only that eigenvalue, itself the spectrum of the Jacobi matrix: the speed-up is representation theory, not integrability.
+We describe the construction, its checks and the consequences for the Gaudin/SoV programme behind it.
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -72,6 +74,7 @@ The Gaudin vertex operator, whose eigenvectors are the multiplicity copies that 
 
 The result: all 113 irreps and 344 copies of $[14,7,0]^{\otimes2}$, in the SoV eigenbasis, take 0.10~s, or 0.17~s with every full vector written out; the standard code needs 206~s, or 10.9~s once its linear algebra is repaired.
 At $[16,8,0]$, where the standard code runs out of memory, the engine needs 0.24~s, and at $[28,14,0]$ (421 irreps, 2255 copies, $n_W$ up to 25\,425) 2.0~s.\footnote{\py{RESULTS-slice-engine.md}~\S1 (item 5), \S5. The 0.10~s never touches $n_W$ (exact generators, Racah--Speiser, null spaces, reduced vertex operator, eigendecomposition); the 0.17~s adds the metric, the left inverses of Section~\ref{sec:slice} and all 344 reconstructions (155\,176 coefficients). Repaired Munich code: \src{HANDOFF.md}, ``Done (2026-10-21, Ubuntu): experiments 2--3''.}
+A closed-form refinement of the reduced vertex operator (Section~\ref{sec:obs}) goes further: the slices of all 344 copies of $[14,7,0]^{\otimes2}$ take 5.9~ms in double precision, without any Q-function and without any object of the size of $V_\Lambda$ or of the weight space.\footnote{\py{RESULTS-jacobi-cg.md}~\S1 (items 2, 5), \S7 (complexity table).}
 The timings come from different machines and are to be read as orders of magnitude (Section~\ref{sec:verified}).
 
 \emph{Context and two points up front.}
@@ -79,6 +82,7 @@ The project behind these notes asks for the Clebsch--Gordan (CG) coefficients of
 The engine of these notes was built as a reference and a lower bound, and it turned out to answer the benchmark by itself.
 First, the speed-up is representation theory, not integrability: the question that started this was whether the Gaudin/SoV machinery makes our own pipeline faster than the standard code, and the answer was no (Section~\ref{sec:standard}).\footnote{\src{HANDOFF.md}, ``NEWEST (2026-10-21): why is our sl(3) CG pipeline $\sim$16$\times$ faster than the Munich C++ --- and is integrability the reason?'' and ``Done (2026-10-21, Ubuntu): experiments 2--3''.}
 Second, the result still matters for the programme: the SoV overlap formula, which writes the overlap of rotated vacua with a Gaudin eigenstate as a bilinear form in jets of Q-functions and, as the twist goes to zero, turns it into the generating function of the CG coefficients, produces exactly the slice components,\footnote{\gd{Gaudin-sl3-round6-plan.md}~\S1, the paragraph after the displayed formula; \py{RESULTS-gauss-dictionary.md}~\S1 (item 4).} so the slice is what a Q-function formula should deliver, and the engine is both the baseline against which that formula must be timed and the reference that says what a correct answer looks like (Section~\ref{sec:programme}).
+A follow-up computation then showed that the slice of a copy is the three-term recurrence of an explicit chain evaluated at its eigenvalue, so that the Q-functions are needed only for that eigenvalue, itself the spectrum of a small Jacobi matrix (Sections~\ref{sec:obs} and~\ref{sec:programme}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The problem and the standard algorithm}\label{sec:standard}
@@ -241,7 +245,7 @@ With $\kappa_\mu=\tfrac12(\mu_1+2)(\mu_2+1)\mu_3$,
 V=\kappa_\mu-\tfrac12\eta\quad(m_\mu=1),\qquad V_{\rm singlet}=\lambda_1\lambda_2(\lambda_1+1),\qquad V_{\rm top}=-\lambda_1\lambda_2,
 \end{equation}
 the last two for $\Lambda=[2a,a,0]$ and its top irrep $\mu=(2\lambda_1,2\lambda_2,0)$ ($1470$ and $-98$ at $a=7$).
-The first holds to $10^{-55}$ on all 28, 40 and 56 multiplicity-one sectors at $a=7,10,14$, the other two exactly for $a=1,\dots,10$ (singlet: 6, 40, 126, 288, 550, 936, 1470, 2176, 3078, 4200); none of the three has a proof yet.\footnote{\py{RESULTS-slice-engine.md}~\S8; \py{slice_engine_output.txt}, block ``closed forms''; \gd{Experiments/Gaudin-Qsystem-scale.md}~\S0 (item 4), where the mean of $A_1$ over the copies of a sector is also found to equal $\kappa_\mu$ (numerical identity). $\kappa_\mu$ is called $\alpha$ in the project files.}
+The first holds to $10^{-55}$ on all 28, 40 and 56 multiplicity-one sectors at $a=7,10,14$, the other two exactly for $a=1,\dots,10$ (singlet: 6, 40, 126, 288, 550, 936, 1470, 2176, 3078, 4200); none of the three has a proof for general $\Lambda$ yet (the chain of Section~\ref{sec:obs} reproduces the first on all multiplicity-one sectors tested).\footnote{\py{RESULTS-slice-engine.md}~\S8; \py{RESULTS-jacobi-cg.md}~\S1 (item 7); \py{slice_engine_output.txt}, block ``closed forms''; \gd{Experiments/Gaudin-Qsystem-scale.md}~\S0 (item 4), where the mean of $A_1$ over the copies of a sector is also found to equal $\kappa_\mu$ (numerical identity). $\kappa_\mu$ is called $\alpha$ in the project files.}
 
 \subsection{The engine in five steps}\label{sec:six}
 
@@ -272,13 +276,13 @@ Steps 1--4 never see $n_W$; step 5 is bound by the size of the output.\footnote{
 
 \subsection{The benchmark}\label{sec:bench}
 
-Table~\ref{tab:bench} puts the standard algorithm, its repaired versions and the engine side by side at $a=7$, and Table~\ref{tab:scale} shows the scaling in $a$.\footnote{Sources: \src{HANDOFF.md} (the two ``Done (2026-10-21)'' sections and the round-6 blocks); \py{RESULTS-slice-engine.md}~\S5 (all rows $a=1,\dots,20$); \gd{Experiments/Gaudin-Qsystem-scale.md}~\S6.1; \py{RESULTS-bethe-series-scale.md}~\S5--\S6 for the Q-route.}
+Table~\ref{tab:bench} puts the standard algorithm, its repaired versions, the engine and the Jacobi chain of Section~\ref{sec:obs} side by side at $a=7$, and Table~\ref{tab:scale} shows the scaling of the engine in $a$.\footnote{Sources: \src{HANDOFF.md} (the two ``Done (2026-10-21)'' sections and the round-6 blocks); \py{RESULTS-slice-engine.md}~\S5 (all rows $a=1,\dots,20$); \gd{Experiments/Gaudin-Qsystem-scale.md}~\S6.1; \py{RESULTS-bethe-series-scale.md}~\S5--\S6 for the Q-route.}
 Between $a=7$ and $a=14$ the $n_W$-free part grows by a factor 10.1, and between 14 and 20 by 3.7 (about $a^{3.3}$ and $a^{3.7}$); it is dominated by exact rational arithmetic in Python.
 The full output grows like the number of coefficients written, about $a^6$ ($1.6\times10^{5}$ at $a=7$, $1.1\times10^{7}$ at $a=14$, $1.1\times10^{8}$ at $a=20$).
 
 \begin{table}[htbp]
 \centering\small
-\caption{Highest-weight solve of $[14,7,0]^{\otimes2}$ ($a=7$): 113 irreps, 344 copies. ``i5'' = Ubuntu laptop (i5-1345U, 15~GB), ``i7'' = i7-12700KF desktop (Windows 11, 32~GB). Not like for like: rows 1--4 use different linear algebra for the same $n_W$-sized null space, row 5 adds the diagonalisation of $V$, the engine produces the SoV copies, the Q-system only their labels.}
+\caption{Highest-weight solve of $[14,7,0]^{\otimes2}$ ($a=7$): 113 irreps, 344 copies. ``i5'' = Ubuntu laptop (i5-1345U, 15~GB), ``i7'' = i7-12700KF desktop (Windows 11, 32~GB). Not like for like: rows 1--4 use different linear algebra for the same $n_W$-sized null space, row 5 adds the diagonalisation of $V$, the engine and the chain produce the SoV copies (the chain only their slices), the Q-system only their labels.}
 \label{tab:bench}
 \begin{tabular}{@{}lrrl@{}}
 \toprule
@@ -291,6 +295,7 @@ Munich code as distributed (dense \texttt{dgesvd}, reference BLAS) & 20.5 & 206 
 our sparse null space plus diagonalisation of $V$ (Mathematica) & -- & 12.7 & i7 \\
 slice engine, without writing the vectors & -- & 0.10 & i7 \\
 slice engine, all 344 full vectors written & -- & 0.17 & i7 \\
+Jacobi chain of Section~\ref{sec:obs}, double precision, Q-free (slices only) & -- & 0.006 & i7 \\
 Q-system spectrum only (Baxter pencil, Mathematica) & -- & 3.0 & i7 \\
 Q-route end to end (jet formula, $\epsilon$-series) & -- & hours (not run) & i7 \\
 \bottomrule
@@ -340,32 +345,84 @@ $\lambda_3>0$ was only smoke-tested, there is no run beyond $a=20$, and for $[8,
 The reference files (\gd{ref/cg-slices-*.txt}) were re-parsed from the text and re-checked with code paths that use neither the engine's recursion nor its exact generators.\footnote{\py{RESULTS-slice-engine.md}~\S3 (``HW residual vs size''), \S5 (last paragraph), \S6--\S7, \S10; \src{HANDOFF.md}, ``NEWEST (2026-10-21): why \ldots'' (the SVD returns an arbitrary basis).}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Two observations}\label{sec:obs}
+\section{The copies are a Jacobi chain}\label{sec:obs}
 
-\textbf{Punchline.} The reduced vertex operator is tridiagonal in the GT basis in every sector we looked at, which may make a slice a three-term recursion; and for one irrep in four the multiplicity space is a line, so the Q-data have nothing to decide.
+\textbf{Punchline.} In the GT basis the reduced vertex operator is a tridiagonal (Jacobi) matrix on an explicit chain, with closed-form entries; the multiplicity space is a sub-chain cut out by the two string conditions; and the slice of a copy is the three-term recurrence of that chain evaluated at the copy's eigenvalue $V$.
+The Q-functions supply only $V$, and $V$ is itself the spectrum of a Jacobi matrix of size at most $a+1$.
 
-\subsection{\texorpdfstring{$V_{\rm red}$}{V\_red} is tridiagonal}\label{sec:jacobi}
+\subsection{The chain and its closed forms}\label{sec:jacobi}
 
-The weight space $V_\Lambda[\mu-\Lambda]$ is labelled by one integer (the first entry $r_1$ of the middle row of the GT pattern at fixed weight), so a tridiagonal matrix is a three-term recurrence.
-The operator \eqref{eq:Vred}, taken as the formula-defined operator on the whole weight space, is tridiagonal in the GT basis in every sector we tested: 13 of 13, 41 of 41, 113 of 113 and 421 of 421 sectors of $[4,2,0]$, $[8,4,0]$, $[14,7,0]$ and $[28,14,0]$ (and all sectors of $[10,3,0]$, $[6,1,0]$).\footnote{\py{RESULTS-slice-engine.md}~\S8 (first item); \py{slice_engine_output.txt}, block ``structure: bandwidth of V\_red''.}
-In the sectors with $w=m$ (11, 29, 71 and 239 of them) every off-diagonal product $V_{i,i+1}V_{i+1,i}$ is strictly positive (6, 36, 161 and 1106 products in all): $V_{\rm red}$ is a Jacobi matrix there, with real simple spectrum.
-In the sectors with $w>m$ it has zero or negative products (it is not self-adjoint off $M_\mu$).
+The weight $\mu-\Lambda$ fixes two GT entries, the bottom one $t=\mu_1-\lambda_1$ and the sum of the middle row $s=m_1+m_2=(\mu_1-\lambda_1)+(\mu_2-\lambda_2)$, so the weight space $V_\Lambda[\mu-\Lambda]$ is a chain in the single coordinate $m_1$, running from $\mathrm{lo}=\max(\lambda_2,\,s-\lambda_2,\,t,\,s-t)$ to $\mathrm{hi}=\min(\lambda_1,\,s-\lambda_3)$, of length $w=\mathrm{hi}-\mathrm{lo}+1$.\footnote{\py{RESULTS-jacobi-cg.md}~\S0 (conventions), \S2 (chain coordinate).}
+Of the 36 terms of \eqref{eq:Vred}, 24 survive, and in each of them exactly one factor has first index 3 and exactly one has second index 3 (either $E_{33}$ times two $\mathrm{gl}(2)$ generators, or $E_{a3}E_{3b}$ times one); since $E_{23}$ and $E_{32}$ move exactly one of $m_1,m_2$ by $\pm1$, the net shift of $(m_1,m_2)$ is $0$ or $\pm(1,-1)$, and $V_{\rm red}$ is tridiagonal for a structural reason.
+Its entries are explicit.
+With $m_2=s-m_1$, $x=m_1-m_2$ and $\xi=x(x+2)$, one has $V_{\rm red}\,e(m_1)=d(m_1)\,e(m_1-1)+\alpha(m_1)\,e(m_1)+u(m_1)\,e(m_1+1)$ with
+\begin{equation}\label{eq:chain}
+\begin{aligned}
+u&=-\frac{(\lambda_1-m_1)(\lambda_2-m_1-1)(\lambda_3-m_1-2)(t+1-m_2)(\mu_1-\lambda_2-m_1)}{(x+1)(x+2)},\\
+d&=-\frac{(\lambda_2-m_2)(t-m_1)(\lambda_1-m_2+1)(\lambda_3-m_2-1)(\mu_1-\lambda_2-m_2+1)}{x(x+1)},\\
+\alpha&=A_0+\tfrac{3}{16}(s-2\lambda_3+2)\,\xi-\frac{K}{16\,\xi},
+\end{aligned}
+\end{equation}
+where $K=(s-2\lambda_2)(s-2t)(s-2\lambda_1-2)(s-2\lambda_3+2)(s-2\mu_1+2\lambda_2-2)$ ($K/\xi:=0$ at $x=0$) and $A_0(\lambda;s,t)$ is an explicit cubic polynomial.
+These formulas were derived symbolically from the GT matrix elements (36 terms, generic labels), not fitted.
+They reproduce the engine's exact $V_{\rm red}$ entry for entry on 39\,608 dominant weights of 968 representations (every $[\lambda_1,\lambda_2,\lambda_3]$ with $\lambda_1\le16$, $\lambda_3>0$ included), and the exact chains of all 192 irreps of $[4,2,0]$, $[6,3,0]$, $[8,4,0]$, $[14,7,0]$ are tabulated.\footnote{\py{RESULTS-jacobi-cg.md}~\S1 (item 1), \S2 (bandwidth table), \S3 (closed forms; $A_0$ is the cubic printed there); exact chains: \py{jacobi_cg_tables.txt}.}
+(In the example of Section~\ref{sec:reduction}, $K=0$ and the diagonal is $777+12k(k+1)$.)
+Below the cut of the next subsection $u,d<0$, and $ud$ is a product of ten linear factors over $(x+1)(x+2)^2(x+3)$, each factor a positive integer (a distance to a wall of the GT range): $V_{\rm red}$ is a Jacobi matrix with simple real spectrum.
 
-For a Jacobi matrix the eigenvector with eigenvalue $V$ is the sequence $(p_0(V),\dots,p_{w-1}(V))$ of orthogonal polynomials of the three-term recurrence: given $V$ from the Q-system, the slice follows in $w-1$ steps of an explicit rational recurrence, and every slice component is a polynomial in $V$.
-That much is linear algebra; the open question is a different one: the Baxter equation of Section~\ref{sec:qsystem} is itself a three-term recursion, in the coefficients of the Q-polynomial, with the spectral parameter entering linearly on the diagonal.\footnote{\py{RESULTS-bethe-series-scale.md}~\S1, ``The oper as a three-term recursion''.}
-Whether the slice of a copy is the orthogonal-polynomial sequence of that recursion at the Q-system eigenvalue, which would make ``CG from Q-functions'' a two-line algorithm (Q-system eigenvalue, then a recurrence), is being tested; we state it as an observation under investigation, not as a result.\footnote{\src{HANDOFF.md}, ``ASSESSMENT GIVEN TO PAUL'' in the ROUND-6 block, recommended round-7 priority~(1).}
+\subsection{The multiplicity space is a sub-chain}\label{sec:subchain}
+
+$E_{12}$ is diagonal in the chain basis, $E_{12}\,e(t,m_1,m_2)=(m_1-t)(t+1-m_2)\,e(t+1,m_1,m_2)$, so the condition $E_{12}^{\lambda_1-\lambda_2+1}v=0$ is a coordinate cut, $m_1\le\mu_1-\lambda_2$.
+The entry $u$ contains the factor $\mu_1-\lambda_2-m_1$, which vanishes exactly at the cut: the truncated chain $W_1$ is invariant under $V_{\rm red}$, the recurrence below stops by itself, and beyond the cut the products $ud$ are negative.
+The $E_{23}$ condition is the same coordinate cut, $m_1\le\mu_2-\lambda_3$, in the Weyl-reflected chain $V'=UV_{\rm red}U^{-1}$, where $U$ is the longest Weyl element ($E_{ij}\to E_{4-i,4-j}$).
+The two conditions are never both active, because every $E_{ii}$-eigenvalue of a weight of $V_\Lambda$ lies in $[\lambda_3,\lambda_1]$ (the image weights would need $\mu_2\ge\lambda_1+\lambda_3+1$ and $\mu_2\le\lambda_1+\lambda_3-1$ respectively).
+Hence for $\mu_2\ge\lambda_1+\lambda_3$ the multiplicity space is the sub-chain $W_1$ and $m=w_1$ (its length), and for $\mu_2\le\lambda_1+\lambda_3$ it corresponds to a sub-chain $W_2$ of the second chain and $m=w_2$.
+This closed-form multiplicity equals the Racah--Speiser one on all 39\,608 dominant weights tested.\footnote{\py{RESULTS-jacobi-cg.md}~\S1 (item 3), \S4, \S7 (T2--T4).}
+At $[14,7,0]$ the 113 irreps split into 71 sectors in which the whole chain is the multiplicity space ($w=m$), 21 in which the $E_{12}$ cut truncates it ($w>m$), and 21 in which the $E_{23}$ condition is active ($w>m$ again, but now the first chain is Jacobi throughout and the physical eigenvalues are those of the $m\times m$ Jacobi matrix of the second chain); for $[2a,a,0]$ the three counts are $a^2+3a+1$, $\binom a2$ and $\binom a2$ ($a=1,\dots,20$), the equality of the last two being the $E_{12}\leftrightarrow E_{23}$ duality made visible.
 
 \subsection{For one irrep in four the answer is symmetry alone}\label{sec:m1}
 
 If $m_\mu=1$ then $M_\mu$ is a line, and the slice map and the theorem fix the HW vector up to scale: no operator needs diagonalising and no Q-function needs solving.
 At $[14,7,0]$ this is the case for 28 of the 113 irreps; the other 316 of the 344 copies live in sectors with $m\ge2$ (at $[28,14,0]$: 56 irreps, and 2199 of 2255 copies).\footnote{\py{RESULTS-gauss-dictionary.md}~\S1 (item 3), \S3 (item 1).}
-For $m=1$ even the eigenvalue is explicit, eq.~\eqref{eq:closed}: everything that distinguishes a Q-function approach from the PRV theorem sits in the sectors with $m\ge2$, and there only in the choice of basis of $M_\mu$.
+For $m=1$ even the eigenvalue is explicit, eq.~\eqref{eq:closed}, and the chain reproduces it ($\lambda_3=0$, $\lambda_1\le15$): $V=\kappa_\mu-\tfrac12\eta$ on all 2510 multiplicity-one sectors, and the mean of $V$ over the copies equals $\kappa_\mu-\tfrac12\eta$ in all 6255 sectors, being the trace of the explicit matrix.\footnote{\py{RESULTS-jacobi-cg.md}~\S1 (item 7).}
+Everything that distinguishes a Q-function approach from the PRV theorem therefore sits in the sectors with $m\ge2$, and there only in the choice of basis of $M_\mu$.
+
+\subsection{The slice is a three-term recurrence}\label{sec:recurrence}
+
+For every eigenvalue $V$ of the sector, the slice of the corresponding copy is
+\begin{equation}\label{eq:recur}
+p_0=1,\qquad p_1=\frac{V-\alpha_0}{d_0},\qquad p_{k+1}=\frac{(V-\alpha_k)\,p_k-u_{k-1}\,p_{k-1}}{d_k}\quad(k\ge1),
+\end{equation}
+on the chain below the cut and zero beyond it, where $\alpha_k=\alpha(\mathrm{lo}+k)$, $u_k=u(\mathrm{lo}+k)$ and $d_k=d(\mathrm{lo}+k+1)$ are the diagonal, sub-diagonal and super-diagonal entries of \eqref{eq:chain}.
+It is unique up to scale because the spectrum is simple, and it holds in every sector, with $V$ taken from either chain or from the Q-system.
+The component at chain position $k$ (counted from 0) is thus a polynomial of degree $k$ in $V$, equivalently in the accessory parameter $A_1=V+\tfrac12\eta$ of the copy's oper, and $V=\alpha_0+d_0\,p_1$: the accessory parameter is a linear function of the first slice ratio.
+
+\emph{Checks.}
+Against the slice engine at 50 digits, on all 3\,638 copies of $[4,2,0]$, $[6,3,0]$, $[8,4,0]$, $[14,7,0]$, $[20,10,0]$ and $[28,14,0]$, the maximal relative deviation lies between $4\times10^{-50}$ and $4\times10^{-42}$ (the growth with $a$ is the engine's eigensolver: $7\times10^{-78}$ and $1\times10^{-73}$ at 80 digits for $[14,7,0]$ and $[28,14,0]$); a further 848 copies of 12 other representations, nine of them with $\lambda_3>0$, agree with the engine to $6\times10^{-48}$.
+Without the engine, the recurrence slice satisfies both string conditions and $V_{\rm red}v=Vv$ exactly, up to the working precision, for 6\,796 copies of 285 representations ($\lambda_1\le10$, $\lambda_3\ge0$; worst residual $10^{-39}$, 0 failures), and the 587 non-physical eigenvalues of $V_{\rm red}$ on the chain all violate the $E_{23}$ condition.\footnote{\py{RESULTS-jacobi-cg.md}~\S1 (item 2), \S5 (deviation table, 80-digit rerun), \S7 (T6).}
+
+\emph{Cost.}
+The chain code builds no representation matrix and no object of the size of $V_\Lambda$ or of the weight space ($O(a^2)$ set-up per $\Lambda$, $O(w)$ per sector).
+In double precision all 344 copies of $[14,7,0]^{\otimes2}$ take 5.9~ms (closed-form chains 3.0~ms, eigenvalues 2.5~ms, forward recurrences 0.33~ms) and all 2255 copies of $[28,14,0]^{\otimes2}$ take 39~ms, which is 13--15 and 17--23 times faster than the $n_W$-free part of the slice engine in the same session (0.090~s and 0.89~s); given $V$, one copy costs 14~$\mu$s at 30 digits and 1~$\mu$s in double precision.
+The plain forward recurrence loses accuracy in double precision at large $a$ ($3\times10^{-8}$ at $a=14$, $5\times10^{-5}$ at $a=20$); the twisted variant (forward from the bottom, backward from the top) stays below $8\times10^{-14}$ up to $a=30$, at 6.8~ms and 51~ms for the two cases above.\footnote{\py{RESULTS-jacobi-cg.md}~\S1 (item 5), \S5 (timing and float64 accuracy), \S7 (complexity table).}
+The full HW vectors still need the triangular recursion of Section~\ref{sec:recursion} and are bound by the size of the output.
+
+\subsection{What the Q-system adds, and what it does not}\label{sec:qadds}
+
+The Q-system and the chain share the spectrum, exactly.
+The consistency polynomial of the Baxter pencil (the gcd of the three echelon systems, with the spectral parameter $b$ mapped by $V=\kappa_\mu-\tfrac12b-\tfrac12\eta$) equals the exact characteristic polynomial of $V_{\rm red}$ in all 192 sectors of $[4,2,0]$, $[6,3,0]$, $[8,4,0]$, $[14,7,0]$.
+The continuant of the first chain below the cut equals it whenever the multiplicity space is the whole truncated chain (the $71+21=92$ sectors with $w_1=m$ at $[14,7,0]$) and is divisible by it in the 21 $E_{23}$-active sectors, where the continuant of the second chain's sub-chain equals it instead.
+The three single Baxter systems also explain an earlier surprise: in the $E_{23}$-active sectors the second system alone already has degree $m$, in the $E_{12}$-cut sectors the third alone, so the gcd of the first two systems, the one our first solver used, over-counts roots exactly in the 21 $E_{12}$-cut sectors, which together with the $a+1$ sectors with $\mu_1=2\lambda_1$ (where a system has no unknowns) are the $\binom a2+a+1=29$ of 113 irreps of the footnote to Section~\ref{sec:qsystem}.
+But the chain recurrence is not the Baxter recurrence.
+The chains have length at most $a+1$ where the Q-polynomials have degree up to $4a+2$; the off-diagonal products are a product of ten linear factors divided by $(x+1)(x+2)^2(x+3)$ against a polynomial sextic in the index; the diagonals differ.
+A regression of the slices on the coefficients, on the Taylor coefficients at both sites and on the values of the Q-polynomials finds no copy-independent map to the interior slice components; only the last component is proportional to a ratio of two Q-data, in 39 of the 85 multi-copy sectors at $[14,7,0]$, and these ratios look like normalisation data rather than direction data.\footnote{\py{RESULTS-jacobi-cg.md}~\S1 (items 4, 6, 8), \S3 (characteristic polynomial), \S6 (J5).}
+The Q-function information that fixes the direction of a slice is $V$ alone.
+In one sentence: the eigenvector is representation theory (the chain), the Q-functions supply $V$, and $V$ is itself the spectrum of a Jacobi matrix of size at most 15 at $[28,14,0]$, so the Q-system step is replaceable, at the price of using no Q-function at all.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{What this means for the integrability programme}\label{sec:programme}
 
-\textbf{Punchline.} The benchmark was beaten by representation theory.
-The Q-function formula is not a faster way to compute Clebsch--Gordan coefficients, and we do not present it as one; what it offers is a structural statement, a precise point of contact with the slice, and one open question (Section~\ref{sec:jacobi}) that might yet turn it into a fast algorithm.
+\textbf{Punchline.} The benchmark was beaten by representation theory, and the Jacobi chain of Section~\ref{sec:obs} sharpens this: the slice of a copy is a three-term recurrence evaluated at its eigenvalue $V$, the Q-functions supply only $V$, and $V$ is itself the spectrum of a Jacobi matrix of size at most $a+1$, so even the Q-system step is replaceable.
+The Q-function formula is not a faster way to compute Clebsch--Gordan coefficients, and we do not present it as one; what it offers is a structural statement and a precise point of contact with the slice.
 
 \subsection{The balance sheet}\label{sec:balance}
 
@@ -374,7 +431,7 @@ To extract the slice of one copy from the SoV formula one needs the Laurent data
 Extrapolated to all 344 copies this is hours on one core (15--20 minutes on 20 cores), against 10.9~s for the repaired Munich code and 0.17~s for the engine; the family was not run (\py{RESULTS-bethe-series-scale.md}~\S6, last paragraph before ``Surprises'').
 The Q-route would only ``win'' where the standard code cannot run at all, and there the engine is faster still, by three to four orders of magnitude even if the Q-route is spread over 20 cores.
 
-\emph{The Q-system spectrum can compete, and does:} 3.0~s for all irreps at $a=7$ (against 206~s and 10.9~s), 38~s at $a=14$, independently of $n_W$; but it delivers the labels of the copies, not their vectors.
+\emph{The Q-system spectrum can compete, and does:} 3.0~s for all irreps at $a=7$ (against 206~s and 10.9~s), 38~s at $a=14$, independently of $n_W$; but it delivers the labels of the copies, not their vectors, and the same labels are the spectra of the explicit Jacobi matrices of Section~\ref{sec:obs}, a few milliseconds for all irreps at $a=7$ in double precision and without any Q-function.
 
 \emph{What the formula is for.}
 The relation that the programme established reads
@@ -391,14 +448,14 @@ Its value is structural: the CG coefficients of $\mathrm{gl}(3)$ are Q-numbers o
 Both objects are $w$-dimensional.
 In \eqref{eq:jet} the unknown is the slice, that is the $m$ coordinates of $\psi_{\rm top}$ in the explicit basis of $M_\mu$, and $m+1$ evaluations of the Q-side expression at different $\hat\omega$ determine them: the ``dictionary''.
 On the 26 known branches it recovers every slice to 53--116 digits and confirms independently that the constant is 1; at $[14,7,0]$ it has been tested only on synthetic data generated from known slices (random elements of $M_\mu$ in all 113 irreps, and the engine's own 344 copies), not yet on Q-side data.\footnote{\py{RESULTS-gauss-dictionary.md}~\S1 (items 4, 5, 9), \S3 (item 1), \S4.}
-The engine is thus both the baseline against which the Q-route is timed and the reference against which any Q-route output is compared; and it sharpens what the Q-route can add: for $m=1$ nothing, since the slice is fixed by symmetry (Section~\ref{sec:m1}), for $m\ge2$ the choice of the eigenbasis of $V$.
+The engine is thus both the baseline against which the Q-route is timed and the reference against which any Q-route output is compared; and it sharpens what the Q-route can add: for $m=1$ nothing, since the slice is fixed by symmetry (Section~\ref{sec:m1}), for $m\ge2$ the choice of the eigenbasis of $V$, whose only Q-side datum is $V$ itself (Section~\ref{sec:qadds}).
 
 \subsection{Next}\label{sec:next}
 
 \begin{enumerate}
-\item Test the Jacobi observation of Section~\ref{sec:jacobi}: compare the recurrence of $V_{\rm red}$ with the Baxter recursion and look for closed forms of its coefficients. If the slice is the orthogonal-polynomial sequence of the Baxter recursion, ``CG from Q-functions'' becomes a two-line algorithm as fast as the engine.
+\item Explain, rather than check, why the consistency polynomial of the Baxter pencil equals the characteristic polynomial of the chain (Section~\ref{sec:qadds}; verified in all 192 sectors up to $[14,7,0]$), and ask whether the interior slice components have any Q-side expression at all: it would have to involve Wronskian-type minors of the jets, as in eq.~\eqref{eq:jet}, and has not been explored.
 \item Assemble the jet-formula route end to end at $[4,2,0]$, $[6,3,0]$, $[8,4,0]$ and on a sample of $[14,7,0]$ copies, validated against the engine, with its cost stated as in Section~\ref{sec:balance}.
-\item One benchmark table with all columns (Munich as distributed and repaired, sparse null space, engine, Q-spectrum, Q-route) from $a=7$ to $a=14$.
+\item One benchmark table with all columns (Munich as distributed and repaired, sparse null space, engine, Jacobi chain, Q-spectrum, Q-route) from $a=7$ to $a=14$.
 \end{enumerate}
 How to restate the project's goal in the light of this is open.\footnote{\src{HANDOFF.md}, ROUND-6 block, ``ASSESSMENT GIVEN TO PAUL'' (recommended round-7 priorities, open decisions); \gd{Gaudin-sl3-round6-plan.md}~\S4, \S7.}
 
