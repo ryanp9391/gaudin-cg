@@ -50,6 +50,29 @@ freely each session rather than appending.
   [14,7,0] with a degree-15 solvability polynomial for c₁; Jacobian rank 5 or 6 in every run; the pruning tolerance must scale with the precision
   (10^(−0.6·dps)) — a near-solution with inconsistency 1e-41 survived 1e-40 at (28,13,1) until fixed. Not done: the full [14,7,0] family.
 
+**LITERATURE CHECK (2026-10-21 night, `Paul/Mathematica/Gaudin/Literature-check-missing-label.md`; per-claim verdicts with access status) — THE
+JACOBI/MISSING-LABEL RESULT IS LARGELY IN CRAMPÉ–POULAIN D'ANDECY–VINET 2023.** Verdicts: C1 slice reduction = Kostant 1959 Lemma 4.1 /
+PRV 1967 ("Zhelobenko" is the physics name; the book theorem not located) — algorithmic uses exist (extremal projectors: Asherova–Smirnov–Tolstoy
+1968/71, Pluhař–Smirnov–Tolstoy (PST) 1985/86; Rowe–Bahri VCS), our two-string null-space engine + benchmark not found. C2a: **our V IS the cubic
+missing-label operator X of PST 1986 (J. Phys. A 19, 21) and of Crampé–Poulain d'Andecy–Vinet (CPV), Commun. Math. Phys. 400 (2023) 179,
+arXiv:2110.03521 (+ J. Lie Theory 31 (2021) 1085), up to a Casimir constant** (checked by hand in four sectors); it is NOT Moshinsky–Nagel's Ω.
+C2b: CPV already have a TRIDIAGONAL form of X with closed-form entries in an extremal-projector basis (off-diagonal products negative); PST is
+quasi-tridiagonal; our GT-basis Jacobi chain (positive products, M_μ as a sub-chain/Weyl cut) was not found. C2c: slice_k = p_k(V) in GT form
+not found, but implicit in any tridiagonal form; PST's "algebraic algorithm" (abstract only) may pre-empt it — must be read. C3: canonical
+Gaudin eigenbasis / simple spectrum known (Rybnikov 2006, 2020; FFR 2010; MTV; HKRW 2020); the sl(3) two-site case with labelling operators:
+Campoamor-Stursberg–Musso, J. Phys. A 46 (2013) 335201. C4: oper dictionary standard (FFR 1994); CPV give the Bethe equations and polynomial
+ODEs for exactly this model; "chain char poly = Q-system polynomial" and "CG as polynomials in the accessory parameter" not found. NB the
+two-site sl(2) oper is hypergeometric (no accessory parameter) — Heun is THREE sites; the session's Heun analogy was off by one site. C5: our
+two-regime multiplicity rule = O'Reilly 1982 / Bégin–Mathieu–Walton 1992 / CPV eq. (10). C6: **the speed claim is fair only against general-N
+null-space codes (Munich)**; the SU(3)-specific Draayer–Akiyama lineage (SU3lib, ndsu3lib; Herko et al. arXiv:2505.08993 Fig. 8 ≈ 5 ms per
+coupling at this size, i.e. ~0.3–1 s for all 113 couplings of [14,7,0]², agent's extrapolation) is the same order as our 0.17 s — must be RUN
+before any claim. C7: Gaudin → CG is PROPOSED in CPV's conclusion but not carried out; no prior "CG as polynomials in the missing-label
+eigenvalue". **Recommended framing: realise CPV's proposed programme — CG coefficients from the two-site Gaudin model by SoV; cite V = X and the
+Gaudin eigenbasis as known; new content = the SoV/jet formula, the GT-basis Jacobi chain with its cuts, slice_k = p_k(V), the engine; quote
+speed only vs general-N codes.** To do before writing: read CPV (arXiv, open) and PST in full and produce an exact map (their basis ↔ our GT
+chain, their entries ↔ J's closed forms, their eq. (10) ↔ our cut rule, their Bethe equations ↔ our Q-system); run ndsu3lib on the 113
+couplings; fix the attributions in `Slice-engine-notes.tex` (Kostant/PRV; related work: PST, CPV, Campoamor-Stursberg–Musso).
+
 **ROUND 7 RESULT — AGENT J (`Paul/Python/gaudin_sl3/jacobi_cg.py`, `RESULTS-jacobi-cg.md` §7 theorems T1–T6, `jacobi_cg_tables.txt`): THE
 CG SLICE OF EVERY COPY IS A THREE-TERM RECURRENCE AT ITS Q-SYSTEM EIGENVALUE, WITH CLOSED FORMS.** (1) The weight space V_Λ[μ−Λ] is a chain in
 the GT entry m₁ (= m₁₂; t = μ₁−λ₁, s = m₁+m₂ fixed, lo = max(λ₂, s−λ₂, t, s−t) ≤ m₁ ≤ hi = min(λ₁, s−λ₃)); V_red is tridiagonal structurally
