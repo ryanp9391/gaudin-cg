@@ -1,0 +1,6 @@
+plain signs (+1 everywhere): max relative residual 6.672e-16, irreps failing (>1e-8): 0 / 113
+irreps with dim(weight space) w > m (non-vacuous test): 42 ; max (w-m) = 3
+dump keys subset of slice weight-space states, and absent states all forbidden by the SU(2) triangle rule: True (violating irreps: 0; 34 absent states in total)
+min singular value of the normalised m ndsu3lib vectors per irrep (independence): 0.0488
+min cos(principal angle) span(ndsu3lib) vs M_mu: 0.999999999999999  (1 = identical subspaces)
+control "flip one random component sign": over the 42 non-vacuous irreps residual>1e-8 in 21, median 2.66e-03

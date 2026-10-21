@@ -1,0 +1,15 @@
+mer. 21 oct. 2026 21:43:04 CEST
+ 21:43:04 up 3 days, 10:57,  1 user,  load average: 1,00, 1,18, 0,75
+rep 0  full: 0.1264 s (8408 calls, 4042816 coefficients)   HWrow: 0.00080 s (113 calls, 26086 coefficients)
+rep 1  full: 0.1179 s (8408 calls, 4042816 coefficients)   HWrow: 0.00078 s (113 calls, 26086 coefficients)
+rep 2  full: 0.1212 s (8408 calls, 4042816 coefficients)   HWrow: 0.00079 s (113 calls, 26086 coefficients)
+rep 3  full: 0.1175 s (8408 calls, 4042816 coefficients)   HWrow: 0.00079 s (113 calls, 26086 coefficients)
+rep 4  full: 0.1183 s (8408 calls, 4042816 coefficients)   HWrow: 0.00081 s (113 calls, 26086 coefficients)
+ 21:43:05 up 3 days, 10:57,  1 user,  load average: 1,00, 1,18, 0,75
+rep 0  full: 0.1165 s (8408 calls, 4042816 coefficients)   HWrow: 0.00083 s (113 calls, 26086 coefficients)
+rep 1  full: 0.1206 s (8408 calls, 4042816 coefficients)   HWrow: 0.00086 s (113 calls, 26086 coefficients)
+rep 2  full: 0.1170 s (8408 calls, 4042816 coefficients)   HWrow: 0.00079 s (113 calls, 26086 coefficients)
+rep 3  full: 0.1157 s (8408 calls, 4042816 coefficients)   HWrow: 0.00081 s (113 calls, 26086 coefficients)
+rep 4  full: 0.1185 s (8408 calls, 4042816 coefficients)   HWrow: 0.00079 s (113 calls, 26086 coefficients)
+ 21:43:05 up 3 days, 10:57,  1 user,  load average: 1,00, 1,18, 0,75
+irreps 113, sum rhomax 344, mismatches 0
