@@ -38,6 +38,26 @@ point against the SU(3)-specific state of the art; "orders of magnitude faster" 
 What we have that ndsu3lib does not: the canonical Gaudin eigenbasis of M_μ, exact arithmetic, the GT-basis Jacobi chain / slice = p_k(V), and
 the Q-system/SoV dictionary. **For the Windows session:** fold this into `Slice-engine-notes.*` (framing: CPV's programme realised; quote speed
 only vs Munich, cite ndsu3lib/SU3lib with these numbers); open idea: is ndsu3lib's 0.8 ms HW row a fair target for a compiled jacobi_cg?
+**UPDATE (same night): scaling to a = 20–30 (`RESULTS.md` § "Scaling to a = 20") REVERSES the verdict at large reps.** Single-thread, load ≈ 1:
+
+| a | irreps/copies | ndsu3lib full set | ndsu3lib HW row | slice_engine t_a / t_b | jacobi_cg float |
+|---|---|---|---|---|---|
+| 7 | 113/344 | 0.115 s | 0.79 ms | 0.125 / 0.180 s | 7.8 ms |
+| 10 | 221/891 | 1.50 s | 5.5 ms | 0.40 / 0.61 s | 19 ms |
+| 14 | 421/2255 | 19.6 s | 34 ms | 1.25 / 2.05 s | 49 ms |
+| 20 | 841/6181 | ≈ 350–400 s (extrap.) | 315 ms | 4.3 / 8.2 s | 137 ms |
+| 25 | 1301/11726 | – | 1.37 s | 9.8 / 20.8 s | 277 ms |
+| 30 | 1861/19871 | – | 4.75 s | – | 490 ms |
+
+Exponents (a = 7–20): ndsu3lib full a^7.7, HW row a^5.7 (→ 6.7 locally), slice_engine a^3.4–3.6, jacobi_cg a^2.7. HW row vs jacobi_cg: crossover
+a ≈ 15 (jacobi_cg ×10 faster at a = 30); vs slice_engine t_a ndsu3lib still ×14 ahead at a = 20. **ndsu3lib accuracy (double; its coupling routine
+has no quad switch — `-DPRECISION=quad` only affects SU(3)⊃SO(3), checked): worst HW-row residual vs exact M_μ 7e-16 (a = 7), 1e-12 (14), 5e-9 (20),
+2e-6 (25, 9 irreps > 1e-8), 8e-4 (30, 31 irreps); ×3.3 per unit a, worst on top-row irreps m₁ = 3a.** Our float paths: slice_engine 5e-10 at
+a = 20; jacobi_cg forward recurrence breaks down (5e-5 at 20, garbage at 30) but its TWISTED recurrence stays ≤ 7e-14 through a = 30. Conditioning:
+the m site-2-HW slices of ndsu3lib at a = 20 are nearly dependent in the plain GT basis (min normalized σ 3.7e-5 at (66,34,20), m = 15) yet span
+M_μ to 1e-15. **Revised claim: for large reps (a ≳ 15) the Jacobi-chain route is faster AND more accurate than ndsu3lib for the HW data; ndsu3lib
+wins for small reps and for the all-states set.** Still pending: a compiled jacobi_cg (most of its time is Python overhead — chains 4.2 ms + 113
+numpy eig calls 2.5 ms of the 7.7 ms at a = 7; arithmetic is µs), which should move the crossover far below a = 15.
 Gotcha: parsing the Munich result files with awk under this machine's French locale silently mis-sums — use `LC_ALL=C`.
 
 ## >>> NEWEST (2026-10-21 evening): ROUND 6 — R, Q0, K, D RETURNED (S pending); the slice engine does [14,7,0]² in 0.1 s; exact kernel through λ₁ = 14; a BUG in today's pencilSolve found and fixed <<<

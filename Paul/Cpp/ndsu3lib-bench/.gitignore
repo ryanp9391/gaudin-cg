@@ -4,3 +4,6 @@ src_dl/
 build/
 bench_driver
 __pycache__/
+build_quad/
+bench_driver_quad
+dump_a*.txt

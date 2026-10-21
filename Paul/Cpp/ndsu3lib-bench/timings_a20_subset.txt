@@ -1,0 +1,6 @@
+SUBSET: every 8-th irrep, offset 0 -> 106 irreps
+rep 0  full: 50.2320 s (56290 calls, 1132540806 coefficients)   HWrow: 0.04114 s (106 calls, 918270 coefficients)
+maxrss 22.9 MB (site a=20)
+SUBSET: every 8-th irrep, offset 3 -> 105 irreps
+rep 0  full: 48.3313 s (51212 calls, 1114185278 coefficients)   HWrow: 0.04094 s (105 calls, 908294 coefficients)
+maxrss 21.6 MB (site a=20)

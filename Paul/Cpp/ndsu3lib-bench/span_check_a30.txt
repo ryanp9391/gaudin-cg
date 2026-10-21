@@ -1,0 +1,8 @@
+a = 30: max direct residual |E^k v|/(|v| ||E^k||) = 7.816e-04; worst irreps by membership residual: ['(90, 59, 31) 7.82e-04 (m=29,w=30)', '(90, 58, 32) 6.42e-04 (m=27,w=29)', '(90, 57, 33) 1.64e-04 (m=25,w=28)', '(89, 58, 33) 6.36e-05 (m=26,w=28)', '(89, 57, 34) 2.83e-05 (m=24,w=27)']
+membership residual in the orthonormal basis (V*sqrt(G)): max 4.260e-03
+plain signs (+1 everywhere): max relative residual 7.816e-04, irreps failing (>1e-8): 31 / 1861
+irreps with dim(weight space) w > m (non-vacuous test): 870 ; max (w-m) = 15
+dump keys subset of slice weight-space states, and absent states all forbidden by the SU(2) triangle rule: True (violating irreps: 0; 2360 absent states in total)
+min singular value of the normalised m ndsu3lib vectors per irrep (independence): 0.0000
+min cos(principal angle) span(ndsu3lib) vs M_mu: 0.999756439163183  (1 = identical subspaces)
+control "flip one random component sign": over the 870 non-vacuous irreps residual>1e-8 in 424, median 1.77e-15
