@@ -86,25 +86,25 @@ Conventions: GT normalisation is the notebook's (rational JJp matrix elements, n
 code's orthonormal one, so compare CGC *vectors* only up to normalisation and basis change. Don't edit
 `Minimal_complete_working.nb` raw (it's a Mathematica .nb); the `.wl` is the working copy.
 
-## >>> FOR THE UBUNTU MACHINE (2026-10-21): run the SU(3) [2a,a,0] timing sweep <<<
+## Done (2026-10-21): SU(3) [2a,a,0] timing sweep (Munich CGC code, Ubuntu i5-1345U, 15 GB)
 
-Paul's ask: time how long the Munich (Alex–Kalus–Huckleberry–von Delft, arXiv:1009.0437) code takes to
-compute the **highest-weight-state CGCs only** of μ = [2a,a,0] inside [2a,a,0] ⊗ [2a,a,0] (SU(3), N=3;
-a=1 is the 8 in 8⊗8), for a = 1,2,3,… run **one at a time**. **Do a = 1,2,3 first and report back to
-Paul**; go on toward a = 7 only if the growth isn't steep.
+`Paul/Cpp/AlexCGC/results/`: `sweep_2aa0.csv` (single mu=[2a,a,0]), `full_decomp_2aa0_a{7,8}.txt` (per-mu).
+hw-solve only. Times for a<=5 are the fastest of 3 runs; a>=6 are single runs. mult(mu=[2a,a,0]) = a+1 as expected.
 
-- Code: `Paul/Cpp/AlexCGC/`. `cgc_hw_bench` is our modified build that stops after
-  `compute_highest_weight_coeffs()` (see its README). This hasn't run yet: the Windows machine has no
-  g++/LAPACK/WSL, and Paul chose to run it on the Ubuntu box instead of installing a toolchain.
-- New script `sweep_2aa0.sh` (commit 687a9fc): `bash Paul/Cpp/AlexCGC/sweep_2aa0.sh [amax=3] [reps=5] [limit_s=60]`.
-  It builds the binary if missing (`build.sh`; needs `liblapack-dev libblas-dev`). It prints dim, multiplicity,
-  hw-solve time, total (+LR) time, growth vs. the previous a, and wall-clock time; it stops once a single
-  hw-solve exceeds limit_s and adds its rows to `results/sweep_2aa0.csv`. I only dry-ran it with a fake binary.
-- Things to check: the `mult` column should be a+1 if my expectation is right (2 for the adjoint).
-  Wall-clock time per a is ≈ (reps+1) × hw-solve, because of one untimed warm-up solve; use reps=1 for big a.
-  For comparison, the old SU(4) [S,S,0,0]² sweep (`results/hw_timings.txt`) grew ~×5 per step in S.
-- Report the a=1..3 table plus growth factors to Paul. Commit the CSV only if he wants it, and clear this
-  section once the sweep is done.
+| a | dim | #irreps | max mult | mu=[2a,a,0] | singlet | sum over all mu |
+|---|-----|---------|----------|-------------|---------|-----------------|
+| 1 | 8   | 5   | 2 | 0.02 ms | 0.04 ms | 0.1 ms |
+| 2 | 27  | 13  | 3 | 0.2 ms  | 0.6 ms  | 2.8 ms |
+| 3 | 64  | 25  | 4 | 1.2 ms  | 4.7 ms  | 24 ms |
+| 4 | 125 | 41  | 5 | 3.3 ms  | 72 ms   | 0.34 s |
+| 5 | 216 | 61  | 6 | 36 ms   | 0.58 s  | 3.9 s |
+| 6 | 343 | 85  | 7 | 0.16 s  | 3.8 s   | 31 s |
+| 7 | 512 | 113 | 8 | 0.62 s  | 20 s    | 206 s |
+| 8 | 729 | 145 | 9 | -       | OOM (>12 GB) | >284 s (15 lowest mu OOM-killed) |
+
+- The singlet is always the slowest mu, but only ~10% of the total by a=7. The growth of the sum falls (x12, x7.9, x6.6), so it looks polynomial.
+- Compared with SU(4) [S,S,0,0]^2 (multiplicity-free; S=8, dim 7425: 80 s total), the SU(3) multiplicity case costs far more per
+  input dimension (a=7, dim 512: 206 s). Memory limits a=8 on this laptop; it needs >=32 GB.
 
 ## Moved out (2026-10-11): su(4) alternating chain f⊗f̄ thread
 
