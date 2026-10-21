@@ -1,0 +1,470 @@
+% Slice-engine-notes.tex -- notes on the slice engine (round 6, 2026-10-21).
+% Companion files: Slice-engine-notes.md (same content, generated from this file by a small script) and Slice-engine-notes.pdf.
+\documentclass[11pt]{article}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,array}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black,citecolor=blue!50!black]{hyperref}
+\usepackage{microtype}
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+\linespread{1.0}
+\allowdisplaybreaks
+\emergencystretch=2em
+% let tables sit at the top of a text page instead of forming float-only pages
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.85}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{5pt}
+
+% slightly more compact headings (no extra packages)
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}{-2.6ex \@plus -1ex \@minus -.2ex}{1.0ex \@plus .2ex}{\normalfont\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}{-2.0ex \@plus -1ex \@minus -.2ex}{0.6ex \@plus .2ex}{\normalfont\normalsize\bfseries}}
+% tighter lists, 9pt footnotes
+\def\@listi{\leftmargin\leftmargini \topsep 2pt \parsep 0pt \itemsep 1pt}
+\let\@listI\@listi
+\renewcommand\footnotesize{\@setfontsize\footnotesize{9}{10.5}\def\@listi{\leftmargin\leftmargini \topsep 2pt \parsep 0pt \itemsep 1pt}}
+\makeatother
+
+% file-name macros (paths are relative to the repository root; see the convention in the first footnote)
+\newcommand{\py}[1]{\path{PY/#1}}
+\newcommand{\gd}[1]{\path{GD/#1}}
+\newcommand{\cpp}[1]{\path{CPP/#1}}
+\newcommand{\src}[1]{\path{#1}}
+
+\title{\vspace{-1.6cm}The slice engine: why the highest-weight Clebsch--Gordan problem of $\mathrm{gl}(3)$ is tiny}
+\author{Paul Ryan\\ \small (project notes, compiled from the round-6 computations of 2026-10-21)}
+\date{21 October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For two copies of an irreducible representation $V_\Lambda$ of $\mathrm{gl}(3)$ the highest-weight (HW) Clebsch--Gordan vectors of $V_\Lambda\otimes V_\Lambda$ are normally found as a null space on a weight space of dimension $n_W$ (about 2000 for $\Lambda=[14,7,0]$).
+The classical Zhelobenko (Parthasarathy--Ranga Rao--Varadarajan) criterion says that a HW vector is determined by a \emph{slice} of dimension $w\le8$, and that the allowed slices form an explicit $m$-dimensional null space, $m$ being the multiplicity.
+Used as an algorithm, together with a reduction to the slice of the Gaudin vertex operator (whose eigenbasis is the one separation of variables singles out), it gives all 344 HW vectors of the 113 irreps of $[14,7,0]\otimes[14,7,0]$ in 0.10~s (0.17~s with every full vector written out), against 206~s for the standard dense algorithm, which runs out of memory one size later.
+We describe the construction, its checks, two structural observations (the reduced vertex operator is tridiagonal; for 28 of the 113 irreps the slice is fixed by symmetry alone) and the consequence for the Gaudin/SoV programme behind it: the speed-up is representation theory, not integrability.
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Punchline}\label{sec:punch}
+
+Take two copies of the $\mathrm{gl}(3)$ irrep with highest weight $\Lambda=[14,7,0]$ (dimension 512) and ask for the highest-weight (HW) vectors of $V_\Lambda\otimes V_\Lambda$: for each of the 113 irreps $\mu$ in the decomposition, and for each of its $m_\mu\le8$ copies, the vector killed by the raising operators, written in the product of Gelfand--Tsetlin (GT) bases.
+There are 344 of them.
+The largest, the singlet, has $n_W=2080$ components, and the standard algorithm, the Munich code of Alex, Kalus, Huckleberry and von Delft~\cite{munich}, finds it as the null space of the raising operators on the whole 2080-dimensional weight space.
+The full problem costs 206~s, and one size up the code runs out of memory.\footnote{\cpp{results/sweep_2aa0.csv}, \cpp{results/full_decomp_2aa0_a7.txt}, \cpp{results/full_decomp_2aa0_a8.txt}; summarised in \src{HANDOFF.md}, section ``Done (2026-10-21): SU(3) [2a,a,0] timing sweep''. Times are for the highest-weight solve only, on an Ubuntu laptop (i5-1345U, 15~GB). Convention for all footnotes: paths are relative to the repository root, with PY = \path{Paul/Python/gaudin_sl3}, GD = \path{Paul/Mathematica/Gaudin}, CPP = \path{Paul/Cpp/AlexCGC}; \S{} refers to a section of the file named.}
+
+\emph{The problem is much smaller than that.}
+A HW vector $\Psi$ is determined by its \emph{slice} $\psi_{\rm top}$: the components in which the second tensor factor sits on its highest-weight state.
+The slice is a vector in a single weight space of $V_\Lambda$, of dimension $w\le8$ (for the singlet, $w=1$).
+The HW conditions fix every other component from the slice by a triangular recursion, and the only conditions on the slice itself are two $\mathrm{sl}(2)$ string conditions.
+They cut the $w$-dimensional space of slices down to an $m$-dimensional subspace $M_\mu$, and that subspace \emph{is} the multiplicity space, written down explicitly.
+This is the classical criterion of Zhelobenko and of Parthasarathy, Ranga Rao and Varadarajan~\cite{zhel,prv}; what we add is only its use as an algorithm.\footnote{Statement and use: \py{SPEC-slice-engine.md}~\S2; \gd{Gaudin-sl3-round6-plan.md}~\S2.1.}
+The Gaudin vertex operator, whose eigenvectors are the multiplicity copies that separation of variables (SoV) singles out, is linear in the generators of the second factor and therefore reduces to an $m\times m$ matrix on the slice, again without any reference to $n_W$.
+
+The result: all 113 irreps and 344 copies of $[14,7,0]^{\otimes2}$, in the SoV eigenbasis, take 0.10~s, or 0.17~s with every full vector written out; the standard code needs 206~s, or 10.9~s once its linear algebra is repaired.
+At $[16,8,0]$, where the standard code runs out of memory, the engine needs 0.24~s, and at $[28,14,0]$ (421 irreps, 2255 copies, $n_W$ up to 25\,425) 2.0~s.\footnote{\py{RESULTS-slice-engine.md}~\S1 (item 5), \S5. The 0.10~s never touches $n_W$ (exact generators, Racah--Speiser, null spaces, reduced vertex operator, eigendecomposition); the 0.17~s adds the metric, the left inverses of Section~\ref{sec:slice} and all 344 reconstructions (155\,176 coefficients). Repaired Munich code: \src{HANDOFF.md}, ``Done (2026-10-21, Ubuntu): experiments 2--3''.}
+The timings come from different machines and are to be read as orders of magnitude (Section~\ref{sec:verified}).
+
+\emph{Context and two points up front.}
+The project behind these notes asks for the Clebsch--Gordan (CG) coefficients of $\mathrm{gl}(3)$ as explicit functions of Q-functions, obtained by SoV in the two-site rational Gaudin model, and in October 2026 it set itself a benchmark: \emph{beat the standard Munich code using Q-function technology, for general representations, with $[14,7,0]^{\otimes2}$ as the test case}.\footnote{Paul Ryan, 2026-10-21, quoted in \gd{Gaudin-sl3-round6-plan.md}, header, and \src{HANDOFF.md}, ``ROUND 6'' block, ``Original dispatch note''; the notes: \gd{Gaudin-sl3-CG-notes.md}~\S0, \S5, \S9.}
+The engine of these notes was built as a reference and a lower bound, and it turned out to answer the benchmark by itself.
+First, the speed-up is representation theory, not integrability: the question that started this was whether the Gaudin/SoV machinery makes our own pipeline faster than the standard code, and the answer was no (Section~\ref{sec:standard}).\footnote{\src{HANDOFF.md}, ``NEWEST (2026-10-21): why is our sl(3) CG pipeline $\sim$16$\times$ faster than the Munich C++ --- and is integrability the reason?'' and ``Done (2026-10-21, Ubuntu): experiments 2--3''.}
+Second, the result still matters for the programme: the SoV overlap formula, which writes the overlap of rotated vacua with a Gaudin eigenstate as a bilinear form in jets of Q-functions and, as the twist goes to zero, turns it into the generating function of the CG coefficients, produces exactly the slice components,\footnote{\gd{Gaudin-sl3-round6-plan.md}~\S1, the paragraph after the displayed formula; \py{RESULTS-gauss-dictionary.md}~\S1 (item 4).} so the slice is what a Q-function formula should deliver, and the engine is both the baseline against which that formula must be timed and the reference that says what a correct answer looks like (Section~\ref{sec:programme}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The problem and the standard algorithm}\label{sec:standard}
+
+\textbf{Punchline.} The standard algorithm solves an $n_W$-sized null space with dense linear algebra: time of order $n_W^3$ and, in the implementation we timed, memory $n_W\dim^2$.
+Repairing the linear algebra buys a factor 19 and shows that the 16-fold gap between our own pipeline and the standard code was never about integrability.
+
+\subsection{The problem}\label{sec:problem}
+
+Let $V_\Lambda$ be the irrep of $\mathrm{gl}(3)$ with highest weight $\Lambda=[\lambda_1,\lambda_2,\lambda_3]$ ($\lambda_3=0$ throughout), in the GT basis $\{e_\nu\}$ with the plain rational generators $E_{ij}$ (Appendix~\ref{app:conv}), and write $V_\Lambda\otimes V_\Lambda=\bigoplus_\mu V_\mu\otimes\mathbb{C}^{m_\mu}$.
+For every $\mu$ and each of its $m_\mu$ copies we want the HW vector: the vector $\Psi$ of weight $\mu$ annihilated by $E_{12}^{\rm tot}=E_{12}\otimes1+1\otimes E_{12}$ and by $E_{23}^{\rm tot}$ ($E_{13}=[E_{12},E_{23}]$ follows).
+The rest of $V_\mu$ follows by lowering, so the HW vectors are the hard part and what the standard code is benchmarked on.
+We call the first tensor factor site~1 and the second site~2, as in the Gaudin chain; for $m_\mu\ge2$ one also needs a distinguished basis of the multiplicity space (Section~\ref{sec:copies}).
+
+The benchmark family is $\Lambda=[2a,a,0]$, with $\dim V_\Lambda=(a+1)^3$.
+At $a=7$, $\Lambda=[14,7,0]$, there are 113 irreps and 344 copies, and one irrep, $\mu=(21,14,7)$, has multiplicity 8.
+The cost driver is $n_W$, the dimension of the weight-$\mu$ subspace of $V_\Lambda\otimes V_\Lambda$ in which $\Psi$ lives; it is largest for the singlet, $\binom{(a+1)^2+1}{2}$: 10, 45, 136, 325, 666, 1225, 2080, 3321 for $a=1,\dots,8$, and 25\,425 at $a=14$.\footnote{\py{RESULTS-slice-engine.md}~\S2 (last paragraph, ``counting laws''); \gd{Experiments/Gaudin-Qsystem-scale.md}~\S6.2.}
+
+\subsection{What the standard code costs, and why}\label{sec:munich}
+
+The Munich code works with GT patterns and finds the HW coefficients as the null space of the raising operators on that weight space; everything else follows by lowering.\footnote{\cpp{README.md}, sections ``Highest-weight-state CGCs only'' and ``Benchmarking just the highest-weight state''; the algorithm is described in Ref.~\cite{munich}.}
+Timing just that step on $[2a,a,0]^{\otimes2}$, the sum over all irreps is 0.1~ms, 2.8~ms, 24~ms, 0.34~s, 3.9~s, 31~s and 206~s for $a=1,\dots,7$, consistent with $n_W^3\sim a^{12}$; at $a=8$ the fifteen lowest irreps, the singlet among them, are killed by the out-of-memory killer on the 15~GB laptop.
+For the singlet at $a=7$ (20.5~s in all), allocating and zeroing the system takes 1.25~s and filling it 0.013~s, and 19.1~s go into a full dense singular value decomposition (LAPACK \texttt{dgesvd}, all left singular vectors) from which a handful of null vectors are read off.
+The array is stored as $n_{\rm coeff}\times\dim^2=2080\times512^2$ doubles, 4.4~GB, although the system itself is $2080\times4032$ (67~MB); that layout is what kills $a=8$, and at $a=14$ it would need 2.3~TB.\footnote{\src{HANDOFF.md}, ``Done (2026-10-21): SU(3) [2a,a,0] timing sweep'' (sum at $a=8$: $>284$~s, 15 irreps missing) and ``Done (2026-10-21, Ubuntu): experiments 2--3'' (breakdown); the 2.3~TB: \py{RESULTS-slice-engine.md}~\S5; per-irrep data: \cpp{results/full_decomp_2aa0_a7.txt}, \cpp{results/full_decomp_2aa0_a8.txt}.}
+
+Our own pipeline (sparse null space on the weight space, then diagonalisation of the vertex operator; Mathematica) solves the same problem in 12.7~s on a different machine, 16 times faster, and the first thing we wanted to know was whether integrability was the reason.
+It is not.\footnote{\src{HANDOFF.md}, ``NEWEST (2026-10-21): why is our sl(3) CG pipeline \ldots'' (``What our approach is'', ``Current answer''); repaired variants: ``Done (2026-10-21, Ubuntu): experiments 2--3'', data in \cpp{results/full_decomp_2aa0_a7_cgc_hw_prof_*.txt}, code \cpp{cgc_hw_prof.cpp}.}
+Keeping only the columns that are used, replacing the SVD by the lowest $m+1$ eigenvectors of $AA^{T}$ (\texttt{dsyrk} plus \texttt{dsyevr}) and linking OpenBLAS brings the singlet from 20.5~s to 0.45~s and the whole $a=7$ problem from 206~s to 10.9~s (Table~\ref{tab:bench}), about as fast as our pipeline: the gap was linear algebra.
+But all these codes solve the same $n_W$-sized problem, with $n_W\sim a^4$: dense methods die around $a\approx8$, sparse ones reach further, and all of them pay for the weight space.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The slice map and the theorem}\label{sec:slice}
+
+\textbf{Punchline.} A HW vector is determined by its components in one weight space of $V_\Lambda$, the slice; the slice must satisfy two $\mathrm{sl}(2)$ string conditions, and those are sufficient.
+The multiplicity space is the null space of two small matrices.
+
+\subsection{The slice and the level recursion}\label{sec:recursion}
+
+Write a HW vector as
+\begin{equation}\label{eq:slice}
+\Psi=\sum_q\psi_q\otimes e_q,\qquad\psi_q\in V_\Lambda,
+\end{equation}
+with $q$ running over the GT basis of site~2, and call $\psi_{\rm top}$ the \emph{slice}: the coefficient of the highest-weight state $e_{\rm top}$ of site~2.
+If $\Psi$ has weight $\mu$ then $\psi_q$ has weight $\mu-\mathrm{wt}(q)$, so $\psi_{\rm top}$ lies in the weight space $V_\Lambda[\mu-\Lambda]$, whose dimension $w$ is a weight multiplicity of $V_\Lambda$.
+(For $\mathrm{gl}(2)$ this is the textbook recursion that builds the Clebsch--Gordan coefficients of $|J,J\rangle$ from $J_+|J,J\rangle=0$, with $w=1$.)
+
+Now read the HW condition for $E_i\in\{E_{12},E_{23}\}$ at the site-2 component $r$:
+\begin{equation}\label{eq:hw}
+E_i\,\psi_r+\sum_q(E_i)_{rq}\,\psi_q=0,
+\end{equation}
+where $E_i$ acts on site~1 and $(E_i)_{rq}$ is the site-2 matrix element, the sum running over the states $q$ one step below $r$.
+Equation~\eqref{eq:hw} determines the components one level down from those above.
+Label the weights of site~2 by $\Lambda-s\alpha_1-t\alpha_2$ and collect the $\psi_q$ of that weight in a block $X_{st}$; then \eqref{eq:hw} reads
+$A_{st}X_{st}=-\big(E_{12}X_{s-1,t};\,E_{23}X_{s,t-1}\big)$, with $A_{st}$ the stacked site-2 raising blocks.
+The matrix $A_{st}$ is injective for $(s,t)\neq(0,0)$, because a vector killed by both raising operators below the top weight would be a second highest-weight vector, and it depends neither on $\mu$ nor on the slice: its left inverse is computed once per $\Lambda$.
+So the slice determines $\Psi$, and writing $\Psi$ out is one pass over the at most $3a^2+3a+1$ weight blocks of site~2, at a cost linear in $n_W$.\footnote{\py{SPEC-slice-engine.md}~\S2 (``Level recursion''); \py{RESULTS-slice-engine.md}~\S3. The smallest singular-value ratio of the blocks $A_{st}$, which controls the conditioning of the recursion, is 0.26 at $a=7$ and 0.19 at $a=14$.}
+
+\subsection{The theorem}\label{sec:theorem}
+
+Which slices are allowed?
+Follow the $\alpha_1$-string of site~2: $e_{\rm top}$, $E_{21}e_{\rm top}$, \dots, $E_{21}^{p}e_{\rm top}$ with $p=\lambda_1-\lambda_2$.
+Along it \eqref{eq:hw} makes the $k$-th component proportional to $E_{12}^k\psi_{\rm top}$, and at the end of the string, where there is no state further down, the equation reads $E_{12}\psi_{\rm end}=0$, that is $E_{12}^{p+1}\psi_{\rm top}=0$.
+The $\alpha_2$-string gives $E_{23}^{\lambda_2-\lambda_3+1}\psi_{\rm top}=0$.
+The classical theorem says that these two necessary conditions are also sufficient: every other equation in the overdetermined system \eqref{eq:hw} then holds automatically.
+
+\textbf{Theorem} (Zhelobenko; Parthasarathy--Ranga Rao--Varadarajan).
+The map $\Psi\mapsto\psi_{\rm top}$ is an isomorphism from the HW vectors of weight $\mu$ in $V_\Lambda\otimes V_\Lambda$ onto
+\begin{equation}\label{eq:M}
+M_\mu=\{\,v\in V_\Lambda[\mu-\Lambda]\;:\;E_{12}^{\lambda_1-\lambda_2+1}v=0,\ \ E_{23}^{\lambda_2-\lambda_3+1}v=0\,\}.
+\end{equation}
+In particular $\dim M_\mu=m_\mu$.
+
+The statement is classical~\cite{zhel,prv} (valid for any two dominant weights of any semisimple Lie algebra); what is new is only its use as an algorithm: the multiplicity space is the null space of two matrices with $w$ columns and at most $a+1$ rows, computed exactly over $\mathbb{Q}$, once per irrep.
+We checked the statement on our data: $\dim M_\mu$ equals the Racah--Speiser multiplicity for every irrep in 15 representations (Section~\ref{sec:checks}).
+
+\subsection{How big is the problem now?}\label{sec:sizes}
+
+Table~\ref{tab:sizes} shows what the theorem buys at $[14,7,0]$.\footnote{\py{slice_engine_output.txt}, block ``named irreps of [14,7,0] x [14,7,0]''; \gd{ref/cg-slices-1470.txt}, records SECTOR (fields $\mu$, $m$, $w$, $n_W$, \ldots).}
+The singlet has $n_W=2080$ but $w=1$: its slice is the lowest-weight vector of $V_\Lambda$, a single number, and the recursion produces the rest.
+The irrep $(21,14,7)$, with $m=8$, has $w=m=8$: the string conditions are empty and $M_\mu$ is the whole weight space.
+At $(20,12,10)$ the conditions bite: $M_\mu$ is 3-dimensional inside a 5-dimensional weight space.
+In general $w\le a+1$ while $n_W\sim a^4$; Appendix~\ref{app:wm} gives the distribution of $(w,m)$ at $[14,7,0]$.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Problem sizes for five irreps of $[14,7,0]^{\otimes2}$: multiplicity $m$, slice length $w=\dim V_\Lambda[\mu-\Lambda]$ and number $n_W$ of components of the full vector.}
+\label{tab:sizes}
+\begin{tabular}{@{}lrrrl@{}}
+\toprule
+irrep $\mu$ & $m$ & $w$ & $n_W$ & the slice space $M_\mu$ \\
+\midrule
+$(14,14,14)$ (singlet) & 1 & 1 & 2080 & the lowest-weight vector of $V_\Lambda$ \\
+$(28,14,0)$ (top) & 1 & 1 & 1 & the highest-weight vector of $V_\Lambda$ \\
+$(21,14,7)$ & 8 & 8 & 540 & all of $V_\Lambda[\mu-\Lambda]$ \\
+$(18,12,12)$ & 1 & 3 & 1498 & a line in a 3-dimensional weight space \\
+$(20,12,10)$ & 3 & 5 & 979 & a 3-dimensional subspace of a 5-dimensional one \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The multiplicity copies}\label{sec:copies}
+
+\textbf{Punchline.} The vertex operator that selects the SoV copies has exactly one site-2 generator per term, so it reduces to an $m\times m$ matrix acting on slices; its eigenvalues are the roots of the Q-system's Baxter pencil, which we compute independently, in 3~s for all irreps at $a=7$.
+
+\subsection{The vertex operator}\label{sec:vertex}
+
+For $m_\mu\ge2$ (316 of the 344 copies at $[14,7,0]$ sit in such sectors) the choice of basis of the multiplicity space is real.
+SoV chooses the eigenbasis of the leading-order Gaudin Hamiltonians, which for two sites in the untwisted limit are all fixed by the Casimirs of $\mu$ except one number per copy, the eigenvalue of the vertex operator
+\begin{equation}\label{eq:V}
+V=\tfrac12\sum_{\sigma,\tau\in S_3}\mathrm{sgn}\,\sigma\;\mathrm{sgn}\,\tau\;E^{(1)}_{\sigma_1\tau_1}E^{(1)}_{\sigma_2\tau_2}E^{(2)}_{\sigma_3\tau_3},
+\end{equation}
+36 terms, $E^{(s)}_{ij}$ being $E_{ij}$ acting on site $s$.\footnote{\py{SPEC-slice-engine.md}~\S1 (``The vertex operator''); \src{Minimal_complete_working-fast.wl} (\texttt{vTriples}); \gd{Experiments/gl3-GT-tools.wl}.}
+It commutes with the diagonal $\mathrm{gl}(3)$, so it acts on every multiplicity space; its eigenvectors are the SoV copies and its eigenvalues label them.
+In terms of the Laurent data of the Gaudin Hamiltonians at site~1 (units $\theta_{12}=1$),
+\begin{equation}\label{eq:laurent}
+H_1=\eta,\qquad A_1=V+\tfrac12\eta,\qquad\eta=|\Lambda|^2+c_2(\Lambda)-\tfrac12c_2(\mu),\qquad c_2(\mu)=\sum_i\mu_i(\mu_i+4-2i),
+\end{equation}
+with $|\Lambda|=\lambda_1+\lambda_2+\lambda_3$.\footnote{\py{RESULTS-slice-engine.md}~\S4 (relation found and verified on 45 exact branches); \gd{Experiments/Gaudin-Qsystem-scale.md}~\S0 (item 4) and \S3.1 ($H_1=\eta$ on every sector). $A_1$ is called $a_1$ elsewhere in the project; here $a$ is the family parameter.}
+So $\eta$ depends only on $\Lambda$ and $\mu$, and $V$ carries all the dependence on the copy.
+
+\subsection{Reduction to the slice}\label{sec:reduction}
+
+The point is that every term of \eqref{eq:V} contains exactly one site-2 generator.
+Applying $V$ to $\Psi(v)$ and reading off the slice, for the site-2 factor $E^{(2)}_{cd}$ we need only the component of $E^{(2)}_{cd}\Psi$ at $e_{\rm top}$, and the HW conditions turn that into a site-1 operator: for $c=d$ it is $\lambda_c\psi_{\rm top}$, since $e_{\rm top}$ has weight $\Lambda$; for $c<d$ the HW condition $(E^{(1)}_{cd}+E^{(2)}_{cd})\Psi=0$ read at $e_{\rm top}$ gives $-E_{cd}\psi_{\rm top}$; for $c>d$ it vanishes, because a lowering operator never produces $e_{\rm top}$.
+Hence
+\begin{equation}\label{eq:Vred}
+V_{\rm red}\,v=\tfrac12\sum_{\sigma,\tau}\mathrm{sgn}\,\sigma\,\mathrm{sgn}\,\tau\;E_{\sigma_1\tau_1}E_{\sigma_2\tau_2}\,\Phi_{\sigma_3\tau_3}\,v,\quad
+\Phi_{cc}=\lambda_c,\ \ \Phi_{cd}=-E_{cd}\ (c<d),\ \ \Phi_{cd}=0\ (c>d),
+\end{equation}
+an operator on the weight space $V_\Lambda[\mu-\Lambda]$ built from site-1 generators alone; 24 of the 36 terms survive.\footnote{\py{SPEC-slice-engine.md}~\S2 (``$V_{\rm red}$''); \py{RESULTS-slice-engine.md}~\S1 (item 3) and \S3 (the full 36-term $V$ on the reconstructed vectors agrees with \eqref{eq:Vred} to $1.4\times10^{-14}$ on all entries).}
+It preserves $M_\mu$, because $V$ maps HW vectors to HW vectors, so on $M_\mu$ it is an exact rational $m\times m$ matrix in the canonical basis of $M_\mu$ (the reduced-row-echelon basis, in which the coordinates of $v$ are its free entries); its eigenvectors are the copies.
+(A Hamiltonian quadratic in the site-2 generators would need components two levels below the slice; linearity in site~2 is what makes the reduction work.)
+
+An example.
+For $\mu=(21,14,7)$ of $[14,7,0]$, where $m=w=8$, the matrix of $V_{\rm red}$ in the GT basis of the weight space is tridiagonal, with
+\begin{equation*}
+\begin{array}{ll}
+\text{diagonal:}&777,\ 801,\ 849,\ 921,\ 1017,\ 1137,\ 1281,\ 1449,\\[2pt]
+\text{above:}&-\tfrac{189}{2},\ -120,\ -\tfrac{1815}{14},\ -128,\ -\tfrac{2535}{22},\ -\tfrac{1176}{13},\ -\tfrac{105}{2},\\[2pt]
+\text{below:}&-\tfrac{441}{2},\ -120,\ -\tfrac{165}{2},\ -\tfrac{384}{7},\ -\tfrac{65}{2},\ -\tfrac{168}{11},\ -\tfrac{105}{26}.
+\end{array}
+\end{equation*}
+Its eight eigenvalues are $607.713$, $768.308$, $897.791$, $993.417$, $1064.583$, $1160.209$, $1289.692$, $1450.287$ (to three decimals), summing to the trace, 8232.\footnote{\gd{ref/cg-slices-1470.txt}, records VRED, CHARPOLY and COPY for $\mu=(21,14,7)$; the same eigenvalues appear in \gd{Experiments/Gaudin-Qsystem-scale.md}~\S10, row $(21,14,7)$.}
+
+\subsection{The same spectrum from the Q-system}\label{sec:qsystem}
+
+The same eigenvalues come out of the Q-system, without any reference to the representation.
+In the untwisted limit the Baxter equation of the two-site model is a third-order linear ODE with regular singular points at $\theta_1=1$, $\theta_2=0$ and three solutions $Q_k=l(u)\,q_k(u)$, $q_k$ a polynomial, whose coefficients depend on the state through $\mu$ and one free number, which can be taken to be $V$.
+The equations for the coefficients of $q_k$ are linear in them and affine in $V$, a linear pencil, and $V$ is admissible exactly when all three systems are consistent, that is, when it is a root of the greatest common divisor of three exact consistency polynomials.
+The $q_k$ have degrees $(4a-\mu_1,\ 4a-\mu_2+1,\ 4a-\mu_3+2)$, in total $6a+3$ (45 at $a=7$), against $n_W$ up to 2080.\footnote{\gd{Experiments/Gaudin-Qsystem-scale.md}~\S3 (``The corrected solver''), \S5 (degrees); the pencil is also written as a three-term recursion in \py{RESULTS-bethe-series-scale.md}~\S1. Using only two of the three systems returns too many roots on $\binom a2+a+1$ irreps of $[2a,a,0]^{\otimes2}$ (29 of 113 at $a=7$); see \S2 of the first file.}
+
+For every irrep of $[2a,a,0]^{\otimes2}$, $a=1,\dots,14$, the number of roots equals $m_\mu$, and the roots are real and simple; on all 492 branches of $[4,2,0]$, $[6,3,0]$, $[8,4,0]$ and $[14,7,0]$ they coincide with the eigenvalues of $V_{\rm red}$ to the 30 digits printed.
+Two independent computations, Baxter polynomials in Mathematica and GT matrix elements in Python, agree on 492 spectra.\footnote{\gd{Experiments/Gaudin-Qsystem-scale.md}~\S0 (items 2--3), \S4 (table). A separate implementation of the pencil agrees on the same 492 branches to $4.6\times10^{-27}$: \py{RESULTS-bethe-series-scale.md}~\S1 (table).}
+The Q-system costs 3.0~s for all 113 irreps at $a=7$ and 38~s for all 421 irreps at $a=14$: 0.05--0.28~s per irrep while $n_W$ ranges over $1,\dots,25\,425$.\footnote{\gd{Experiments/Gaudin-Qsystem-scale.md}~\S0 (item 6), \S6.1 (CPU times; wall times 3.4~s and 48~s).}
+
+For multiplicity one the eigenvalue can be read off.
+With $\kappa_\mu=\tfrac12(\mu_1+2)(\mu_2+1)\mu_3$,
+\begin{equation}\label{eq:closed}
+V=\kappa_\mu-\tfrac12\eta\quad(m_\mu=1),\qquad V_{\rm singlet}=\lambda_1\lambda_2(\lambda_1+1),\qquad V_{\rm top}=-\lambda_1\lambda_2,
+\end{equation}
+the last two for $\Lambda=[2a,a,0]$ and its top irrep $\mu=(2\lambda_1,2\lambda_2,0)$ ($1470$ and $-98$ at $a=7$).
+The first holds to $10^{-55}$ on all 28, 40 and 56 multiplicity-one sectors at $a=7,10,14$, the other two exactly for $a=1,\dots,10$ (singlet: 6, 40, 126, 288, 550, 936, 1470, 2176, 3078, 4200); none of the three has a proof yet.\footnote{\py{RESULTS-slice-engine.md}~\S8; \py{slice_engine_output.txt}, block ``closed forms''; \gd{Experiments/Gaudin-Qsystem-scale.md}~\S0 (item 4), where the mean of $A_1$ over the copies of a sector is also found to equal $\kappa_\mu$ (numerical identity). $\kappa_\mu$ is called $\alpha$ in the project files.}
+
+\subsection{The engine in five steps}\label{sec:six}
+
+\begin{enumerate}
+\item Build exact sparse GT matrices for $V_\Lambda$ ($E_{12},E_{23},E_{21},E_{32}$, and $E_{13}=[E_{12},E_{23}]$; $O(\dim V_\Lambda)$) and list the irreps and multiplicities (Racah--Speiser).
+\item For each $\mu$, take the weight space $V_\Lambda[\mu-\Lambda]$ and compute $M_\mu$ as the exact null space (row reduction over $\mathbb{Q}$) of the two string operators of \eqref{eq:M}.
+\item Build the exact $m\times m$ matrix of $V_{\rm red}$, eq.~\eqref{eq:Vred}, on $M_\mu$.
+\item Diagonalise it: the eigenvectors are the slices of the copies (float64, or 30 digits with mpmath).
+\item Optionally, write out the full vectors by the triangular recursion of Section~\ref{sec:recursion}, using the left inverses of the $A_{st}$ computed once per $\Lambda$.
+\end{enumerate}
+Steps 1--4 never see $n_W$; step 5 is bound by the size of the output.\footnote{\py{RESULTS-slice-engine.md}~\S5 (breakdown of $t_a$ and $t_b$), \S11 (usage). Pure Python with exact rationals; the exact $V_{\rm red}$ is 58--70\% of the $n_W$-free time.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What was verified, and the benchmark}\label{sec:verified}
+
+\textbf{Punchline.} Every claim above was checked against an independent route, mostly in exact arithmetic; the engine is about three orders of magnitude faster than the standard code at $a=7$ and keeps going where the standard code cannot.
+
+\subsection{Checks}\label{sec:checks}
+
+\begin{small}
+\begin{itemize}
+\item \emph{Counting.} $\dim M_\mu$ equals the Racah--Speiser multiplicity for every irrep in 15 representations from $[2,1,0]$ to $[14,7,0]$ (0 mismatches), and $\dim M_\mu=0$ for every dominant $\Lambda+w$ that is not an irrep, where such candidates exist. At $[14,7,0]$: 113 irreps, 344 copies, $\max m=\max w=8$, $\sum_\mu m_\mu\dim V_\mu=512^2$; at $[28,14,0]$: 421 irreps, 2255 copies, $\max m=\max w=15$.\footnote{\py{RESULTS-slice-engine.md}~\S2 (table; for $[2a,a,0]$ with $a\le7$ every dominant $\Lambda+w$ is an irrep, so the zero-multiplicity half of the test needs extra representations such as $[3,0,0]$, $[4,1,0]$, $[5,5,0]$, $[9,1,0]$); \py{RESULTS-gauss-dictionary.md}~\S1 (item 3).}
+\item \emph{Exact HW vectors from slices.} For the exact data of six small representations, $[1,1,0]$ to $[4,1,0]$ (45 branches in 37 sectors), computed earlier by an entirely different, symbolic route, the exact recursion reproduces all 45 HW vectors entry for entry; the eigenvalues of $V_{\rm red}$ satisfy \eqref{eq:laurent} to $6\times10^{-50}$, the matrix identity ``Laurent-datum matrix $=V_{\rm red}+\tfrac12\eta$'' holds exactly in all 37 sectors, slices agree to $8\times10^{-51}$ and invariant norms to $2.9\times10^{-49}$.\footnote{\py{RESULTS-slice-engine.md}~\S4 (table); data \gd{ref/untwisted-exact-110.txt} and the files for 210, 220, 310, 320, 410, produced by \gd{Experiments/Gaudin-untwisted-exact.wb}.}
+\item \emph{Exact twin and negative control.} The recursion run in rational arithmetic on all PRV basis vectors: at $a=7$, 344 vectors, 155\,176 entries, 104\,240 exact consistency conditions, 0 HW violations; at $a=14$, 2255 vectors, 10\,739\,904 entries, 8\,765\,049 conditions, 0 violations (561~s in Python fractions). Of 78 random slices outside $M_\mu$ all 78 are rejected by the exact conditions; 102 of 102 random elements of $M_\mu$ are accepted.\footnote{\py{RESULTS-slice-engine.md}~\S3 (table, last paragraph) and \S7 (last item).}
+\item \emph{Brute force.} A Munich-style null space written by us in numpy (dense eigendecomposition of $A^TA$ on the weight space; no slice, no recursion) for every irrep of $[4,2,0]$, $[6,3,0]$, $[8,4,0]$, $[14,7,0]$: the null dimension equals the multiplicity (0 exceptions), the first non-null eigenvalue is exactly 1, the engine's copies lie in the null space (distance $\le8.2\times10^{-13}$) and span all of it, and the eigenvalues of the full 36-term $V$ restricted to it agree with ours to $3.3\times10^{-15}$.\footnote{\py{RESULTS-slice-engine.md}~\S7 (``Brute-force null space'').}
+\end{itemize}
+\end{small}
+
+\subsection{The benchmark}\label{sec:bench}
+
+Table~\ref{tab:bench} puts the standard algorithm, its repaired versions and the engine side by side at $a=7$, and Table~\ref{tab:scale} shows the scaling in $a$.\footnote{Sources: \src{HANDOFF.md} (the two ``Done (2026-10-21)'' sections and the round-6 blocks); \py{RESULTS-slice-engine.md}~\S5 (all rows $a=1,\dots,20$); \gd{Experiments/Gaudin-Qsystem-scale.md}~\S6.1; \py{RESULTS-bethe-series-scale.md}~\S5--\S6 for the Q-route.}
+Between $a=7$ and $a=14$ the $n_W$-free part grows by a factor 10.1, and between 14 and 20 by 3.7 (about $a^{3.3}$ and $a^{3.7}$); it is dominated by exact rational arithmetic in Python.
+The full output grows like the number of coefficients written, about $a^6$ ($1.6\times10^{5}$ at $a=7$, $1.1\times10^{7}$ at $a=14$, $1.1\times10^{8}$ at $a=20$).
+
+\begin{table}[htbp]
+\centering\small
+\caption{Highest-weight solve of $[14,7,0]^{\otimes2}$ ($a=7$): 113 irreps, 344 copies. ``i5'' = Ubuntu laptop (i5-1345U, 15~GB), ``i7'' = i7-12700KF desktop (Windows 11, 32~GB). Not like for like: rows 1--4 use different linear algebra for the same $n_W$-sized null space, row 5 adds the diagonalisation of $V$, the engine produces the SoV copies, the Q-system only their labels.}
+\label{tab:bench}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+method & singlet [s] & all irreps [s] & machine \\
+\midrule
+Munich code as distributed (dense \texttt{dgesvd}, reference BLAS) & 20.5 & 206 & i5 \\
+\quad compact columns, \texttt{dgesvd}, OpenBLAS & 7.0 & 69 & i5 \\
+\quad lowest $m+1$ eigenvectors of $AA^T$, reference BLAS & 1.7 & 18 & i5 \\
+\quad the same with OpenBLAS (``repaired'') & 0.45 & 10.9 & i5 \\
+our sparse null space plus diagonalisation of $V$ (Mathematica) & -- & 12.7 & i7 \\
+slice engine, without writing the vectors & -- & 0.10 & i7 \\
+slice engine, all 344 full vectors written & -- & 0.17 & i7 \\
+Q-system spectrum only (Baxter pencil, Mathematica) & -- & 3.0 & i7 \\
+Q-route end to end (jet formula, $\epsilon$-series) & -- & hours (not run) & i7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{Scaling for $\Lambda=[2a,a,0]$: the Munich code (sum of the highest-weight solves over all irreps; OOM = killed by the out-of-memory killer) against the engine ($t_a$: the part that never touches $n_W$; $t_b$: everything, including all full vectors). Munich: i5, single runs for $a\ge6$; engine: i7, minimum of five cold runs, accurate to about $\pm30\%$ because other jobs shared the machine. Rows $a=9,11,13,15,17,19$ are omitted.}
+\label{tab:scale}
+\begin{tabular}{@{}rrrrrrrr@{}}
+\toprule
+$a$ & $\dim V_\Lambda$ & irreps & copies & max $n_W$ & Munich [s] & $t_a$ [s] & $t_b$ [s] \\
+\midrule
+1 & 8 & 5 & 6 & 10 & 0.0001 & 0.001 & 0.002 \\
+2 & 27 & 13 & 19 & 45 & 0.0028 & 0.003 & 0.006 \\
+3 & 64 & 25 & 44 & 136 & 0.024 & 0.009 & 0.013 \\
+4 & 125 & 41 & 85 & 325 & 0.34 & 0.020 & 0.030 \\
+5 & 216 & 61 & 146 & 666 & 3.9 & 0.036 & 0.055 \\
+6 & 343 & 85 & 231 & 1225 & 31 & 0.061 & 0.096 \\
+7 & 512 & 113 & 344 & 2080 & 206 & 0.103 & 0.170 \\
+8 & 729 & 145 & 489 & 3321 & OOM & 0.147 & 0.243 \\
+10 & 1331 & 221 & 891 & 7381 & -- & 0.300 & 0.529 \\
+12 & 2197 & 313 & 1469 & 14365 & -- & 0.581 & 1.049 \\
+14 & 3375 & 421 & 2255 & 25425 & -- & 1.037 & 2.024 \\
+16 & 4913 & 545 & 3281 & 41905 & -- & 1.538 & 3.436 \\
+18 & 6859 & 685 & 4579 & 65341 & -- & 2.473 & 5.638 \\
+20 & 9261 & 841 & 6181 & 97461 & -- & 3.847 & 9.073 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Caveats}\label{sec:caveats}
+
+\emph{Different machines.}
+The standard code ran on the i5 laptop and the engine on the i7 desktop, so the ratios (1200 against 206~s, 64 against 10.9~s) are orders of magnitude, not measurements; the only same-machine, same-language comparison is the numpy brute force above, 76--93~s for the 113 irreps of $[14,7,0]$ on a loaded machine (for scale, not a benchmark), against 0.10~s.\footnote{\py{RESULTS-slice-engine.md}~\S5 (``Caveat on the noise'' and the context paragraph), \S7.}
+
+\emph{Output.}
+The engine returns the SoV eigenbasis (the Munich code's SVD returns an arbitrary orthonormal basis of each multiplicity space), normalised by ``first non-zero slice component $=1$''; the absolute normalisation and sign from the Q side are not part of it.
+
+\emph{Precision.}
+In float64 the largest HW residual over all irreps of $[14,7,0]$ is $2.6\times10^{-14}$ and grows by a factor of about 2.2 per unit of $a$ ($5.3\times10^{-12}$ at $a=14$, $4.8\times10^{-10}$ at $a=20$), a property of double precision in the 600-step recursion; the exact recursion rounded at the end gives $1.5\times10^{-15}$ at $a=14$.
+The eigenvalues of a sector crowd (smallest relative gap between consecutive eigenvalues: 0.019 at $a=7$, 0.0049 at $a=14$, 0.0017 at $a=20$), so beyond $a\approx20$ one needs the arbitrary-precision path or the exact characteristic polynomial.
+
+\emph{Scope.}
+$\lambda_3>0$ was only smoke-tested, there is no run beyond $a=20$, and for $[8,4,0]$ and $[14,7,0]$ there is no independent exact reference beyond the brute-force and exact-twin checks.
+The reference files (\gd{ref/cg-slices-*.txt}) were re-parsed from the text and re-checked with code paths that use neither the engine's recursion nor its exact generators.\footnote{\py{RESULTS-slice-engine.md}~\S3 (``HW residual vs size''), \S5 (last paragraph), \S6--\S7, \S10; \src{HANDOFF.md}, ``NEWEST (2026-10-21): why \ldots'' (the SVD returns an arbitrary basis).}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Two observations}\label{sec:obs}
+
+\textbf{Punchline.} The reduced vertex operator is tridiagonal in the GT basis in every sector we looked at, which may make a slice a three-term recursion; and for one irrep in four the multiplicity space is a line, so the Q-data have nothing to decide.
+
+\subsection{\texorpdfstring{$V_{\rm red}$}{V\_red} is tridiagonal}\label{sec:jacobi}
+
+The weight space $V_\Lambda[\mu-\Lambda]$ is labelled by one integer (the first entry $r_1$ of the middle row of the GT pattern at fixed weight), so a tridiagonal matrix is a three-term recurrence.
+The operator \eqref{eq:Vred}, taken as the formula-defined operator on the whole weight space, is tridiagonal in the GT basis in every sector we tested: 13 of 13, 41 of 41, 113 of 113 and 421 of 421 sectors of $[4,2,0]$, $[8,4,0]$, $[14,7,0]$ and $[28,14,0]$ (and all sectors of $[10,3,0]$, $[6,1,0]$).\footnote{\py{RESULTS-slice-engine.md}~\S8 (first item); \py{slice_engine_output.txt}, block ``structure: bandwidth of V\_red''.}
+In the sectors with $w=m$ (11, 29, 71 and 239 of them) every off-diagonal product $V_{i,i+1}V_{i+1,i}$ is strictly positive (6, 36, 161 and 1106 products in all): $V_{\rm red}$ is a Jacobi matrix there, with real simple spectrum.
+In the sectors with $w>m$ it has zero or negative products (it is not self-adjoint off $M_\mu$).
+
+For a Jacobi matrix the eigenvector with eigenvalue $V$ is the sequence $(p_0(V),\dots,p_{w-1}(V))$ of orthogonal polynomials of the three-term recurrence: given $V$ from the Q-system, the slice follows in $w-1$ steps of an explicit rational recurrence, and every slice component is a polynomial in $V$.
+That much is linear algebra; the open question is a different one: the Baxter equation of Section~\ref{sec:qsystem} is itself a three-term recursion, in the coefficients of the Q-polynomial, with the spectral parameter entering linearly on the diagonal.\footnote{\py{RESULTS-bethe-series-scale.md}~\S1, ``The oper as a three-term recursion''.}
+Whether the slice of a copy is the orthogonal-polynomial sequence of that recursion at the Q-system eigenvalue, which would make ``CG from Q-functions'' a two-line algorithm (Q-system eigenvalue, then a recurrence), is being tested; we state it as an observation under investigation, not as a result.\footnote{\src{HANDOFF.md}, ``ASSESSMENT GIVEN TO PAUL'' in the ROUND-6 block, recommended round-7 priority~(1).}
+
+\subsection{For one irrep in four the answer is symmetry alone}\label{sec:m1}
+
+If $m_\mu=1$ then $M_\mu$ is a line, and the slice map and the theorem fix the HW vector up to scale: no operator needs diagonalising and no Q-function needs solving.
+At $[14,7,0]$ this is the case for 28 of the 113 irreps; the other 316 of the 344 copies live in sectors with $m\ge2$ (at $[28,14,0]$: 56 irreps, and 2199 of 2255 copies).\footnote{\py{RESULTS-gauss-dictionary.md}~\S1 (item 3), \S3 (item 1).}
+For $m=1$ even the eigenvalue is explicit, eq.~\eqref{eq:closed}: everything that distinguishes a Q-function approach from the PRV theorem sits in the sectors with $m\ge2$, and there only in the choice of basis of $M_\mu$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What this means for the integrability programme}\label{sec:programme}
+
+\textbf{Punchline.} The benchmark was beaten by representation theory.
+The Q-function formula is not a faster way to compute Clebsch--Gordan coefficients, and we do not present it as one; what it offers is a structural statement, a precise point of contact with the slice, and one open question (Section~\ref{sec:jacobi}) that might yet turn it into a fast algorithm.
+
+\subsection{The balance sheet}\label{sec:balance}
+
+\emph{Munich's cost was never intrinsic} (an $n_W$-sized null space in dense linear algebra, 10.9~s once repaired), \emph{and the Q-route as formulated cannot compete with the engine on wall-clock.}
+To extract the slice of one copy from the SoV formula one needs the Laurent data of the Q-system, which is cheap (Section~\ref{sec:qsystem}); their $\epsilon$-series to a depth equal to $N_B=4\lambda_1-2\lambda_2-k_B$ with $k_B=2\lambda_1-(\mu_1-\mu_3)$ (at $[14,7,0]$: order 21 for the top state, 28 for the eight copies of $(21,14,7)$, 41 for $(28,13,1)$), at 20--85~s per copy for the series alone on the deeper of the 14 sample branches we ran; the kernel, which at $\lambda_1=14$ is 8464 polynomial entries with 1.69 million monomials in all and coefficients up to $10^{51}$ (2 minutes and 3~GB to build exactly); and a contraction of these that cancels by $10^{26}$ to $10^{29}$, so that it has to be done with some 60 digits.\footnote{\py{RESULTS-bethe-series-scale.md}~\S0, \S5, \S6 (depth law $N_B$ measured on 188 branches; times per branch); \py{RESULTS-kernel-L14.md}~\S1--\S2 (kernel size, build time and memory; cancellation in the contraction); \src{HANDOFF.md}, ROUND-6 block, items K and S.}
+Extrapolated to all 344 copies this is hours on one core (15--20 minutes on 20 cores), against 10.9~s for the repaired Munich code and 0.17~s for the engine; the family was not run (\py{RESULTS-bethe-series-scale.md}~\S6, last paragraph before ``Surprises'').
+The Q-route would only ``win'' where the standard code cannot run at all, and there the engine is faster still, by three to four orders of magnitude even if the Q-route is spread over 20 cores.
+
+\emph{The Q-system spectrum can compete, and does:} 3.0~s for all irreps at $a=7$ (against 206~s and 10.9~s), 38~s at $a=14$, independently of $n_W$; but it delivers the labels of the copies, not their vectors.
+
+\emph{What the formula is for.}
+The relation that the programme established reads
+\begin{equation}\label{eq:jet}
+\sum_{i,j}G_{ij}(\epsilon\hat\omega_1,\epsilon\hat\omega_1';\theta_{12})\;\nu_i(\theta_1;\epsilon)\,\nu_j(\theta_2;\epsilon)
+=\epsilon^{N_B}\;\hat c(\phi,\hat\omega)\;\frac{\langle\varphi_u(\hat\omega)\otimes e_1|\Psi_0\rangle}{X_B}+O(\epsilon^{N_B+1}).
+\end{equation}
+The left side is built from the Q-functions of the twisted two-site Gaudin eigenstate, with twist $\zeta=\epsilon\phi$: the $\nu_i(\theta_s)$ are Pl\"ucker-type ratios of their jets at the two sites, $G$ is a universal kernel, and $\hat\omega_1,\hat\omega_1'$ are two rotation parameters; $N_B$ is the order at which the left side first becomes non-zero, all lower orders cancelling.
+The right side is the generating function of the slice, $\langle\varphi_u(\hat\omega)\otimes e_1|\Psi_0\rangle=\sum_\nu[e_1^{T}\rho_\Lambda(n')]_\nu\,C_\nu$ with $C_\nu=\langle e_\nu\otimes e_1|\Psi_0\rangle$ the components of $\psi_{\rm top}$, times an explicit prefactor $\hat c$ and one constant $X_B$ per branch.
+Relation \eqref{eq:jet} holds with no further free constant on all 26 branches of $[2,1,0]$, $[3,1,0]$, $[3,2,0]$ that were checked; it is verified, not proved.\footnote{\gd{Gaudin-sl3-round6-plan.md}~\S1 (the displayed formula and the paragraph after it); \gd{Gaudin-sl3-CG-notes.md}~\S5, \S7, \S9; \src{HANDOFF.md}, round-5 blocks N1, W5, S1.}
+Its value is structural: the CG coefficients of $\mathrm{gl}(3)$ are Q-numbers of the Gaudin model, depending on the state only through a handful of Laurent data, and the multiplicity basis it selects is the eigenbasis of $V$, whose spectrum the Q-system reproduces exactly.
+
+\emph{Where the two routes meet.}
+Both objects are $w$-dimensional.
+In \eqref{eq:jet} the unknown is the slice, that is the $m$ coordinates of $\psi_{\rm top}$ in the explicit basis of $M_\mu$, and $m+1$ evaluations of the Q-side expression at different $\hat\omega$ determine them: the ``dictionary''.
+On the 26 known branches it recovers every slice to 53--116 digits and confirms independently that the constant is 1; at $[14,7,0]$ it has been tested only on synthetic data generated from known slices (random elements of $M_\mu$ in all 113 irreps, and the engine's own 344 copies), not yet on Q-side data.\footnote{\py{RESULTS-gauss-dictionary.md}~\S1 (items 4, 5, 9), \S3 (item 1), \S4.}
+The engine is thus both the baseline against which the Q-route is timed and the reference against which any Q-route output is compared; and it sharpens what the Q-route can add: for $m=1$ nothing, since the slice is fixed by symmetry (Section~\ref{sec:m1}), for $m\ge2$ the choice of the eigenbasis of $V$.
+
+\subsection{Next}\label{sec:next}
+
+\begin{enumerate}
+\item Test the Jacobi observation of Section~\ref{sec:jacobi}: compare the recurrence of $V_{\rm red}$ with the Baxter recursion and look for closed forms of its coefficients. If the slice is the orthogonal-polynomial sequence of the Baxter recursion, ``CG from Q-functions'' becomes a two-line algorithm as fast as the engine.
+\item Assemble the jet-formula route end to end at $[4,2,0]$, $[6,3,0]$, $[8,4,0]$ and on a sample of $[14,7,0]$ copies, validated against the engine, with its cost stated as in Section~\ref{sec:balance}.
+\item One benchmark table with all columns (Munich as distributed and repaired, sparse null space, engine, Q-spectrum, Q-route) from $a=7$ to $a=14$.
+\end{enumerate}
+How to restate the project's goal in the light of this is open.\footnote{\src{HANDOFF.md}, ROUND-6 block, ``ASSESSMENT GIVEN TO PAUL'' (recommended round-7 priorities, open decisions); \gd{Gaudin-sl3-round6-plan.md}~\S4, \S7.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{Conventions}\label{app:conv}
+
+\begin{small}
+\begin{itemize}
+\item \emph{One-site basis.} GT patterns of $\mathrm{gl}(3)$ with rows $(\lambda_1,\lambda_2,\lambda_3)$, $(r_1,r_2)$, $(k)$, in the order of \path{gl3_reps.GL3Rep(Lambda).patterns}: ascending lexicographic in $(r_1,r_2,k)$, highest-weight state \emph{last}. (The Wolfram notebooks use the opposite order, descending in $(k,r_1,r_2)$, highest-weight state first; the map is by pattern.)
+\item \emph{Generators and metric.} Plain rational, non-unitary GT matrices acting on kets as columns; $E_{13}=[E_{12},E_{23}]$, $E_{31}=[E_{32},E_{21}]$; weights are the eigenvalues of $(E_{11},E_{22},E_{33})$, $\alpha_1=(1,-1,0)$, $\alpha_2=(0,1,-1)$. The invariant metric is the diagonal matrix $G$ with $E_{ij}^TG=GE_{ji}$, $G[\mathrm{HW}]=1$; the floating-point recursion runs in the orthonormal basis $\tilde e_q=e_q/\sqrt{g_q}$ for conditioning ($g$ reaches $1.7\times10^{37}$ at $[14,7,0]$, $10^{103}$ at $[28,14,0]$) and the output is converted back.
+\item \emph{Two sites, slices, copies.} $\Psi=\sum\Psi[\nu,q]\,e_\nu\otimes e_q$, site~1 the first factor (slow index), flat index $(\nu-1)\dim V_\Lambda+q$, 1-based; the slice is $\Psi[\,\cdot\,,q_{\rm top}]$. The basis of $M_\mu$ is the reduced row echelon form of the null space (one vector per free column, so the coordinates of $v\in M_\mu$ are its free entries); copies are normalised so that the first non-zero slice component is 1 and ordered by increasing eigenvalue of $V_{\rm red}$. Multiplicities by Racah--Speiser (Klimyk), $\rho=(2,1,0)$.
+\end{itemize}
+\end{small}
+\vspace{-0.4em}
+\noindent Sources: \py{RESULTS-slice-engine.md}~\S0; \gd{ref/cg-slices-1470.txt} (header).
+
+\section{\texorpdfstring{The $(w,m)$ table for $[14,7,0]$}{The (w,m) table for [14,7,0]}}\label{app:wm}
+
+Table~\ref{tab:wm} counts the 113 irreps of $[14,7,0]^{\otimes2}$ by slice length $w$ and multiplicity $m$.\footnote{Tabulated from the SECTOR records of \gd{ref/cg-slices-1470.txt}; the pattern is quoted in \py{RESULTS-gauss-dictionary.md}~\S1 (item 3).}
+The diagonal $w=m$ holds 71 sectors, where the slice space is the whole weight space; the remaining 42 have $w>m$.
+The 28 irreps with $m=1$ are those of Section~\ref{sec:m1}.
+In general $\Lambda=[2a,a,0]$ has $2a(a+1)+1$ irreps, $4(a+1-m)$ of multiplicity $m\le a$ and one with $m=a+1$, and $\tfrac23a(a+1)(a+2)+(a+1)$ copies (checked at $a=1,2,3,4,7,14$).
+
+\begin{table}[htbp]
+\centering\small
+\caption{Irreps of $[14,7,0]^{\otimes2}$ by slice length $w$ (rows) and multiplicity $m$ (columns); blank means none.}
+\label{tab:wm}
+\begin{tabular}{@{}c|cccccccc|rr@{}}
+\toprule
+$w\backslash m$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & irreps & copies \\
+\midrule
+1 & 16 &    &    &    &    &   &   &   & 16 & 16 \\
+2 & 4  & 14 &    &    &    &   &   &   & 18 & 32 \\
+3 & 4  & 4  & 12 &    &    &   &   &   & 20 & 48 \\
+4 & 4  & 4  & 4  & 10 &    &   &   &   & 22 & 64 \\
+5 &    & 2  & 4  & 4  & 8  &   &   &   & 18 & 72 \\
+6 &    &    &    & 2  & 4  & 6 &   &   & 12 & 64 \\
+7 &    &    &    &    &    & 2 & 4 &   & 6  & 40 \\
+8 &    &    &    &    &    &   &   & 1 & 1  & 8 \\
+\midrule
+total & 28 & 24 & 20 & 16 & 12 & 8 & 4 & 1 & 113 & 344 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Reproduction}\label{app:repro}
+
+The engine (Python 3.13 with numpy, scipy, sympy, mpmath), from \path{Paul/Python/gaudin_sl3}:
+\begin{small}
+\begin{verbatim}
+python -X utf8 slice_engine.py all       # every check and table quoted above
+python -X utf8 slice_engine.py bench 20  # Table 3 (a = 1..20)
+# further stages: w4, brute, tridiag, closed, exact 14, ref all
+\end{verbatim}
+\end{small}
+In Python, \texttt{import slice\_engine as se; se.reference\_irrep((14,7,0),(21,14,7))} returns the exact basis of $M_\mu$, the exact $V_{\rm red}$, the copies and the full vectors (\py{RESULTS-slice-engine.md}~\S11); reference data: \gd{ref/cg-slices-*.txt}.
+
+The Q-system (Mathematica): \texttt{Get} \gd{Experiments/gl3-GT-tools.wl}, \src{Minimal_complete_working-fast.wl}, \gd{Experiments/Gaudin-Qsystem-scale.wl}, then \texttt{runAll[7]}. The Munich variants: \cpp{cgc_hw_prof.cpp} with \texttt{HW\_MODE=orig|compact|eig} (\cpp{README.md}).
+
+\begin{small}
+\begin{thebibliography}{9}
+\bibitem{munich} A.~Alex, M.~Kalus, A.~Huckleberry and J.~von Delft, \emph{A numerical algorithm for the explicit calculation of SU(N) and SL(N,C) Clebsch--Gordan coefficients}, arXiv:1009.0437.
+\bibitem{zhel} D.~P.~Zhelobenko, \emph{Compact Lie Groups and Their Representations}, AMS Transl.\ Math.\ Monographs 40, 1973.
+\bibitem{prv} K.~R.~Parthasarathy, R.~Ranga Rao and V.~S.~Varadarajan, \emph{Representations of complex semi-simple Lie groups and Lie algebras}, Ann.\ of Math.\ 85 (1967) 383--429.
+\end{thebibliography}
+\end{small}
+
+\end{document}
