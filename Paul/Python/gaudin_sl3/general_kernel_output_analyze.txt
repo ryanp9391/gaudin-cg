@@ -1,0 +1,20 @@
+
+====================================================================================================
+ANALYZE: polynomial laws, exchange rule, t = 0 factorisation, expansion ranks, top-state sum rule, block theorem
+====================================================================================================
+Lambda (1, 0, 0): pairs 3, a-degree 2, a'-degree 2 (2l1-l2 = 2), t-degree 1, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 2, ranks of Theta_n [1, 2], top-state sum rule worst dev 0
+Lambda (1, 1, 0): pairs 2, a-degree 1, a'-degree 1 (2l1-l2 = 1), t-degree 1, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 2, ranks of Theta_n [1, 2], top-state sum rule worst dev 0
+Lambda (2, 0, 0): pairs 6, a-degree 4, a'-degree 4 (2l1-l2 = 4), t-degree 4, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 6, ranks of Theta_n [1, 2, 4, 6, 6], top-state sum rule worst dev 0
+Lambda (2, 1, 0): pairs 5, a-degree 3, a'-degree 3 (2l1-l2 = 3), t-degree 4, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 5, ranks of Theta_n [1, 2, 4, 5, 4], top-state sum rule worst dev 0
+Lambda (2, 2, 0): pairs 3, a-degree 2, a'-degree 2 (2l1-l2 = 2), t-degree 3, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 3, ranks of Theta_n [1, 2, 3, 2], top-state sum rule worst dev 0
+Lambda (3, 0, 0): pairs 10, a-degree 6, a'-degree 6 (2l1-l2 = 6), t-degree 8, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 8, ranks of Theta_n [1, 2, 4, 8, 10, 10, 10, 8, 6], top-state sum rule worst dev 0
+Lambda (3, 1, 0): pairs 9, a-degree 5, a'-degree 5 (2l1-l2 = 5), t-degree 8, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 8, ranks of Theta_n [1, 2, 4, 8, 9, 9, 8, 6, 4], top-state sum rule worst dev 0
+Lambda (3, 2, 0): pairs 7, a-degree 4, a'-degree 4 (2l1-l2 = 4), t-degree 7, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 7, ranks of Theta_n [1, 2, 4, 7, 7, 6, 4, 2], top-state sum rule worst dev 0
+Lambda (3, 3, 0): pairs 4, a-degree 3, a'-degree 3 (2l1-l2 = 3), t-degree 5, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 4, ranks of Theta_n [1, 2, 3, 4, 3, 2], top-state sum rule worst dev 0
+Lambda (4, 4, 0): pairs 5, a-degree 4, a'-degree 4 (2l1-l2 = 4), t-degree 7, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 5, ranks of Theta_n [1, 2, 3, 4, 5, 4, 3, 2], top-state sum rule worst dev 0
+block theorem: Theta^(1, 1, 0) == N (a a')^(-l2) Theta^(1, 0, 0) restricted to non-forced pairs, N = 1 : True
+block theorem: Theta^(2, 1, 0) == N (a a')^(-l2) Theta^(2, 0, 0) restricted to non-forced pairs, N = 1/4 : True
+block theorem: Theta^(2, 2, 0) == N (a a')^(-l2) Theta^(2, 0, 0) restricted to non-forced pairs, N = 1 : True
+block theorem: Theta^(3, 1, 0) == N (a a')^(-l2) Theta^(3, 0, 0) restricted to non-forced pairs, N = 1/9 : True
+block theorem: Theta^(3, 2, 0) == N (a a')^(-l2) Theta^(3, 0, 0) restricted to non-forced pairs, N = 1/9 : True
+block theorem: Theta^(3, 3, 0) == N (a a')^(-l2) Theta^(3, 0, 0) restricted to non-forced pairs, N = 1 : True

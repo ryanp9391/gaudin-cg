@@ -1,0 +1,31 @@
+@table tab:G210 | The adjoint kernel $G_{ij}(\omega_1,\omega_1',t)$, $t=1/\theta_{12}$, in the basis $N=(P^3p_{02},\,P^{3\prime}p_{02},\,P^3p_{03},\,P^{3\prime}p_{03},\,P^3p_{23})$ (weights $2,3,3,4,5$); $G=4K$. Source: `RESULTS-twovac-limit.md` section L2(d), parsed from the agent's printout (D2); equal to the independent fit of D1 in 25/25 entries.
+@size scriptsize
+@cols cp{13.5cm}
+| $(i,j)$ | $G_{ij}$ |
+|---|---|
+| 1,1 | $-4 \omega_1^{2} \omega_1'^{2} (3 t^{2} + t \omega_1 - t \omega_1' - \omega_1 \omega_1')$ |
+| 1,2 | $2 (6 t^{3} \omega_1^{2} + 24 t^{3} \omega_1 \omega_1' + 6 t^{3} \omega_1'^{2} + 2 t^{2} \omega_1^{3} + 12 t^{2} \omega_1^{2} \omega_1' - 2 t^{2} \omega_1'^{3} + 2 t \omega_1^{3} \omega_1' - 6 t \omega_1^{2} \omega_1'^{2} - 2 t \omega_1 \omega_1'^{3} - 3 \omega_1^{3} \omega_1'^{2})$ |
+| 1,3 | $-2 \omega_1^{2} \omega_1'^{2} (2 t + \omega_1)$ |
+| 1,4 | $4 (-3 t^{4} - 4 t^{3} \omega_1 - 2 t^{3} \omega_1' - t^{2} \omega_1^{2} + 3 t^{2} \omega_1 \omega_1' + t^{2} \omega_1'^{2} + 3 t \omega_1^{2} \omega_1' + t \omega_1 \omega_1'^{2} + \omega_1^{3} \omega_1')$ |
+| 1,5 | $-2 (6 t^{3} + 8 t^{2} \omega_1 + 4 t^{2} \omega_1' + 4 t \omega_1^{2} + 2 t \omega_1 \omega_1' + \omega_1^{3})$ |
+| 2,1 | $-2 (6 t^{3} \omega_1^{2} + 24 t^{3} \omega_1 \omega_1' + 6 t^{3} \omega_1'^{2} + 2 t^{2} \omega_1^{3} - 12 t^{2} \omega_1 \omega_1'^{2} - 2 t^{2} \omega_1'^{3} - 2 t \omega_1^{3} \omega_1' - 6 t \omega_1^{2} \omega_1'^{2} + 2 t \omega_1 \omega_1'^{3} + 3 \omega_1^{2} \omega_1'^{3})$ |
+| 2,2 | $-12 t^{2} \omega_1^{2} - 48 t^{2} \omega_1 \omega_1' - 12 t^{2} \omega_1'^{2} - 4 t \omega_1^{3} - 12 t \omega_1^{2} \omega_1' + 12 t \omega_1 \omega_1'^{2} + 4 t \omega_1'^{3} + 9 \omega_1^{2} \omega_1'^{2}$ |
+| 2,3 | $12 t^{4} + 16 t^{3} \omega_1 + 8 t^{3} \omega_1' + 4 t^{2} \omega_1^{2} - 12 t^{2} \omega_1 \omega_1' - 4 t^{2} \omega_1'^{2} - 4 t \omega_1^{2} \omega_1' + 4 t \omega_1 \omega_1'^{2} + 3 \omega_1^{2} \omega_1'^{2}$ |
+| 2,4 | $2 (6 t^{3} + 8 t^{2} \omega_1 + 4 t^{2} \omega_1' + 2 t \omega_1^{2} - 6 t \omega_1 \omega_1' - 2 t \omega_1'^{2} - 3 \omega_1^{2} \omega_1')$ |
+| 2,5 | $6 t^{2} + 8 t \omega_1 + 4 t \omega_1' + 3 \omega_1^{2}$ |
+| 3,1 | $2 \omega_1^{2} \omega_1'^{2} (2 t - \omega_1')$ |
+| 3,2 | $12 t^{4} - 8 t^{3} \omega_1 - 16 t^{3} \omega_1' - 4 t^{2} \omega_1^{2} - 12 t^{2} \omega_1 \omega_1' + 4 t^{2} \omega_1'^{2} - 4 t \omega_1^{2} \omega_1' + 4 t \omega_1 \omega_1'^{2} + 3 \omega_1^{2} \omega_1'^{2}$ |
+| 3,3 | $\omega_1^{2} \omega_1'^{2}$ |
+| 3,4 | $-2 (-6 t^{3} - 2 t^{2} \omega_1 + 2 t^{2} \omega_1' + 2 t \omega_1 \omega_1' + \omega_1^{2} \omega_1')$ |
+| 3,5 | $6 t^{2} + 4 t \omega_1 + \omega_1^{2}$ |
+| 4,1 | $4 (-3 t^{4} + 2 t^{3} \omega_1 + 4 t^{3} \omega_1' + t^{2} \omega_1^{2} + 3 t^{2} \omega_1 \omega_1' - t^{2} \omega_1'^{2} - t \omega_1^{2} \omega_1' - 3 t \omega_1 \omega_1'^{2} + \omega_1 \omega_1'^{3})$ |
+| 4,2 | $2 (-6 t^{3} + 4 t^{2} \omega_1 + 8 t^{2} \omega_1' + 2 t \omega_1^{2} + 6 t \omega_1 \omega_1' - 2 t \omega_1'^{2} - 3 \omega_1 \omega_1'^{2})$ |
+| 4,3 | $-2 (6 t^{3} + 2 t^{2} \omega_1 - 2 t^{2} \omega_1' - 2 t \omega_1 \omega_1' + \omega_1 \omega_1'^{2})$ |
+| 4,4 | $-4 (3 t^{2} + t \omega_1 - t \omega_1' - \omega_1 \omega_1')$ |
+| 4,5 | $-2 (2 t + \omega_1)$ |
+| 5,1 | $-2 (-6 t^{3} + 4 t^{2} \omega_1 + 8 t^{2} \omega_1' - 2 t \omega_1 \omega_1' - 4 t \omega_1'^{2} + \omega_1'^{3})$ |
+| 5,2 | $6 t^{2} - 4 t \omega_1 - 8 t \omega_1' + 3 \omega_1'^{2}$ |
+| 5,3 | $6 t^{2} - 4 t \omega_1' + \omega_1'^{2}$ |
+| 5,4 | $2 (2 t - \omega_1')$ |
+| 5,5 | $1$ |
+@endtable

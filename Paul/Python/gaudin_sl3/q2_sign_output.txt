@@ -1,0 +1,91 @@
+(2, 1, 0) P n=64  #detJ>0=32  sign(detJ)=sign(B1 B2) in 30/64 ; detJ/(B1B2) range [-1.7164, 1.8591] ; sectors with constant sign: 19/19
+   sign by sector (mu: +/- counts): {(0, 2, 4): (1, 0), (0, 3, 3): (0, 2), (0, 4, 2): (1, 0), (1, 1, 4): (0, 2), (1, 2, 3): (6, 0), (1, 3, 2): (0, 6), (1, 4, 1): (2, 0), (2, 0, 4): (1, 0), (2, 1, 3): (0, 6), (2, 2, 2): (10, 0), (2, 3, 1): (0, 6), (2, 4, 0): (1, 0), (3, 0, 3): (2, 0), (3, 1, 2): (0, 6), (3, 2, 1): (6, 0), (3, 3, 0): (0, 2), (4, 0, 2): (1, 0), (4, 1, 1): (0, 2), (4, 2, 0): (1, 0)}
+(2, 1, 0) Pp n=64  #detJ>0=32  sign(detJ)=sign(B1 B2) in 36/64 ; detJ/(B1B2) range [-2.32, 175.1] ; sectors with constant sign: 19/19
+(2, 1, 0) X1 n=64  #detJ>0=32  sign(detJ)=sign(B1 B2) in 39/64 ; detJ/(B1B2) range [-9.0955, 13.533] ; sectors with constant sign: 19/19
+(3, 1, 0) P n=225  #detJ>0=113  sign(detJ)=sign(B1 B2) in 108/225 ; detJ/(B1B2) range [-0.4058, 0.55629] ; sectors with constant sign: 36/36
+   sign by sector (mu: +/- counts): {(0, 2, 6): (1, 0), (0, 3, 5): (0, 2), (0, 4, 4): (3, 0), (0, 5, 3): (0, 2), (0, 6, 2): (1, 0), (1, 1, 6): (0, 2), (1, 2, 5): (6, 0), (1, 3, 4): (0, 10), (1, 4, 3): (10, 0), (1, 5, 2): (0, 6), (1, 6, 1): (2, 0), (2, 0, 6): (1, 0), (2, 1, 5): (0, 6), (2, 2, 4): (14, 0), (2, 3, 3): (0, 18), (2, 4, 2): (14, 0), (2, 5, 1): (0, 6), (2, 6, 0): (1, 0), (3, 0, 5): (2, 0), (3, 1, 4): (0, 10), (3, 2, 3): (18, 0), (3, 3, 2): (0, 18), (3, 4, 1): (10, 0), (3, 5, 0): (0, 2), (4, 0, 4): (3, 0), (4, 1, 3): (0, 10), (4, 2, 2): (14, 0), (4, 3, 1): (0, 10), (4, 4, 0): (3, 0), (5, 0, 3): (2, 0), (5, 1, 2): (0, 6), (5, 2, 1): (6, 0), (5, 3, 0): (0, 2), (6, 0, 2): (1, 0), (6, 1, 1): (0, 2), (6, 2, 0): (1, 0)}
+(3, 1, 0) Pp n=225  #detJ>0=113  sign(detJ)=sign(B1 B2) in 115/225 ; detJ/(B1B2) range [-22.539, 60.681] ; sectors with constant sign: 36/36
+(3, 1, 0) X1 n=225  #detJ>0=113  sign(detJ)=sign(B1 B2) in 122/225 ; detJ/(B1B2) range [-758.32, 61.494] ; sectors with constant sign: 36/36
+(3, 2, 0) P n=225  #detJ>0=113  sign(detJ)=sign(B1 B2) in 114/225 ; detJ/(B1B2) range [-0.53992, 4.2955] ; sectors with constant sign: 36/36
+   sign by sector (mu: +/- counts): {(0, 4, 6): (1, 0), (0, 5, 5): (0, 2), (0, 6, 4): (1, 0), (1, 3, 6): (0, 2), (1, 4, 5): (6, 0), (1, 5, 4): (0, 6), (1, 6, 3): (2, 0), (2, 2, 6): (3, 0), (2, 3, 5): (0, 10), (2, 4, 4): (14, 0), (2, 5, 3): (0, 10), (2, 6, 2): (3, 0), (3, 1, 6): (0, 2), (3, 2, 5): (10, 0), (3, 3, 4): (0, 18), (3, 4, 3): (18, 0), (3, 5, 2): (0, 10), (3, 6, 1): (2, 0), (4, 0, 6): (1, 0), (4, 1, 5): (0, 6), (4, 2, 4): (14, 0), (4, 3, 3): (0, 18), (4, 4, 2): (14, 0), (4, 5, 1): (0, 6), (4, 6, 0): (1, 0), (5, 0, 5): (2, 0), (5, 1, 4): (0, 6), (5, 2, 3): (10, 0), (5, 3, 2): (0, 10), (5, 4, 1): (6, 0), (5, 5, 0): (0, 2), (6, 0, 4): (1, 0), (6, 1, 3): (0, 2), (6, 2, 2): (3, 0), (6, 3, 1): (0, 2), (6, 4, 0): (1, 0)}
+(3, 2, 0) Pp n=225  #detJ>0=113  sign(detJ)=sign(B1 B2) in 113/225 ; detJ/(B1B2) range [-19.596, 4.513] ; sectors with constant sign: 36/36
+(3, 2, 0) X1 n=225  #detJ>0=113  sign(detJ)=sign(B1 B2) in 126/225 ; detJ/(B1B2) range [-26.197, 215.11] ; sectors with constant sign: 36/36
+(1, 0, 0) states tested 27 violations of sign(detJ6)=(-1)^mu2: 4
+(2, 0, 0) states tested 108 violations of sign(detJ6)=(-1)^mu2: 16
+(3, 0, 0) states tested 300 violations of sign(detJ6)=(-1)^mu2: 48
+(1, 1, 0) states tested 27 violations of sign(detJ6)=(-1)^mu2: 4
+(2, 2, 0) states tested 108 violations of sign(detJ6)=(-1)^mu2: 16
+(3, 3, 0) states tested 300 violations of sign(detJ6)=(-1)^mu2: 48
+(2, 1, 0) states tested 192 violations of sign(detJ6)=(-1)^mu2: 32
+(3, 1, 0) states tested 675 violations of sign(detJ6)=(-1)^mu2: 112
+(3, 2, 0) states tested 675 violations of sign(detJ6)=(-1)^mu2: 112
+(4, 1, 0) states tested 576 violations of sign(detJ6)=(-1)^mu2: 0
+(4, 2, 0) states tested 729 violations of sign(detJ6)=(-1)^mu2: 0
+(4, 3, 0) states tested 576 violations of sign(detJ6)=(-1)^mu2: 0
+(4, 4, 0) states tested 225 violations of sign(detJ6)=(-1)^mu2: 0
+(4, 0, 0) states tested 225 violations of sign(detJ6)=(-1)^mu2: 0
+(5, 1, 0) states tested 1225 violations of sign(detJ6)=(-1)^mu2: 0
+total 5968 bad 392
+(2, 1, 0) P order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(2, 1, 0) Pp order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(2, 1, 0) X1 order signs (12,13,23)= (1, 1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (2, 1, 0) X2 theta 2.7_-3.5 times (ops, eig, Q) 0/1/3 s eigres 4.16e-78 bad states 0
+(2, 1, 0) X2 order signs (12,13,23)= (-1, -1, -1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+  built point (2, 1, 0) X3 theta 2.7_-3.5 times (ops, eig, Q) 0/1/3 s eigres 4.2e-77 bad states 0
+(2, 1, 0) X3 order signs (12,13,23)= (1, -1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (2, 1, 0) q2a theta 2.7_-3.5 times (ops, eig, Q) 0/1/3 s eigres 4.42e-78 bad states 0
+(2, 1, 0) q2a order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+  built point (2, 1, 0) q2b theta 2.7_-3.5 times (ops, eig, Q) 0/1/3 s eigres 1.02e-76 bad states 0
+(2, 1, 0) q2b order signs (12,13,23)= (-1, -1, 1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (2, 1, 0) q2c theta 2.7_-3.5 times (ops, eig, Q) 0/1/3 s eigres 1.4e-77 bad states 0
+(2, 1, 0) q2c order signs (12,13,23)= (1, 1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (2, 1, 0) q2d theta 2.7_-3.5 times (ops, eig, Q) 0/1/3 s eigres 2.01e-77 bad states 0
+(2, 1, 0) q2d order signs (12,13,23)= (1, -1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 1, 0) P order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(3, 1, 0) Pp order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(3, 1, 0) X1 order signs (12,13,23)= (1, 1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 1, 0) X2 order signs (12,13,23)= (-1, -1, -1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(3, 1, 0) X3 order signs (12,13,23)= (1, -1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 1, 0) q2a order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(3, 1, 0) q2b order signs (12,13,23)= (-1, -1, 1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 1, 0) q2c order signs (12,13,23)= (1, 1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 1, 0) q2d order signs (12,13,23)= (1, -1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 2, 0) P order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(3, 2, 0) Pp order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(3, 2, 0) X1 order signs (12,13,23)= (1, 1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 2, 0) X2 order signs (12,13,23)= (-1, -1, -1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(3, 2, 0) X3 order signs (12,13,23)= (1, -1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 2, 0) q2a order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(3, 2, 0) q2b order signs (12,13,23)= (-1, -1, 1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 2, 0) q2c order signs (12,13,23)= (1, 1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 2, 0) q2d order signs (12,13,23)= (1, -1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(2, 2, 0) P order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(2, 2, 0) Pp order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(2, 2, 0) X1 order signs (12,13,23)= (1, 1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (2, 2, 0) X2 theta 2.7_-3.5 times (ops, eig, Q) 0/0/2 s eigres 1.24e-77 bad states 0
+(2, 2, 0) X2 order signs (12,13,23)= (-1, -1, -1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+  built point (2, 2, 0) X3 theta 2.7_-3.5 times (ops, eig, Q) 0/0/2 s eigres 4.39e-78 bad states 0
+(2, 2, 0) X3 order signs (12,13,23)= (1, -1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (2, 2, 0) q2a theta 2.7_-3.5 times (ops, eig, Q) 0/0/2 s eigres 5.62e-77 bad states 0
+(2, 2, 0) q2a order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+  built point (2, 2, 0) q2b theta 2.7_-3.5 times (ops, eig, Q) 0/0/2 s eigres 1.41e-77 bad states 0
+(2, 2, 0) q2b order signs (12,13,23)= (-1, -1, 1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (2, 2, 0) q2c theta 2.7_-3.5 times (ops, eig, Q) 0/0/2 s eigres 4.43e-77 bad states 0
+(2, 2, 0) q2c order signs (12,13,23)= (1, 1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (2, 2, 0) q2d theta 2.7_-3.5 times (ops, eig, Q) 0/0/2 s eigres 1.48e-77 bad states 0
+(2, 2, 0) q2d order signs (12,13,23)= (1, -1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+(3, 0, 0) P order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(3, 0, 0) Pp order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+(3, 0, 0) X1 order signs (12,13,23)= (1, 1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (3, 0, 0) X2 theta 2.7_-3.5 times (ops, eig, Q) 0/1/4 s eigres 8.14e-79 bad states 0
+(3, 0, 0) X2 order signs (12,13,23)= (-1, -1, -1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+  built point (3, 0, 0) X3 theta 2.7_-3.5 times (ops, eig, Q) 0/1/5 s eigres 1.69e-78 bad states 0
+(3, 0, 0) X3 order signs (12,13,23)= (1, -1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (3, 0, 0) q2a theta 2.7_-3.5 times (ops, eig, Q) 0/1/4 s eigres 2.21e-78 bad states 0
+(3, 0, 0) q2a order signs (12,13,23)= (1, 1, 1) sign(detJ)*(-1)^mu2 takes [1]  with zeta-diff signs ^mu: [1]
+  built point (3, 0, 0) q2b theta 2.7_-3.5 times (ops, eig, Q) 0/1/4 s eigres 3.54e-78 bad states 0
+(3, 0, 0) q2b order signs (12,13,23)= (-1, -1, 1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (3, 0, 0) q2c theta 2.7_-3.5 times (ops, eig, Q) 0/1/4 s eigres 4.44e-78 bad states 0
+(3, 0, 0) q2c order signs (12,13,23)= (1, 1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]
+  built point (3, 0, 0) q2d theta 2.7_-3.5 times (ops, eig, Q) 0/1/4 s eigres 2.48e-78 bad states 0
+(3, 0, 0) q2d order signs (12,13,23)= (1, -1, -1) sign(detJ)*(-1)^mu2 takes [-1, 1]  with zeta-diff signs ^mu: [1]

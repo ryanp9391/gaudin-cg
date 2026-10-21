@@ -1,0 +1,9 @@
+
+====================================================================================================
+T6b: site-exchange symmetry: is K_ij(w,w,thi) = K_ji(w,w,-thi) ? (w1 = w1p = 5/2; degree-7 polynomial in thi from 12 theta12 values)
+====================================================================================================
+  12 theta12 values, degree-7 polynomial fit in thi: max resid 0.0
+  max |K(thi)_ij - K(-thi)_ji| / max|K| = 5.79e-63   (0 would mean exchange symmetric: K(w,w,thi)^T = K(w,w,-thi))
+  max |K(thi)_ij + K(-thi)_ji| / max|K| = 2.0
+
+total time 12s

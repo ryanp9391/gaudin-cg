@@ -1,0 +1,60 @@
+# Which operators localise: the answer to "which $T$'s?" {#sec:localise}
+
+**Punchline.** In Gaudin, every Laurent coefficient of $S_2,S_3$ at $\theta_1$ localises the two-vacua covector on site 1 by itself: $\{1,H_1,S3c[1,2]\}$ each separately for every representation, plus one extra quadratic combination $X_4$ once $\lambda_1=3$. The number of localisers is $\ell_1=\lambda_1+1$, as in XXX, but the fused shapes of XXX are not needed.
+
+## The question {#sec:Tq}
+
+Paul's question at the start of the project was "I don't know which $T$'s to use". In XXX the answer was specific: the shapes $T_{(1,1)}(\theta_1-2h)$ and $T_{(2,1)}(\theta_1-2h)$ (for the adjoint), and in general $T_{(k,k)}$ ($k\le d$) and $T_{(k,d)}$ ($d<k\le\lambda_1$) at $\theta_1-\lambda_1h$ with $d=\lambda_1-\lambda_2$, which acting on $\langle\Omega\otimes\Omega|$ produce $f_\lambda\langle\Omega T^{(1)}_\lambda|\otimes\langle\Omega|$: a covector on site 1 times the unchanged vacuum on site 2. The set of such site-1 covectors is the "localising span" $L_1$, and the CG data are read off from $L_1$ as soon as it reaches every weight with rank equal to the multiplicity.
+
+In Gaudin there are no shifts $\theta_s-mh$; the commuting family is the Laurent coefficients themselves. We test every operator $X$ in the algebra they generate: $X$ \emph{localises} if $\langle\Omega\otimes\Omega|X=v\otimes\Omega_1$ for a covector $v$ on site 1 (the rank-1 scan: $\langle\Omega\otimes\Omega|X$ viewed as an $\dim V\times\dim V$ matrix has rank $1$ and second factor $\Omega$).
+
+## The scan {#sec:scan}
+
+Let $S3c[s,k]$ denote the coefficient of $(u-\theta_s)^{-k}$ in $S_3$ (so $S3c[s,2]=a_s$ and $S3c[s,1]=b_s$), and
+$$
+D_1=\mathrm{span}\{1,\ W,\ H_1,\ S3c[1,2],\ S3c[1,1],\ S3c[2,2],\ S3c[2,1]\},\qquad D_2=D_1+\text{quadratic monomials},\label{eq:D12}
+$$
+with $\dim D_1=7$ (independent basis), $\dim D_2=24$ for $[2,1,0]$ and $26$ for $[3,1,0]$, $[3,2,0]$; the cubic span has rank $48,68,68$ (not $64$, hence not vacuous). The result, exact at $P$ and $P'$, is as follows.
+
+**Adjoint.** $\ell_1=\ell_2=3$ already inside $D_1$, with no products needed. Site 1: $\{1,H_1,S3c[1,2]\}$ localise, each separately,
+$$
+\langle\Omega\otimes\Omega|H_1=\bigl[\Omega_1(c_H-C_\zeta)\bigr]\otimes\Omega_1,\qquad \langle\Omega\otimes\Omega|S3c[1,2]=\bigl[\Omega_1S3^{\rm 1\text{-}site}[-2]\bigr]\otimes\Omega_1,\label{eq:localise}
+$$
+where $C_\zeta=\sum_k\zeta_kE_{kk}$, $S3^{\rm 1\text{-}site}[-2]$ is the $(u-\theta_1)^{-2}$ coefficient of the one-site cdet with twist $\mathrm{diag}\,\zeta$, and $c_H$ is a constant (below). Hence the localising span is $L_1=\Omega_1\cdot\mathrm{span}\{1,C_\zeta,S3^{\rm 1\text{-}site}[-2]\}$, of full rank on every weight of $V$. Site 2: $\{1,\ W+H_1(=-H_2+\text{scalar}),\ S3c[2,2]\}$ with $+C_\zeta$.^[Agent W1, `Gaudin-L2-chain.wb`, task G3 (cells "Which T's localise" and the summary cell). The prediction by agent P2 (`RESULTS-xxx-limit.md` X3) from the XXX limit was $T_{(1,1)}(\theta_1-2h)=3h^2\theta_{12}^2[1+h\,X_1/\ldots]$ with $X_1=-\tfrac{4631}{124}\mathbf 1+3H_1-S3c[1,2]$ exactly (the constant at one numerical point only) and $\langle\Omega\otimes\Omega|X_1=u\otimes\Omega_1$, $u=\Omega_1(\tfrac{431}{62}-3C_\zeta-S3^{\rm 1\text{-}site}[-2])$; W1 found this to be a combination of the three separate localisers.]
+
+**$[3,1,0]$ and $[3,2,0]$.** $\ell_1=4=\lambda_1+1$: three over $D_1$ (the same three), four over $D_2$ (and over $D_1+H_1D_1$ at site 1). No single quadratic monomial supplies the fourth; the minimal supports are $\{H_1^2,H_1S3c[1,2]\}$ and $\{H_1^2,S3c[1,2]^2\}$, and the localiser is
+$$
+X_4=H_1^2-\tfrac12H_1\,S3c[1,2]-\frac{\gamma}{\theta_{12}}\,W-S3c[1,1]\quad(\mathrm{mod}\ 1,H_1,S3c[1,2]),\label{eq:X4}
+$$
+where $\gamma=2$ for $[3,1,0]$ and $\gamma=1$ for $[3,2,0]$, and
+with $\zeta$- and $\omega$-independent coefficients (checked at 9 values of $\theta_2$ at $P$ and 2 at $P'$ for $[3,2,0]$). Its covector $v_4=\Omega_1(c_0+c_1C_\zeta+c_2S3[-2]-S3[-1]+C_\zeta^2+\tfrac12C_\zeta S3[-2])$ is $\theta_{12}$-independent. The coefficient $\gamma$ changed from $2$ to $1$; it could be $\lambda_1-\lambda_2$ or $2/\lambda_2$, and two data points cannot decide. The three-dimensional $L_1$ already reaches every weight (multiplicities $\le2$), so the fourth is needed to match the count $\ell=\lambda_1+1$ and not for reach.^[Agents W2 (`Gaudin-L2-chain-2.wb` task B; $X_4$ for $[3,1,0]$), W3 (`Gaudin-L2-chain-320.wb` summary: $\gamma=1$, "not $c_\Lambda$"). The XXX analogue is presumably the third fused shape $T_{(3,2)}$; the identification is a guess from degrees.]
+
+The quadratic subspace has exact relations that make $D_2$ smaller than $28$ by two. For $[3,1,0]$ they are $S3c[s,1]=\tfrac14S3c[s,2](H_s-S3c[s,2])$ for $s=1,2$. For $[3,2,0]$ there is no scalar $c_\Lambda$ (none of $1/4,1/3,1/5,1/6,1/8,1/(\lambda_1+1),1/|\Lambda|$) and the relation is an inhomogeneous quadratic: with $a=S3c[1,2]$, $s=\sum\zeta$,
+$$
+S3c[1,1]=3H_1^2-\tfrac74H_1a+\tfrac14a^2-\frac3{\theta_{12}}W-\beta H_1-\gamma'a-\delta,\label{eq:D2rel}
+$$
+$\beta=78/\theta_{12}+15s$, $\gamma'=-45/(2\theta_{12})-\tfrac92s$, $\delta=-504/\theta_{12}^2-210s/\theta_{12}-18s^2-3e_2(\zeta)$, an exact $225\times225$ operator identity at six combined $(\zeta,\theta)$ points; site 2 is the mirror $\theta_{12}\to-\theta_{12}$, $H_1\to H_2=-H_1-W+10s$. Its quadratic part factorises, $12H^2-7Ha+a^2=(3H-a)(4H-a)$.^[Agent W3, `Gaudin-L2-chain-320.wb` cells 63--66 and the summary table (verdict "a different relation" from the plan's $c_\Lambda$).]
+
+## Spectators and closed forms {#sec:spect}
+
+Two things accompany each localiser: the constant $c_H$ in (\ref{eq:localise}) and the \emph{spectator} factor $f(X)$, defined by $\langle\Omega\otimes\Omega|X|e_1\otimes e_1\rangle$ with $v$ normalised to first component 1 (the analogue of $f_\lambda$ in XXX). All of them have closed forms:
+$$
+c_H=|\Lambda|\sigma+\frac{2e_2(\Lambda)}{\theta_{12}},\qquad f(H_1)=|\Lambda|\sigma-\zeta\cdot\Lambda+\frac{2e_2(\Lambda)}{\theta_{12}},\qquad f(S3c[s,2])=c_2\,\zeta_3,\label{eq:spect}
+$$
+with $f(H_2)$ having the opposite sign of the $1/\theta_{12}$ term, and $e_2(\Lambda)=\lambda_1\lambda_2+\lambda_1\lambda_3+\lambda_2\lambda_3$. The constant $c_H$ has a one-line origin: contracting the $\Omega$'s one has $\sum_{ik}(\Omega E_{ik})\otimes(\Omega E_{ki})=(\sum_i\lambda_i^2)\,\Omega\otimes\Omega$ (the Casimir-type identity on the vacuum), and with $|\Lambda|^2-\sum\lambda_i^2=2e_2(\Lambda)$ the $1/\theta_{12}$ coefficient follows. We initially guessed $2\lambda_1$ for it (from the two data points $4,6$ of $[2,1,0],[3,1,0]$) and were wrong: it is $2e_2(\Lambda)$, equal to $2\lambda_1\lambda_2=4,6,12$ for $[2,1,0],[3,1,0],[3,2,0]$. Table~\ref{tab:spect} lists spectators at the two standard points.^[$c_H$: agent W2 task C, ten representations (the conjecture $2\lambda_1$ refuted); W3 cell 69. Spectators: W1, W2, W3 (Laurent polynomials in $\theta_{12}$ fitted on six values with three checks).]
+
+The last formula in (\ref{eq:spect}) is the place where $c_2=\lambda_2(\lambda_1+1)$ and not $|\Lambda|$ appears: $f(S3c[s,2])=8\zeta_3$ for $[3,2,0]$, not $5\zeta_3$; the same correction as for the vacuum's $a^{\rm vac}_s=c_2\omega_3$ (Section~\ref{sec:vacQ}), and for the same reason, since $\langle\Omega\otimes\Omega|S3c[1,2]=\Omega_1S3^{\rm 1\text{-}site}[-2]\otimes\Omega_1$ and the one-site double pole is $c_2\zeta_3$.
+
+@table tab:spect | Spectator factors at the two standard twist points ($P=(3/2,5/4,2/3)$, $P'=(2,5/3,-1/2)$). Sources: W1, W2, W3 summary cells.
+@size small
+@cols lcccc
+| $\Lambda$ | $f(H_1)$ at $P$ | $f(H_1)$ at $P'$ | $f(S3c[1,2])$ at $P$ | at $P'$ |
+|---|---|---|---|---|
+| $[2,1,0]$ | $6+4/\theta_{12}$ | $\tfrac{23}6+4/\theta_{12}$ | $2$ | $-\tfrac32$ |
+| $[3,1,0]$ | $\tfrac{95}{12}+6/\theta_{12}$ | $5+6/\theta_{12}$ | $\tfrac83$ | $-2$ |
+| $[3,2,0]$ | $\tfrac{121}{12}+12/\theta_{12}$ | $\tfrac{13}2+12/\theta_{12}$ | $\tfrac{16}3$ | $-4$ |
+@endtable
+
+## Why Gaudin differs from XXX {#sec:whydiff}
+
+In XXX only the specific fused shapes $T_{(1,1)},T_{(2,1)},\dots$ localise; in Gaudin every Laurent coefficient in $D_1$ at $\theta_1$ localises on its own. This was the round-1 surprise, and we have no derivation of it. Our reading, which has not been tested, is that in the $h\to0$ limit the shifted transfer matrices at $\theta_s-mh$ collapse onto jets at $\theta_s$, so that the products needed for a fused shape reduce to combinations of Laurent coefficients, and the spectators become Laurent polynomials in $\theta_{12}$ with point-dependent constants instead of ladder products.

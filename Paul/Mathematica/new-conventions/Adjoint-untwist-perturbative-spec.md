@@ -1,0 +1,24 @@
+# Spec: derive κ_singlet(t) and Δ_c(t, τ_c) of the untwisted two-rotation family by first-order perturbation theory (adjoint, 2026-10-10)
+
+Delegated to a wolfbook-builder subagent (sonnet); planned by the main session. **New notebook:** `Paul/Mathematica/new-conventions/Adjoint-untwist-perturbative.wb` (self-contained, exact, E basis = plain GT `JJ`, h = 1, θ = (t, 0) with t symbolic where feasible). Model: `Adjoint-clean-analytic.wb` (same idea for the T-insertion family: Ψ = h + εψ₁, first order is enough) — read its cells first and copy its perturbation-theory pattern. Results to reproduce: `L2-210-untwist-CG.md` §4 (the two closed forms) and §1 (the ε = 0 covector).
+
+## 0. Statement to prove
+
+Regime: z = 1+εφ, w₁ = 1+εω₁, w₂ = 1+εω₂, y = w₂ y₀, y₀ = (t−1)/(t−2). Covectors v₂ = e₁ᵀρ(n(ε)), v₁ = v₂ρ(Δ), Δ = ε⁻¹diag(1/(ω₂−φ_k)). Undone covector φ(ε) = v₁ρ(n)⁻¹ = δ^Λ e₁ᵀρ(n′(ε)), φ(0)/δ^Λ = e₁ᵀe^{a′₀E₁₂}e^{c′₀E₂₃} with a′₀ = (ω₁−φ₁)(φ₂−φ₁)/((ω₁−φ₂)(ω₂−φ₂)), c′₀ = r₃₀(φ₃−φ₂)/(ω₂−φ₃), and b′/(a′c′) = 1 + ε(t−2)(φ₂−ω₂) + O(ε²).
+
+Eigenstate of the HW-limit branch of irrep ν: Ψ = h_ν + εψ₁ + O(ε²) (unnormalized; the ⟨x₀|Ψ⟩ = 1 normalization only multiplies by a scalar series and is irrelevant for the ratios below). ψ₁ by first-order perturbation theory of the commuting family: with t(u; ε) any generic member (use t₁(u) at a fixed rational u, or t₁ + πt₂ at u = 3/7, and check the result is independent of the choice), ψ₁ = Σ_{n ≠ h, same weight sector} |n⟩⟨n|t′|h⟩/(E_h − E_n) where |n⟩ run over the untwisted eigenstates of the sector (which are G-orthogonal; use the dual basis ⟨n| = G-adjoint), t′ = ∂_ε t|_{ε=0}, and the component of ψ₁ along h is irrelevant. Note the untwisted t restricted to a weight sector is gl(3)-invariant, so |n⟩ are organized by irrep; the two octets are split by the inhomogeneity and their HW vectors are the eigenvectors of t restricted to HW_{(3,2,1)} (algebraic in t: τ_c roots of τ² − 3(2t−1)(t+2)τ + 9t(t−1)(t+1)(t+3) = 0 for t₂(θ₁+h)).
+
+Overlap: ⟨v₁⊗v₂|Ψ⟩ = ⟨φ(ε)⊗e₁ᵀ|h⟩ + ε⟨v₁⁰⊗v₂⁰|ψ₁⟩ + O(ε²), with v₁⁰⊗v₂⁰ the ε = 0 covector pair (after dividing by δ^Λ).
+
+**Claim 1 (singlet).** ⟨φ(ε)⊗e₁ᵀ|h_singlet⟩ = ε·S₁ + O(ε²) with S₁ = −3(t−2)(φ₂−ω₂)(a′₀c′₀)²·C_singlet·(u₀₁₂ component), and K₁ := ⟨v₁⁰⊗v₂⁰|ψ₁⟩ satisfies K₁/S₁ = −t/(3(t−2)) exactly, for all φ, ω₁, ω₂.
+
+**Claim 2 (octets).** For the HW-limit branch of octet copy c, with F = top-killed overlap/(a′₀c′₀) expanded as F₀ + εF₁: F₁/F₀ is affine in ω₂ with slope = −(t−2)R_c + Δ_c, R_c = (u·C_c)/((u+u′)·C_c) (u = e₁ᵀE₁₃, u′ = e₁ᵀE₂₃E₁₂ on the (1,1,1) weight space), and Δ_c = (1−t²) + t·τ_c/(3(t+3)) exactly, where the contamination part of the slope is ∂_{ω₂} of ⟨v₁⁰⊗v₂⁰|ψ₁⟩/⟨φ₀⊗e₁ᵀ|h_c⟩ (minus the top-killed piece).
+
+## 1. Tasks
+
+1. **Setup** (exact): generators, two-site t₁(u), t₂(u) with symbolic twist z = 1+εφ (φ rational) — build t at ε = 0 and its ε-derivative t′ (exact rational matrices; keep t symbolic if the sector sizes allow, else do everything at 6 rational t values and reconstruct rational functions of t by `Rationalize`/interpolation with validation). Weight sectors (2,2,2) (dim 10) and (3,2,1) (dim 6). HW kets h_ν, invariant metric G (diag(1,1,1,2,6,9,4,9) in `ps` order), the untwisted eigenbasis of each sector (per irrep; octets algebraic in t).
+2. **Singlet, Claim 1.** Compute ψ₁ for the singlet (the energy denominators involve the 27, the two decuplets and the two octets at weight (2,2,2); the octet pair should enter only through symmetric combinations — check that K₁ is rational in t). Build v₁⁰, v₂⁰ (exact in φ, ω₁, ω₂, rational or symbolic), K₁ = ⟨v₁⁰⊗v₂⁰|ψ₁⟩ and S₁ from the exact ε-expansion of φ(ε)·h. Verify K₁/S₁ = −t/(3(t−2)) symbolically in t (and in φ, ω if feasible; else at 5 random rational (φ, ω) points). Report which intermediate states |n⟩ contribute to K₁ (by irrep) and the contribution of each.
+3. **Octets, Claim 2.** For each copy (work with τ_c as a symbol obeying its quadratic, or at rational t where τ_c happens to be rational if any; otherwise `RootReduce` at 4 rational t values): ψ₁, the contamination slope, Δ_c; verify Δ_c = (1−t²) + tτ_c/(3(t+3)). Also derive τ₁+τ₂ and τ₁τ₂ (the characteristic polynomial of t₂(θ₁+h) on HW_{(3,2,1)}) symbolically.
+4. **Bonus if cheap:** the same derivation gives the O(ε) contamination of the clean branches ([4,1,1], [3,3,0]) — record their K₁/S₀ as functions of (t, φ, ω) for the record (they are not needed for the CG extraction).
+
+Markdown result cell with the derivation steps and the verified identities; save; report back concisely (what was verified symbolically vs at rational points; the per-irrep contributions). Do not edit other notebooks, `paper/*.tex`, or git. The shared kernel: your first cell clears it; do not run this while another agent's notebook computation is live (the main session sequences the agents).

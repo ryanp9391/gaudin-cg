@@ -1,0 +1,44 @@
+
+==============================================================================
+SECTION 4 (Q4): untwisting regime zeta = eps*phi, omega = eps*om^, omega' = eps*om^', Lambda = (3, 2, 0), 100 digits
+==============================================================================
+  phi = ['1/3', '-2/7', '5/11']  om^ = ['3/4', '-1/5', '1/2']  om^' = ['-12/5', '1/8', '-1/3']
+  eps = 1/1000000 (25s): eigen-residual 1.81e-97; Gauss r_k = ['0.40229885', '1.374096', '0.089884474']
+     vacuum eigencovector test (omega, omega'): (True, True)  vacuum direct Q degrees [0, 2, 6] [0, 2, 6]
+     raising residuals (smallest first, m+1 per HW sector): {(6, 4, 0): ['0.0'], (5, 5, 0): ['1.94e-7', '1.41'], (6, 3, 1): ['2.32e-7', '2.83'], (5, 4, 1): ['2.37e-7', '2.37e-7', '2.1'], (6, 2, 2): ['5.35e-7', '2.0'], (5, 3, 2): ['4.08e-7', '4.08e-7', '2.08'], (4, 4, 2): ['3.56e-7', '1.68'], (4, 3, 3): ['7.2e-7', '1.52']}
+     branch idx 224 sector (6, 4, 0) : deg dual [6, 4, 0], deg direct [0, 2, 6], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.21e-103, det/prod(col norms) = 1.24e-255, sigma_6/sigma_1 = 2.11e-77 | ratio-test deviation = 0.0
+     branch idx 214 sector (5, 5, 0) : deg dual [5, 5, 0], deg direct [1, 1, 6], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 9.52e-105, det/prod(col norms) = 1.03e-297, sigma_6/sigma_1 = 2.89e-84 | ratio-test deviation = 2.19e-52
+     branch idx 223 sector (6, 3, 1) : deg dual [6, 3, 1], deg direct [0, 3, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.09e-104, det/prod(col norms) = 5.79e-186, sigma_6/sigma_1 = 1.77e-62 | ratio-test deviation = 1.6e-51
+     branch idx 208 sector (5, 4, 1) : deg dual [5, 4, 1], deg direct [1, 2, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.01e-98, det/prod(col norms) = 2.38e-218, sigma_6/sigma_1 = 1.51e-69 | ratio-test deviation = 1.59e-51
+     branch idx 209 sector (5, 4, 1) : deg dual [5, 4, 1], deg direct [1, 2, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.01e-98, det/prod(col norms) = 2.38e-218, sigma_6/sigma_1 = 1.51e-69 | ratio-test deviation = 1.46e-51
+     branch idx 221 sector (6, 2, 2) : deg dual [6, 2, 2], deg direct [0, 4, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.74e-105, det/prod(col norms) = 1.38e-181, sigma_6/sigma_1 = 1.12e-54 | ratio-test deviation = 1.57e-51
+     branch idx 198 sector (5, 3, 2) : deg dual [5, 3, 2], deg direct [1, 3, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.78e-99, det/prod(col norms) = 3.31e-174, sigma_6/sigma_1 = 2.53e-55 | ratio-test deviation = 1.57e-51
+     branch idx 199 sector (5, 3, 2) : deg dual [5, 3, 2], deg direct [1, 3, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.78e-99, det/prod(col norms) = 3.31e-174, sigma_6/sigma_1 = 2.53e-55 | ratio-test deviation = 1.57e-51
+     branch idx 169 sector (4, 4, 2) : deg dual [4, 4, 2], deg direct [2, 2, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.07e-92, det/prod(col norms) = 4.64e-157, sigma_6/sigma_1 = 2.76e-55 | ratio-test deviation = 1.57e-51
+     branch idx 146 sector (4, 3, 3) : deg dual [4, 3, 3], deg direct [2, 3, 3], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.34e-93, det/prod(col norms) = 1.75e-140, sigma_6/sigma_1 = 1.24e-41 | ratio-test deviation = 1.57e-51
+  eps = 1/500000 (26s): eigen-residual 2.06e-97; Gauss r_k = ['0.40229885', '1.374096', '0.089884474']
+     vacuum eigencovector test (omega, omega'): (True, True)  vacuum direct Q degrees [0, 2, 6] [0, 2, 6]
+     raising residuals (smallest first, m+1 per HW sector): {(6, 4, 0): ['0.0'], (5, 5, 0): ['3.88e-7', '1.41'], (6, 3, 1): ['4.64e-7', '2.83'], (5, 4, 1): ['4.74e-7', '4.74e-7', '2.1'], (6, 2, 2): ['1.07e-6', '2.0'], (5, 3, 2): ['8.15e-7', '8.15e-7', '2.08'], (4, 4, 2): ['7.11e-7', '1.68'], (4, 3, 3): ['1.44e-6', '1.52']}
+     branch idx 224 sector (6, 4, 0) : deg dual [6, 4, 0], deg direct [0, 2, 6], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 7.9e-99, det/prod(col norms) = 3.4e-244, sigma_6/sigma_1 = 4.33e-74 | ratio-test deviation = 0.0
+     branch idx 214 sector (5, 5, 0) : deg dual [5, 5, 0], deg direct [1, 1, 6], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 6.24e-100, det/prod(col norms) = 1.81e-284, sigma_6/sigma_1 = 1.19e-80 | ratio-test deviation = 2.78e-54
+     branch idx 223 sector (6, 3, 1) : deg dual [6, 3, 1], deg direct [0, 3, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 7.12e-100, det/prod(col norms) = 1.55e-177, sigma_6/sigma_1 = 9.06e-60 | ratio-test deviation = 3.64e-54
+     branch idx 208 sector (5, 4, 1) : deg dual [5, 4, 1], deg direct [1, 2, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 6.6e-94, det/prod(col norms) = 2.04e-208, sigma_6/sigma_1 = 1.55e-66 | ratio-test deviation = 7.83e-54
+     branch idx 209 sector (5, 4, 1) : deg dual [5, 4, 1], deg direct [1, 2, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 6.6e-94, det/prod(col norms) = 2.04e-208, sigma_6/sigma_1 = 1.55e-66 | ratio-test deviation = 1.73e-55
+     branch idx 221 sector (6, 2, 2) : deg dual [6, 2, 2], deg direct [0, 4, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.14e-100, det/prod(col norms) = 3.7e-173, sigma_6/sigma_1 = 2.87e-52 | ratio-test deviation = 3.75e-54
+     branch idx 198 sector (5, 3, 2) : deg dual [5, 3, 2], deg direct [1, 3, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 9.11e-95, det/prod(col norms) = 4.44e-166, sigma_6/sigma_1 = 6.48e-53 | ratio-test deviation = 3.75e-54
+     branch idx 199 sector (5, 3, 2) : deg dual [5, 3, 2], deg direct [1, 3, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 9.11e-95, det/prod(col norms) = 4.44e-166, sigma_6/sigma_1 = 6.48e-53 | ratio-test deviation = 3.75e-54
+     branch idx 169 sector (4, 4, 2) : deg dual [4, 4, 2], deg direct [2, 2, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.75e-88, det/prod(col norms) = 7.79e-150, sigma_6/sigma_1 = 7.05e-53 | ratio-test deviation = 3.75e-54
+     branch idx 146 sector (4, 3, 3) : deg dual [4, 3, 3], deg direct [2, 3, 3], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 3.83e-89, det/prod(col norms) = 7.33e-134, sigma_6/sigma_1 = 7.93e-40 | ratio-test deviation = 3.75e-54
+  epsilon-exponents p in f ~ eps^p, p = log2(f(2e-6)/f(1e-6)):
+     sector (6, 4, 0): |det N(w)| p = 16.0, |det N(wp)| p = 16.0, det/prod(col norms) p = 38.0, sigma_6/sigma_1 p = 11.0, max|N(w)| p = -4.0, |R(w)| p = 0.0
+     sector (5, 5, 0): |det N(w)| p = 16.0, |det N(wp)| p = 16.0, det/prod(col norms) p = 44.0, sigma_6/sigma_1 p = 12.0, max|N(w)| p = -5.0, |R(w)| p = 1.0
+     sector (6, 3, 1): |det N(w)| p = 16.0, |det N(wp)| p = 16.0, det/prod(col norms) p = 28.0, sigma_6/sigma_1 p = 9.0, max|N(w)| p = -2.0, |R(w)| p = 1.0
+     sector (5, 4, 1): |det N(w)| p = 15.0, |det N(wp)| p = 15.0, det/prod(col norms) p = 33.0, sigma_6/sigma_1 p = 10.0, max|N(w)| p = -3.0, |R(w)| p = 1.0
+     sector (5, 4, 1): |det N(w)| p = 15.0, |det N(wp)| p = 15.0, det/prod(col norms) p = 33.0, sigma_6/sigma_1 p = 10.0, max|N(w)| p = -3.0, |R(w)| p = 1.0
+     sector (6, 2, 2): |det N(w)| p = 16.0, |det N(wp)| p = 16.0, det/prod(col norms) p = 28.0, sigma_6/sigma_1 p = 8.0, max|N(w)| p = -2.0, |R(w)| p = 2.0
+     sector (5, 3, 2): |det N(w)| p = 15.0, |det N(wp)| p = 15.0, det/prod(col norms) p = 27.0, sigma_6/sigma_1 p = 8.0, max|N(w)| p = -2.0, |R(w)| p = 2.0
+     sector (5, 3, 2): |det N(w)| p = 15.0, |det N(wp)| p = 15.0, det/prod(col norms) p = 27.0, sigma_6/sigma_1 p = 8.0, max|N(w)| p = -2.0, |R(w)| p = 2.0
+     sector (4, 4, 2): |det N(w)| p = 14.0, |det N(wp)| p = 14.0, det/prod(col norms) p = 24.0, sigma_6/sigma_1 p = 8.0, max|N(w)| p = -2.0, |R(w)| p = 2.0
+     sector (4, 3, 3): |det N(w)| p = 14.0, |det N(wp)| p = 14.0, det/prod(col norms) p = 22.0, sigma_6/sigma_1 p = 6.0, max|N(w)| p = -2.0, |R(w)| p = 3.0
+
+total time 51s

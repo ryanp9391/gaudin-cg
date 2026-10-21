@@ -1,0 +1,916 @@
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.1cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,longtable,array}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\nb}[1]{\texttt{#1}}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+\begin{document}
+
+\title{Untwisting the two-rotation $\det_6\times\det_2$ formula and extracting CG coefficients\\[2pt]\large $\mathfrak{gl}(3)$ XXX, $L=2$, new conventions --- research notes of the 2026-10-10 thread}
+\author{Paul Ryan (with Claude)}
+\date{10 October 2026}
+\maketitle
+
+\setcounter{tocdepth}{1}\tableofcontents
+\bigskip
+\setcounter{section}{-1}
+
+Research notes on the 2026-10-10 thread ``untwisting the two-rotation $\det_6\times\det_2$ formula and extracting CG coefficients'' (adjoint $[2,1,0]^{\otimes2}$ in full; $[3,1,0]^{\otimes2}$, point A, in full; the untwisting of the Q-determinants themselves, adjoint, partially). Audience: Paul Ryan and future Claude sessions. This file is the Markdown companion of \nb{Untwist-\allowbreak{}two-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}tex}/\nb{.\allowbreak{}pdf}; both have the same content (they are generated from one source).
+
+\textbf{Primary sources.} \nb{HANDOFF.\allowbreak{}md} (entry ``NEWEST (2026-10-10)''); the write-ups \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}md}, \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}md}, \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets.\allowbreak{}md}; the specs \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG-\allowbreak{}spec.\allowbreak{}md}, \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG-\allowbreak{}spec.\allowbreak{}md}, \nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative-\allowbreak{}spec.\allowbreak{}md}, \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets-\allowbreak{}spec.\allowbreak{}md}; and the four notebooks \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} (45 cells), \nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative.\allowbreak{}wb} (22), \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} (90), \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets.\allowbreak{}wb} (45). Background only (not re-documented): \nb{Two-\allowbreak{}rotations-\allowbreak{}det-\allowbreak{}overlap.\allowbreak{}md} \S{}5.6b, \S{}5.8 (the family), \nb{Undo-\allowbreak{}site2-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}md} \S{}1--\S{}4, \S{}5.2--5.4 (the undo, point A), \nb{Clean-\allowbreak{}CG-\allowbreak{}combinations.\allowbreak{}md} \S{}2--3 (signal and contamination). All paths are under \nb{Paul/\allowbreak{}Mathematica/\allowbreak{}new-\allowbreak{}conventions/\allowbreak{}} unless stated. Cell numbers are 1-based positions in the \nb{.\allowbreak{}wb} file. \textbf{None of the four notebooks carries a native output}: every number quoted below was read from the markdown result cells that the agents stored under (or after) the code cells, or from the cell sources; no number was recomputed in Wolfram.
+
+\textbf{Evidence tags.} Every claim carries one of:
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item \textbf{[exact]}: a symbolic identity, an exact-rational computation (ranks, \nb{Series}, exact \nb{Solve}), or agreement at 200-digit working precision with the stated residual;
+\item \textbf{[numeric]}: true at the stated numeric point(s) with the stated residual, not proved;
+\item \textbf{[fitted]}: a closed form recognized from a scan and validated on held-out points (the held-out residual is quoted);
+\item \textbf{[conjecture]}: pattern or prediction not (fully) verified; the text says what is verified.
+\end{itemize}
+
+Combined tags such as \textbf{[exact/numeric]} mean that part of the statement is exact and the rest numerical; the text says which.
+
+\textbf{Scope of this write-up.} No notebook, no existing \nb{.\allowbreak{}md}/\nb{.\allowbreak{}tex}, \nb{HANDOFF.\allowbreak{}md}, \nb{CLAUDE.\allowbreak{}md} or \nb{paper/\allowbreak{}*.\allowbreak{}tex} was edited, nothing was evaluated in Wolfram, nothing was committed. Independent checks made by hand or with plain arithmetic while writing (not notebook cells) are marked ``re-derived here'' and listed in Appendix~\ref{app:checks}.
+
+\section{Summary}\label{sec:summary}
+
+\textbf{The question.} The two-rotation family of \nb{Two-\allowbreak{}rotations-\allowbreak{}det-\allowbreak{}overlap.\allowbreak{}md} \S{}5.6b/\S{}5.8 gives product covectors $\langle v_1\otimes v_2|$ whose overlap with a twisted eigenstate $\Psi_B$ of the $L=2$ transfer matrix is a product of two Q-determinants, $\det_6\times\det_2$. The previous thread (\nb{Undo-\allowbreak{}site2-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}md}) showed that, after undoing the site-2 rotation, the covectors span every site-1 weight space at finite twist. But a CG coefficient is a property of the highest-weight (HW) ket $h_\nu$, and the eigenstate $\Psi_B$ at finite twist is not $h_\nu$. This thread asks: in which limit of the twist can the HW CG data be read off from the Q-formula alone, with what contamination, and can the contamination be controlled?
+
+\textbf{The answer in one paragraph.} Untwist everything together, $z=1+\varepsilon\varphi$, $w_1=1+\varepsilon\omega_1$, $w_2=1+\varepsilon\omega_2$, with the ladder-1 insertion slaved to $w_2$ (\S\,\ref{sec:regime}). In this regime the undone covector has $O(1)$ components on four site-1 weights and one direction of a fifth, the $E_{13}$ direction degenerates by exactly one order, and the ratio of contamination to signal $K/S$ is $O(\varepsilon)$ for the branches whose CG slice sits at order $\varepsilon^0$ (``clean'') and a constant independent of $\varepsilon$, $\omega$, $\varphi$ for those at higher order (``contaminated with a structural constant''). All six HW CG data of $\mathrm{adj}\otimes\mathrm{adj}$ and all ten of $[3,1,0]\otimes[3,1,0]$ (point A) are then recovered from the Q-formula, the top-killing determinant, one Q-number $\tau_c$ and closed forms in $t=\theta_{12}/h$ (\S\,\ref{sec:adj}, \S\,\ref{sec:a310}), with $O(\varepsilon)$ errors at finite $\varepsilon$ and Richardson limits agreeing with the chain side to $10^{-18}$ or better. For the adjoint the two structural constants are derived by first-order perturbation theory (\S\,\ref{sec:pert}); for $[3,1,0]$ they are fitted (\S\,\ref{sec:a310}). The Q-determinants themselves are untwisted only for $\det_2$ (\S\,\ref{sec:dets}).
+
+\textbf{What is extracted, by representation.} ``Leading'' = read at the lowest order of the covector expansion from $Q_{\mathrm{num}}$ alone; ``$O(\varepsilon)$ layer'' = needs the structural constant listed; $R$ = octet-type mixing of a two-dimensional multiplicity space.
+
+\subsection{Adjoint $[2,1,0]^{\otimes2}$ (6 HW states, 5 irreps)}
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{2.9cm}p{1.9cm}p{2.7cm}p{5.6cm}p{2.4cm}@{}}\toprule
+\textbf{branch} & \textbf{site-1 weight} & \textbf{order of covector} & \textbf{extraction} & \textbf{tag} \\\midrule\endhead
+$[4,2,0]$ (27) & $(2,1,0)$ & $\varepsilon^0$ & trivial: $Q_{\mathrm{num}}/\delta^\Lambda=[\Psi_{\mathrm{top}}]_{11}$ & \textbf{[numeric]} \\
+$[4,1,1]$ & $(2,0,1)$ & $\varepsilon^0$ & leading, $C=Q_{\mathrm{num}}/(\delta^\Lambda c_0')$ & \textbf{[numeric]} \\
+$[3,3,0]$ & $(1,2,0)$ & $\varepsilon^0$ & leading, $C=Q_{\mathrm{num}}/(\delta^\Lambda a_0')$ & \textbf{[numeric]} \\
+$[3,2,1]$ octet, 2 copies & $(1,1,1)$ (dim 2) & one direction $\varepsilon^0$, second $\varepsilon^1$ & functional $(u+u')\cdot C_c$ at leading order; mixing $R_c^Q=(\Delta_c-\mathrm{slope}_c^Q)/(t-2)$ with $\Delta_c=(1-t^2)+t\tau_c/(3(t+3))$ & \textbf{[fitted]} and \textbf{[exact]} (derived, \S\,\ref{sec:pert}) \\
+$[2,2,2]$ singlet & $(0,1,2)$ & $\varepsilon^1$ & $C=Q_{\mathrm{num}}/(\kappa\,\varphi_{(0,1,2)})$ with $\kappa=2(t-3)/(3(t-2))$ & \textbf{[fitted]} and \textbf{[exact]} (derived) \\
+\bottomrule\end{longtable}\end{center}
+
+\subsection{$[3,1,0]^{\otimes2}$, point A (10 HW states, 8 irreps)}
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{2.3cm}p{1.8cm}p{2.5cm}p{6.2cm}p{2.4cm}@{}}\toprule
+\textbf{branch} & \textbf{site-1 weight} & \textbf{order of covector} & \textbf{extraction} & \textbf{tag} \\\midrule\endhead
+$[6,2,0]$ & $(3,1,0)$ & $\varepsilon^0$ & trivial (top) & \textbf{[numeric]} \\
+$[6,1,1]$ & $(3,0,1)$ & $\varepsilon^0$ & leading, clean & \textbf{[numeric]} \\
+$[5,3,0]$ & $(2,2,0)$ & $\varepsilon^0$ & leading, clean & \textbf{[numeric]} \\
+$[5,2,1]\times2$ & $(2,1,1)$ (dim 2) & $\varepsilon^0$ and $\varepsilon^1$ & $u'\cdot C$ at leading order; $R_c=3/2-2t+\tau_c/(2(t+4))$ from the $\omega_2$-slope with signal slopes $(t-5)/4$, $(7-3t)/2$ and remainder $\Delta_c$ & \textbf{[fitted]} ($10^{-18}$ for $R_c$; $10^{-9}$ for $\Delta_c$) \\
+$[4,4,0]$ & $(1,3,0)$ & $\varepsilon^1$ & $\kappa=(t+1)/2$ & \textbf{[fitted]} \\
+$[4,3,1]\times2$ & $(1,2,1)$ (dim 2) & $\varepsilon^1$ and $\varepsilon^2$ & $\kappa_c=A+B\tau_c$; $R_c=A_R+B_R\tau_c$; second direction needs $\alpha(t)$ & \textbf{[fitted]}, second direction only to $10^{-8}$ \\
+$[4,2,2]$ & $(1,1,2)$ (dim 2) & $\varepsilon^1$ and $\varepsilon^2$ & $\kappa=(11t-31)/(5(3t-7))$, $R=-2(t-3)/(3(3t-7))$, slope constant rational fit & \textbf{[fitted]} \\
+$[3,3,2]$ & $(0,2,2)$ & $\varepsilon^2$ & $\kappa=(t+1)(19t-49)/(40(t-2))$ & \textbf{[fitted]} \\
+\bottomrule\end{longtable}\end{center}
+
+\textbf{Closed forms obtained in this thread} ($t=\theta_{12}/h$; $\tau_c$ = untwisted eigenvalue of $t_2(\theta_1+h)/h^4$ of the copy $c$, a Q-number):
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item $b'/(a'c')=1+\varepsilon(t-2)(\varphi_2-\omega_2)+O(\varepsilon^2)$ \textbf{[exact]};
+\item adjoint singlet: $K/S=-t/(3(t-2))$, $\kappa=2(t-3)/(3(t-2))$ \textbf{[exact]}, derived in \S\,\ref{sec:pert}; per copy $K_{1,c}/S_1=A+B\tau_c$ \textbf{[exact]};
+\item adjoint octets: $\Delta_c=(1-t^2)+t\tau_c/(3(t+3))$ \textbf{[exact]}; $\tau_1+\tau_2=3(2t-1)(t+2)$, $\tau_1\tau_2=9t(t-1)(t+1)(t+3)$ \textbf{[exact]}; $t_2(\theta_1+h)$ on $\mathrm{HW}_{(3,2,1)}$ is an explicit $2\times2$ matrix \textbf{[exact]};
+\item adjoint clean branches, top-killed: $K_1^{\mathrm{tk}}/S_0=(t-1)(\varphi_2-\varphi_3)/4$ for $[4,1,1]$ and $(t-1)(\varphi_1-\varphi_2)/4$ for $[3,3,0]$ \textbf{[exact]};
+\item $[3,1,0]$: all closed forms of the table above, plus $t_2(\theta_1+h)$ on $\mathrm{HW}_{[4,3,1]}$: trace $8t^2+16t-8$, determinant $16t(t-1)(t+1)(t+4)$, and on $\mathrm{HW}_{[5,2,1]}$: trace $8t^2+19t-8$, determinant $4(t+4)(t-1)(t+1)(4t+3)$ \textbf{[exact, rational data of the untwisted chain]};
+\item $\det_2^{(1)}/\mathrm{minor}_1=\frac{343000}{1161}\,F(y)\cdot(1,\tau_{10},\tau_{11},\tau_{20},\tau_{21})$ with $F$ explicit \textbf{[numeric]} (residual $10^{-140}$); $\tau^0_\lambda$ = untwisted quantum-Wronskian formula \textbf{[numeric]} (residual $10^{-197}$);
+\item $\det_6$ ratios: $D_6^{[3,3,0]}/D_6^{\mathrm{top}}=(w_1-z_1)/(w_1-z_2)$ and $D_6^{[4,1,1]}/D_6^{\mathrm{top}}=(w_1-z_2)(w_2-z_2)/((w_1-z_3)(w_2-z_3))$ exactly in $\varepsilon$ \textbf{[numeric]} (deviation $10^{-122}$).
+\end{itemize}
+
+\textbf{What is not done.} (i) Analytic untwisting of $\det_6$ for the non-top branches; $\tau^1$ in Q-language (\S\,\ref{sec:dets}). (ii) Closed form of $\alpha(t)$ for the $[4,3,1]$ second direction, and proofs of the $[3,1,0]$ constants (\S\,\ref{sec:a310}). (iii) $[4,1,0]$ at $k=2$ and $[3,2,0]$-type representations. (iv) Stored native outputs: all four notebooks must be rerun in VS Code (\S\,\ref{sec:tools}).
+
+\section{Setting, conventions, the family, the numeric points}\label{sec:setting}
+
+\textbf{Conventions (new, 2026-10-01).} Lax $\mathcal L_{ij}(u)=(u-\theta_s)\delta_{ij}+hE_{ij}$; $T(u)=\mathcal L^{(1)}\mathcal L^{(2)}$ with twist on the right, $T^M=T\cdot M$; $t_a$ the sum of principal quantum minors with column $k$ at $u-(k-1)h$; CBR fusion $T_\lambda(x)=\det_{i,j}t_{\lambda'_j+i-j}(x+(i-1)h)$, $t_0=1$, $t_a=0$ outside $0..3$. Generators: the plain GT generators \nb{JJ} (exact rationals, \textbf{not Hermitian}), so the invariant inner product is a diagonal metric $G$ (below) and the HW projector $P_{\mathrm{HW}}$ is $G$-orthogonal, which is the orthogonal projector of the Hermitian EH frame. The GT basis has the HW vector $e_1$ first, covectors are rows acted on from the right, and $E_{ij}$ with $i<j$ raise (checked in each notebook: \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 3, \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 3--4).
+
+\textbf{Notation for $t$.} In this file $t:=\theta_{12}/h$ everywhere (so $t=62/35$ at P1, $\theta_{12}-h=27/70$, $\theta_{12}-2h=-8/70$ in absolute units). This differs from \nb{Undo-\allowbreak{}site2-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}md}, which writes $\theta_{12}$ (31/35 at P1) in its $[3,1,0]$ formulas; see Appendix~\ref{app:incons}. The scans use $h=1$, $\theta=(t,0)$, where the two agree.
+
+\textbf{Numeric points.} P1: $h=1/2$, $\theta=(2/7,-3/5)$, $t=62/35$, $y_0=(t-1)/(t-2)=-27/8$. P2: $h=1/3$, $\theta=(1/5,-4/9)$, $t=29/15$, $y_0=-14$. P3: $h=1/2$, $\theta=(3/7,-1/4)$, $t=19/14$, $y_0=-5/9$ (in no fit set). P2 lies in the fit set of the adjoint $\Delta_c$ (see Appendix~\ref{app:incons}). Scans in $t$: $h=1$, $\theta=(t,0)$. Directions $\varphi=(1/3,-2/7,5/11)$ (primary), $\varphi'=(-2/5,3/8,7/11)$ (control), and six further directions for the octet scan; $\omega_1\in\{3/4,-5/3,7/2\}$, $\omega_2\in\{-1/5,9/7,-12/5,5/3,2/9,-7/4\}$ (the $3\times6=18$ grid, ``$\omega\,\mathrm{A}$'' $=(3/4,-1/5)$, ``$\omega\,\mathrm{B}$'' $=(7/2,-7/4)$); $\varepsilon\in\{1,2,4\}\cdot10^{-6}$ (four-point ladder $1,2,4,8\cdot10^{-6}$ where stated); working precision 200 digits. Never let $\omega_i$ equal a $\varphi_k$ (poles of $\Delta$ and the Gauss parameters).
+
+\textbf{Diagonal frame, vacuum, family.} Ket twist $\mathrm{diag}(z)$. The one-site vacuum is $\Omega_w=e_1^{\mathsf T}e^{r_1E_{12}}e^{r_2E_{13}}e^{r_3E_{23}}=e_1^{\mathsf T}\rho(n)$ with the representation-independent Gauss parameters ($w=(w_1,y,w_3)$, $w_3$ drops out)
+
+\[
+r_1=\frac{w_1-z_1}{w_1-z_2},\quad r_2=\frac{(w_1-z_1)(z_1-y)(z_2-z_3)}{(z_1-z_2)(w_1-z_3)(y-z_3)},\quad r_3=\frac{(w_1-z_2)(z_2-y)(z_1-z_3)}{(z_1-z_2)(w_1-z_3)(z_3-y)}
+\]
+
+(\nb{oneSiteVac}, \nb{u12rs}: \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 5, 11; \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 7), and $n=\begin{pmatrix}1&r_1&r_2+r_1r_3\\0&1&r_3\\0&0&1\end{pmatrix}\in N_+$. The family of \nb{Two-\allowbreak{}rotations-\allowbreak{}det-\allowbreak{}overlap.\allowbreak{}md} \S{}5.6b is
+
+\[
+v_2=\Omega_{(w_1,y)}=e_1^{\mathsf T}\rho(n),\qquad v_1=v_2\,\rho(\Delta),\quad \Delta_k=\frac{1}{w_2-z_k},\qquad w_2=\frac{y\,(t-2)}{t-1}\ \Leftrightarrow\ y=w_2\,y_0,
+\]
+
+with overlap, state-independent at finite twist,
+
+\[
+\frac{\langle v_1\otimes v_2|\Psi_B\rangle}{\langle x_0|\Psi_B\rangle}=c\cdot\frac{\det\nolimits_6[Q_B,Q_{\mathrm{vac,(w_1,w_2)}}]}{\Psi_Q^B(x_0)}\cdot\frac{\det\nolimits_2^{(1)}[Q_B;y]}{\mathrm{minor}_1(B)} .
+\]
+
+For $[3,1,0]$ point A the site-1 covector carries a second-order dressing, $v_1\propto e_1^{\mathsf T}\bigl(1+\beta E_{12}+\gamma(E_{13}+\tfrac12E_{12}E_{23})\bigr)\rho(n_A)\rho(\Delta)$, $y=y_A=w_2y_0$, and the overlap is $\det_6\times\det_2^{(0,1,2)}[y_A]/(\Psi_QW(3,4))$ (closed forms of $\beta,\gamma$ and the identification: \nb{Undo-\allowbreak{}site2-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}md} \S{}5.3--5.4; regression of both here: \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 16--18, \S\,\ref{sec:a310}). The Q-side objects are those of the background notes: dual $Q^j(x)=z_j^{x/h}q^j(x)$ with $\deg q^j=\mu_j$; vacuum direct $Q_i^{\mathrm{vac}}(x)=w_i^{-x/h}q_i^{\mathrm{vac}}(x)$ with degrees $(0,2,4)$ (adjoint) resp. $(0,4,6)$ ($[3,1,0]$); $W(a,b)=Q^2(\theta_1-ah)Q^3(\theta_1-bh)-Q^3(\theta_1-ah)Q^2(\theta_1-bh)$; $\mathrm{minor}_1=W(2,3)$ (adjoint), $W(3,4)$ ($[3,1,0]$); $\Psi_Q$ with the vacuum SoV triple. $\det_6$ is the $6\times6$ bracket determinant over all poles (rows $(k,(i,j))$ with $k=1,2$ the insertions $1$ and $e^{2\pi ix/h}$ and $(i,j)\in\{(1,3),(1,2),(2,3)\}$; for $[3,1,0]$ an $8$-pole version, poles $n=0..3$ on both ladders); the fixed-degree monic Baxter solvers (overdetermined least squares, no \nb{Chop}) are those of \nb{L2-\allowbreak{}diagonal-\allowbreak{}frame-\allowbreak{}overlap-\allowbreak{}EH.\allowbreak{}wb} cell 95, and every Baxter residual is evaluated in exact arithmetic on the stored numbers (\nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 8).
+
+\textbf{The undo.} For $n\in N_+$, $\rho(n)\otimes\rho(n)$ fixes every HW ket, so $\langle v_1\otimes v_2|h_\nu\rangle=s\langle\varphi_u\otimes e_1^{\mathsf T}|h_\nu\rangle$ with the undone covector $\varphi_u=v_1\rho(n)^{-1}=\delta^\Lambda e_1^{\mathsf T}g'\rho(n')$, $n'=\Delta^{-1}n\Delta n^{-1}=\begin{pmatrix}1&a'&b'\\0&1&c'\\0&0&1\end{pmatrix}$, $\delta_k=1/(w_2-z_k)$, $s=(v_2)_1=1$, $g'$ the site-1 dressing ($g'=1$ for the adjoint). Here $\delta^\Lambda=\delta_1^2\delta_2$ (adjoint) and $\delta_1^3\delta_2$ ($[3,1,0]$), and
+
+\[
+a'=\frac{r_1(\delta_2-\delta_1)}{\delta_1},\quad c'=\frac{r_3(\delta_3-\delta_2)}{\delta_2},\quad b'=\frac{r_1r_3(\delta_1-\delta_2)}{\delta_1}-\frac{(r_2+r_1r_3)(\delta_1-\delta_3)}{\delta_1},\quad \frac{b'}{a'c'}=\frac{y-w_2}{y-z_2}.
+\]
+
+All of this is \textbf{[exact]} (finite twist; \nb{Undo-\allowbreak{}site2-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}md} \S{}3, re-checked in this thread: adjoint exact undo to $10^{-152}$ at 324 points, \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 25; $[3,1,0]$ to $4.9\cdot10^{-138}$ at 540 points, \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 32).
+
+\textbf{The CG target, signal and contamination.} The twisted eigenstate of the HW-limit branch of $\nu$ behaves as $\Psi_B\to\varepsilon^{-k}(h_\nu+\varepsilon\psi_1+\dots)$ with $\langle x_0|\Psi_B\rangle=1$. Define $R_C:=\langle v_1\otimes v_2|\Psi_B\rangle$, $S:=\langle v_1\otimes v_2|P_{\mathrm{HW}}\Psi_B\rangle=s\langle\varphi_u\otimes e_1^{\mathsf T}|P_{\mathrm{HW}}\Psi_B\rangle$ (signal, the CG slice $\langle m\otimes\mathrm{top}|h_\nu\rangle$ weighted by the covector), $K:=R_C-S$ (contamination), $\kappa:=R_C/S=1+K/S$. The invariant metric is $G=\mathrm{diag}(1,1,1,2,6,9,4,9)$ for the adjoint and $\mathrm{diag}(1,1,2,3,24,32,4,12,24,64,288,576,36,128,576)$ for $[3,1,0]$ (GT order of \nb{ps}; \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 25, \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 4). \textbf{Top-killing} (exact): for $\nu\ne$ top, $\langle v_2\otimes v_2|h_\nu\rangle=0$, so $T:=\delta^\Lambda s\langle v_2\otimes v_2|\Psi_B\rangle/\langle x_0|\Psi_B\rangle$ is pure contamination, and it is itself a Q-number, the $\det_6$ of the $(w_1,y)$-vacuum over $\Psi_Q$ (verified to $1.6\cdot10^{-116}$ for the adjoint, \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 25; $2.5\cdot10^{-82}$ for $[3,1,0]$, \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 50). The pure Q-side number is
+
+\[
+Q_{\mathrm{num}}(B)=\frac{R_Q(B)}{R_Q(\mathrm{top})}\cdot\frac{\langle v_1\otimes v_2|e_1e_1\rangle}{\langle x_0|e_1e_1\rangle},\qquad R_Q(B)=\frac{\det\nolimits_6[B,F_{\mathrm{vac}}]}{\Psi_Q}\cdot\frac{\det\nolimits_2[B;y]}{\mathrm{minor}_1},
+\]
+
+and $Q_{\mathrm{num}}=R_C$ is the finite-twist identity at small $\varepsilon$ ($\varepsilon=10^{-6}$ etc.): see \S\,\ref{sec:adjQ}, \S\,\ref{sec:a310Q}.
+
+\textbf{Branches.} Adjoint: five HW sectors $\mu\in\{(4,2,0),(4,1,1),(3,3,0),(3,2,1),(2,2,2)\}$ of sizes $1,2,2,6,10$ (21 states), multiplicities $1,1,1,2,1$: six HW-limit branches, selected as the $\dim\mathrm{HW}_\mu$ states with the smallest raising residual (below $4\cdot10^{-7}$ versus at least $1.3$ for the others at $\varepsilon=10^{-6}$), copies ordered by the real part of the eigenvalue of $t_1+\pi t_2$ at $u=3/7$. $[3,1,0]$: eight HW sectors of sizes $1,2,2,6,3,10,14,18$ (56 states), multiplicities $1,1,1,2,1,2,1,1$, ten branches; the raising residual is $\sim10^{-7}$ versus at least $1.41$ for the others (\nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 27).
+
+\section{The untwisting regime and why}\label{sec:regime}
+
+\subsection{The problem, and why fixed $y$ does not work}\label{sec:fixedy}
+
+At finite twist the covector $\langle v_1\otimes v_2|$ sees the eigenstate $\Psi_B$ of the twisted chain, not the HW ket $h_\nu$ of the untwisted one. As $z\to1$ the HW-limit branch behaves as $\Psi_B=\varepsilon^{-k}(h_\nu+\varepsilon\psi_1+\dots)$ and the overlap splits exactly as $R_C=S+K$ (signal plus contamination, \S\,\ref{sec:setting}; mechanism and measured $\kappa$ values in \nb{Clean-\allowbreak{}CG-\allowbreak{}combinations.\allowbreak{}md} \S{}2). The question is therefore not whether the covectors span (the previous thread showed they do, at finite twist) but at which order in $\varepsilon$ each CG slice $\langle m\otimes\mathrm{top}|h_\nu\rangle$ appears in the undone covector, and how it compares with the contamination that comes from the $O(\varepsilon)$ corrections $\psi_1,\psi_2,\dots$ of the eigenstate.
+
+At \textbf{fixed $y$} (the ladder-1 insertion and $w_1$ fixed, $z\to1$) the resolvent torus $\Delta=\mathrm{diag}(1/(w_2-z_k))$ becomes a scalar at $z=1$, the two rotations $v_1,v_2$ coincide in the limit (spec \S{}4: in the joint regime they ``stay distinct'' because the torus is non-scalar), and the undone covector has components $O(\varepsilon^{d})$ where $d$ is the depth of the weight. For the adjoint the leading orders at fixed $y$ are $\varepsilon^0,\varepsilon^1,\varepsilon^1,\varepsilon^2$ (rank 2), $\varepsilon^3,\varepsilon^3,\varepsilon^4$ over the seven weights (\nb{Undo-\allowbreak{}site2-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}md} \S{}3, computed in \nb{L2-\allowbreak{}rotation-\allowbreak{}sov.\allowbreak{}wb} cell 119 with $a',c'=O(\varepsilon)$, $b',a'c'=O(\varepsilon^2)$) \textbf{[exact]}. The contamination, which starts at relative order $\varepsilon$, is then at or above the signal for every non-top state: ``at fixed $y$ nothing is clean'' (HANDOFF; spec \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG-\allowbreak{}spec.\allowbreak{}md} \S{}4). That table is not used in this thread; I did not re-derive it here.
+
+\subsection{The joint regime}\label{sec:jointreg}
+
+The regime was chosen by the main session before the notebooks were written (spec \S{}0, \S{}4: sympy-checked at P1, then verified in \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 10--12): untwist \textbf{everything together},
+
+\[
+z=1+\varepsilon\varphi,\qquad w_1=1+\varepsilon\omega_1,\qquad w_2=1+\varepsilon\omega_2,\qquad y=w_2\,y_0,\quad y_0=\frac{t-1}{t-2},
+\]
+
+with fixed rational directions $\varphi,\omega_1,\omega_2$ and $\varepsilon\to0$ (rational paths; the direction at first order is what matters). The product condition $w_2(y)=w_2$ then holds exactly. The resolvent torus is now $\Delta=\varepsilon^{-1}\mathrm{diag}(1/(\omega_2-\varphi_k))$, a genuine non-scalar torus element at $\varepsilon=0$ after removing the overall factor $\varepsilon^{-1}$, so the two rotations stay distinct. $w_3$ drops out of the determinant identity; it is set to $1+5\varepsilon/13$ (the spec's $1+2\varepsilon/9$ coincides with $w_2$ at $\omega_2=2/9$, see \S\,\ref{sec:tools}).
+
+\subsection{The mechanism: $a'$, $c'$ and the degeneration of the $E_{13}$ direction}\label{sec:mech}
+
+With $\delta_2/\delta_1=(w_2-z_1)/(w_2-z_2)$ one has $\delta_2/\delta_1-1=(z_2-z_1)/(w_2-z_2)$, hence, in the regime,
+
+\[
+a'=\frac{(w_1-z_1)(z_2-z_1)}{(w_1-z_2)(w_2-z_2)}=\frac{(\omega_1-\varphi_1)(\varphi_2-\varphi_1)}{(\omega_1-\varphi_2)(\omega_2-\varphi_2)},
+\]
+
+\textbf{exactly independent of $\varepsilon$} \textbf{[exact]} (re-derived here; confirmed symbolically in \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 11, with $a'_0=-2275/783$ at $\varphi$, $\omega\,\mathrm{A}$). Likewise $c'=r_3(\varepsilon)(\varphi_3-\varphi_2)/(\omega_2-\varphi_3)=O(1)$, with $r_3(0)=\frac{(\omega_1-\varphi_2)(\varphi_1-\varphi_3)}{(\varphi_1-\varphi_2)(\omega_1-\varphi_3)}$ and $c'_0=2755/3549$ at $\varphi$, $\omega\,\mathrm{A}$ (\nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 11, 45). The decisive quantity is the ratio
+
+\[
+\frac{b'}{a'c'}=\frac{y-w_2}{y-z_2}=\frac{w_2}{w_2(t-1)-(t-2)z_2}=\frac{1+\varepsilon\omega_2}{1+\varepsilon\bigl((t-1)\omega_2-(t-2)\varphi_2\bigr)}=1+\varepsilon\,(t-2)(\varphi_2-\omega_2)+O(\varepsilon^2),
+\]
+
+\textbf{[exact]} (the middle expression is re-derived here from the finite-twist identity $b'/(a'c')=(y-w_2)/(y-z_2)$ of the background notes and $y=w_2(t-1)/(t-2)$; the first-order coefficient is confirmed in \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 11 as $24/1225=(t-2)(\varphi_2-\omega_2)$ at $t=62/35$, $\varphi_2-\omega_2=-3/35$, and symbolically in \nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative.\allowbreak{}wb} cell 22). So $b'_0=a'_0c'_0$ and at $\varepsilon=0$ the undone covector is
+
+\[
+\varphi_u(0)/\delta^\Lambda=e_1^{\mathsf T}e^{a'_0E_{12}}e^{c'_0E_{23}}\qquad\text{(adjoint)},
+\]
+
+\textbf{[exact]} (\nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 11: exact equality; the reversed order of the exponentials fails). The $E_{13}$ direction ($b'-a'c'$) is thus \textbf{one order down}: it is the $\varepsilon=0$ shadow of the old blind spot $b'=0\Leftrightarrow\omega=y$. The main session's reading (spec \S{}4) is that the vacuum's $r_2/(r_1r_3)$ and the torus $\Delta$ are both built from the same $\varphi$, so that $n_0\Delta n_0^{-1}$ has $b'=a'c'$; I take that as an interpretation, the all-orders formula above is the proven statement. (Ordering of exponentials: as a matrix $n'=e^{c'E_{23}}e^{b'E_{13}}e^{a'E_{12}}$, the Undo notes' form; at $b'=a'c'$ this equals $e^{a'E_{12}}e^{c'E_{23}}$ because $[E_{12},E_{23}]=E_{13}$. The two statements are consistent.)
+
+\subsection{What degenerates: per-weight orders}\label{sec:weights}
+
+Adjoint, leading order and ranks of the coefficient vectors over the $3\times6$ $(\omega_1,\omega_2)$ grid (exact, \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 11--12; identical for $\varphi$ and $\varphi'$) \textbf{[exact]}:
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lccc@{}}\toprule
+\textbf{site-1 weight} & \textbf{dim} & \textbf{leading order} & \textbf{ranks ($\varepsilon^0$, $\varepsilon^1$, both)} \\\midrule\endhead
+$(2,1,0)$ & 1 & $\varepsilon^0$ & (1,0,1) \\
+$(1,2,0)$ & 1 & $\varepsilon^0$ & (1,0,1) \\
+$(2,0,1)$ & 1 & $\varepsilon^0$ & (1,1,1) \\
+$(1,1,1)$ & 2 & $\varepsilon^0$ (one direction) & (1,2,2) \\
+$(1,0,2)$ & 1 & $\varepsilon^0$ & (1,1,1) \\
+$(0,2,1)$ & 1 & $\varepsilon^1$ & (0,1,1) \\
+$(0,1,2)$ & 1 & $\varepsilon^1$ & (0,1,1) \\
+\bottomrule\end{longtable}\end{center}
+
+The $(1,1,1)$ component is $b'u+a'c'u'$ with $u=e_1^{\mathsf T}E_{13}=(-1,3)$ and $u'=e_1^{\mathsf T}E_{23}E_{12}=(2,0)$ on the two GT indices; at $\varepsilon=0$ only $u+u'=(1,3)$ is seen. The $(0,1,2)$ component is $3b'(a'c'-b')\delta^\Lambda=-3(t-2)(\varphi_2-\omega_2)(a'_0c'_0)^2\delta^\Lambda\,\varepsilon+O(\varepsilon^2)$ \textbf{[exact]} (the first-order coefficient re-derived here from the ratio above; notebook value $-72/1225\,(a'_0c'_0)^2$ at $\omega\,\mathrm{A}$, cell 11). So in the adjoint the singlet direction and the second octet direction sit at $O(\varepsilon)$, at the same order as the first contamination.
+
+$[3,1,0]$ point A (\nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 20--24, exact, symbolic $\varepsilon$; again identical for $\varphi,\varphi'$) \textbf{[exact]}:
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{3.6cm}cp{5.8cm}p{4.5cm}@{}}\toprule
+\textbf{site-1 weight} & \textbf{dim} & \textbf{leading order} & \textbf{ranks ($\varepsilon^0$, $\varepsilon^1$, $\varepsilon^2$; cumulative $0..1$, $0..2$)} \\\midrule\endhead
+$(3,1,0)$ & 1 & $\varepsilon^0$ & 1,0,0; 1,1 \\
+$(3,0,1)$, $(2,2,0)$, $(2,0,2)$ & 1 each & $\varepsilon^0$ & 1,1,1; 1,1 \\
+$(2,1,1)$ & 2 & one direction at $\varepsilon^0$ ($u'=e_1^{\mathsf T}E_{12}E_{23}=(2,8)$), second at $\varepsilon^1$ ($u=e_1^{\mathsf T}E_{13}=(-1,8)$) & 1,2,2; 2,2 \\
+$(1,3,0)$ & 1 & $\varepsilon^1$ & 0,1,1; 1,1 \\
+$(1,2,1)$, $(1,1,2)$ & 2 each & one direction at $\varepsilon^1$, second at $\varepsilon^2$ & 0,1,2; 1,2 \\
+$(1,0,3)$, $(0,3,1)$, $(0,2,2)$ & 1 each & $\varepsilon^2$ & 0,0,1; 0,1 \\
+$(0,1,3)$ & 1 & beyond $\varepsilon^2$ ($\varepsilon^3$) & 0,0,0; 0,0 \\
+\bottomrule\end{longtable}\end{center}
+
+The slice weight carrying the CG vector of an irrep $\nu$ is $\nu-\Lambda$; for $[3,1,0]$ these are $(3,1,0)$, $(3,0,1)$, $(2,2,0)$, $(2,1,1)$, $(1,3,0)$, $(1,2,1)$, $(1,1,2)$, $(0,2,2)$ for $[6,2,0]$, $[6,1,1]$, $[5,3,0]$, $[5,2,1]\times2$, $[4,4,0]$, $[4,3,1]\times2$, $[4,2,2]$, $[3,3,2]$ respectively. The weight $(0,1,3)$ is not a slice weight.
+
+\subsection{Why three orders for $[3,1,0]$ and two for the adjoint}\label{sec:orders}
+
+The dressing of point A, $e_1^{\mathsf T}(1+\beta E_{12}+\gamma(E_{13}+\frac12E_{12}E_{23}))$, behaves in the regime as follows (\nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 8, 21, 24):
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item $\gamma=O(\varepsilon)$ (numerator carries three $\varepsilon$'s, denominator two; $\gamma(10^{-6})/\gamma(2\cdot10^{-6})=0.5000003$; $\varepsilon^1$ coefficient $-2565/56056$ at $\varphi$, $\omega\,\mathrm{A}$) \textbf{[exact]};
+\item $\beta(0)=\frac{(\varphi_1-\varphi_2)(\omega_1-\varphi_1)}{2(\omega_1-\varphi_2)(\omega_2-\varphi_1)}$ \textbf{[exact]}; with the torus rescaling of the $E_{12}$ coefficient, $\beta_0\,\delta_2/\delta_1=\beta_0(\omega_2-\varphi_1)/(\omega_2-\varphi_2)=-a'_0/2$ (re-derived here), so that the undone covector at $\varepsilon=0$ is
+\end{itemize}
+
+\[
+\varphi_A(0)/\delta^\Lambda=e_1^{\mathsf T}\bigl(1-\tfrac{a'_0}{2}E_{12}\bigr)e^{a'_0E_{12}}e^{c'_0E_{23}}=e_1^{\mathsf T}\bigl(1+\tfrac{a'_0}{2}E_{12}\bigr)e^{c'_0E_{23}}
+\]
+
+\textbf{[exact]} (cell 21: exact equality; the no-dressing variant and the reversed order fail). The second equality uses $e_1^{\mathsf T}E_{12}^3=0$: $(1-\frac a2X)e^{aX}=1+\frac a2X-\frac{a^3}{12}X^3+\dots$ (re-derived here). \textbf{The $E_{12}^2$ term cancels exactly}, which is why the weight $(1,3,0)$ drops from $\varepsilon^0$ to $\varepsilon^1$.
+
+Consequently the CG slices of $[3,1,0]$ enter the covector at orders $\varepsilon^0$ (four 1-dimensional weights and one direction of $(2,1,1)$), $\varepsilon^1$ ($(1,3,0)$, one direction each of $(1,2,1),(1,1,2)$, the second direction of $(2,1,1)$) and $\varepsilon^2$ ($(0,2,2)$ and the second directions of $(1,2,1),(1,1,2)$). The Q-number must therefore be expanded to three orders, against two for the adjoint (orders $\varepsilon^0$ and $\varepsilon^1$; the highest slice weight is $(0,1,2)$ at $\varepsilon^1$). The sources do not derive why the contamination sits at the same order as the signal for the contaminated branches; the data are as follows (\S\,\ref{sec:adjchain}, \S\,\ref{sec:a310chain}). A branch whose slice weight is at $\varepsilon^0$ is clean ($K/S=O(\varepsilon)$). A branch whose slice weight (first direction, for the dim-2 weights) is at $\varepsilon^1$ or $\varepsilon^2$ has $K/S$ equal to a constant independent of $\varepsilon$, $\omega$, $\varphi$. For the dim-2 weights the mixing $R$ of the two directions is read from the next layer of the expansion (\S\,\ref{sec:adjO}, \S\,\ref{sec:a310O}).
+
+For $[4,1,0]$ at $k=2$ (dressing of $E_{13}$-degree 2) the $[3,1,0]$ write-up expects four orders \textbf{[conjecture]}; it was not tried.
+
+\subsection{Bookkeeping of $\varepsilon$-exponents}\label{sec:bookkeeping}
+
+For every branch the exponent of $S$ equals (exponent of $\delta^\Lambda$) + (exponent of $\|\Psi\|$, as a power of $\varepsilon^{-1}$) + (leading order of the covector at the slice weight), with $\delta^\Lambda\sim\varepsilon^{-3}$ (adjoint) or $\varepsilon^{-4}$ ($[3,1,0]$). Adjoint: $[4,2,0]$: $-3-2+0=-5$; $[4,1,1]$, $[3,3,0]$: $-3-3+0=-6$; octets: $-3-4+0=-7$; singlet: $-3-6+1=-8$, matching the measured exponents of \S\,\ref{sec:adjchain}. $[3,1,0]$: $[4,4,0]$: $-4-4+1=-7$; $[3,3,2]$: $-4-7+2=-9$ (stated in \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 32), and likewise $[6,1,1]$: $-4-3+0=-7$, $[4,2,2]$: $-4-6+1=-9$ \textbf{[exact]} (consistency of the tables, re-derived here).
+
+\section{Adjoint $[2,1,0]^{\otimes2}$}\label{sec:adj}
+
+Notebook: \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} (45 cells, no stored outputs; the agent ran each cell's source in the shared kernel K1, results in the markdown cells 25, 33, 40, 45). Implementation by a sonnet wolfbook-builder from \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG-\allowbreak{}spec.\allowbreak{}md}; planned and reviewed by the main session.
+
+\subsection{Chain side: signal and contamination}\label{sec:adjchain}
+
+Task 1 (cells 13--16), three $\varepsilon$ and 18 $\omega$ at $\varphi$, P1. The exact undo $S=s\langle\varphi_u\otimes e_1^{\mathsf T}|P_{\mathrm{HW}}\Psi\rangle$ holds to better than $10^{-152}$ at 324 points \textbf{[exact/numeric]}. $\varepsilon$-exponents (identical for all 18 $\omega$) of $S$, $K$, $\|\Psi\|$ and the contamination ratio:
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{1.6cm}cccp{4.6cm}p{4.6cm}@{}}\toprule
+\textbf{branch} & \textbf{$S$} & \textbf{$K$} & \textbf{$|\Psi|$} & \textbf{$\max\lvert K/S\rvert$ at $\varepsilon=1,2,4\cdot10^{-6}$} & \textbf{$\kappa-1$ at $\omega\,\mathrm{A}$} \\\midrule\endhead
+$[4,2,0]$ & $-5$ & $K\equiv0$ & $-2$ & 0 & 0 \\
+$[4,1,1]$ & $-6$ & $-5$ & $-3$ & $9.6\cdot10^{-7}$, $1.9\cdot10^{-6}$, $3.8\cdot10^{-6}$ & $1.1\cdot10^{-7}$, $2.2\cdot10^{-7}$, $4.4\cdot10^{-7}$ \\
+$[3,3,0]$ & $-6$ & $-5$ & $-3$ & $9.4\cdot10^{-7}$, $1.9\cdot10^{-6}$, $3.7\cdot10^{-6}$ & $8.6\cdot10^{-8}$, $1.7\cdot10^{-7}$, $3.5\cdot10^{-7}$ \\
+octet 1 & $-7$ & $-6$ & $-4$ & $2.8\cdot10^{-6}$, $5.5\cdot10^{-6}$, $1.1\cdot10^{-5}$ & $1.5\cdot10^{-7}$, $3.0\cdot10^{-7}$, $6.0\cdot10^{-7}$ \\
+octet 2 & $-7$ & $-6$ & $-4$ & $1.1\cdot10^{-6}$, $2.3\cdot10^{-6}$, $4.5\cdot10^{-6}$ & $-1.0\cdot10^{-7}$, $-2.0\cdot10^{-7}$, $-4.0\cdot10^{-7}$ \\
+singlet & $-8$ & $-8$ & $-6$ & $2.58$ at every $\varepsilon$ and $\omega$ ($=31/12$) & $\kappa=3.58$ constant ($=43/12$) \\
+\bottomrule\end{longtable}\end{center}
+
+\textbf{[numeric]} The spec's expectation is confirmed: $K/S=O(\varepsilon)$, linear in $\varepsilon$, for $[4,1,1]$, $[3,3,0]$ and both octets, and $\kappa\not\to1$ for the singlet. The contamination carriers (undone frame, $\varepsilon=10^{-6}$, $\omega\,\mathrm{A}$; $\sum_\nu c_\nu=K$ to $10^{-16}$ or better): singlet, site-1 weight $(1,0,2)$ at $\varepsilon^{-8}$ (fraction 1.0), $(0,1,2),(0,2,1),(1,1,1)$ at $\varepsilon^{-7}$ ($10^{-7}$ each), $(1,2,0),(2,0,1)$ at $\varepsilon^{-6}$, $(2,1,0)$ at $\varepsilon^{-5}$; octet 1, weights $(1,1,1),(1,2,0),(2,0,1)$ all at $\varepsilon^{-6}$ (fractions $0.94,2.31,0.37$, signed) and $(2,1,0)$ at $\varepsilon^{-5}$ ($7\cdot10^{-8}$) \textbf{[numeric]}. In words: the singlet's contamination is carried by the weight $(1,0,2)$, which is $O(1)$ in the covector, meeting the $O(\varepsilon)$ correction $\psi_1$ of the singlet eigenstate, while its own slice weight $(0,1,2)$ is $O(\varepsilon)$.
+
+\subsection{Q side at small $\varepsilon$ and the leading-order CG numbers}\label{sec:adjQ}
+
+Task 2 (cells 17--21) \textbf{[numeric]}. Dual Q's of the branches ($\deg q^j=\mu_j$) and vacuum direct Q's of the twist $(w_1,w_2,w_3)$ (degrees $0,2,4$) by fixed-degree least squares; exact Baxter residuals $8.4\cdot10^{-149}$ (dual) and $6.9\cdot10^{-190}$ (vacuum). The finite-twist identity at small $\varepsilon$: $R_C/R_Q$ is state-independent over the six branches to $1.56\cdot10^{-116}$ ($\varepsilon=10^{-6}$) and $1.34\cdot10^{-125}$ ($4\cdot10^{-6}$) (max over 18 $\omega$), and over all 21 states of the five HW sectors to $2.4\cdot10^{-116}$, $1.0\cdot10^{-126}$; $R_Q$ keeps 126 digits (the limit is the working precision, not the identity). $Q_{\mathrm{num}}=R_C$ to the same numbers.
+
+Leading-order extraction. With the $\varepsilon=0$ covector of \S\,\ref{sec:mech}, $C^Q(\omega,\varepsilon):=Q_{\mathrm{num}}/(\delta^\Lambda\,\mathrm{fac}(\omega))$ with $\mathrm{fac}=c'_0$ ($[4,1,1]$, weight $(2,0,1)$), $a'_0$ ($[3,3,0]$, weight $(1,2,0)$) and $a'_0c'_0$ (octets, which gives the functional $(u+u')\cdot C_c$ on the $(1,1,1)$ slice, $u+u'=(1,3)$ independent of $\omega$); for the 27 the check is $Q_{\mathrm{num}}/\delta^\Lambda=[\Psi_{\mathrm{top}}]_{11}$ (deviation below $10^{-144}$). The chain side is $C_B=f\cdot[P_{\mathrm{HW}}\Psi_B]_{(\nu-\Lambda),e_1}$. Spread of $C^Q$ over the 18 $\omega$ and error against the chain side, both $O(\varepsilon)$:
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lll@{}}\toprule
+\textbf{branch} & \textbf{$\varepsilon=10^{-6}$: spread / error} & \textbf{$\varepsilon=4\cdot10^{-6}$: spread / error} \\\midrule\endhead
+$[4,1,1]$ & $8.5\cdot10^{-7}$ / $7.9\cdot10^{-7}$ & $3.4\cdot10^{-6}$ / $3.2\cdot10^{-6}$ \\
+$[3,3,0]$ & $8.5\cdot10^{-7}$ / $9.4\cdot10^{-7}$ & $3.4\cdot10^{-6}$ / $3.7\cdot10^{-6}$ \\
+octet 1 & $3.5\cdot10^{-6}$ / $3.4\cdot10^{-6}$ & $1.4\cdot10^{-5}$ / $1.4\cdot10^{-5}$ \\
+octet 2 & $1.6\cdot10^{-6}$ / $1.8\cdot10^{-6}$ & $6.3\cdot10^{-6}$ / $7.3\cdot10^{-6}$ \\
+\bottomrule\end{longtable}\end{center}
+
+(scaling $4.00\pm0.00001$ in $\varepsilon$). Second-order Richardson on $f(\varepsilon)=C(\varepsilon)\varepsilon^{-p_B}$ with $p_B=$ the exponent of $\|\Psi_B\|$ ($2,3,3,4,4$), $\varepsilon=1,2,4\cdot10^{-6}$ at $\omega\,\mathrm{A}$ (cell 21): chain and Q limits $2.609467456$ (27), $46.67453891$ ($[4,1,1]$; agreement $1.2\cdot10^{-19}$), $10.92853892$ ($[3,3,0]$; $1.6\cdot10^{-121}$), $184.3305612$ (octet 1, functional; $3.2\cdot10^{-20}$), $-238.5587523$ (octet 2; $9.5\cdot10^{-20}$) \textbf{[numeric]}. The two octet functionals are $(u+u')\cdot C_c$ only: the mixing $R_c$ requires the $O(\varepsilon)$ layer.
+
+\subsection{The $O(\varepsilon)$ layer}\label{sec:adjO}
+
+\textbf{Top-killing} (cells 22--24, 30). $T=\delta^\Lambda s\langle v_2\otimes v_2|\Psi_B\rangle/\langle x_0|\Psi_B\rangle$ is subtracted: $Q_{\mathrm{num}}^{\mathrm{tk}}:=Q_{\mathrm{num}}-T=R_C-T$. The identity $\langle v_2\otimes v_2|\Psi\rangle/\langle x_0|\Psi\rangle=\det_6[F_{\mathrm{vac}}(w_1,y)]/\Psi_Q$ (top-normalised) holds to $1.6\cdot10^{-116}$ \textbf{[numeric]}.
+
+\textbf{Measurements before the fits} (Task 3, cell 25, with $\rho_B:=K^{\mathrm{tk}}/S$): for the octets $\rho_B=O(\varepsilon)$, so the $\varepsilon$-independent quantity is $g=\rho_B/\varepsilon$ ($\varepsilon$-independence $3.0\cdot10^{-6}$ and $1.7\cdot10^{-6}$ for copies 1, 2, $O(\varepsilon)$); for the singlet $\rho_B$ is $\varepsilon$-independent ($6.1\cdot10^{-6}$). The singlet $K/S=2.5833=31/12$ is independent of $\varepsilon$, $\omega$ and $\varphi$ ($g(\varphi')/g(\varphi)=1-3\cdot10^{-8}$). The octet $g_0=\lim(4g(10^{-6})-g(4\cdot10^{-6}))/3$ takes six distinct values over the 18 $\omega$: it depends on $\omega_2$ only (the $\omega_1$-only ratios equal 1), and it is \textbf{not} $\varphi$-independent. These are the facts the later fits are built on.
+
+\textbf{Singlet} \textbf{[fitted]}, then \textbf{[exact]}. $K/S$ is constant in $\varepsilon$, $\omega$, $\varphi$. A scan in $t$ at $h=1$, $\theta=(t,0)$ over eight values $t\in\{29/15,5/2,3/2,7/3,11/4,13/5,9/4,17/6\}$ (fresh kernel at $t=5/2$ and at P2; $\varphi'$ at $t=7/3$), residual $3.1\cdot10^{-11}$ (cell 33), gives
+
+\[
+\frac KS=-\frac{t}{3(t-2)},\qquad \kappa_{\mathrm{singlet}}=1+\frac KS=\frac{2(t-3)}{3(t-2)}\quad(=43/12\ \text{at P1}).
+\]
+
+The sources give the structural reason (main session): the first-order correction $\psi_1$ of the untwisted eigenvector comes from the twist derivative, whose off-diagonal part within a weight sector is $h^2\sum_jE^{(1)}_{kj}E^{(2)}_{jk}$, independent of $\theta$, while the singlet signal carries the explicit factor $(t-2)$ of \S\,\ref{sec:mech}. This is made rigorous in \S\,\ref{sec:pert}. The Q-side CG number: $C^Q=Q_{\mathrm{num}}/(\kappa\,\varphi_{(0,1,2)}(\varepsilon,\omega))$ with $\varphi_{(0,1,2)}$ the exact $(0,1,2)$ component; spread over 18 $\omega$ / error against the chain side $1.27\cdot10^{-6}$ / $1.47\cdot10^{-6}$ at $\varepsilon=10^{-6}$ and $5.06\cdot10^{-6}$ / $5.89\cdot10^{-6}$ at $4\cdot10^{-6}$; Richardson limit of $C^Q\varepsilon^{6}$: chain and Q $-5118.53831440474756$, agreement $4.5\cdot10^{-19}$ \textbf{[numeric]}.
+
+\textbf{Octets} (cells 29--32, 37--39). Define $F:=Q_{\mathrm{num}}^{\mathrm{tk}}/(\delta^\Lambda a'_0c'_0)=F_0+\varepsilon F_1+\dots$ (computed as $f=F\varepsilon^4$ from three $\varepsilon$ by an exact $3\times3$ inverse; two points would leave an $O(\varepsilon)$ error in $F_1$). Measured at P1 over eight directions $\varphi$ \textbf{[numeric]}:
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item $F_0$ is $\omega$-independent ($4.8\cdot10^{-17}$, max over 8 $\varphi$); $F_0$ itself ($=(u+u')\cdot C_c$) depends on $\varphi$ (e.g. $184.33$, $38.96$, $120.66$, $-37.60$ for copy 1 at the first four $\varphi$; $F_0^{(2)}/F_0^{(1)}=-1.29418$);
+\item $g=F_1/F_0$ is exactly a straight line in $\omega_2$ (residual $2.1\cdot10^{-11}$ copy 1, $9.6\cdot10^{-12}$ copy 2; the residual is $O(\varepsilon^2)$), $\omega_1$-independent (slope and intercept differences below $10^{-168}$), with a \textbf{$\varphi$-independent slope}: copy 1 $-1.5687193188$ (spread over 8 $\varphi$ $8.4\cdot10^{-12}$), copy 2 $0.7163668808$ ($2\cdot10^{-12}$), and a $\varphi$-dependent intercept;
+\item the chain-side mixing $R_c=(u\cdot C_c)/((u+u')\cdot C_c)$: $\approx-1.694367$ (copy 1; $\varphi$-spread $4\cdot10^{-7}$), $1.0955643$ (copy 2).
+\end{itemize}
+
+The signal contributes exactly $-(t-2)R_c$ to the slope (proved in \S\,\ref{sec:pert}: the signal part of the slope is exactly $-(t-2)R_c$, remainder 0); the rest is a structural constant
+
+\[
+\Delta_c:=\mathrm{slope}_c+(t-2)R_c,
+\]
+
+independent of $\omega$ and $\varphi$: $\Delta_1\in[-1.18143555,-1.18143546]$, $\Delta_2\in[0.46595216,0.46595223]$ at P1 (spread $9\cdot10^{-8}$, $6\cdot10^{-8}$, $O(\varepsilon)$) \textbf{[numeric]}. \textbf{A scan over 22 values of $t$} (15 in the fit set, 7 held out; $h=1$, $\theta=(t,0)$; copies sorted by $\tau$; $\tau_c$ the eigenvalue of $t_2(\theta_1+h)$ at $u=\theta_1+h$ read from the branch's own $t_2$ polynomial, Richardson-extrapolated, and divided by $h^4$, the $h$-independent scale because $t_2$ has degree 4 in $(u,\theta,h)$) gives (cells 38--40):
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lll@{}}\toprule
+\textbf{series} & \textbf{fitted form} & \textbf{held-out relative residual} \\\midrule\endhead
+$\tau_1+\tau_2$ & $6t^2+9t-6=3(2t-1)(t+2)$ & $2.4\cdot10^{-21}$ \\
+$\tau_1\tau_2$ & $9t^4+27t^3-9t^2-27t=9t(t-1)(t+1)(t+3)$ & $2.1\cdot10^{-22}$ \\
+$\Delta_1+\Delta_2$ & $3(2-t^2)/(t+3)$ & $4.8\cdot10^{-12}$ \\
+$\Delta_1\Delta_2$ & $(t-3)(t-1)(t+1)/(t+3)$ & $1.6\cdot10^{-11}$ \\
+$A$ in $\Delta_c=A+B\tau_c$ & $1-t^2$ & $2.2\cdot10^{-11}$ \\
+$B$ in $\Delta_c=A+B\tau_c$ & $t/(3(t+3))$ & $3.7\cdot10^{-11}$ \\
+\bottomrule\end{longtable}\end{center}
+
+\textbf{[fitted]} so that
+
+\[
+\Delta_c=(1-t^2)+\frac{t\,\tau_c}{3(t+3)},\qquad \tau^2-3(2t-1)(t+2)\,\tau+9t(t-1)(t+1)(t+3)=0 .
+\]
+
+The fit-set data are in cell 40 (e.g. $t=29/15$: $\Delta=-1.46172486$, $0.40496811$, $\tau=9.76840506$, $24.0582616$; $t=5/2$: $-2.50844796$, $0.19026615$, $18.0942434$, $35.9057566$; $t=17/6$: $-3.16347254$, $0.06347254$, $23.8677676$, $43.7988990$). Consistency re-derived here: $2A+B(\tau_1+\tau_2)=3(2-t^2)/(t+3)$ and $\Delta_1\Delta_2=(t-3)(t-1)(t+1)/(t+3)$ follow algebraically from the quoted $\tau$-sums and $A,B$. The hypothesis $\Delta_1=\Delta_2$ is false ($-2.508$ versus $0.190$ at $t=5/2$).
+
+\textbf{The Q dictionary for $\tau_c$.} $\tau_c$ is a Q-number: $t_2(\theta_1+h)=\chi_3\,\nu_1(\theta_1+h)\,\nu_2(\theta_1)\,Q^j(\theta_1-h)/Q^j(\theta_1)$, for any $j$ ($j$-spread 0), with $\chi_3=z_1z_2z_3$ and $\nu_n(x)=\prod_s(x-\theta_s+h\Lambda_n)$ (cell 42; \nb{Clean-\allowbreak{}CG-\allowbreak{}combinations.\allowbreak{}md} \S{}4); the $\tau_c$ from this dictionary equal the eigenvalue-based ones to relative difference 0 at P1, P2, P3 \textbf{[numeric]}. Hence the mixing is read from the Q side as
+
+\[
+R_c^Q=\frac{\Delta_c-\mathrm{slope}_c^Q}{t-2},
+\]
+
+with $\mathrm{slope}_c^Q$ the $\omega_2$-slope of $F_1/F_0$ computed from $Q_{\mathrm{num}}-T$ alone.
+
+\subsection{Final extraction at P1, P2, P3}\label{sec:adjF}
+
+Cells 41--45 (\nb{finalRun}). Per branch: error $=\max_\omega|C^Q/C-1|$ at $\varepsilon=10^{-6}$ (the expected $O(\varepsilon)$ of the leading-order formula), then the Richardson limit of $C\varepsilon^{p}$ ($p=2,3,3,4,4,6$) from $\varepsilon=1,2,4\cdot10^{-6}$, chain-side limit, and $|Q/\mathrm{chain}-1|$ \textbf{[numeric]}:
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{2.8cm}p{4.3cm}p{4.3cm}p{4.3cm}@{}}\toprule
+\textbf{branch} & \textbf{P1} & \textbf{P2} & \textbf{P3 (out of sample)} \\\midrule\endhead
+27 & 0 / 2.609467456 / 0 & same & same \\
+$[4,1,1]$ & $7.9\cdot10^{-7}$ / 46.67453891 / $1.2\cdot10^{-19}$ & $1.1\cdot10^{-6}$ / 38.57793522 / $6.0\cdot10^{-20}$ & $7.6\cdot10^{-7}$ / 100.8170040 / $1.8\cdot10^{-19}$ \\
+$[3,3,0]$ & $9.4\cdot10^{-7}$ / 10.92853892 / $1.6\cdot10^{-121}$ & $1.1\cdot10^{-6}$ / 9.032771962 / $9.7\cdot10^{-121}$ & $4.3\cdot10^{-7}$ / 23.60564406 / $3.5\cdot10^{-121}$ \\
+octet 1, $(u+u')\cdot C$ & $3.4\cdot10^{-6}$ / 184.3305612 / $3.2\cdot10^{-20}$ & $3.6\cdot10^{-6}$ / 122.3424387 / $2.8\cdot10^{-20}$ & $3.1\cdot10^{-6}$ / 937.1257171 / $3.8\cdot10^{-19}$ \\
+octet 2, $(u+u')\cdot C$ & $1.8\cdot10^{-6}$ / $-238.5587523$ / $9.5\cdot10^{-20}$ & $1.2\cdot10^{-6}$ / $-245.4884068$ / $1.6\cdot10^{-20}$ & $3.6\cdot10^{-6}$ / $-254.7138085$ / $2.9\cdot10^{-19}$ \\
+singlet & $1.5\cdot10^{-6}$ / $-5118.538314$ / $4.5\cdot10^{-19}$ & $2.0\cdot10^{-6}$ / $-3805.202777$ / $6.4\cdot10^{-19}$ & $1.1\cdot10^{-6}$ / $-20997.70633$ / $2.2\cdot10^{-19}$ \\
+\bottomrule\end{longtable}\end{center}
+
+(Per-cell entries: error at $\varepsilon=10^{-6}$ / Q-side limit (equal to the chain limit to the digits shown) / $|Q/\mathrm{chain}-1|$. The octet limits are of the functional $(u+u')\cdot C_c$.) Octet mixing, Q side against chain side:
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{0.9cm}p{2.7cm}p{2.9cm}p{2.9cm}p{2.9cm}p{2.5cm}@{}}\toprule
+\textbf{point} & \textbf{$\tau_Q$ copy 1, 2} & \textbf{$\Delta_c$} & \textbf{slope$^Q$} & \textbf{$R^Q=R^{\mathrm{chain}}$} & \textbf{$\lvert R^Q-R^{\mathrm{chain}}\rvert$} \\\midrule\endhead
+P1 & 7.72932830, 21.0412839 & $-1.18143552$, $0.465952203$ & $-1.56871932$, $0.716366881$ & $-1.69436661$, $1.09556421$ & $4.9\cdot10^{-11}$, $3.7\cdot10^{-11}$ \\
+P2 & 9.76840506, 24.0582616 & $-1.46172486$, $0.404968107$ & $-1.58305272$, $0.476746417$ & $-1.81991789$, $1.07667465$ & $8.4\cdot10^{-11}$, $5.6\cdot10^{-11}$ \\
+P3 & 3.18098696, 14.0843192 & $-0.511570329$, $0.620469626$ & $-1.37387704$, $1.36685128$ & $-1.34136599$, $1.16103812$ & $1.2\cdot10^{-11}$, $5.3\cdot10^{-12}$ \\
+\bottomrule\end{longtable}\end{center}
+
+The differences are at the Richardson $O(\varepsilon^3)$ level. The chain $\varepsilon$-exponents of the slices are $-2,-3,-3,-4,-4,-6$ at all three points. \textbf{All six HW CG data of $\mathrm{adj}\otimes\mathrm{adj}$ are thus obtained from the $\det_6\times\det_2$ formula, the top-killing $\det_6$, one Q-number $\tau_c$ and the two closed forms $\kappa(t)$, $\Delta_c(t,\tau_c)$.} Caveat on ``from the Q-formula alone'': the closed forms were fitted from chain-side scans (and later derived, \S\,\ref{sec:pert}); at the final stage the chain side enters only the comparison columns. P2 lies in the $\Delta_c$ fit set (cell 43 states this), so only P3 and the seven held-out $t$ are independent tests of $\Delta_c$.
+
+\section{The perturbative derivation of the adjoint constants}\label{sec:pert}
+
+Notebook: \nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative.\allowbreak{}wb} (22 cells; spec \nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative-\allowbreak{}spec.\allowbreak{}md}; no native outputs, the cells were run in K1, results in the markdown cell 22). The model is \nb{Adjoint-\allowbreak{}clean-\allowbreak{}analytic.\allowbreak{}wb} (first-order perturbation theory of the eigenvector, $\Psi=h+\varepsilon\psi_1$, for the T-insertion family). All results of this section are exact symbolic identities in $(t,\varphi_1,\varphi_2,\varphi_3,\omega_1,\omega_2)$ (octets: in $(m,\varphi,\omega)$, $m$ the conic parameter below) \textbf{[exact]}, except the finite-$\varepsilon$ cross-check (80 digits, \textbf{[numeric]}). Setting: $h=1$, $\theta=(t,0)$ with \textbf{$t$ symbolic}, plain GT generators, exact arithmetic.
+
+\subsection{Setup}\label{sec:pertsetup}
+
+\textbf{Covectors.} $V_1:=v_1/\delta^\Lambda=v_2\,\rho(\mathrm{diag}(D_k))/(D_1^2D_2)$ with $D_k=1/(\omega_2-\varphi_k)$; the only $\varepsilon$-dependence is in $v_2$, through the Gauss parameters $r_k(\varepsilon)$ (cell 5). The setup checks (listed in the results cell 22): $\mathfrak{gl}(3)$ relations, positivity of $G=\mathrm{diag}(1,1,1,2,6,9,4,9)$, HW multiplicities $(1,1,1,2,1)$, sector sizes $(1,2,2,6,10)$; $[t_a(u),t_b(v)]=0$ and the first-order identity $[t_{a0},t_b']+[t_a',t_{b0}]=0$ (symbolic in $t,\varphi$); exact undo at a rational point and $\rho(n)\otimes\rho(n)\,\mathrm{HW}=\mathrm{HW}$; $\tilde\varphi(0)=e_1^{\mathsf T}e^{a_0'E_{12}}e^{c_0'E_{23}}$, $a'$ $\varepsilon$-free, $b'/(a'c')=1+\varepsilon(t-2)(\varphi_2-\omega_2)+O(\varepsilon^2)$, all symbolic.
+
+\textbf{The twisted transfer matrix to first order.} Since $t_a(u;z)=\sum_{|I|=a}z_I\,m_I(u)$ with $z_I=\prod_{i\in I}z_i$ and the untwisted principal quantum minors $m_I$ (the principal minors preserve the total weight, so every term stays inside a weight sector), the $\varepsilon$-derivative is exact:
+
+\[
+t_a'=\sum_{|I|=a}\Bigl(\sum_{i\in I}\varphi_i\Bigr)m_I,\qquad t_a(u;\varepsilon)=t_{a0}+\varepsilon t_a'+O(\varepsilon^2)
+\]
+
+(cell 4). \textbf{The family member.} A generic member $M=t_1(3/7)+\tfrac53t_2(1/5)$ of the commuting family restricted to a weight sector (a second member $t_1(2/9)-\tfrac74t_2(-3/5)$ is used as a check). \textbf{Perturbation theory.} $M_0$ is $\mathfrak{gl}(3)$-invariant but not symmetric in the plain basis, so use the left eigenvector $\ell$ of the eigenvalue $m_0$ of the HW ket $h$:
+
+\[
+(M_0-m_0)\psi_1=-(M_1-m_1)h,\qquad m_1=\frac{\ell M_1h}{\ell h},\qquad \ell\cdot\psi_1=0,
+\]
+
+solved as the nonsingular system $\bigl(M_0-m_0+h\ell/(\ell h)\bigr)\psi_1=-(M_1-m_1)h$ (cell 7, \nb{pert1}; $\psi_1=\sum_i\varphi_i\psi_1^{(i)}$ over the unit directions; the component of $\psi_1$ along $h$ is irrelevant). Irrep projectors $\Pi_\nu$ on a weight sector are built from $C_2+C_3/7$ (\nb{PiIrrep}). The overlap to first order is
+
+\[
+\langle v_1\otimes v_2|\Psi\rangle=\langle V_1(\varepsilon)\otimes v_2(\varepsilon)|h\rangle+\varepsilon\,\langle V_1^0\otimes v_2^0|\psi_1\rangle+O(\varepsilon^2),
+\]
+
+with the scalar normalisation series of $\Psi$ cancelling in the ratios below. Define $S_1$ as the order-$\varepsilon$ coefficient of the signal $\langle V_1(\varepsilon)\otimes v_2|h\rangle$ (zero at $\varepsilon^0$ for the singlet) and $K_1:=\langle V_1^0\otimes v_2^0|\psi_1\rangle$.
+
+\subsection{Singlet (Claim 1)}\label{sec:pertsing}
+
+Sector $(2,2,2)$ (dim 10), $h$ the $\mathfrak{gl}(3)$-invariant singlet ket (checked: annihilated by all $E_{ij}$, $i\ne j$, and $E_{ii}\mapsto2$; cell 9).
+
+\[
+S_1=\frac{3(t-2)(\omega_1-\varphi_1)^2(\varphi_1-\varphi_3)^2(\varphi_2-\varphi_3)^2}{(\omega_2-\varphi_2)(\omega_1-\varphi_3)^2(\omega_2-\varphi_3)^2}=-3(t-2)(\varphi_2-\omega_2)(a_0'c_0')^2\,C_{\mathrm{singlet}},\qquad \frac{K_1}{S_1}=-\frac{t}{3(t-2)},
+\]
+
+\textbf{[exact]}, for all $\varphi,\omega_1,\omega_2$ ($C_{\mathrm{singlet}}=1$ in the normalisation used; the equality of the two expressions for $S_1$ is re-derived here from $a_0',c_0'$ of \S\,\ref{sec:mech}), independent of the family member (second member: $K_1-K_1'=0$ and $\psi_1-\psi_1'\parallel h$). Hence $\kappa_{\mathrm{singlet}}=1+K/S=2(t-3)/(3(t-2))$, $=43/12$ at $t=62/35$, reproducing the fitted law of \S\,\ref{sec:adjO}.
+
+\textbf{Which states contribute.} The twist derivative $t'=\sum_I(\sum_{i\in I}\varphi_i)m_I$ is an adjoint tensor operator (the sources' argument; $\varphi\mapsto t'$ is linear in the Cartan element $\mathrm{diag}(\varphi)$), so it takes the singlet only to octets: the projections of $\psi_1$ onto the 27, $[4,1,1]$ and $[3,3,0]$ vanish identically \textbf{[exact]}. \textbf{100\% of $K_1$ comes from the two octets} (each contributing a 2-dimensional weight-$(2,2,2)$ space), with copy shares
+
+\[
+\frac{K_{1,c}}{S_1}=A(t)+B(t)\,\tau_c,\qquad A=\frac{3t^4+2t^3-9t^2-11t+6}{3(t-2)(5t^2+4)},\quad B=-\frac{t^2-2}{3(t-2)(5t^2+4)},
+\]
+
+also independent of $\varphi,\omega$ \textbf{[exact]} (cell 16: the spectral projectors of $M_0$ inside the octet subspace of the $(2,2,2)$ sector). The octet pair enters only in the symmetric, rational-in-$t$ combination. Re-derived here: $2A+B(\tau_1+\tau_2)=-t/(3(t-2))$ with $\tau_1+\tau_2=3(2t-1)(t+2)$ (the numerator $2(3t^4+2t^3-9t^2-11t+6)-3(t^2-2)(2t^2+3t-2)=-t(5t^2+4)$ cancels against the denominator). At P1 the two shares are $0.7307$ and $1.8527$ (using $\tau=7.7293,21.0413$), summing to $31/12$.
+
+\subsection{Octets (Claim 2)}\label{sec:pertoct}
+
+Sector $(3,2,1)$ (dim 6, two HW kets). \textbf{The $\tau_c$.} The two octet HW kets are the eigenvectors of $t_2(\theta_1+h)$ on $\mathrm{HW}_{(3,2,1)}$; restricting the operator to the HW kets, $t_2(\theta_1+h)H=HA(t)$ with (cell 12, symbolic in $t$)
+
+\[
+A(t)=\begin{pmatrix}\frac32(2t^2+5t-1)&\frac32(t-1)\\ \frac32(t-3)&\frac32(t-1)(2t+3)\end{pmatrix},\qquad \mathrm{tr}\,A=3(2t-1)(t+2),\quad \det A=9t(t-1)(t+1)(t+3),
+\]
+
+\textbf{[exact]}. The discriminant is $(\mathrm{tr}A)^2-4\det A=9(5t^2+4)$ (re-derived here), a conic in $(t,\tau)$, rationally parametrized by $t=4m/(5-m^2)$, for which $\sqrt{5t^2+4}=(10+2m^2)/(5-m^2)=2+mt$ (re-derived here). So both $\tau_\pm$ are rational functions of the single symbol $m$, and \textbf{every octet computation is exact and symbolic}, with no \nb{RootReduce} and no sampling: an identity in $m$ holds on the whole curve $\tau^2-(\mathrm{tr}A)\tau+\det A=0$, i.e. for both copies at all $t$. The deck involution is $m\mapsto-5/m$ (it fixes $t$ and flips the sign of the square root; re-derived here).
+
+\textbf{The top-killed overlap.} With $\mathrm{Sig}_0=\langle V_1^0\otimes v_2^0|h_c\rangle=a_0'c_0'\,(u+u')\cdot C_c$ ($u=(-1,3)$, $u'=(2,0)$ on the $(1,1,1)$ indices),
+
+\[
+g_c=\frac{F_1}{F_0}=\frac{\langle\partial_\varepsilon(V_1\otimes v_2-v_2\otimes v_2)|h_c\rangle+\langle V_1^0\otimes v_2^0-v_2^0\otimes v_2^0|\psi_1\rangle}{\mathrm{Sig}_0}
+\]
+
+(the factors $\delta^\Lambda$, $a'_0c'_0$ and the scalar normalisation series cancel up to an $\omega_2$-independent constant; cells 11, 13). Results \textbf{[exact]}:
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item $g_c$ is affine in $\omega_2$ (second derivative 0); the slope is independent of $\omega_1$ and of $\varphi$;
+\item the slope is $-(t-2)R_c+\Delta_c$ with $R_c=(u\cdot C_c)/((u+u')\cdot C_c)$; the \textbf{signal part} contributes exactly $-(t-2)R_c$ (remainder 0), and the \textbf{contamination part} $\partial_{\omega_2}\langle V_1^0\otimes v_2^0-v_2^0\otimes v_2^0|\psi_1\rangle/\mathrm{Sig}_0$ equals
+\end{itemize}
+
+\[
+\Delta_c=(1-t^2)+\frac{t\,\tau_c}{3(t+3)}
+\]
+
+exactly, for both copies, symbolic in $m$, and for the second family member as well.
+
+\textbf{Which irreps carry the slope} (cell 15): $\psi_1=\sum_\nu\Pi_\nu\psi_1$ with $\nu\in\{27,\,10,\,\overline{10},\,\text{other octet}\}$. The two decuplets contribute $\Delta_c^{(10)}=\Delta_c^{(\overline{10})}=\tfrac12\Delta_c=-\tfrac12(t^2-1)+t\tau_c/(6(t+3))$ each; the 27 and the other octet contribute $\omega_2$-independent, $\varphi$-dependent (intercept-only) terms with zero slope; the sum over $\nu$ equals $\Delta_c$ symbolically. In the notation of \S\,\ref{sec:adjO} the intercept of $g_c$ is where the $\varphi$-dependence of $\rho_B$ sits.
+
+\subsection{The clean branches (bonus)}\label{sec:pertclean}
+
+For $[4,1,1]$ and $[3,3,0]$ (sectors of dimension 2: the decuplet HW ket and a 27 descendant), cell 18, exact in $(t,\varphi,\omega)$ \textbf{[exact]}:
+
+\[
+\begin{aligned}
+[4,1,1]:\quad &S_0=\frac{(\omega_1-\varphi_2)(\varphi_1-\varphi_3)(\varphi_2-\varphi_3)}{(\varphi_1-\varphi_2)(\omega_1-\varphi_3)(\varphi_3-\omega_2)},\quad \frac{K_1}{S_0}=\frac{(t-1)(\varphi_2+\varphi_3-2\omega_2)}{4},\quad \frac{K_1^{\mathrm{tk}}}{S_0}=\frac{(t-1)(\varphi_2-\varphi_3)}{4},\\
+[3,3,0]:\quad &S_0=\frac{(\omega_1-\varphi_1)(\varphi_1-\varphi_2)}{(\omega_1-\varphi_2)(\varphi_2-\omega_2)},\quad \frac{K_1}{S_0}=\frac{(t-1)(\varphi_1+\varphi_2-2\omega_2)}{4},\quad \frac{K_1^{\mathrm{tk}}}{S_0}=\frac{(t-1)(\varphi_1-\varphi_2)}{4}.
+\end{aligned}
+\]
+
+The top-killed contamination is $\omega$-independent. The 27 ($[4,2,0]$) has a 1-dimensional sector, so $\psi_1=0$. These are not needed for the CG extraction. \textbf{Cross-check against the numerics (re-derived here):} $K/S=\varepsilon K_1/S_0$, and at $\varphi$, $\omega\,\mathrm{A}$ the formulas give $K_1/S_0=0.10970$ ($[4,1,1]$) and $0.08633$ ($[3,3,0]$), i.e. $\kappa-1=1.1\cdot10^{-7}$ and $8.6\cdot10^{-8}$ at $\varepsilon=10^{-6}$, exactly the values measured in \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 25 (\S\,\ref{sec:adjchain}).
+
+\subsection{Cross-checks of the perturbation theory itself}\label{sec:pertcheck}
+
+Cells 19--21, 25. \textbf{Independent finite-$\varepsilon$ evaluation} \textbf{[numeric]} at the rational point $m=2$ ($t=8$, where $\tau_\pm=252,198$ are rational), at $\varepsilon=10^{-8}$ and 80 digits, with no Taylor pieces and no symbolic $m$: the exactly twisted sector operator $M(\varepsilon)=\sum_Iz_I[m_I(3/7)+\tfrac53m_I(1/5)]$, its true eigenvector near $h_c$, and the exact finite-$\varepsilon$ covectors. The true eigenvector reproduces $\psi_1$ to $2.6\cdot10^{-9}$ and $4.6\cdot10^{-9}$ relative ($O(\varepsilon)$); the numerical slopes of $g$ in $\omega_2$ give $\Delta_c=-1.90909088$ against the claim $-1.90909091$ ($\tau=252$), and $-15.0000024$ against $-15$ ($\tau=198$). The two agree to $3\cdot10^{-8}$ ($\tau=252$) and $2.4\cdot10^{-6}$ ($\tau=198$) in absolute terms; the write-up and HANDOFF quote ``$3\cdot10^{-8}$'' for the pair, which is true only of the first (see Appendix~\ref{app:incons}). At P1 ($t=62/35$) the closed form gives $\Delta=-1.18143552$, $0.46595220$ against the earlier fitted $-1.1814355$, $0.4659522$ (re-derived here from the closed form and the $\tau$'s of cell 45: $-1.18143552$, $0.46595220$). Independence of the family member: cell 21.
+
+What the derivation does \textbf{not} give: it does not prove the $[3,1,0]$ constants (second-order perturbation theory is needed for the $\varepsilon^2$ layer), and it proves $\Delta_c$ and $\kappa_{\mathrm{singlet}}$ in the regime where the eigenvector is the first-order perturbation of a generic family member (non-degenerate within the sector after the irrep decomposition; the two octets are split by the inhomogeneity through the $\tau_c$).
+
+\section{$[3,1,0]^{\otimes2}$, point A, through the same pipeline}\label{sec:a310}
+
+Notebook: \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} (90 cells; no native outputs: VS Code never opened the file, the sonnet agent ran each cell's source in K1 via \nb{Get} and stored the printed result as a markdown cell directly under each code cell; summary cells 18, 24, 32, 38, 50, 51 for round 1 and 64, 84, 89, 90 for round 2). Spec \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG-\allowbreak{}spec.\allowbreak{}md} (round 1); round 2 (closed forms, $\varepsilon^2$ layer, final extraction) was ordered by the main session during the day. Representation $\Lambda=(3,1,0)$ on both sites (dim 15, 225 states, 36 distinct total weights), 10 HW states in 8 irreps. The pipeline is that of \S\,\ref{sec:adj}; the point-A data are those of \nb{Undo-\allowbreak{}site2-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}md} \S{}5.2--5.4, \S{}6.
+
+\subsection{Regression at finite twist}\label{sec:a310reg}
+
+Cells 15--18. Before any small-$\varepsilon$ work, point A was rebuilt from the closed-form dressing at $z=(3/2,5/4,2/3)$, $w=(5/2,7/3,3/5)$ ($y_A=-63/8$): (i) $\langle v_1\otimes v_2|\mathrm{HW}\rangle=s\langle\varphi_A\otimes e_1^{\mathsf T}|\mathrm{HW}\rangle$ exactly on the 10 HW kets (and, at three regime points, also $(\rho(n)\otimes\rho(n))\mathrm{HW}=\mathrm{HW}$, cell 10) \textbf{[exact]}; (ii) $\langle v_1\otimes v_2|\Psi\rangle/\langle x_0|\Psi\rangle=\mathrm{const}\times\det_6/\Psi_Q\times\det_2^{(0,1,2)}[y_A]/W(3,4)$ over \textbf{all 225 states} (36 weight sectors, 200 digits): $\max|\mathrm{ratio}/\mathrm{ratio}_1-1|=1.3\cdot10^{-179}$ (the constant has precision 187); the controls fail (wrong $y=2$: 10.3, $y=3$: 44.1, and the pole set $\{0..3\}$ at $y_A$: 44.9) \textbf{[numeric]}. Dual-Q Baxter residual $3.8\cdot10^{-184}$ (225 states), vacuum $5.3\cdot10^{-195}$ (degrees $0,4,6$). Timings: 225 states 13.4 s, $\det_6\times\det_2$ on 225 states 3.7 s, one $R_Q$ 0.014 s. The closed forms of the spec are right as given: $K_{12}=\beta(w_2-z_1)/w_2=2/25$ and $K_{13}=\gamma(w_2-z_1)(y_A-z_3)/w_2^2=\mathbf{-189/704}$; \nb{Undo-\allowbreak{}site2-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}md} \S{}5.3 (md line 247, tex line 265) quotes $+189/704$, a \textbf{sign typo} in the notes (the formula passes the test; cell 17 prints $-189/704$) (Appendix~\ref{app:incons}).
+
+\subsection{The $\varepsilon$-structure of the undone covector}\label{sec:a310eps}
+
+Task 0 (cells 19--24; exact, symbolic $\varepsilon$, rational $\varphi$ and $\omega$ at $\varphi$, $\omega\,\mathrm{A}$). The per-weight orders and ranks are in the table of \S\,\ref{sec:weights} and the mechanism (the $E_{12}^2$ cancellation, $\gamma=O(\varepsilon)$, $b'/(a'c')$) in \S\,\ref{sec:orders}; the control that the factorized form $\varphi_A/\delta^\Lambda=[e_1^{\mathsf T}g\,\mathrm{diag}(\prod\delta_k^{n_k})]\rho(n')$ equals $\varphi_A/\delta^\Lambda$ holds exactly at $\varepsilon=1/1000$ (15 components) \textbf{[exact]}. Here $\delta^\Lambda=\delta_1^3\delta_2$ and $\varphi_A(0)/\delta^\Lambda=e_1^{\mathsf T}(1+\frac{a'_0}{2}E_{12})e^{c'_0E_{23}}$ with $b'_0=a'_0c'_0$ ($b_0'=a_0'c_0'$ and $\tilde\beta_0=-a'_0/2$ verified exactly, cell 21). The leading coefficients of the twelve weight components of $\varphi_A/\delta^\Lambda$ (cell 21, exact) are, at $\varphi$, $\omega\,\mathrm{A}$ \textbf{[exact]}:
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{2.2cm}p{1.6cm}p{9.0cm}@{}}\toprule
+\textbf{weight} & \textbf{order} & \textbf{leading coefficient(s)} \\\midrule\endhead
+$(3,1,0)$ & $\varepsilon^0$ & $1$ \\
+$(3,0,1)$ & $\varepsilon^0$ & $2755/3549$ ($=c'_0$) \\
+$(2,2,0)$ & $\varepsilon^0$ & $-2275/783$ ($=a'_0$) \\
+$(2,0,2)$ & $\varepsilon^0$ & $-26172500/3737097$ \\
+$(2,1,1)$ & $\varepsilon^0$ & $(-2375/1053,\ -9500/1053)\propto(1,4)\propto u'=(2,8)$: one direction \\
+$(1,3,0)$ & $\varepsilon^1$ & $-295750/204363$ \\
+$(1,2,1)$ & $\varepsilon^1$ & $(-204250/147987,\ -396625/147987)$ \\
+$(1,1,2)$ & $\varepsilon^1$ & $(-38807500/18110547,\ -451250/223587)$ \\
+$(1,0,3)$ & $\varepsilon^2$ & $-3978220000/969845877$ \\
+$(0,3,1)$ & $\varepsilon^2$ & $-2470000/12874869$ \\
+$(0,2,2)$ & $\varepsilon^2$ & $-72200000/363604059$ \\
+$(0,1,3)$ & $\varepsilon^3$ & $-1097440000/4700022327$ \\
+\bottomrule\end{longtable}\end{center}
+
+($\gamma=\varepsilon\cdot(-2565/56056)+\dots$ at the same point; the identification of $(3,0,1)$ and $(2,2,0)$ with $c'_0$, $a'_0$ is re-checked here against the values of \S\,\ref{sec:mech}: $a'_0=-2275/783$, $c'_0=2755/3549$.) The ranks over the $3\times6$ grid are identical for $\varphi$ and $\varphi'$, and the only weight with a component beyond $\varepsilon^2$ is $(0,1,3)$ \textbf{[exact]}.
+
+\subsection{Chain side: clean and contaminated branches}\label{sec:a310chain}
+
+Task 1 (cells 25--32): exact undo to $4.9\cdot10^{-138}$ at 540 points (3 $\varepsilon$ $\times$ 18 $\omega$ $\times$ 10 branches), minimum Precision of $K$ 137.6; the sum of carrier contributions equals $K$ to $3.3\cdot10^{-140}$. Raising residual of the branches $\sim10^{-7}$ versus at least $1.41$ for the other states. $\varepsilon$-exponents, $\kappa$ and classification \textbf{[numeric]}:
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{1.9cm}p{1.3cm}cccp{5.6cm}p{2.0cm}@{}}\toprule
+\textbf{branch} & \textbf{slice weight} & \textbf{$S$} & \textbf{$K$} & \textbf{$\lVert\Psi\rVert$} & \textbf{$\kappa$ at $\omega\,\mathrm{A}$} & \textbf{class} \\\midrule\endhead
+$[6,2,0]$ & $(3,1,0)$ & $-6$ & $K\equiv0$ & $-2$ & 1 & exact \\
+$[6,1,1]$ & $(3,0,1)$ & $-7$ & $-6$ & $-3$ & $1+O(10^{-6})$; $\max\lvert K/S\rvert=9.6\cdot10^{-7}$ at $10^{-6}$ & clean \\
+$[5,3,0]$ & $(2,2,0)$ & $-7$ & $-6$ & $-3$ & $1+O(10^{-6})$; $2.6\cdot10^{-7}$ & clean \\
+$[5,2,1]$ \#1, \#2 & $(2,1,1)$ & $-8$ & $-7$ & $-4$ & $1+O(10^{-6})$; $8.3\cdot10^{-7}$, $1.8\cdot10^{-6}$ & clean \\
+$[4,4,0]$ & $(1,3,0)$ & $-7$ & $-7$ & $-4$ & $1.3857144$ ($=97/70$), constant & contaminated \\
+$[4,3,1]$ \#1, \#2 & $(1,2,1)$ & $-8$ & $-8$ & $-5$ & $1.4105702$; $0.98671310$ & contaminated \\
+$[4,2,2]$ & $(1,1,2)$ & $-9$ & $-9$ & $-6$ & $1.3661018$ ($=1+108/295$) & contaminated \\
+$[3,3,2]$ & $(0,2,2)$ & $-9$ & $-9$ & $-7$ & $4.6508004$ & contaminated \\
+\bottomrule\end{longtable}\end{center}
+
+The clean set is exactly the set of branches whose slice weight is at $\varepsilon^0$ in the table of \S\,\ref{sec:weights}; the contaminated set is the branches whose slice weight is at $\varepsilon^1$ or $\varepsilon^2$, where $K$ (which comes from $\varepsilon^0$ weights next door) has the same order as $S$. The $\kappa$ of the contaminated branches are constant in $\varepsilon$ (e.g. $1.3857144,1.3857144,1.3857146$ at $\varepsilon=1,2,4\cdot10^{-6}$) with spreads $\le10^{-5}$ over $\varepsilon$, $\omega$, $\varphi$ (cell 50). Contamination carriers ($\varepsilon=10^{-6},2\cdot10^{-6}$, all $c_\nu$ scaling like $S$): $[4,4,0]$ from $(2,2,0)$ (100\%); $[4,3,1]$ \#1 from $(2,1,1)$ (100\%); \#2 from $(2,1,1)$ ($\approx$100\%, plus $(1,2,1)$: $1.6\cdot10^{-5}$, $(1,3,0)$: $4.1\cdot10^{-5}$, $(2,2,0)$: $4.3\cdot10^{-6}$ of $K$); $[4,2,2]$ from $(2,0,2)$ ($\approx$100\%); $[3,3,2]$ from $(1,1,2)$ (85\%) and $(2,0,2)$ (15\%) \textbf{[numeric]}.
+
+\subsection{Q side and the leading-order extraction}\label{sec:a310Q}
+
+Task 2 (cells 33--38) \textbf{[numeric]}. Vacuum direct Q's (degrees $0,4,6$) of the 54 twists $(w_1,w_2,w_3)$: Baxter residual $\le2.6\cdot10^{-189}$; dual Q's of the 56 HW-sector states: $2.4\cdot10^{-140}$ (exact arithmetic). $R_C/R_Q$ is state-independent over the 10 branches to $2.5\cdot10^{-82}$, $3.7\cdot10^{-86}$, $8.9\cdot10^{-93}$ ($\varepsilon=1,2,4\cdot10^{-6}$, max over 18 $\omega$; limited by Precision$(R_Q)\ge103.7$ digits, not by the identity), and over all 56 HW-sector states at $\omega\,\mathrm{A}$ to $6.4\cdot10^{-77}$, $2.0\cdot10^{-85}$, $2.8\cdot10^{-87}$. Leading-order extraction for the five clean branches, $C^Q=Q_{\mathrm{num}}/(\delta^\Lambda\,\mathrm{fac})$ with $\mathrm{fac}$ the component of $\varphi_A(0)/\delta^\Lambda$ at the slice weight: $1$, $c'_0$, $a'_0$ (the GT matrix element of $e_1^{\mathsf T}E_{12}$ is 2, so the coefficient $a'_0/2$ of $E_{12}$ gives $a'_0$), and $(a'_0c'_0/2)u'$ for $(2,1,1)$ with $u'=(2,8)$:
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{2.5cm}p{3.4cm}p{3.4cm}p{3.3cm}p{2.0cm}@{}}\toprule
+\textbf{branch} & \textbf{spread / error at $\varepsilon=10^{-6}$} & \textbf{at $4\cdot10^{-6}$} & \textbf{Richardson limit (Q = chain)} & \textbf{$\lvert Q/\mathrm{chain}-1\rvert$} \\\midrule\endhead
+$[6,2,0]$ & 0 / 0 & 0 & 2.609467455621302 & 0 \\
+$[6,1,1]$ & $8.5\cdot10^{-7}$ / $7.9\cdot10^{-7}$ & $3.4\cdot10^{-6}$ / $3.2\cdot10^{-6}$ & 46.67453891138102 & $1.2\cdot10^{-19}$ \\
+$[5,3,0]$ & $2.0\cdot10^{-6}$ / $1.9\cdot10^{-6}$ & $7.8\cdot10^{-6}$ / $7.4\cdot10^{-6}$ & $-36.88381884387802$ & $5.4\cdot10^{-20}$ \\
+$[5,2,1]$ \#1 ($u'\cdot C$) & $4.2\cdot10^{-6}$ / $4.0\cdot10^{-6}$ & $1.7\cdot10^{-5}$ / $1.6\cdot10^{-5}$ & $-1325.402366533307$ & $1.1\cdot10^{-19}$ \\
+$[5,2,1]$ \#2 ($u'\cdot C$) & $2.1\cdot10^{-6}$ / $2.5\cdot10^{-6}$ & $8.6\cdot10^{-6}$ / $9.8\cdot10^{-6}$ & $-334.3316171624337$ & $1.2\cdot10^{-19}$ \\
+\bottomrule\end{longtable}\end{center}
+
+(Richardson of $C\varepsilon^p$, $p=2,3,3,4,4$, three points; scaling $\times4.00$.) The top value $2.6094674556$ and the $[6,1,1]$ value $46.6745389114$ coincide with the adjoint's 27 and $[4,1,1]$ values of \S\,\ref{sec:adjF}. For the $[5,2,1]$ pair only the functional $u'\cdot C$ is read at leading order; $C$ itself needs the $\varepsilon^1$ layer.
+
+\subsection{The $O(\varepsilon)$ layer}\label{sec:a310O}
+
+\textbf{Top-killing} (cells 40--41). $T=\delta^\Lambda s\langle v_2\otimes v_2|\Psi_B\rangle/\langle x_0|\Psi_B\rangle$ equals the $(w_1,y_A)$-vacuum $\det_6/\Psi_Q$ (no $\det_2$), top-normalised, to $2.5\cdot10^{-82}$ over the 10 branches (vacuum Baxter residual $9.5\cdot10^{-194}$) \textbf{[numeric]}. $T\sim\varepsilon^{-6}$ for every branch (pure contamination: $\langle v_2\otimes v_2|\mathrm{HW}\rangle=0$ for non-top HW kets); $T/K=2.30137$ for $[6,1,1]$ and $-1.24138$ for $[5,3,0]$ are $O(1)$, and $\le4\cdot10^{-8}$ for all other branches, so the top-kill matters at leading order only for the two clean decuplet-type branches $[6,1,1]$, $[5,3,0]$ and at relative $O(\varepsilon)$ for the $[5,2,1]$ pair.
+
+\textbf{The two-direction weight $(2,1,1)$ and the $[5,2,1]$ pair} (cells 42--47, 54--64). Convention: $u=e_1^{\mathsf T}E_{13}=(-1,8)$ and $u'=e_1^{\mathsf T}E_{12}E_{23}=(2,8)$ on the two GT indices (the order $E_{12}E_{23}$ is the one that appears in $e_1^{\mathsf T}(1+\frac{a'_0}2E_{12})e^{c'_0E_{23}}$; the adjoint's $u'$ is $e_1^{\mathsf T}E_{23}E_{12}$), $\varphi_{(2,1,1)}/\delta^\Lambda=A_uu+A_{u'}u'$, $R_c:=(u\cdot C_c)/(u'\cdot C_c)$, $C_c=[P_{\mathrm{HW}}\Psi_c]_{((2,1,1),e_1)}$ Richardson-extrapolated. Exact (rational, at $\varphi$, $\omega_1\in\{3/4,-5/3,7/2\}$): $A_u(0)=0$, $A_{u'}(0)=\mathrm{fac}_0=a'_0c'_0/2$, and the first-order coefficients are exact straight lines in $\omega_2$, $\omega_1$-independent: $A^{(1)}_{u'}/\mathrm{fac}_0=-\tfrac{113}{140}\omega_2+\mathrm{const}$ and $A^{(1)}_u/\mathrm{fac}_0=\tfrac{59}{70}\omega_2+\mathrm{const}$ \textbf{[exact]}. With $F=\varepsilon^4Q_{\mathrm{num}}^{\mathrm{tk}}/(\delta^\Lambda\mathrm{fac}_0)=F_0+\varepsilon F_1+\dots$ and $g=F_1/F_0$ \textbf{[numeric]}:
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{5.0cm}p{4.5cm}p{4.5cm}@{}}\toprule
+\textbf{quantity} & \textbf{copy 1} & \textbf{copy 2} \\\midrule\endhead
+$F_0$ spread over 12 $\omega$ & $2.2\cdot10^{-17}$ & $4.7\cdot10^{-17}$ \\
+$g(\omega_2)$ a straight line: residual & $\le2.5\cdot10^{-11}$ & $\le2.5\cdot10^{-11}$ \\
+$\omega_1$-dependence of the slope & 0 ($10^{-166}$) & 0 ($10^{-167}$) \\
+slope (8 $\varphi$; spread) & $-1.90107065557$ ($1.0\cdot10^{-11}$) & $0.97351289979$ ($6\cdot10^{-12}$) \\
+$R_c=(u\cdot C)/(u'\cdot C)$, $\varphi$-independent & $-0.8921886416$ & $1.2040698297$ \\
+signal slope $=-\frac{113}{140}+\frac{59}{70}R_c$ & $-1.5591304265$ & $0.2077159993$ \\
+$\Delta_c:=\mathrm{slope}-\mathrm{slope}_{\mathrm{sig}}$ (spread over 8 $\varphi$) & $-0.34194022909$ ($6\cdot10^{-12}$) & $0.76579690047$ ($6\cdot10^{-12}$) \\
+\bottomrule\end{longtable}\end{center}
+
+$F_0$ itself ($=u'\cdot C$) and the intercept depend on $\varphi$ ($-1325.40$, $-334.33$ at $\varphi$; $-280.13$, $-70.66$ at $\varphi'$); slope, $R_c$ and $\Delta_c$ are structural. $\Delta_1+\Delta_2=0.42385667137$. Note that the exact signal slopes are $p'_1=(t-5)/4$ for the $u'$-part and $q'_1=(7-3t)/2$ for the $u$-part (times $R_c$), found as exact straight lines at all 20 $t$ ($-113/140$ and $59/70$ at P1), and that the signal's coefficient of $R_c$ is \textbf{not} $-(t-2)$ as for the adjoint; so the combination of the spec, $\mathrm{slope}+(t-2)R$, is not the signal-free constant here (see Appendix~\ref{app:incons}).
+
+\textbf{The branches with $F_0\equiv0$} (leading covector order $\varepsilon^1$ or $\varepsilon^2$; cells 48--50) \textbf{[numeric]}. $K/S$ is a constant over $\varepsilon$, $\omega$, $\varphi$ (3 $\varepsilon$ $\times$ 18 $\omega$; 8 $\varphi$ at $\omega\,\mathrm{A}$; the variations are $O(\varepsilon)$):
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{1.5cm}p{2.0cm}p{3.9cm}p{1.9cm}p{1.9cm}p{3.0cm}@{}}\toprule
+\textbf{branch} & \textbf{slice weight, order} & \textbf{$K/S$ ($\varepsilon\to0$)} & \textbf{spread over $\varepsilon,\omega$} & \textbf{spread over 8 $\varphi$} & \textbf{$R_\nu=C[\mathrm{idx}2]/C[\mathrm{idx}1]$ ($\varphi$ / $\varphi'$)} \\\midrule\endhead
+$[4,4,0]$ & $(1,3,0)$, $\varepsilon^1$ & $0.38571428571=27/70$ ($\kappa=97/70$) & $8.5\cdot10^{-6}$ & $3.1\cdot10^{-7}$ & $-$ \\
+$[4,3,1]$ \#1 & $(1,2,1)$, $\varepsilon^1$ & $0.41056992897$ & $2.2\cdot10^{-5}$ & $2.7\cdot10^{-7}$ & $-0.0789657625$ / same \\
+$[4,3,1]$ \#2 & $(1,2,1)$, $\varepsilon^1$ & $-0.01328651383$ & $7.3\cdot10^{-4}$ & $2.2\cdot10^{-5}$ & $-8.7671880836$ / same \\
+$[4,2,2]$ & $(1,1,2)$, $\varepsilon^1$ & $0.36610169492=108/295$ & $1.8\cdot10^{-5}$ & $2.0\cdot10^{-6}$ & $-1/3$ exactly / $-1/3$ \\
+$[3,3,2]$ & $(0,2,2)$, $\varepsilon^2$ & $3.65080357143$ & $1.8\cdot10^{-5}$ & $6.6\cdot10^{-7}$ & $-$ \\
+\bottomrule\end{longtable}\end{center}
+
+($R_\nu$ in the GT-index convention $u=$ unit covector on the first index, $u'$ on the second; $\varphi$-independent to $10^{-20}$.) $[4,4,0]$ at P1 is rational, $27/70=\theta_{12}-h$ in absolute units. The two $[4,3,1]$ copies have copy-dependent constants, as the adjoint octets (where $\tau_c$ entered). The clean branches $[6,1,1]$, $[5,3,0]$ also have an $O(\varepsilon)$ layer, $K/S=\lambda\varepsilon$ with $\lambda$ $\omega$- and $\varphi$-dependent (at $\omega\,\mathrm{A}$, $\varphi$: $\lambda=0.10970$, $-0.00789$); it is not needed for the extraction and was not pursued. Observation (re-derived here): $\lambda=0.1097031447$ for $[6,1,1]$ equals, to $8\cdot10^{-8}$ relative, the adjoint $[4,1,1]$ value $K_1/S_0=(t-1)(\varphi_2+\varphi_3-2\omega_2)/4=5913/53900=0.1097031540$ of \S\,\ref{sec:pertclean}; no explanation is given in the sources \textbf{[numeric]}.
+
+\textbf{Round 2, Task A: closed forms by a $t$-scan} (cells 53--65; $h=1$, $\theta=(t,0)$; 20 values of $t$: 29/15, 5/2, 3/2, 7/3, 11/4, 13/5, 9/4, 17/6, 19/7, 8/3, 12/5, 7/2, 23/8, 16/5, 11/3, 14/5, 25/9, 13/4, 9/5, 21/8; fit on 14, held out the 3rd, 6th, ..., 18th; rational fits by the null vector of $P(t)-fQ(t)=0$ at 40 digits; $\varphi$, $\omega_1=3/4$, six $\omega_2$, three-$\varepsilon$ Richardson; 30 s per $t$). At $t=62/35$ ($h=1$) the round-1 constants are reproduced. Exact untwisted data of the chain (rational, all 20 $t$, held-out exact): $t_2(\theta_1+h)$ on $\mathrm{HW}_{[4,3,1]}$: $\mathrm{tr}=8t^2+16t-8$, $\det=16t(t-1)(t+1)(t+4)$; on $\mathrm{HW}_{[5,2,1]}$: $\mathrm{tr}=8t^2+19t-8$, $\det=4(t+4)(t-1)(t+1)(4t+3)$ \textbf{[exact]}; the copy eigenvalues of the branches' own $t_2$ polynomials agree with these to $9\cdot10^{-19}$; $t_1(\theta_1+h)$ is degenerate on the $[4,3,1]$ pair (difference $4\cdot10^{-18}$), so the affine-in-$t_1$ alternative cannot separate the copies. Closed forms ($\tau_c=\mathrm{eig}(t_2(\theta_1+h))/h^4$, $D=t^3+3t^2-17t+5$):
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{3.2cm}p{6.4cm}p{3.6cm}@{}}\toprule
+\textbf{constant} & \textbf{closed form} & \textbf{residual (fit / held-out)} \\\midrule\endhead
+$\kappa_{[4,4,0]}$ & $(t+1)/2$ & $1.4\cdot10^{-18}$ / $2.6\cdot10^{-18}$ \\
+$\kappa_{[4,2,2]}$ & $(11t-31)/(5(3t-7))$; pole at $t=7/3$ (chain value $-2.5\cdot10^6$ there, $\varepsilon$-regulated; point skipped) & $3.4\cdot10^{-15}$ / $1.9\cdot10^{-17}$ \\
+$\kappa_{[3,3,2]}$ & $(t+1)(19t-49)/(40(t-2))$ & $7.2\cdot10^{-17}$ / $4.9\cdot10^{-17}$ \\
+$\kappa_c^{[4,3,1]}=A+B\tau_c$ & $A=(-7t^4+26t^3-166t+75)/(9D)$, $B=(7t^2-22t+23)/(36D)$ & $3.0\cdot10^{-10}$ (data amplified near the root $t\approx2.65$ of $D$) / $9.1\cdot10^{-16}$ \\
+$R_c^{[5,2,1]}$ & $3/2-2t+\tau_c/(2(t+4))$; $R_a+R_b=(16-7t)/(2(t+4))$, $R_aR_b=-7t/(2(t+4))$ & $9.7\cdot10^{-19}$ / $2.3\cdot10^{-18}$ \\
+signal slopes $[5,2,1]$ & $p'_1=(t-5)/4$, $q'_1=(7-3t)/2$ & exact (all 20 $t$) \\
+$\Delta_c^{[5,2,1]}=\mathrm{slope}-p'_1-q'_1R_c$ & $\frac{111+44t-92t^2}{105}+\frac{(23t-13)\,\tau_c}{105(t+4)}$ & $7.1\cdot10^{-10}$ / $1.6\cdot10^{-9}$ (noise-limited) \\
+\bottomrule\end{longtable}\end{center}
+
+\textbf{[fitted]} ($\kappa$'s and $R_c$) and \textbf{[fitted]} at the $10^{-9}$ level ($\Delta_c^{[5,2,1]}$: the coefficients with the common $1/105$ are rationalized from a $10^{-8}$-accurate least-squares fit and are not exact-proven; $\Delta_1+\Delta_2=(-3t^2+143t/105+992/105)/(t+4)$ and the product are rational fits of degrees (2,1), (3,1) with held-out $5.6\cdot10^{-11}$, $1.5\cdot10^{-9}$; re-derived here: the sum follows from the quoted $\Delta_c$ and $\mathrm{tr}=8t^2+19t-8$). The worst line residual ($1.3\cdot10^{-9}$) is at $t=29/15$, close to the singularity of $y_0$ at $t=2$. The sources note that the first automatic fit of $q_1'(t)$ reported ``NO FIT'' only because $q_1'$ vanishes at $t=7/3$ (relative error $0/0$); the linear form is exact. The cross-check against round 1 at $t=62/35$: the closed form gives $\Delta=0.765797$ ($\tau=37.479$) and $-0.341940$ ($\tau=13.282$) (re-derived here); round 1 measured $0.76579690$ and $-0.34194023$. (Cell 64 prints ``0.7655'' and cell 61 prints a ``sanity'' line with other numbers; see Appendix~\ref{app:incons}.)
+
+Re-derived here from the quoted trace and determinant: the discriminants of the two $2\times2$ problems are $(\mathrm{tr})^2-4\det=64(3t^2+1)$ on $\mathrm{HW}_{[4,3,1]}$ and $105t^2+256$ on $\mathrm{HW}_{[5,2,1]}$ (the adjoint octets had $9(5t^2+4)$). Each is a conic in $(t,\tau)$, so the rational-parameter trick of \S\,\ref{sec:pertoct} would apply to the first-order perturbation theory of $[3,1,0]$ as well \textbf{[conjecture]} (not attempted). At P1 these give $\tau_2-\tau_1=25.82$ and $24.20$, matching the printed $\tau$'s ($35.6315-9.8150$ and $37.4788-13.2820$).
+
+\subsection{The $O(\varepsilon^2)$ layer}\label{sec:a310E2}
+
+Round 2, Task B (cells 66--84): the weights $(1,2,1)$ ($[4,3,1]\times2$) and $(1,1,2)$ ($[4,2,2]$), whose first direction is at $\varepsilon^1$ and whose second direction enters at $\varepsilon^2$. \textbf{Exact covector structure} \textbf{[exact]} (all rational): $\varphi_\nu/\delta^\Lambda=\varepsilon c_1+\varepsilon^2c_2+\dots$ with $c_1=\mathrm{fac}_1(\omega,\varphi)\,u'$, $u'=(1,x_U)$ (normalised so its first GT component is 1), $u=(0,1)$ and $c_2=a_2u'+b_2u$. Convention $R:=(u\cdot C)/(u'\cdot C)=C_2/(C_1+x_UC_2)$. $a_2/\mathrm{fac}_1$ and $b_2/\mathrm{fac}_1$ are exactly linear in $\omega_2$ (exact interpolation of degree 1 through 10 points, both weights) and $\omega_1$-independent:
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{1.5cm}p{2.8cm}p{2.9cm}p{2.9cm}p{4.6cm}@{}}\toprule
+\textbf{weight} & \textbf{$x_U(t)$} & \textbf{$\omega_2$-slope of $a_2/\mathrm{fac}_1$} & \textbf{$\omega_2$-slope of $b_2/\mathrm{fac}_1$} & \textbf{at P1} \\\midrule\endhead
+$(1,2,1)$ & $-(t+3)/(2(t-3))$ & $t(2-t)/(t-3)$ & not fitted & $x_U=167/86$, $a$-slope $-496/1505$, $b$-slope $525/3698$ \\
+$(1,1,2)$ & $-3(t-1)/(2(t-3))$ & $-19/35$ at P1 (zero at an isolated $t$; $t$-form not fitted) & $3(t-1)/(t-3)$ & $x_U=81/86$, $a$-slope $-19/35$, $b$-slope $-81/43$ \\
+\bottomrule\end{longtable}\end{center}
+
+(The $t$-forms of $x_U$ at P1 are re-derived here: $167/86$ and $81/86$.) \textbf{The Q-number structure at P1} (four-$\varepsilon$ Richardson with $\varepsilon=1,2,4,8\cdot10^{-6}$; ten $\omega_2$, $\omega_1=3/4$ unless stated; $F=\varepsilon^p Q^{\mathrm{tk}}_{\mathrm{num}}/(\delta^\Lambda\mathrm{fac}_1)$, $p=4,5$) \textbf{[numeric]}: $F_0$ is $\omega$-independent (spread $3\cdot10^{-21}$, $1.3\cdot10^{-21}$, $4\cdot10^{-21}$); $g=F_1/F_0$ is a straight line in $\omega_2$ (degree-1 residual $\le4.3\cdot10^{-15}$; degrees 2--4 do not improve beyond the $10^{-15}$ truncation level); its slope is $\omega_1$-independent ($\omega_1=7/2$: identical to $10^{-15}$) and $\varphi$-independent ($\varphi'$, $\varphi_3$, $\varphi_4$: identical to $\le5\cdot10^{-16}$); the intercept and $F_0$ depend on $\varphi$. Write $g=s_1+\mathrm{rem}$ with the signal part $s_1=a_2/\mathrm{fac}_1+(b_2/\mathrm{fac}_1)R$ (the $R$-carrying coefficient is the $b$-slope):
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{2.5cm}p{1.9cm}p{1.9cm}p{1.9cm}p{1.9cm}p{1.9cm}p{2.0cm}@{}}\toprule
+\textbf{branch} & \textbf{$R$} & \textbf{$s_1$ slope} & \textbf{$g$ slope} & \textbf{remainder slope} & \textbf{$\kappa_0$} & \textbf{$\mathrm{kslope}=\kappa_0\times\mathrm{rem}$} \\\midrule\endhead
+$[4,3,1]$ \#1 ($\tau=9.815$) & $-0.0932674373$ & $-0.3428091568$ & $-1.0162824575$ & $-0.6734733008$ & $1.4105699290$ & $-0.9499811860$ \\
+$[4,3,1]$ \#2 ($\tau=35.631$) & $0.5471061670$ & $-0.2518961924$ & $0.7940852803$ & $1.0459814726$ & $0.9867134862$ & $1.0320840253$ \\
+$[4,2,2]$ & $-0.4858757062$ & $0.3723970944$ & $-0.1527827012$ & $-0.5251797956$ & $1.3661016949$ & $-0.71743$ \\
+\bottomrule\end{longtable}\end{center}
+
+The natural structural constant is $\mathrm{kslope}$, the $\omega_2$-slope of the $O(\varepsilon)$ correction $\kappa_1$ of $R_C/S=\kappa_0+\varepsilon\kappa_1+\dots$ ($F_1/F_0=s_1+\kappa_1/\kappa_0$). \textbf{$t$-scan} (20 $t$, 14 fit, 6 held out, after the memo fix of \S\,\ref{sec:tools}; $[4,2,2]$ excludes $t=7/3$) \textbf{[fitted]}:
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item $R_c^{[4,3,1]}=A_R+B_R\tau_c$, $A_R=(-10+\frac{28t}3+4t^2-4t^3+\frac{2t^4}3)/D$, $B_R=(-\frac32+t-\frac{t^2}6)/D$ (held-out $1.9\cdot10^{-16}$, $5.7\cdot10^{-18}$; $R_a+R_b$ and $R_aR_b$ rational (3,3) with the same $D$: $8.8\cdot10^{-18}$, $1.8\cdot10^{-17}$);
+\item $[4,2,2]$: $R=-2(t-3)/(3(3t-7))$ (exact in the fit), $\mathrm{kslope}=\bigl(-\tfrac{28}{45}t^3+\tfrac{2912}{675}t^2-\tfrac{448}{45}t+\tfrac{4948}{675}\bigr)/(t-\tfrac73)^2$ (held-out $1.5\cdot10^{-11}$; the coefficients are $10^{-9}$-noise-limited rationals; re-derived here: at P1 this evaluates to $-0.717449$ against the measured $-0.71743$);
+\item $[4,3,1]$: $\mathrm{kslope}_c=\alpha(t)+\beta(t)\tau_c$ with $\beta=(3331-7425t+7876t^2-2262t^3-481t^4+247t^5-6t^6)/(216D^2)$ (held-out $1.7\cdot10^{-11}$) and $\alpha=P_8(t)/D^2$ with $P_8$ of degree 8 (leading coefficient $\approx1/9$), only a \textbf{numerical} fit (held-out $10^{-9}$ relative; the coefficients are not rationalizable at the $10^{-6}$ noise level and live in the notebook variable \nb{caC}). At P1 the closed form reproduces the measured $\mathrm{kslope}$: $-0.94998118599$ (copy 1) against $-0.949981186023$.
+\end{itemize}
+
+What did \textbf{not} fit: (i) the remainder slope $\mathrm{rem}_c=\mathrm{kslope}_c/\kappa_c$ as an affine-in-$\tau_c$ form with polynomial$/D^m$ coefficients (degrees up to 6--8, fit-set residual $\ge10^{-1}$; one has to divide by $\kappa_c=A+B\tau_c$, which is not affine); (ii) symmetric functions of $\mathrm{rem}_c$ and of $\mathrm{kslope}_c$ in low degree; (iii) $\alpha(t)$ is not an identified rational; (iv) the $t$-forms of the $(1,2,1)$ $b$-slope and the $(1,1,2)$ $a$-slope.
+
+\subsection{Final pure-Q extraction of all ten branches}\label{sec:a310F}
+
+Round 2, Task C (cells 85--89). Inputs from the Q side only: $Q_{\mathrm{num}}^{\mathrm{tk}}=Q_{\mathrm{num}}-T_q$ ($T_q$ the top-kill $\det_6$ with the $(w_1,y_A)$-vacuum) at 6 $\omega_2$ $\times$ 4 $\varepsilon$; $\tau_c=t_2(\theta_1+h)/h^4$ from the dual-Q dictionary $t_2(\theta_1+h)=\chi_3\nu_1(\theta_1+h)\nu_2(\theta_1)Q^j(\theta_1-h)/Q^j(\theta_1)$ (single-ratio form, Richardson in $\varepsilon$; agrees with the exact untwisted eigenvalues of Task A to $10^{-18}$); the closed forms of Tasks A--B; the exact covector functions ($\mathrm{fac}_k$, $x_U$, the $a$- and $b$-slopes are analytic in the twists). Extraction: first direction $u'\cdot C=Q^{\mathrm{tk}}_{\mathrm{num}}/(\delta^\Lambda\varepsilon^k\mathrm{fac}_k\,\kappa)$ ($k=0,1,2$ the leading covector order); second direction (dim-2 weights): $R^Q$ from the $\omega_2$-slope of $F_1/F_0$ minus the known signal and the closed-form remainder; the full slice from $\{u\cdot C=Rc_1,\ u'\cdot C=c_1\}$. The chain side enters only the comparison columns. Columns: error $=\max_{6\,\omega}$ at $\varepsilon=10^{-6}$ of the first-direction extraction against the chain; Richardson $=|Q/\mathrm{chain}-1|$ of the $\varepsilon\to0$ limits at $\omega\,\mathrm{A}$; $dR=|R^Q-R^{\mathrm{chain}}|$; slice $=$ max componentwise relative error of the $\varepsilon\to0$ slice \textbf{[numeric]}.
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{1.9cm}p{1.6cm}p{1.2cm}p{1.9cm}p{1.7cm}p{2.5cm}p{1.4cm}p{1.4cm}@{}}\toprule
+\textbf{branch (P1)} & \textbf{extracted} & \textbf{error} & \textbf{Richardson} & \textbf{$\tau_Q$} & \textbf{$R^Q$} & \textbf{$dR$} & \textbf{slice} \\\midrule\endhead
+$[6,2,0]$ & full & 0 & 0 & $-$ & $-$ & $-$ & $-$ \\
+$[6,1,1]$ & leading & $3.1\cdot10^{-7}$ & $9.9\cdot10^{-20}$ &  &  &  &  \\
+$[5,3,0]$ & leading & $2.1\cdot10^{-6}$ & $5.4\cdot10^{-20}$ &  &  &  &  \\
+$[5,2,1]$ \#1 & $u'C+R$ & $4.0\cdot10^{-6}$ & $1.1\cdot10^{-19}$ & 13.28200213 & $-0.892188641588$ & $6.2\cdot10^{-17}$ & $1.6\cdot10^{-16}$ \\
+$[5,2,1]$ \#2 & $u'C+R$ & $2.5\cdot10^{-6}$ & $1.5\cdot10^{-19}$ & 37.47881420 & $1.20406982971$ & $2.6\cdot10^{-16}$ & $1.3\cdot10^{-15}$ \\
+$[4,4,0]$ & leading, $\kappa=(t+1)/2$ & $9.5\cdot10^{-7}$ & $6.3\cdot10^{-19}$ &  &  &  &  \\
+$[4,3,1]$ \#1 & $u'C+R$ & $2.5\cdot10^{-6}$ & $9.6\cdot10^{-20}$ & 9.815049286 & $-0.0932674374557$ & $1.7\cdot10^{-10}$ & $1.8\cdot10^{-9}$ \\
+$[4,3,1]$ \#2 & $u'C+R$ & $1.7\cdot10^{-6}$ & $1.5\cdot10^{-19}$ & 35.63148133 & $0.547106166786$ & $2.4\cdot10^{-10}$ & $7.4\cdot10^{-9}$ \\
+$[4,2,2]$ & $u'C+R$ & $5.6\cdot10^{-7}$ & $1.2\cdot10^{-18}$ &  & $-0.485875706215$ & $1.9\cdot10^{-16}$ & $3.8\cdot10^{-16}$ \\
+$[3,3,2]$ & leading, $\varepsilon^2$ covector & $2.7\cdot10^{-7}$ & $1.9\cdot10^{-19}$ &  &  &  &  \\
+\bottomrule\end{longtable}\end{center}
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{1.9cm}p{1.6cm}p{1.2cm}p{1.9cm}p{1.7cm}p{2.5cm}p{1.4cm}p{1.4cm}@{}}\toprule
+\textbf{branch (P3, out of sample)} & \textbf{extracted} & \textbf{error} & \textbf{Richardson} & \textbf{$\tau_Q$} & \textbf{$R^Q$} & \textbf{$dR$} & \textbf{slice} \\\midrule\endhead
+$[6,2,0]$ & full & 0 & 0 & $-$ & $-$ & $-$ & $-$ \\
+$[6,1,1]$ & leading & $5.4\cdot10^{-7}$ & $2.8\cdot10^{-19}$ &  &  &  &  \\
+$[5,3,0]$ & leading & $2.1\cdot10^{-6}$ & $4.2\cdot10^{-20}$ &  &  &  &  \\
+$[5,2,1]$ \#1 & $u'C+R$ & $3.8\cdot10^{-6}$ & $3.7\cdot10^{-19}$ & 5.660760026 & $-0.685948111847$ & $4.7\cdot10^{-17}$ & $2.5\cdot10^{-16}$ \\
+$[5,2,1]$ \#2 & $u'C+R$ & $4.7\cdot10^{-6}$ & $3.1\cdot10^{-19}$ & 26.85964814 & $1.29261477851$ & $3.1\cdot10^{-17}$ & $1.0\cdot10^{-16}$ \\
+$[4,4,0]$ & leading & $6.4\cdot10^{-7}$ & $4.4\cdot10^{-19}$ &  &  &  &  \\
+$[4,3,1]$ \#1 & $u'C+R$ & $1.8\cdot10^{-6}$ & $3.1\cdot10^{-19}$ & 4.006458515 & $-0.0492541950103$ & $1.6\cdot10^{-8}$ & $3.3\cdot10^{-7}$ \\
+$[4,3,1]$ \#2 & $u'C+R$ & $4.7\cdot10^{-6}$ & $3.6\cdot10^{-19}$ & 24.44252108 & $0.865785999106$ & $2.3\cdot10^{-8}$ & $2.1\cdot10^{-7}$ \\
+$[4,2,2]$ & $u'C+R$ & $2.4\cdot10^{-6}$ & $1.6\cdot10^{-18}$ &  & $-0.373983739837$ & $1.8\cdot10^{-17}$ & $5.0\cdot10^{-17}$ \\
+$[3,3,2]$ & leading & $2.9\cdot10^{-6}$ & $9.5\cdot10^{-19}$ &  &  &  &  \\
+\bottomrule\end{longtable}\end{center}
+
+(P3 is $h=1/2$, $\theta=(3/7,-1/4)$, $t=19/14$.) ``First direction only'' is never the limit: every branch is extracted completely (one-component weights from the leading formula with $\kappa(t)$; the dim-2 weights through $R$). The $[4,3,1]$ second direction is limited to $10^{-8}$ ($10^{-10}$ at P1) by the noise of the fitted $\alpha(t)$; the $[4,2,2]$ and $[5,2,1]$ ones by nothing but the arithmetic ($10^{-16}$). The $\varepsilon=10^{-6}$ errors are the expected $O(\varepsilon)$ of the leading-order formulas, and the $\varepsilon\to0$ Richardson limits agree to $\le1.6\cdot10^{-18}$. The same caveat as for the adjoint holds: the closed forms are fits (only $\kappa$'s and $R_c$ are at the $10^{-16}$ level; $\Delta_c^{[5,2,1]}$ and the $[4,2,2]$ $\mathrm{kslope}$ at $10^{-9}$--$10^{-11}$; $[4,3,1]$ $\alpha(t)$ at $10^{-9}$).
+
+\subsection{What remains for $[3,1,0]$}\label{sec:a310open}
+
+Identify $\alpha(t)$ (needs either higher accuracy, four-$\varepsilon$ Richardson at smaller $\varepsilon$, or second-order perturbation theory as in \S\,\ref{sec:pert}); prove the fitted $\kappa$'s, $\Delta_c$ and $\mathrm{kslope}$ by first- and second-order perturbation theory; the $[5,2,1]$ remainder and the $[4,2,2]$ $\mathrm{kslope}$ are rationalized from $10^{-9}$--$10^{-11}$ fits; $[4,1,0]$ at $k=2$ (dressing of $E_{13}$-degree 2: four orders expected \textbf{[conjecture]}); poles of the structural constants at $t=7/3$ ($[4,2,2]$) and $t=2$ ($[3,3,2]$) must be excluded from fits.
+
+\section{Untwisting the Q-determinants themselves}\label{sec:dets}
+
+Notebook: \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets.\allowbreak{}wb} (45 cells; no native outputs, results in the markdown cells 15, 22, 40, 44, 45); spec \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets-\allowbreak{}spec.\allowbreak{}md} (``Spec C1''); write-up \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets.\allowbreak{}md}. Setting as in \S\,\ref{sec:adj} (adjoint, P1, joint regime), cells 2--8 copied from \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 3--9. $\varepsilon\in\{1,2,4,8\}\cdot10^{-6}$; \textbf{48 direction points}: $\varphi$ and $\varphi'$ over the $18$ $(\omega_1,\omega_2)$ grid (36 points), plus $\varphi_3=(1/2,1/5,-3/7)$ and $\varphi_4=(2/3,-1/4,1/9)$ over six $\omega_2$ at $\omega_1=3/4$ (12 points); 200 digits; branch order $27$, $[4,1,1]$, $[3,3,0]$, octet 1, octet 2, singlet. Goal (spec \S{}0): the two pieces of the CG pipeline that so far enter as black boxes, $D_2:=\det_2^{(1)}[Q_B;y]/\mathrm{minor}_1$ and $D_6:=\det_6[Q_B,F_{\mathrm{vac}}(w_1,w_2,w_3)]/\Psi_Q$ (and the top-kill partner $D_{6t}:=\det_6[Q_B,F_{\mathrm{vac}}(w_1,y,w_3)]/\Psi_Q$), to leading and next-to-leading order in $\varepsilon$, in terms of \textbf{untwisted} objects: the untwisted Q-polynomials of the HW ket with staggered degrees, the untwisted transfer eigenvalues and the directions. The spec cites the only existing untwisting technology, \nb{old-\allowbreak{}conventions/\allowbreak{}old/\allowbreak{}XXX/\allowbreak{}Experiments/\allowbreak{}SU3\_\allowbreak{}L2\_\allowbreak{}Untwisting.\allowbreak{}\{md,tex\}} \S{}3.2--3.5 (old conventions, and for the norm, not for this overlap; I did not read it): bare rows at infinity, a Laplace split into a bare block that becomes a Vandermonde-type monomial in the twist directions and a periodic block that becomes an untwisted minor, and staggered untwisted degrees $\deg q^j=\mu_j+(3-j)$, $\deg q_i=(4-\mu_i)+(i-1)$.
+
+\subsection{Exponents and direction monomials}\label{sec:detsexp}
+
+Task 1 (cells 9--15) \textbf{[numeric]}. Exponents are log$_2$ ratios over the doubling ladder (all within $10^{-6}$ of an integer, except $D_2$ where the non-top exponent is 0 to $10^{-6}$); coefficients $c_0=f/\varepsilon^p$ by a cubic extrapolation in $\varepsilon$ (error $\sim10^{-22}$); monomial test by least squares in the logs of the nine differences $\varphi_{12},\varphi_{13},\varphi_{23},\omega_1-\varphi_k,\omega_2-\varphi_k$ followed by a constant-spread test at all 48 points.
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{8.5cm}p{6.0cm}@{}}\toprule
+\textbf{factor} & \textbf{$\varepsilon$-exponent per branch} \\\midrule\endhead
+$D_2=\det_2^{(1)}/\mathrm{minor}_1$ & $1,0,0,0,0,0$ \\
+$D_6=\det_6/\Psi_Q$ & $10,10,10,9,9,8$ \\
+$D_{6t}$ (top-kill partner) & $6$ for all \\
+$\langle x_0\mid\hat\Psi\rangle$ ($=1/\lVert P_{\mathrm{HW}}\Psi\rVert_G$; so $\lVert\Psi\rVert_G\sim\varepsilon^{-p}$) & $2,3,3,4,4,6$ \\
+$Q_{\mathrm{num}}$ & $-5,-6,-6,-7,-7,-8$ \\
+\bottomrule\end{longtable}\end{center}
+
+Consistency: $p(Q_{\mathrm{num}}^B)=p(D_6^B)+p(D_2^B)-11-5$ (top-state values $D_2\sim\varepsilon$, $D_6\sim\varepsilon^{10}$, $D_{6t}\sim\varepsilon^6$, $\mathrm{topFac}=\langle v_{12}|e_1e_1\rangle/\langle x_0|e_1e_1\rangle\sim\varepsilon^{-5}$; re-checked here against the table).
+
+\textbf{Leading coefficients} (constants exact where rational; spread $\le8\cdot10^{-22}$ over 48 points unless stated):
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item $D_2$ is independent of $\varphi$ and $\omega$ except for the top state: top $\frac{893025}{1024}(\omega_2-\varphi_2)\varepsilon$ ($893025=945^2$); $[4,1,1]$ and $[3,3,0]$: $-\frac{1157625}{512}$ ($=-105^3/2^9$); singlet $-\frac{1157625}{128}$; octets $-7116.62856099\ldots$, $-3487.22204765\ldots$ (algebraic, the two copies) \textbf{[numeric]}.
+\item $D_{6t}$ is a pure monomial in $\omega_1$ alone: $D_{6t}\sim\mathrm{const}\cdot\varepsilon^6\prod_k(\omega_1-\varphi_k)^{4-\mu_k}$, i.e. exponents $(0,2,4)$ (top), $(0,3,3)$ ($[4,1,1]$), $(1,1,4)$ ($[3,3,0]$), $(1,2,3)$ (octets), $(2,2,2)$ (singlet); no $\varphi_{ij}$ and no $\omega_2$ dependence. The constant is the same complex number $1.47784527\cdot10^6+1.41296475\cdot10^6\,i$ for the three clean branches (it contains the $e^{2\pi ix/h}$ insertion).
+\item \textbf{$D_6$ itself is not a monomial} (fit residual $O(1)$, spread $\sim10$): the top branch carries a branch-independent, twist-dependent complex normalisation constant of the $\det_6$ formula (the same value for 27, $[4,1,1]$, $[3,3,0]$). The branch \textbf{ratios} $D_6^B/D_6^{\mathrm{top}}$ are exact monomials, listed in the table below.
+\item $\langle x_0|\hat\Psi\rangle$ is a function of $\varphi_{ij}$ only (absolute value): top $|\varphi_{12}|^2$, $[4,1,1]$ $|\varphi_{12}\varphi_{13}\varphi_{23}|$, $[3,3,0]$ $|\varphi_{12}|^3$, octets $\varphi_{12}^2|\varphi_{13}\varphi_{23}|$, singlet $|\varphi_{12}\varphi_{13}\varphi_{23}|^2$; constants $1$, $0.272741187029$, $0.272741187029$, $0.0398430144518$, $0.0773784594992$, $0.00746241357134$.
+\item \textbf{$Q_{\mathrm{num}}$ is an exact monomial for every branch} (constant spread $\le10^{-22}$; integer deviation of fitted exponents $\le10^{-22}$), see the table below.
+\end{itemize}
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{1.3cm}p{5.2cm}p{3.2cm}p{5.3cm}@{}}\toprule
+\textbf{branch} & \textbf{$D_6^B/D_6^{\mathrm{top}}$ (monomial; constant)} & \textbf{$D_{6t}^B/D_{6t}^{\mathrm{top}}$ (constant)} & \textbf{$Q_{\mathrm{num}}^B$ (constant)} \\\midrule\endhead
+top & $1$ & $1$ & $\varphi_{12}^{-2}(\omega_2-\varphi_1)^{-2}(\omega_2-\varphi_2)^{-1}$ (1, $=\delta^\Lambda\Psi_{\mathrm{top}}(1,1)$) \\
+$[4,1,1]$ & $\frac{(\omega_1-\varphi_2)(\omega_2-\varphi_2)}{(\omega_1-\varphi_3)(\omega_2-\varphi_3)}$ (1; spread $10^{-127}$) & $\frac{\omega_1-\varphi_2}{\omega_1-\varphi_3}$ (1) & $\varphi_{12}^{-2}\frac{\omega_1-\varphi_2}{\omega_1-\varphi_3}(\omega_2-\varphi_1)^{-2}(\omega_2-\varphi_2)^{-1}(\omega_2-\varphi_3)^{-1}$ ($-70/27$) \\
+$[3,3,0]$ & $\frac{\omega_1-\varphi_1}{\omega_1-\varphi_2}$ (1) & $\frac{\omega_1-\varphi_1}{\omega_1-\varphi_2}$ (1) & $\varphi_{12}^{-2}\frac{\omega_1-\varphi_1}{\omega_1-\varphi_2}(\omega_2-\varphi_1)^{-2}(\omega_2-\varphi_2)^{-2}$ ($-70/27$) \\
+octets & $\frac{\omega_1-\varphi_1}{(\omega_1-\varphi_3)(\omega_2-\varphi_3)}$ ($-0.7767209220418339$, $2.0514347617920940$; algebraic; spread $2\cdot10^{-20}$) & $\frac{\omega_1-\varphi_1}{\omega_1-\varphi_3}$ ($1.17753621$, $0.53110063$) & $\varphi_{12}^{-2}\frac{\omega_1-\varphi_1}{\omega_1-\varphi_3}(\omega_2-\varphi_1)^{-2}(\omega_2-\varphi_2)^{-2}(\omega_2-\varphi_3)^{-1}$ ($6.33834161515$, $-8.20301776029$) \\
+singlet & $\frac{(\omega_1-\varphi_1)^2}{(\omega_1-\varphi_3)^2(\omega_2-\varphi_3)^2}$ ($-9800/2619=-3.7418862161130$; spread $10^{-21}$) & $\frac{(\omega_1-\varphi_1)^2}{(\omega_1-\varphi_3)^2}$ ($2107/2619=0.80450554$) & $\varphi_{12}^{-2}\frac{(\omega_1-\varphi_1)^2}{(\omega_1-\varphi_3)^2}\prod_k(\omega_2-\varphi_k)^{-2}$ ($38.8047459449$) \\
+\bottomrule\end{longtable}\end{center}
+
+Reading: $Q_{\mathrm{num}}^B/Q_{\mathrm{num}}^{\mathrm{top}}=[D_6^B/D_6^{\mathrm{top}}][D_2^B/D_2^{\mathrm{top}}]$ (the state-independent chain-side constants cancel); the top branch's $D_2$ carries the factor $(\omega_2-\varphi_2)$, which turns the $\omega_2$-exponent of the $D_6$ ratio into the one listed. So the $\omega_1$-dependence of $Q_{\mathrm{num}}$ is exactly that of $D_6^B/D_6^{\mathrm{top}}$. These exact monomials are the reason the leading-order extraction of \S\,\ref{sec:adjQ} works with the simple factors $c'_0$, $a'_0$, $a'_0c'_0$.
+
+\subsection{$\det_2^{(1)}$: the $\tau$-polynomial and the untwisted Wronskian}\label{sec:detsdet2}
+
+Task 2 (cells 16--22). \textbf{(a) The $\tau$-polynomial identity at small $\varepsilon$} \textbf{[numeric]}:
+
+\[\begin{aligned}
+D_2=c\;F(h,\theta_{12},y)\cdot(1,\tau_{10},\tau_{11},\tau_{20},\tau_{21}),\\
+F=\Bigl(2h^2(\theta_{12}-h)(\theta_{12}-2h)(\theta_{12}-3h)y^4,\ 2h(\theta_{12}-h)(\theta_{12}-3h)y^3,\ (\theta_{12}-h)y^2,\ (\theta_{12}-3h)y^2,\ \tfrac{2}{3h}y\Bigr),
+\end{aligned}\]
+
+($\theta_{12}$ absolute here, as in \nb{Two-\allowbreak{}rotations-\allowbreak{}det-\allowbreak{}overlap.\allowbreak{}md} \S{}5.4; the dot product pairs the vector $F$ with $(1,\tau_\lambda)$ componentwise-summed), $\tau_\lambda$ the eigenvalue of the fused $T_\lambda$ at $v_0=\theta_1-2h$ read from the branch's own $t_1,t_2,t_3$ polynomials through the CBR ($T_{10}=t_1$, $T_{11}=t_2$, $T_{20}=t_1t_1^{[+]}-t_2^{[+]}$, $T_{21}=t_2t_1^{[+]}-t_3^{[+]}$). The constant $c$ is the same number for all six branches, all 18 $\omega$, all four $\varepsilon$, both $\varphi$ and $\varphi'$: $\max|c_B/c_{\mathrm{top}}-1|=0$ at Precision 140 (the working precision of $D_2$), and
+
+\[
+c=\frac{343000}{1161}=\frac{70^3}{27\cdot43}=295.4349698535745\ldots
+\]
+
+(independent of $\varepsilon$, $\omega$, $\varphi$, branch; the write-up adds ``so the constant depends only on $(h,\theta)$'', but only P1 was tested, so that part is untested). The convention check (no mismatch) passed.
+
+\textbf{(b) Untwisted $\tau^0$ and first-order shifts.} HW kets of the untwisted chain (octet sector diagonalised in $\mathrm{HW}_{(3,2,1)}$, copies ordered by the real part of the eigenvalue of $t_1+\pi t_2$ at $u=3/7$; eigen-residuals $10^{-196}$). $\tau^0$ at P1 \textbf{[numeric]}:
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lllll@{}}\toprule
+\textbf{branch} & \textbf{$T_{10}$} & \textbf{$T_{11}$} & \textbf{$T_{20}$} & \textbf{$T_{21}$} \\\midrule\endhead
+27 & $-0.078571429$ & $-0.17770408$ & $0.015153061$ & $0.034271501$ \\
+$[4,1,1]$ & $-0.57857143$ & $-0.17770408$ & $0.40086735$ & $0.12312354$ \\
+$[3,3,0]$ & $-0.57857143$ & $-0.63841837$ & $0.11158163$ & $0.12312354$ \\
+octet 1 & $-1.3285714$ & $-0.51334555$ & $1.3150802$ & $0.50813271$ \\
+octet 2 & $-1.3285714$ & $0.31865168$ & $0.48308302$ & $-0.11586521$ \\
+singlet & $-2.0785714$ & $0.40086735$ & $2.4794388$ & $-0.47817748$ \\
+\bottomrule\end{longtable}\end{center}
+
+($27$: $T_{10}=-11/140$.) The branch $\tau_\lambda(\varepsilon)$ obey $\tau=\tau^0+\varepsilon\tau^1+O(\varepsilon^2)$: $\max|(\tau(\varepsilon)-\tau^0)/\varepsilon-\tau^1|/|\tau^1|=2.67\cdot10^{-4},5.34\cdot10^{-4},1.07\cdot10^{-3},2.14\cdot10^{-3}$ at $\varepsilon=1,2,4,8\cdot10^{-6}$ (successive ratios exactly 2.000: $O(\varepsilon)$), with $\tau^1=\langle\ell|T'_\lambda|r\rangle/\langle\ell|r\rangle$, $T'_\lambda=\partial_\varepsilon T_\lambda|_{\varepsilon=0}$ built from the principal minors ($\partial_\varepsilon\prod_{i\in I}z_i=\sum_{i\in I}\varphi_i$), $\ell$ the left eigenvector in the weight sector. \textbf{$\tau^1$ is linear in $\varphi$}, $\tau^1=\sum_k\varphi_ka_k$ with $a_k=\partial\tau/\partial z_k|_{z=1}$ (linearity checked at $\varphi$, $\varphi'$ to $10^{-196}$), and the scaling sum rule $\sum_ka_k=|\lambda|\,\tau^0$ holds to $10^{-196}$ ($z\to cz$ multiplies $T_\lambda$ by $c^{|\lambda|}$) \textbf{[exact/numeric]}. The $a_k$ are rational for the non-degenerate branches, e.g. 27: $T_{10}$: $(0,-\frac{27}{140},\frac4{35})$, $T_{11}$: $(0,-\frac{3483}{19600},-\frac{3483}{19600})$ (the sum rule is re-checked here: $-\frac{27}{140}+\frac{16}{140}=-\frac{11}{140}=\tau^0_{10}$ and $2\cdot(-\frac{3483}{19600})=2\tau^0_{11}$); singlet $a_1=a_2=a_3=|\lambda|\tau^0/3$ (symmetric weight); $[4,1,1]$: $a_1=0$ for $T_{10},T_{11}$; octet $a_k$ are quadratic irrationals. No uniform closed formula was found beyond linearity and the sum rule.
+
+\textbf{(c) $\tau^0$ through the untwisted dual Q's.} At $z=1$ the dual Baxter equation has a \textbf{3-dimensional polynomial kernel} in degrees $\le\mu_1+2$ for every branch; the staggered basis (elimination from the top degree) has degrees $(\mu_3,\mu_2+1,\mu_1+2)=(0,3,6),(1,2,6),(0,4,5),(1,3,5),(1,3,5),(2,3,4)$ for 27, $[4,1,1]$, $[3,3,0]$, octet 1, octet 2, singlet (checked against the expected degrees); Baxter residual of each vector $\le2\cdot10^{-199}$ (exact arithmetic on the stored numbers). \textbf{The untwisted quantum-Wronskian formula holds} \textbf{[numeric]}:
+
+\[
+T_\lambda(x)=P_\lambda(x)\,\frac{\det[v(x+\lambda_1h),\,v(x+(\lambda_2-1)h),\,v(x-2h)]}{\det[v(x),\,v(x-h),\,v(x-2h)]},\qquad P_\lambda(x)=\prod_{\text{boxes }(r,c)}\nu_3\bigl(x+(c-r)h\bigr),
+\]
+
+with $v$ the three staggered untwisted dual solutions (any basis of the kernel: the ratio is basis-independent), $\nu_3(x)=\prod_s(x-\theta_s+h\Lambda_3)=(x-\theta_1)(x-\theta_2)$ and $P_{10}=\nu_3(x)$, $P_{11}=\nu_3(x)\nu_3(x-h)$, $P_{20}=\nu_3(x)\nu_3(x+h)$, $P_{21}=\nu_3(x)\nu_3(x+h)\nu_3(x-h)$ (derived by Cramer from the $3\times4$ system): $\max|\tau/(PW)-1|=0$ at Precision 197 for all 6 branches $\times$ 4 shapes $\times$ 4 points $x=\theta_1-2h,\ 3/7,\ -2/9,\ 11/13$; the control $P=1$ fails with $O(1)$ deviation. Hence \textbf{at leading order $D_2=cF(y)\cdot(1,\tau^0)$ with $\tau^0=PW[\text{untwisted staggered dual Q's}]$ is an explicit expression in untwisted Q's}, and at next order it is the same polynomial with $\tau\to\tau^0+\varepsilon\tau^1$ ($F$ also depends on $\varepsilon$ through $y=(1+\varepsilon\omega_2)y_0$). The only non-Q input left at next order is $\tau^1$ (a first-order eigenvalue shift of the untwisted chain, linear in $\varphi$).
+
+\subsection{$\det_6$: what is and is not untwisted}\label{sec:detsdet6}
+
+Task 3 (cells 23--40) \textbf{[numeric]} unless stated.
+
+\textbf{(a) Entry exponents.} In the raw $6\times6$ matrix (rows $(k,(i,j))$: $k=1$ bare rows $(1,3),(1,2),(2,3)$, then $k=2$ periodic rows; columns $c_1..c_6=-\langle QF\rangle,-\langle xQF\rangle,\langle QF(x{+}h)\rangle,\langle xQF(x{+}h)\rangle,\langle Q(x{-}h)F\rangle,\langle xQ(x{-}h)F\rangle$) the exponent of every entry is $p_{ab}=r_a+s_b$ with $s=(0,-1,0,-1,0,-1)$ (the $x$-weighted brackets are one power of $\varepsilon$ larger) and row exponents (bare $|$ periodic): 27: $(5,3,3\,|\,0,-2,-2)$; $[4,1,1]$: $(4,4,2\,|\,0,0,-2)$; $[3,3,0]$: $(5,2,3\,|\,0,-3,-2)$; octets: $(4,3,2\,|\,0,-1,-2)$; singlet: $(3,3,1\,|\,0,0,-2)$. All 216 exponents are integers to $2.7\cdot10^{-5}$. The raw $k=2$ rows contain divergent pieces (the twisted monic $q^2$ tends to a multiple of $\varepsilon^{-1}q^3$ plus the finite untwisted solution of degree $\mu_2+1$); the determinant-preserving row operations (row $(1,2)$ \nb{+=} $y\cdot$row $(1,3)$, row $(2,3)$ \nb{+=} $x\cdot$row $(1,3)$, both $k$; $y=-Q^2(a)/Q^3(a)$, $x=-F_2(a')/F_1(a')$ at $a=1/3$, $a'=-1/5$; $y,x\sim\varepsilon^{-2}$; the determinant is unchanged to $1.6\cdot10^{-116}$) bring the periodic rows to exponents $(0,1,1)$ for all branches.
+
+\textbf{(b) The column basis: a rational one exists for the $H$ directions.} Filtration of the column space by the weighted order in the three bare rows (levels $F_j=\{v:\mathrm{ord}_a(Mv)\ge r_a-1+j\}$): dimensions ($j=0..4$) $(6,5,3,1,0)$ for \textbf{all six branches}. The level $F_2$ (dim 3) is the same subspace for all six branches and for two directions (stacked rank 3, differences $10^{-15}$), with the rational reduced echelon basis
+
+\[
+H_1=c_1+c_5,\qquad H_2=c_3-c_5,\qquad H_3=c_4-\tfrac52c_5-c_6\quad(\tfrac52=5h\text{ at }h=\tfrac12\text{; the }5h\text{ is untested}),
+\]
+
+and the complement $O=(c_2,c_5,c_6)$ (any complement works). Change of basis $CC$ (columns $[H_1H_2H_3O_1O_2O_3]$): $\det CC=1$, $\det(M\,CC)/\det CC=\det M$ to $3\cdot10^{-116}$. Entry-exponent profile of $M\,CC$ in the bare rows: $H$ columns $(n+2,n+2,n+2)$, $O$ $(n,n+1,n)$ (e.g. 27, row 1: $(6,6,6\,|\,4,5,4)$). The combinations that vanish at leading order in the periodic rows (null space of the $3\times6$ leading periodic block, dim 3) are state- and direction-dependent and complex: \textbf{there is no rational $O$ of that type; only the $H$ space is rational}. The old thread's $(c_1{+}c_3,\ c_5{-}c_6{+}5c_3,\ c_2{-}c_3)$ is the same space in its labelling.
+
+\textbf{(c) The Laplace split holds for the top state only.} The block exponents add exactly: the $\varepsilon$-exponent of $\det_6$ is $12,12,12,11,11,10$ (for $\det_6$ itself; $D_6=\det_6/\Psi_Q$ has $10,10,10,9,9,8$; the difference of 2 is presumably the order of $\Psi_Q$, not checked in the sources) $=$ BO $+$ PH with $\mathrm{BO}$ (bare rows $\times$ $O$ columns) $=10,9,9,8,8,6$ and $\mathrm{PH}$ (periodic rows $\times$ $H$ columns) $=2,3,3,3,3,4$. The split ratio $r_B=\lim\det_6/(-\mathrm{BO}\cdot\mathrm{PH})$: for 27 it is 1 ($1+2.2\cdot10^{-7}$ at $\varepsilon=10^{-6}$, $O(\varepsilon)$; limit $1+3\cdot10^{-23}$); for the other five it does \textbf{not} tend to 1: at $(\varphi,\omega\,\mathrm{A})$ it is $-66/53=-1.2453$ ($[4,1,1]$), $0.32794$ ($[3,3,0]$), $0.72267$ (both octets), $0.38888$ (singlet), and it is direction dependent (spread over 48 points $2.8,1.8,0.75,0.75,6.7$). Diagnosis: for the five non-top branches all 20 Laplace terms (subsets $S$ of three columns for the bare rows) are of the same $\varepsilon$-order; the terms with $S$ containing one $H$ column and two $O$ columns are of order 1 relative to the determinant (e.g. $[4,1,1]$: seven terms with $|\mathrm{term}/\det|$ up to 15), because both BO and PH are anomalously suppressed ($O_1,O_3$ proportional at leading order; PH one order below the naive count). The bare-times-periodic product is therefore \textbf{not} the leading term in this basis (the determinant and the blocks are invariant under the row regularisation, so regularisation does not help).
+
+\textbf{(d) The periodic block against the untwisted minor: fails.} Untwisted objects: dual $q^3,q^2$ = the staggered kernel solutions (degrees $\mu_3,\mu_2+1$); the vacuum direct kernel at $z=1$ (the $w\to1$ limit; the vacuum eigenvalues at $w=1$ equal the top state's, difference 0 at 198 digits): polynomial kernel dimensions $1,1,1,2,2,2,3$ for maximal degree $0..6$, i.e. staggered degrees $(0,3,6)=(4-\lambda_i)+(i-1)$ for $\lambda=(4,2,0)$ (the finite-$\varepsilon$ monic $q_i^{\mathrm{vac}}$ have degrees $0,2,4$). The untwisted periodic minor $\mathrm{PH}_u$ (rows $(1,3),(1,2),(2,3)$, insertion $e^{2\pi ix/h}$, columns $H_1,H_2,H_3$, with $F_1$ (deg 0), $F_2$ (deg 3), $q^3,q^2$): \textbf{top $13453$ (nonzero); the five others are numerically zero} ($1.7\cdot10^{-207}$, 0, $6.9\cdot10^{-208}$, $7.2\cdot10^{-208}$, $2.4\cdot10^{-208}$; orthogonality of different irreps at zero twist). So $\mathrm{PH}(\varepsilon)\sim\varepsilon^{(3,3,3,3,4)}$ is controlled by first-order Q corrections and cannot tend to the untwisted minor. Even for the top state $c_0(\mathrm{PH})/\mathrm{PH}_u$ is not a monomial in the directions (spread 5): a direction-dependent factor common to PH, BO and $D_6$ of all branches (the state-independent constant $r_6$ of the $\det_6$ formula; $\mathrm{LHS}_{\mathrm{top}}=\langle\Omega\Omega|e_1e_1\rangle/\langle x_0|e_1e_1\rangle=\varepsilon^{-2}/\varphi_{12}^2$ exactly, and $r_6=\mathrm{LHS}_{\mathrm{top}}/D_{6,\rm top}$ is not a monomial; $D_6$ is independent of the third vacuum twist $w_3$, checked). Best alternative tried: the top state's own untwisted direct solutions in place of the vacuum Q's change nothing (they coincide); no alternative reproduces PH.
+
+\textbf{(e) The bare block.} BO itself is not a monomial (the common factor above), but the branch ratios are exact monomials with rational constants (spread $\le2.7\cdot10^{-20}$, exponent deviations $\le8\cdot10^{-20}$):
+
+\[\begin{aligned}
+\frac{\mathrm{BO}_B}{\mathrm{BO}_{\mathrm{top}}}&=-\frac53\frac{\omega_1-\varphi_2}{(\omega_1-\varphi_3)(\omega_2-\varphi_3)}\ ([4,1,1]),\qquad -\frac{1}{\omega_1-\varphi_2}\ ([3,3,0]),\\
+&\quad \frac{5/2}{(\omega_1-\varphi_3)(\omega_2-\varphi_3)}\ (\text{octets}),\qquad \frac{5/2}{(\omega_1-\varphi_3)^2(\omega_2-\varphi_3)^2}\ (\text{singlet}).
+\end{aligned}\]
+
+So $E_\nu/E_{27}=-5/3,-1,5/2,5/2,5/2$ for $[4,1,1],[3,3,0]$, octet 1, octet 2, singlet; the old thread's $E_\lambda/E_{27}$ (for the norm; $E_\lambda=-3/160,-1/36,-1/36,-2/3,-2/3,-1$) would be $40/27,40/27,320/9,320/9,160/3$ (re-derived here from the quoted $E_\lambda$): no resemblance (different object; our absolute $E_{27}$ is hidden in the common factor). $\mathrm{PH}_B/\mathrm{PH}_{\mathrm{top}}$ is \textbf{not} a monomial (spread 4 to 170).
+
+\textbf{Exact results for the full $D_6$ ratios} (not from the Laplace split) \textbf{[numeric]}:
+
+\[
+\frac{D_6^{[3,3,0]}}{D_6^{\mathrm{top}}}=\frac{w_1-z_1}{w_1-z_2},\qquad \frac{D_6^{[4,1,1]}}{D_6^{\mathrm{top}}}=\frac{(w_1-z_2)(w_2-z_2)}{(w_1-z_3)(w_2-z_3)},
+\]
+
+hold \textbf{exactly in $\varepsilon$} (deviation $6\cdot10^{-122}$ and $6\cdot10^{-130}$ at $\varepsilon=10^{-6}$, Precision $\sim140$): ratios of Gauss parameters of the vacuum covector, with no Q input at all (this suggests an algebraic rather than SoV-determinant origin; the write-up lists it as a lead). For the octets and the singlet the leading monomial of the table above holds with a numerical $O(\varepsilon)$ correction $\rho_B=c_1/c_0$ that is not a simple 9-term rational function of the directions (fit residuals 0.05 to 1; cell 43).
+
+\subsection{Reconstruction of $Q_{\mathrm{num}}$ to $O(\varepsilon)$}\label{sec:detsrec}
+
+Task 4 (cells 41--44): $Q_{\mathrm{num}}^B=[D_6^B/D_6^{\mathrm{top}}][D_2^B/D_2^{\mathrm{top}}]\,\mathrm{topFac}$, with (1) $D_2^B/D_2^{\mathrm{top}}=F(y)\cdot(1,\tau_B)/F(y)\cdot(1,\tau_{\mathrm{top}})$, $\tau_B=\tau^0_B+\varepsilon\sum_k\varphi_ka_k$ (untwisted $\tau^0=PW$ of the untwisted staggered dual Q's, $\tau^1$ from the untwisted chain), $\tau_{\mathrm{top}}$ \textbf{exact} (the top state is the reference state; eigenvalues \nb{auditVac}$(z)$), $y=(1+\varepsilon\omega_2)y_0$ exact, $c=343000/1161$ cancels; (2) $D_6^B/D_6^{\mathrm{top}}=\varepsilon^{p_B-10}c_0(1+\varepsilon\rho_B)$ with $c_0$ the Task-1 monomial (exact rational constant) and $\rho_B=c_1/c_0$ \textbf{numerical}, fitted from the four-$\varepsilon$ ladder of the same direction; (3) $\mathrm{topFac}$ exact. Test at $\varepsilon=3\cdot10^{-6},5\cdot10^{-6}$ (outside the ladder), direction A ($\varphi$, $\omega=(3/4,-1/5)$) and direction B ($\varphi'$, $\omega=(-5/3,9/7)$); residual $Q_{\mathrm{num}}^{\mathrm{rec}}/Q_{\mathrm{num}}-1$ \textbf{[numeric]}:
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lllllll@{}}\toprule
+\textbf{direction} & \textbf{branch} & \textbf{$\varepsilon$} & \textbf{full ($c_1,\tau^1$)} & \textbf{leading only} & \textbf{$c_1$ only} & \textbf{$\tau^1$ only} \\\midrule\endhead
+A & $[3,3,0]$ & $3\cdot10^{-6}$ & $6.2\cdot10^{-13}$ & $7.2\cdot10^{-7}$ & $7.2\cdot10^{-7}$ & $6.2\cdot10^{-13}$ \\
+A & $[3,3,0]$ & $5\cdot10^{-6}$ & $1.7\cdot10^{-12}$ & $1.2\cdot10^{-6}$ & $1.2\cdot10^{-6}$ & $1.7\cdot10^{-12}$ \\
+A & singlet & $3\cdot10^{-6}$ & $8.9\cdot10^{-13}$ & $1.7\cdot10^{-6}$ & $7.2\cdot10^{-7}$ & $1.0\cdot10^{-6}$ \\
+A & singlet & $5\cdot10^{-6}$ & $2.5\cdot10^{-12}$ & $2.9\cdot10^{-6}$ & $1.2\cdot10^{-6}$ & $1.7\cdot10^{-6}$ \\
+B & $[3,3,0]$ & $3\cdot10^{-6}$ & $8.7\cdot10^{-13}$ & $8.2\cdot10^{-7}$ & $8.2\cdot10^{-7}$ & $8.7\cdot10^{-13}$ \\
+B & $[3,3,0]$ & $5\cdot10^{-6}$ & $2.4\cdot10^{-12}$ & $1.4\cdot10^{-6}$ & $1.4\cdot10^{-6}$ & $2.4\cdot10^{-12}$ \\
+B & singlet & $3\cdot10^{-6}$ & $6.9\cdot10^{-13}$ & $2.1\cdot10^{-6}$ & $8.7\cdot10^{-7}$ & $1.2\cdot10^{-6}$ \\
+B & singlet & $5\cdot10^{-6}$ & $1.9\cdot10^{-12}$ & $3.5\cdot10^{-6}$ & $1.5\cdot10^{-6}$ & $2.0\cdot10^{-6}$ \\
+\bottomrule\end{longtable}\end{center}
+
+The full reconstruction scales as $\varepsilon^2$ (ratio $2.7$--$2.8$ for $5/3$ in $\varepsilon$, i.e. $(5/3)^2$), the leading-only one as $\varepsilon$ (ratio 1.7). For $[3,3,0]$ the $D_6$ ratio is exact, so only the $\tau^1$ term matters. The fitted $c_0$ agrees with the monomial to $2\cdot10^{-121}$ ($[3,3,0]$) and $10^{-24}$ (singlet, limited by the cubic ladder extrapolation). \textbf{Caveat on ``held out'':} the direction-B residuals are held out in $\varepsilon$ and in the direction of the test, but $\rho_B$ is fitted from the ladder of the same direction (\nb{d6Coef[lab, io, ib]}, cell 42), so the $O(\varepsilon^2)$ agreement checks the structure, not a prediction of $\rho_B$.
+
+\textbf{What is an untwisted-Q formula and what is still numerical} (cell 44):
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item untwisted-Q formulas, verified: $D_2$ at leading order $=cF(y)\cdot(1,\tau^0)$ with $\tau^0=P_\lambda W$ evaluated on the untwisted staggered dual Q's (residual $10^{-197}$); $\mathrm{topFac}$, $\tau_{\mathrm{top}}$ (exact vacuum eigenvalues), $F(y)$, $y$ exact; $D_6^{[4,1,1]}/D_6^{\mathrm{top}}$ and $D_6^{[3,3,0]}/D_6^{\mathrm{top}}$ as exact rational functions of $(w_1,w_2,z)$ (Gauss parameters), no Q input;
+\item untwisted-chain (not Q) formula: $\tau^1=\sum_k\varphi_ka_k$ with rational $a_k$;
+\item empirical (fitted monomial with exact rational constant, not derived from untwisted Q's): the leading coefficients of $D_6^{\mathrm{octet}}/D_6^{\mathrm{top}}$ and $D_6^{\mathrm{singlet}}/D_6^{\mathrm{top}}$ (the periodic-block derivation failed);
+\item numerical: $\rho_B$ (the first correction of $D_6$ for the octets and singlet; it vanishes for $[4,1,1]$, $[3,3,0]$) and, for the octets, the individual copies' $\tau$ (quadratic irrationals).
+\end{itemize}
+
+\section{Bugs and tooling}\label{sec:tools}
+
+\textbf{The \nb{Do}/\nb{DownValues} purge bug (adjoint, cells 26--28, found in cells 34--36).} The first version of the $t$-scan for the singlet reported $K/S=-(62/105)/(t-2)$. Cause: \nb{DownValues} has attribute \nb{HoldAll}, so the line \nb{Do[DownValues[f] = .\allowbreak{}.\allowbreak{}.\allowbreak{}, \{f, \{Tm, tBasisC, tZof, wgt, branchesAt\}\}]} of \nb{purge[]} assigned to the \nb{Do} iterator \nb{f}, not to \nb{Tm}, \nb{tBasisC}, ...; the memoized transfer matrices and states of the first point (P1) were never purged and the scan kept P1's transfer matrices while $y_0$ and $\theta_{12}$ changed. The result was $K/S=-t_{12}(\mathrm{P1})/(3(t-2))$ with $62/105=t_{\mathrm{P1}}/3$. \textbf{Symptom:} a clean-looking law whose numerator was a P1 number: at $t=5/2$ the scan gave $-1.180952381$ whereas the correct law gives $-5/3$. Everything at P1 itself (Tasks 1--3, 5 and the P1 part of Task 4) was unaffected. Fix (cell 36): purge with literal symbols, \nb{DownValues[Tm] = Select[DownValues[Tm], !FreeQ[\#[[1]], Pattern] \&]} and so on, wrapped in \nb{setPoint[h, theta]}; verified in fresh kernels (restart, cell 3 with the line \nb{hN = 1/\allowbreak{}2; thN = \{2/\allowbreak{}7, -\allowbreak{}3/\allowbreak{}5\};} replaced by the test point, then cells 4--9, 14, 35): $(h,\theta)=(1,(5/2,0))$: $-1.6666666666672$ against $-5/3$ (difference $5\cdot10^{-13}$); $(1/3,(1/5,-4/9))$: $9.6666666666674$ against $9.6666666666667$ ($7\cdot10^{-13}$; the old scan gave $8.857142857$); $(1,(7/3,0))$: $\varphi$: $-2.3333333333339$, $\varphi'$: $-2.3333333333343$ against $-7/3$. The corrected eight-point scan agrees to $3.1\cdot10^{-11}$. The bug cost one wrong law.
+
+\textbf{The $(\varphi,\varepsilon,\omega)$-keyed memo bug ($[3,1,0]$ round 2, Task B, cell 84).} \nb{qtkC}, a memoized Q-side quantity depending on $(h,\theta)$ but keyed only on $(\varphi,\varepsilon,\omega)$, was not purged by \nb{setPoint}; the first $t$-scan reused the Q-numbers of the first $t$, which made the ``$g$ slope'' $t$-independent and produced a spurious $(\varphi_3,\omega_1=7/2)$ discrepancy. Fix: \nb{qtkC} is now purged with literal symbols in \nb{purge[]}; the P1 tables were computed before any scan (fresh cache) and the $t$-scan was redone. Task A used the non-memoized \nb{qtk} and is unaffected. \textbf{Rule:} purge every $(h,\theta)$-dependent memo with literal symbols.
+
+\textbf{The $\omega_2=2/9$ collision.} The spec's $w_3=1+\varepsilon\cdot2/9$ coincides with $w_2$ at $\omega_2=2/9$ (two equal vacuum twists, vacuum Baxter residual $4\cdot10^{-10}$ instead of $10^{-190}$). Use $w_3=1+\varepsilon\cdot5/13$; $w_3$ drops out of the identity.
+
+\textbf{Other gotchas found or re-met.} (1) \nb{Quiet[ClearAll["Global\textasciigrave{}*"]]}: the front-end wrapper symbol \nb{ClearGlobals} is Protected and aborts a bare \nb{ClearAll}. (2) The naive Baxter residual prints an exact 0 with Precision $\infty$ (the trap of \nb{Clean-\allowbreak{}CG-\allowbreak{}combinations.\allowbreak{}md} \S{}7); evaluate it in exact arithmetic on the stored numbers (\nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 8). (3) Precision limits: $R_Q$ keeps 126 digits at working precision 200 (adjoint) and about 104--112 digits ($[3,1,0]$), so identities are quoted as $10^{-116}$ and $10^{-82}$, limited by the working precision, not by the identity. (4) Poles of structural constants at $t=7/3$ ($[4,2,2]$) and $t=2$ ($[3,3,2]$; $y_0$ also singular at $t=2$): exclude such $t$ from fits. (5) $t_1(\theta_1+h)$ does not split the $[4,3,1]$ pair; use $t_2(\theta_1+h)$. (6) $\tau$ scales as $h^4$ ($t_2$ has degree 4 in $(u,\theta,h)$): quote $\tau/h^4$. (7) $\Omega_{(w_1,y)}$ degenerates at $y=z_i$; the Gauss parameters have poles at $w_1=z_k$; $\Delta$ at $w_2=z_k$. (8) Inherited: the string \nb{y*)} closes a Wolfram comment; the notebooks write \nb{y-\allowbreak{}star}. (9) Order of exponentials in $n'$ (\S\,\ref{sec:mech}).
+
+\textbf{No native outputs (all four notebooks).} VS Code did not execute the cells of new files (controller not associated, as for \nb{L2-\allowbreak{}410-\allowbreak{}two-\allowbreak{}rotations.\allowbreak{}wb}): for each notebook an agent ran each cell's source in the shared kernel K1 (\nb{ToExpression}/\nb{Get} of the saved source, cells in order) and stored the printed results as markdown cells (\nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 25, 33, 40, 45; \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets.\allowbreak{}wb} cells 15, 22, 40, 44, 45; \nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative.\allowbreak{}wb} cell 22; \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb}: a markdown cell with the printed output directly under every code cell, plus the summaries). \nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative.\allowbreak{}wb} was created from the cell sources by a script (no create-notebook tool). \textbf{A rerun in VS Code is needed to store native outputs}; run times from the notebooks: adjoint, 21 states at one $\varepsilon$ 1.5 s, one parameter point 0.02 s, one $t$ point $\approx3$ s, a full run a few minutes; $[3,1,0]$, 56 states 3.1 s per $\varepsilon$, 225 states 13.4 s, one $t$ point $\approx30$ s (a 20-point scan $\approx9$ min); \nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative.\allowbreak{}wb} a few seconds. Dependencies for a partial rerun of the adjoint notebook (its write-up \S{}6): cells 3--9 always; Task 5 needs 11 and 14; the final cells need 3--9, 11, 14, 28, 36.
+
+\textbf{Shared kernel.} Every one of these notebooks starts with a \nb{ClearAll} that wipes the live state of the other new-conventions notebooks (files intact). The main session sequenced the agents; \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 52 records that ``the kernel was cleared by another agent'' between rounds and that setup cells 1--6 and the helper cells (10, 20, 21, 23, 24, 30--32) had to be re-run before round 2. Never evaluate two of these notebooks concurrently. Nothing was committed; \nb{img/\allowbreak{}L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG/\allowbreak{}} is untracked tooling output (HANDOFF also records an unrelated 12-line change in \nb{.\allowbreak{}vscode/\allowbreak{}settings.\allowbreak{}json}).
+
+\section{Open problems and suggested next steps}\label{sec:open}
+
+\begin{enumerate}\setlength{\itemsep}{1pt}
+\item \textbf{Analytic untwisting of $\det_6$ for the non-top branches} (\S\,\ref{sec:dets}). Needed: a column basis, possibly state- or direction-dependent or with $O(\varepsilon)$ admixtures, that makes a bare$\times$periodic term dominant; or a different route. The exact Gauss-parameter ratios for $[4,1,1]$, $[3,3,0]$ suggest an algebraic origin; the common non-monomial factor $r_6$ (state-independent, $w_3$-independent) is unidentified; $\tau^1$ in Q-language (currently from the untwisted chain). Until then the leading coefficients of the octet and singlet $D_6$ ratios (constants $-0.7767$, $2.0514$, $-9800/2619$) and $\rho_B$ are empirical.
+\item \textbf{Proofs and the missing constants for $[3,1,0]$.} First- and second-order perturbation theory as in \S\,\ref{sec:pert} for the fitted $\kappa$'s, $\Delta_c^{[5,2,1]}$, $\mathrm{kslope}$; identify $\alpha(t)$ for $[4,3,1]$. Suggestion (mine, re-derived from the quoted traces and determinants): the conic parametrization of \S\,\ref{sec:pertoct} should apply, since the discriminants are $64(3t^2+1)$ ($[4,3,1]$) and $105t^2+256$ ($[5,2,1]$) \textbf{[conjecture]}.
+\item \textbf{$[4,1,0]$ at $k=2$} through the same pipeline (dressing of $E_{13}$-degree 2; four orders expected \textbf{[conjecture]}); then the $[3,2,0]$-type representations, where point A does not exist (\nb{Undo-\allowbreak{}site2-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}md} \S{}7) and the undone covector is one direction short.
+\item \textbf{Why is $K/S$ of order one exactly for the branches whose slice weight is at $\varepsilon^{\ge1}$?} The data are in \S\,\ref{sec:adjchain} and \S\,\ref{sec:a310chain}; the sources give the exponent bookkeeping but no derivation. A derivation would also predict the constants (the perturbative proof of \S\,\ref{sec:pert} is the adjoint instance).
+\item \textbf{Relations to the earlier clean combinations.} $\kappa_{[4,4,0]}=(t+1)/2$ here coincides with the number $(t+1)/2=97/70$ quoted in \nb{Clean-\allowbreak{}CG-\allowbreak{}combinations.\allowbreak{}md} \S{}2.1 for the adjoint $[3,3,0]$ (a different setting: T-insertion, not this overlap); and the $[3,1,0]$ clean branch $[6,1,1]$ has the same $O(\varepsilon)$ constant as the adjoint $[4,1,1]$ (\S\,\ref{sec:a310O}). Whether these are structural or accidental is not known.
+\item \textbf{Housekeeping.} Rerun the four notebooks in VS Code to store native outputs; decide with Paul whether the adjoint pipeline is promoted to a clean notebook; the HANDOFF NEXT list (1) analytic untwisting of $\det_6\times\det_2$ (this section: $\det_2$ done, $\det_6$ open), (2) $[3,1,0]$ $k=2$ then $[4,1,0]$ (first done, second open), (3) derive $\kappa_{\mathrm{singlet}}(t)$, $\Delta_c(t,\tau_c)$ (done for the adjoint), (4) rerun in VS Code (open).
+\end{enumerate}
+
+\appendix
+
+\section{Notebook and cell maps}\label{app:cells}
+
+All notebooks are in \nb{Paul/\allowbreak{}Mathematica/\allowbreak{}new-\allowbreak{}conventions/\allowbreak{}}; cells are 1-based. None has native outputs; ``result cell'' means a markdown cell holding the printed numbers. The first code cell of each notebook is \nb{Quiet[ClearAll["Global\textasciigrave{}*"]]}.
+
+\subsection{\nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} (45 cells)}\label{sec:cellsA}
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{11.5cm}@{}}\toprule
+\textbf{cells} & \textbf{content} \\\midrule\endhead
+1--2 & title, setup note (everything a function of the twists; $G$ makes $P_{\mathrm{HW}}$ the EH-frame orthogonal projector) \\
+3 & kernel reset; GT basis, plain generators \nb{JJ}, relations, nilpotency, invariant metric $G$, $\Lambda$, \nb{Ee} \\
+4 & monodromy and transfer polynomials: minors at the seven interpolation points \nb{uS}, basis polynomials \nb{tBasisC}, \nb{tZof}; quantum determinant check \\
+5 & Gauss factors, $x_0$ with the factorized inverse (\nb{x0Of}), \nb{oneSiteVac}, \nb{rhodiag} (the Greek letter rho in the notebook), \nb{Dy}, the \nb{u12} machinery (\nb{u12rs}, \nb{u12phi}, ...) \\
+6 & exact HW kets of $V\otimes V$, weights, $G$-orthogonal projectors per HW sector \\
+7 & Q machinery: poles, brackets \nb{det6}, \nb{su2det1}, \nb{minor1}, \nb{psiQ}; fixed-degree Q solvers (\nb{auditVac}, \nb{auditMonicQ}); state = association with dual Q's and twist \\
+8 & exact-arithmetic Baxter residual (\nb{baxRes}) \\
+9 & all 21 eigenstates of the five HW sectors at a ket twist, $\langle x_0\mid\Psi\rangle=1$, HW-limit branches (\nb{branchesAt}), $t_1,t_2$ polynomials \\
+10--12 & Task 0: $\varepsilon$-structure of the undone covector (symbolic $\varepsilon$), per-weight ranks over the $3\times6$ grid \\
+13--16 & Task 1: $R_C$, $S$, $K$, exact undo, $\varepsilon$-exponents, $\kappa$ tables, contamination carriers (\nb{showContam}) \\
+17--21 & Task 2: $R_Q$, state independence, $Q_{\mathrm{num}}$, leading-order extraction, Richardson \\
+22--24 & Task 3: top-killing, $\rho_B$ diagnostics \\
+25 & result cell, Tasks 0--3 \\
+26--28 & Task 4: singlet $\kappa(t)$ scan (first version, with the purge bug), law check \\
+29--32 & Task 5: octet $O(\varepsilon)$ layer, slope and intercept over 8 $\varphi$ \\
+33 & result cell, Tasks 4--5 \\
+34--36 & Task 6: leak test; \nb{purge[]}/\nb{setPoint} fixed (cell 36), corrected scan \\
+37--39 & Task 7: $\Delta_c$, $\tau_c$ scan over 22 $t$; rational fits \\
+40 & result cell, Tasks 6--7 \\
+41--45 & FINAL: \nb{finalRun} (42), P2 (43), P3 (44), result cell (45) \\
+\bottomrule\end{longtable}\end{center}
+
+\subsection{\nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative.\allowbreak{}wb} (22 cells)}\label{sec:cellsB}
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{11.5cm}@{}}\toprule
+\textbf{cells} & \textbf{content} \\\midrule\endhead
+1--2 & title, regime, method (generic family member, conic parametrization of the octets, evidence tags), setup note \\
+3 & kernel reset; GT generators, metric, HW kets per weight sector \\
+4 & two-site transfer matrices at $h=1$, $\theta=(t,0)$ with $t$ symbolic; principal quantum minors $m_I$; $t_a'$ \\
+5 & regime and covectors (exact in $\varepsilon,t,\varphi,\omega$) \\
+6--7 & first-order perturbation theory (\nb{pert1}), irrep projectors (\nb{PiIrrep}) \\
+8--10 & singlet: $\psi_1$, $K_1$, $S_1$ (cell 9); Claim 1, second family member, per-irrep decomposition (cell 10) \\
+11--16 & octets: $\tau_c$ and the $2\times2$ matrix (12), $\psi_1$ and $g_c$ (13), Claim 2 (14), per-irrep slope contributions (15), octet shares of the singlet $K_1$ (16) \\
+17--18 & bonus: clean branches $[4,1,1]$, $[3,3,0]$ \\
+19--21 & cross-checks: independent finite-$\varepsilon$ evaluation at $t=8$ (20), second member, 27 and other octet, P1 (21) \\
+22 & result cell \\
+\bottomrule\end{longtable}\end{center}
+
+\subsection{\nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} (90 cells)}\label{sec:cellsC}
+
+Every code cell is followed by a markdown cell ``Output of the cell above ...'' holding the printed output (in round 1; in round 2 some of these hold only \nb{Null}).
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{11.5cm}@{}}\toprule
+\textbf{cells} & \textbf{content} \\\midrule\endhead
+1--2 & title, setup note \\
+3--14 & setup (code, output): reset and generators with $G$ (3--4); sparse transfer polynomials (5--6); Gauss factors, \nb{x0Of}, point-A machinery (\nb{dressBeta}, \nb{dressGamma}, \nb{vA1}, \nb{vA2}, \nb{phiA}), regime \nb{reg} (7--8); HW kets and projectors (9--10); Q machinery (11--12); eigenstates \nb{branchesAt} (13--14) \\
+15--18 & finite-twist regression (code 16, output 17, result 18) \\
+19--24 & Task 0: $\varepsilon$-structure (20--21), ranks (22--23), result (24) \\
+25--32 & Task 1: machinery (26--27), loop and classification (28--29), contamination carriers (30--31), result (32) \\
+33--38 & Task 2: Q side (34--35), leading extraction and Richardson (36--37), result (38) \\
+39--50 & Task 3: top-kill and $\rho$ (40--41), exact $(2,1,1)$ covector (42--43), $[5,2,1]$ pair (44--45), 8 directions (46--47), $F_0\equiv0$ branches (48--49), result (50) \\
+51 & round-1 summary \\
+52--65 & round 2, Task A: \nb{setPoint}, \nb{scanT} (54), fits (56), $\kappa$ closed forms (58--59), $[5,2,1]$ pair over 20 $t$ (60--61), rationalized closed forms (62--63), result (64), driver (65) \\
+66--84 & round 2, Task B: machinery (67), P1 structure (69--72), driver (73), $t$-scan analysis (74--75), affine fits (76--77), \nb{kslope} fits (78--79), symmetric functions (80--81), $\alpha,\beta$ (82--83), result (84) \\
+85--90 & round 2, Task C: \nb{taskC} (86), drivers (88; the P3 call is commented out in the source), result (89), summary (90) \\
+\bottomrule\end{longtable}\end{center}
+
+\subsection{\nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets.\allowbreak{}wb} (45 cells)}\label{sec:cellsD}
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{11.5cm}@{}}\toprule
+\textbf{cells} & \textbf{content} \\\midrule\endhead
+1 & title, tooling note \\
+2--8 & setup copied from \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cells 3--9 \\
+9--15 & Task 1: machinery (10), data over 48 points (11), coefficients (12), monomial table (13), $D_6$ ratios (14), result (15) \\
+16--22 & Task 2: $\tau$-polynomial identity (17), untwisted $\tau^0$ and $\tau^1$ (18, 21), staggered kernel and quantum Wronskian (19--20), result (22) \\
+23--40 & Task 3: matrix and exponents (24--25), filtration and $H$ space (26--28), regularisation (29--31), $O$ space (32), block determinants and split (33--36), untwisted vacuum Q's and periodic block (37--38), normalisation $r_6$ (39), result (40) \\
+41--44 & Task 4: reconstruction (42--43), result (44) \\
+45 & summary \\
+\bottomrule\end{longtable}\end{center}
+
+\section{Checks summary}\label{app:checks}
+
+\textbf{What the notebooks check} (counts are literal \nb{checks[".\allowbreak{}.\allowbreak{}.\allowbreak{}"] =} assignments in the sources; no notebook states a total pass count): \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} 57, \nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative.\allowbreak{}wb} 40 (the HANDOFF quotes 42), \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} 56, \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets.\allowbreak{}wb} 20. Key residuals:
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item Adjoint (\nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb}): gl(3) relations, nilpotency, positivity of $G$, quantum determinant $10^{-199}$, $[t_1,t_2]$ $10^{-197}$, factorized $x_0=$ Inverse-based $x_0$ exactly, top branch $=e_1\otimes e_1$ to $10^{-191}$; Baxter residuals $8.4\cdot10^{-149}$ (dual), $6.9\cdot10^{-190}$ (vacuum); exact undo $10^{-152}$ at 324 points; $R_C/R_Q$ state-independence $1.6\cdot10^{-116}$; Richardson Q against chain $\le6.4\cdot10^{-19}$; octet mixing $\le8.4\cdot10^{-11}$; singlet law $3.1\cdot10^{-11}$ (8 $t$); $\Delta_c$ fit held-out $\le4\cdot10^{-11}$ (22 $t$).
+\item Perturbative (\nb{Adjoint-\allowbreak{}untwist-\allowbreak{}perturbative.\allowbreak{}wb}): all symbolic identities of \S\,\ref{sec:pert}; finite-$\varepsilon$ cross-check $2.6\cdot10^{-9}$, $4.6\cdot10^{-9}$ for $\psi_1$, $3\cdot10^{-8}$/$2.4\cdot10^{-6}$ for $\Delta_c$.
+\item $[3,1,0]$: regression $1.3\cdot10^{-179}$ (225 states); exact undo $4.9\cdot10^{-138}$ (540 points); $R_C/R_Q$ $2.5\cdot10^{-82}$; Richardson $\le1.6\cdot10^{-18}$; closed forms: see the table of \S\,\ref{sec:a310O}.
+\item Qdets: $\tau$-polynomial identity $0$ at Precision 140; quantum Wronskian $0$ at Precision 197; $\det$ under row operations and column change $10^{-116}$; $D_6$ ratios $6\cdot10^{-122}$; reconstruction $10^{-12}$ at $\varepsilon\sim3\cdot10^{-6}$.
+\end{itemize}
+
+\textbf{Independent checks made while writing these notes} (by hand, or with plain floating-point arithmetic in a shell; not Wolfram, not notebook cells; nothing in the repository was touched):
+
+\begin{enumerate}\setlength{\itemsep}{1pt}
+\item $a'$ is exactly $\varepsilon$-free; the all-orders formula for $b'/(a'c')$ and its first-order coefficient (\S\,\ref{sec:mech}); the first-order coefficient of the $(0,1,2)$ component, $-3(t-2)(\varphi_2-\omega_2)(a'_0c'_0)^2$ (\S\,\ref{sec:weights}).
+\item The $E_{12}^2$ cancellation at $\varepsilon=0$ for $[3,1,0]$ and $\beta_0\delta_2/\delta_1=-a'_0/2$ (\S\,\ref{sec:orders}).
+\item $S_1$ of the singlet equals $-3(t-2)(\varphi_2-\omega_2)(a'_0c'_0)^2$ (\S\,\ref{sec:pertsing}); $2A+B(\tau_1+\tau_2)=-t/(3(t-2))$ (algebra), and the two copy shares at P1, $0.7307$ and $1.8527$, sum to $31/12$ (arithmetic).
+\item $\Delta_1+\Delta_2$ and $\Delta_1\Delta_2$ from $\Delta_c=A+B\tau_c$ and the $\tau$-sum/product; the discriminant $9(5t^2+4)$ and the conic parametrization ($\sqrt{5t^2+4}=2+mt$, the deck involution) (\S\,\ref{sec:pertoct}, \S\,\ref{sec:adjO}).
+\item Clean-branch $K_1/S_0$ at P1 ($0.10970$, $0.08633$) against the measured $\kappa-1$ (\S\,\ref{sec:pertclean}).
+\item $[3,1,0]$ closed forms evaluated at P1 against the printed numbers: $\kappa_{[4,4,0]}=97/70$, $\kappa_{[4,2,2]}=1.366101695$, $\kappa_{[3,3,2]}=4.650803571$, $\kappa_c^{[4,3,1]}=1.410570$, $0.986713$ (with the printed $\tau_c$), $R_c^{[5,2,1]}=-0.89218864$, $1.20406983$, $\Delta_c^{[5,2,1]}=-0.34194023$, $0.76579690$, $R^{[4,2,2]}=-0.485875706$, $R_c^{[4,3,1]}=-0.0932674$, $0.5471062$, $\mathrm{kslope}^{[4,2,2]}=-0.717449$, $x_U=167/86$, $81/86$; the traces and determinants against the printed $\tau$'s (trace $50.76082$ and determinant $497.79369$ for $[5,2,1]$; $45.44653$ and $349.72475$ for $[4,3,1]$); the discriminants $64(3t^2+1)$ and $105t^2+256$ (\S\,\ref{sec:a310O}).
+\item Qdets: the $\tau^1$ sum rule for 27; $E_\lambda$ ratios; the exponent consistency $p(Q_{\mathrm{num}})=p(D_6)+p(D_2)-16$ (\S\,\ref{sec:dets}); the exponent bookkeeping of \S\,\ref{sec:bookkeeping}.
+\end{enumerate}
+
+Not checked: any printed number was recomputed in Wolfram (none was); any fitted form was re-fitted; any claim about the old \nb{SU3\_\allowbreak{}L2\_\allowbreak{}Untwisting} technology (not read).
+
+\section{Source inconsistencies found while compiling}\label{app:incons}
+
+Reported, not resolved silently. ``Notebook wins'' means the notebook's printed number was used in the text.
+
+\begin{enumerate}\setlength{\itemsep}{1pt}
+\item \textbf{$K_{13}$ sign (Undo notes).} \nb{Undo-\allowbreak{}site2-\allowbreak{}rotation-\allowbreak{}notes.\allowbreak{}md} \S{}5.3 (md line 247; tex line 265) writes $K_{13}=\gamma(w_2-z_1)(y_A-z_3)/w_2^2=+189/704$; \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 17 prints $-189/704$, and the point-A regression (cells 16--18) passes with the spec's formula. The notes carry a sign typo; the notebook wins.
+\item \textbf{$t=\theta_{12}$ versus $t=\theta_{12}/h$.} The Undo notes write $t:=\theta_{12}=31/35$ at P1 in the $[3,1,0]$/$[4,1,0]$ formulas; this thread, the specs, HANDOFF and \nb{Two-\allowbreak{}rotations-\allowbreak{}det-\allowbreak{}overlap.\allowbreak{}md}/\nb{Clean-\allowbreak{}CG-\allowbreak{}combinations.\allowbreak{}md} use $t=\theta_{12}/h=62/35$ (e.g. $b'/(a'c')=1+\varepsilon(t-2)(\varphi_2-\omega_2)$ and $\kappa_{[4,4,0]}=(t+1)/2=97/70$ need the latter). The scans use $h=1$, where they agree. This file writes $t=\theta_{12}/h$ throughout.
+\item \textbf{Two different $\Delta_c$.} For the adjoint octets $\Delta_c:=\mathrm{slope}_c+(t-2)R_c$ (the signal contributes exactly $-(t-2)R_c$); for the $[3,1,0]$ $[5,2,1]$ pair $\Delta_c:=\mathrm{slope}-p'_1-q'_1R_c$ with $q'_1=(7-3t)/2$, because the signal's coefficient of $R_c$ is not $-(t-2)$. The $[3,1,0]$ spec (\S{}2, Task 3) expected the adjoint combination ``$\Delta:=\mathrm{slope}+(t-2)R$ can be read off''; the notebook (cell 64) states that this combination is also affine in $\tau_c$ ($\Delta'_c=(216-\frac{647t}2+13t^2)/105+\frac{(263-13t)}{420(t+4)}\tau_c$, the ``coordinator's combination'') but is not the one that removes the signal. HANDOFF uses the symbol $\Delta_c$ for both without saying so. This file keeps the two definitions apart.
+\item \textbf{$[5,2,1]$ sanity values.} In \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} the result cell 61 prints a line ``t = 62/35 sanity'' with the headings ``Delta, Delta-prime'', namely $\{\{0.71618427,-0.57000985\},\{0.57719571,-1.8534932\}\}$, which agrees neither with the round-1 values ($-0.34194023$, $0.76579690$) nor with the closed form (re-derived here: $-0.341940$, $0.765797$); cell 64 prints ``$\Delta=0.7655$ for $\tau=37.479$'' (closed form: $0.7658$; round 1: $0.76580$) and calls the difference ``within the quoted $10^{-9}$ noise'', which $3\cdot10^{-4}$ is not. Likely a stale print or a typo; the closed form and round 1 agree with each other, and cell 61's line is unresolved.
+\item \textbf{The $t=8$ check of $\Delta_c$ (adjoint perturbative notebook).} The write-up (\S{}4.1) and HANDOFF say ``$\Delta_c$ to $3\cdot10^{-8}$''; the results cell prints $-1.90909088$ against $-1.90909091$ for $\tau=252$ (difference $3\cdot10^{-8}$) but $-15.0000024$ against $-15$ for $\tau=198$ (difference $2.4\cdot10^{-6}$).
+\item \textbf{``Validated at P2, P3''.} \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}md} \S{}0 item 3 and HANDOFF say the constants are validated at P2 and P3; cell 43 states that $t=29/15$ (P2) is in the $\Delta_c$ fit set (it is the first of the 22 values). Only P3 and the held-out $t$'s are independent tests of $\Delta_c$ (for $\kappa_{\mathrm{singlet}}$, P2 has the same $t$ as the first scan point but a different $h$, so it tests the $h$-independence).
+\item \textbf{Rounded bounds in HANDOFF.} ``Richardson limits Q vs chain $\le6\cdot10^{-19}$'': the largest printed value is $6.4\cdot10^{-19}$ (P2 singlet); ``octet mixing $\le8\cdot10^{-11}$'': $8.4\cdot10^{-11}$ (P2); ``$\le3.6\cdot10^{-6}$'': $3.61\cdot10^{-6}$ (P2 octet 1). Rounding only.
+\item \textbf{``42 passing checks''} (HANDOFF, perturbative notebook): the results cell states no count; the source has 40 literal \nb{checks[.\allowbreak{}.\allowbreak{}.\allowbreak{}] =} assignments (59 occurrences of the string). Unverifiable.
+\item \textbf{Cell count of the $[3,1,0]$ notebook.} HANDOFF's earlier bullet says ``51 cells''; the file has 90 (cell 51 is the round-1 summary; round 2 was added the same day). Same type as item 6 of the corresponding appendix of the Undo notes.
+\item \textbf{Round-2 task message.} \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}md} header cites ``the round-2 task message recorded in HANDOFF''; the HANDOFF entry records results, not the task message.
+\item \textbf{Vacuum Baxter residual at small $\varepsilon$ ($[3,1,0]$).} \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}md} \S{}1 gives a single vacuum residual, $5.3\cdot10^{-195}$, next to the dual residuals of both the regression and small $\varepsilon$; that value is the regression point (cell 12), while cell 38 gives $\le2.6\cdot10^{-189}$ for the 54 small-$\varepsilon$ twists. Minor.
+\item \textbf{Per-weight orders in HANDOFF.} The $[3,1,0]$ bullet lists the weights at $\varepsilon^1$ without the second direction of $(2,1,1)$, which cell 24/51 puts at $\varepsilon^1$. Not a contradiction, an omission.
+\item \textbf{Specs against notebooks (expectations that did not hold; all recorded by the agents).} \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG-\allowbreak{}spec.\allowbreak{}md} Task 3 expected $\rho_B=K^{\mathrm{tk}}/S$ to be $\varepsilon$-independent and $\varphi$-independent; for the octets $\rho_B=O(\varepsilon)$ ($\rho_B/\varepsilon$ is the structural object) and its intercept is $\varphi$-dependent. \nb{L2-\allowbreak{}310-\allowbreak{}untwist-\allowbreak{}CG-\allowbreak{}spec.\allowbreak{}md} Task 0 expected $(1,3,0)$ and one direction each of $(1,2,1),(1,1,2)$ at $\varepsilon^0$, and $(0,2,2)$ at $\varepsilon^1$ (\S{}0: ``one direction of each dim-2 weight and the weight $(0,2,2)$ are $O(\varepsilon)$''); found $(1,3,0)$ and one direction each of $(1,2,1),(1,1,2)$ at $\varepsilon^1$ (the $E_{12}^2$ cancellation), and $(0,2,2)$ at $\varepsilon^2$. The Qdets spec expected the bare$\times$periodic Laplace split to hold; it holds for the top state only. The Qdets spec asked for a $2\times3$ $(\omega_1,\omega_2)$ grid; the notebook used the 18-point grid for two directions plus two further directions on six $\omega_2$ (48 points). The adjoint spec's $w_3=1+\varepsilon\cdot2/9$ collides with $\omega_2=2/9$ (\S\,\ref{sec:tools}).
+\item \textbf{``Depends only on $(h,\theta)$'' ($c=343000/1161$).} \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets.\allowbreak{}md}'s statement is based on P1 only.
+\item \textbf{``Held out'' reconstruction (Qdets, Task 4).} Direction B is held out in the test point and in $\varepsilon$, but $\rho_B$ is fitted from the ladder of the same direction (\S\,\ref{sec:detsrec}).
+\item \textbf{Order of the exponentials in $n'$.} The Undo notes write $n'=e^{c'E_{23}}e^{b'E_{13}}e^{a'E_{12}}$, \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}CG.\allowbreak{}wb} cell 11 verifies $\varphi_u(0)=e_1^{\mathsf T}e^{a'_0E_{12}}e^{c'_0E_{23}}$ (reversed order fails); these are consistent at $b'_0=a'_0c'_0$ because $[E_{12},E_{23}]=E_{13}$ (\S\,\ref{sec:mech}). Likewise $u'=e_1^{\mathsf T}E_{23}E_{12}$ (adjoint) and $e_1^{\mathsf T}E_{12}E_{23}$ ($[3,1,0]$) differ because the dressing changes the ordering.
+\item \textbf{Exponents of $\det_6$ versus $D_6$.} \nb{L2-\allowbreak{}210-\allowbreak{}untwist-\allowbreak{}Qdets.\allowbreak{}md} quotes $10,10,10,9,9,8$ (for $D_6=\det_6/\Psi_Q$) in \S{}0 and block exponents summing to $12,12,12,11,11,10$ (for $\det_6$) in the notebook; the sources do not say that the difference is the order of $\Psi_Q$.
+\item \textbf{Not found in the sources (not guessed).} The values of the $\alpha(t)$ polynomial coefficients (variable \nb{caC}); the P3 $\Delta_c$ numbers of the $[5,2,1]$ pair (only $R^Q$ is tabulated); the P3 code call in cell 88 (commented out; its results are in cell 89); any check of $c=343000/1161$ or of the Qdets structure at P2/P3; why the $5h$ in $H_3$ is $5h$; the content of \nb{SU3\_\allowbreak{}L2\_\allowbreak{}Untwisting} (not read).
+\end{enumerate}
+
+\end{document}

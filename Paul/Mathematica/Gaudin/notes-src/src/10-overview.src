@@ -1,0 +1,48 @@
+# Overview: what the program is, what we found, what is open {#sec:overview}
+
+**Punchline.** For the two-site $\mathrm{gl}(3)$ Gaudin model, the overlap of a suitable pair of rotated vacua with an eigenstate is a Q-number that depends on the eigenstate only through the Laurent data of the Gaudin Hamiltonians at the two sites; sending the twist to zero turns this Q-number into the CG generating function. We have this fully for the adjoint, with the main structural pieces (kernel, Frobenius reduction, representation-independent rules) in place for $[3,1,0]$, $[3,2,0]$ and, at the level of kernels, many more.
+
+## The program in a nutshell {#sec:nutshell}
+
+The goal is simple to state. Take two copies of an irreducible $\mathrm{gl}(3)$ representation $V_\Lambda$, $\Lambda=(\lambda_1,\lambda_2,0)$, and ask for the Clebsch--Gordan coefficients $\langle e_\nu\otimes e_1|\Psi_0\rangle$ of the highest-weight (HW) vectors $\Psi_0$ in $V_\Lambda\otimes V_\Lambda$. The idea is to realise $V_\Lambda\otimes V_\Lambda$ as the Hilbert space of a two-site Gaudin chain with inhomogeneities $\theta_1,\theta_2$ and a diagonal twist $g=\mathrm{diag}(\zeta_1,\zeta_2,\zeta_3)$. The Gaudin Hamiltonians are the Laurent coefficients of the quantum characteristic polynomial of the Lax matrix $L_g(u)=g+\sum_sE^{(s)}/(u-\theta_s)$. Their eigenvectors for generic $\zeta$ are labelled by Q-functions, and as $\zeta\to0$ (in a controlled direction $\zeta=\epsilon\phi$) the eigenvectors that are regular become the HW vectors of the untwisted $V_\Lambda\otimes V_\Lambda$. SoV tells us how to write the overlap of any covector with such an eigenvector as a determinant or bilinear form of Q-functions. If we pick covectors whose overlaps with the untwisted HW kets are exactly the CG coefficients (suitably rotated), the CG coefficients become Q-expressions.
+
+This is the "XXX program" of the earlier notes (Lax matrix $u+hE$, companion twist, SoV bases, localising transfer matrices), transplanted to the rational Gaudin model, which is the $h\to0$ limit of the XXX chain with twists $z=e^{h\zeta}$. We use the XXX chain as a scaffold (Section~\ref{sec:scaffold}) but the deliverable is Gaudin.^[Paul's steer of 2026-10-16: "the goal of the project is Gaudin anyway, not XXX; I assumed XXX would be simpler"; and later "project target is gl(3) CG coefficients from SoV in the Gaudin model". `HANDOFF.md`, entries "ROUND 2" and "ROUND 4". The repository's `CLAUDE.md` still states a su(4) goal; that sentence is outdated and was deliberately not edited by the notes writer.]
+
+## What we found, in eight points {#sec:eight}
+
+1. **The chain side works without cleaning.** The family $\Phi_\infty(\omega_1,\omega_1')=\Omega^\infty[\zeta,\omega_1]\otimes\Omega^\infty[\zeta,\omega_1']$ of products of two rotated vacua is CG-complete, its exact undo is $\langle\varphi_u\otimes e_1|$ with $\epsilon$-free Gauss parameters, and the contamination ratio $K/S$ is $O(\epsilon)$ on every HW branch of $[2,1,0]$, $[3,1,0]$, $[3,2,0]$, including the multiplicity-2 sectors that needed per-copy cleaning in XXX (Section~\ref{sec:chain}).
+2. **The overlap is a Q-number (the jet formula).** Up to a frame-tie scalar $c$ and a vacuum monomial $M$, the overlap is a bilinear form, with a state-independent kernel $K$, in Plücker coordinates of the jets of the dual Q-functions at $\theta_1$ and $\theta_2$, equation~(\ref{eq:jet0}) below (Section~\ref{sec:jet}).
+3. **Where the kernel comes from.** The adjoint kernel was obtained three independent ways: as the analytic $h\to0$ limit of the XXX ten-product formula, by a direct fit, and as the Gaudin K tensor in the jet basis that replaces the SoV basis when $h\to0$ (Sections~\ref{sec:jet} and~\ref{sec:B}).
+4. **The overlap depends only on the Laurent data** $(H_s,a_s)$ at $\theta_1,\theta_2$, because every Plücker ratio is fixed by the Frobenius recursion at $\theta_s$ (Section~\ref{sec:nu}).
+5. **The kernel has closed forms.** One site: a decomposable bivector, explicitly a dressed Wronskian. Two sites: a block theorem relating every $[\lambda_1,\lambda_2,0]$ to the one-row master kernel, the first-order term in $1/\theta_{12}$ for all pairs, and all orders for $[l,l,0]$ (Section~\ref{sec:kernel}).
+6. **The untwisting limit is established for the adjoint**, as a polynomial identity in the rotation parameters, for all six HW branches; the CG coefficients come out $\phi$-independent to 77 digits (Section~\ref{sec:untwist}).
+7. **The $\epsilon$-series of the Laurent data are exact** and partly algebraic (Section~\ref{sec:series}), and the untwisted model has a rich structure of its own: Fuchsian at infinity, three polynomial solutions, Casimir closed forms (Section~\ref{sec:untwisted}).
+8. **Several of our own early expectations were wrong**, and we collect them in Section~\ref{sec:surprises} because they are as instructive as the successes.
+
+The formula of point 2, written out once so that the reader has it in front of them, is
+$$
+c\,\frac{\langle\Phi_\infty|\Psi\rangle}{\langle x_0^G|\Psi\rangle}\,M(\theta_1)M(\theta_2)=\sum_{(kl),(k'l')}K_{(kl),(k'l')}(\omega_1,\omega_1',\theta_{12})\,(P^3p_{kl})(\theta_1)\,(P^3p_{k'l'})(\theta_2),\label{eq:jet0}
+$$
+with $M=P^3p_{0,\lambda_2+1}$. Here $\Phi_\infty$ is the two-vacua covector, $\Psi$ any eigenstate, $x_0^G$ a reference covector, $P^2,P^3$ two of the three dual Q-functions of $\Psi$, $p_{kl}=P^{2(k)}P^{3(l)}-P^{3(k)}P^{2(l)}$ their Plücker coordinates at $\theta_s$, and $(kl)$ runs over the $\binom{\lambda_1+2}{2}-\binom{\lambda_2+1}{2}$ pairs $0\le k<l\le\lambda_1+1$ with $l\ge\lambda_2+1$. Every symbol is defined properly in Sections~\ref{sec:setting} to~\ref{sec:jet}.
+
+## What is open {#sec:open}
+
+The master kernel $R^{\lambda_1}$ for all four jet indices beyond first order; the Laurent-data (Frobenius) form of the overlap and the untwisting limit for $\lambda_1\ge3$; a derivation, not a fit, of the $\epsilon$-series of the Laurent data (the degenerate solver for the top state and the octets); the norm $\langle\Psi_0|\Psi_0\rangle$ from the Q side, which would remove the last piece of chain input; the multiplicity-3 sector $[4,2,0]$; and the write-up as a paper. Section~\ref{sec:outlook} turns this into the round-5 plan.
+
+## How to read these notes {#sec:reading}
+
+Each section opens with its punchline in two or three sentences, then tells the story, then gives the data. The main text works one example, the adjoint $[2,1,0]$, all the way through; bulk data live in the appendices (A conventions, B kernels, C one-site kernel, D Laurent series and CG tables, E untwisted data, F reproducibility). A reader who skips all appendices still gets the whole story. Every number carries a provenance footnote: a file and a section or cell. Where sources disagreed, the later round, or the explicit reconciliation in `HANDOFF.md`, wins, and we say so in a footnote. Table~\ref{tab:status} is the map of what has been done for which representation.
+
+@table tab:status | Status map. "Chain" = chain-side checks (K/S, CG at leading order, Section~\ref{sec:chain}); "Q" = Q-side rules (oper, Wronskians, $\det N$, Section~\ref{sec:q}); "jet" = jet formula verified; "kernel" = closed forms (Section~\ref{sec:kernel}); "limit" = analytic untwisting limit (Section~\ref{sec:untwist}); "exact" = exact untwisted reference data (Appendices D, E). All entries are ours to the precision stated in the text; "fit" = determined by a unique exact fit, not derived.
+@size scriptsize
+@cols lrrrcccccc
+| $\Lambda$ | $\dim V$ | states | HW branches | chain | Q | jet | kernel | limit | exact |
+|---|---|---|---|---|---|---|---|---|---|
+| $[1,1,0]$ | 3 | 9 | 2 | -- | -- | fit | exact | -- | yes |
+| $[2,1,0]$ (adjoint) | 8 | 64 | 6 | yes | yes | derived | exact | yes | yes |
+| $[2,2,0]$ | 6 | 36 | 3 | -- | -- | fit | exact | -- | yes |
+| $[3,1,0]$ | 15 | 225 | 10 | yes | yes | fit | laws | -- | yes |
+| $[3,2,0]$ | 15 | 225 | 10 | yes | yes | fit | laws | -- | yes |
+| $[4,1,0]$ | 24 | 576 | 14 | -- | -- | base point | block thm | -- | yes |
+| $[l,0,0]$, $l\le4$; $[3,3,0]$, $[4,4,0]$ | 3--15 | 9--225 | -- | -- | -- | fit | exact | -- | -- |
+@endtable

@@ -1,0 +1,140 @@
+# The untwisting limit and the CG generating function {#sec:untwist}
+
+**Punchline.** In the regime $\zeta=\epsilon\phi$, $\omega=\epsilon\hat\omega$ the jet formula is a statement about the $\epsilon$-jet of the Q-functions, with cancellations of depth up to six orders. Reduced to Laurent data it becomes a polynomial identity in $(\hat\omega_1,\hat\omega_1')$ whose solution is the CG generating function. For all six HW branches of the adjoint the identity holds to $10^{-55}$--$10^{-157}$ and returns every CG coefficient, $\phi$-independent to $2\cdot10^{-77}$.
+
+## The regime and the difficulty {#sec:regime}
+
+Let $\zeta=\epsilon\phi$, $\omega_1=\epsilon\hat\omega_1$, $\omega_1'=\epsilon\hat\omega_1'$ and $\epsilon\to0$. Chain side (Section~\ref{sec:chain}): $\langle\Phi_\infty|\Psi_B\rangle=\langle\varphi_u\otimes e_1^T|\Psi_0\rangle(1+O(\epsilon))$ for every HW-limit branch $\Psi_B=\Psi_0+\epsilon\Psi_1+\cdots$ with $\Psi_0$ an exact HW vector of weight $\mu$, G-norm 1; so
+$$
+\langle\varphi_u(\hat\omega_1,\hat\omega_1')\otimes e_1|\Psi_0\rangle=\sum_\nu\bigl[e_1^T\rho(n')\bigr]_\nu\,C_\nu,\qquad C_\nu=\langle e_\nu\otimes e_1|\Psi_0\rangle,\label{eq:CGgf}
+$$
+is the CG generating function: a polynomial in the rotation parameters whose coefficients are the CG coefficients of the GT basis. We want to write the left-hand side as a Q-expression using (\ref{eq:jet}).
+
+The difficulty is that the limit is delicate on the Q side. At $\zeta=0$ the three dual Q-functions $e^{\zeta_ju}p_j$ lose their exponentials and their Wronskians vanish (they carry factors $\zeta_b-\zeta_a$), so the untwisted limits of the three branch Q's are linearly dependent: the limit of the solution space is a $\zeta$-jet ($p^{(0)}$ and its $\epsilon$-derivatives), not just a triple of polynomials. Moreover the jet formula's total is $\epsilon^{N_B}$ smaller than its individual terms, with $N_B=8,7,7,6,6,4$ for $(4,2,0),(4,1,1),(3,3,0),(3,2,1)\times2,(2,2,2)$, while single terms are $O(\epsilon^2\ldots\epsilon^3)$: a cancellation of up to six orders.
+
+## $\epsilon$-order bookkeeping {#sec:bookkeeping}
+
+The ingredients scale as follows (for the adjoint, at generic $\phi$; $\phi'$ gives identical exponents). The frame scalar is $c=\epsilon^8\hat c$ with $\hat c=(\phi_2-\hat\omega_1)(\phi_3-\hat\omega_1)^2(\phi_2-\hat\omega_1')(\phi_3-\hat\omega_1')^2(\phi_1-\phi_2)^2$; the kernel splits by degree in $(\omega_1,\omega_1')$, $G^s(\epsilon\hat\omega)=\sum_d\epsilon^dG^{s[d]}(\hat\omega)$ (at fixed $\theta_{12}$); $M_1M_2\sim\epsilon^2$ on all branches; $\langle\Phi_\infty|\Psi_B\rangle\sim\epsilon^0$ at all 16 grid points; and
+$$
+\langle x_0^G|\Psi_B\rangle\sim\epsilon^{2+k_B},\qquad k_B=0,1,1,2,2,4\quad\text{for}\quad(4,2,0),\,(4,1,1),\,(3,3,0),\,(3,2,1)\times2,\,(2,2,2).\label{eq:kB}
+$$
+Table~\ref{tab:order} gives the exponents. The interpretation of $k_B$: on the exact HW kets of every non-top $\mu$, $\langle x(\phi)\otimes x(\phi)|v\rangle=0$ identically ($\le4\cdot10^{-202}$ at 200 digits, both $\phi$, the whole HW space and both octet copies); for the top it is $(\phi_2-\phi_1)^2$. So $\langle x_0^G|\Psi_B\rangle$ gets its first contribution from the $k_B$-th order vector $\Psi_{k_B}$, and we define
+$$
+X_B:=\langle x(\phi)\otimes x(\phi)|\Psi_{k_B}\rangle,\label{eq:XB}
+$$
+which turns out to be a product of differences $\phi_i-\phi_j$ (below). The consistency check is $N_B=8+0-(2+k_B)+2=8-k_B$ on all six branches.
+
+@table tab:order | $\epsilon$-orders for the six adjoint branches (U2 L1; the same at $\phi'$). $N_i$ are the exponents of the five jet monomials $(P^3p_{02},P^{3\prime}p_{02},P^3p_{03},P^{3\prime}p_{03},P^3p_{23})$ (the same on both sites); $N_B$ is the exponent of $\sum GNN$; "first $n$" is the first order at which $\langle x(\phi)\otimes x(\phi)|\Psi_n\rangle\ne0$.
+@size small
+@cols lcccccc
+| branch | $k_B$ | $\langle x_0^G|\Psi_B\rangle$ | $M_1M_2$ | $N_i$ exponents | $N_B$ | first $n$ |
+|---|---|---|---|---|---|---|
+| $(4,2,0)$ | 0 | $\epsilon^2$ | $\epsilon^2$ | 1,2,1,2,3 | 8 | 0 |
+| $(4,1,1)$ | 1 | $\epsilon^3$ | $\epsilon^2$ | 1,1,2,2,3 | 7 | 1 (odd $n$ only) |
+| $(3,3,0)$ | 1 | $\epsilon^3$ | $\epsilon^2$ | 1,2,1,2,3 | 7 | 1 (odd $n$ only) |
+| $(3,2,1)$ a, b | 2 | $\epsilon^4$ | $\epsilon^2$ | 1,1,1,1,2 | 6 | 2 |
+| $(2,2,2)$ | 4 | $\epsilon^6$ | $\epsilon^2$ | 1,1,1,1,1 | 4 | 4 ($n=0..3$ vanish to $10^{-74}$) |
+@endtable
+
+## The leading polynomial identity {#sec:leadpoly}
+
+All orders $t<N_B$ of $\sum_{ij}G^s_{ij}(\epsilon\hat\omega)N_iN_j$ cancel, with residuals $4.5\cdot10^{-51}$ ($(4,2,0)$), $1.2\cdot10^{-55}$, $1.1\cdot10^{-55}$, $6.6\cdot10^{-66}$, $2.9\cdot10^{-84}$ at $t=N_B-1$, against $0.2$--$0.4$ at $t=N_B$. The leading polynomial is $L_B(\hat\omega)=\sum_{d+n+m=N_B}G^{s[d]}_{ij}N^{(n)}_iN^{(m)}_j$, where $N_i^{(n)}$ is the $\epsilon^n$ coefficient of $N_i$, and the identity is
+$$
+L_B(\hat\omega_1,\hat\omega_1')=\hat c\;\langle\varphi_u\otimes e_1|\Psi_0\rangle\;\frac{m_B}{X_B},\qquad m_B=\lim\epsilon^{-2}M_1M_2,\ \ \kappa_B=1,\label{eq:leadpoly}
+$$
+as a polynomial in $(\hat\omega_1,\hat\omega_1')$, coefficient by coefficient (relative coefficient residual $10^{-39}$ to $10^{-75}$ over six branches and two directions; the constant $\kappa_B$ between the two sides is exactly 1). Each octet copy pairs with its own HW ket (different generating functions, same constant $R_B=m_B/X_B$). For the top state $m_B=-(\phi_3-\phi_2)^2\theta_{12}^2$ ($Q_1=1$; checked to 13 digits), so $R_B(\mathrm{top})=-(\phi_3-\phi_2)^2\theta_{12}^2/(\phi_2-\phi_1)^2$; in general $M_s=P^3A_sQ_1$ with $A_s=(\zeta_3-\zeta_2)e^{\sigma\theta_s}(\theta_s-\theta_t)$ and $m_B=-(\phi_3-\phi_2)^2\theta_{12}^2Q_1^0(\theta_1)Q_1^0(\theta_2)$ (not separately checked beyond the top). Which $(d,n,m)$ contribute at order $N_B$ (terms above $10^{-30}$): $(4,2,0)$: $d=2..6$, $n,m=1..4$ (largest $(4,2,2),(3,2,3),(5,1,2),(4,1,3)$); $(4,1,1)$ and $(3,3,0)$: $d=1..5$, $n,m\le5$ (largest $(3,2,2),(4,1,2),(2,2,3)$); octets $d=0..4$, $n,m\le4$; singlet only six triples $(1,1,2),(2,1,1),(1,2,1),(0,2,2),(0,1,3),(0,3,1)$.
+
+@table tab:RB | The constant $R_B=m_B/X_B$ of (\ref{eq:leadpoly}) at the two directions (U2 table L2(c)): best-fit value, and relative residual of the polynomial identity.
+@size small
+@cols lrrrr
+| branch | $R_B(\phi)$ | residual $(\phi)$ | $R_B(\phi')$ | residual $(\phi')$ |
+|---|---|---|---|---|
+| $(4,2,0)$ | $-1.1217793595$ | $2.4\cdot10^{-43}$ | $-0.0892224658$ | $7.7\cdot10^{-39}$ |
+| $(4,1,1)$ | $-4.8470775935$ | $2.7\cdot10^{-47}$ | $0.1598811435$ | $2.8\cdot10^{-46}$ |
+| $(3,3,0)$ | $-1.1349116102$ | $1.8\cdot10^{-47}$ | $0.0721026407$ | $1.6\cdot10^{-45}$ |
+| $(3,2,1)$ a, b | $-7.5969660751$ | $2.9\cdot10^{-57}$, $7.3\cdot10^{-58}$ | $-0.2001611630$ | $2.1\cdot10^{-54}$, $3.4\cdot10^{-55}$ |
+| $(2,2,2)$ | $-90.949002471$ | $7.0\cdot10^{-75}$ | $-0.7937987684$ | $3.8\cdot10^{-72}$ |
+@endtable
+
+## The reduced form: only Laurent data {#sec:redform}
+
+Using Section~\ref{sec:nu} the leading identity can be written without any Q-function or normalisation:
+$$
+\sum_{ij}G^s_{ij}(\epsilon\hat\omega_1,\epsilon\hat\omega_1')\,\nu_i(\theta_1)\nu_j(\theta_2)=\epsilon^{6-k_B}\,\hat c\,\frac{\langle\varphi_u\otimes e_1|\Psi_0\rangle}{X_B}+O(\epsilon^{7-k_B}),\label{eq:limitnu}
+$$
+verified coefficientwise to $10^{-55}\ldots10^{-157}$ with lower orders vanishing to $10^{-62}\ldots10^{-165}$; no $M$, no $\kappa_B$ and no Q-normalisation enters. The $\nu$-series are needed only to order $3$ (top), $5$ ($(4,1,1)$, $(3,3,0)$), $4$ (octets) and $2$ (singlet), i.e. the Laurent data to order $\epsilon^3,\epsilon^5,\epsilon^4,\epsilon^2$. Table~\ref{tab:nudepth} lists the $(i,n)$ pairs that enter.
+
+@table tab:nudepth | Depth needed in the $\nu$-form (U2 L3): $i=0,\dots,4$ labels $(1,\kappa,\pi,\kappa\pi,\varepsilon_s)$, $n$ the $\epsilon$-order of $\nu_i$.
+@size small
+@cols lcl
+| branch | $\nu$ exponents | $n$ needed per site |
+|---|---|---|
+| $(4,2,0)$ | 0,1,0,1,2 | only the leading coefficients: $(0,0),(1,1),(2,1),(3,2),(4,3)$ |
+| $(4,1,1)$ | 0,0,1,1,2 | $i{=}1$: 0,1,2,4; $i{=}2$: 1,2,4; $i{=}3$: 1,2,3,5; $i{=}4$: 2,3,4 |
+| $(3,3,0)$ | 0,1,0,1,2 | $i{=}1$: 1; $i{=}2$: 0,1,2,4; $i{=}3$: 1,2,3,5; $i{=}4$: 2,3,4 |
+| $(3,2,1)$ a, b | 0,0,0,0,1 | $i{=}1..3$: 0..4; $i{=}4$: 1..4 |
+| $(2,2,2)$ | 0,0,0,0,0 | $i{=}1..4$: 0..2 |
+@endtable
+
+## The CG dictionary and $\phi$-independence {#sec:dictionary}
+
+Solving the polynomial identity (\ref{eq:leadpoly}) or (\ref{eq:limitnu}) for the HW ket (least squares over the polynomial coefficients, unknown in the HW space $H_\mu$, then G-normalise and fix the sign by the first non-zero GT component) returns the exact CG slices: $C_7=1$ for the top ($\mathtt{gl3}$ index; notebook $\nu=1$), $-0.70710678119$ for $(4,1,1)$ and $(3,3,0)$, the octet pairs $(C_2,C_4)=(0.208887289734,0.049311600013)$ and $(-0.0797878448606,0.337986734608)$, and $C_0=0.117851130198$ for the singlet; the full 64-component vector equals the chain's $\Psi_0$ to $3\cdot10^{-77}$ (octets), $6\cdot10^{-100}$ ($(4,1,1)$), $3\cdot10^{-102}$ (singlet). The result is \emph{$\phi$-independent}: repeating the whole procedure with $\phi'=(-2/5,3/8,7/11)$ changes $N^{(n)}$, $\hat c$, the Gauss parameters, $R_B$, $X_B$ and $m_B$ (Table~\ref{tab:RB}) but the recovered $C_\nu$ differ by $\le2\cdot10^{-77}$ (0 for the one-dimensional sectors, $10^{-202}$ for the singlet).^[Agent U2, `RESULTS-untwist-limit.md` headlines 1--4, L2(d). Normalisation-free check: $\rho_B(\hat\omega;\hat\omega^0)=[\hat c(\hat\omega^0)/\hat c(\hat\omega)]L(\hat\omega)/L(\hat\omega^0)$ against the exact ratio from $\langle\varphi_u\otimes e_1|\Psi_0\rangle$ at all 16 grid points: maximal deviation $2.5\cdot10^{-153}$, $3.1\cdot10^{-52}$, $4.4\cdot10^{-51}$, $3.0\cdot10^{-64}$, $1.2\cdot10^{-64}$, $3.4\cdot10^{-82}$ ($\phi$).]
+
+The recipe for the CG generating function in "CG from Q" form is thus: write $\mathrm{GF}(\hat\omega)=\sum_{d+n+m=6-k_B}G^{s[d]}_{ij}\nu_i^{(n)}(\theta_1)\nu_j^{(m)}(\theta_2)/\hat c$ and expand in the basis $\hat c\,[e_1^T\rho(n'(\hat\omega))]_\nu$ (polynomials; the weight-$(0,2,1)$ component $-2a'g'$ carries $(\phi_2-\hat\omega_1')^{-2}$ that $\hat c$ does not clear, harmless because $C_3=\langle e_3\otimes e_1|\Psi_0\rangle=0$ on every HW ket of the sectors involved); the overall constant is fixed by the G-norm and the sign convention. The final formula needs exactly: (i) the kernel $G$ split by degree; (ii) the one-site numbers $\nu(\theta_s;\epsilon)=(1,a_s/3,\pi,a_s\pi/3,\varepsilon_s)$, that is $(H_s,a_s)$ per site and branch as $\epsilon$-series to the depths above; (iii) the Gauss parameters (\ref{eq:gauss}) and $\hat c$. The Q-polynomials are not needed beyond these numbers.
+
+# The $\epsilon$-series of the Laurent data {#sec:series}
+
+**Punchline.** The Laurent data of the HW-limit branches have exact $\epsilon$-series, polynomial in the direction $\phi$ (degree $n$ at order $\epsilon^n$): linear for the top state, algebraic with a square root for $(4,1,1)$ and $(3,3,0)$, given to $n=6$ for the singlet and to $n=5$ over $\mathbb{Q}(\sqrt5)$ for the octets. They obey $H_1+H_2=\epsilon\sum_{i\ne j}\phi_i\mu_j$ and $b_s=a_s(H_s-a_s)/3$ order by order.
+
+## The series {#sec:seriesdata}
+
+In units $\theta_{12}=1$ (at general $\theta_{12}$, $H^{(n)},a^{(n)}\sim\theta_{12}^{n-1}$ and $b^{(n)}\sim\theta_{12}^{n-2}$, verified at two $\theta$), with $\epsilon$ written $e$ where terse:
+
+- *Top, $(4,2,0)$, exact to all orders:* $H_1=4+\epsilon(\phi_1+2\phi_2+3\phi_3)$, $a_1=a_2=3\epsilon\phi_3$ ($\kappa=\zeta_3$, $P^3=e^{\zeta_3u}$), and $\Psi_B=e_1\otimes e_1$ exactly for all $\epsilon$. With $\theta_{12}$: $H_1^{(0)}=4/\theta_{12}$.
+- *$(4,1,1)$*, with $x=\epsilon(\phi_2-\phi_3)$: $H_1=6+\tfrac\epsilon2(2\phi_1+5\phi_2+5\phi_3)+\bigl(\sqrt{1+x^2/4}-1\bigr)$, $a_1=6+\tfrac32\epsilon(\phi_2+\phi_3)+3\bigl(\sqrt{1+x^2/4}-1\bigr)$ (series to $n=6$: $x^2/8-x^4/128+x^6/1024$, resp. $3x^2/8,\dots$; odd orders $n\ge3$ vanish).
+- *$(3,3,0)$*, with $y=\epsilon(\phi_1-\phi_2)$: $H_1=6+\tfrac32\epsilon(\phi_1+\phi_2+2\phi_3)+\bigl(\sqrt{1+y^2/4}-1\bigr)$, $a_1=a_2=3\epsilon\phi_3$ exactly.
+- *Singlet $(2,2,2)$*, with $s_1=\phi_1+\phi_2+\phi_3$, $Q=\sum\phi_i^2-\sum_{i<j}\phi_i\phi_j$, $D=(\phi_1-2\phi_2+\phi_3)(\phi_1+\phi_2-2\phi_3)(2\phi_1-\phi_2-\phi_3)$:
+$$
+\begin{aligned}
+H_1&=12+2s_1\epsilon+\tfrac{Q}{6}\epsilon^2+0\cdot\epsilon^3-\tfrac{Q^2}{288}\epsilon^4+0\cdot\epsilon^5+(\deg6)\,\epsilon^6,\\
+a_1&=12+s_1\epsilon+\tfrac Q4\epsilon^2+\tfrac D{72}\epsilon^3-\tfrac{Q^2}{192}\epsilon^4-\tfrac{11}{10368}DQ\,\epsilon^5+(\deg6)\,\epsilon^6.
+\end{aligned}\label{eq:singlet}
+$$
+- *Octets $(3,2,1)$ copy 0* (the other copy has $\sqrt5\to-\sqrt5$; even orders are rational, odd orders carry $\sqrt5$), in terms of $p_i=\phi_i$: $H_1^{(0)}=9$,
+$$
+\begin{aligned}
+H_1^{(1)}&=\frac{(15+\sqrt5)p_1+(20-2\sqrt5)p_2+(25+\sqrt5)p_3}{10},\\
+H_1^{(2)}&=\frac{2(2p_1^2-3p_1p_2-p_1p_3+3p_2^2-3p_2p_3+2p_3^2)}{75},
+\end{aligned}
+$$
+$H_1^{(3)}=-\sqrt5(p_1-p_3)^2(p_1-2p_2+p_3)/375$, $a_1^{(0)}=(15-3\sqrt5)/2$, $a_1^{(1)}=[(3-\sqrt5)p_1+(9-3\sqrt5)p_2+(18+4\sqrt5)p_3]/10$, $b_1^{(0)}=3\sqrt5$, $b_1^{(1)}=(12p_1+11p_2+22p_3)/5$; orders up to $n=5$ in the data (Appendix~\ref{app:D}).
+
+The structure is exact, not guessed: (i) the *global rules* $H_1+H_2=\epsilon\sum_{i\ne j}\phi_i\mu_j$ (it holds at order 1 only) and $b_1+b_2=\epsilon^2(\phi_1\phi_2\mu_3+\phi_1\phi_3\mu_2+\phi_2\phi_3\mu_1)$; (ii) $b_s=a_s(H_s-a_s)/3$ order by order; (iii) the six no-log conditions hold to $10^{-148}$. Algebraic degree: on $(4,1,1)$ and $(3,3,0)$ the $\sqrt{1+x^2/4}$ is read off the series to $n=6$ (not proved) and suggests a $2\times2$ mixing, the HW-limit branch mixing with one neighbour; on the singlet and octets we did not identify closed algebraic forms.
+
+## How they were obtained {#sec:seriesmethod}
+
+Two independent routes agree exactly. Agent W4 did exact Rayleigh--Schrödinger degenerate perturbation theory on the weight-$\mu$ space, with isolating operator $H_1+a_1/7$ (all six Laurent operators commute, and every series eigen-equation holds exactly): series to order $7$ at $\phi$ and $\phi'$ (data file record `E4_SERIES`), symbolic $\phi$ to order $3$, and $\Psi_n$ to order $4$ symbolically. Agent U1 solved the six no-log conditions plus the two global rules order by order: that works (exact symbolic $\phi$ to $n=6$) when the Jacobian of the eight equations in six unknowns has rank 6, which is the case for $(4,1,1)$, $(3,3,0)$, $(2,2,2)$. For the top state and the octets the Jacobian has rank 5 (kernel dimension 1), the implemented degenerate-solvability step failed (a cubic with no rational root), and U1 used instead the closed form from the Wronskian structure (top) and a polynomial fit in $\phi$ over 29 generic $\phi$ at 200--300 digits followed by exact $\mathbb{Q}(\sqrt5)$ reconstruction by PSLQ (octets, $n\le5$; $n=6$ would need $\ge30$ directions). All series were validated against 200 and 400-digit numerics at $\phi=(1/3,-2/7,5/11)$ to $10^{-60}$ ($n\le5$).^[Agent U1, `RESULTS-untwisted-Q.md` T2(b)/T3 (`untwisted_Q_laurent_exact.pkl`, $n\le5$; `untwisted_Q_pert_sym.pkl`, $n\le6$; `untwisted_Q_octet_fit.pkl`); agent W4, `Gaudin-untwisted-exact.wb` E4, data file `ref/untwisted-exact-210.txt`. U1 and W4 agree exactly to the depth where both have data; the degenerate solver is the missing piece (work package C1 of round 5).]
+
+Tables~\ref{tab:series-ex} and~\ref{tab:series-num} (Appendix D) list the series at $\phi$. A few exact entries as a sanity check: top $H_1=140/31+(260/231)\epsilon$, $a_1=(15/11)\epsilon$, $b_{1,2}=\pm(700/341)\epsilon-(25/231)\epsilon^2$; $(4,1,1)$ at $\phi$: $H_1^{(1)}=349/462$, $a_1^{(1)}=39/154$, $H_1^{(2)}=100719/1660120$; singlet $H_1^{(1)}=232/231$ and $a_1^{(1)}=116/231$ ($2s_1$ and $s_1$ at $\phi$, in units $\theta_{12}=31/35$, since $2(1/3-2/7+5/11)=232/231$).
+
+## The perturbative content: $\Psi_1$ and $X_B$ {#sec:Psi1}
+
+The exact perturbation theory also gives the irreducible content of the first-order vector. For $(4,1,1)$: $\Psi_1=\tfrac{31}{140}(\phi_3-\phi_2)(1,1)$ lies entirely in the $(4,2,0)$ irrep (its G-norm$^2$ is $(\theta_{12}^2/8)(\phi_2-\phi_3)^2$ while $\Psi_0=(1,-1)$ has G-norm$^2$ 2); $(3,3,0)$ is the same with $\phi_2-\phi_1$, entirely in $(4,2,0)$; the singlet $\Psi_1$ lies entirely in the $(3,2,1)$ octet irrep (G-norm$^2$ $(15376/1225)Q$, no $(3,3,0),(4,1,1),(4,2,0)$ component); the octets have components in all four irreps, proportional to $(\phi_2-\phi_3)$ and $(\phi_1-\phi_2)$ combinations. The leading coefficient of the reference overlap, closed-form $X_B=\langle x(\phi)\otimes x(\phi)|\Psi_{k_B}\rangle$, with $\Psi_0$ of G-norm 1:
+$$
+\begin{aligned}
+X_{(4,2,0)}&=(\phi_1-\phi_2)^2,\qquad X_{(4,1,1)}=-\tfrac{\theta_{12}}2(\phi_1-\phi_2)(\phi_1-\phi_3)(\phi_2-\phi_3),\\
+X_{(3,3,0)}&=-\tfrac{\theta_{12}}2(\phi_1-\phi_2)^3,\qquad X_{(2,2,2)}=\Bigl(\tfrac{\theta_{12}}2\Bigr)^4\bigl[(\phi_1-\phi_2)(\phi_1-\phi_3)(\phi_2-\phi_3)\bigr]^2,\\
+X_{\rm octet}&=-\frac{5766(\sqrt5-3)}{6125}(\phi_1-\phi_2)^2(\phi_1-\phi_3)(\phi_2-\phi_3)\quad\text{and its conjugate,}
+\end{aligned}\label{eq:XBforms}
+$$
+(for $(4,1,1)$, $(3,3,0)$ the formulas are for $\Psi_0$ of G-norm$^2$ 2, divided by $\sqrt{g_0}$ in $\langle x_0^G|\Psi_B\rangle=\epsilon^{2+k_B}X_B/\sqrt{g_0}$; for the octet $g_0=1080(7-3\sqrt5)$, for the singlet $g_0=288$; the data file has $\texttt{E5\_KB}$ with the exact strings). These are the closed forms of U2's numerical $X_B$ up to normalisation: e.g. at $\phi$ the numbers are $0.383220,-0.017394,-0.074288,0.0013930,6.9931\cdot10^{-6}$.
+
+The generating functions in the data file are $\hat c\langle\varphi_u\otimes e_1|\Psi_B\rangle=\sum_\nu W_\nu s[\nu]$ with $W_\nu=\hat c[e_1\rho(n')]_\nu$ polynomial in $(\hat\omega_1,\hat\omega_1')$ ($\nu=1..6,8$; $W_7$ has a simple pole $1/(\hat\omega_1'-\phi_2)$, which never carries a slice) and $s[\nu]=\Psi(\nu,1)$, exactly the CG coefficients at order $0$ and exact linear or quadratic forms in $\phi$ at orders $1,2$ (record `E5_GF` of `untwisted-exact-210.txt`).
+
+## Worked numbers for $\mathrm{adj}\otimes\mathrm{adj}$ {#sec:worked}
+
+The complete exact CG table of $\mathrm{adj}\otimes\mathrm{adj}$ is Table~\ref{tab:cg} (rows with $\Lambda=(2,1,0)$): $C_1=1$ for $(4,2,0)$; $C_2=-1/\sqrt2$ for $(4,1,1)$; $C_3=-1/\sqrt2$ for $(3,3,0)$; $C_8=2/\sqrt{288}=\sqrt2/12$ for the singlet $(2,2,2)$; and for the octet copy 1,
+$$
+C_4=\frac{21-9\sqrt5}{\sqrt{7560-3240\sqrt5}},\qquad C_5=\frac{-3+3\sqrt5}{\sqrt{7560-3240\sqrt5}},
+$$
+copy 2 with $\sqrt5\to-\sqrt5$ (indices in notebook order: $\nu=4,5$ are the two weight-$(1,1,1)$ states). Their Laurent data at $\zeta=0$ and the first corrections are in Tables~\ref{tab:untw} and~\ref{tab:series-ex}. What the Q-side formula needs for each branch is: $G^s$, the series of $(H_s,a_s)$ to the depths of Table~\ref{tab:nudepth}, the Gauss parameters and $\hat c$; the output is the polynomial in $(\hat\omega_1,\hat\omega_1')$ of which $C_\nu$ are the coefficients up to the overall constant $m_B/X_B$ (Table~\ref{tab:RB}), fixed by the G-norm. A single end-to-end script reproducing the whole table from the pieces ($G$, the series, the Gauss parameters) was not written; it is item F3 of the round-5 plan.

@@ -1,0 +1,320 @@
+
+==============================================================================
+SECTION 0: conventions for Lambda = (3, 1, 0)
+==============================================================================
+Lambda = (3, 1, 0)  |Lambda| = 4  theta = ['2/7', '-3/5']  one-site dim = 15  two-site dim = 225  weight sectors: 36  largest sector: 18
+HW ket index in gl3_reps ordering (0-based) = 14  GT pattern ((3,), (3, 1), (3, 1, 0)) ; annihilated by E12, E13, E23: {(1, 2): True, (1, 3): True, (2, 3): True}
+nilpotency indices (smallest k with E^k = 0 on the one-site rep): E12: 4  E23: 4  E13: 4
+partial-fraction fit (S2: 1, 1/x, 1/x^2; S3: 1, 1/x..1/x^3 per site), mismatches at extra points: 0 0 (0.7s)
+S1 = e1(zeta) + 4/x1 + 4/x2 (scalar), exact: True
+[S2(3/7), S3(-2/9)] = 0 exactly: True
+all [S_k(u), S_l(v)] = 0 exactly on a 3x3 rational grid (via the fitted Laurent form): True
+weight conservation [S2(u), E_kk^tot] = [S3(u), E_kk^tot] = 0: True
+S2 constant scalar = {Fraction(89, 24)} (e2(zeta) = 89/24 );  S3 constant scalar = {Fraction(5, 4)} (e3(zeta) = 5/4 )
+S2 double-pole coefficients scalar: True, True; value c2(Lambda) = {Fraction(4, 1)}
+   quadratic Casimir sum_i lam_i (lam_i + 3 - 2i) = 12, half = 6
+S3 triple-pole coefficient operators identically ZERO: True True
+S3 double-pole coefficient scalar? False False  (non-scalar: state dependent)
+non-scalar Laurent data: H_s (S2 simple pole): [True, True]  b_s (S3 simple): [True, True]  a_s (S3 double): [True, True]  => six non-scalar data (H1,H2,a1,a2,b1,b2)
+indicial polynomial of the dual oper at theta_s: e(e-1)(e-2) - 4 e(e-1) + c2 e = e*(e - 5)*(e - 2) ; roots {5: 1, 2: 1, 0: 1}
+H_s = sum_{i<j}[g_ii E_jj + g_jj E_ii - g_ij E_ji - g_ji E_ij]^(s) + (1/(th_s - th_s')) sum_{i<j}[...] (same formula as (2,1,0)), exact: True True
+c2(Lambda) for other reps (two-site fit, exact):
+    (1, 0, 0): c2 = NONSCALAR   (Casimir/2 = 1, |Lambda| = 1, S3 triple pole zero: True)
+    (1, 1, 0): c2 = [Fraction(2, 1)]   (Casimir/2 = 1, |Lambda| = 2, S3 triple pole zero: True)
+    (2, 0, 0): c2 = NONSCALAR   (Casimir/2 = 3, |Lambda| = 2, S3 triple pole zero: True)
+    (2, 1, 0): c2 = [Fraction(3, 1)]   (Casimir/2 = 3, |Lambda| = 3, S3 triple pole zero: True)
+    (2, 2, 0): c2 = [Fraction(6, 1)]   (Casimir/2 = 4, |Lambda| = 4, S3 triple pole zero: True)
+    (3, 1, 0): c2 = [Fraction(4, 1)]   (Casimir/2 = 6, |Lambda| = 4, S3 triple pole zero: True)
+    (3, 0, 0): c2 = NONSCALAR   (Casimir/2 = 6, |Lambda| = 3, S3 triple pole zero: True)
+    (2, 1, 1): c2 = [Fraction(8, 1)]   (Casimir/2 = 2, |Lambda| = 4, S3 triple pole zero: False)
+    (3, 2, 0): c2 = [Fraction(8, 1)]   (Casimir/2 = 7, |Lambda| = 5, S3 triple pole zero: True)
+
+==============================================================================
+SECTION 0b: bra vacuum and g' orientation
+==============================================================================
+Gauss parameters r_k(zeta,omega) = ['4/5', '-7/11', '65/44'] (rep-independent formulas)
+bra twist omega ['5/2', '7/3', '3/5']
+   variant 0  g' = P gc P^-1      : Omega x Omega left eigencovector of all S2,S3 coefficient operators: True
+   variant 1  g' = P^-1 gc P      : Omega x Omega left eigencovector of all S2,S3 coefficient operators: False
+   variant 2  g' = (P gc P^-1)^T  : Omega x Omega left eigencovector of all S2,S3 coefficient operators: False
+   exact vacuum eigenvalue functions (x1 = u-theta1, x2 = u-theta2):
+   S1 = 163/30 + 4/x1 + 4/x2
+   S2 = 131/15 + (5789/310)/x1 + (4)/x1^2 + (1589/310)/x2 + (4)/x2^2
+   S3 = 7/2 + (3027/310)/x1 + (12/5)/x1^2 + (0)/x1^3 + (507/310)/x2 + (12/5)/x2^2 + (0)/x2^3
+   e2(omega) = 131/15, e3(omega) = 7/2
+   vacuum direct Q_i = e^{-om_i u} q_i (gauge 3): degrees [0, 4, 6] nullities [1, 1, 1] ; vacuum dual P^j: degrees [6, 2, 0] nullities [1, 1, 1]
+bra twist omega_prime ['7/4', '-2/5', '9/7']
+   variant 0  g' = P gc P^-1      : Omega x Omega left eigencovector of all S2,S3 coefficient operators: True
+   variant 1  g' = P^-1 gc P      : Omega x Omega left eigencovector of all S2,S3 coefficient operators: False
+   variant 2  g' = (P gc P^-1)^T  : Omega x Omega left eigencovector of all S2,S3 coefficient operators: False
+   exact vacuum eigenvalue functions (x1 = u-theta1, x2 = u-theta2):
+   S1 = 369/140 + 4/x1 + 4/x2
+   S2 = 29/28 + (54107/4340)/x1 + (4)/x1^2 + (-4693/4340)/x2 + (4)/x2^2
+   S3 = -9/10 + (40869/4340)/x1 + (36/7)/x1^2 + (0)/x1^3 + (-34731/4340)/x2 + (36/7)/x2^2 + (0)/x2^3
+   e2(omega) = 29/28, e3(omega) = -9/10
+   vacuum direct Q_i = e^{-om_i u} q_i (gauge 3): degrees [0, 4, 6] nullities [1, 1, 1] ; vacuum dual P^j: degrees [6, 2, 0] nullities [1, 1, 1]
+
+225 eigenstates (36 sectors), 0s; max eigen-residual of all coefficient operators on all states: 2.26e-56
+
+==============================================================================
+SECTION 1 (Q1): opers and Q-functions for Lambda = (3, 1, 0), 225 states, 60 digits
+==============================================================================
+  gauge-power scan: direct ODE  Pi^p o A o Pi^-p, Q_i = e^{-zeta_i u} q_i, one state per weight sector (0s)
+  (smallest polynomial degree d_i, nullity at it; None = none up to degree 9); target degrees 2 lam1 - mu_i = 6 - mu_i
+    p = 0: sectors with degrees == 6 - mu_i:  0 / 36 ; kernel dim 1 for all three i:  0 ; sectors where some i has no solution: 36 ; (deg - (6-mu)) pattern counts: {}
+    p = 1: sectors with degrees == 6 - mu_i:  0 / 36 ; kernel dim 1 for all three i:  0 ; sectors where some i has no solution: 36 ; (deg - (6-mu)) pattern counts: {}
+    p = 2: sectors with degrees == 6 - mu_i:  0 / 36 ; kernel dim 1 for all three i:  0 ; sectors where some i has no solution: 36 ; (deg - (6-mu)) pattern counts: {}
+    p = 3: sectors with degrees == 6 - mu_i: 36 / 36 ; kernel dim 1 for all three i: 36 ; sectors where some i has no solution:  0 ; (deg - (6-mu)) pattern counts: {(0, 0, 0): 36}
+    p = 4: sectors with degrees == 6 - mu_i:  0 / 36 ; kernel dim 1 for all three i: 36 ; sectors where some i has no solution:  0 ; (deg - (6-mu)) pattern counts: {(2, 2, 2): 36}
+  => gauge powers p giving ALL degrees 6 - mu_i with kernel dimension 1 in all 36 sectors: [3]
+  full run on all 225 states (p = 3), 0s; max eigen-residual of the eigenstates 2.26e-56
+  sector mu  #st  deg dual p_j       deg direct q_i       check  max resid
+  (0, 2, 6)  1    (0, 2, 6)          (6, 4, 0)            OK     2.15e-56 
+  (0, 3, 5)  2    (0, 3, 5)          (6, 3, 1)            OK     3.32e-56 
+  (0, 4, 4)  3    (0, 4, 4)          (6, 2, 2)            OK     3.02e-55 
+  (0, 5, 3)  2    (0, 5, 3)          (6, 1, 3)            OK     5.54e-56 
+  (0, 6, 2)  1    (0, 6, 2)          (6, 0, 4)            OK     2.65e-56 
+  (1, 1, 6)  2    (1, 1, 6)          (5, 5, 0)            OK     3.95e-56 
+  (1, 2, 5)  6    (1, 2, 5)          (5, 4, 1)            OK     2.34e-55 
+  (1, 3, 4)  10   (1, 3, 4)          (5, 3, 2)            OK     4.43e-55 
+  (1, 4, 3)  10   (1, 4, 3)          (5, 2, 3)            OK     1.05e-54 
+  (1, 5, 2)  6    (1, 5, 2)          (5, 1, 4)            OK     7.24e-55 
+  (1, 6, 1)  2    (1, 6, 1)          (5, 0, 5)            OK     1.72e-56 
+  (2, 0, 6)  1    (2, 0, 6)          (4, 6, 0)            OK     2.07e-56 
+  (2, 1, 5)  6    (2, 1, 5)          (4, 5, 1)            OK     4.24e-55 
+  (2, 2, 4)  14   (2, 2, 4)          (4, 4, 2)            OK     2.6e-54  
+  (2, 3, 3)  18   (2, 3, 3)          (4, 3, 3)            OK     2.63e-53 
+  (2, 4, 2)  14   (2, 4, 2)          (4, 2, 4)            OK     1.32e-54 
+  (2, 5, 1)  6    (2, 5, 1)          (4, 1, 5)            OK     1.62e-55 
+  (2, 6, 0)  1    (2, 6, 0)          (4, 0, 6)            OK     1.77e-56 
+  (3, 0, 5)  2    (3, 0, 5)          (3, 6, 1)            OK     1.1e-54  
+  (3, 1, 4)  10   (3, 1, 4)          (3, 5, 2)            OK     6.23e-54 
+  (3, 2, 3)  18   (3, 2, 3)          (3, 4, 3)            OK     2.56e-54 
+  (3, 3, 2)  18   (3, 3, 2)          (3, 3, 4)            OK     1.55e-54 
+  (3, 4, 1)  10   (3, 4, 1)          (3, 2, 5)            OK     6.87e-55 
+  (3, 5, 0)  2    (3, 5, 0)          (3, 1, 6)            OK     8.07e-56 
+  (4, 0, 4)  3    (4, 0, 4)          (2, 6, 2)            OK     2.04e-53 
+  (4, 1, 3)  10   (4, 1, 3)          (2, 5, 3)            OK     5.01e-55 
+  (4, 2, 2)  14   (4, 2, 2)          (2, 4, 4)            OK     3.63e-55 
+  (4, 3, 1)  10   (4, 3, 1)          (2, 3, 5)            OK     2.11e-55 
+  (4, 4, 0)  3    (4, 4, 0)          (2, 2, 6)            OK     2.01e-55 
+  (5, 0, 3)  2    (5, 0, 3)          (1, 6, 3)            OK     1.05e-54 
+  (5, 1, 2)  6    (5, 1, 2)          (1, 5, 4)            OK     2.62e-55 
+  (5, 2, 1)  6    (5, 2, 1)          (1, 4, 5)            OK     1.15e-55 
+  (5, 3, 0)  2    (5, 3, 0)          (1, 3, 6)            OK     3.84e-56 
+  (6, 0, 2)  1    (6, 0, 2)          (0, 6, 4)            OK     2.2e-56  
+  (6, 1, 1)  2    (6, 1, 1)          (0, 5, 5)            OK     1.07e-56 
+  (6, 2, 0)  1    (6, 2, 0)          (0, 4, 6)            OK     1.52e-56 
+  ALL 225 states: dual degrees mu_j, direct degrees 6 - mu_i, kernel dimension 1 for each of 6 exponentials: True
+  max ODE residual (u=0.37) over all states x 6 Q: 2.63e-53 ; largest smallest-singular-value at the degree found: 7.19e-56
+  local exponents at theta_s (vanishing orders of the span of the 3 dual P^j | of the 3 direct Q_i; psi = Pi^-3 Q has orders minus 3), both sites, all states: counts
+    dual (0, 2, 5)  direct Q (0, 3, 5)  count 450
+  no-logarithm (Frobenius) conditions of the dual oper at theta_s (exponents 0,2,5; Taylor data of S1,S2,S3 at theta_s: s_k, h_k, t_k from the other site, e_k(zeta)):
+    exponent-0 series, resonance at order x^2:  C1 = a(a - H) + 4b = 0   [derived symbolically; polynomial printed below]
+    order x^2, coefficient of free constant c_0 (x192): 48*H*a - 48*a**2 - 192*b
+    order x^5, coefficient of free constant c_0 (x192): -12*H**2*a*b + 12*H**2*a*h0 - 48*H**2*t0 + 7*H*a**2*b - 7*H*a**2*h0 + 60*H*a*b*s0 - 60*H*a*h0*s0 + 24*H*a*h1 + 4*H*a*t0 + 240*H*s0*t0 - 96*H*t1 - a**3*b + a**3*h0 - 18*a**2*b*s0 + 18*a**2*h0*s0 - 6*a**2*h1 + 2*a**2*t0 + 8*a*b**2 - 32*a*b*h0 - 72*a*b*s0**2 + 48*a*b*s1 + 24*a*h0**2 + 72*a*h0*s0**2 - 48*a*h0*s1 - 72*a*h1*s0 + 48*a*h2 - 24*a*t1 + 32*b*t0 - 96*h0*t0 - 288*s0**2*t0 + 288*s0*t1 + 192*s1*t0 - 192*t2
+    order x^5, coefficient of free constant c_2 (x192): 96*H**3 - 104*H**2*a - 576*H**2*s0 + 36*H*a**2 + 440*H*a*s0 - 160*H*b + 384*H*h0 + 1056*H*s0**2 - 576*H*s1 - 4*a**3 - 80*a**2*s0 + 56*a*b - 144*a*h0 - 432*a*s0**2 + 240*a*s1 + 352*b*s0 - 768*h0*s0 + 384*h1 - 576*s0**3 + 960*s0*s1 - 384*s2 - 192*t0
+    (the order-5 coefficient of c_2 is identical to the exponent-2 series condition at order x^3) => 3 conditions per site, 6 in total for the 6 unknowns (H1,H2,a1,a2,b1,b2)
+    max relative violation over all 225 states x 2 sites of the condition (order 2, c_0): 5.95e-59
+    max relative violation over all 225 states x 2 sites of the condition (order 5, c_0): 8.16e-59
+    max relative violation over all 225 states x 2 sites of the condition (order 5, c_2): 1.33e-58
+  negative controls (one state per sector, 36 states; smallest degree for i = 1,2,3; None = no solution up to degree 9):
+    dual ODE D with e^{-zeta u}                        : [(None, None, None)]
+    plain formal adjoint (p = 0) with e^{-zeta u}      : [(None, None, None)]
+    adjoint with p = 3 and e^{+zeta u}                 : [(None, None, None)]
+
+==============================================================================
+SECTION 2 (Q2): Wronskian / QQ relations and quantum-Weyl formulas, Lambda = (3, 1, 0)
+==============================================================================
+  (a) direct: Q_a Q_b' - Q_b Q_a' = c_ab e^{-(z_a+z_b)u} w_ab(u),  w_ab = F p_c  (c = complement; all p, q monic)
+      225 states x 3 pairs: max relative remainder of w_ab / p_c = 9.2e-49
+      deg F = deg w - deg p_c in [4] ; F = Pi^k with k in [2] , max |F - Pi^k| = 7.96e-49
+      max |c_ab/(zeta_a - zeta_b) - 1| = 0.0
+  (a') dual: P^a P^b' - P^b P^a' = c'_ab e^{+(z_a+z_b)u} F'(u) q_c
+      deg F' in [2] ; F' = Pi^k with k in [1] ; max relative remainder 7.03e-51 ; max |F' - Pi^k| = 6.55e-51 ; max |c'_ab/(zeta_b - zeta_a) - 1| = 0.0
+  (b) quantum Weyl (monic operator killing P^1,P^2,P^3): S1 = det[P,P',P''']/W, S2 = -det[P,P''',P'']/W, S3 = det[P''',P',P'']/W, W = det[P,P',P'']
+      max relative deviation of S1 from the eigenvalue function (225 states x 3 u): 3.82e-47
+      max relative deviation of S2 from the eigenvalue function (225 states x 3 u): 4.12e-47
+      max relative deviation of S3 from the eigenvalue function (225 states x 3 u): 4.14e-47
+      W = c_W e^{(z1+z2+z3)u} Pi^4 (power = |Lambda|); max |c_W/prod_{i<j}(zeta_j - zeta_i) - 1| = 4.14e-47 (prod = -0.1215277778)
+      direct side: psi_i = Pi^-3 Q_i span ker of the monic operator d^3 + (-S1) d^2 + (2S1' + S2) d - (S1'' + S2' + S3):
+      max relative deviation S1d: 1.42e-40
+      max relative deviation S2d: 5.09e-40
+      max relative deviation S3d: 7.25e-39
+
+==============================================================================
+SECTION 3 (Q3): residue functionals, orthogonality, det N, x0-free overlap ratio, Lambda = (3, 1, 0), gauge p = 3
+==============================================================================
+  Lagrange identity (bra A: psi = Pi^-3 Q_i, ket B: P^j; Delta S_k = S_k^B - S_k^A):  P (dS2 psi)' + dS3 P psi = C'; the double pole of S2 is the scalar c2 (cancels), S3 has no triple pole,
+  so Res_{theta_s} gives the SAME six columns: N[(s,i,j),H_t] = -Res[psi P'/(u-th_t)], N[.,a_t] = Res[psi P/(u-th_t)^2], N[.,b_t] = Res[psi P/(u-th_t)], and sum_m Delta_m N_m = 0.
+  (a) identity residual max |sum_m Delta_m N| / sum_m |Delta_m N| over 600 random ordered pairs A != B x 18 rows (28s): 5.53e-56
+      rank tally (stacked 18x6, columns normalised, rank = #{sigma_k/sigma_1 > 1e-40}) for A != B, key (same sector?, rank): {(False, 4): 133, (False, 5): 439, (True, 5): 28}
+      same pairs tallied by (#positive, #negative components of mu_B - mu_A, rank): {(0, 0, 5): 28, (1, 1, 5): 303, (1, 2, 4): 133, (2, 1, 5): 136}   [rank 4 <=> exactly two negative components, as in (2,1,0)]
+      max sigma_6/sigma_1 over A != B pairs = 1.58e-57 ; min sigma_5/sigma_1 among rank-5 pairs = 9.77e-12 ; max sigma_5/sigma_1 among rank-4 pairs = 5.51e-57
+      A = B (225 states): rank tally {6: 225} ; min sigma_6/sigma_1 = 7.07e-12
+  (b) det N (6x6, rows (s,(i,j)) with (i,j) in {(1,3),(1,2),(2,3)}, columns H1,H2,a1,a2,b1,b2): |det N|/prod(row norms): max over 150 pairs A != B = 5.85e-65 ; A = B over all 225 states: min 1.97e-37, max 5.38e-5
+
+==============================================================================
+SECTION 3c: overlap-ratio identity R_B(w)/R_B(w') = [D_B(w)/D_B(w')][D_B0(w')/D_B0(w)], B0 = e1 x e1, all 225 states
+==============================================================================
+  vacuum w : eigencovector ok True  direct Q degrees [0, 4, 6]  dual P degrees [6, 2, 0]
+  vacuum wp : eigencovector ok True  direct Q degrees [0, 4, 6]  dual P degrees [6, 2, 0]
+  top state B0 (weight (6, 2, 0)) has index 224; overlaps nonzero for all states: True
+  main result (rows {(1,3),(1,2),(2,3)} x 2 sites, columns H1,H2,a1,a2,b1,b2, 60 digits): max relative deviation over 225 states = 6.83e-52 (non-degenerate: 225)
+     5 worst states (index, sector, dev): [(135, (3, 3, 2), '6.83e-52'), (80, (2, 3, 3), '5.67e-52'), (117, (3, 2, 3), '3.91e-52'), (107, (3, 1, 4), '3.19e-52'), (19, (1, 3, 4), '1.81e-52')]
+     B=0 (0, 2, 6)  LHS = 13.7396044771896  RHS = 13.7396044771896
+     B=1 (0, 3, 5)  LHS = 9.30065533840528  RHS = 9.30065533840528
+     B=2 (0, 3, 5)  LHS = 9.30065533840528  RHS = 9.30065533840528
+     B=3 (0, 4, 4)  LHS = 6.29582822907435  RHS = 6.29582822907435
+  84 row triples (same triple on both sites; 20s): pass (all 225 states non-degenerate, dev < 1e-30): 72 ; fail: 6 ; degenerate: 6
+     failing triples: [(((1, 1), (2, 2), (3, 3)), '1.4'), (((1, 1), (2, 3), (3, 2)), '1.4'), (((1, 2), (2, 1), (3, 3)), '1.4'), (((1, 2), (2, 3), (3, 1)), '1.4'), (((1, 3), (2, 1), (3, 2)), '1.3'), (((1, 3), (2, 2), (3, 1)), '1.3')] ; all failing are permutation triples: True ; number of permutation triples: 6
+     degenerate triples (first 8, with number of non-degenerate states): [(((1, 1), (1, 2), (1, 3)), 0), (((1, 1), (2, 1), (3, 1)), 0), (((1, 2), (2, 2), (3, 2)), 0), (((1, 3), (2, 3), (3, 3)), 0), (((2, 1), (2, 2), (2, 3)), 0), (((3, 1), (3, 2), (3, 3)), 0)] ; all degenerate are "same i or same j" triples: True
+  control 1 (a2 column replaced by Res[psi P/(u-th2)^3]): max deviation 1.96 (non-degenerate 225 )
+  control 2 (orientation swapped: vacuum dual in ket slot, state direct in bra slot): max deviation 1.64 (non-degenerate 225 )
+  control 3 (weight Pi^-2 instead of Pi^-3 in the functionals, same Q): max deviation 1.7 (non-degenerate 225 )
+  control 3 (weight Pi^-4 instead of Pi^-3 in the functionals, same Q): max deviation 1.91 (non-degenerate 225 )
+
+==============================================================================
+SECTION 4 (Q4): untwisting regime zeta = eps*phi, omega = eps*om^, omega' = eps*om^', Lambda = (3, 1, 0), 100 digits
+==============================================================================
+  phi = ['1/3', '-2/7', '5/11']  om^ = ['3/4', '-1/5', '1/2']  om^' = ['-12/5', '1/8', '-1/3']
+  eps = 1/1000000 (0s): eigen-residual 1.72e-97; Gauss r_k = ['0.40229885', '1.374096', '0.089884474']
+     vacuum eigencovector test (omega, omega'): (True, True)  vacuum direct Q degrees [0, 4, 6] [0, 4, 6]
+     raising residuals (smallest first, m+1 per HW sector): {(6, 2, 0): ['0.0'], (6, 1, 1): ['2.32e-7', '1.41'], (5, 3, 0): ['1.94e-7', '2.83'], (5, 2, 1): ['2.25e-7', '2.25e-7', '2.41'], (4, 4, 0): ['4.48e-7', '2.0'], (4, 3, 1): ['3.49e-7', '3.49e-7', '2.41'], (4, 2, 2): ['3.95e-7', '2.28'], (3, 3, 2): ['6.64e-7', '1.75']}
+     branch idx 224 sector (6, 2, 0) : deg dual [6, 2, 0], deg direct [0, 4, 6], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 3.02e-103, det/prod(col norms) = 1.23e-252, sigma_6/sigma_1 = 9.84e-77 | ratio-test deviation = 0.0
+     branch idx 223 sector (6, 1, 1) : deg dual [6, 1, 1], deg direct [0, 5, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.72e-104, det/prod(col norms) = 1.34e-262, sigma_6/sigma_1 = 3.45e-75 | ratio-test deviation = 2.0e-52
+     branch idx 219 sector (5, 3, 0) : deg dual [5, 3, 0], deg direct [1, 3, 6], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.38e-104, det/prod(col norms) = 9.73e-254, sigma_6/sigma_1 = 7.16e-77 | ratio-test deviation = 4.18e-52
+     branch idx 214 sector (5, 2, 1) : deg dual [5, 2, 1], deg direct [1, 4, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 5.04e-98, det/prod(col norms) = 4.39e-257, sigma_6/sigma_1 = 6.64e-76 | ratio-test deviation = 6.56e-52
+     branch idx 213 sector (5, 2, 1) : deg dual [5, 2, 1], deg direct [1, 4, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 5.04e-98, det/prod(col norms) = 4.39e-257, sigma_6/sigma_1 = 6.64e-76 | ratio-test deviation = 3.57e-52
+     branch idx 204 sector (4, 4, 0) : deg dual [4, 4, 0], deg direct [2, 2, 6], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 3.34e-105, det/prod(col norms) = 2.34e-257, sigma_6/sigma_1 = 2.06e-77 | ratio-test deviation = 2.38e-52
+     branch idx 200 sector (4, 3, 1) : deg dual [4, 3, 1], deg direct [2, 3, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 6.1e-99, det/prod(col norms) = 2.05e-258, sigma_6/sigma_1 = 4.41e-76 | ratio-test deviation = 1.76e-52
+     branch idx 192 sector (4, 3, 1) : deg dual [4, 3, 1], deg direct [2, 3, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 6.1e-99, det/prod(col norms) = 2.05e-258, sigma_6/sigma_1 = 4.41e-76 | ratio-test deviation = 1.33e-52
+     branch idx 185 sector (4, 2, 2) : deg dual [4, 2, 2], deg direct [2, 4, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.67e-92, det/prod(col norms) = 1.59e-247, sigma_6/sigma_1 = 2.79e-68 | ratio-test deviation = 1.66e-52
+     branch idx 143 sector (3, 3, 2) : deg dual [3, 3, 2], deg direct [3, 3, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 5.13e-93, det/prod(col norms) = 8.18e-249, sigma_6/sigma_1 = 2.0e-68 | ratio-test deviation = 1.66e-52
+  eps = 1/500000 (0s): eigen-residual 1.01e-97; Gauss r_k = ['0.40229885', '1.374096', '0.089884474']
+     vacuum eigencovector test (omega, omega'): (True, True)  vacuum direct Q degrees [0, 4, 6] [0, 4, 6]
+     raising residuals (smallest first, m+1 per HW sector): {(6, 2, 0): ['0.0'], (6, 1, 1): ['4.64e-7', '1.41'], (5, 3, 0): ['3.88e-7', '2.83'], (5, 2, 1): ['4.49e-7', '4.49e-7', '2.41'], (4, 4, 0): ['8.95e-7', '2.0'], (4, 3, 1): ['6.98e-7', '6.98e-7', '2.41'], (4, 2, 2): ['7.89e-7', '2.28'], (3, 3, 2): ['1.33e-6', '1.75']}
+     branch idx 224 sector (6, 2, 0) : deg dual [6, 2, 0], deg direct [0, 4, 6], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.98e-98, det/prod(col norms) = 3.39e-241, sigma_6/sigma_1 = 2.02e-73 | ratio-test deviation = 0.0
+     branch idx 223 sector (6, 1, 1) : deg dual [6, 1, 1], deg direct [0, 5, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.78e-99, det/prod(col norms) = 1.47e-250, sigma_6/sigma_1 = 7.07e-72 | ratio-test deviation = 2.06e-54
+     branch idx 219 sector (5, 3, 0) : deg dual [5, 3, 0], deg direct [1, 3, 6], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.56e-99, det/prod(col norms) = 2.67e-242, sigma_6/sigma_1 = 1.47e-73 | ratio-test deviation = 2.81e-54
+     branch idx 214 sector (5, 2, 1) : deg dual [5, 2, 1], deg direct [1, 4, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.65e-93, det/prod(col norms) = 2.42e-245, sigma_6/sigma_1 = 1.36e-72 | ratio-test deviation = 3.9e-54
+     branch idx 213 sector (5, 2, 1) : deg dual [5, 2, 1], deg direct [1, 4, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 1.65e-93, det/prod(col norms) = 2.42e-245, sigma_6/sigma_1 = 1.36e-72 | ratio-test deviation = 1.35e-55
+     branch idx 204 sector (4, 4, 0) : deg dual [4, 4, 0], deg direct [2, 2, 6], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.19e-100, det/prod(col norms) = 6.42e-246, sigma_6/sigma_1 = 4.21e-74 | ratio-test deviation = 6.98e-54
+     branch idx 200 sector (4, 3, 1) : deg dual [4, 3, 1], deg direct [2, 3, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.0e-94, det/prod(col norms) = 1.13e-246, sigma_6/sigma_1 = 9.04e-73 | ratio-test deviation = 8.95e-54
+     branch idx 192 sector (4, 3, 1) : deg dual [4, 3, 1], deg direct [2, 3, 5], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 2.0e-94, det/prod(col norms) = 1.13e-246, sigma_6/sigma_1 = 9.04e-73 | ratio-test deviation = 7.62e-55
+     branch idx 185 sector (4, 2, 2) : deg dual [4, 2, 2], deg direct [2, 4, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 4.38e-88, det/prod(col norms) = 4.36e-236, sigma_6/sigma_1 = 2.86e-65 | ratio-test deviation = 2.12e-54
+     branch idx 143 sector (3, 3, 2) : deg dual [3, 3, 2], deg direct [3, 3, 4], nullities [1, 1, 1, 1, 1, 1] | |det N(w)| = 8.4e-89, det/prod(col norms) = 2.25e-237, sigma_6/sigma_1 = 2.05e-65 | ratio-test deviation = 2.12e-54
+  epsilon-exponents p in f ~ eps^p, p = log2(f(2e-6)/f(1e-6)):
+     sector (6, 2, 0): |det N(w)| p = 16.0, |det N(wp)| p = 16.0, det/prod(col norms) p = 38.0, sigma_6/sigma_1 p = 11.0, max|N(w)| p = -4.0, |R(w)| p = 0.0
+     sector (6, 1, 1): |det N(w)| p = 16.0, |det N(wp)| p = 16.0, det/prod(col norms) p = 40.0, sigma_6/sigma_1 p = 11.0, max|N(w)| p = -4.0, |R(w)| p = 1.0
+     sector (5, 3, 0): |det N(w)| p = 16.0, |det N(wp)| p = 16.0, det/prod(col norms) p = 38.0, sigma_6/sigma_1 p = 11.0, max|N(w)| p = -4.0, |R(w)| p = 1.0
+     sector (5, 2, 1): |det N(w)| p = 15.0, |det N(wp)| p = 15.0, det/prod(col norms) p = 39.0, sigma_6/sigma_1 p = 11.0, max|N(w)| p = -4.0, |R(w)| p = 1.0
+     sector (5, 2, 1): |det N(w)| p = 15.0, |det N(wp)| p = 15.0, det/prod(col norms) p = 39.0, sigma_6/sigma_1 p = 11.0, max|N(w)| p = -4.0, |R(w)| p = 1.0
+     sector (4, 4, 0): |det N(w)| p = 16.0, |det N(wp)| p = 16.0, det/prod(col norms) p = 38.0, sigma_6/sigma_1 p = 11.0, max|N(w)| p = -4.0, |R(w)| p = 2.0
+     sector (4, 3, 1): |det N(w)| p = 15.0, |det N(wp)| p = 15.0, det/prod(col norms) p = 39.0, sigma_6/sigma_1 p = 11.0, max|N(w)| p = -4.0, |R(w)| p = 2.0
+     sector (4, 3, 1): |det N(w)| p = 15.0, |det N(wp)| p = 15.0, det/prod(col norms) p = 39.0, sigma_6/sigma_1 p = 11.0, max|N(w)| p = -4.0, |R(w)| p = 2.0
+     sector (4, 2, 2): |det N(w)| p = 14.0, |det N(wp)| p = 14.0, det/prod(col norms) p = 38.0, sigma_6/sigma_1 p = 10.0, max|N(w)| p = -4.0, |R(w)| p = 2.0
+     sector (3, 3, 2): |det N(w)| p = 14.0, |det N(wp)| p = 14.0, det/prod(col norms) p = 38.0, sigma_6/sigma_1 p = 10.0, max|N(w)| p = -4.0, |R(w)| p = 3.0
+
+==============================================================================
+SECTION R: rank of the stacked 18x6 matrix for all ordered pairs A != B of Lambda = (2,1,0) (64 states, gauge p = 2)
+==============================================================================
+  computed/loaded 4032 ordered pairs (1s)
+  overall rank tally: {4: 714, 5: 3318}
+  same-sector pairs rank tally: {5: 282}
+  ordered sector pairs: 355 total; with some rank<5 pair: 87; with ALL pairs rank<5: 87
+  rank<5 sector pairs (A weight, B weight, mu_B - mu_A, rank counts):
+      (0, 2, 4) (2, 1, 3) (2, -1, -1) {4: 6}
+      (0, 2, 4) (3, 0, 3) (3, -2, -1) {4: 2}
+      (0, 2, 4) (3, 1, 2) (3, -1, -2) {4: 6}
+      (0, 2, 4) (4, 0, 2) (4, -2, -2) {4: 1}
+      (0, 2, 4) (4, 1, 1) (4, -1, -3) {4: 2}
+      (0, 3, 3) (2, 2, 2) (2, -1, -1) {4: 20}
+      (0, 3, 3) (3, 1, 2) (3, -2, -1) {4: 12}
+      (0, 3, 3) (3, 2, 1) (3, -1, -2) {4: 12}
+      (0, 3, 3) (4, 0, 2) (4, -3, -1) {4: 2}
+      (0, 3, 3) (4, 1, 1) (4, -2, -2) {4: 4}
+      (0, 3, 3) (4, 2, 0) (4, -1, -3) {4: 2}
+      (0, 4, 2) (2, 3, 1) (2, -1, -1) {4: 6}
+      (0, 4, 2) (3, 2, 1) (3, -2, -1) {4: 6}
+      (0, 4, 2) (3, 3, 0) (3, -1, -2) {4: 2}
+      (0, 4, 2) (4, 1, 1) (4, -3, -1) {4: 2}
+      (0, 4, 2) (4, 2, 0) (4, -2, -2) {4: 1}
+      (1, 1, 4) (0, 3, 3) (-1, 2, -1) {4: 4}
+      (1, 1, 4) (0, 4, 2) (-1, 3, -2) {4: 2}
+      (1, 1, 4) (3, 0, 3) (2, -1, -1) {4: 4}
+      (1, 1, 4) (4, 0, 2) (3, -1, -2) {4: 2}
+      (1, 2, 3) (0, 4, 2) (-1, 2, -1) {4: 6}
+      (1, 2, 3) (3, 1, 2) (2, -1, -1) {4: 36}
+      (1, 2, 3) (4, 0, 2) (3, -2, -1) {4: 6}
+      (1, 2, 3) (4, 1, 1) (3, -1, -2) {4: 12}
+      (1, 3, 2) (0, 2, 4) (-1, -1, 2) {4: 6}
+      (1, 3, 2) (3, 2, 1) (2, -1, -1) {4: 36}
+      (1, 3, 2) (4, 1, 1) (3, -2, -1) {4: 12}
+      (1, 3, 2) (4, 2, 0) (3, -1, -2) {4: 6}
+      (1, 4, 1) (0, 2, 4) (-1, -2, 3) {4: 2}
+      (1, 4, 1) (0, 3, 3) (-1, -1, 2) {4: 4}
+      (1, 4, 1) (3, 3, 0) (2, -1, -1) {4: 4}
+      (1, 4, 1) (4, 2, 0) (3, -2, -1) {4: 2}
+      (2, 0, 4) (0, 3, 3) (-2, 3, -1) {4: 2}
+      (2, 0, 4) (0, 4, 2) (-2, 4, -2) {4: 1}
+      (2, 0, 4) (1, 2, 3) (-1, 2, -1) {4: 6}
+      (2, 0, 4) (1, 3, 2) (-1, 3, -2) {4: 6}
+      (2, 0, 4) (1, 4, 1) (-1, 4, -3) {4: 2}
+      (2, 1, 3) (0, 4, 2) (-2, 3, -1) {4: 6}
+      (2, 1, 3) (1, 3, 2) (-1, 2, -1) {4: 36}
+      (2, 1, 3) (1, 4, 1) (-1, 3, -2) {4: 12}
+      (2, 1, 3) (4, 0, 2) (2, -1, -1) {4: 6}
+      (2, 2, 2) (1, 1, 4) (-1, -1, 2) {4: 20}
+      (2, 2, 2) (1, 4, 1) (-1, 2, -1) {4: 20}
+      (2, 2, 2) (4, 1, 1) (2, -1, -1) {4: 20}
+      (2, 3, 1) (0, 2, 4) (-2, -1, 3) {4: 6}
+      (2, 3, 1) (1, 1, 4) (-1, -2, 3) {4: 12}
+      (2, 3, 1) (1, 2, 3) (-1, -1, 2) {4: 36}
+      (2, 3, 1) (4, 2, 0) (2, -1, -1) {4: 6}
+      (2, 4, 0) (0, 2, 4) (-2, -2, 4) {4: 1}
+      (2, 4, 0) (0, 3, 3) (-2, -1, 3) {4: 2}
+      (2, 4, 0) (1, 1, 4) (-1, -3, 4) {4: 2}
+      (2, 4, 0) (1, 2, 3) (-1, -2, 3) {4: 6}
+      (2, 4, 0) (1, 3, 2) (-1, -1, 2) {4: 6}
+      (3, 0, 3) (0, 4, 2) (-3, 4, -1) {4: 2}
+      (3, 0, 3) (1, 3, 2) (-2, 3, -1) {4: 12}
+      (3, 0, 3) (1, 4, 1) (-2, 4, -2) {4: 4}
+      (3, 0, 3) (2, 2, 2) (-1, 2, -1) {4: 20}
+      (3, 0, 3) (2, 3, 1) (-1, 3, -2) {4: 12}
+      (3, 0, 3) (2, 4, 0) (-1, 4, -3) {4: 2}
+      (3, 1, 2) (1, 4, 1) (-2, 3, -1) {4: 12}
+      (3, 1, 2) (2, 0, 4) (-1, -1, 2) {4: 6}
+      (3, 1, 2) (2, 3, 1) (-1, 2, -1) {4: 36}
+      (3, 1, 2) (2, 4, 0) (-1, 3, -2) {4: 6}
+      (3, 2, 1) (1, 1, 4) (-2, -1, 3) {4: 12}
+      (3, 2, 1) (2, 0, 4) (-1, -2, 3) {4: 6}
+      (3, 2, 1) (2, 1, 3) (-1, -1, 2) {4: 36}
+      (3, 2, 1) (2, 4, 0) (-1, 2, -1) {4: 6}
+      (3, 3, 0) (0, 2, 4) (-3, -1, 4) {4: 2}
+      (3, 3, 0) (1, 1, 4) (-2, -2, 4) {4: 4}
+      (3, 3, 0) (1, 2, 3) (-2, -1, 3) {4: 12}
+      (3, 3, 0) (2, 0, 4) (-1, -3, 4) {4: 2}
+      (3, 3, 0) (2, 1, 3) (-1, -2, 3) {4: 12}
+      (3, 3, 0) (2, 2, 2) (-1, -1, 2) {4: 20}
+      (4, 0, 2) (1, 4, 1) (-3, 4, -1) {4: 2}
+      (4, 0, 2) (2, 3, 1) (-2, 3, -1) {4: 6}
+      (4, 0, 2) (2, 4, 0) (-2, 4, -2) {4: 1}
+      (4, 0, 2) (3, 2, 1) (-1, 2, -1) {4: 6}
+      (4, 0, 2) (3, 3, 0) (-1, 3, -2) {4: 2}
+      (4, 1, 1) (2, 0, 4) (-2, -1, 3) {4: 2}
+      (4, 1, 1) (2, 4, 0) (-2, 3, -1) {4: 2}
+      (4, 1, 1) (3, 0, 3) (-1, -1, 2) {4: 4}
+      (4, 1, 1) (3, 3, 0) (-1, 2, -1) {4: 4}
+      (4, 2, 0) (1, 1, 4) (-3, -1, 4) {4: 2}
+      (4, 2, 0) (2, 0, 4) (-2, -2, 4) {4: 1}
+      (4, 2, 0) (2, 1, 3) (-2, -1, 3) {4: 6}
+      (4, 2, 0) (3, 0, 3) (-1, -2, 3) {4: 2}
+      (4, 2, 0) (3, 1, 2) (-1, -1, 2) {4: 6}
+  rank depends on Dmu = mu_B - mu_A only (every Dmu gives a single rank): True ; number of distinct Dmu: 61
+  (number of positive Dmu components, number of negative components) -> ranks seen: {(0, 0): {5}, (1, 1): {5}, (1, 2): {4}, (2, 1): {5}}
+  => rank 4  <=>  Dmu has exactly one positive and two negative components (sign pattern (+,-,-) in some order); otherwise rank 5
+  row relation row(1,k,k) + row(2,k,k) = 0 (all six columns) for every k with Dmu_k <= -1 (4464 (pair,k) cases): max relative violation 5.41e-58; for k with Dmu_k >= 0 the smallest violation is 1.21e-6 (relation does NOT hold)
+  (rank of site-1 rows, rank of site-2 rows, total rank) over 400 pairs -> {(3, 3, 5): 301, (3, 3, 4): 99}  [each site contributes a 3-dim row space S_s; total rank = 6 - dim(S_1 n S_2)]
+
+total time 248s

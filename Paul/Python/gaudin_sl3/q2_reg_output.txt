@@ -1,0 +1,43 @@
+#### 310 
+(6, 2, 0) 1 k_B 0 p=2(2l2+kB)= 4 formula vs direct N max rel dev (24 pts) 4.09e-100 | lim eps^p N (formula) 6.80932040195 ; direct 6.80932040195 ; 1/X_B^2 6.80932040195 ; rel diff -1.42e-99 1s
+(6, 1, 1) 1 k_B 1 p=2(2l2+kB)= 6 formula vs direct N max rel dev (24 pts) 1.85e-115 | lim eps^p N (formula) 3305.17309617 ; direct 3305.17309617 ; 1/X_B^2 3305.17309617 ; rel diff -6.54e-115 0s
+(5, 3, 0) 1 k_B 1 p=2(2l2+kB)= 6 formula vs direct N max rel dev (24 pts) 3.18e-115 | lim eps^p N (formula) 362.400124539 ; direct 362.400124539 ; 1/X_B^2 362.400124539 ; rel diff -1.11e-114 0s
+(5, 2, 1) 1 k_B 2 p=2(2l2+kB)= 8 formula vs direct N max rel dev (24 pts) 2.8e-129 | lim eps^p N (formula) 828581.965404 ; direct 828581.965404 ; 1/X_B^2 828581.965404 ; rel diff 9.68e-129 0s
+(5, 2, 1) 2 k_B 2 p=2(2l2+kB)= 8 formula vs direct N max rel dev (24 pts) 6.06e-131 | lim eps^p N (formula) 828581.965404 ; direct 828581.965404 ; 1/X_B^2 828581.965404 ; rel diff -2.16e-130 0s
+(4, 4, 0) 1 k_B 2 p=2(2l2+kB)= 8 formula vs direct N max rel dev (24 pts) 5.4e-130 | lim eps^p N (formula) 8136.85725012 ; direct 8136.85725012 ; 1/X_B^2 8136.85725012 ; rel diff 1.7e-129 0s
+(4, 3, 1) 1 k_B 3 p=2(2l2+kB)= 10 formula vs direct N max rel dev (24 pts) 4.78e-144 | lim eps^p N (formula) 53318866.0717 ; direct 53318866.0717 ; 1/X_B^2 53318866.0717 ; rel diff -1.95e-143 0s
+(4, 3, 1) 2 k_B 3 p=2(2l2+kB)= 10 formula vs direct N max rel dev (24 pts) 7.54e-145 | lim eps^p N (formula) 53318866.0717 ; direct 53318866.0717 ; 1/X_B^2 53318866.0717 ; rel diff 4.58e-144 0s
+(4, 2, 2) 1 k_B 4 p=2(2l2+kB)= 12 formula vs direct N max rel dev (24 pts) 4.02e-142 | lim eps^p N (formula) 88853375578.1 ; direct 88853375578.1 ; 1/X_B^2 88853375578.1 ; rel diff 2.15e-143 0s
+(3, 3, 2) 1 k_B 5 p=2(2l2+kB)= 14 formula vs direct N max rel dev (24 pts) 1.23e-128 | lim eps^p N (formula) 2.49093385945e+12 ; direct 2.49093385945e+12 ; 1/X_B^2 2.49093385945e+12 ; rel diff 8.48e-132 0s
+#### 320 
+(6, 4, 0) 1 k_B 0 p=2(2l2+kB)= 8 formula vs direct N max rel dev (24 pts) 6.21e-100 | lim eps^p N (formula) 46.3668443364 ; direct 46.3668443364 ; 1/X_B^2 46.3668443364 ; rel diff 2.18e-99 1s
+(6, 3, 1) 1 k_B 1 p=2(2l2+kB)= 10 formula vs direct N max rel dev (24 pts) 4.98e-114 | lim eps^p N (formula) 45011.9651914 ; direct 45011.9651914 ; 1/X_B^2 45011.9651914 ; rel diff 1.71e-113 0s
+(6, 2, 2) 1 k_B 2 p=2(2l2+kB)= 12 formula vs direct N max rel dev (24 pts) 3.6e-129 | lim eps^p N (formula) 18434535.5176 ; direct 18434535.5176 ; 1/X_B^2 18434535.5176 ; rel diff -1.25e-128 0s
+(5, 5, 0) 1 k_B 1 p=2(2l2+kB)= 10 formula vs direct N max rel dev (24 pts) 9.0e-115 | lim eps^p N (formula) 1233.84928085 ; direct 1233.84928085 ; 1/X_B^2 1233.84928085 ; rel diff 2.95e-114 0s
+(5, 4, 1) 1 k_B 2 p=2(2l2+kB)= 12 formula vs direct N max rel dev (24 pts) 3.66e-129 | lim eps^p N (formula) 5642080.08171 ; direct 5642080.08171 ; 1/X_B^2 5642080.08171 ; rel diff 1.26e-128 0s
+(5, 4, 1) 2 k_B 2 p=2(2l2+kB)= 12 formula vs direct N max rel dev (24 pts) 6.64e-129 | lim eps^p N (formula) 5642080.08171 ; direct 5642080.08171 ; 1/X_B^2 5642080.08171 ; rel diff 2.22e-128 0s
+(5, 3, 2) 1 k_B 3 p=2(2l2+kB)= 14 formula vs direct N max rel dev (24 pts) 6.55e-143 | lim eps^p N (formula) 6622478253.06 ; direct 6622478253.06 ; 1/X_B^2 6622478253.06 ; rel diff 2.3e-142 0s
+(5, 3, 2) 2 k_B 3 p=2(2l2+kB)= 14 formula vs direct N max rel dev (24 pts) 3.67e-144 | lim eps^p N (formula) 6622478253.06 ; direct 6622478253.06 ; 1/X_B^2 6622478253.06 ; rel diff 1.11e-143 0s
+(4, 4, 2) 1 k_B 4 p=2(2l2+kB)= 16 formula vs direct N max rel dev (24 pts) 4.8e-143 | lim eps^p N (formula) 605031103106.0 ; direct 605031103106.0 ; 1/X_B^2 605031103106.0 ; rel diff -5.49e-144 0s
+(4, 3, 3) 1 k_B 5 p=2(2l2+kB)= 18 formula vs direct N max rel dev (24 pts) 1.4e-128 | lim eps^p N (formula) 3.09386836769e+14 ; direct 3.09386836769e+14 ; 1/X_B^2 3.09386836769e+14 ; rel diff 8.39e-132 0s
+#### 320 2
+(6, 4, 0) 1 k_B 0 p=2(2l2+kB)= 8 formula vs direct N max rel dev (24 pts) 1.26e-103 | lim eps^p N (formula) 7.68398272734 ; direct 7.68398272734 ; 1/X_B^2 7.68398272734 ; rel diff -4.38e-103 1s
+(6, 3, 1) 1 k_B 1 p=2(2l2+kB)= 10 formula vs direct N max rel dev (24 pts) 2.28e-118 | lim eps^p N (formula) 1282.94432068 ; direct 1282.94432068 ; 1/X_B^2 1282.94432068 ; rel diff 7.83e-118 0s
+(6, 2, 2) 1 k_B 2 p=2(2l2+kB)= 12 formula vs direct N max rel dev (24 pts) 8.69e-132 | lim eps^p N (formula) 90367.658051 ; direct 90367.658051 ; 1/X_B^2 90367.658051 ; rel diff 2.96e-131 0s
+(5, 5, 0) 1 k_B 1 p=2(2l2+kB)= 10 formula vs direct N max rel dev (24 pts) 1.64e-116 | lim eps^p N (formula) 130.462489932 ; direct 130.462489932 ; 1/X_B^2 130.462489932 ; rel diff 5.73e-116 0s
+(5, 4, 1) 1 k_B 2 p=2(2l2+kB)= 12 formula vs direct N max rel dev (24 pts) 2.84e-131 | lim eps^p N (formula) 102603.8815 ; direct 102603.8815 ; 1/X_B^2 102603.8815 ; rel diff -9.97e-131 0s
+(5, 4, 1) 2 k_B 2 p=2(2l2+kB)= 12 formula vs direct N max rel dev (24 pts) 1.42e-131 | lim eps^p N (formula) 102603.8815 ; direct 102603.8815 ; 1/X_B^2 102603.8815 ; rel diff -4.54e-131 0s
+(5, 3, 2) 1 k_B 3 p=2(2l2+kB)= 14 formula vs direct N max rel dev (24 pts) 5.94e-147 | lim eps^p N (formula) 20713146.5946 ; direct 20713146.5946 ; 1/X_B^2 20713146.5946 ; rel diff 2.96e-146 0s
+(5, 3, 2) 2 k_B 3 p=2(2l2+kB)= 14 formula vs direct N max rel dev (24 pts) 7.69e-147 | lim eps^p N (formula) 20713146.5946 ; direct 20713146.5946 ; 1/X_B^2 20713146.5946 ; rel diff 4.49e-146 0s
+(4, 4, 2) 1 k_B 4 p=2(2l2+kB)= 16 formula vs direct N max rel dev (24 pts) 7.93e-144 | lim eps^p N (formula) 1207391041.95 ; direct 1207391041.95 ; 1/X_B^2 1207391041.95 ; rel diff -1.21e-144 0s
+(4, 3, 3) 1 k_B 5 p=2(2l2+kB)= 18 formula vs direct N max rel dev (24 pts) 1.1e-129 | lim eps^p N (formula) 106187421219.0 ; direct 106187421219.0 ; 1/X_B^2 106187421219.0 ; rel diff -3.34e-132 0s
+(6, 2, 0) 1 k_B 0 p=2(2l2+kB)= 4 formula vs direct N max rel dev (24 pts) 4.59e-105 | lim eps^p N (formula) 2.77199977044 ; direct 2.77199977044 ; 1/X_B^2 2.77199977044 ; rel diff 1.59e-104 1s
+(6, 1, 1) 1 k_B 1 p=2(2l2+kB)= 6 formula vs direct N max rel dev (24 pts) 1.48e-118 | lim eps^p N (formula) 231.411332417 ; direct 231.411332417 ; 1/X_B^2 231.411332417 ; rel diff -5.09e-118 0s
+(5, 3, 0) 1 k_B 1 p=2(2l2+kB)= 6 formula vs direct N max rel dev (24 pts) 1.12e-118 | lim eps^p N (formula) 94.1287884099 ; direct 94.1287884099 ; 1/X_B^2 94.1287884099 ; rel diff -3.95e-118 0s
+(5, 2, 1) 1 k_B 2 p=2(2l2+kB)= 8 formula vs direct N max rel dev (24 pts) 1.9e-132 | lim eps^p N (formula) 37014.3903309 ; direct 37014.3903309 ; 1/X_B^2 37014.3903309 ; rel diff -6.51e-132 0s
+(5, 2, 1) 2 k_B 2 p=2(2l2+kB)= 8 formula vs direct N max rel dev (24 pts) 3.08e-133 | lim eps^p N (formula) 37014.3903309 ; direct 37014.3903309 ; 1/X_B^2 37014.3903309 ; rel diff -1.06e-132 0s
+(4, 4, 0) 1 k_B 2 p=2(2l2+kB)= 8 formula vs direct N max rel dev (24 pts) 3.35e-131 | lim eps^p N (formula) 1348.45214203 ; direct 1348.45214203 ; 1/X_B^2 1348.45214203 ; rel diff 1.29e-130 0s
+(4, 3, 1) 1 k_B 3 p=2(2l2+kB)= 10 formula vs direct N max rel dev (24 pts) 1.39e-145 | lim eps^p N (formula) 1519710.062 ; direct 1519710.062 ; 1/X_B^2 1519710.062 ; rel diff 4.58e-145 0s
+(4, 3, 1) 2 k_B 3 p=2(2l2+kB)= 10 formula vs direct N max rel dev (24 pts) 1.4e-145 | lim eps^p N (formula) 1519710.062 ; direct 1519710.062 ; 1/X_B^2 1519710.062 ; rel diff -4.87e-145 0s
+(4, 2, 2) 1 k_B 4 p=2(2l2+kB)= 12 formula vs direct N max rel dev (24 pts) 3.54e-143 | lim eps^p N (formula) 435566790.02 ; direct 435566790.02 ; 1/X_B^2 435566790.02 ; rel diff -7.79e-146 0s
+(3, 3, 2) 1 k_B 5 p=2(2l2+kB)= 14 formula vs direct N max rel dev (24 pts) 1.77e-129 | lim eps^p N (formula) 7790901867.38 ; direct 7790901867.38 ; 1/X_B^2 7790901867.38 ; rel diff 7.52e-133 0s

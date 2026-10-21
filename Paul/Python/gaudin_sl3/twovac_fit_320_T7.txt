@@ -1,0 +1,35 @@
+
+====================================================================================================
+T7: [3,1,0] comparison (same pipeline; exponents {0,2,5}: only dP = kappa P forced, p01 = 0; first nonzero p02)
+====================================================================================================
+  rows 675 = 225 states x 3 zeta points
+   full: P3^(c) p_kl, c<=1, 9 pairs (18)          unknowns  225 (per site 15/15) rows  675 rank  225 null    0 resid 0.0  (14s)
+   full with lone c<=2 (27)                       unknowns  576 (per site 24/24) rows  675 rank  576 null    0 resid 0.0  (85s)
+   N5 = {P3^(c) p02, P3^(c) p03 (c=0,1), P3 p23}  unknowns   25 (per site -/-) rows  675 rank   25 null    0 resid 0.316  (0s)
+   N5 + {P3 p04, dP3 p04}                         unknowns   49 (per site -/-) rows  675 rank   49 null    0 resid 0.0512  (1s)
+   N5, wrong c exponents (1,3,2)                  unknowns   25 (per site -/-) rows  675 rank   25 null    0 resid 0.319  (0s)
+     N5 without element 0: resid 0.894 (rank 16)
+     N5 without element 1: resid 0.469 (rank 16)
+     N5 without element 2: resid 0.856 (rank 16)
+     N5 without element 3: resid 0.536 (rank 16)
+     N5 without element 4: resid 0.397 (rank 16)
+  N5 kernel (basis P3 p02, dP3 p02, P3 p03, dP3 p03, P3 p23), rational reconstruction:
+    ['-2320.16697501', '51579252078413099518572617267/7038941069959328932170533', '-1778.85206472', '2567.10288436', '-2237.04668874']
+    ['-1908.88042206', '-4965.4939', '1030.68326304', '-246.645107294', '699.151770048']
+    ['510.700941591', '-1667.53487899', '234.936764021', '-266.407686517', '326.118215777']
+    ['492.042727369', '1196.09231012', '-214.625061869', '-8.7345209335', '-130.574572394']
+    ['-135.305079256', '-183.986254345', '36.548291016', '12.2467811069', '15.0993458538']
+  pure Plucker basis {P3 p_kl: 9 pairs, k<l<=4, (0,1) forced zero}, lone c = 0: unknowns 81, rank 81, resid 0.0 (unique kernel)
+  l <= 3 subset (5 Plucker coordinates = the adjoint pattern): rank 25 resid 0.316 -> FAILS
+     without P3 p02: resid 0.268 (rank 64 / 64)
+     without P3 p03: resid 0.081 (rank 64 / 64)
+     without P3 p04: resid 0.218 (rank 64 / 64)
+     without P3 p12: resid 0.0744 (rank 64 / 64)
+     without P3 p13: resid 0.0274 (rank 64 / 64)
+     without P3 p14: resid 0.0866 (rank 64 / 64)
+     without P3 p23: resid 0.0157 (rank 64 / 64)
+     without P3 p24: resid 0.0388 (rank 64 / 64)
+     without P3 p34: resid 0.0128 (rank 64 / 64)
+  kernel entries with no rational reconstruction (denominator <= 1e25): 0 of 81; K_99 = 1/9
+
+total time 138s

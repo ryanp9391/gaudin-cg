@@ -1,0 +1,1464 @@
+
+===== cell 1 (kind 1) =====
+# gl(3), L=2, adjoint⊗adjoint: overlap formula in the diagonal frame
+
+Goal: the two-site version of row 19 of `Companion-B-C-diagonalize-clean.md`, i.e. the overlap of the rotated $w$-vacuum with a diagonal-twist eigenstate written as a determinant of $Q$'s. Spec: `docs/superpowers/specs/2026-10-01-L2-diagonal-frame-overlap-design.md`. The first code cell clears the kernel.
+
+**Conventions** (new, as in the clean L=1 notebook).
+- **Lax.** $\mathcal L_{ij}(u)=u\,\delta_{ij}+h\,E_{ij}$; two sites, $T(u)=\mathcal L^{(1)}(u-\theta_1)\,\mathcal L^{(2)}(u-\theta_2)$ (product in auxiliary space).
+- **Twist.** Diagonal, $T^z=T\,\mathrm{diag}(z)$. No companion frame anywhere.
+- **Quantum minors.** Rows antisymmetrized, column $k$ at $u-(k-1)h$; $t_a=\sum_{|I|=a}\mathrm{qmin}_{I,I}$.
+- **Factors.** $\nu_n(u)=\prod_s(u-\theta_s+h\lambda_n)$ (the L=1 factor, multiplied over sites).
+- **Q-functions.** Direct $Q_i=z_i^{-u/h}q_i$, dual $Q^j=z_j^{+u/h}q^j$, monic $q$'s.
+
+**Numeric point** (exact rationals; 60 digits where floats enter): $h=1/2$, $\theta=(2/7,-3/5)$, $z=(3/2,5/4,2/3)$, $w=(5/2,7/3,3/5)$.
+
+===== cell 2 (kind 1) =====
+> **EH variant (2026-10-01).** This copy of `L2-diagonal-frame-overlap.wb` uses Hermitian generators $EH_{ij}=R\,E_{ij}R^{-1}$, with $EH_{ij}^T=EH_{ji}$ and $R=\sqrt M=\mathrm{diag}(1,1,1,\sqrt2,\sqrt6,3,2,3)$ in `ps` order. $M^{-1}E_{ij}^TM=E_{ji}$ with $M_1=1$ (cell 4). The changes from the E-basis notebook are:
+> - **Zero tests.** Surds don't cancel canonically in exact arithmetic, so exact zero tests use `zeroQ` (`PossibleZeroQ`).
+> - **$\langle x_0|y_0\rangle$.** The hard-coded $9h^4$ is replaced by the computed value, now $9h^4R_1/R_8=3h^4$ per site.
+> - **New Section 1b.** It checks the Hermitian structure: $t_a^T$ equals the transfer matrix with the sites reversed.
+>
+> All other results are unchanged, including the value of $R$ and the 50-digit overlap formula.
+
+===== cell 3 (kind 2) =====
+(* fresh kernel state; this also clears the other new-conventions notebooks' session state (their files are untouched) *)
+(* Preserve protected symbols installed by the Wolfbook extension. *)
+ClearAll @@ Select[Names["Global`*"], FreeQ[Attributes[#], Protected] &];
+(* GT basis and gl(3) generators, verbatim from the clean L=1 notebook *)
+ps[rep_] := ps[rep] = Block[{res = (Prepend[rep, #1] &) /@ Tuples[Table[Range[rep[[1, i + 1]], rep[[1, i]]], {i, 1, Length[rep[[1]]] - 1}]]}, If[Length[res[[1, 1]]] == 1, Reverse[Sort[res]], Reverse[Sort[Flatten[ps /@ res, 1]]]]];
+dim[rep_] := dim[rep] = Length[ps[{rep}]];
+J0[k_][pat_] := J0[k][pat] = Sum[pat[[k, i]], {i, 1, k}] - Sum[pat[[k - 1, i]], {i, 1, k - 1}];
+Jp[k_][pat_] := Jp[k][pat] = -Sum[(Product[pat[[k, i]] - i - pat[[k + 1, j]] + j, {j, Range[k + 1]}]/Product[pat[[k, i]] - i - pat[[k, j]] + j, {j, Complement[Range[k], {i}]}])*v[ReplacePart[pat, {k, i} -> pat[[k, i]] + 1]], {i, 1, k}];
+Jm[k_][pat_] := Jm[k][pat] = Sum[(Product[pat[[k, i]] - i - pat[[k - 1, j]] + j, {j, Range[k - 1]}]/Product[pat[[k, i]] - i - pat[[k, j]] + j, {j, Complement[Range[k], {i}]}])*v[ReplacePart[pat, {k, i} -> pat[[k, i]] - 1]], {i, 1, k}];
+JJ[k_, l_, rep_] := JJ[k, l, rep] = Which[
+  k == l, DiagonalMatrix[J0[k] /@ ps[{rep}]],
+  l == k + 1, Transpose[Table[(Coefficient[Jp[k][ps[{rep}][[i]]], v[#1]] &) /@ ps[{rep}], {i, 1, Length[ps[{rep}]]}]],
+  l == k - 1, Transpose[Table[(Coefficient[Jm[l][ps[{rep}][[i]]], v[#1]] &) /@ ps[{rep}], {i, 1, Length[ps[{rep}]]}]],
+  l > k + 1, JJ[k, k + 1, rep] . JJ[k + 1, l, rep] - JJ[k + 1, l, rep] . JJ[k, k + 1, rep],
+  l < k - 1, JJ[k, k - 1, rep] . JJ[k - 1, l, rep] - JJ[k - 1, l, rep] . JJ[k, k - 1, rep]];
+checks = <||>;
+(* rep, numeric point, two-site generators *)
+Λ = {2, 1, 0}; nL = 2; d1 = dim[Λ]; d2 = d1^nL; id2 = IdentityMatrix[d2];
+hN = 1/2; thN = {2/7, -3/5}; zN = {3/2, 5/4, 2/3}; wN = {5/2, 7/3, 3/5}; prec = 60;
+Ee[i_, j_] := Ee[i, j] = JJ[i, j, Λ];
+E1[i_, j_] := E1[i, j] = KroneckerProduct[Ee[i, j], IdentityMatrix[d1]];
+E2[i_, j_] := E2[i, j] = KroneckerProduct[IdentityMatrix[d1], Ee[i, j]];
+(* total gl(3) weight of each product basis state, in KroneckerProduct order *)
+wtBasis = Flatten[Table[Table[J0[k][p1] + J0[k][p2], {k, 3}], {p1, ps[{Λ}]}, {p2, ps[{Λ}]}], 1];
+nuP[n_][x_] := Product[x - thN[[s]] + hN Λ[[n]], {s, nL}];
+Grid[{{"two-site dimension", d2}, {"weight sectors", Length[Union[wtBasis]]}}, Frame -> All]
+
+===== cell 4 (kind 2) =====
+(* "Hermitian" generators EH = R.E.R^-1 (R diagonal) with EH[i,j]^T = EH[j,i]: M = R^2 solves M^-1.E[i,j]^T.M = E[j,i], normalized M_1 = 1. Overrides the cell above's Ee before anything uses it *)
+ClearAll[Ee, E1, E2];
+MsolEH = Module[{Mv = Array[mm, d1]}, Mv /. First[Solve[Join[Thread[DeleteCases[Union[Flatten[Table[DiagonalMatrix[Mv] . JJ[j, i, Λ] - Transpose[JJ[i, j, Λ]] . DiagonalMatrix[Mv], {i, 3}, {j, 3}]]], 0] == 0], {mm[1] == 1}], Mv]]];
+Rd = Sqrt[MsolEH];
+Ee[i_, j_] := Ee[i, j] = DiagonalMatrix[Rd] . JJ[i, j, Λ] . DiagonalMatrix[1/Rd];
+E1[i_, j_] := E1[i, j] = KroneckerProduct[Ee[i, j], IdentityMatrix[d1]];
+E2[i_, j_] := E2[i, j] = KroneckerProduct[IdentityMatrix[d1], Ee[i, j]];
+(* exact zero test: entries now carry surds (√2, √6, ...) that Mathematica does not combine canonically (√6/2 -> √(3/2)), so === {0} can fail on true zeros; PossibleZeroQ on the distinct entries handles algebraic numbers *)
+zeroQ[e_] := AllTrue[Union[Flatten[{e}]], PossibleZeroQ];
+checks["EH[i,j]^T = EH[j,i]"] = And @@ Flatten[Table[zeroQ[Transpose[Ee[i, j]] - Ee[j, i]], {i, 3}, {j, 3}]];
+Grid[{{"R = sqrt(M)", Rd}, {"EH^T = EH_ji", checks["EH[i,j]^T = EH[j,i]"]}, {"EH[1,2]", MatrixForm[Ee[1, 2]]}}, Frame -> All, Alignment -> Left]
+
+===== cell 5 (kind 1) =====
+## 1. Two-site transfer matrices (diagonal twist)
+$t_a(u)$ has degree $\le 2a\le 6$ in $u$, so it is rebuilt exactly (Lagrange) from 7 rational sample points; each sample is an exact $64\times64$ product. Checks: the quantum determinant $t_3=\chi_3\,\nu_1(u)\nu_2(u-h)\nu_3(u-2h)$, commutativity, and weight conservation (the diagonal twist commutes with the Cartan).
+
+===== cell 6 (kind 2) =====
+(* monodromy at a numeric argument v: aux-space product L^(1)(v-θ1).L^(2)(v-θ2) *)
+Tm[v_] := Tm[v] = Table[Sum[(KroneckerDelta[i, k] (v - thN[[1]]) id2 + hN E1[i, k]) . (KroneckerDelta[k, j] (v - thN[[2]]) id2 + hN E2[k, j]), {k, 3}], {i, 3}, {j, 3}];
+(* twist M on the right, T^M = T.M; quantum minor: rows antisymmetrized, column k at v-(k-1)h *)
+TMf[M_][i_, j_][v_] := Sum[Tm[v][[i, l]] M[[l, j]], {l, 3}];
+qminor[M_][I_, J_][v_] := Sum[Signature[σ] Dot @@ Table[TMf[M][σ[[k]], J[[k]]][v - (k - 1) hN], {k, Length[J]}], {σ, Permutations[I]}];
+tAt[M_, a_, v_] := Sum[qminor[M][I, I][v], {I, Subsets[Range[3], {a}]}];
+uS = 1/7 + Range[0, 6]/3;
+tPoly[M_, a_] := Expand[Sum[tAt[M, a, uS[[k]]] Product[(u - uS[[l]])/(uS[[k]] - uS[[l]]), {l, DeleteCases[Range[7], k]}], {k, 7}]];
+Zd = DiagonalMatrix[zN]; χ3z = Times @@ zN;
+{tTime, tZ} = AbsoluteTiming[Table[tPoly[Zd, a], {a, 3}]];
+checks["qdet: t3 = χ3 ν1(u)ν2(u-h)ν3(u-2h)"] = zeroQ[tZ[[3]] - χ3z nuP[1][u] nuP[2][u - hN] nuP[3][u - 2 hN] id2];
+checks["deg t_a = 2a"] = Table[Max[Exponent[tZ[[a]], u]], {a, 3}] === {2, 4, 6};
+checks["[t_a(u1), t_b(u2)] = 0"] = And @@ Flatten[Table[With[{A = tZ[[a]] /. u -> 1/3, B = tZ[[b]] /. u -> -2/5}, zeroQ[A . B - B . A]], {a, 3}, {b, 3}]];
+checks["t_a conserve the weight"] = And @@ Table[zeroQ[Table[If[wtBasis[[r]] =!= wtBasis[[c]], tZ[[a, r, c]], 0], {r, d2}, {c, d2}]], {a, 3}];
+Grid[Prepend[Append[List @@@ Normal[checks], {"build time (s)", tTime}], {"check", "value"}], Frame -> All, Alignment -> Left]
+
+===== cell 7 (kind 1) =====
+### 1b. Hermitian structure with EH
+Since $EH_{ij}^T=EH_{ji}$, transposing the physical space turns $\mathcal L^{(s)}_{ij}$ into $\mathcal L^{(s)}_{ji}$, and it reverses the order of the operator products. At L=1 this makes $t_a(\mathrm{diag}\,z)$ symmetric. At L=2 the site order in the monodromy is reversed instead: $t_a(u)^T$ is the transfer matrix of $T^{\rm rev}(u)=\mathcal L^{(2)}(u-\theta_2)\,\mathcal L^{(1)}(u-\theta_1)$, which is not $t_a$ itself. Both statements are checked at a sample $u$.
+
+===== cell 8 (kind 2) =====
+TmRev[v_] := TmRev[v] = Table[Sum[(KroneckerDelta[i, k] (v - thN[[2]]) id2 + hN E2[i, k]) . (KroneckerDelta[k, j] (v - thN[[1]]) id2 + hN E1[k, j]), {k, 3}], {i, 3}, {j, 3}];
+tAtRev[a_, v_] := Sum[Sum[Signature[σ] Dot @@ Table[Sum[TmRev[v - (k - 1) hN][[σ[[k]], l]] Zd[[l, I[[k]]]], {l, 3}], {k, a}], {σ, Permutations[I]}], {I, Subsets[Range[3], {a}]}];
+checks["t_a(u)^T = t_a of site-reversed chain (a=1,2,3)"] = And @@ Table[zeroQ[Transpose[tZ[[a]] /. u -> 2/9] - tAtRev[a, 2/9]], {a, 3}];
+symL2 = Table[zeroQ[Transpose[tZ[[a]] /. u -> 2/9] - (tZ[[a]] /. u -> 2/9)], {a, 3}];
+Grid[{{"t_a^T = t_a(reversed sites)", checks["t_a(u)^T = t_a of site-reversed chain (a=1,2,3)"]}, {"t_a symmetric? (a=1,2,3; info only)", symL2}}, Frame -> All, Alignment -> Left]
+
+===== cell 9 (kind 1) =====
+## 2. Eigenstates, one weight sector at a time
+The diagonal twist conserves the weight, so $t_1+\pi t_2$ (at $u=3/7$) is diagonalized block by block; the weight $\mu$ of a state is its sector label. Eigenvalues $t_a(u)$ are read off as polynomials from one large component.
+
+===== cell 10 (kind 2) =====
+maxc[e_, var_] := Max[Abs[Flatten[CoefficientList[Chop[Expand[e], 10^-40], var]]], 0];
+sectors = GatherBy[Range[d2], wtBasis[[#]] &];
+mixN = N[(tZ[[1]] + Pi tZ[[2]]) /. u -> 3/7, prec];
+states = Flatten[Table[With[{es = Eigensystem[mixN[[sec, sec]]]}, Table[<|"mu" -> wtBasis[[sec[[1]]]], "ev" -> es[[1, r]], "vec" -> Normal[SparseArray[Thread[sec -> es[[2, r]]], {d2}]]|>, {r, Length[sec]}]], {sec, sectors}], 1];
+nS = Length[states]; muS = states[[All, "mu"]]; vecS = states[[All, "vec"]];
+tZn = N[tZ, prec];
+vals = Table[With[{k = Ordering[Abs[ψ], -1][[1]]}, Table[Chop[Expand[(tZn[[a]] . ψ)[[k]]/ψ[[k]]], 10^-40], {a, 3}]], {ψ, vecS}];
+checks["64 eigenvectors of t1,t2,t3 (max residual)"] = Max[Table[maxc[tZn[[a]] . vecS[[A]] - vals[[A, a]] vecS[[A]], u], {A, nS}, {a, 3}]];
+checks["simple spectrum within sectors (min gap)"] = Min[Table[With[{e = Select[states, #["mu"] === mu &][[All, "ev"]]}, If[Length[e] < 2, Infinity, Min[Abs[Subtract @@@ Subsets[e, {2}]]]]], {mu, Union[muS]}]];
+Grid[{{"states", nS}, {"sector sizes", Tally[Length /@ sectors]}, {"max residual", checks["64 eigenvectors of t1,t2,t3 (max residual)"]}, {"min gap", N[checks["simple spectrum within sectors (min gap)"], 5]}}, Frame -> All, Alignment -> Left]
+
+===== cell 11 (kind 1) =====
+## 3. Baxter equations and QQ relation at L=2
+The L=1 equations with each $\nu_n$ replaced by the two-site product $\nu_n(x)=\prod_s(x-\theta_s+h\lambda_n)$:
+$$\nu_1(x)\nu_1(x+h)\nu_1(x+2h)Q(x-h)-t_1(x)\nu_1(x+h)\nu_1(x+2h)Q(x)+t_2(x+h)\nu_1(x+2h)Q(x+h)-t_3(x+2h)Q(x+2h)=0,$$
+$$\nu_3(x)\nu_3(x-h)\nu_3(x-2h)Q(x+h)-t_1(x)\nu_3(x-h)\nu_3(x-2h)Q(x)+t_2(x)\nu_3(x-2h)Q(x-h)-t_3(x)Q(x-2h)=0.$$
+Expected degrees: $\deg q_i=L\lambda_1-\mu_i$, $\deg q^j=\mu_j-L\lambda_3$. QQ factor $F_\lambda=\prod_s\prod_{n=\lambda_2+1}^{\lambda_1}(u-\theta_s+nh)$. The solver searches the minimal degree up to 6, so the degree rule is a test, not an input.
+
+===== cell 12 (kind 2) =====
+opDir[tt_, Q_, x_] := nuP[1][x] nuP[1][x + hN] nuP[1][x + 2 hN] Q[x - hN] - (tt[[1]] /. u -> x) nuP[1][x + hN] nuP[1][x + 2 hN] Q[x] + (tt[[2]] /. u -> x + hN) nuP[1][x + 2 hN] Q[x + hN] - (tt[[3]] /. u -> x + 2 hN) Q[x + 2 hN];
+opDual[tt_, Q_, x_] := nuP[3][x] nuP[3][x - hN] nuP[3][x - 2 hN] Q[x + hN] - (tt[[1]] /. u -> x) nuP[3][x - hN] nuP[3][x - 2 hN] Q[x] + (tt[[2]] /. u -> x) nuP[3][x - 2 hN] Q[x - hN] - (tt[[3]] /. u -> x) Q[x - 2 hN];
+(* minimal-degree monic q with Q = zz^(s x/h) q solving op; {} if none up to degree 6 *)
+solveQ[op_, tt_, zz_, s_] := Module[{c, eqs, ns, res = {}},
+  Do[If[res === {},
+    eqs = CoefficientList[Chop[Expand[op[tt, Function[yy, zz^(s (yy - X)/hN) Sum[c[j] yy^j, {j, 0, d}]], X]], 10^-40], X];
+    ns = If[eqs === {}, {UnitVector[d + 1, d + 1]}, NullSpace[N[Table[Coefficient[e, c[j]], {e, eqs}, {j, 0, d}], prec], Tolerance -> 10^-30]];
+    If[Length[ns] > 0, res = Expand[#/Coefficient[#, X, d]] &[Sum[ns[[1, j + 1]] X^j, {j, 0, d}]]]], {d, 0, 6}]; res];
+{qTime, {qd, qu}} = AbsoluteTiming[{Table[solveQ[opDir, vals[[A]], zN[[i]], -1], {A, nS}, {i, 3}], Table[solveQ[opDual, vals[[A]], zN[[j]], 1], {A, nS}, {j, 3}]}];
+checks["all direct and dual Q's found"] = FreeQ[{qd, qu}, {}];
+checks["deg q_i = Lλ1 - μ_i"] = And @@ Flatten[Table[Exponent[qd[[A, i]], X] == nL Λ[[1]] - muS[[A, i]], {A, nS}, {i, 3}]];
+checks["deg q^j = μ_j - Lλ3"] = And @@ Flatten[Table[Exponent[qu[[A, j]], X] == muS[[A, j]] - nL Λ[[3]], {A, nS}, {j, 3}]];
+Flam[x_] := Product[x - thN[[s]] + n hN, {s, nL}, {n, Λ[[2]] + 1, Λ[[1]]}];
+checks["QQ: Q_a Q_b^[2] - Q_b Q_a^[2] = (1/z_b-1/z_a) F Q^c"] = Max[Table[With[{q = qd[[A]], qc = qu[[A, abc[[3]]]], a = abc[[1]], b = abc[[2]]},
+     maxc[q[[a]] (q[[b]] /. X -> X + hN)/zN[[b]] - q[[b]] (q[[a]] /. X -> X + hN)/zN[[a]] - (1/zN[[b]] - 1/zN[[a]]) Flam[X] qc, X]], {A, nS}, {abc, {{1, 2, 3}, {2, 3, 1}, {3, 1, 2}}}]];
+Grid[Prepend[Append[Table[{k, checks[k]}, {k, {"all direct and dual Q's found", "deg q_i = Lλ1 - μ_i", "deg q^j = μ_j - Lλ3", "QQ: Q_a Q_b^[2] - Q_b Q_a^[2] = (1/z_b-1/z_a) F Q^c"}}], {"solve time (s)", qTime}], {"check", "value"}], Frame -> All, Alignment -> Left]
+
+===== cell 13 (kind 1) =====
+## 4. The rotated $w$-vacuum bra
+From the L=1 notebook: $P_{\rm aux}G(z)P_{\rm aux}^{-1}=\mathrm{diag}(z)$, and the second twist written in this diagonal frame is $G'=P_{\rm aux}G(w)P_{\rm aux}^{-1}$. At L=1 its vacuum covector is $\Omega_{zw}=e_1^T e^{r_1E_{12}}e^{r_2E_{13}}e^{r_3E_{23}}$. A global rotation acts as $g\otimes g$, so at L=2 the claim is $\Omega^{(2)}=\Omega_{zw}\otimes\Omega_{zw}$, a left eigenvector of every $t_a(G')$ with $t_1=\sum_jw_j\nu_j(u)$. Its direct $Q$'s, $Q_{i,{\rm vac}}=w_i^{-u/h}q_i$, come from the direct Baxter equation with these eigenvalues.
+
+===== cell 14 (kind 2) =====
+ee[i_, j_] := Table[KroneckerDelta[i, ii] KroneckerDelta[j, jj], {ii, 3}, {jj, 3}];
+zs = {z[1], z[2], z[3]}; ws = {w[1], w[2], w[3]};
+χ[tw_] := {tw[[1]] + tw[[2]] + tw[[3]], tw[[1]] tw[[2]] + tw[[1]] tw[[3]] + tw[[2]] tw[[3]], tw[[1]] tw[[2]] tw[[3]]};
+Gc[tw_] := With[{c = χ[tw]}, {{c[[1]], -c[[2]], c[[3]]}, {1, 0, 0}, {0, 1, 0}}];
+(* auxiliary-space Gauss factors, verbatim from the clean L=1 notebook *)
+Ppa = MatrixExp[-(1/z[1]) ee[2, 1]] . MatrixExp[(1/(z[1] z[2])) ee[3, 1]] . MatrixExp[-((z[1] + z[2])/(z[1] z[2])) ee[3, 2]];
+Pma = MatrixExp[-r[1] ee[2, 3]] . MatrixExp[-r[2] ee[1, 3]] . MatrixExp[-r[3] ee[1, 2]];
+Pda = MatrixExp[-Log[s[1]] ee[1, 1]] . MatrixExp[-Log[s[2]] ee[2, 2]] . MatrixExp[-Log[s[3]] ee[3, 3]];
+rsSol = {s[1] -> z[1]^2/((z[1] - z[2]) (z[1] - z[3])), s[2] -> -(z[2]/(z[1] (z[2] - z[3]))), s[3] -> 1/(z[1] z[2]), r[1] -> -(z[3]/z[2]), r[2] -> -(z[3]/z[1]), r[3] -> (z[2]^2 (-z[1] + z[3]))/(z[1]^2 (z[2] - z[3]))};
+Paux = Simplify[Pma . Pda . Ppa /. rsSol];
+checks["Paux G(z) Paux^-1 = diag(z)"] = Union[Flatten[Simplify[Paux . Gc[zs] . Inverse[Paux] - DiagonalMatrix[zs]]]] === {0};
+numZW = Join[Thread[zs -> zN], Thread[ws -> wN]];
+GPzw = Simplify[Paux . Gc[ws] . Inverse[Paux]] /. numZW;
+rOm = {r1 -> (w[1] - z[1])/(w[1] - z[2]), r2 -> ((w[1] - z[1]) (-w[2] + z[1]) (z[2] - z[3]))/((z[1] - z[2]) (w[1] - z[3]) (w[2] - z[3])), r3 -> ((w[1] - z[2]) (-w[2] + z[2]) (z[1] - z[3]))/((z[1] - z[2]) (w[1] - z[3]) (-w[2] + z[3]))} /. numZW;
+Ω1 = First[{UnitVector[d1, 1]} . MatrixExp[(r1 /. rOm) Ee[1, 2]] . MatrixExp[(r2 /. rOm) Ee[1, 3]] . MatrixExp[(r3 /. rOm) Ee[2, 3]]];
+Ω2 = Flatten[KroneckerProduct[Ω1, Ω1]];
+tW = Table[tPoly[GPzw, a], {a, 3}];
+kOm = Ordering[Abs[Ω2], -1][[1]];
+tauVac = Table[Expand[(Ω2 . tW[[a]])[[kOm]]/Ω2[[kOm]]], {a, 3}];
+checks["Ωzw⊗Ωzw left eigenvector of t_a(G') (exact)"] = And @@ Table[zeroQ[Ω2 . tW[[a]] - tauVac[[a]] Ω2], {a, 3}];
+checks["vacuum t1 = Σ w_j ν_j(u)"] = zeroQ[tauVac[[1]] - Sum[wN[[j]] nuP[j][u], {j, 3}]];
+qdVac = Table[solveQ[opDir, N[tauVac, prec], wN[[i]], -1], {i, 3}];
+checks["vacuum direct q's found, degrees (0,2,4)"] = FreeQ[qdVac, {}] && Exponent[qdVac, X] === {0, 2, 4};
+Grid[Prepend[Table[{k, checks[k]}, {k, {"Paux G(z) Paux^-1 = diag(z)", "Ωzw⊗Ωzw left eigenvector of t_a(G') (exact)", "vacuum t1 = Σ w_j ν_j(u)", "vacuum direct q's found, degrees (0,2,4)"}}], {"check", "value"}], Frame -> All, Alignment -> Left]
+
+===== cell 15 (kind 1) =====
+## 5. Two-site bracket and functional orthogonality
+**Bracket.** $\langle f\rangle=\sum_{s,n}\mathrm{Res}_{x=\theta_s-nh}\,\rho f$ with $\rho=\prod_s\prod_{n=\lambda_3}^{\lambda_1}(x-\theta_s+nh)^{-1}$; at L=1 this is the clean notebook's bracket.
+
+**Columns.** At L=2, $\delta t_1$ is linear and $\delta t_2$ is cubic, while $\delta t_3=0$. Split $\delta t_2(y)=\nu_1(y)A(y)+\nu_3(y-h)B(y)$ with $A,B$ linear, as at L=1. That gives six unknowns, so six columns:
+$$-\langle P Q\rangle,\ -\langle xPQ\rangle,\ \langle PQ^{[2]}\rangle,\ \langle xPQ^{[2]}\rangle,\ \langle P^{[-2]}Q\rangle,\ \langle xP^{[-2]}Q\rangle,$$
+with $P=Q^j$ (the ket's dual) and $Q=Q_i$ (the bra's direct). The 9 pairs $(i,j)$ give a $9\times6$ matrix. The prediction is rank 5 between different states at the same twist and rank 6 for the same state. This is tested without choosing any rows.
+
+===== cell 16 (kind 2) =====
+poles = Flatten[Table[{s, n}, {s, nL}, {n, Λ[[3]], Λ[[1]]}], 1];
+xP[{s_, n_}] := thN[[s]] - n hN;
+wgt[p_] := wgt[p] = 1/Product[xP[p] - xP[q], {q, DeleteCases[poles, p]}];
+(* full Q's at a rational point, memoized; A = state index, "vac" = the w-vacuum *)
+QU[A_, j_, x_] := QU[A, j, x] = N[zN[[j]]^(x/hN), prec] (qu[[A, j]] /. X -> x);
+QD[A_Integer, i_, x_] := QD[A, i, x] = N[zN[[i]]^(-x/hN), prec] (qd[[A, i]] /. X -> x);
+QD["vac", i_, x_] := QD["vac", i, x] = N[wN[[i]]^(-x/hN), prec] (qdVac[[i]] /. X -> x);
+rowF[B_, A_, {i_, j_}] := Sum[wgt[p] With[{x = xP[p]}, {-QU[B, j, x] QD[A, i, x], -x QU[B, j, x] QD[A, i, x], QU[B, j, x] QD[A, i, x + hN], x QU[B, j, x] QD[A, i, x + hN], QU[B, j, x - hN] QD[A, i, x], x QU[B, j, x - hN] QD[A, i, x]}], {p, poles}];
+pairs9 = Tuples[Range[3], 2];
+M9[B_, A_] := Table[rowF[B, A, ij], {ij, pairs9}];
+svr[m_] := With[{sv = SingularValueList[m, Tolerance -> 0]}, Last[sv]/First[sv]];
+{oTime, svTab} = AbsoluteTiming[Table[svr[M9[B, A]], {A, nS}, {B, nS}]];
+checks["orthogonality: max σmin/σmax over A≠B"] = Max[Table[If[A != B, svTab[[A, B]], 0], {A, nS}, {B, nS}]];
+checks["orthogonality: min σmin/σmax over A=B (not a zero test)"] = Min[Diagonal[svTab]];
+(* det N on the six off-diagonal rows, as a second view *)
+rows6 = Select[pairs9, #[[1]] != #[[2]] &];
+detN[B_, A_] := Det[Table[rowF[B, A, ij], {ij, rows6}]];
+detZ = Table[detN[B, A], {A, nS}, {B, nS}];
+checks["det N off-diagonal/diagonal (same twist)"] = Max[Abs[detZ - DiagonalMatrix[Diagonal[detZ]]]]/Min[Abs[Diagonal[detZ]]];
+Grid[Prepend[Append[Table[{k, ScientificForm[N[checks[k], 3], 3]}, {k, {"orthogonality: max σmin/σmax over A≠B", "orthogonality: min σmin/σmax over A=B (not a zero test)", "det N off-diagonal/diagonal (same twist)"}}], {"time (s)", oTime}], {"check", "value"}], Frame -> All, Alignment -> Left]
+
+===== cell 17 (kind 1) =====
+## 6. Overlap formula: site-product reference factor
+At L=1 (row 19), with the ket normalized by $\langle x_0|\Psi\rangle=1$, $\Omega\cdot\Psi_B\propto\det N[B,\mathrm{vac}]/\Psi_Q^B(x_0)$. The constant does not depend on $B$. In the diagonal frame $\langle x_0|=e_1^TP_{\rm phys}^{-1}$. The L=2 candidates are:
+- $\langle x_0^{(2)}|=(e_1^TP_{\rm phys}^{-1})^{\otimes2}$;
+- $\Psi_Q(x_0)=\prod_s\big[Q^2(\theta_s-2h)Q^3(\theta_s-3h)-Q^3(\theta_s-2h)Q^2(\theta_s-3h)\big]\,Q^3(\theta_s-h)$.
+
+The ket's scale cancels in
+$$R_B=\frac{\Omega^{(2)}\cdot\Psi_B}{\langle x_0^{(2)}|\Psi_B\rangle}\cdot\frac{\Psi_Q^B(x_0)}{\det N[B,\mathrm{vac}]},$$
+which should be the same for all 64 states. $P_{\rm phys}$ is checked first at L=1, via $P_{\rm phys}\,t_1^{G(z)}P_{\rm phys}^{-1}=\sum_iz_i\mathcal L_{ii}$.
+
+===== cell 18 (kind 2) =====
+(* physical-space Gauss factors, from the clean L=1 notebook, at the numeric z; Pdp = exp(Σ log s_k E_kk) written as integer powers *)
+rsN = rsSol /. numZW;
+Ppp = MatrixExp[(1/zN[[1]]) Ee[1, 2]] . MatrixExp[-(1/(zN[[1]] zN[[2]])) Ee[1, 3]] . MatrixExp[((zN[[1]] + zN[[2]])/(zN[[1]] zN[[2]])) Ee[2, 3]];
+Pmp = MatrixExp[(r[1] /. rsN) Ee[3, 2]] . MatrixExp[(r[2] /. rsN) Ee[3, 1]] . MatrixExp[(r[3] /. rsN) Ee[2, 1]];
+Pdp = DiagonalMatrix[Table[Product[(s[k] /. rsN)^J0[k][p], {k, 3}], {p, ps[{Λ}]}]];
+Pph1 = Pmp . Pdp . Ppp; PphInv1 = Inverse[Pph1];
+t1comp1 = Sum[(u KroneckerDelta[i, k] IdentityMatrix[d1] + hN Ee[i, k]) Gc[zN][[k, i]], {i, 3}, {k, 3}];
+checks["L=1: Pphys t1(G(z)) Pphys^-1 = Σ z_i L_ii"] = zeroQ[Pph1 . t1comp1 . PphInv1 - Sum[zN[[i]] (u IdentityMatrix[d1] + hN Ee[i, i]), {i, 3}]];
+x01 = First[{UnitVector[d1, 1]} . PphInv1]; x02 = Flatten[KroneckerProduct[x01, x01]];
+psiQ[B_] := Product[With[{t = thN[[s]]}, (QU[B, 2, t - 2 hN] QU[B, 3, t - 3 hN] - QU[B, 3, t - 2 hN] QU[B, 2, t - 3 hN]) QU[B, 3, t - hN]], {s, nL}];
+ovl = Table[Ω2 . vecS[[B]], {B, nS}]; x0ovl = Table[x02 . vecS[[B]], {B, nS}];
+dV = Table[detN[B, "vac"], {B, nS}];
+RB = Table[ovl[[B]]/x0ovl[[B]] psiQ[B]/dV[[B]], {B, nS}];
+checks["<x0|Psi_B> nonzero (min size, not a zero test)"] = Min[Abs[x0ovl]];
+checks["R_B state-independent: max |R_B/R_1 - 1|"] = Max[Abs[RB/RB[[1]] - 1]];
+Grid[{{"Pphys check (L=1)", checks["L=1: Pphys t1(G(z)) Pphys^-1 = Σ z_i L_ii"]}, {"min |<x0|Psi_B>|", ScientificForm[N[Min[Abs[x0ovl]], 3], 3]}, {"max |R_B/R_1 - 1|", ScientificForm[N[Max[Abs[RB/RB[[1]] - 1]], 3], 3]}, {"R_1", N[RB[[1]], 8]}}, Frame -> All, Alignment -> Left]
+
+===== cell 19 (kind 1) =====
+**Result with the single combined bracket: fails** (superseded by Section 7). $R_B$ varies by up to $\sim10^8$, also within weight sectors. The diagnostic below shows why: the combined bracket gives only 9 rows for 6 unknowns, and $\det N$ then depends on the choice of rows in a state-dependent way. That holds even at $A=B$. **Fix (Paul):** at L=2 there are two brackets, one for each ladder (the insertions $1$ and $e^{2\pi iu/h}$); see Section 7.
+
+===== cell 20 (kind 2) =====
+rowsAlt = {{1, 3}, {1, 2}, {2, 3}, {2, 1}, {3, 1}, {1, 1}};
+dAlt = Table[Det[Table[rowF[B, "vac", ij], {ij, rowsAlt}]], {B, nS}];
+dSameAlt = Table[Det[Table[rowF[B, B, ij], {ij, rowsAlt}]], {B, nS}];
+spread[r_] := Max[Abs[r/r[[1]] - 1]];
+bySec = GatherBy[Range[nS], muS[[#]] &];
+checks["det N row-choice ratio state-independent (mixed: B vs vac)"] = spread[dAlt/dV];
+checks["det N row-choice ratio state-independent (same twist, A=B)"] = spread[dSameAlt/Diagonal[detZ]];
+Grid[Join[{{"diagnostic", "max |ratio/ratio_1 - 1|"},
+   {"row choice {13,12,23,21,31,11} vs off-diagonal rows, mixed twist", ScientificForm[N[spread[dAlt/dV], 3], 3]},
+   {"same, same twist A=B", ScientificForm[N[spread[dSameAlt/Diagonal[detZ]], 3], 3]}},
+  Table[{Row[{"R_B spread in sector ", muS[[g[[1]]]], " (", Length[g], " states)"}], ScientificForm[N[spread[RB[[g]]], 3], 3]}, {g, Select[bySec, Length[#] > 1 &]}]], Frame -> All, Alignment -> Left]
+
+===== cell 21 (kind 1) =====
+## 7. Per-ladder brackets (FSoV structure)
+At L=2 there are two independent brackets. Section 5's single bracket is only their sum. As in `old-conventions/old/XXX/Clean/XXX_CG_L2_Clean.wb` (cells 38–40), the measure $\mu_\alpha\propto\rho\,(1-e^{2\pi i(u-\theta_{\bar\alpha})/h})$ kills the other ladder. Equivalently, the insertions $1$ and $e^{2\pi iu/h}$ are constant on each ladder. So
+$$\langle f\rangle_\alpha=\sum_{n=\lambda_3}^{\lambda_1}\mathrm{Res}_{x=\theta_\alpha-nh}\,\rho f,$$
+up to a constant per $\alpha$, which only rescales rows. The structure is then:
+- **rows** $(i,j;\alpha)$, a pair times a ladder;
+- **columns** $(\text{type};\beta)$, one of the three L=1 functionals times $x^{\beta-1}$;
+- $\det N$ is $6\times6$, with the L=1 pairs $(1,3),(1,2),(2,3)$ times $\alpha=1,2$.
+
+Orthogonality is tested on the full $18\times6$ matrix (9 pairs × 2 ladders).
+
+===== cell 22 (kind 2) =====
+(* row of ladder α only: the same residue weights, restricted to that ladder's poles *)
+rowFa[B_, A_, {i_, j_}, α_] := Sum[wgt[p] With[{x = xP[p]}, {-QU[B, j, x] QD[A, i, x], -x QU[B, j, x] QD[A, i, x], QU[B, j, x] QD[A, i, x + hN], x QU[B, j, x] QD[A, i, x + hN], QU[B, j, x - hN] QD[A, i, x], x QU[B, j, x - hN] QD[A, i, x]}], {p, Select[poles, #[[1]] == α &]}];
+M18[B_, A_] := Flatten[Table[rowFa[B, A, ij, α], {α, nL}, {ij, pairs9}], 1];
+sv18 = Table[svr[M18[B, A]], {A, nS}, {B, nS}];
+checks["per-ladder orthogonality: max σmin/σmax over A≠B (18x6)"] = Max[Table[If[A != B, sv18[[A, B]], 0], {A, nS}, {B, nS}]];
+checks["per-ladder: min σmin/σmax over A=B (not a zero test)"] = Min[Diagonal[sv18]];
+detNa[B_, A_, prs_] := Det[Flatten[Table[rowFa[B, A, ij, α], {α, nL}, {ij, prs}], 1]];
+prsL1 = {{1, 3}, {1, 2}, {2, 3}}; prsAlt = {{1, 3}, {2, 1}, {3, 2}};
+dVa = Table[detNa[B, "vac", prsL1], {B, nS}]; dVaAlt = Table[detNa[B, "vac", prsAlt], {B, nS}];
+dZa = Table[detNa[B, A, prsL1], {A, nS}, {B, nS}];
+checks["per-ladder det N off-diag/diag (same twist)"] = Max[Abs[dZa - DiagonalMatrix[Diagonal[dZa]]]]/Min[Abs[Diagonal[dZa]]];
+checks["per-ladder det N: pair-choice ratio state-independent (B vs vac)"] = spread[dVaAlt/dVa];
+RBa = Table[ovl[[B]]/x0ovl[[B]] psiQ[B]/dVa[[B]], {B, nS}];
+checks["per-ladder: R_B state-independent, site-product Ψ_Q(x0)"] = spread[RBa];
+Grid[Prepend[Table[{k, ScientificForm[N[checks[k], 3], 3]}, {k, {"per-ladder orthogonality: max σmin/σmax over A≠B (18x6)", "per-ladder: min σmin/σmax over A=B (not a zero test)", "per-ladder det N off-diag/diag (same twist)", "per-ladder det N: pair-choice ratio state-independent (B vs vac)", "per-ladder: R_B state-independent, site-product Ψ_Q(x0)"}}], {"check", "value"}], Frame -> All, Alignment -> Left]
+
+===== cell 23 (kind 1) =====
+## 8. Identifying $R$
+At L=1 (row 19), $R=(\Omega\cdot y_0)/(c_0\langle x_0|y_0\rangle\,\Phi_Q^{\rm vac}(y_0))$. The L=2 candidates, each built site by site:
+- **$y_0$.** $|y_0^{(2)}\rangle=|y_0(\theta_1)\rangle\otimes|y_0(\theta_2)\rangle$. Each factor is the L=1 vector at that site: in the companion frame $y_0=t_{S,21}(\theta)\,t_{S,20}(\theta)\,t_1(\theta)^{-1}e_8$, with $t_{S,20}(\theta)=t_1(\theta-h)t_1(\theta)-t_2(\theta)$ and $t_{S,21}(\theta)=t_2(\theta+h)t_1(\theta-h)-t_3(\theta+h)$. It is mapped to the diagonal frame by $P_{\rm phys}$.
+- **$\Phi_Q(y_0)$.** $\Phi_Q(y_0)=\prod_s[Q_1(\theta_s-2h)Q_2(\theta_s)-Q_2(\theta_s-2h)Q_1(\theta_s)]\,Q_1(\theta_s-2h)$, from the vacuum's direct $Q$'s.
+- **$c_0$.** The coefficient of the monomials of $\Psi_Q(x_0)\Phi_Q(y_0)$ in the per-ladder $\det N$, with the $Q$'s at $\theta_s+kh$ treated as symbols. Every symbol not in that product is set to 0 first, which leaves those coefficients unchanged.
+- **$\langle x_0|y_0\rangle$.** The candidate is $\langle x_0^{(2)}|y_0^{(2)}\rangle=(9h^4)^2$. It is not obvious that this is what enters at L=2: at L=1 it was really the $(y_0,x_0)$ entry of the inverse $x/y$ overlap matrix.
+
+The cell reports $R$ divided by the prediction.
+
+===== cell 24 (kind 2) =====
+(* one-site companion-frame t_a at site s, twist Gc[zN] *)
+T1s[s_][v_] := Table[KroneckerDelta[i, k] (v - thN[[s]]) IdentityMatrix[d1] + hN Ee[i, k], {i, 3}, {k, 3}];
+Gz = Gc[zN];
+TG1[s_][i_, j_][v_] := Sum[T1s[s][v][[i, l]] Gz[[l, j]], {l, 3}];
+t1s[s_, a_, v_] := Sum[Sum[Signature[σ] Dot @@ Table[TG1[s][σ[[k]], I[[k]]][v - (k - 1) hN], {k, a}], {σ, Permutations[I]}], {I, Subsets[Range[3], {a}]}];
+y0comp[s_] := With[{θs = thN[[s]]}, (t1s[s, 2, θs + hN] . t1s[s, 1, θs - hN] - t1s[s, 3, θs + hN]) . (t1s[s, 1, θs - hN] . t1s[s, 1, θs] - t1s[s, 2, θs]) . Inverse[t1s[s, 1, θs]] . UnitVector[d1, d1]];
+y0d = Table[Pph1 . y0comp[s], {s, nL}];
+(* <x0|y0> per site: 9h^4 in the E basis, times R1/R8 in the EH basis (the seeds e1, e8 are the same GT states) *)
+x0y0s = Table[x01 . y0d[[s]], {s, nL}];
+checks["L=1: <x0|y0> = 9h^4 R1/R8 at each site (diagonal frame)"] = zeroQ[x0y0s - ConstantArray[9 hN^4 Rd[[1]]/Rd[[d1]], nL]];
+y02 = Flatten[KroneckerProduct[y0d[[1]], y0d[[2]]]];
+phiQvac = Product[With[{t = thN[[s]]}, (QD["vac", 1, t - 2 hN] QD["vac", 2, t] - QD["vac", 2, t - 2 hN] QD["vac", 1, t]) QD["vac", 1, t - 2 hN]], {s, nL}];
+(* c0: per-ladder det N with symbols Us[j,s,k] = Q^j(θ_s+kh) (ket dual), Ds[i,s,k] = Q_i(θ_s+kh) (bra direct) *)
+rowSa[{i_, j_}, α_] := Sum[wgt[p] With[{x = xP[p], n = p[[2]]}, {-Us[j, α, -n] Ds[i, α, -n], -x Us[j, α, -n] Ds[i, α, -n], Us[j, α, -n] Ds[i, α, -n + 1], x Us[j, α, -n] Ds[i, α, -n + 1], Us[j, α, -n - 1] Ds[i, α, -n], x Us[j, α, -n - 1] Ds[i, α, -n]}], {p, Select[poles, #[[1]] == α &]}];
+termSym = Expand[Product[(Us[2, s, -2] Us[3, s, -3] - Us[3, s, -2] Us[2, s, -3]) Us[3, s, -1] (Ds[1, s, -2] Ds[2, s, 0] - Ds[2, s, -2] Ds[1, s, 0]) Ds[1, s, -2], {s, nL}]];
+keepVars = Union[Cases[termSym, (Us | Ds)[__], Infinity]];
+detSym = Expand[Det[Flatten[Table[rowSa[ij, α], {α, nL}, {ij, prsL1}], 1]] /. (v : (Us | Ds)[__] /; ! MemberQ[keepVars, v]) -> 0];
+monos = List @@ termSym; coefOf[m_] := With[{bare = m /. (Us | Ds)[__] -> 1}, Coefficient[detSym, m/bare]/bare];
+c0List = coefOf /@ monos; c02 = First[c0List];
+checks["c0: same coefficient on all (x0,y0) monomials"] = Union[c0List - c02] === {0};
+Rpred = (Ω2 . y02)/(c02 (Times @@ x0y0s) phiQvac);
+Grid[{{"<x0|y0> per site", x0y0s}, {"# monomials, all same coefficient", {Length[monos], checks["c0: same coefficient on all (x0,y0) monomials"]}}, {"c0 (L=2)", c02}, {"c0 × h^12", c02 hN^12}, {"Ω·y0", N[Ω2 . y02, 10]}, {"R (fitted)", N[RBa[[1]], 12]}, {"R / Rpred", N[RBa[[1]]/Rpred, 15]}}, Frame -> All, Alignment -> Left]
+
+===== cell 25 (kind 2) =====
+(* c0 symbolically in h, θ1, θ2: same per-ladder det, residue weights of ρ with symbolic poles *)
+thS = {ϑ1, ϑ2};
+xPs[{s_, n_}] := thS[[s]] - n ħ;
+wgtS[p_] := 1/Product[xPs[p] - xPs[q], {q, DeleteCases[poles, p]}];
+rowSs[{i_, j_}, α_] := Sum[wgtS[p] With[{x = xPs[p], n = p[[2]]}, {-Us[j, α, -n] Ds[i, α, -n], -x Us[j, α, -n] Ds[i, α, -n], Us[j, α, -n] Ds[i, α, -n + 1], x Us[j, α, -n] Ds[i, α, -n + 1], Us[j, α, -n - 1] Ds[i, α, -n], x Us[j, α, -n - 1] Ds[i, α, -n]}], {p, Select[poles, #[[1]] == α &]}];
+detSymS = Expand[Det[Flatten[Table[rowSs[ij, α], {α, nL}, {ij, prsL1}], 1]] /. (v : (Us | Ds)[__] /; ! MemberQ[keepVars, v]) -> 0];
+c0S = Factor[Together[Coefficient[detSymS, monos[[1]]/(monos[[1]] /. (Us | Ds)[__] -> 1)]/(monos[[1]] /. (Us | Ds)[__] -> 1)]];
+checks["c0 symbolic reproduces numeric c0"] = (c0S /. {ϑ1 -> thN[[1]], ϑ2 -> thN[[2]], ħ -> hN}) === c02;
+(* closed form: (L=1 c0)^2 times the cross-site factors of the residue weights *)
+c0closed = -(1/(4 ħ^6))^2/((ϑ1 - ϑ2)^3 Product[((ϑ1 - ϑ2)^2 - k^2 ħ^2)^(6 - 2 k), {k, 1, 2}]);
+checks["c0 = -(1/4h^6)^2 / [θ12^3 (θ12^2-h^2)^4 (θ12^2-4h^2)^2]"] = Simplify[c0S - c0closed] === 0;
+checks["R = Ω·y0/(c0 <x0|y0>^2 Φ_Q(y0)): max |R_B/Rpred - 1|"] = Max[Abs[RBa/Rpred - 1]];
+Grid[{{"c0(h, θ1, θ2)", c0S}, {"matches numeric", checks["c0 symbolic reproduces numeric c0"]}, {"closed form", checks["c0 = -(1/4h^6)^2 / [θ12^3 (θ12^2-h^2)^4 (θ12^2-4h^2)^2]"]}, {"max |R_B/Rpred - 1| (all 64)", ScientificForm[N[Max[Abs[RBa/Rpred - 1]], 3], 3]}}, Frame -> All, Alignment -> Left]
+
+===== cell 26 (kind 1) =====
+## 9. Preferred brackets: both ladders, insertions $1$ and $e^{2\pi iu/h}$
+This is Paul's choice, preferred for future work. Both brackets are residue sums over **all** poles of $\rho$:
+$$\langle f\rangle_1=\sum_{\rm all\ poles}\mathrm{Res}\,\rho f,\qquad \langle f\rangle_2=\sum_{\rm all\ poles}\mathrm{Res}\,\rho f\,e^{2\pi iu/h}.$$
+On the pole $u=\theta_s-nh$ the insertion equals $\varepsilon_s=e^{2\pi i\theta_s/h}$. So $\langle\cdot\rangle_1=\langle\cdot\rangle_{\theta_1}+\langle\cdot\rangle_{\theta_2}$ and $\langle\cdot\rangle_2=\varepsilon_1\langle\cdot\rangle_{\theta_1}+\varepsilon_2\langle\cdot\rangle_{\theta_2}$, and the rows are the Section 7 rows mixed by $\begin{pmatrix}1&1\\\varepsilon_1&\varepsilon_2\end{pmatrix}$. The expectation is that only $c_0$ changes, by $(\varepsilon_2-\varepsilon_1)^3$. Below, everything is recomputed directly with the insertion; nothing is converted from Section 7.
+
+===== cell 27 (kind 2) =====
+ins[1][x_] := 1; ins[2][x_] := Exp[2 Pi I x/hN];
+(* bracket k: all poles, insertion ins[k] evaluated at the pole *)
+rowFb[B_, A_, {i_, j_}, k_] := Sum[N[wgt[p] ins[k][xP[p]], prec] With[{x = xP[p]}, {-QU[B, j, x] QD[A, i, x], -x QU[B, j, x] QD[A, i, x], QU[B, j, x] QD[A, i, x + hN], x QU[B, j, x] QD[A, i, x + hN], QU[B, j, x - hN] QD[A, i, x], x QU[B, j, x - hN] QD[A, i, x]}], {p, poles}];
+M18b[B_, A_] := Flatten[Table[rowFb[B, A, ij, k], {k, 2}, {ij, pairs9}], 1];
+sv18b = Table[svr[M18b[B, A]], {A, nS}, {B, nS}];
+checks["insertion brackets: orthogonality max σmin/σmax, A≠B"] = Max[Table[If[A != B, sv18b[[A, B]], 0], {A, nS}, {B, nS}]];
+checks["insertion brackets: min σmin/σmax, A=B (not a zero test)"] = Min[Diagonal[sv18b]];
+detNb[B_, A_] := Det[Flatten[Table[rowFb[B, A, ij, k], {k, 2}, {ij, prsL1}], 1]];
+dVb = Table[detNb[B, "vac"], {B, nS}];
+(* c0 for these brackets, symbolically: εs = e^{2πiθ_s/h} kept as symbols; symbols outside the (x0,y0) monomials are zeroed BEFORE Det (same coefficients, much faster) *)
+insS[1][s_] := 1; insS[2][s_] := ε[s];
+rowSb[{i_, j_}, k_] := Sum[wgtS[p] insS[k][p[[1]]] With[{x = xPs[p], s = p[[1]], n = p[[2]]}, {-Us[j, s, -n] Ds[i, s, -n], -x Us[j, s, -n] Ds[i, s, -n], Us[j, s, -n] Ds[i, s, -n + 1], x Us[j, s, -n] Ds[i, s, -n + 1], Us[j, s, -n - 1] Ds[i, s, -n], x Us[j, s, -n - 1] Ds[i, s, -n]}], {p, poles}];
+detSymB = Expand[Det[Flatten[Table[rowSb[ij, k], {k, 2}, {ij, prsL1}], 1] /. (v : (Us | Ds)[__] /; ! MemberQ[keepVars, v]) -> 0]];
+c0Blist = Table[Factor[Together[Coefficient[detSymB, m/(m /. (Us | Ds)[__] -> 1)]/(m /. (Us | Ds)[__] -> 1)]], {m, monos}];
+c0B = First[c0Blist];
+checks["insertion brackets: c0 same on all 16 monomials"] = Union[Simplify[c0Blist - c0B]] === {0};
+checks["insertion brackets: c0 = (ε2-ε1)^3 × per-ladder c0"] = Simplify[c0B - (ε[2] - ε[1])^3 c0S] === 0;
+c0BN = N[c0B /. {ϑ1 -> thN[[1]], ϑ2 -> thN[[2]], ħ -> hN, ε[s_] :> Exp[2 Pi I thN[[s]]/hN]}, prec];
+RpredB = (Ω2 . y02)/(c0BN (Times @@ x0y0s) phiQvac);
+checks["insertion brackets: full formula, max |lhs/rhs - 1| (all 64)"] = Max[Abs[Table[ovl[[B]]/(RpredB x0ovl[[B]] dVb[[B]]/psiQ[B]), {B, nS}] - 1]];
+Grid[{{"orthogonality A≠B", ScientificForm[N[checks["insertion brackets: orthogonality max σmin/σmax, A≠B"], 3], 3]}, {"A=B (not zero)", ScientificForm[N[checks["insertion brackets: min σmin/σmax, A=B (not a zero test)"], 3], 3]}, {"c0", c0B}, {"c0 same on 16 monomials", checks["insertion brackets: c0 same on all 16 monomials"]}, {"c0 = (ε2-ε1)^3 c0(per-ladder)", checks["insertion brackets: c0 = (ε2-ε1)^3 × per-ladder c0"]}, {"full formula, all 64", ScientificForm[N[checks["insertion brackets: full formula, max |lhs/rhs - 1| (all 64)"], 3], 3]}}, Frame -> All, Alignment -> Left]
+
+===== cell 28 (kind 1) =====
+## 10. Acting on $\langle\Omega|$ with $T_{(1,1)}$ and $T_{(2,1)}$ at $\theta_1-2h$: is the action localized on site 1?
+The transfer matrices are built with the **ket's diagonal twist** $\mathrm{diag}(z_1,z_2,z_3)$, so that $\langle\Omega|T_\lambda(u)|\Psi_B\rangle=T_\lambda^B(u)\,\langle\Omega|\Psi_B\rangle$. Fusion uses the CBR formula of the clean L=1 notebook, $T_\lambda(u)=\det_{i,j\le\lambda_1}t_{\lambda'_j+i-j}(u+(i-1)h)$:
+$$T_{(1,1)}(u)=t_2(u),\qquad T_{(2,1)}(u)=t_2(u)\,t_1(u+h)-t_3(u+h).$$
+**Localization test.** Write a covector $c$ on $V\otimes V$ as an $8\times8$ matrix $M_{i_1i_2}$ (row = site 1, column = site 2). The action is localized on site 1 when $\langle\Omega|T_\lambda(\theta_1-2h)=\langle v_\lambda|\otimes\langle\Omega_{zw}|$, i.e. $M=v_\lambda\,\Omega_{zw}^T$. It is *nontrivial* when $v_\lambda\not\propto\Omega_{zw}$; otherwise $\langle\Omega|$ would simply be an eigencovector. The cell also compares $v_\lambda$ with the one-site action $\langle\Omega_{zw}|T^{L=1,\,\theta_1}_\lambda(\theta_1-2h)$ (same twist), reported for information only.
+
+===== cell 29 (kind 2) =====
+(* CBR fusion with the KET's twist diag(z): T_(1,1)(u) = t2(u), T_(2,1)(u) = t2(u) t1(u+h) - t3(u+h); covector-times-matrix only, no 64x64 products *)
+uL = thN[[1]] - 2 hN;
+tZat[a_, v_] := tZ[[a]] /. u -> v;
+ΩT["11"] = Ω2 . tZat[2, uL];
+ΩT["21"] = ΩT["11"] . tZat[1, uL + hN] - Ω2 . tZat[3, uL + hN];
+(* Ω2 = Flatten[Ω1 ⊗ Ω1], so Partition gives rows = site-1 index, columns = site-2 index; site-1-local <=> M = v Ω1^T *)
+asMat[c_] := Partition[c, d1];
+locV[c_] := asMat[c] . Ω1/(Ω1 . Ω1);
+locResid[c_] := asMat[c] - Outer[Times, locV[c], Ω1];
+vL = <|"11" -> locV[ΩT["11"]], "21" -> locV[ΩT["21"]]|>;
+checks["<Ω|T_(1,1)(θ1-2h) = <v|⊗<Ωzw| (site-1 local, exact)"] = zeroQ[locResid[ΩT["11"]]];
+checks["<Ω|T_(2,1)(θ1-2h) = <v|⊗<Ωzw| (site-1 local, exact)"] = zeroQ[locResid[ΩT["21"]]];
+(* nontrivial: v not ∝ Ω1 (rank 2), and nonzero *)
+nontriv[k_] := MatrixRank[N[{vL[k], Ω1}, prec]] == 2;
+(* contrast: the same covector is NOT local on site 2 (columns ∝ Ω1 would mean M = Ω1 v^T) *)
+loc2Q[c_] := zeroQ[Transpose[asMat[c]] - Outer[Times, Transpose[asMat[c]] . Ω1/(Ω1 . Ω1), Ω1]];
+(* info: one-site chain at θ1 with the same twist, T^{L=1}_λ(θ1-2h) *)
+T1z[v_] := Table[(KroneckerDelta[i, k] (v - thN[[1]]) IdentityMatrix[d1] + hN Ee[i, k]) zN[[k]], {i, 3}, {k, 3}];
+t1site[a_, v_] := Sum[Sum[Signature[σ] Dot @@ Table[T1z[v - (k - 1) hN][[σ[[k]], I[[k]]]], {k, a}], {σ, Permutations[I]}], {I, Subsets[Range[3], {a}]}];
+w1["11"] = Ω1 . t1site[2, uL];
+w1["21"] = (Ω1 . t1site[2, uL]) . t1site[1, uL + hN] - Ω1 . t1site[3, uL + hN];
+parQ[a_, b_] := MatrixRank[N[{a, b}, prec]] == 1;
+ratio[a_, b_] := With[{k = Ordering[Abs[N[b]], -1][[1]]}, a[[k]]/b[[k]]];
+Grid[Prepend[Table[{k, checks["<Ω|T_(" <> StringJoin[Riffle[Characters[k], ","]] <> ")(θ1-2h) = <v|⊗<Ωzw| (site-1 local, exact)"], nontriv[k], loc2Q[ΩT[k]], parQ[vL[k], w1[k]], If[parQ[vL[k], w1[k]], Simplify[ratio[vL[k], w1[k]]], "-"]}, {k, {"11", "21"}}], {"λ", "site-1 local", "v ∦ Ωzw (nontrivial)", "also site-2 local?", "v ∥ Ωzw·T^{L=1}_λ ?", "ratio v / (Ωzw·T^{L=1}_λ)"}], Frame -> All, Alignment -> Left]
+
+===== cell 30 (kind 2) =====
+(* site-2 spectator factor: v_λ = f_λ · Ωzw.T^{L=1,θ1}_λ(θ1-2h). Fitted shapes in θ12 = θ1-θ2 (one numeric point only, so this is a guess consistent with it): f_(1,1) = (θ12-h)(θ12-3h), f_(2,1) = (θ12-h)^2(θ12-3h) *)
+θ12 = thN[[1]] - thN[[2]];
+fL["11"] = (θ12 - hN) (θ12 - 3 hN); fL["21"] = (θ12 - hN)^2 (θ12 - 3 hN);
+checks["<Ω|T_(1,1)(θ1-2h) = (θ12-h)(θ12-3h) · (Ωzw.T^{L=1}_(1,1)) ⊗ Ωzw"] = zeroQ[ΩT["11"] - fL["11"] Flatten[KroneckerProduct[w1["11"], Ω1]]];
+checks["<Ω|T_(2,1)(θ1-2h) = (θ12-h)^2(θ12-3h) · (Ωzw.T^{L=1}_(2,1)) ⊗ Ωzw"] = zeroQ[ΩT["21"] - fL["21"] Flatten[KroneckerProduct[w1["21"], Ω1]]];
+Grid[{{"λ", "f_λ (exact)", "factorized formula holds"}, {"(1,1)", fL["11"], checks["<Ω|T_(1,1)(θ1-2h) = (θ12-h)(θ12-3h) · (Ωzw.T^{L=1}_(1,1)) ⊗ Ωzw"]}, {"(2,1)", fL["21"], checks["<Ω|T_(2,1)(θ1-2h) = (θ12-h)^2(θ12-3h) · (Ωzw.T^{L=1}_(2,1)) ⊗ Ωzw"]}}, Frame -> All, Alignment -> Left]
+
+===== cell 31 (kind 1) =====
+**Result (exact, one numeric point).** With $T_\lambda$ built from the ket's twist $\mathrm{diag}(z)$, both covectors are localized on site 1 and the action is nontrivial ($v_\lambda\not\propto\Omega_{zw}$). They are not local on site 2. Site 1 sees exactly the one-site transfer matrix at $\theta_1$, and site 2 only contributes a scalar:
+$$\langle\Omega|T_{(1,1)}(\theta_1-2h)=(\theta_{12}-h)(\theta_{12}-3h)\;\langle\Omega_{zw}|T^{L=1,\theta_1}_{(1,1)}(\theta_1-2h)\otimes\langle\Omega_{zw}|,$$
+$$\langle\Omega|T_{(2,1)}(\theta_1-2h)=(\theta_{12}-h)^2(\theta_{12}-3h)\;\langle\Omega_{zw}|T^{L=1,\theta_1}_{(2,1)}(\theta_1-2h)\otimes\langle\Omega_{zw}|.$$
+The factors $f_\lambda$ were fitted at the single point $h=1/2$, $\theta_{12}=31/35$; a second point is needed to confirm them. Because $\langle\Omega|T_\lambda|\Psi_B\rangle=T^B_\lambda(\theta_1-2h)\,\langle\Omega|\Psi_B\rangle$, this gives the overlaps $(\langle v_\lambda|\otimes\langle\Omega_{zw}|)\,|\Psi_B\rangle$ in terms of the known $\langle\Omega|\Psi_B\rangle$.
+
+===== cell 32 (kind 1) =====
+### 10b. Undoing the global rotation on site 1: $\langle v_\lambda|R^{-1}$
+$\Omega_{zw}=e_1^TR$ with $R=e^{r_1E_{12}}e^{r_2E_{13}}e^{r_3E_{23}}$ (raising operators, Section 4). Here $\langle v_\lambda|=\langle\Omega_{zw}|T^{L=1,\theta_1}_\lambda(\theta_1-2h)$ is the one-site vector from Section 10, without the site-2 factor $f_\lambda$. The cell lists the GT components of $\langle v_\lambda|R^{-1}$ with their weights. It also tests whether $R^{-1}$ can be moved into the auxiliary space, i.e. $\langle v_\lambda|R^{-1}=e_1^T\,T_\lambda^{L=1}[g\,\mathrm{diag}(z)\,g^{-1}](\theta_1-2h)$ for $g=R$ written in the fundamental (or its inverse).
+
+===== cell 33 (kind 2) =====
+Rg = MatrixExp[(r1 /. rOm) Ee[1, 2]] . MatrixExp[(r2 /. rOm) Ee[1, 3]] . MatrixExp[(r3 /. rOm) Ee[2, 3]];
+RgInv = MatrixExp[-(r3 /. rOm) Ee[2, 3]] . MatrixExp[-(r2 /. rOm) Ee[1, 3]] . MatrixExp[-(r1 /. rOm) Ee[1, 2]];
+checks["Ωzw = e1^T R, R R^-1 = 1"] = zeroQ[Ω1 - UnitVector[d1, 1] . Rg] && zeroQ[Rg . RgInv - IdentityMatrix[d1]];
+vR[k_] := vR[k] = Simplify[w1[k] . RgInv];
+wts = Table[Table[J0[kk][p], {kk, 3}], {p, ps[{Λ}]}];
+(* one-site T_λ at θ1 with an arbitrary 3x3 twist M on the right (aux-space product written out: a 3x3 array of 8x8 blocks) *)
+T1M[M_][v_] := Table[Sum[(KroneckerDelta[i, l] (v - thN[[1]]) IdentityMatrix[d1] + hN Ee[i, l]) M[[l, k]], {l, 3}], {i, 3}, {k, 3}];
+t1M[M_, a_, v_] := Sum[Sum[Signature[σ] Dot @@ Table[T1M[M][v - (k - 1) hN][[σ[[k]], I[[k]]]], {k, a}], {σ, Permutations[I]}], {I, Subsets[Range[3], {a}]}];
+TλM["11"][M_] := t1M[M, 2, uL]; TλM["21"][M_] := t1M[M, 2, uL] . t1M[M, 1, uL + hN] - t1M[M, 3, uL + hN];
+checks["one-site helper reproduces w1 at twist diag(z)"] = zeroQ[w1["21"] - Ω1 . TλM["21"][DiagonalMatrix[zN]]];
+(* R in the fundamental. ℒ = u + h Σ e_ij⊗E_ij is invariant under g^-T ⊗ π(g), so R^-1 should move into the aux twist as g^-T z g^T, not g z g^-1 *)
+gF = MatrixExp[(r1 /. rOm) ee[1, 2]] . MatrixExp[(r2 /. rOm) ee[1, 3]] . MatrixExp[(r3 /. rOm) ee[2, 3]];
+conjQ[k_, g_] := zeroQ[vR[k] - UnitVector[d1, 1] . TλM[k][g . DiagonalMatrix[zN] . Inverse[g]]];
+gTi = Inverse[Transpose[gF]];
+checks["<v_(1,1)|R^-1 = e1^T T_(1,1)[g^-T z g^T](θ1-2h)"] = conjQ["11", gTi];
+checks["<v_(2,1)|R^-1 = e1^T T_(2,1)[g^-T z g^T](θ1-2h)"] = conjQ["21", gTi];
+Grid[Join[{{"GT pattern", "weight", "<v_(1,1)|R^-1", "<v_(2,1)|R^-1"}}, Table[{ps[{Λ}][[n]], wts[[n]], vR["11"][[n]], vR["21"][[n]]}, {n, d1}],
+  {{"helper check", "", checks["one-site helper reproduces w1 at twist diag(z)"], ""},
+   {"twist g z g^-1 (g = R_fund)", "", conjQ["11", gF], conjQ["21", gF]},
+   {"twist g^-1 z g", "", conjQ["11", Inverse[gF]], conjQ["21", Inverse[gF]]},
+   {"twist g^T z g^-T", "", conjQ["11", Transpose[gF]], conjQ["21", Transpose[gF]]},
+   {"twist g^-T z g^T", "", checks["<v_(1,1)|R^-1 = e1^T T_(1,1)[g^-T z g^T](θ1-2h)"], checks["<v_(2,1)|R^-1 = e1^T T_(2,1)[g^-T z g^T](θ1-2h)"]}}], Frame -> All, Alignment -> Left]
+
+===== cell 34 (kind 1) =====
+**Result (exact, same numeric point).**
+- $\langle v_{(1,1)}|R^{-1}$ is sparse: it has only 3 nonzero GT components, at weights $(2,1,0)$ (the highest weight), $(1,2,0)$ and one of the two $(1,1,1)$ states. $\langle v_{(2,1)}|R^{-1}$ has all 8 components nonzero.
+- $R^{-1}$ moves into the auxiliary twist: $\langle v_\lambda|R^{-1}=e_1^T\,T^{L=1,\theta_1}_\lambda\big[g^{-T}\mathrm{diag}(z)\,g^{T}\big](\theta_1-2h)$ for both $\lambda$, with $g=e^{r_1e_{12}}e^{r_2e_{13}}e^{r_3e_{23}}$ (fundamental). The twist $g^{-T}\mathrm{diag}(z)g^T$ is lower-triangular-conjugated. This follows from the invariance of $\mathcal L=u+h\sum e_{ij}\otimes E_{ij}$ under $g^{-T}\otimes\pi(g)$; the conjugations $gzg^{-1}$, $g^{-1}zg$ and $g^Tzg^{-T}$ all fail.
+
+===== cell 35 (kind 1) =====
+### 10c. Projecting $\langle v_\lambda|R^{-1}\otimes e_1^T$ onto the highest-weight spaces of $[2,1,0]^{\otimes2}$
+For each irrep $V_\mu\subset[2,1,0]\otimes[2,1,0]$, the highest-weight space $\mathrm{HW}_\mu$ is the set of kets of total weight $\mu$ that are killed by $E^{\rm tot}_{12}$ and $E^{\rm tot}_{23}$ (here $E^{\rm tot}=E^{(1)}+E^{(2)}$). Its dimension is the multiplicity of $V_\mu$. The covector $c_\lambda=\langle v_\lambda|R^{-1}\otimes e_1^T$ is projected onto $\mathrm{HW}_\mu$ with the invariant form; for the EH generators this is the plain dot product, since $EH^T_{ij}=EH_{ji}$. The table gives the overlaps $c_\lambda\cdot h^{(k)}_\mu$ in an orthonormal basis of $\mathrm{HW}_\mu$, ordered by Gram–Schmidt, and the norm of the projection, which does not depend on the basis. The row $\lambda=\varnothing$ uses $c=e_1^T\otimes e_1^T$ as a sanity check: it should reach only $[4,2,0]$.
+
+===== cell 36 (kind 2) =====
+Etot[i_, j_] := Etot[i, j] = E1[i, j] + E2[i, j];
+(* HW kets of weight μ: supported on that weight sector, killed by E12tot and E23tot *)
+hwBasis[μ_] := hwBasis[μ] = Module[{sec = Flatten[Position[wtBasis, μ]], ns},
+   ns = NullSpace[Join[Etot[1, 2][[All, sec]], Etot[2, 3][[All, sec]]]];
+   Simplify[Orthogonalize[Table[Normal[SparseArray[Thread[sec -> n], {d2}]], {n, ns}], Simplify[#1 . #2] &]]];
+irreps = Select[Union[wtBasis], Length[hwBasis[#]] > 0 &];
+checks["decomposition: Σ mult · dim V_μ = 64"] = Total[Length[hwBasis[#]] dim[#] & /@ irreps] == d2;
+(* covectors: λ = (1,1), (2,1), and ∅ (plain e1⊗e1) as a check *)
+cCov["11"] = Flatten[KroneckerProduct[vR["11"], UnitVector[d1, 1]]];
+cCov["21"] = Flatten[KroneckerProduct[vR["21"], UnitVector[d1, 1]]];
+cCov["∅"] = Flatten[KroneckerProduct[UnitVector[d1, 1], UnitVector[d1, 1]]];
+hwOv[k_, μ_] := hwOv[k, μ] = RootReduce[cCov[k] . # & /@ hwBasis[μ]];
+Grid[Join[{{"μ", "dim V_μ", "mult", "λ = ∅: overlaps", "λ = (1,1): overlaps", "|proj|", "λ = (2,1): overlaps", "|proj|"}},
+   Table[{μ, dim[μ], Length[hwBasis[μ]], hwOv["∅", μ], hwOv["11", μ], RootReduce[Sqrt[Total[hwOv["11", μ]^2]]], hwOv["21", μ], RootReduce[Sqrt[Total[hwOv["21", μ]^2]]]}, {μ, Reverse[irreps]}],
+   {{"Σ mult·dim = 64", checks["decomposition: Σ mult · dim V_μ = 64"]}}], Frame -> All, Alignment -> Left]
+
+===== cell 37 (kind 2) =====
+(* multiplicity-2 irrep [3,2,1]: do the λ=(1,1) and λ=(2,1) projections span both copies? *)
+checks["[3,2,1]: (1,1) and (2,1) HW projections independent (rank 2)"] = MatrixRank[{hwOv["11", {3, 2, 1}], hwOv["21", {3, 2, 1}]}] == 2;
+checks["(2,1) reaches every irrep of [2,1,0]^2"] = AllTrue[irreps, ! zeroQ[hwOv["21", #]] &];
+Grid[{{"[3,2,1] rank 2", checks["[3,2,1]: (1,1) and (2,1) HW projections independent (rank 2)"]}, {"(2,1) reaches all irreps", checks["(2,1) reaches every irrep of [2,1,0]^2"]}}, Frame -> All, Alignment -> Left]
+
+===== cell 38 (kind 1) =====
+**Result (exact).** $[2,1,0]^{\otimes2}=[4,2,0]\oplus[4,1,1]\oplus[3,3,0]\oplus2\,[3,2,1]\oplus[2,2,2]$. Overlaps of $c_\lambda$ with the orthonormal highest-weight kets:
+
+| $\mu$ | $\lambda=\varnothing$ | $\lambda=(1,1)$ | $\lambda=(2,1)$ |
+|---|---|---|---|
+| $[4,2,0]$ | $1$ | $5/8$ | $-5/24$ |
+| $[4,1,1]$ | $0$ | $0$ | $-2275/(8448\sqrt2)$ |
+| $[3,3,0]$ | $0$ | $1/(10\sqrt2)$ | $-1/(30\sqrt2)$ |
+| $[3,2,1]$ (2 copies) | $(0,0)$ | $\big(\tfrac{7}{88}\sqrt{7/3},\,-\tfrac{7}{176}\sqrt{7/15}\big)$ | $\big(-\tfrac{7}{176}\sqrt{7/3},\,\tfrac{49}{2112}\sqrt{7/15}\big)$ |
+| $[2,2,2]$ | $0$ | $0$ | $343/(30976\sqrt2)$ |
+
+- $(1,1)$ reaches $[4,2,0]$, $[3,3,0]$ and $[3,2,1]$, but not $[4,1,1]$ or the singlet. This fits its weight support: only the site-1 weights $(2,1,0)$, $(1,2,0)$ and $(1,1,1)$ occur.
+- $(2,1)$ reaches every irrep, including the singlet.
+- On the multiplicity-2 space $[3,2,1]$, the $(1,1)$ and $(2,1)$ projections are linearly independent, so together they reach both copies.
+- The $[3,2,1]$ coordinates depend on the Gram–Schmidt basis; whether they are zero and the rank do not.
+
+===== cell 39 (kind 1) =====
+### 10d. Symbolic $z$, $w$, $h$
+The site-1 vector $\langle v_\lambda|R^{-1}=\langle\Omega_{zw}|\,T^{L=1,\theta_1}_\lambda(\theta_1-2h)\,R^{-1}$ involves only one-site $8\times8$ objects. At $u=\theta_1-2h$ the Lax depends only on $u-\theta_1$, so $\theta$ drops out, and the computation can be done with $z_i$, $w_i$ and $h$ symbolic. The rotation parameters $r_{1,2,3}(z,w)$ are those of Section 4. The localization on site 1 and the site-2 factor $f_\lambda(\theta_{12})$ come from Section 10 and are not re-derived here. The cell checks the symbolic result against the numeric point, then projects onto the highest-weight spaces of 10c.
+
+===== cell 40 (kind 2) =====
+hS = ħh;
+rOmS = {r1 -> (w[1] - z[1])/(w[1] - z[2]), r2 -> ((w[1] - z[1]) (-w[2] + z[1]) (z[2] - z[3]))/((z[1] - z[2]) (w[1] - z[3]) (w[2] - z[3])), r3 -> ((w[1] - z[2]) (-w[2] + z[2]) (z[1] - z[3]))/((z[1] - z[2]) (w[1] - z[3]) (-w[2] + z[3]))};
+checks["symbolic r's reproduce Section 4 at the numeric point"] = ((({r1, r2, r3} /. rOmS) /. numZW) === ({r1, r2, r3} /. rOm));
+(* E_12, E_13, E_23 are nilpotent: exp is a finite sum. Start from the identity: MatrixPower[singular, 0] errors *)
+nexp[A_] := IdentityMatrix[Length[A]] + Sum[MatrixPower[A, k]/k!, {k, 1, 4}];
+RS = nexp[(r1 /. rOmS) Ee[1, 2]] . nexp[(r2 /. rOmS) Ee[1, 3]] . nexp[(r3 /. rOmS) Ee[2, 3]];
+RSinv = nexp[-(r3 /. rOmS) Ee[2, 3]] . nexp[-(r2 /. rOmS) Ee[1, 3]] . nexp[-(r1 /. rOmS) Ee[1, 2]];
+Ω1S = UnitVector[d1, 1] . RS;
+(* one-site T at shift δ = u - θ1, twist diag(z) on the right *)
+TS[δ_] := Table[(KroneckerDelta[i, k] δ IdentityMatrix[d1] + hS Ee[i, k]) z[k], {i, 3}, {k, 3}];
+tS[a_, δ_] := Sum[Sum[Signature[σ] Dot @@ Table[TS[δ - (k - 1) hS][[σ[[k]], I[[k]]]], {k, a}], {σ, Permutations[I]}], {I, Subsets[Range[3], {a}]}];
+(* u = θ1 - 2h  <=>  δ = -2h; T_(2,1)(u) = t2(u) t1(u+h) - t3(u+h) *)
+vRS["11"] = Factor[Together[(Ω1S . tS[2, -2 hS]) . RSinv]];
+vRS["21"] = Factor[Together[((Ω1S . tS[2, -2 hS]) . tS[1, -hS] - Ω1S . tS[3, -hS]) . RSinv]];
+numPt = Join[numZW, {ħh -> hN}];
+checks["symbolic <v_(1,1)|R^-1 = numeric at the point"] = zeroQ[(vRS["11"] /. numPt) - vR["11"]];
+checks["symbolic <v_(2,1)|R^-1 = numeric at the point"] = zeroQ[(vRS["21"] /. numPt) - vR["21"]];
+(* the twist-conjugation identity, symbolically: <v|R^-1 = e1^T T_λ[g^-T z g^T](θ1-2h) *)
+gS = nexp[(r1 /. rOmS) ee[1, 2]] . nexp[(r2 /. rOmS) ee[1, 3]] . nexp[(r3 /. rOmS) ee[2, 3]];
+Zt = Inverse[Transpose[gS]] . DiagonalMatrix[zs] . Transpose[gS];
+TSM[δ_] := Table[Sum[(KroneckerDelta[i, l] δ IdentityMatrix[d1] + hS Ee[i, l]) Zt[[l, k]], {l, 3}], {i, 3}, {k, 3}];
+tSM[a_, δ_] := Sum[Sum[Signature[σ] Dot @@ Table[TSM[δ - (k - 1) hS][[σ[[k]], I[[k]]]], {k, a}], {σ, Permutations[I]}], {I, Subsets[Range[3], {a}]}];
+checks["symbolic: <v_(1,1)|R^-1 = e1^T T_(1,1)[g^-T z g^T]"] = zeroQ[Together[vRS["11"] - UnitVector[d1, 1] . tSM[2, -2 hS]]];
+checks["symbolic: <v_(2,1)|R^-1 = e1^T T_(2,1)[g^-T z g^T]"] = zeroQ[Together[vRS["21"] - (UnitVector[d1, 1] . tSM[2, -2 hS] . tSM[1, -hS] - UnitVector[d1, 1] . tSM[3, -hS])]];
+Grid[Prepend[Table[{k, checks[k]}, {k, {"symbolic r's reproduce Section 4 at the numeric point", "symbolic <v_(1,1)|R^-1 = numeric at the point", "symbolic <v_(2,1)|R^-1 = numeric at the point", "symbolic: <v_(1,1)|R^-1 = e1^T T_(1,1)[g^-T z g^T]", "symbolic: <v_(2,1)|R^-1 = e1^T T_(2,1)[g^-T z g^T]"}}], {"check", "value"}], Frame -> All, Alignment -> Left]
+
+===== cell 41 (kind 2) =====
+(* symbolic HW projections of <v_λ|R^-1 ⊗ e1^T, same orthonormal HW kets as 10c (they are pure numbers) *)
+cCovS[k_] := Flatten[KroneckerProduct[vRS[k], UnitVector[d1, 1]]];
+hwOvS[k_, μ_] := hwOvS[k, μ] = Factor[Together[cCovS[k] . # & /@ hwBasis[μ]]];
+checks["symbolic HW projections = numeric 10c at the point"] = And @@ Flatten[Table[zeroQ[(hwOvS[k, μ] /. numPt) - hwOv[k, μ]], {k, {"11", "21"}}, {μ, irreps}]];
+Grid[Join[{{"μ", "λ = (1,1)", "λ = (2,1)"}}, Table[{μ, hwOvS["11", μ], hwOvS["21", μ]}, {μ, Reverse[irreps]}], {{"matches numeric 10c", checks["symbolic HW projections = numeric 10c at the point"], ""}}], Frame -> All, Alignment -> Left]
+
+===== cell 42 (kind 1) =====
+**Result (symbolic in $z$, $w$, $h$; exact).** All checks pass: agreement with the numeric point and with the twist-conjugation identity. The overlaps of $\langle v_\lambda|R^{-1}\otimes e_1^T$ with the orthonormal HW kets are below. The full L=2 covector is $f_\lambda(\theta_{12})$ times this, with $f_\lambda$ from Section 10 (fitted at one point). Write $z_{ij}=z_i-z_j$.
+
+| $\mu$ | $\lambda=(1,1)$ | $\lambda=(2,1)$ |
+|---|---|---|
+| $[4,2,0]$ | $3h^2z_2z_3$ | $-3h^3z_2z_3^2$ |
+| $[4,1,1]$ | $0$ | $-\dfrac{3h^3z_2z_3(z_2-w_1)(z_2-w_2)z_{13}z_{23}}{\sqrt2\,z_{12}(w_1-z_3)(w_2-z_3)}$ |
+| $[3,3,0]$ | $\dfrac{3h^2(w_1-z_1)z_{12}z_3}{\sqrt2(w_1-z_2)}$ | $-\dfrac{3h^3(w_1-z_1)z_{12}z_3^2}{\sqrt2(w_1-z_2)}$ |
+| $[3,2,1]_1$ | $2\sqrt{3/7}\,h^2X$ | $-3\sqrt{3/7}\,h^3z_3X$ |
+| $[3,2,1]_2$ | $-\sqrt{3/35}\,h^2X$ | $-\sqrt{3/35}\,h^3(2w_2-7z_2)\,z_3X/w_2$ |
+| $[2,2,2]$ | $0$ | $\dfrac{3h^3w_2(w_1-z_1)^2z_{13}^2z_{23}^2}{2\sqrt2(w_1-z_3)^2(w_2-z_3)^2}$ |
+
+Here $X=\dfrac{w_2(w_1-z_1)z_{13}z_{23}}{(w_1-z_3)(w_2-z_3)}$.
+- **(1,1).** The $[3,2,1]$ direction, $(2\sqrt{3/7},-\sqrt{3/35})$, does not depend on $z$ or $w$: it is the image of $e_5^T\otimes e_1^T$.
+- **(2,1).** Its $[3,2,1]$ direction does depend on $z_2/w_2$.
+- **Relation between the two.** On $[4,2,0]$ and $[3,3,0]$, the $(2,1)$ overlap is $-hz_3$ times the $(1,1)$ overlap.
+
+===== cell 43 (kind 1) =====
+### 10e. Small-twist limit $z_k=e^{\varepsilon\phi_k}$, $w_k=e^{\varepsilon\omega_k}$
+Each HW overlap from 10d is expanded in $\varepsilon\to0$ with generic $\phi_k$ and $\omega_k$. The cell reports the leading power $\varepsilon^{\#}$ and its coefficient. For $[3,2,1]$, $\#$ is the lowest order of the 2-vector, which does not depend on the HW basis.
+
+===== cell 44 (kind 2) =====
+epsSub = Join[Table[z[k] -> Exp[ε φ[k]], {k, 3}], Table[w[k] -> Exp[ε ω[k]], {k, 3}]];
+(* leading term of a list of overlaps: lowest power of ε among the components, and the coefficient vector there *)
+leadEps[expr_List] := Module[{ser = Normal[Series[expr /. epsSub, {ε, 0, 5}]], n},
+   If[AllTrue[Flatten[{expr}], # === 0 &], {"∞ (vanishes)", 0},
+    n = Min[Table[If[Simplify[e] === 0, Infinity, Exponent[e, ε, Min]], {e, Expand[ser]}]];
+    {n, Factor[Simplify[Coefficient[Expand[ser], ε, n]]]}]];
+epsTab = Table[{μ, leadEps[hwOvS["11", μ]], leadEps[hwOvS["21", μ]]}, {μ, Reverse[irreps]}];
+Grid[Join[{{"μ", "(1,1): #", "(1,1): leading coeff", "(2,1): #", "(2,1): leading coeff"}}, Table[{r[[1]], r[[2, 1]], r[[2, 2]], r[[3, 1]], r[[3, 2]]}, {r, epsTab}]], Frame -> All, Alignment -> Left]
+
+===== cell 45 (kind 1) =====
+**Result.** Leading order of the HW overlaps of $\langle v_\lambda|R^{-1}\otimes e_1^T$ as $\varepsilon\to0$, with $\phi_{ij}=\phi_i-\phi_j$:
+
+| $\mu$ | $(1,1)$: $\#$ | $(2,1)$: $\#$ |
+|---|---|---|
+| $[4,2,0]$ | 0 | 0 |
+| $[4,1,1]$ | (exactly 0) | 1 |
+| $[3,3,0]$ | 1 | 1 |
+| $[3,2,1]$ (both components) | 1 | 1 |
+| $[2,2,2]$ | (exactly 0) | 2 |
+
+The leading coefficients are the 10d formulas with $z_i-z_j\to\varepsilon\phi_{ij}$ and $w_i-z_j\to\varepsilon(\omega_i-\phi_j)$, and with $z,w\to1$ elsewhere. For example, the $(2,1)$ singlet is $\varepsilon^2\cdot3h^3\phi_{13}^2\phi_{23}^2(\phi_1-\omega_1)^2/[2\sqrt2(\phi_3-\omega_1)^2(\phi_3-\omega_2)^2]$. On $[3,2,1]$ the leading directions are $(2\sqrt{3/7},-\sqrt{3/35})$ for $(1,1)$ and $(-3\sqrt{3/7},\sqrt{15/7})$ for $(2,1)$. These stay independent at $\varepsilon^1$.
+
+===== cell 46 (kind 1) =====
+### 10f. Do the leading-$\varepsilon$ vectors span each weight sector of $e_j^T\otimes e_1^T$?
+The covectors $e_j^T\otimes e_1^T$ ($j=1..8$) have 7 distinct total weights, $\mathrm{wt}_j+(2,1,0)$. Every sector is 1-dimensional except total weight $(3,2,1)$, which is 2-dimensional (site-1 GT states 4 and 5). For each sector, take the restriction of $\langle v_\lambda|R^{-1}$ to that sector with $z_k=e^{\varepsilon\phi_k}$, $w_k=e^{\varepsilon\omega_k}$, and find its leading order $\varepsilon^{\#}$ and coefficient vector. The vectors are collected over $\lambda\in\{(1,1),(2,1)\}$ and 8 random rational $\omega$'s, with generic $\phi=(1/3,-2/7,5/11)$ and $h=1$. The question is whether their rank equals the dimension of the sector. On the dominant sectors this is the HW-multiplicity question of 10c–10e, since the multiplicities are 1, 1, 1, 2, 1.
+
+===== cell 47 (kind 2) =====
+(* site-1 weight sectors (site 2 is e1, weight (2,1,0)) *)
+secs1 = GatherBy[Range[d1], wts[[#]] &];
+φN = {1/3, -2/7, 5/11}; tol = 10^-9;
+SeedRandom[7]; ωSamples = Table[RandomInteger[{-40, 40}, 3]/RandomChoice[{7, 9, 11, 13}], 8];
+ClearAll[epsCoefs];
+(* ε-series coefficients n = 0..4 of the site-1 vector (exact, then numeric) *)
+epsCoefs[k_, ωv_] := epsCoefs[k, ωv] = Module[{a = vRS[k] /. ħh -> 1 /. Join[Table[z[i] -> Exp[ε φN[[i]]], {i, 3}], Table[w[i] -> Exp[ε ωv[[i]]], {i, 3}]]},
+   Table[N[SeriesCoefficient[#, {ε, 0, n}] & /@ a], {n, 0, 4}]];
+leadSec[k_, ωv_, sec_] := Module[{cs = epsCoefs[k, ωv][[All, sec]], n},
+   n = SelectFirst[Range[0, 4], Max[Abs[cs[[# + 1]]]] > tol &, Missing[]];
+   If[MissingQ[n], {∞, None}, {n, cs[[n + 1]]}]];
+rankN[M_] := If[M === {} || Max[Abs[Flatten[M]]] < tol, 0, With[{sv = SingularValueList[N[M], Tolerance -> 0]}, Count[sv, x_ /; x > tol Max[sv]]]];
+secTab = Table[With[{L11 = Table[leadSec["11", ωv, sec], {ωv, ωSamples}], L21 = Table[leadSec["21", ωv, sec], {ωv, ωSamples}]},
+    {wts[[sec[[1]]]] + {2, 1, 0}, sec, Length[sec], Union[L11[[All, 1]]], Union[L21[[All, 1]]],
+     rankN[DeleteCases[L11[[All, 2]], None]], rankN[DeleteCases[L21[[All, 2]], None]], rankN[DeleteCases[Join[L11[[All, 2]], L21[[All, 2]]], None]]}], {sec, secs1}];
+checks["leading-ε vectors span every weight sector of e_j⊗e_1"] = AllTrue[secTab, #[[8]] == #[[3]] &];
+Grid[Join[{{"total weight", "site-1 GT states", "dim", "# (1,1)", "# (2,1)", "rank (1,1)", "rank (2,1)", "rank both"}}, secTab,
+   {{"all sectors spanned", checks["leading-ε vectors span every weight sector of e_j⊗e_1"]}}], Frame -> All, Alignment -> Left]
+
+===== cell 48 (kind 1) =====
+**Result** ($\phi=(1/3,-2/7,5/11)$, $h=1$, 8 random $\omega$'s): **yes, every weight sector is spanned** at leading order once both $\lambda$'s are used.
+
+| total weight | site-1 GT | dim | $\#$ (1,1) | $\#$ (2,1) | rank (1,1) | rank (2,1) | rank both |
+|---|---|---|---|---|---|---|---|
+| $(4,2,0)$ | 1 | 1 | 0 | 0 | 1 | 1 | 1 |
+| $(4,1,1)$ | 2 | 1 | — | 1 | 0 | 1 | 1 |
+| $(3,3,0)$ | 3 | 1 | 1 | 1 | 1 | 1 | 1 |
+| $(3,2,1)$ | 4, 5 | 2 | 1 | 1 | 1 | 1 | **2** |
+| $(3,1,2)$ | 6 | 1 | — | 2 | 0 | 1 | 1 |
+| $(2,3,1)$ | 7 | 1 | — | 2 | 0 | 1 | 1 |
+| $(2,2,2)$ | 8 | 1 | — | 2 | 0 | 1 | 1 |
+
+- **Sector $(3,2,1)$.** Varying $\omega$ never adds a direction. At order $\varepsilon$, (1,1) gives $(0,1)$ in $(e_4,e_5)$ and (2,1) gives the fixed direction $\propto(-1/\sqrt2,\sqrt{3/2})$. Only together do they make rank 2.
+- **Other sectors.** (1,1) is exactly zero on GT states 2, 4, 6, 7 and 8, so (2,1) alone covers those sectors. The orders agree with counting the factors $z_i-z_j$ and $w_i-z_j$ in the 10d entries.
+- **Relation to 10c–10e.** On the dominant weights this is the HW-multiplicity statement, with multiplicities 1, 1, 1, 2, 1.
+
+===== cell 49 (kind 2) =====
+(* HW states are fixed by their e_j⊗e_1 components: restricting HW_μ to the slots (j,1) is injective (rank = multiplicity) *)
+slots1 = Table[(j - 1) d1 + 1, {j, d1}];
+injTab = Table[{μ, Length[hwBasis[μ]], MatrixRank[N[hwBasis[μ][[All, slots1]], 30]]}, {μ, Reverse[irreps]}];
+checks["HW_μ → (e_j⊗e_1 components) injective for all μ"] = AllTrue[injTab, #[[2]] == #[[3]] &];
+Grid[Join[{{"μ", "mult", "rank on e_j⊗e_1 slots"}}, injTab, {{"injective", checks["HW_μ → (e_j⊗e_1 components) injective for all μ"]}}], Frame -> All, Alignment -> Left]
+
+===== cell 50 (kind 1) =====
+## 11. Small-twist limit of the overlap ratio $\rho_B=\langle\Omega|\Psi_B\rangle/(\langle\Omega|y_0\rangle\langle x_0|\Psi_B\rangle)$
+By Sections 7–9, $\rho_B=\det N[B,\mathrm{vac}]/(c_0\langle x_0|y_0\rangle^2\Phi_Q^{\rm vac}(y_0)\Psi_Q^B(x_0))$; it does not depend on the normalization of $\Psi_B$. Take $z_k=e^{\varepsilon\phi_k}$ and $w_k=e^{\varepsilon\omega_k}$, and send $\varepsilon\to0$. Only states $\Psi_B$ whose limit is a highest-weight state are kept: one per dominant weight sector $\mu=\Lambda$, two in $(3,2,1)$. A state counts as HW when $\|E^{\rm tot}_{12}\Psi\|+\|E^{\rm tot}_{23}\Psi\|=O(\varepsilon)$.
+
+The ratio is computed **directly from the vectors**: eigenstates of the $z$-twisted chain, $\Omega=\Omega_{zw}^{\otimes2}$, $x_0=(e_1^TP_{\rm phys}^{-1})^{\otimes2}$ and $y_0=\otimes_sP_{\rm phys}\,y_0^{\rm comp}(\theta_s)$, all rebuilt at each $\varepsilon$. The point is the same as before ($h=1/2$, $\theta=(2/7,-3/5)$). The leading power $\#$ is read off from two values of $\varepsilon$.
+
+===== cell 51 (kind 2) =====
+(* everything at one ε, numerically at precision pr; P_phys, y0 and Ω rebuilt with z = e^{εφ}, w = e^{εω} *)
+EtotS[i_, j_] := EtotS[i, j] = E1[i, j] + E2[i, j];
+hwSecs = {{4, 2, 0}, {4, 1, 1}, {3, 3, 0}, {3, 2, 1}, {2, 2, 2}};
+nexpS[A_] := IdentityMatrix[Length[A]] + Sum[MatrixPower[A, k]/k!, {k, 1, 4}];
+(* numeric EH generators for the one-site y0 Lax: exact surd combinations that cancel to 0 make N[] fail with meprec at some (h, θ) *)
+EeN[i_, j_] := EeN[i, j] = N[Ee[i, j], 400];
+T1sE[s_][v_] := Table[KroneckerDelta[i, k] (v - thN[[s]]) IdentityMatrix[d1] + hN EeN[i, k], {i, 3}, {k, 3}];
+t1sE[s_, a_, v_, Gm_] := Sum[Sum[Signature[σ] Dot @@ Table[Sum[T1sE[s][v - (k - 1) hN][[σ[[k]], l]] Gm[[l, I[[k]]]], {l, 3}], {k, a}], {σ, Permutations[I]}], {I, Subsets[Range[3], {a}]}];
+y0E[s_, Gm_] := With[{θs = thN[[s]]}, (t1sE[s, 2, θs + hN, Gm] . t1sE[s, 1, θs - hN, Gm] - t1sE[s, 3, θs + hN, Gm]) . (t1sE[s, 1, θs - hN, Gm] . t1sE[s, 1, θs, Gm] - t1sE[s, 2, θs, Gm]) . Inverse[t1sE[s, 1, θs, Gm]] . UnitVector[d1, d1]];
+rOmF[zz_, ww_] := {(ww[[1]] - zz[[1]])/(ww[[1]] - zz[[2]]), ((ww[[1]] - zz[[1]]) (-ww[[2]] + zz[[1]]) (zz[[2]] - zz[[3]]))/((zz[[1]] - zz[[2]]) (ww[[1]] - zz[[3]]) (ww[[2]] - zz[[3]])), ((ww[[1]] - zz[[2]]) (-ww[[2]] + zz[[2]]) (zz[[1]] - zz[[3]]))/((zz[[1]] - zz[[2]]) (ww[[1]] - zz[[3]]) (-ww[[2]] + zz[[3]]))};
+(* "ev" = eigenvalue of t1 + π t2 at u = 3/7; unlike t1(0) it separates the two [3,2,1] copies *)
+smallTw[eps_, φv_, ωv_, pr_] := Module[{zE, wE, tt, mix, rsE, Pph, x01e, x02e, y02e, rr, Om1, Om2, Oy, sts},
+  zE = N[Exp[eps φv], pr]; wE = N[Exp[eps ωv], pr];
+  tt = Table[tPoly[DiagonalMatrix[zE], a], {a, 2}];
+  mix = (tt[[1]] + N[Pi, pr] tt[[2]]) /. u -> 3/7;
+  rsE = rsSol /. Thread[zs -> zE];
+  Pph = nexpS[(r[1] /. rsE) Ee[3, 2]] . nexpS[(r[2] /. rsE) Ee[3, 1]] . nexpS[(r[3] /. rsE) Ee[2, 1]] . DiagonalMatrix[Table[Product[(s[k] /. rsE)^J0[k][p], {k, 3}], {p, ps[{Λ}]}]] . nexpS[(1/zE[[1]]) Ee[1, 2]] . nexpS[-(1/(zE[[1]] zE[[2]])) Ee[1, 3]] . nexpS[((zE[[1]] + zE[[2]])/(zE[[1]] zE[[2]])) Ee[2, 3]];
+  x01e = UnitVector[d1, 1] . Inverse[Pph]; x02e = Flatten[KroneckerProduct[x01e, x01e]];
+  y02e = Flatten[KroneckerProduct @@ Table[Pph . y0E[s, Gc[zE]], {s, nL}]];
+  rr = rOmF[zE, wE];
+  Om1 = UnitVector[d1, 1] . nexpS[rr[[1]] Ee[1, 2]] . nexpS[rr[[2]] Ee[1, 3]] . nexpS[rr[[3]] Ee[2, 3]]; Om2 = Flatten[KroneckerProduct[Om1, Om1]];
+  Oy = Om2 . y02e;
+  sts = Flatten[Table[With[{sec = Flatten[Position[wtBasis, Λw]]}, With[{es = Eigensystem[mix[[sec, sec]]]}, Table[With[{ψ = Normal[SparseArray[Thread[sec -> es[[2, k]]], {d2}]]},
+        <|"mu" -> Λw, "ev" -> es[[1, k]], "t1" -> Chop[(tt[[1]] /. u -> 0) . ψ, 10^-30][[Ordering[Abs[ψ], -1][[1]]]]/ψ[[Ordering[Abs[ψ], -1][[1]]]], "hwRes" -> (Norm[EtotS[1, 2] . ψ] + Norm[EtotS[2, 3] . ψ])/Norm[ψ], "Ωψ/x0ψ" -> (Om2 . ψ)/(x02e . ψ), "ρ" -> (Om2 . ψ)/(Oy (x02e . ψ))|>], {k, Length[sec]}]]], {Λw, hwSecs}], 1];
+  <|"Ωy0" -> Oy, "x0y0" -> x02e . y02e, "states" -> sts|>];
+φT = {1/3, -2/7, 5/11}; ωT = {2/5, 1/7, -3/4};
+{tst, st1} = AbsoluteTiming[smallTw[10^-6, φT, ωT, 80]];
+Grid[Join[{{"time (s)", tst, "", ""}, {"μ", "hw residual", "t1(0)", "ρ"}}, Table[{s["mu"], N[s["hwRes"], 3], N[s["t1"], 6], N[s["ρ"], 6]}, {s, st1["states"]}]], Frame -> All, Alignment -> Left]
+
+===== cell 52 (kind 2) =====
+(* leading power: ρ(ε) ≈ C ε^#, # read off from ε = 10^-6 and 10^-9 (also 10^-12 as a check); keep only the states whose limit is HW *)
+epsL = {10^-6, 10^-9, 10^-12};
+smallData = Table[smallTw[e, φT, ωT, 160], {e, epsL}];
+hwIdx = Flatten[Position[smallData[[2]]["states"], x_ /; x["hwRes"] < 10^-5, {1}, Heads -> False]];
+expo[f_] := Table[Log[Abs[f[smallData[[k + 1]]]/f[smallData[[k]]]]]/Log[epsL[[k + 1]]/epsL[[k]]], {k, 2}];
+hwRows = Table[With[{f = Function[d, d["states"][[b]]["ρ"]], g = Function[d, d["states"][[b]]["Ωψ/x0ψ"]]}, {smallData[[2]]["states"][[b]]["mu"], N[expo[f], 6], N[expo[g], 6]}], {b, hwIdx}];
+Grid[Join[{{"μ (HW limit)", "# of ρ (two fits)", "# of <Ω|Ψ>/<x0|Ψ>"}}, hwRows, {{"<Ω|y0>", N[expo[#["Ωy0"] &], 6], ""}, {"<x0|y0>", N[expo[#["x0y0"] &], 6], ""}}], Frame -> All, Alignment -> Left]
+
+===== cell 53 (kind 2) =====
+(* leading coefficient C_B(φ,ω) = lim ρ_B/ε^#; fit log|C_B| to integer powers of φ_ij, ω_i-φ_j, ω_ij over random twist directions (degenerate directions with a vanishing factor rejected). The two [3,2,1] states are ordered by Re ev (t1+πt2 at 3/7) so copies match across points *)
+sharpL = {8, 8, 8, 7, 7, 6};
+leadC[φv_, ωv_] := With[{sts = Select[smallTw[10^-14, φv, ωv, 200]["states"], #["hwRes"] < 10^-8 &]}, With[{o = Join[sts[[1 ;; 3]], SortBy[sts[[4 ;; 5]], Re[#["ev"]] &], sts[[6 ;;]]]}, Table[o[[b]]["ρ"]/10^(-14 sharpL[[b]]), {b, 6}]]];
+facs[φv_, ωv_] := Join[{φv[[1]] - φv[[2]], φv[[1]] - φv[[3]], φv[[2]] - φv[[3]]}, Flatten[Table[ωv[[i]] - φv[[j]], {i, 3}, {j, 3}]], {ωv[[1]] - ωv[[2]], ωv[[1]] - ωv[[3]], ωv[[2]] - ωv[[3]]}];
+facNames = Join[{"φ12", "φ13", "φ23"}, Flatten[Table["ω" <> ToString[i] <> "-φ" <> ToString[j], {i, 3}, {j, 3}]], {"ω12", "ω13", "ω23"}];
+SeedRandom[11]; fitPts = Select[Table[{RandomInteger[{-30, 30}, 3]/RandomChoice[{7, 11, 13}], RandomInteger[{-30, 30}, 3]/RandomChoice[{9, 17, 19}]}, 40], FreeQ[facs @@ #, 0] &][[1 ;; 26]];
+{fitTime, Cdat} = AbsoluteTiming[leadC @@@ fitPts];
+Am = Table[Join[{1}, Log[Abs[facs @@ p]]], {p, fitPts}];
+fitExp = Table[LeastSquares[N[Am, 40], N[Log[Abs[Cdat[[All, b]]]], 40]], {b, 6}];
+fitRes = Table[Max[Abs[N[Am, 40] . fitExp[[b]] - Log[Abs[Cdat[[All, b]]]]]], {b, 6}];
+Grid[Join[{Join[{"state", "max log-resid", "e^const"}, facNames]}, Table[Join[{{"[4,2,0]", "[4,1,1]", "[3,3,0]", "[3,2,1]a", "[3,2,1]b", "[2,2,2]"}[[b]], ScientificForm[N[fitRes[[b]], 3], 3], N[Exp[fitExp[[b, 1]]], 10]}, N[Round[fitExp[[b, 2 ;;]], 10^-6]]], {b, 6}], {{"time (s)", fitTime}}], Frame -> All, Alignment -> Left]
+
+===== cell 54 (kind 2) =====
+(* constants: X_B = <x0|y0>^2 · C_B / ∏(ω_i-φ_j)^{n_ij}, functions of t = θ12/h only (read off at two chain points):
+   27, 10, 10bar: X = 1;  singlet: X = -8/(t^2-1);  octets: roots of X^2 - (4/t^2) X - 5/t^2, i.e. X± = (2 ± Sqrt[4+5t^2])/t^2.
+   Second chain point: temporarily swap h, θ, drop the memoized monodromy, then restore *)
+Xpred[h_, th_] := With[{t = (th[[1]] - th[[2]])/h}, Join[{1, 1, 1}, Sort[(2 + {-1, 1} Sqrt[4 + 5 t^2])/t^2], {-8/(t^2 - 1)}]];
+Xat[pts_] := Table[With[{c = leadC @@ p}, (3 hN^4)^2 c/Table[Times @@ ((facs @@ p)^nExp[[b]]), {b, 6}]], {p, pts}];
+clearTm[] := (DownValues[Tm] = Select[DownValues[Tm], ! FreeQ[#[[1]], Pattern] &]);
+X1 = Xat[fitPts[[1 ;; 3]]];
+{hSave, thSave} = {hN, thN}; hN = 1/3; thN = {1/5, -4/9}; clearTm[];
+X2 = Check[Xat[fitPts[[4 ;; 6]]], $Failed];
+X2pred = Xpred[hN, thN];
+hN = hSave; thN = thSave; clearTm[];
+X1pred = Xpred[hN, thN];
+(* octet order: leadC sorts by Re ev; compare as sorted pairs *)
+sortOct[x_] := Join[x[[1 ;; 3]], Sort[Re[x[[4 ;; 5]]]], x[[6 ;;]]];
+devX1 = Max[Abs[sortOct[#] - X1pred] & /@ X1]; devX2 = Max[Abs[sortOct[#] - X2pred] & /@ X2];
+checks["ε→0: X_B closed forms at main point"] = devX1; checks["ε→0: X_B closed forms at 2nd point (h=1/3, θ=(1/5,-4/9))"] = devX2;
+Grid[{{"point", "X predicted (27,10,10bar,8-,8+,1)", "max |X - pred| over 3 (φ,ω)"}, {"h=1/2, θ=(2/7,-3/5)", N[X1pred, 8], ScientificForm[N[devX1, 3], 3]}, {"h=1/3, θ=(1/5,-4/9)", N[X2pred, 8], ScientificForm[N[devX2, 3], 3]}, {"restored", {hN, thN}, ""}}, Frame -> All, Alignment -> Left]
+
+===== cell 55 (kind 1) =====
+**Result (Section 11; numeric, high precision; HW-limit states of $[2,1,0]^{\otimes2}$).** With $z_k=e^{\varepsilon\phi_k}$, $w_k=e^{\varepsilon\omega_k}$ and $t=\theta_{12}/h$:
+$$\lim_{\varepsilon\to0}\varepsilon^{-\#}\,\langle x_0|y_0\rangle^2\,\frac{\langle\Omega|\Psi_B\rangle}{\langle\Omega|y_0\rangle\langle x_0|\Psi_B\rangle}=X_B\prod_{i,j}(\omega_i-\phi_j)^{n_{ij}},\qquad n_{ij}=\max(d_j-D_i,0).$$
+- $d_j=2\lambda_1-\mu_j=\deg q_j$ are the twisted direct degrees of $\Psi_B$, and $D_i=(0,2,4)$ those of the $w$-vacuum. So $\#=\sum_{ij}n_{ij}=6+\sum_j\max(2-\mu_j,0)=8-\min(4-\mu_1,\mu_3)$: **8, 8, 8, 7, 7, 6** for $[4,2,0],[4,1,1],[3,3,0],[3,2,1]_\pm,[2,2,2]$.
+- **Factors.** No $\phi_{ij}$, $\omega_{ij}$ or $\omega_3$ factor appears. Explicitly: $[4,2,0]$: $(\omega_1-\phi_2)^2(\omega_1-\phi_3)^4(\omega_2-\phi_3)^2$; $[4,1,1]$: $(\omega_1-\phi_2)^3(\omega_1-\phi_3)^3(\omega_2-\phi_2)(\omega_2-\phi_3)$; $[3,3,0]$: $(\omega_1-\phi_1)(\omega_1-\phi_2)(\omega_1-\phi_3)^4(\omega_2-\phi_3)^2$; $[3,2,1]$: $(\omega_1-\phi_1)(\omega_1-\phi_2)^2(\omega_1-\phi_3)^3(\omega_2-\phi_3)$; $[2,2,2]$: $(\omega_1-\phi_1)^2(\omega_1-\phi_2)^2(\omega_1-\phi_3)^2$.
+- **Constants** $X_B$ (independent of $\phi,\omega$; functions of $t$ only): $X=1$ for $[4,2,0],[4,1,1],[3,3,0]$; $X_\pm=(2\pm\sqrt{4+5t^2})/t^2$ for the two $[3,2,1]$ copies (roots of $X^2-4X/t^2-5/t^2$, the same $\sqrt{4+5t^2}$ as the untwisted octet spectrum); $X=-8/(t^2-1)$ for the singlet.
+- **Evidence.** The monomial was fitted on 26 random $(\phi,\omega)$, with log-residuals $\lesssim10^{-13}$ for all six states. The $X_B$ forms were read off at $h=1/2,\theta=(2/7,-3/5)$ and checked at $h=1/3,\theta=(1/5,-4/9)$ on 3 further $(\phi,\omega)$ each, to $\sim10^{-13}$ (= $O(\varepsilon)$ at $\varepsilon=10^{-14}$). $\langle x_0|y_0\rangle^2=(3h^4)^2$ was assumed at the second point.
+- **Dependence on $\Psi$.** The whole $(\phi,\omega)$ dependence is a monomial fixed by the weight. The remaining state dependence $X_B$ is twist-independent, i.e. untwisted data, and it distinguishes the two $[3,2,1]$ copies. At finite $\varepsilon$, $\Omega$ and $x_0$ restricted to the 1- and 2-dimensional weight sectors are exactly parallel, so there $\rho$ is the same for every state of that weight. In the $(3,2,1)$ and $(2,2,2)$ sectors they are not.
+- **Open.** Write $X_B$ as an untwisted-$Q$ expression (the untwisted limit of $\det N[B,\mathrm{vac}]/(c_0\Phi_Q\Psi_Q)$). Test the $n_{ij}$ rule on $[3,1,0]^{\otimes2}$.
+
+===== cell 56 (kind 1) =====
+### 11b. The y₀-free ratio $R_B=\rho_B/\rho_{[4,2,0]}=(z_2-z_1)^2\,\langle\Omega|\Psi_B\rangle/\langle x_0|\Psi_B\rangle$
+For $\Psi=e_1\otimes e_1$ (the 1-dimensional sector $(4,2,0)$) one has $\langle\Omega|\Psi\rangle=1$ and $\langle x_0|\Psi\rangle=(z_2-z_1)^2$ exactly, so $\rho_{[4,2,0]}=1/(\langle\Omega|y_0\rangle(z_2-z_1)^2)$. The $\varepsilon^8$ of Section 11 is therefore pure reference-vector normalization: $x_0,y_0$ are companion-frame vectors carried by the singular $P_{\rm phys}$. The ratio $R_B$ drops $y_0$ and $c_0\langle x_0|y_0\rangle^2\Phi_Q^{\rm vac}$. Prediction from Section 11: $R_B\to\varepsilon^{\#_B-8}X_B\prod(\omega_i-\phi_j)^{n_{ij}(B)-n_{ij}([4,2,0])}$, checked below directly from the vectors at both chain points.
+
+===== cell 57 (kind 2) =====
+(* R_B from vectors only; also the exact statements <x0|e1⊗e1> = (z2-z1)^2, <Ω|e1⊗e1> = 1. The octet copies are ordered by Re ev, which matches (X-, X+); do not re-sort R_B by value (the monomial can flip the order) *)
+Rlead[φv_, ωv_, eps_] := With[{zE = N[Exp[eps φv], 200], sts = Select[smallTw[eps, φv, ωv, 200]["states"], #["hwRes"] < 10^-8 &]}, With[{o = Join[sts[[1 ;; 3]], SortBy[sts[[4 ;; 5]], Re[#["ev"]] &], sts[[6 ;;]]]}, Table[(zE[[2]] - zE[[1]])^2 o[[b]]["Ωψ/x0ψ"]/eps^(sharpL[[b]] - 8), {b, 6}]]];
+Rpred[φv_, ωv_, h_, th_] := Xpred[h, th] Table[Times @@ ((facs[φv, ωv])^(nExp[[b]] - nExp[[1]])), {b, 6}];
+exactE1 = With[{cv = covs[1/3, φT, ωT, 60], zz = N[Exp[φT/3], 60]}, Max[Abs[{cv[[2, 1]] - (zz[[2]] - zz[[1]])^2, cv[[1, 1]] - 1}]]];
+devR[h_, th_, pts_] := Max[Table[Abs[Rlead[p[[1]], p[[2]], 10^-14]/Rpred[p[[1]], p[[2]], h, th] - 1], {p, pts}]];
+devR1 = devR[hN, thN, fitPts[[7 ;; 9]]];
+{hSave, thSave} = {hN, thN}; hN = 1/3; thN = {1/5, -4/9}; clearTm[];
+devR2 = devR[hN, thN, fitPts[[10 ;; 12]]];
+hN = hSave; thN = thSave; clearTm[];
+checks["<x0|e1e1> = (z2-z1)^2, <Ω|e1e1> = 1 (finite ε)"] = exactE1;
+Grid[{{"check", "value"}, {"<x0|e1⊗e1> = (z2-z1)^2 and <Ω|e1⊗e1> = 1 at ε=1/3", ScientificForm[N[exactE1, 3], 3]}, {"R_B leading term vs prediction, h=1/2 (3 random φ,ω; max rel. dev)", ScientificForm[N[devR1, 3], 3]}, {"same at h=1/3, θ=(1/5,-4/9)", ScientificForm[N[devR2, 3], 3]}, {"restored", {hN, thN}}}, Frame -> All, Alignment -> Left]
+
+===== cell 58 (kind 2) =====
+(* in the 2-dim sectors (3,3,0), (4,1,1) the restrictions of Ω and x0 are parallel, so R is state-independent there; test the leading monomials as EXACT finite-twist formulas at ε = 1/3 and two (φ,ω) *)
+Rexact2d[mu_, zz_, ww_] := If[mu == {3, 3, 0}, (ww[[1]] - zz[[1]])/(ww[[1]] - zz[[2]]), (ww[[1]] - zz[[2]]) (ww[[2]] - zz[[2]])/((ww[[1]] - zz[[3]]) (ww[[2]] - zz[[3]]))];
+dev2d = Max[Table[With[{cv = covs[1/3, p[[1]], p[[2]], 60], zz = N[Exp[p[[1]]/3], 60], ww = N[Exp[p[[2]]/3], 60]}, Table[With[{sec = Flatten[Position[wtBasis, mu]]}, Max[Abs[(zz[[2]] - zz[[1]])^2 cv[[1, sec]]/cv[[2, sec]]/Rexact2d[mu, zz, ww] - 1]]], {mu, {{3, 3, 0}, {4, 1, 1}}}]], {p, {{φT, ωT}, fitPts[[13]]}}]];
+checks["R_[3,3,0], R_[4,1,1] exact monomials in (w_i - z_j) at finite twist"] = dev2d;
+Grid[{{"R_[3,3,0] = (w1-z1)/(w1-z2), R_[4,1,1] = (w1-z2)(w2-z2)/((w1-z3)(w2-z3)) at ε = 1/3: max rel. dev", ScientificForm[N[dev2d, 3], 3]}}, Frame -> All, Alignment -> Left]
+
+===== cell 59 (kind 1) =====
+**Result (11b).** $R_B=\rho_B/\rho_{[4,2,0]}=(z_2-z_1)^2\langle\Omega|\Psi_B\rangle/\langle x_0|\Psi_B\rangle$ contains no $y_0$, $c_0$ or $\Phi_Q^{\rm vac}$. Its small-twist limit is
+$$R_B\simeq X_B\prod_{i,j}(w_i-z_j)^{\Delta n_{ij}},\qquad \Delta n_{ij}=\max(d_j-D_i,0)-\max(d^{[4,2,0]}_j-D_i,0),$$
+with $d=2\lambda_1-\mu$, $D=(0,2,4)$ and $t=\theta_{12}/h$:
+
+| $B$ | $R_B$ (leading) | order |
+|---|---|---|
+| $[4,2,0]$ | $1$ | $\varepsilon^0$ |
+| $[4,1,1]$ | $\dfrac{(w_1-z_2)(w_2-z_2)}{(w_1-z_3)(w_2-z_3)}$ (**exact** at any twist) | $\varepsilon^0$ |
+| $[3,3,0]$ | $\dfrac{w_1-z_1}{w_1-z_2}=r_1$ (**exact** at any twist) | $\varepsilon^0$ |
+| $[3,2,1]_\pm$ | $\dfrac{2\pm\sqrt{4+5t^2}}{t^2}\,\dfrac{w_1-z_1}{(w_1-z_3)(w_2-z_3)}$ | $\varepsilon^{-1}$ |
+| $[2,2,2]$ | $-\dfrac{8}{t^2-1}\,\dfrac{(w_1-z_1)^2}{(w_1-z_3)^2(w_2-z_3)^2}$ | $\varepsilon^{-2}$ |
+
+Here $w_i-z_j\simeq\varepsilon(\omega_i-\phi_j)$. The table was checked directly from the vectors at $(h,\theta)=(1/2,(2/7,-3/5))$ and $(1/3,(1/5,-4/9))$, 3 random $(\phi,\omega)$ each, to $\sim10^{-13}$. In the 1- and 2-dimensional sectors $R$ does not depend on $\theta$, $h$ or the state, and the two formulas hold exactly at $\varepsilon=1/3$. The negative powers for the octets and the singlet are genuine: in those sectors $\langle x_0|\Psi_B\rangle$ vanishes faster than $\langle\Omega|\Psi_B\rangle$ as $\Psi_B\to$ HW.
+
+===== cell 60 (kind 1) =====
+### 11c. The CG chain at small twist: which $\varepsilon$-powers come from where
+The chain (Sections 10–10e) is
+$$c_\lambda\cdot(R\otimes R)\,\Psi_B=\frac{T^B_\lambda(\theta_1-2h)}{f_\lambda}\,\langle\Omega|\Psi_B\rangle=\frac{T^B_\lambda(\theta_1-2h)}{f_\lambda}\,\frac{\langle\Omega|y_0\rangle}{\langle x_0|y_0\rangle^2}\,F^Q_B\,\langle x_0|\Psi_B\rangle,\qquad c_\lambda=\langle v_\lambda|R^{-1}\otimes e_1^T ,$$
+with $F^Q_B=\det N[B,\mathrm{vac}]/(c_0\Phi^{\rm vac}_Q\Psi^B_Q)=\langle x_0|y_0\rangle^2\rho_B$. Section 10e replaced $(R\otimes R)\Psi_B$ by its HW limit. For each HW-limit state (unit norm $\hat\Psi_B$) and $\lambda\in\{(1,1),(2,1)\}$ the cell reports:
+- the exact identity residual;
+- the order of $c_\lambda\cdot(R\otimes R)\hat\Psi_B$ versus the order of $c_\lambda\cdot P_{\rm HW}\hat\Psi_B$ (the 10e quantity);
+- the orders of the Q-side factors $T^B_\lambda$, $\langle\Omega|\hat\Psi_B\rangle$, $\langle x_0|\hat\Psi_B\rangle$ and $\langle x_0|P_{\rm HW}\hat\Psi_B\rangle$.
+
+===== cell 61 (kind 2) =====
+(* one-site T at θ₁ with twist diag(z) on the right (numeric generators), and HW bases at 250 digits *)
+T1zE[v_, zE_] := Table[(KroneckerDelta[i, k] (v - thN[[1]]) IdentityMatrix[d1] + hN EeN[i, k]) zE[[k]], {i, 3}, {k, 3}];
+t1zE[a_, v_, zE_] := Sum[Sum[Signature[σ] Dot @@ Table[T1zE[v - (k - 1) hN, zE][[σ[[k]], I[[k]]]], {k, a}], {σ, Permutations[I]}], {I, Subsets[Range[3], {a}]}];
+hwB[μ_] := hwB[μ] = Module[{sec = Flatten[Position[wtBasis, μ]], ns}, ns = NullSpace[Join[EtotS[1, 2][[All, sec]], EtotS[2, 3][[All, sec]]]]; Orthogonalize[N[Table[Normal[SparseArray[Thread[sec -> n], {d2}]], {n, ns}], 250]]];
+cgData[eps_, φv_, ωv_, pr_] := Module[{zE, wE, tt, mix, rr, Rg, RgI, Om1, Om2, RR, Pph, rsE, x02e, uLl = thN[[1]] - 2 hN, t12 = thN[[1]] - thN[[2]], fl, v11, v21, cl, ev, out = {}},
+  zE = N[Exp[eps φv], pr]; wE = N[Exp[eps ωv], pr];
+  tt = Table[tPoly[DiagonalMatrix[zE], a], {a, 2}]; mix = (tt[[1]] + N[Pi, pr] tt[[2]]) /. u -> 3/7;
+  rr = rOmF[zE, wE];
+  Rg = nexpS[rr[[1]] EeN[1, 2]] . nexpS[rr[[2]] EeN[1, 3]] . nexpS[rr[[3]] EeN[2, 3]]; RgI = nexpS[-rr[[3]] EeN[2, 3]] . nexpS[-rr[[2]] EeN[1, 3]] . nexpS[-rr[[1]] EeN[1, 2]];
+  Om1 = UnitVector[d1, 1] . Rg; Om2 = Flatten[KroneckerProduct[Om1, Om1]]; RR = KroneckerProduct[Rg, Rg];
+  rsE = rsSol /. Thread[zs -> zE];
+  Pph = nexpS[(r[1] /. rsE) Ee[3, 2]] . nexpS[(r[2] /. rsE) Ee[3, 1]] . nexpS[(r[3] /. rsE) Ee[2, 1]] . DiagonalMatrix[Table[Product[(s[k] /. rsE)^J0[k][p], {k, 3}], {p, ps[{Λ}]}]] . nexpS[(1/zE[[1]]) Ee[1, 2]] . nexpS[-(1/(zE[[1]] zE[[2]])) Ee[1, 3]] . nexpS[((zE[[1]] + zE[[2]])/(zE[[1]] zE[[2]])) Ee[2, 3]];
+  x02e = Flatten[KroneckerProduct[#, #]] &[UnitVector[d1, 1] . Inverse[Pph]];
+  fl = {(t12 - hN) (t12 - 3 hN), (t12 - hN)^2 (t12 - 3 hN)};
+  v11 = Om1 . t1zE[2, uLl, zE]; v21 = v11 . t1zE[1, uLl + hN, zE] - Om1 . t1zE[3, uLl + hN, zE];
+  cl = {Flatten[KroneckerProduct[v11 . RgI, UnitVector[d1, 1]]], Flatten[KroneckerProduct[v21 . RgI, UnitVector[d1, 1]]]};
+  Do[With[{sec = Flatten[Position[wtBasis, Λw]], hb = hwB[Λw]}, With[{es = Eigensystem[mix[[sec, sec]]]}, Do[With[{ψ0 = Normal[SparseArray[Thread[sec -> es[[2, k]]], {d2}]]}, If[(Norm[EtotS[1, 2] . ψ0] + Norm[EtotS[2, 3] . ψ0])/Norm[ψ0] < 10^-3,
+        With[{ψ = ψ0/Norm[ψ0], km = Ordering[Abs[ψ0], -1][[1]]}, Module[{ph, ψh, Phw, eva, T11, T21, t3v, Tl, L2, L3},
+          ph = With[{c = hb . ψ}, Conjugate[c[[1]]]/Abs[c[[1]]]]; ψh = ph ψ; Phw = Total[hb (hb . ψh)];
+          eva[a_, x_] := ((tt[[a]] /. u -> x) . ψh)[[km]]/ψh[[km]];
+          t3v[x_] := (Times @@ zE) nuP[1][x] nuP[2][x - hN] nuP[3][x - 2 hN];
+          T11 = eva[2, uLl]; T21 = eva[2, uLl] eva[1, uLl + hN] - t3v[uLl + hN]; Tl = {T11, T21};
+          L2 = Table[cl[[l]] . RR . ψh, {l, 2}]; L3 = Table[Tl[[l]] (Om2 . ψh)/fl[[l]], {l, 2}];
+          AppendTo[out, <|"mu" -> Λw, "ev" -> es[[1, k]], "L2" -> L2, "L3" -> L3, "HWtarget" -> Table[cl[[l]] . Phw, {l, 2}], "T" -> Tl, "Ωψ" -> Om2 . ψh, "x0ψ" -> x02e . ψh, "x0Phw" -> x02e . Phw|>]]]]], {k, Length[sec]}]]], {Λw, hwSecs}];
+  SortBy[out, {Position[hwSecs, #["mu"]][[1, 1]], Re[#["ev"]]} &]];
+epsC = {10^-6, 10^-9};
+cgD = Table[cgData[e, φT, ωT, 200], {e, epsC}];
+ordC[f_] := Round[Log[Abs[f[cgD[[2]]]/f[cgD[[1]]]]]/Log[epsC[[2]]/epsC[[1]]], 1/100];
+cgTab = Table[With[{b = bb}, Join[{cgD[[1, b]]["mu"]}, Flatten[Table[{ScientificForm[N[Max[Abs[cgD[[2, b]]["L2"][[l]]/cgD[[2, b]]["L3"][[l]] - 1]], 2], 2], N[ordC[#[[b]]["L2"][[l]] &]], N[ordC[#[[b]]["HWtarget"][[l]] &]], N[ordC[#[[b]]["T"][[l]] &]]}, {l, 2}]], {N[ordC[#[[b]]["Ωψ"] &]], N[ordC[#[[b]]["x0ψ"] &]], N[ordC[#[[b]]["x0Phw"] &]]}]], {bb, Length[cgD[[1]]]}];
+Grid[Join[{{"μ", "(1,1) id. resid", "(1,1) # c·RRΨ", "(1,1) # c·P_HWΨ", "(1,1) # T", "(2,1) id. resid", "(2,1) # c·RRΨ", "(2,1) # c·P_HWΨ", "(2,1) # T", "# <Ω|Ψ>", "# <x0|Ψ>", "# <x0|P_HWΨ>"}}, cgTab], Frame -> All, Alignment -> Left]
+
+===== cell 62 (kind 1) =====
+**Result (11c).** Orders $\#$ (ratio of $\varepsilon=10^{-9}$ and $10^{-6}$; $\phi=(1/3,-2/7,5/11)$, $\omega=(2/5,1/7,-3/4)$, main chain point):
+
+| $\mu$ | $c_{11}\!\cdot\!RR\Psi$ | $c_{11}\!\cdot\!P_{HW}\Psi$ | $c_{21}\!\cdot\!RR\Psi$ | $c_{21}\!\cdot\!P_{HW}\Psi$ | $T_\lambda$ | $\langle\Omega|\hat\Psi\rangle$ | $\langle x_0|\hat\Psi\rangle$ | $\langle x_0|P_{HW}\hat\Psi\rangle$ |
+|---|---|---|---|---|---|---|---|---|
+| [4,2,0] | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 2 |
+| [4,1,1] | **1** | **exact 0** | 1 | 1 | 0 | 1 | 3 | exact 0 |
+| [3,3,0] | 1 | 1 | 1 | 1 | 0 | 1 | 3 | exact 0 |
+| [3,2,1]± | 1 | 1 | 1 | 1 | 0 | 1 | 4 | exact 0 |
+| [2,2,2] | **2** | **exact 0** | 2 | 2 | 0 | 2 | 6 | exact 0 |
+
+- **The identity holds exactly** at small twist ($|L_2/L_3-1|=0$ to 160 digits), so $f_\lambda$ also holds at these new $z,w$.
+- **$x_0$ and $\Omega$ are both coherent states in $[4,2,0]^*$.** Each is $(e_1^T\pi(g))^{\otimes2}$, so it annihilates every other irrep and only sees $P_{27}\Psi_B$; hence $\langle x_0|P_{HW}\Psi\rangle=0$ exactly for $\mu\ne[4,2,0]$. All the Q-formula ratio contains is the ratio of two overlaps with the 27-admixture of the twisted eigenstate, which is $O(\varepsilon^{\rm ht})$.
+- **Replacing $(R\otimes R)\Psi_B$ by its HW limit is not valid at leading order** (except for $[4,2,0]$). $(R\otimes R)$ acts nontrivially on the $O(\varepsilon)$ admixture of other irreps' descendants, and that contributes at the same order as $c_\lambda\cdot P_{HW}\Psi$:
+  - For $(1,1)$ at $[4,1,1]$ and $[2,2,2]$ the CG overlap is exactly 0, but the chain gives $\varepsilon^1$, $\varepsilon^2$.
+  - Otherwise the orders agree, but $c_\lambda\cdot(R\otimes R)\hat\Psi\big/c_\lambda\cdot P_{HW}\hat\Psi\to\kappa_{B,\lambda}\ne1$.
+- **$\kappa_{B,\lambda}$ is independent of $\phi$ and $\omega$** (3 twist directions, agreement to $\sim10^{-9}$). It is untwisted data. With $t=\theta_{12}/h$:
+  - $[3,3,0]$ (both $\lambda$) and $[4,1,1]$ $(2,1)$: $\kappa=(t+1)/2$. That is 97/70 at $t=62/35$ and 22/15 at $t=29/15$, so validated at a second point.
+  - $[2,2,2]$ $(2,1)$: $\kappa=(t+1)(t+3)/12$, **pair-fitted** on the two points.
+  - $[3,2,1]$ copies: (1.5294, 1.0723) and (0.6420, 0.7717) at $t=62/35$, presumably involving $\sqrt{4+5t^2}$; not identified.
+
+===== cell 63 (kind 1) =====
+### 11d. Weight-by-weight decomposition of the chain, with $\langle x_0|\Psi_B\rangle=1$
+Normalize $\Psi_B$ by $\langle x_0|\Psi_B\rangle=1$, so that $\Psi_B=\varepsilon^{-k}(h_\mu+O(\varepsilon))$. $\Psi_B$ has exact total weight $\mu$ and $R$ contains only raising operators, so
+$$c_\lambda\cdot(R\otimes R)\Psi_B=\sum_{\nu\ge\mu}c^{(\nu)}_\lambda\cdot\big[(R\otimes R)\Psi_B\big]_\nu ,$$
+where $c^{(\nu)}_\lambda$ is the weight-$\nu$ part of $c_\lambda=\langle v_\lambda|R^{-1}\otimes e_1^T$.
+- **$\nu=\mu$:** the term $c^{(\mu)}_\lambda\cdot\Psi_B\to\varepsilon^{-k}c^{(\mu)}_\lambda\cdot h_\mu$, the CG data of 10c–10e.
+- **$\nu>\mu$:** these terms vanish on $h_\mu$, so $[(R\otimes R)\Psi_B]_\nu=O(\varepsilon^{1-k})$. Their size relative to the $\nu=\mu$ term is set by $\|c^{(\nu)}_\lambda\|$ versus $\|c^{(\mu)}_\lambda\|$.
+
+The table lists, for each HW-limit state and $\lambda$, the $\varepsilon$-order of every nonzero weight contribution, together with the orders of $\|c^{(\nu)}\|$ and $\|[(R\otimes R)\Psi]_\nu\|$.
+
+===== cell 64 (kind 2) =====
+(* per-weight pieces of c_λ·(R⊗R)Ψ with <x0|Ψ> = 1 *)
+cgParts[eps_, φv_, ωv_, pr_] := Module[{zE, wE, tt, mix, rr, Rg, RgI, Om1, RR, Pph, rsE, x02e, uLl = thN[[1]] - 2 hN, v11, v21, cl, out = {}},
+  zE = N[Exp[eps φv], pr]; wE = N[Exp[eps ωv], pr];
+  tt = Table[tPoly[DiagonalMatrix[zE], a], {a, 2}]; mix = (tt[[1]] + N[Pi, pr] tt[[2]]) /. u -> 3/7;
+  rr = rOmF[zE, wE];
+  Rg = nexpS[rr[[1]] EeN[1, 2]] . nexpS[rr[[2]] EeN[1, 3]] . nexpS[rr[[3]] EeN[2, 3]]; RgI = nexpS[-rr[[3]] EeN[2, 3]] . nexpS[-rr[[2]] EeN[1, 3]] . nexpS[-rr[[1]] EeN[1, 2]];
+  Om1 = UnitVector[d1, 1] . Rg; RR = KroneckerProduct[Rg, Rg];
+  rsE = rsSol /. Thread[zs -> zE];
+  Pph = nexpS[(r[1] /. rsE) Ee[3, 2]] . nexpS[(r[2] /. rsE) Ee[3, 1]] . nexpS[(r[3] /. rsE) Ee[2, 1]] . DiagonalMatrix[Table[Product[(s[k] /. rsE)^J0[k][p], {k, 3}], {p, ps[{Λ}]}]] . nexpS[(1/zE[[1]]) Ee[1, 2]] . nexpS[-(1/(zE[[1]] zE[[2]])) Ee[1, 3]] . nexpS[((zE[[1]] + zE[[2]])/(zE[[1]] zE[[2]])) Ee[2, 3]];
+  x02e = Flatten[KroneckerProduct[#, #]] &[UnitVector[d1, 1] . Inverse[Pph]];
+  v11 = Om1 . t1zE[2, uLl, zE]; v21 = v11 . t1zE[1, uLl + hN, zE] - Om1 . t1zE[3, uLl + hN, zE];
+  cl = {Flatten[KroneckerProduct[v11 . RgI, UnitVector[d1, 1]]], Flatten[KroneckerProduct[v21 . RgI, UnitVector[d1, 1]]]};
+  Do[With[{sec = Flatten[Position[wtBasis, Λw]]}, With[{es = Eigensystem[mix[[sec, sec]]]}, Do[With[{ψ0 = Normal[SparseArray[Thread[sec -> es[[2, k]]], {d2}]]}, If[(Norm[EtotS[1, 2] . ψ0] + Norm[EtotS[2, 3] . ψ0])/Norm[ψ0] < 10^-3,
+        With[{ψ = ψ0/(x02e . ψ0)}, With[{RRψ = RR . ψ},
+          AppendTo[out, <|"mu" -> Λw, "ev" -> es[[1, k]], "normψ" -> Norm[ψ], "parts" -> Table[{wtBasis[[sn[[1]]]], Table[cl[[l]][[sn]] . RRψ[[sn]], {l, 2}], Table[Norm[cl[[l]][[sn]]], {l, 2}], Norm[RRψ[[sn]]]}, {sn, sectors}]|>]]]]], {k, Length[sec]}]]], {Λw, hwSecs}];
+  SortBy[out, {Position[hwSecs, #["mu"]][[1, 1]], Re[#["ev"]]} &]];
+cpD = Table[cgParts[e, φT, ωT, 200], {e, epsC}];
+ordP[a_, b_] := If[Abs[a] < 10^-150 || Abs[b] < 10^-150, "0", N[Round[Log[Abs[b/a]]/Log[epsC[[2]]/epsC[[1]]], 1/100]]];
+(* rows: state, λ, then for each total weight ν ≥ μ with a nonzero contribution: {ν, order of contribution, order of ||c^(ν)||, order of ||[RRΨ]_ν||} *)
+partTab = Flatten[Table[With[{A = cpD[[1, b]], B = cpD[[2, b]]}, {A["mu"], l, N[ordP[A["normψ"], B["normψ"]]], Select[Table[With[{pa = A["parts"][[j]], pb = B["parts"][[j]]}, {pa[[1]], ordP[pa[[2, l]], pb[[2, l]]], ordP[pa[[3, l]], pb[[3, l]]], ordP[pa[[4]], pb[[4]]]}], {j, Length[sectors]}], #[[2]] =!= "0" &]}], {b, Length[cpD[[1]]]}, {l, 2}], 1];
+Grid[Join[{{"μ", "λ (1=(1,1), 2=(2,1))", "# ||Ψ|| (<x0|Ψ>=1)", "{ν, # contribution, # ||c^(ν)||, # ||[RRΨ]_ν||}"}}, partTab], Frame -> All, Alignment -> Left]
+
+===== cell 65 (kind 1) =====
+**Result (11d).** With $\langle x_0|\Psi_B\rangle=1$, $\|\Psi_B\|\sim\varepsilon^{-k}$ with $k=2,3,3,4,4,6$ for $[4,2,0],[4,1,1],[3,3,0],[3,2,1]_\pm,[2,2,2]$. Contributions $c^{(\nu)}_\lambda\cdot[(R\otimes R)\Psi_B]_\nu$, listed as $\nu$: order of the contribution $=$ order of $\|c^{(\nu)}\|$ $+$ order of $\|[RR\Psi]_\nu\|$:
+- **[4,1,1], (2,1):** $\nu=[4,1,1]$: $-2=1-3$; $\nu=[4,2,0]$: $-2=0-2$. For (1,1) only $\nu=[4,2,0]$ contributes ($c^{(411)}_{11}=0$).
+- **[3,3,0], both $\lambda$:** $\nu=[3,3,0]$: $-2=1-3$; $\nu=[4,2,0]$: $-2=0-2$.
+- **[3,2,1]:** $\nu=[3,2,1]$: $-3=1-4$; $\nu=[4,2,0]$: $-3=0-3$; $\nu=[3,3,0]$ and $[4,1,1]$: $-2=1-3$, which is subleading.
+- **[2,2,2], (2,1):** $\nu=[2,2,2]$: $-4$; $\nu=[4,2,0]$: $-4=0-4$; the rest are $-3$. For (1,1), $\nu=[2,2,2]$ is absent ($c^{(222)}_{11}=0$) and $\nu=[4,2,0],[3,2,1]$ give $-4$.
+
+**Mechanism.** $(R\otimes R)\Psi_B$ indeed keeps its leading piece $\varepsilon^{-k}h_\mu$, and its higher-weight pieces are suppressed. But $c_\lambda$ is not uniform: $c^{(\mu)}_\lambda=O(\varepsilon^{1\text{ or }2})$ while $c^{(420)}_\lambda=O(1)$. The large higher-weight components of $c_\lambda$ pair with the subleading higher-weight pieces of $(R\otimes R)\Psi_B$, at the same order as the CG term. The $\nu=\mu$ term is exactly $c^{(\mu)}_\lambda\cdot\Psi_B$ (raising operators do not change the weight-$\mu$ component), and its leading part $\varepsilon^{-k}c^{(\mu)}_\lambda\cdot h_\mu$ is the 10e CG data. The Q side, $T^B_\lambda\langle\Omega|\Psi_B\rangle/f_\lambda$, gives only the sum over $\nu$.
+
+===== cell 66 (kind 1) =====
+### 11e. The projected covector $W_\mu=\langle v_\lambda\otimes\Omega_{zw}|P_\mu$
+$W_\mu\cdot\Psi_B$ is exactly the left-hand side (it equals $T^B_\lambda\langle\Omega|\Psi_B\rangle/f_\lambda$). Question: if $W_\mu=\varepsilon^{a}(w_0+O(\varepsilon))$ and $\Psi_B=\varepsilon^{-k}(h_\mu+O(\varepsilon))$ with $\langle x_0|\Psi_B\rangle=1$, is the leading term $\varepsilon^{a-k}\,w_0\cdot h_\mu$? The cell reports the orders of $\|W_\mu\|$, of $W_\mu\cdot h_\mu$ (the norm of the projection onto $\mathrm{HW}_\mu$ for the octet) and of $W_\mu\cdot\Psi_B$, together with $|w_0\cdot h_\mu|/\|w_0\|$.
+
+===== cell 67 (kind 2) =====
+wData[eps_, φv_, ωv_, pr_] := Module[{zE, wE, tt, mix, rr, Rg, Om1, Pph, rsE, x02e, uLl = thN[[1]] - 2 hN, v11, v21, cov, out = {}},
+  zE = N[Exp[eps φv], pr]; wE = N[Exp[eps ωv], pr];
+  tt = Table[tPoly[DiagonalMatrix[zE], a], {a, 2}]; mix = (tt[[1]] + N[Pi, pr] tt[[2]]) /. u -> 3/7;
+  rr = rOmF[zE, wE]; Rg = nexpS[rr[[1]] EeN[1, 2]] . nexpS[rr[[2]] EeN[1, 3]] . nexpS[rr[[3]] EeN[2, 3]]; Om1 = UnitVector[d1, 1] . Rg;
+  rsE = rsSol /. Thread[zs -> zE];
+  Pph = nexpS[(r[1] /. rsE) Ee[3, 2]] . nexpS[(r[2] /. rsE) Ee[3, 1]] . nexpS[(r[3] /. rsE) Ee[2, 1]] . DiagonalMatrix[Table[Product[(s[k] /. rsE)^J0[k][p], {k, 3}], {p, ps[{Λ}]}]] . nexpS[(1/zE[[1]]) Ee[1, 2]] . nexpS[-(1/(zE[[1]] zE[[2]])) Ee[1, 3]] . nexpS[((zE[[1]] + zE[[2]])/(zE[[1]] zE[[2]])) Ee[2, 3]];
+  x02e = Flatten[KroneckerProduct[#, #]] &[UnitVector[d1, 1] . Inverse[Pph]];
+  v11 = Om1 . t1zE[2, uLl, zE]; v21 = v11 . t1zE[1, uLl + hN, zE] - Om1 . t1zE[3, uLl + hN, zE];
+  cov = {Flatten[KroneckerProduct[v11, Om1]], Flatten[KroneckerProduct[v21, Om1]]};
+  Do[With[{sec = Flatten[Position[wtBasis, Λw]], hb = hwB[Λw]}, With[{es = Eigensystem[mix[[sec, sec]]]}, Do[With[{ψ0 = Normal[SparseArray[Thread[sec -> es[[2, k]]], {d2}]]}, If[(Norm[EtotS[1, 2] . ψ0] + Norm[EtotS[2, 3] . ψ0])/Norm[ψ0] < 10^-3,
+        With[{ψ = ψ0/(x02e . ψ0)}, With[{W = Table[Normal[SparseArray[Thread[sec -> cov[[l]][[sec]]], {d2}]], {l, 2}]},
+          AppendTo[out, <|"mu" -> Λw, "ev" -> es[[1, k]], "W" -> W, "normW" -> Norm /@ W, "Wh" -> Table[Norm[hb . W[[l]]], {l, 2}], "WΨ" -> Table[W[[l]] . ψ, {l, 2}]|>]]]]], {k, Length[sec]}]]], {Λw, hwSecs}];
+  SortBy[out, {Position[hwSecs, #["mu"]][[1, 1]], Re[#["ev"]]} &]];
+wD = Table[wData[e, φT, ωT, 200], {e, epsC}];
+wTab = Flatten[Table[With[{A = wD[[1, b]], B = wD[[2, b]]}, {A["mu"], {"(1,1)", "(2,1)"}[[l]], ordP[A["normW"][[l]], B["normW"][[l]]], ordP[A["Wh"][[l]], B["Wh"][[l]]], ordP[A["WΨ"][[l]], B["WΨ"][[l]]], If[A["mu"] == {4, 2, 0}, 1, N[B["Wh"][[l]]/B["normW"][[l]], 3]]}], {b, Length[wD[[1]]]}, {l, 2}], 1];
+Grid[Join[{{"μ", "λ", "# ||W_μ||", "# W_μ·h_μ", "# W_μ·Ψ (<x0|Ψ>=1)", "|W·h|/||W|| at ε=1e-9"}}, wTab], Frame -> All, Alignment -> Left]
+
+===== cell 68 (kind 1) =====
+**Result (11e).** For every HW-limit state and both $\lambda$, $\|W_\mu\|=O(\varepsilon^0)$. The overlap $W_\mu\cdot h_\mu$ is $O(\varepsilon^{1})$ (or $\varepsilon^2$ for the singlet), and exactly 0 for (1,1) at $[4,1,1]$ and $[2,2,2]$. These are the 10e CG orders: indeed $W_\mu\cdot h_\mu=c_\lambda\cdot(R\otimes R)h_\mu=c_\lambda\cdot h_\mu$ exactly. So the leading direction $w_0$ of $W_\mu$ is **orthogonal** to $h_\mu$, and $W_\mu\cdot\Psi_B$ (with $\langle x_0|\Psi_B\rangle=1$) scales as $\varepsilon^{-2,-2,-2,-3,-3,-4}$, one order above the naive $\varepsilon^{0-k}$. Its leading coefficient mixes $w_1\cdot h_\mu$ (the CG part) with $w_0\cdot\Psi^{(1)}_B$, where $\Psi^{(1)}_B$ is the $O(\varepsilon)$ correction of the eigenstate. That second piece is the $\kappa$ contamination.
+
+===== cell 69 (kind 1) =====
+### 11f. Coincident twist parameters $\omega_i=\phi_j$
+$\Omega_{zw}$ does not depend on $w_3$. The rotation parameters satisfy $r_1\propto(w_1-z_1)$, $r_2\propto(w_1-z_1)(w_2-z_1)$ and $r_3\propto(w_1-z_2)(w_2-z_2)$, with denominators $(w_1-z_2)$, $(w_1-z_3)$, $(w_2-z_3)$. The allowed single coincidences are $\omega_1=\phi_1$ ($R=e^{r_3E_{23}}$), $\omega_2=\phi_1$ ($r_2=0$) and $\omega_2=\phi_2$ ($r_3=0$). For each, the cell gives the orders of the chain value $c\cdot RR\hat\Psi$ and of the CG term $c\cdot P_{HW}\hat\Psi$, together with their ratio $\kappa$ at $\varepsilon=10^{-9}$. The ratio is 1 when there is no contamination.
+
+===== cell 70 (kind 2) =====
+coinCases = {"ω₁=φ₁" -> {φT[[1]], ωT[[2]], ωT[[3]]}, "ω₂=φ₁" -> {ωT[[1]], φT[[1]], ωT[[3]]}, "ω₂=φ₂" -> {ωT[[1]], φT[[2]], ωT[[3]]}};
+coinTab = Flatten[Table[With[{dd = Table[cgData[e, φT, cc[[2]], 200], {e, epsC}]}, Table[With[{A = dd[[1, b]], B = dd[[2, b]]}, {cc[[1]], A["mu"], Sequence @@ Flatten[Table[{ordP[A["L2"][[l]], B["L2"][[l]]], ordP[A["HWtarget"][[l]], B["HWtarget"][[l]]], If[Abs[B["HWtarget"][[l]]] < 10^-150, "CG=0", N[B["L2"][[l]]/B["HWtarget"][[l]], 6]]}, {l, 2}]]}], {b, Length[dd[[1]]]}]], {cc, coinCases}], 1];
+Grid[Join[{{"case", "μ", "(1,1) # chain", "(1,1) # CG", "(1,1) κ", "(2,1) # chain", "(2,1) # CG", "(2,1) κ"}}, coinTab], Frame -> All, Alignment -> Left]
+
+===== cell 71 (kind 1) =====
+**Result (11f): coincidences do not help.** In every case either the chain value and the CG term both vanish exactly, or $\kappa$ is unchanged ($(t+1)/2=97/70$ for $[3,3,0]$ and $[4,1,1]$(2,1), $1.5294/1.0723$ for the octet, $1.10197$ for the singlet (2,1)).
+- **$\omega_1=\phi_1$:** $[3,3,0]$, $[3,2,1]$ and $[2,2,2]$ vanish exactly on both sides; $[4,1,1]$ keeps $\kappa$.
+- **$\omega_2=\phi_2$:** $[4,1,1]$ vanishes on both sides; the rest keep $\kappa$.
+- **$\omega_2=\phi_1$:** nothing new vanishes; $\kappa$ is unchanged.
+
+This is consistent with $\kappa$ being independent of $\phi$ and $\omega$: the contamination has the same twist dependence as the CG term, so no choice of $\omega$ separates them.
+
+===== cell 72 (kind 1) =====
+### 11g. Removing the contamination: kill the $[4,2,0]$ component of the covector
+From 10d, $c_{(2,1)}\cdot h_{[4,2,0]}=-hz_3\,c_{(1,1)}\cdot h_{[4,2,0]}$ exactly, and $h_{[4,2,0]}=e_1\otimes e_1$ spans its 1-dimensional weight space. So $C=c_{(2,1)}+hz_3\,c_{(1,1)}$ has **no** $[4,2,0]$ component, which was the source of the leading contamination (11d). On the Q side this is $\big(T^B_{(2,1)}/f_{(2,1)}+hz_3T^B_{(1,1)}/f_{(1,1)}\big)\langle\Omega|\Psi_B\rangle$. The cell reports $\kappa_C=C\cdot(R\otimes R)\hat\Psi\big/C\cdot P_{HW}\hat\Psi$ at $\varepsilon=10^{-9}$ for three twist directions and both chain points.
+
+===== cell 73 (kind 2) =====
+kapC[d_, e_, φv_] := With[{z3 = N[Exp[e φv[[3]]], 200]}, Table[With[{x = d[[b]]}, With[{num = x["L2"][[2]] + hN z3 x["L2"][[1]], den = x["HWtarget"][[2]] + hN z3 x["HWtarget"][[1]]}, If[Abs[den] < 10^-150, If[Abs[num] < 10^-150, "both 0", "CG=0, chain≠0"], num/den]]], {b, Length[d]}]];
+kC = {kapC[cgD[[2]], 10^-9, φT], kapC[cgData[10^-9, φT, {3/4, -1/3, 2/9}, 200], 10^-9, φT], kapC[cgData[10^-9, {1/2, 1/5, -4/7}, {-5/6, 3/8, 1/9}, 200], 10^-9, {1/2, 1/5, -4/7}]};
+{hSave, thSave} = {hN, thN}; hN = 1/3; thN = {1/5, -4/9}; clearTm[];
+kC2 = kapC[cgData[10^-9, φT, ωT, 200], 10^-9, φT];
+hN = hSave; thN = thSave; clearTm[];
+Grid[Join[{{"μ", "κ_C (φT,ωT)", "κ_C (φT,ω')", "κ_C (φ',ω'')", "κ_C at h=1/3, θ=(1/5,-4/9)"}}, Table[{cgD[[2, b]]["mu"], Sequence @@ (If[StringQ[#], #, N[#, 8]] & /@ {kC[[1, b]], kC[[2, b]], kC[[3, b]], kC2[[b]]})}, {b, Length[cgD[[2]]]}]], Frame -> All, Alignment -> Left]
+
+===== cell 74 (kind 1) =====
+**Result (11g).** With $C=c_{(2,1)}+hz_3c_{(1,1)}$:
+- **$[4,1,1]$ and both $[3,2,1]$ copies: $\kappa_C=1$** (to $10^{-10}=O(\varepsilon)$) for 3 twist directions and at both chain points. The Q side then gives the HW CG data directly.
+- **$[4,2,0]$, $[3,3,0]$:** $C$ vanishes exactly on both sides. $[4,2,0]$ is clean with either $\lambda$ alone ($\kappa=1$). $[3,3,0]$ still needs another covector.
+- **$[2,2,2]$:** $\kappa_C=97/105$ at $t=62/35$ and $44/45$ at $t=29/15$, i.e. $\kappa_C=(t+1)/3$ (**pair-fitted**, one parameter, two points). The remaining contamination comes from the intermediate weights $[4,1,1],[3,3,0],[3,2,1]$. It is independent of $\phi,\omega$.
+- **Lesson.** Contamination is removable by choosing linear combinations of Q-computable insertions ($T_\lambda$ at $\theta_1-2h$, weighted by $z$) that kill the higher-weight components of the covector at the orders that matter.
+
+===== cell 75 (kind 1) =====
+### 11h. Reconstruction from many $w$: rank of the localized covectors
+Only $T_{(1,1)}$ and $T_{(2,1)}$ at $\theta_1-2h$ are allowed, but the vacuum twist $w$ is free: the overlap formula holds for every $w$. The question is the rank, in each dominant weight sector $\mu$, of $\{\langle v_\lambda(w)\otimes\Omega_{zw}|P_\mu\}$ over $\lambda$ and many $w$ (twist $z$ fixed), with and without the normalization row $\langle x_0|P_\mu$. Full rank means $\Psi_B(\varepsilon)$ is determined by Q data at each $\varepsilon$. $\Omega_{zw}$ depends only on $(w_1,w_2)$.
+
+===== cell 76 (kind 2) =====
+wCov[eps_, φv_, ωv_, pr_] := Module[{zE = N[Exp[eps φv], pr], wE = N[Exp[eps ωv], pr], rr, Om1, uLl = thN[[1]] - 2 hN, v11, v21},
+  rr = rOmF[zE, wE]; Om1 = UnitVector[d1, 1] . nexpS[rr[[1]] EeN[1, 2]] . nexpS[rr[[2]] EeN[1, 3]] . nexpS[rr[[3]] EeN[2, 3]];
+  v11 = Om1 . t1zE[2, uLl, zE]; v21 = v11 . t1zE[1, uLl + hN, zE] - Om1 . t1zE[3, uLl + hN, zE];
+  {Flatten[KroneckerProduct[v11, Om1]], Flatten[KroneckerProduct[v21, Om1]]}];
+x0Cov[eps_, φv_, pr_] := Module[{zE = N[Exp[eps φv], pr], rsE, Pph}, rsE = rsSol /. Thread[zs -> zE];
+  Pph = nexpS[(r[1] /. rsE) Ee[3, 2]] . nexpS[(r[2] /. rsE) Ee[3, 1]] . nexpS[(r[3] /. rsE) Ee[2, 1]] . DiagonalMatrix[Table[Product[(s[k] /. rsE)^J0[k][p], {k, 3}], {p, ps[{Λ}]}]] . nexpS[(1/zE[[1]]) Ee[1, 2]] . nexpS[-(1/(zE[[1]] zE[[2]])) Ee[1, 3]] . nexpS[((zE[[1]] + zE[[2]])/(zE[[1]] zE[[2]])) Ee[2, 3]];
+  Flatten[KroneckerProduct[#, #]] &[UnitVector[d1, 1] . Inverse[Pph]]];
+SeedRandom[5]; ωMany = Table[RandomInteger[{-40, 40}, 3]/RandomChoice[{7, 11, 13, 17}], 30];
+rankTol[m_, tol_] := With[{sv = SingularValueList[m, Tolerance -> 0]}, {Count[sv, x_ /; x > tol First[sv]], N[sv/First[sv], 3]}];
+rkTab = Table[With[{sec = Flatten[Position[wtBasis, μ]]}, With[{rows = Flatten[Table[wCov[1/3, φT, ωv, 80][[All, sec]], {ωv, ωMany}], 1], xr = x0Cov[1/3, φT, 80][[sec]]},
+     {μ, Length[sec], rankTol[rows, 10^-40][[1]], rankTol[Append[rows, xr], 10^-40][[1]]}]], {μ, hwSecs}];
+Grid[Join[{{"μ", "dim weight space", "rank {W_λ(w)}", "rank with x0"}}, rkTab], Frame -> All, Alignment -> Left]
+
+===== cell 77 (kind 2) =====
+(* reconstruction: data = W_λ(w)·Ψ for λ, many w (= Q side, used here via the vectors) plus <x0|Ψ> = 1. Solve on the weight-μ space; fix the null directions by minimizing the part of Ψ orthogonal to HW_μ (the limit is HW). Compare the HW direction (and, for full rank, Ψ itself) with the true eigenstate *)
+psiStates[eps_, φv_, pr_] := Module[{zE = N[Exp[eps φv], pr], tt, mix, x0, out = {}}, tt = Table[tPoly[DiagonalMatrix[zE], a], {a, 2}]; mix = (tt[[1]] + N[Pi, pr] tt[[2]]) /. u -> 3/7; x0 = x0Cov[eps, φv, pr];
+  Do[With[{sec = Flatten[Position[wtBasis, Λw]]}, With[{es = Eigensystem[mix[[sec, sec]]]}, Do[With[{ψ0 = Normal[SparseArray[Thread[sec -> es[[2, k]]], {d2}]]}, If[(Norm[EtotS[1, 2] . ψ0] + Norm[EtotS[2, 3] . ψ0])/Norm[ψ0] < 10^-3, AppendTo[out, <|"mu" -> Λw, "ev" -> es[[1, k]], "ψ" -> ψ0/(x0 . ψ0)|>]]], {k, Length[sec]}]]], {Λw, hwSecs}];
+  SortBy[out, {Position[hwSecs, #["mu"]][[1, 1]], Re[#["ev"]]} &]];
+recon[eps_, φv_, ωs_, pr_] := Module[{sts = psiStates[eps, φv, pr], covs = Table[wCov[eps, φv, ωv, pr], {ωv, ωs}], x0 = x0Cov[eps, φv, pr]},
+  Table[With[{μ = st["mu"], sec = Flatten[Position[wtBasis, st["mu"]]]}, Module[{M, b, sv, U, S, V, r, ψp, Nn, hb, Pperp, α, ψr, ψt, dirErr},
+      M = Append[Flatten[covs[[All, All, sec]], 1], x0[[sec]]]; ψt = st["ψ"][[sec]]; b = M . ψt;
+      {U, S, V} = SingularValueDecomposition[M]; sv = Diagonal[S]; r = Count[sv, x_ /; x > 10^-80 First[sv]];
+      ψp = V[[All, 1 ;; r]] . ((ConjugateTranspose[U[[All, 1 ;; r]]] . b)/sv[[1 ;; r]]);
+      Nn = Transpose[V[[All, r + 1 ;;]]];
+      hb = hwB[μ][[All, sec]]; Pperp = IdentityMatrix[Length[sec]] - Transpose[hb] . Conjugate[hb];
+      α = If[Nn === {}, {}, LeastSquares[Pperp . Transpose[Nn], -Pperp . ψp]];
+      ψr = ψp + If[Nn === {}, 0, α . Nn];
+      dirErr = With[{a = hb . ψr, c = hb . ψt}, 1 - Abs[Conjugate[a] . c]/(Norm[a] Norm[c])];
+      {μ, Length[sec], r, N[dirErr, 3], N[Norm[hb . ψr - hb . ψt]/Norm[hb . ψt], 3]}]], {st, sts}]];
+reconTab = Table[{e, Sequence @@ #} & /@ recon[e, φT, ωMany[[1 ;; 20]], 200], {e, {10^-6, 10^-9}}];
+Grid[Join[{{"ε", "μ", "dim", "rank (with x0)", "1 - |cos| HW direction", "rel. error of HW part (incl. scale)"}}, Flatten[reconTab, 1]], Frame -> All, Alignment -> Left]
+
+===== cell 78 (kind 1) =====
+**Result (11h).** The data are all $w$ (20 random), both $\lambda$, plus $\langle x_0|\Psi\rangle=1$, and they determine $\Psi_B(\varepsilon)$ on its weight space up to the exact null space of the covector family. Rank, with $x_0$:
+- **$[4,2,0]$, $[4,1,1]$, $[3,3,0]$: full rank.** $\Psi_B$ is reconstructed exactly at every $\varepsilon$, normalization included, so the CG data come out with no $\kappa$.
+- **$(3,2,1)$: rank 5 of 6.** One exact null vector $n(\varepsilon)$ is present at every $\varepsilon$, including $\varepsilon=1/3$, with singular value $10^{-308}$ at 300 digits. At finite $\varepsilon$ it is not HW, but as $\varepsilon\to0$ it tends to a vector $n_0\in\mathrm{HW}_{[3,2,1]}$ ($\|P_{HW}n\|/\|n\|\to1$). So each octet eigenstate is fixed only up to $\alpha_B n(\varepsilon)$, and the limiting HW direction is undetermined. Fixing $\alpha$ by minimizing the non-HW part fails: the direction error stays at 0.024 and 0.049 at both $\varepsilon=10^{-6}$ and $10^{-9}$. The one clean functional on $\mathrm{HW}_{[3,2,1]}$ is $C=c_{(2,1)}+hz_3c_{(1,1)}$ (11g), and $C\cdot n_0=0$.
+- **$(2,2,2)$: rank 7 of 10.** The null vectors overlap the singlet, so its direction is trivial but its scale is not fixed (error 7.6%, same as $\kappa_C$).
+
+Because the null vector is exact at every $\varepsilon$ and for every $w$, no order of the $\varepsilon$-expansion and no choice of $w$ (including coincidences, 11f) recovers the octet mixing from $T_{(1,1)},T_{(2,1)}$ at $\theta_1-2h$. One more independent ingredient is needed.
+
+===== cell 79 (kind 1) =====
+## 12. Localizing on site 2: $t^*$ and $\theta_2$-shifted transfer matrices
+Section 10 localizes $\langle\Omega|$ on site 1 at $\theta_1-2h$; 11h shows the octet mixing and the singlet scale then stay undetermined. Here we look for transfer matrices whose action on $\langle\Omega|=\langle\Omega_{zw}\otimes\Omega_{zw}|$ is **site-2 local**, $\langle\Omega|\mathcal O=\langle\Omega_{zw}|\otimes\langle v|$ with $v\not\propto\Omega_{zw}$. All $t$'s again carry the ket's twist $\mathrm{diag}(z)$.
+
+**Why $t^*$.** In $T=\mathcal L^{(1)}\mathcal L^{(2)}$ site 1 sits on the left in auxiliary space, which is why the degenerate point $\theta_1-2h$ localizes there. The inverse monodromy $T^{-1}=\mathcal L^{(2)-1}\mathcal L^{(1)-1}$ puts site 2 on the left. Its transfer matrices $t^*_a$ (twist $\mathrm{diag}(z)^{-1}$ on the left) are, up to c-number factors, ordinary $t$'s at shifted points, so the search reduces to CBR $T_\lambda$'s at $\theta_2+c\,h$ and products of $t$'s there.
+
+**Locality test.** As in Section 10 a covector is an $8\times8$ matrix $M$ (row = site 1); site-2 local means $M=\Omega_{zw}\,v^T$. Since $t_3$ is a c-number and $\Omega_{zw}\otimes\Omega_{zw}$ is itself site-2 local, adding multiples of $t_3$ never changes locality.
+
+===== cell 80 (kind 2) =====
+(* t* from the inverse monodromy: one-site Lax as a 24x24 block matrix, inverted exactly; T^-1(v) = L2^-1(v-θ2).L1^-1(v-θ1) in aux space, twist (T.Z)^-1 = Z^-1.T^-1 *)
+LaxBig[v_, s_] := ArrayFlatten[Table[KroneckerDelta[i, j] (v - thN[[s]]) IdentityMatrix[d1] + hN Ee[i, j], {i, 3}, {j, 3}]];
+blk[m_] := Table[m[[(i - 1) d1 + 1 ;; i d1, (j - 1) d1 + 1 ;; j d1]], {i, 3}, {j, 3}];
+LinvS[v_, s_] := LinvS[v, s] = blk[Simplify[Inverse[LaxBig[v, s]]]];
+TinvZ[v_] := TinvZ[v] = Table[Sum[(1/zN[[i]]) KroneckerProduct[IdentityMatrix[d1], LinvS[v, 2][[i, k]]] . KroneckerProduct[LinvS[v, 1][[k, j]], IdentityMatrix[d1]], {k, 3}], {i, 3}, {j, 3}];
+tstar1[v_] := Sum[TinvZ[v][[i, i]], {i, 3}];
+tstar2[v_] := Sum[Sum[Signature[σ] TinvZ[v][[σ[[1]], I[[1]]]] . TinvZ[v + hN][[σ[[2]], I[[2]]]], {σ, Permutations[I]}], {I, Subsets[Range[3], {2}]}];
+vg = 3/11;
+shift1 = Select[Range[-3, 3], MatrixRank[N[{Flatten[tstar1[vg]], Flatten[tZ[[2]] /. u -> vg + # hN]}, 40]] == 1 &];
+shift2 = Select[Range[-3, 3], MatrixRank[N[{Flatten[tstar2[vg]], Flatten[tZ[[1]] /. u -> vg + # hN]}, 40]] == 1 &];
+checks["t*_1(v) ∝ t_2(v+2h), t*_2(v) ∝ t_1(v+2h)"] = shift1 === {2} && shift2 === {2};
+(* CBR scan: Ω.T_λ(u) by expanding det_{i,j} t_{λ'_j+i-j}(u+(i-1)h) over permutations, covector times matrix only *)
+tOp[0, v_] := 1; tOp[a_, v_] := If[1 <= a <= 3, tZ[[a]] /. u -> v, 0];
+conj[λ_] := Table[Count[λ, x_ /; x >= j], {j, Max[λ, 1]}];
+covT[λ_, v_] := Module[{lc = conj[λ], n = Max[λ]}, Sum[Signature[σ] Fold[If[NumberQ[#2], #1 #2, #1 . #2] &, Ω2, Table[tOp[lc[[σ[[i]]]] + i - σ[[i]], v + (i - 1) hN], {i, n}]], {σ, Permutations[Range[n]]}]];
+asMat[c_] := Partition[c, d1];
+site1Q[c_] := zeroQ[asMat[c] - Outer[Times, asMat[c] . Ω1/(Ω1 . Ω1), Ω1]];
+site2Q[c_] := zeroQ[Transpose[asMat[c]] - Outer[Times, Transpose[asMat[c]] . Ω1/(Ω1 . Ω1), Ω1]];
+classify[c_] := Which[zeroQ[c], "0", zeroQ[c - (c . Ω2/(Ω2 . Ω2)) Ω2], "eig", site2Q[c], "SITE 2", site1Q[c], "site 1", True, "·"];
+shapes = {{1}, {2}, {3}, {1, 1}, {2, 1}, {3, 1}, {2, 2}, {3, 2}, {3, 3}};
+{scanTime, {scan2, scan1}} = AbsoluteTiming[Table[classify[covT[λ, thN[[s]] + cc hN]], {s, {2, 1}}, {λ, shapes}, {cc, -5, 5}]];
+checks["CBR scan at θ2+ch (c=-5..5): only T_(1,1)(θ2+h) is site-2 local"] = Position[scan2, "SITE 2"] === {{4, 7}};
+checks["CBR scan at θ1+ch: site-1 local = T_(1,1)(θ1-2h), T_(2,1)(θ1-2h) only"] = Sort[Position[scan1, "site 1"]] === {{4, 4}, {5, 4}};
+Grid[Join[{{"t*_1(v) ∝ t_2(v+s h), s =", shift1, "t*_2(v) ∝ t_1(v+s h), s =", shift2}},
+   {Join[{"λ \\ u ="}, Table["θ2" <> If[cc == 0, "", ToString[cc] <> "h"], {cc, -5, 5}]]}, Table[Join[{shapes[[k]]}, scan2[[k]]], {k, Length[shapes]}],
+   {Join[{"λ \\ u ="}, Table["θ1" <> If[cc == 0, "", ToString[cc] <> "h"], {cc, -5, 5}]]}, Table[Join[{shapes[[k]]}, scan1[[k]]], {k, Length[shapes]}], {{"scan time (s)", scanTime}}], Frame -> All, Alignment -> Center]
+
+===== cell 81 (kind 2) =====
+(* products of two t's at θ2 + ℤh (numeric, 60 digits): which ⟨Ω|t_a(x) t_b(y) are site-2 local but not ∝ Ω? *)
+ClearAll[tAtN];
+tAtN[a_, x_] := tAtN[a, x] = N[RootReduce[tZ[[a]] /. u -> x], 60];
+Ω2N = N[RootReduce[Ω2], 60]; Ω1N = N[RootReduce[Ω1], 60];
+site2N[c_] := Module[{m = Transpose[Partition[c, d1]]}, Max[Abs[m - Outer[Times, m . Ω1N/(Ω1N . Ω1N), Ω1N]]]/Max[Abs[c], 10^-50]];
+eigN[c_] := Max[Abs[c - (c . Ω2N/(Ω2N . Ω2N)) Ω2N]]/Max[Abs[c], 10^-50];
+prodScan = Select[Flatten[Table[With[{c = (Ω2N . tAtN[a, thN[[2]] + x hN]) . tAtN[b, thN[[2]] + y hN]}, {a, x, b, y, site2N[c] < 10^-40, eigN[c] < 10^-40, Max[Abs[c]] < 10^-40}], {a, 1, 2}, {x, -4, 4}, {b, a, 2}, {y, -4, 4}], 3], #[[5]] && ! #[[6]] && ! #[[7]] &];
+checks["products t_a(θ2+xh) t_b(θ2+yh): only t1(θ2-h) t2(θ2+h) is site-2 local"] = prodScan[[All, 1 ;; 4]] === {{1, -1, 2, 1}};
+(* exact factorization against the one-site chain at θ2 (same twist) *)
+T2z[v_] := Table[(KroneckerDelta[i, k] (v - thN[[2]]) IdentityMatrix[d1] + hN Ee[i, k]) zN[[k]], {i, 3}, {k, 3}];
+t2site[a_, v_] := Sum[Sum[Signature[σ] Dot @@ Table[T2z[v - (k - 1) hN][[σ[[k]], I[[k]]]], {k, a}], {σ, Permutations[I]}], {I, Subsets[Range[3], {a}]}];
+cA = Ω2 . (tZ[[2]] /. u -> thN[[2]] + hN); cB = cA . (tZ[[1]] /. u -> thN[[2]] - hN);
+wA = Ω1 . t2site[2, thN[[2]] + hN]; wB = wA . t2site[1, thN[[2]] - hN];
+θ12 = thN[[1]] - thN[[2]]; χ3z = Times @@ zN;
+(* Corrected and symbolically proved in Section 13d; the old beta agreed only at h=1/2. *)
+fA = (θ12 - hN) (θ12 - 3 hN); αB = -(θ12 - hN)^2 (θ12 - 3 hN); βB = 6 hN^4 χ3z (θ12 - hN) (θ12 - 3 hN);
+checks["<Ω|t2(θ2+h) = (θ12-h)(θ12-3h) <Ωzw| ⊗ <Ωzw|t2^{L=1,θ2}(θ2+h)"] = zeroQ[cA - fA Flatten[KroneckerProduct[Ω1, wA]]];
+checks["<Ω|t2(θ2+h)t1(θ2-h) = <Ωzw| ⊗ (α <Ωzw|t2^{L=1}(θ2+h)t1^{L=1}(θ2-h) + β <Ωzw|)"] = zeroQ[cB - Flatten[KroneckerProduct[Ω1, αB wB + βB Ω1]]];
+checks["site-2 vectors nontrivial: rank{Ωzw, v_A, v_B} = 3"] = MatrixRank[N[RootReduce[{Ω1, wA, wB}], 60]] == 3;
+Grid[{{"site-2 local products {a,x,b,y}", prodScan[[All, 1 ;; 4]]},
+  {"<Ω|t2(θ2+h) factorizes, f = (θ12-h)(θ12-3h)", checks["<Ω|t2(θ2+h) = (θ12-h)(θ12-3h) <Ωzw| ⊗ <Ωzw|t2^{L=1,θ2}(θ2+h)"]},
+  {"<Ω|t2(θ2+h)t1(θ2-h) factorizes, α = -(θ12-h)^2(θ12-3h), β = 6h^4 χ3 (θ12-h)(θ12-3h)", checks["<Ω|t2(θ2+h)t1(θ2-h) = <Ωzw| ⊗ (α <Ωzw|t2^{L=1}(θ2+h)t1^{L=1}(θ2-h) + β <Ωzw|)"]},
+  {"nontrivial (rank 3)", checks["site-2 vectors nontrivial: rank{Ωzw, v_A, v_B} = 3"]}}, Frame -> All, Alignment -> Left]
+
+===== cell 82 (kind 1) =====
+**Result 12 (exact, numeric point P1).**
+- **$t^*$.** $t^*_1(v)\propto t_2(v+2h)$ and $t^*_2(v)\propto t_1(v+2h)$, so the $t^*$'s are ordinary $t$'s at shifted points; the scan over $T_\lambda$ and products at $\theta_2+\mathbb Z h$ therefore covers them.
+- **CBR scan, $u=\theta_2+ch$, $c=-5..5$, all $\lambda\subseteq3\times3$ with $\lambda_3=0$:** the only site-2 local one is $T_{(1,1)}(\theta_2+h)=t_2(\theta_2+h)\propto t^*_1(\theta_2-h)$. No $T_{(2,1)}$ localizes on site 2 at any integer shift. At $\theta_1+ch$ the same scan returns exactly the Section 10 pair $T_{(1,1)},T_{(2,1)}$ at $\theta_1-2h$.
+- **Products of two $t$'s at $\theta_2+\mathbb Zh$:** the only new site-2 local one is $t_2(\theta_2+h)\,t_1(\theta_2-h)\propto t^*_1(\theta_2-h)\,t^*_2(\theta_2-3h)$. This is the site-2 analogue of $T_{(2,1)}(\theta_1-2h)=t_2(\theta_1-2h)t_1(\theta_1-h)-t_3$, but the gap between the two arguments is $-2h$, not $+h$, so it is not a CBR-fused $T^*_{(2,1)}$.
+- **Factorization against the one-site chain at $\theta_2$** (same twist):
+$$\langle\Omega|t_2(\theta_2+h)=(\theta_{12}-h)(\theta_{12}-3h)\;\langle\Omega_{zw}|\otimes\langle\Omega_{zw}|t^{L=1,\theta_2}_2(\theta_2+h),$$
+$$\langle\Omega|t_2(\theta_2+h)t_1(\theta_2-h)=\langle\Omega_{zw}|\otimes\Big[-(\theta_{12}-h)^2(\theta_{12}-3h)\,\langle\Omega_{zw}|t^{L=1}_2(\theta_2+h)t^{L=1}_1(\theta_2-h)+3h^3\chi_3(\theta_{12}-h)(\theta_{12}-3h)\,\langle\Omega_{zw}|\Big].$$
+  The site-1 factor of the first is the same $f_{(1,1)}$ as in Section 10. All coefficients were **fitted at one point** ($h=1/2$, $\theta_{12}=31/35$, $\chi_3=5/4$). Note $3h^3\chi_3$ is the one-site qdet at $\theta_2-h$. The three vectors $\Omega_{zw}$, $v_A$, $v_B$ are independent.
+
+===== cell 83 (kind 1) =====
+### 12b. Undoing $R$ on site 2 and the highest-weight reach (finite twist)
+As in 10b–10c, with the roles of the sites swapped: the covector is $c=e_1^T\otimes\langle w|R^{-1}$ for the site-2 one-site vectors $w_A=\Omega_{zw}t^{L=1}_2(\theta_2+h)$ and $w_B=w_A\,t^{L=1}_1(\theta_2-h)$. The cell tests the 10b identity at $\theta_2$, $\langle w|R^{-1}=e_1^T\,T^{L=1,\theta_2}[g^{-T}\mathrm{diag}(z)g^T]$, and lists the norm of the projection of $c$ onto each $\mathrm{HW}_\mu$, next to the site-1 covectors of 10c.
+
+===== cell 84 (kind 2) =====
+(* one-site chain at site s with an arbitrary 3x3 twist M on the right *)
+oneT[s_, M_][v_] := Table[Sum[(KroneckerDelta[i, l] (v - thN[[s]]) IdentityMatrix[d1] + hN Ee[i, l]) M[[l, k]], {l, 3}], {i, 3}, {k, 3}];
+onet[s_, M_, a_, v_] := Sum[Sum[Signature[σ] Dot @@ Table[oneT[s, M][v - (k - 1) hN][[σ[[k]], I[[k]]]], {k, a}], {σ, Permutations[I]}], {I, Subsets[Range[3], {a}]}];
+RgInv = MatrixExp[-(r3 /. rOm) Ee[2, 3]] . MatrixExp[-(r2 /. rOm) Ee[1, 3]] . MatrixExp[-(r1 /. rOm) Ee[1, 2]];
+gF = MatrixExp[(r1 /. rOm) ee[1, 2]] . MatrixExp[(r2 /. rOm) ee[1, 3]] . MatrixExp[(r3 /. rOm) ee[2, 3]];
+Zconj = Inverse[Transpose[gF]] . DiagonalMatrix[zN] . Transpose[gF];
+(* the four one-site covectors: site 1 at θ1-2h (Section 10) and site 2 at θ2+h, θ2-h *)
+Zd1 = DiagonalMatrix[zN]; u1 = thN[[1]] - 2 hN; u2 = thN[[2]] + hN;
+w1s["11"] = Ω1 . onet[1, Zd1, 2, u1]; w1s["21"] = w1s["11"] . onet[1, Zd1, 1, u1 + hN] - Ω1 . onet[1, Zd1, 3, u1 + hN];
+w2s["A"] = Ω1 . onet[2, Zd1, 2, u2]; w2s["B"] = w2s["A"] . onet[2, Zd1, 1, thN[[2]] - hN];
+checks["site-2 one-site vectors match 12 (w_A, w_B)"] = zeroQ[w2s["A"] - wA] && zeroQ[w2s["B"] - wB];
+checks["<w_A|R^-1 = e1^T t2^{L=1,θ2}[g^-T z g^T](θ2+h)"] = zeroQ[w2s["A"] . RgInv - UnitVector[d1, 1] . onet[2, Zconj, 2, u2]];
+checks["<w_B|R^-1 = e1^T (t2 t1)^{L=1,θ2}[g^-T z g^T]"] = zeroQ[w2s["B"] . RgInv - UnitVector[d1, 1] . onet[2, Zconj, 2, u2] . onet[2, Zconj, 1, thN[[2]] - hN]];
+e1v = UnitVector[d1, 1];
+hwCov = <|"site1 (1,1)" -> Flatten[KroneckerProduct[w1s["11"] . RgInv, e1v]], "site1 (2,1)" -> Flatten[KroneckerProduct[w1s["21"] . RgInv, e1v]],
+   "site2 A" -> Flatten[KroneckerProduct[e1v, w2s["A"] . RgInv]], "site2 B" -> Flatten[KroneckerProduct[e1v, w2s["B"] . RgInv]]|>;
+(* hwB (Section 11) is numeric; RootReduce first, since surd sums that cancel to 0 make N[] hit meprec *)
+hwProj[c_, μ_] := hwB[μ] . N[RootReduce /@ c, 60];
+rk321 = MatrixRank[Table[hwProj[c, {3, 2, 1}], {c, Values[hwCov]}], Tolerance -> 10^-20];
+checks["[3,2,1] HW projections of {site1 (1,1), site1 (2,1), site2 A, site2 B} span both copies (rank 2)"] = rk321 == 2;
+Grid[Join[{Join[{"μ  (|projection onto HW_μ|)"}, Keys[hwCov]]}, Table[Join[{μ}, Table[With[{p = hwProj[c, μ]}, If[Norm[p] < 10^-25, 0, N[Norm[p], 5]]], {c, Values[hwCov]}]], {μ, hwSecs}],
+   {{"identity at θ2 (A, B)", checks["<w_A|R^-1 = e1^T t2^{L=1,θ2}[g^-T z g^T](θ2+h)"], checks["<w_B|R^-1 = e1^T (t2 t1)^{L=1,θ2}[g^-T z g^T]"], "[3,2,1] rank", rk321}}], Frame -> All, Alignment -> Left]
+
+===== cell 85 (kind 1) =====
+### 12c. Does site 2 fix the octet mixing and the singlet scale? (redo of 11h)
+Data, all allowed by the overlap formula, for many vacuum twists $w$ (twist $z=e^{\varepsilon\varphi}$ fixed):
+- **site1:** $\langle\Omega|T_{(1,1)}(\theta_1-2h)$, $\langle\Omega|T_{(2,1)}(\theta_1-2h)$ (the 11h family, via `wCov`);
+- **site2:** $\langle\Omega|t_2(\theta_2+h)$, $\langle\Omega|t_2(\theta_2+h)t_1(\theta_2-h)$, built from the exact two-site $t$'s at each $\varepsilon$ so that the one-point coefficient fits of Result 12 are not used;
+- **Ω:** the bare $\langle\Omega(w)|$ (the overlap formula itself; 11h did not include it);
+- always the normalization row $\langle x_0|$.
+
+The cell also checks that the site-2 covectors are site-2 local at these new twists. Then it reports the rank per weight space for each family and reconstructs $\Psi_B$ from site1 + site2 at $\varepsilon=10^{-6},10^{-9}$, giving the error in $\Psi_B$ and in its HW part, scale included.
+
+===== cell 86 (kind 2) =====
+covFam[eps_, φv_, ωs_, pr_] := Module[{zE = N[Exp[eps φv], pr], tt, A2, B2},
+   tt = Table[tPoly[DiagonalMatrix[zE], a], {a, 2}];
+   A2 = tt[[2]] /. u -> thN[[2]] + hN; B2 = A2 . (tt[[1]] /. u -> thN[[2]] - hN);
+   Table[With[{rr = rOmF[zE, N[Exp[eps ωv], pr]]}, With[{Om1 = UnitVector[d1, 1] . nexpS[rr[[1]] EeN[1, 2]] . nexpS[rr[[2]] EeN[1, 3]] . nexpS[rr[[3]] EeN[2, 3]]}, With[{Om2 = Flatten[KroneckerProduct[Om1, Om1]]},
+        <|"site1" -> wCov[eps, φv, ωv, pr], "Ω" -> {Om2}, "site2" -> {Om2 . A2, Om2 . B2},
+         "loc2" -> Max[Table[With[{m = Transpose[Partition[c, d1]]}, Max[Abs[m - Outer[Times, m . Om1/(Om1 . Om1), Om1]]]/Max[Abs[c]]], {c, {Om2 . A2, Om2 . B2}}]]|>]]], {ωv, ωs}]];
+famList = {{"site1"}, {"site1", "Ω"}, {"site2"}, {"site2", "Ω"}, {"site1", "site2"}, {"site1", "site2", "Ω"}};
+rankFam[eps_, φv_, ωs_, pr_] := Module[{cf = covFam[eps, φv, ωs, pr], x0 = x0Cov[eps, φv, pr]},
+   {Max[cf[[All, "loc2"]]], Table[With[{sec = Flatten[Position[wtBasis, μ]]}, Join[{μ, Length[sec]}, Table[rankTol[Append[Flatten[Table[Flatten[c /@ f, 1], {c, cf}], 1][[All, sec]], x0[[sec]]], 10^-40][[1]], {f, famList}]]], {μ, hwSecs}]}];
+(* data b = M.ψ stand in for the Q side, T^B(u)<Ω|Ψ_B> (exact identity); full rank => Ψ_B fixed, normalization from the x0 row *)
+reconF[eps_, φv_, ωs_, pr_, fam_] := Module[{sts = psiStates[eps, φv, pr], cf = covFam[eps, φv, ωs, pr], x0 = x0Cov[eps, φv, pr]},
+  Table[With[{μ = st["mu"], sec = Flatten[Position[wtBasis, st["mu"]]]}, Module[{M, ψt, ψr, hb},
+      M = Append[Flatten[Table[Flatten[c /@ fam, 1], {c, cf}], 1][[All, sec]], x0[[sec]]]; ψt = st["ψ"][[sec]];
+      ψr = LeastSquares[M, M . ψt]; hb = hwB[μ][[All, sec]];
+      {μ, Length[sec], rankTol[M, 10^-80][[1]], N[Norm[ψr - ψt]/Norm[ψt], 3], N[Norm[hb . ψr - hb . ψt]/Norm[hb . ψt], 3]}]], {st, sts}]];
+{rkTime, {loc2Max, rk12}} = AbsoluteTiming[rankFam[1/3, φT, ωMany[[1 ;; 12]], 80]];
+rc12 = Table[{e, Sequence @@ #} & /@ reconF[e, φT, ωMany[[1 ;; 12]], 200, {"site1", "site2"}], {e, {10^-6, 10^-9}}];
+checks["site-2 covectors stay site-2 local at ε=1/3, 12 w (max rel. resid)"] = loc2Max;
+checks["site1+site2: full rank in every HW weight space (ε=1/3)"] = AllTrue[rk12, #[[7]] == #[[2]] &];
+checks["site1+site2 reconstruction of all 6 HW-limit states (max rel. error, ε=1e-6,1e-9)"] = Max[Flatten[Table[r[[{5, 6}]], {r, Flatten[rc12, 1]}]]];
+Grid[Join[{{"site-2 locality at ε=1/3 (max rel. resid)", ScientificForm[N[loc2Max, 3], 3], "", "", "", "", "", ""}},
+   {Join[{"μ", "dim"}, StringRiffle[#, "+"] & /@ famList]}, rk12, {{"time (s)", rkTime}},
+   {{"ε", "μ", "dim", "rank site1+site2 (+x0)", "rel. error Ψ", "rel. error HW part"}}, Flatten[rc12, 1]], Frame -> All, Alignment -> Left]
+
+===== cell 87 (kind 1) =====
+**Result 12b–12c.**
+- **Undoing $R$ on site 2 (12b, exact at P1).** The 10b identity holds at $\theta_2$: $\langle w|R^{-1}=e_1^T\,T^{L=1,\theta_2}[g^{-T}\mathrm{diag}(z)g^T]$ for both $w_A$ and $w_B$.
+- **HW reach at finite twist.** $e_1^T\otimes w_AR^{-1}$ reaches $[4,2,0]$, $[4,1,1]$ and $[3,2,1]$, but not $[3,3,0]$ or the singlet. This is the mirror of site-1 $(1,1)$, which misses $[4,1,1]$ and the singlet. $e_1^T\otimes w_BR^{-1}$ reaches every irrep.
+- **Locality at other twists.** At $\varepsilon=1/3$, for 12 random $w$, the two-site covectors $\langle\Omega|t_2(\theta_2+h)$ and $\langle\Omega|t_2(\theta_2+h)t_1(\theta_2-h)$ are site-2 local to $10^{-74}$ (80 digits).
+- **Rank per weight space, with $x_0$** ($\varepsilon=1/3$, 12 values of $w$):
+
+| sector | dim | site1 (= 11h) | site1+Ω | site2 | site2+Ω | **site1+site2** |
+|---|---|---|---|---|---|---|
+| [4,2,0] | 1 | 1 | 1 | 1 | 1 | 1 |
+| [4,1,1], [3,3,0] | 2 | 2 | 2 | 2 | 2 | 2 |
+| (3,2,1) | 6 | 5 | 6 | 5 | 6 | **6** |
+| (2,2,2) | 10 | 7 | 9 | 7 | 9 | **10** |
+
+- **Reconstruction.** With site1 + site2 (and $\langle x_0|\Psi\rangle=1$), all six HW-limit states are reconstructed **exactly**, including both octets and the singlet scale. The relative error in $\Psi_B$ and in its HW part is 0 for every state except the singlet, where it is $8\times10^{-123}$ ($\varepsilon=10^{-6}$) and $2\times10^{-77}$ ($\varepsilon=10^{-9}$). So the 11h null vector $n(\varepsilon)$ is lifted, and the octet mixing is fixed with no $\kappa$.
+- **Side remark.** 11h never used the bare overlap $\langle\Omega(w)|\Psi\rangle$ as a row. Adding it to the site-1 family alone already fixes the octet (rank 6), but not the singlet (9 of 10). Site 2 is needed for the singlet scale.
+
+**Audit update (Section 13).** The site-2 scalar coefficient is corrected to $6h^4\chi_3f$ and all four localization identities are now proved symbolically. The full determinant-Q-to-reconstruction chain passes at two chain points with only three bra twists.
+
+===== cell 88 (kind 1) =====
+## Summary of checks
+Boolean checks must be `True`. Numeric checks are residuals and must be below $10^{-25}$; the "not a zero test" entries are sizes and must be large.
+
+**Expected FAILs.** These rows are records of what does *not* work, not bugs:
+- the two R_B and row-choice checks from the single combined bracket (Section 6);
+- the per-ladder "pair-choice" check: the pairs $\{(1,3),(2,1),(3,2)\}$ are not equivalent to the L=1 pairs $\{(1,3),(1,2),(2,3)\}$.
+
+**Main result (Sections 7–9).** In the diagonal frame, for all 64 eigenstates of the twist-$z$ chain,
+$$\Omega^{(2)}\cdot\Psi_B=\frac{\Omega^{(2)}\cdot y_0^{(2)}}{c_0\,\langle x_0|y_0\rangle^2\,\Phi_Q^{\rm vac}(y_0)}\;\frac{\det N[B,\mathrm{vac}]}{\Psi_Q^B(x_0)}\;\langle x_0^{(2)}|\Psi_B\rangle .$$
+It holds to 50 digits. The ingredients:
+- $x_0^{(2)}$, $y_0^{(2)}$, $\Psi_Q$ and $\Phi_Q$ are products over sites;
+- $\langle x_0|y_0\rangle^2=(9h^4)^2$;
+- $\det N$ has rows $(i,j;k)$ for $(i,j)\in\{(1,3),(1,2),(2,3)\}$ and columns of type $\times\,x^{\beta-1}$.
+
+**Preferred brackets (Section 9).** Both brackets go around all poles, with insertions $1$ and $e^{2\pi iu/h}$. Then
+$$c_0=\frac{(\varepsilon_1-\varepsilon_2)^3}{16h^{12}\,\theta_{12}^3(\theta_{12}^2-h^2)^4(\theta_{12}^2-4h^2)^2},\qquad \varepsilon_s=e^{2\pi i\theta_s/h},\quad \theta_{12}=\theta_1-\theta_2.$$
+This is $(\varepsilon_2-\varepsilon_1)^3$ times the per-ladder $c_0$ of Section 7, as expected from the row mixing, and it was confirmed by direct computation.
+
+===== cell 89 (kind 2) =====
+passQ[k_, v_] := Which[v === True, True, v === False, False, StringContainsQ[k, "not a zero test"], v > 10^-20, StringContainsQ[k, "min gap"], v > 10^-10, NumericQ[v], v < 10^-25, True, False];
+Grid[Prepend[KeyValueMap[{#1, If[NumericQ[#2], ScientificForm[N[#2, 3], 3], #2], If[passQ[#1, #2], Style["PASS", Darker[Green]], Style["FAIL", Red]]} &, checks], {"check", "value", ""}], Frame -> All, Alignment -> Left]
+
+===== cell 90 (kind 1) =====
+## 13. Independent audit and Q-driven reconstruction (2026-10-01)
+
+This section needs only cells 3–14. It does not use the earlier reconstruction's right-hand side $M\Psi$. First audit the one-point localization fits, then reconstruct from Baxter polynomials and determinant overlaps. Reference eigenvectors are used only to supply the spectral input and to check the answer.
+
+### 13a. Dimensionless symbolic localization audit
+
+Set $h=1,\theta_2=0,\theta_1=d$; homogeneity restores arbitrary $h,\theta$. Keep the original rational twists for this first symbolic test. Matrix-shaped covectors avoid forming symbolic $64\times64$ products.
+
+===== cell 91 (kind 2) =====
+ClearAll[auditL, auditTRow, auditTrow, auditOne, auditOneT];
+auditL[i_,j_,x_,hh_] := KroneckerDelta[i,j] x IdentityMatrix[d1] + hh Ee[i,j];
+auditTRow[m_,i_,j_,x_,hh_,ths_,zz_] := Expand[zz[[j]] Sum[Transpose[auditL[i,k,x-ths[[1]],hh]] . m . auditL[k,j,x-ths[[2]],hh],{k,3}]];
+auditTrow[m_,a_,x_,hh_,ths_,zz_] := Expand[Sum[Signature[pp] Fold[auditTRow[#1,Sequence@@#2,hh,ths,zz]&,m,Table[{pp[[k]],ii[[k]],x-(k-1) hh},{k,a}]],{ii,Subsets[Range[3],{a}]},{pp,Permutations[ii]}]];
+auditOne[i_,j_,x_,hh_,zz_] := auditL[i,j,x,hh] zz[[j]];
+auditOneT[a_,x_,hh_,zz_] := Expand[Sum[Signature[pp] Dot@@Table[auditOne[pp[[k]],ii[[k]],x-(k-1) hh,hh,zz],{k,a}],{ii,Subsets[Range[3],{a}]},{pp,Permutations[ii]}]];
+auditM = Outer[Times,Ω1,Ω1];
+auditA = auditTrow[auditM,2,1,1,{dd,0},zN];
+auditB = auditTrow[auditA,1,-1,1,{dd,0},zN];
+auditWA = Expand[Ω1 . auditOneT[2,1,1,zN]];
+auditWB = Expand[auditWA . auditOneT[1,-1,1,zN]];
+auditAB = First[Solve[Thread[Flatten[auditB-Outer[Times,Ω1,aa auditWB+bb Ω1]]==0],{aa,bb}]];
+auditSymbolic = {zeroQ[auditA-(dd-1)(dd-3)Outer[Times,Ω1,auditWA]], Factor[{aa,bb}/.auditAB]};
+Grid[{{"twists", {zN,wN}},{"site-2 A, symbolic d",auditSymbolic[[1]]},{"site-2 B coefficients {alpha,beta}, h=1",auditSymbolic[[2]]},{"old beta at h=1",3(Times@@zN)(dd-1)(dd-3)}},Frame->All,Alignment->Left]
+
+===== cell 92 (kind 1) =====
+**Correction found.** The symbolic result is $\beta=6h^4\chi_3(\theta_{12}-h)(\theta_{12}-3h)$, not $3h^3\chi_3(\theta_{12}-h)(\theta_{12}-3h)$. They coincide at the old test point $h=1/2$. The coefficient has spectral degree six, as required for $t_2t_1$. The next cell validates all four localizing rows at independent rational points and compares the row-action implementation with the original matrices.
+
+===== cell 93 (kind 2) =====
+auditR[zz_,ww_] := Module[{rr},rr={(ww[[1]]-zz[[1]])/(ww[[1]]-zz[[2]]),((ww[[1]]-zz[[1]])(-ww[[2]]+zz[[1]])(zz[[2]]-zz[[3]]))/((zz[[1]]-zz[[2]])(ww[[1]]-zz[[3]])(ww[[2]]-zz[[3]])),((ww[[1]]-zz[[2]])(-ww[[2]]+zz[[2]])(zz[[1]]-zz[[3]]))/((zz[[1]]-zz[[2]])(ww[[1]]-zz[[3]])(-ww[[2]]+zz[[3]]))}; MatrixExp[rr[[1]] Ee[1,2]] . MatrixExp[rr[[2]] Ee[1,3]] . MatrixExp[rr[[3]] Ee[2,3]]];
+auditLocal[hh_,ths_,zz_,ww_] := Module[{om,m,dt,f,a,b,s11,s21,sA,sB,ww11,ww21,wwA,wwB,actual,pred},
+om=UnitVector[d1,1] . auditR[zz,ww]; m=Outer[Times,om,om];dt=ths[[1]]-ths[[2]]; f=(dt-hh)(dt-3 hh);
+s11=auditTrow[m,2,ths[[1]]-2 hh,hh,ths,zz];
+s21=auditTrow[s11,1,ths[[1]]-hh,hh,ths,zz]-(Times@@zz)Product[ths[[1]]-hh-ths[[s]]+2 hh,{s,2}]Product[ths[[1]]-hh-ths[[s]],{s,2}]Product[ths[[1]]-3 hh-ths[[s]],{s,2}] m;
+sA=auditTrow[m,2,ths[[2]]+hh,hh,ths,zz];sB=auditTrow[sA,1,ths[[2]]-hh,hh,ths,zz];
+ww11=om . auditOneT[2,-2 hh,hh,zz];ww21=ww11 . auditOneT[1,-hh,hh,zz]-om . auditOneT[3,-hh,hh,zz];
+wwA=om . auditOneT[2,hh,hh,zz];wwB=wwA . auditOneT[1,-hh,hh,zz];
+actual={s11,s21,sA,sB}; pred={f Outer[Times,ww11,om],(dt-hh)f Outer[Times,ww21,om],f Outer[Times,om,wwA],Outer[Times,om,-(dt-hh)f wwB+6 hh^4(Times@@zz)f om]};
+{And@@MapThread[zeroQ[#1-#2]&,{actual,pred}],zeroQ[sB-Outer[Times,om,-(dt-hh)f wwB+3 hh^3(Times@@zz)f om]]}];
+auditPoints={{hN,thN,zN,wN},{1/3,{1/5,-4/9},{7/5,9/7,4/5},{11/5,5/3,3/7}},{2/5,{-2/3,3/8},{5/3,8/7,3/4},{9/4,7/4,2/5}}};
+auditLocalResults=auditLocal@@@auditPoints;
+auditRowCross=And@@Table[zeroQ[Flatten[auditTrow[auditM,a,2/11,hN,thN,zN]]-Ω2 . (tZ[[a]]/.u->2/11)],{a,2}];
+Grid[Join[{{"point","all four corrected identities (exact)","old beta holds?"}},MapThread[{#1[[1;;2]],Sequence@@#2}&,{auditPoints,auditLocalResults}],{{"row action vs original t1,t2",auditRowCross}}],Frame->All,Alignment->Left]
+
+===== cell 94 (kind 1) =====
+### 13b. Normalize the determinant by the top state
+
+Write $D_B(w)=\det N[B,\mathrm{vac}_w]$, $P_B=\Psi_Q^B(x_0)$, and $B_0=e_1\otimes e_1$. The state-independent prefactor cancels:
+$$
+\frac{\langle\Omega(w)|\Psi_B\rangle}{\langle x_0|\Psi_B\rangle}
+=\frac{D_B(w)P_{B_0}}{D_{B_0}(w)P_B(z_2-z_1)^2}.
+$$
+This uses $\langle\Omega|B_0\rangle=1$ and $\langle x_0|B_0\rangle=(z_2-z_1)^2$. Per-ladder and exponential-insertion brackets give the same ratio. No $y_0,c_0,\Phi_Q$ construction is needed.
+
+The helpers below take spectral/Q input only. The transfer eigenvalues are recovered from the dual Baxter equations, so the reconstruction's right-hand side can be made entirely from Q-polynomials.
+
+===== cell 95 (kind 2) =====
+(* Independent helpers: fixed degrees, no Chop, no eigenvector access in auditQOverlap or auditFromQ. *)
+auditNu[hh_,ths_,n_,x_] := Product[x-ths[[s]]+hh Λ[[n]],{s,Length[ths]}];
+auditVac[zz_,hh_,ths_] := Table[Sum[Times@@Table[zz[[ii[[k]]]] auditNu[hh,ths,ii[[k]],u-(k-1)hh],{k,a}],{ii,Subsets[Range[3],{a}]}],{a,3}];
+auditQdet[zz_,hh_,ths_,x_] := (Times@@zz) auditNu[hh,ths,1,x] auditNu[hh,ths,2,x-hh] auditNu[hh,ths,3,x-2 hh];
+auditOp[tt_,q_,zz_,sgn_,hh_,ths_,x_] := If[sgn==1,
+auditNu[hh,ths,3,x] auditNu[hh,ths,3,x-hh] auditNu[hh,ths,3,x-2 hh] zz (q/.X->x+hh)
+-(tt[[1]]/.u->x) auditNu[hh,ths,3,x-hh] auditNu[hh,ths,3,x-2 hh](q/.X->x)
++(tt[[2]]/.u->x) auditNu[hh,ths,3,x-2 hh](q/.X->x-hh)/zz
+-(tt[[3]]/.u->x)(q/.X->x-2 hh)/zz^2,
+auditNu[hh,ths,1,x] auditNu[hh,ths,1,x+hh] auditNu[hh,ths,1,x+2 hh] zz(q/.X->x-hh)
+-(tt[[1]]/.u->x) auditNu[hh,ths,1,x+hh] auditNu[hh,ths,1,x+2 hh](q/.X->x)
++(tt[[2]]/.u->x+hh) auditNu[hh,ths,1,x+2 hh](q/.X->x+hh)/zz
+-(tt[[3]]/.u->x+2 hh)(q/.X->x+2 hh)/zz^2];
+auditMonicQ[tt_,zz_,sgn_,deg_,hh_,ths_,pr_] := Module[{vars,eq,ar,sol},
+If[deg==0,Return[1]];vars=Array[aq,deg]; eq=CoefficientList[Expand[auditOp[tt,X^deg+Sum[vars[[k+1]]X^k,{k,0,deg-1}],zz,sgn,hh,ths,X]],X];
+ar=CoefficientArrays[eq,vars];sol=LeastSquares[N[Normal[ar[[2]]],pr],-N[Normal[ar[[1]]],pr]];
+Expand[X^deg+Sum[sol[[k+1]]X^k,{k,0,deg-1}]]];
+auditFromQ[qq_,zz_,hh_,ths_,pr_] := Module[{vars,tt,eq,ar,sol},vars=Array[at,8];tt={Sum[vars[[k+1]]u^k,{k,0,2}],Sum[vars[[k+4]]u^k,{k,0,4}],auditQdet[zz,hh,ths,u]};
+eq=Flatten[Table[CoefficientList[Expand[auditOp[tt,qq[[j]],zz[[j]],1,hh,ths,X]],X],{j,3}]];
+ar=CoefficientArrays[eq,vars];sol=LeastSquares[N[Normal[ar[[2]]],pr],-N[Normal[ar[[1]]],pr]];tt/.Thread[vars->sol]];
+auditDet[qq_,qdv_,zz_,ww_,hh_,ths_,pr_] := Module[{pp,pair,up,dn,xp,wt,row},
+pp=Flatten[Table[{s,n},{s,2},{n,0,2}],1];pair={{1,3},{1,2},{2,3}};
+xp[p_]:=ths[[p[[1]]]]-hh p[[2]];wt[p_]:=1/Product[xp[p]-xp[q],{q,DeleteCases[pp,p]}];
+up[j_,x_]:=zz[[j]]^(x/hh)(qq[[j]]/.X->x);dn[i_,x_]:=ww[[i]]^(-x/hh)(qdv[[i]]/.X->x);
+row[{i_,j_},s_]:=Sum[With[{x=xp[p]},N[wt[p],pr]{-up[j,x]dn[i,x],-x up[j,x]dn[i,x],up[j,x]dn[i,x+hh],x up[j,x]dn[i,x+hh],up[j,x-hh]dn[i,x],x up[j,x-hh]dn[i,x]}],{p,Select[pp,First[#]==s&]}];
+Det[Flatten[Table[row[ij,s],{s,2},{ij,pair}],1]]];
+auditPsiQ[qq_,zz_,hh_,ths_] := Module[{up},up[j_,x_]:=zz[[j]]^(x/hh)(qq[[j]]/.X->x);
+Product[With[{x=ths[[s]]},(up[2,x-2 hh]up[3,x-3 hh]-up[3,x-2 hh]up[2,x-3 hh])up[3,x-hh]],{s,2}]];
+auditQOverlap[qq_,qqtop_,qdv_,zz_,ww_,hh_,ths_,pr_] := auditDet[qq,qdv,zz,ww,hh,ths,pr]auditPsiQ[qqtop,zz,hh,ths]/(auditDet[qqtop,qdv,zz,ww,hh,ths,pr]auditPsiQ[qq,zz,hh,ths](zz[[2]]-zz[[1]])^2);
+auditTop=First@First@Position[muS,{4,2,0}];
+auditVacCheck=zeroQ[auditVac[wN,hN,thN]-tauVac];
+auditQFixed=Table[auditQOverlap[qu[[b]],qu[[auditTop]],qdVac,N[zN,prec],N[wN,prec],hN,thN,prec],{b,nS}];
+Grid[{{"vacuum transfer formula exact",auditVacCheck},{"Q-ratio overlaps computed",Length[auditQFixed]},{"top-state reference",auditTop}},Frame->All,Alignment->Left]
+
+===== cell 96 (kind 2) =====
+auditExp[a_] := IdentityMatrix[Length[a]]+Sum[MatrixPower[a,k]/k!,{k,1,4}];
+auditX0[zz_] := Module[{rs,ppinv,pminv,dinv,x},
+rs=rsSol/.Thread[zs->zz];
+ppinv=auditExp[-((zz[[1]]+zz[[2]])/(zz[[1]]zz[[2]]))Ee[2,3]] . auditExp[(1/(zz[[1]]zz[[2]]))Ee[1,3]] . auditExp[-(1/zz[[1]])Ee[1,2]];
+pminv=auditExp[-(r[3]/.rs)Ee[2,1]] . auditExp[-(r[2]/.rs)Ee[3,1]] . auditExp[-(r[1]/.rs)Ee[3,2]];
+dinv=DiagonalMatrix[Table[Product[(s[k]/.rs)^(-J0[k][p]),{k,3}],{p,ps[{Λ}]}]];
+x=UnitVector[d1,1] . ppinv . dinv . pminv; Flatten[Outer[Times,x,x]]];
+auditRows[zz_,ww_,hh_,ths_] := Module[{om,dt,f,v11,v21,vA,vB},
+om=UnitVector[d1,1] . auditR[zz,ww];dt=ths[[1]]-ths[[2]];f=(dt-hh)(dt-3 hh);
+v11=om . auditOneT[2,-2 hh,hh,zz];v21=v11 . auditOneT[1,-hh,hh,zz]-om . auditOneT[3,-hh,hh,zz];
+vA=om . auditOneT[2,hh,hh,zz];vB=vA . auditOneT[1,-hh,hh,zz];
+{f Flatten[Outer[Times,v11,om]],(dt-hh)f Flatten[Outer[Times,v21,om]],f Flatten[Outer[Times,om,vA]],Flatten[Outer[Times,om,-(dt-hh)f vB+6 hh^4(Times@@zz)f om]]}];
+auditEigenRows[tt_,hh_,ths_] := With[{x=ths[[1]]-2 hh,y=ths[[2]]+hh},
+{tt[[2]]/.u->x,((tt[[2]]/.u->x)(tt[[1]]/.u->x+hh)-(tt[[3]]/.u->x+hh)),tt[[2]]/.u->y,(tt[[2]]/.u->y)(tt[[1]]/.u->y-2 hh)}];
+auditWList={wN,{11/5,5/3,3/7},{9/4,7/4,2/5},{13/7,12/5,5/9},{7/3,8/5,1/3},{19/8,13/6,5/11}};
+auditXFixed=auditX0[N[zN,prec]];
+auditOverlapTruth=Table[(N[Ω2,prec] . vecS[[b]])/(auditXFixed . vecS[[b]]),{b,nS}];
+auditOverlapAbs=Max[Abs[auditQFixed-auditOverlapTruth]];
+auditOverlapRel=Max[Abs[auditQFixed/auditOverlapTruth-1]];
+auditFullRows=Flatten[Table[auditRows[N[zN,prec],N[ww,prec],hN,thN],{ww,auditWList}],1];
+auditRanks=Table[With[{m=Append[Take[auditFullRows,4 k],auditXFixed]}, {k,Table[With[{sec=Flatten[Position[wtBasis,mu]]},MatrixRank[N[Map[#/Norm[#]&,m[[All,sec]]],40],Tolerance->10^-25]],{mu,{{4,2,0},{4,1,1},{3,3,0},{3,2,1},{2,2,2}}}]}],{k,1,6}];
+auditTFixed=Table[auditFromQ[qu[[b]],N[zN,prec],hN,thN,prec],{b,nS}];
+auditTResidual=Max[Flatten[Table[Abs[CoefficientList[Expand[auditTFixed[[b,a]]-vals[[b,a]]],u]],{b,nS},{a,2}]]];
+Grid[Join[{{"quantity","value"}},{{"Q-overlap absolute residual (64 states)",ScientificForm[auditOverlapAbs,4]},{"Q-overlap relative residual (64 states)",ScientificForm[auditOverlapRel,4]},{"t1,t2 recovered from dual Q, coefficient residual",ScientificForm[auditTResidual,4]}},{{"number of w","ranks in 420,411,330,321,222"}},auditRanks],Frame->All,Alignment->Left]
+
+===== cell 97 (kind 2) =====
+(* Q-driven reconstruction at the baseline twist. Only the final comparison reads vecS. *)
+auditUseW=Take[auditWList,3];
+auditVacQs=Table[Table[auditMonicQ[N[auditVac[ww,hN,thN],prec],N[ww[[j]],prec],-1,2(j-1),hN,thN,prec],{j,3}],{ww,auditUseW}];
+auditOAll=Table[Table[auditQOverlap[qu[[b]],qu[[auditTop]],auditVacQs[[k]],N[zN,prec],N[auditUseW[[k]],prec],hN,thN,prec],{k,Length[auditUseW]}],{b,nS}];
+auditMAll=Append[Take[auditFullRows,4 Length[auditUseW]],auditXFixed];
+auditReconstructed=Table[Module[{sec,m,rhs,sc},
+sec=Flatten[Position[wtBasis,muS[[b]]]];m=auditMAll[[All,sec]];
+rhs=Append[Flatten[Table[auditOAll[[b,k]]auditEigenRows[auditTFixed[[b]],hN,thN],{k,Length[auditUseW]}]],1];
+sc=Norm/@m;Normal[SparseArray[Thread[sec->LeastSquares[MapThread[#1/#2&,{m,sc}],rhs/sc]],{d2}]]],{b,nS}];
+auditReconstructionRel=Table[With[{truth=vecS[[b]]/(auditXFixed . vecS[[b]])},Norm[SetPrecision[auditReconstructed[[b]]-truth,prec]]/Norm[truth]],{b,nS}];
+Grid[{{"number of states reconstructed",Length[auditReconstructed]},{"w values",Length[auditUseW]},{"working precision",prec},{"max relative vector error",ScientificForm[Max[auditReconstructionRel],4]},{"minimum retained vector precision",Min[Precision/@Flatten[auditReconstructed]]}},Frame->All,Alignment->Left]
+
+===== cell 98 (kind 1) =====
+### 13c. The full Q-to-CG chain at small twist
+
+Use three fixed, reproducible bra directions. The monic Baxter solver uses the known degree and overdetermined coefficient equations, with no precision-cutting Chop. Transfer eigenvalues in the reconstruction are recovered from dual Q's. Exact local covectors use only 8-dimensional one-site matrices and the independently checked factors. The 64-dimensional eigensystem supplies test spectral data and reference vectors; it is not the reconstruction right-hand side.
+
+===== cell 99 (kind 2) =====
+ClearAll[auditBasisPoly];
+(* Exact transfer coefficient templates; only twists are numerical in the small-epsilon run. *)
+auditMono[x_,hh_,ths_] := auditMono[x,hh,ths] = Table[Sum[KroneckerProduct[auditL[i,k,x-ths[[1]],hh],auditL[k,j,x-ths[[2]],hh]],{k,3}],{i,3},{j,3}];
+auditMinor[ii_,a_,x_,hh_,ths_] := Sum[Signature[pp] Dot@@Table[auditMono[x-(k-1)hh,hh,ths][[pp[[k]],ii[[k]]]],{k,a}],{pp,Permutations[ii]}];
+auditBasisPoly[hh_,ths_,a_,ii_] := auditBasisPoly[hh,ths,a,ii] = Module[{nodes=Range[0,2 a]/3+1/7},
+Expand[Sum[auditMinor[ii,a,nodes[[k]],hh,ths] Product[(u-nodes[[l]])/(nodes[[k]]-nodes[[l]]),{l,DeleteCases[Range[Length[nodes]],k]}],{k,Length[nodes]}]]];
+auditTransfer[zz_,hh_,ths_,pr_] := Table[Sum[(Times@@zz[[ii]])N[auditBasisPoly[hh,ths,a,ii],pr],{ii,Subsets[Range[3],{a}]}],{a,2}];
+auditHWSectors={{4,2,0},{4,1,1},{3,3,0},{3,2,1},{2,2,2}};
+auditHW[mu_] := auditHW[mu] = Module[{sec=Flatten[Position[wtBasis,mu]],ns}, ns=NullSpace[Join[(E1[1,2]+E2[1,2])[[All,sec]],(E1[2,3]+E2[2,3])[[All,sec]]]];RootReduce[Orthogonalize[ns,Simplify[#1 . #2]&]]];
+(* Avoid Norm interpreting tracked approximate zeros as exact zeros in diagnostics. *)
+auditNorm[v_,pr_] := Norm[SetPrecision[v,pr]];
+auditSmall[hh_,ths_,eps_,pr_,ph_,oms_] := Module[{zz=N[Exp[eps ph],pr],wws=N[Exp[eps #],pr]&/@oms,tm,x0,mat,topq,vqs,sts={},out={},qres=0,tres=0,overres=0,sec,es,pick,rr,qq,tq,tt,psi,km,ov,refov,rhs,sc,m,reco,errAbs,errRel,hwerr,hb,hbr},
+tm=auditTransfer[zz,hh,ths,pr]; x0=auditX0[zz];
+mat=Append[Flatten[Table[auditRows[zz,ww,hh,ths],{ww,wws}],1],x0];
+topq=Table[auditMonicQ[N[auditVac[zz,hh,ths],pr],zz[[j]],1,{4,2,0}[[j]],hh,ths,pr],{j,3}];
+vqs=Table[Table[auditMonicQ[N[auditVac[ww,hh,ths],pr],ww[[j]],-1,2(j-1),hh,ths,pr],{j,3}],{ww,wws}];
+Do[sec=Flatten[Position[wtBasis,mu]];hb=N[auditHW[mu],pr];
+es=Eigensystem[((tm[[1]]+N[Pi,pr]tm[[2]])/.u->3/7)[[sec,sec]]];
+rr=Table[Norm[Join[(E1[1,2]+E2[1,2])[[All,sec]] . v,(E1[2,3]+E2[2,3])[[All,sec]] . v]]/Norm[v],{v,es[[2]]}];
+pick=SortBy[Ordering[rr,Length[hb]],Re[es[[1,#]]]&];
+Do[psi=es[[2,k]]/(x0[[sec]] . es[[2,k]]);km=First@Ordering[Abs[psi],-1];
+tt=Append[Table[Expand[(tm[[a,sec,sec]] . psi)[[km]]/psi[[km]]],{a,2}],auditQdet[zz,hh,ths,u]];
+qq=Table[auditMonicQ[tt,zz[[j]],1,mu[[j]],hh,ths,pr],{j,3}];
+tq=auditFromQ[qq,zz,hh,ths,pr];
+tres=Max[tres,Max[Abs[SetPrecision[Flatten[CoefficientList[Expand[tq-tt],u]],pr]]]];
+qres=Max[qres,Max[Table[Norm[SetPrecision[CoefficientList[Expand[auditOp[tt,qq[[j]],zz[[j]],1,hh,ths,X]],X],pr]]/Max[1,Norm[CoefficientList[qq[[j]],X]]],{j,3}]]];
+ov=MapThread[auditQOverlap[qq,topq,#1,zz,#2,hh,ths,pr]&,{vqs,wws}];
+refov=Table[With[{om=UnitVector[d1,1] . auditR[zz,ww]},Flatten[Outer[Times,om,om]][[sec]] . psi],{ww,wws}];
+overres=Max[overres,Max[Abs[SetPrecision[ov/refov-1,pr]]]];
+rhs=Append[Flatten[Table[ov[[j]]auditEigenRows[tq,hh,ths],{j,Length[wws]}]],1];
+m=mat[[All,sec]];sc=Norm/@m;reco=LeastSquares[MapThread[#1/#2&,{m,sc}],rhs/sc];
+errAbs=auditNorm[reco-psi,pr];errRel=errAbs/Norm[psi];hwerr=auditNorm[hb .(reco-psi),pr]/Norm[hb . psi];
+AppendTo[out,{mu,Length[sec],errAbs,errRel,hwerr,rr[[k]],Min[Precision/@reco]}];
+AppendTo[sts,<|"mu"->mu,"eigenvalue"->es[[1,k]],"q"->qq,"tQ"->tq,"reconstructed"->reco,"reference"->psi,"sector"->sec|>],
+{k,pick}],{mu,auditHWSectors}];
+<|"epsilon"->eps,"precision"->pr,"h"->hh,"theta"->ths,"table"->out,"states"->sts,"BaxterResidualScaled"->qres,"transferCoefficientResidual"->tres,"overlapRelativeResidual"->overres|>];
+auditPhi={1/3,-2/7,5/11}; auditOmegas={{2/5,1/7,-3/4},{-3/5,2/3,5/7},{4/7,-5/6,2/9}};
+auditSmall1=auditSmall[1/2,{2/7,-3/5},10^-6,240,auditPhi,auditOmegas];
+Grid[Join[{{"mu","weight dimension","absolute vector residual","relative vector residual","relative HW residual","HW residual of finite-twist target","retained precision"}},(Join[Take[#,2],N[Drop[#,2],5]]&/@auditSmall1["table"]),{{"Q overlap max relative residual",N[auditSmall1["overlapRelativeResidual"],5]},{"Q-to-transfer coefficient residual",N[auditSmall1["transferCoefficientResidual"],5]},{"scaled Baxter residual",N[auditSmall1["BaxterResidualScaled"],5]}}],Frame->All,Alignment->Left]
+
+===== cell 100 (kind 2) =====
+auditSmall2=auditSmall[1/3,{1/5,-4/9},10^-6,240,auditPhi,auditOmegas];
+auditSmall3=auditSmall[1/2,{2/7,-3/5},10^-9,300,auditPhi,auditOmegas];
+auditSmall4=auditSmall[1/3,{1/5,-4/9},10^-9,300,{-2/5,3/8,7/11},auditOmegas];
+auditSmallLow=auditSmall[1/2,{2/7,-3/5},10^-6,160,auditPhi,auditOmegas];
+auditRuns={auditSmall1,auditSmall2,auditSmall3,auditSmall4,auditSmallLow};
+auditRunSummary=Table[{r["h"],r["epsilon"],r["precision"],Length[r["states"]],Max[r["table"][[All,3]]],Max[r["table"][[All,4]]],r["overlapRelativeResidual"],r["transferCoefficientResidual"]}, {r,auditRuns}];
+auditPrecisionAgreement=Max[MapThread[auditNorm[#1["reconstructed"]-#2["reconstructed"],160]/Norm[#1["reconstructed"]]&,{auditSmall1["states"],auditSmallLow["states"]}]];
+auditTemplateCheck=And@@Table[zeroQ[Expand[Sum[(Times@@zN[[ii]])auditBasisPoly[hN,thN,a,ii],{ii,Subsets[Range[3],{a}]}]-tZ[[a]]]],{a,2}];
+Grid[Join[{{"h","epsilon","working digits","states","max absolute vector error","max relative vector error","Q overlap relative error","Q-to-transfer coefficient error"}},(Join[Take[#,4],N[Drop[#,4],4]]&/@auditRunSummary),{{"160 vs 240 digit reconstructed vectors",N[auditPrecisionAgreement,4]},{"transfer templates agree with original matrices",auditTemplateCheck}}],Frame->All,Alignment->Left]
+
+===== cell 101 (kind 1) =====
+### 13d. Symbolic proof of the four localization factors
+
+Undo the common upper-triangular physical rotation. The bra becomes $e_1^T\otimes e_1^T$ and the auxiliary twist becomes $g^{-T}\operatorname{diag}(z)g^T$, which is lower triangular. Prove the identities for an arbitrary lower-triangular twist with six independent entries, at $h=1,\theta=(d,0)$. Translation and homogeneity then restore arbitrary $h,\theta_1,\theta_2$. This checks the entire polynomial identity, including the corrected $6h^4\chi_3 f$ term.
+
+===== cell 102 (kind 2) =====
+auditTRowM[m_,i_,j_,x_,hh_,ths_,gg_] := Expand[Sum[gg[[l,j]] Transpose[auditL[i,k,x-ths[[1]],hh]] . m . auditL[k,l,x-ths[[2]],hh],{k,3},{l,3}]];
+auditTrowM[m_,a_,x_,hh_,ths_,gg_] := Expand[Sum[Signature[pp] Fold[auditTRowM[#1,Sequence@@#2,hh,ths,gg]&,m,Table[{pp[[k]],ii[[k]],x-(k-1)hh},{k,a}]],{ii,Subsets[Range[3],{a}]},{pp,Permutations[ii]}]];
+auditOneM[i_,j_,x_,gg_] := Sum[auditL[i,l,x,1]gg[[l,j]],{l,3}];
+auditOneTM[a_,x_,gg_] := Expand[Sum[Signature[pp] Dot@@Table[auditOneM[pp[[k]],ii[[k]],x-k+1,gg],{k,a}],{ii,Subsets[Range[3],{a}]},{pp,Permutations[ii]}]];
+auditLower={{za,0,0},{ab,zb,0},{ac,bc,zc}};
+auditSeed=UnitVector[d1,1];auditSeed2=Outer[Times,auditSeed,auditSeed];
+auditSym11=auditTrowM[auditSeed2,2,dd-2,1,{dd,0},auditLower];
+auditSym21=auditTrowM[auditSym11,1,dd-1,1,{dd,0},auditLower]-auditQdet[{za,zb,zc},1,{dd,0},dd-1]auditSeed2;
+auditSymA=auditTrowM[auditSeed2,2,1,1,{dd,0},auditLower];
+auditSymB=auditTrowM[auditSymA,1,-1,1,{dd,0},auditLower];
+auditSymV11=auditSeed . auditOneTM[2,-2,auditLower];
+auditSymV21=auditSymV11 . auditOneTM[1,-1,auditLower]-auditSeed . auditOneTM[3,-1,auditLower];
+auditSymVA=auditSeed . auditOneTM[2,1,auditLower];
+auditSymVB=auditSymVA . auditOneTM[1,-1,auditLower];
+auditSymResiduals=Expand/@{auditSym11-(dd-1)(dd-3)Outer[Times,auditSymV11,auditSeed],
+auditSym21-(dd-1)^2(dd-3)Outer[Times,auditSymV21,auditSeed],
+auditSymA-(dd-1)(dd-3)Outer[Times,auditSeed,auditSymVA],
+auditSymB-Outer[Times,auditSeed,-(dd-1)^2(dd-3)auditSymVB+6 za zb zc(dd-1)(dd-3)auditSeed]};
+auditSymbolicProof=(Union[Flatten[Simplify[#]]] === {0}&)/@auditSymResiduals;
+Grid[Prepend[Transpose[{{"site1 (1,1)","site1 (2,1)","site2 A","site2 B"},auditSymbolicProof}],{"generic lower-triangular twist; symbolic d","identically zero residual"}],Frame->All,Alignment->Left]
+
+===== cell 103 (kind 1) =====
+### 13e. Exact site-2 highest-weight overlaps and the minimum number of bra twists
+
+The table uses the exact orthonormal HW basis returned by the two raising-operator null spaces. The auxiliary twist is $Z'=g^{-T}\operatorname{diag}(z)g^T=\left(\begin{smallmatrix}z_a&0&0\\a&z_b&0\\b&c&z_c\end{smallmatrix}\right)$. Entries are the **one-site** site-2 rows after undoing the rotation; they do not include spectator factors. These are covector overlaps, not permission to discard finite-twist corrections to the eigenstate.
+
+For the four operator rows and one $x_0$ normalization, two bra twists give at most nine equations in the ten-dimensional $(2,2,2)$ weight space. Three are therefore necessary for unrestricted finite-twist reconstruction. An exact rank calculation below proves they suffice generically.
+
+===== cell 104 (kind 2) =====
+auditSite2HW=Table[With[{sec=Flatten[Position[wtBasis,mu]],hb=auditHW[mu]},
+{mu,Factor[hh^2 Flatten[Outer[Times,auditSeed,auditSymVA]][[sec]] . Transpose[hb]],Factor[hh^3 Flatten[Outer[Times,auditSeed,auditSymVB]][[sec]] . Transpose[hb]]}],{mu,auditHWSectors}];
+auditExactRows=Append[Flatten[Table[auditRows[zN,ww,hN,thN],{ww,Take[auditWList,3]}],1],auditX0[zN]];
+auditExactRanks=Table[With[{sec=Flatten[Position[wtBasis,mu]]},{mu,Length[sec],MatrixRank[RootReduce[auditExactRows[[All,sec]]]]}],{mu,auditHWSectors}];
+Grid[Join[{{"mu","site2 A HW components","site2 B HW components"}},auditSite2HW,{{"mu","weight dimension","exact rank with 3 w + x0"}},auditExactRanks],Frame->All,Alignment->Left]
+
+===== cell 105 (kind 1) =====
+### 13f. Verify the actual untwisted CG limit
+
+Normalize the Q-reconstructed vectors and compare with the untwisted transfer eigenbasis inside each exact highest-weight space. This tests the CG limit separately from finite-twist reconstruction. Both octet copies are matched by their overlaps, not by a potentially changing eigenvalue sort.
+
+===== cell 106 (kind 2) =====
+auditLimitError[run_] := Module[{hh=run["h"],ths=run["theta"],tm,ans},
+tm=auditTransfer[{1,1,1},hh,ths,120];
+ans=Table[With[{sec=st["sector"],hb=N[auditHW[st["mu"]],120]},Module[{es,targets,v,ov,ix,phase},
+es=Eigensystem[hb . (((tm[[1]]+N[Pi,120]tm[[2]])/.u->3/7)[[sec,sec]]) . Transpose[hb]];
+targets=Normalize[# . hb]&/@es[[2]];v=Normalize[st["reconstructed"]];ov=Conjugate[targets] . v;ix=First@Ordering[Abs[ov],-1];phase=Conjugate[ov[[ix]]]/Abs[ov[[ix]]];
+{st["mu"],ix,auditNorm[phase v-targets[[ix]],100],Abs[ov[[ix]]]}]],{st,run["states"]}];ans];
+auditLimit1=auditLimitError[auditSmall1];auditLimit2=auditLimitError[auditSmall2];auditLimit3=auditLimitError[auditSmall3];auditLimit4=auditLimitError[auditSmall4];
+auditLimitRows=MapThread[Join[Take[#1,2],{N[#1[[3]],5],N[#2[[3]],5],If[TrueQ[#2[[3]]==0],"exact",N[#1[[3]]/#2[[3]],5]]}]&,{auditLimit1,auditLimit3}];
+Grid[Join[{{"mu","untwisted branch","CG direction error at 1e-6","at 1e-9","error ratio"}},auditLimitRows,{{"P2, alternate phi, max CG direction error at 1e-9",N[Max[auditLimit4[[All,3]]],5]}}],Frame->All,Alignment->Left]
+
+===== cell 107 (kind 1) =====
+### 13g. Audit ledger and scope
+
+**Established here:** all four localization factors are symbolic identities; the corrected site-2 scalar coefficient is $6h^4\chi_3f$; three bra twists are generically sufficient and minimal for these four rows plus $x_0$; the reference-state determinant ratio eliminates $y_0$ and $c_0$; the complete Q-driven reconstruction passes at two chain points and two small-$\varepsilon$ scales. The reconstructed normalized states converge to all six untwisted HW eigenstates, with $O(\varepsilon)$ direction error.
+
+**Scope:** this validates the map from spectral Q-data to CG vectors. Test Q-data are obtained by solving Baxter equations using transfer eigenvalues from the test eigensystem. It is not an independent Q-only solver for the spectrum. No assertion is made that substituting a leading HW vector into a finite-twist overlap is valid; reconstruction is performed before taking the limit.
+
+**Rerun:** cells 3–14, then 90–108. Sections 5–12 are not dependencies. The historical summary in cells 88–89 includes old rejected approaches; the following ledger is the pass/fail summary for this audit.
+
+===== cell 108 (kind 2) =====
+auditLedger={
+{"generic triangular-twist localization","symbolic identity",And@@auditSymbolicProof},
+{"three independent rational localization tests","independently validated",And@@auditLocalResults[[All,1]]},
+{"original row-action implementation","exact",auditRowCross},
+{"transfer coefficient templates","exact",auditTemplateCheck},
+{"vacuum transfer formula","exact",auditVacCheck},
+{"three w give full HW-weight ranks","exact",And@@(#[[2]]==#[[3]]&/@auditExactRanks)},
+{"all 64 baseline Q overlaps","60 digits; threshold 1e-40",TrueQ[auditOverlapRel<10^-40]},
+{"all 64 baseline Q reconstructions","60 digits; threshold 1e-40",TrueQ[Max[auditReconstructionRel]<10^-40]},
+{"six branches in each small-twist run","independently validated",And@@(Length[#["states"]]==6&/@auditRuns)},
+{"small-twist relative reconstruction error","160-300 digits; threshold 1e-70",TrueQ[Max[auditRunSummary[[All,6]]]<10^-70]},
+{"Q-only overlap residuals","160-300 digits; threshold 1e-80",TrueQ[Max[auditRunSummary[[All,7]]]<10^-80]},
+{"Q-to-transfer coefficient residuals","160-300 digits; threshold 1e-100",TrueQ[Max[auditRunSummary[[All,8]]]<10^-100]},
+{"160 vs 240 digit stability","relative threshold 1e-70",TrueQ[auditPrecisionAgreement<10^-70]},
+{"untwisted CG limit at epsilon 1e-9","direction error below 3e-10",TrueQ[Max[Join[auditLimit3[[All,3]],auditLimit4[[All,3]]]]<3 10^-10]},
+{"CG convergence is first order","non-top branches; error ratio 1000",Max[Abs[auditLimit1[[2;;,3]]/auditLimit3[[2;;,3]]/1000-1]]<10^-5}
+};
+Grid[Join[{{"check","evidence / tolerance","PASS"}},auditLedger,{{"passed",Count[auditLedger[[All,3]],True],Length[auditLedger]}}],Frame->All,Alignment->Left]
+
+===== cell 109 (kind 1) =====
+## 14. Independent spectral input from polynomial Baxter equations
+
+Section 13 supplied test Q's from physical transfer eigenvalues. Here the unknowns are the monic dual Q coefficients and the remaining transfer eigenvalue coefficients. The leading transfer coefficients are fixed by the twist, inhomogeneities and weight. Solve the polynomial Baxter identities directly, without a physical-space eigensystem or initial guesses from one. Start at h=1, theta=(5/2,0), z=(2,3,5); compare with the physical model only after solving.
+
+===== cell 110 (kind 2) =====
+(* Spectral equations contain no physical generators, transfer matrices, or eigenvectors. *)
+specAnsatz[mu_,zz_,hh_,ths_] := Module[{qv,tv,qq,tt,eq},
+qv=Flatten[Table[Table[sq[j,k],{k,0,mu[[j]]-1}],{j,3}]];tv={st[1],st[2],st[3],st[4]};
+qq=Table[X^mu[[j]]+Sum[sq[j,k]X^k,{k,0,mu[[j]]-1}],{j,3}];
+tt={Total[zz]u^2+(hh zz . mu-Total[ths]Total[zz])u+st[1],
+Total[Times@@zz[[#]]&/@Subsets[Range[3],{2}]]u^4+
+Sum[(Times@@zz[[ii]])(hh(Total[mu[[ii]]]-2)-2 Total[ths]),{ii,Subsets[Range[3],{2}]}]u^3+
+st[2]u^2+st[3]u+st[4],auditQdet[zz,hh,ths,u]};
+eq=DeleteCases[Union[Flatten[Table[CoefficientList[Expand[auditOp[tt,qq[[j]],zz[[j]],1,hh,ths,X]],X],{j,3}]]],0];
+<|"mu"->mu,"q"->qq,"t"->tt,"variables"->Join[tv,qv],"equations"->eq|>];
+specPoint={1,{5/2,0},{2,3,5}};
+specSystems=Association@Table[ToString[mu,InputForm]->specAnsatz[mu,specPoint[[3]],specPoint[[1]],specPoint[[2]]],{mu,auditHWSectors}];
+specSolutions=<||>;specTimes=<||>;
+Do[With[{key=ToString[mu,InputForm]},Module[{sys=specSystems[key],tim,res},
+{tim,res}=AbsoluteTiming[TimeConstrained[NSolve[Thread[specSystems[key]["equations"]==0],specSystems[key]["variables"],WorkingPrecision->80],40,$Aborted]];
+specSolutions[key]=res;specTimes[key]=tim;Print["Baxter-only sector ",mu,": ",If[ListQ[res],Length[res],"time limit"]," solutions in ",N[tim,3]," s."]]],{mu,auditHWSectors}];
+Grid[Prepend[Table[{key,Length[specSystems[key]["variables"]],Length[specSystems[key]["equations"]],If[ListQ[specSolutions[key]],Length[specSolutions[key]],specSolutions[key]],specTimes[key]},{key,Keys[specSolutions]}],{"weight","unknowns","equations","solutions","seconds"}],Frame->All,Alignment->Left]
+
+===== cell 111 (kind 1) =====
+### 14b. Reconstruct the complete spectrum without diagonalization
+
+Solve all 19 weight sectors from the Baxter polynomial equations. Reconstruct all states using the determinant ratio and three bra twists. Only after this do we build the physical transfer matrices, to test the eigenvector equations coefficient by coefficient. No physical eigensystem is used at any stage of this test.
+
+===== cell 112 (kind 2) =====
+(* Independent polynomial Newton refinement, seeded only by NSolve's Baxter roots. *)
+specNewton[sys_,sr_,pr_] := Module[{vars=sys["variables"],eq=sys["equations"],jac,xx,vs,jv,ev,rs,delta,wp=pr+80},
+jac=Transpose[Table[D[eq,var],{var,vars}]];xx=SetPrecision[vars/.sr,wp];
+Do[vs=Map[Max[1,Abs[#]]&,xx];jv=N[jac/.Thread[vars->xx],wp];ev=N[eq/.Thread[vars->xx],wp];
+rs=Map[Max[1,Max[Abs[#]]]&,jv . DiagonalMatrix[vs]];
+delta=LeastSquares[MapThread[#1/#2&,{jv . DiagonalMatrix[vs],rs}],-ev/rs];
+xx=SetPrecision[xx+vs delta,wp],{4}];
+Thread[vars->N[xx,pr]]];
+specSolve[mu_,zz_,hh_,ths_,pr_] := Module[{sys=specAnsatz[mu,zz,hh,ths],sol},
+sol=NSolve[Thread[sys["equations"]==0],sys["variables"],WorkingPrecision->pr];
+sol=specNewton[sys,#,pr]&/@sol;
+Table[<|"mu"->mu,"q"->(sys["q"]/.sr),"t"->(sys["t"]/.sr),"BaxterResidual"->Max[Abs[N[sys["equations"]/.Rationalize[sr,0],pr]]]|>,{sr,sol}]];
+specReconstruct[data_,zz0_,hh_,ths_,ws0_,pr_] := Module[{zz=N[zz0,pr],ws=N[ws0,pr],topq,vqs,x0,mat},
+topq=Table[auditMonicQ[N[auditVac[zz,hh,ths],pr],zz[[j]],1,{4,2,0}[[j]],hh,ths,pr],{j,3}];
+vqs=Table[Table[auditMonicQ[N[auditVac[ww,hh,ths],pr],ww[[j]],-1,2(j-1),hh,ths,pr],{j,3}],{ww,ws}];
+x0=auditX0[zz];mat=Append[Flatten[Table[auditRows[zz,ww,hh,ths],{ww,ws}],1],x0];
+Table[Module[{sec=Flatten[Position[wtBasis,stt["mu"]]],ov,rhs,m,sc,v},
+ov=MapThread[auditQOverlap[stt["q"],topq,#1,zz,#2,hh,ths,pr]&,{vqs,ws}];
+rhs=Append[Flatten[Table[ov[[j]]auditEigenRows[stt["t"],hh,ths],{j,Length[ws]}]],1];
+m=mat[[All,sec]];sc=Norm/@m;v=LeastSquares[MapThread[#1/#2&,{m,sc}],rhs/sc];
+Join[stt,<|"sector"->sec,"reconstructed"->v,"normalized"->Normalize[v],"dataResidual"->auditNorm[m . v-rhs,pr]/Max[1,Norm[rhs]]|>]],{stt,data}]];
+(* Only this validation function builds two-site transfer matrices; no Eigensystem is needed. *)
+specValidate[reco_,zz_,hh_,ths_,pr_] := Module[{tm=auditTransfer[zz,hh,ths,pr+40],x0=auditX0[N[zz,pr+40]]},
+Table[With[{sec=stt["sector"],v=Rationalize[stt["reconstructed"],0],tt=Rationalize[stt["t"],0]},
+{stt["mu"],stt["BaxterResidual"],stt["dataResidual"],Max[Table[auditNorm[Flatten[CoefficientList[Expand[tm[[a,sec,sec]] . v-tt[[a]]v],u]],pr]/Norm[v],{a,2}]],Abs[x0[[sec]] . v-1]}],{stt,reco}]];
+specWeights=Union[wtBasis];
+{specAllTime,specAllData}=AbsoluteTiming[Flatten[Table[specSolve[mu,specPoint[[3]],specPoint[[1]],specPoint[[2]],100],{mu,specWeights}],1]];
+specAllVectors=specReconstruct[specAllData,specPoint[[3]],specPoint[[1]],specPoint[[2]],{{7/3,11/4,4/7},{9/4,13/5,3/7},{12/5,17/6,5/8}},100];
+specAllValidation=specValidate[specAllVectors,specPoint[[3]],specPoint[[1]],specPoint[[2]],100];
+specAllCounts=Table[{mu,Count[specAllData,a_/;a["mu"]==mu],Count[wtBasis,mu]},{mu,specWeights}];
+Grid[Join[{{"weight","Baxter solutions","physical weight dimension"}},specAllCounts,{{"total states",Length[specAllData]},{"spectral solve time (s)",specAllTime},{"max Baxter equation residual",N[Max[specAllValidation[[All,2]]],5]},{"max reconstruction data residual",N[Max[specAllValidation[[All,3]]],5]},{"max transfer eigenvector residual / vector norm",N[Max[specAllValidation[[All,4]]],5]},{"max normalization residual",N[Max[specAllValidation[[All,5]]],5]}}],Frame->All,Alignment->Left]
+
+===== cell 113 (kind 1) =====
+### 14c. Baxter-only small-twist CG reconstruction
+
+Use the exact rational path z=1+epsilon phi and w=1+epsilon omega, so polynomial elimination operates over exact rational coefficients. Its first-order twist direction is the same as the exponential path. Solve every state in the five HW-weight sectors, reconstruct them, then select the six branches whose raising-operator residual tends to zero. Physical transfer matrices and the untwisted HW eigensystem appear only in the subsequent verification.
+
+===== cell 114 (kind 2) =====
+specNear[hh_,ths_,eps_,pr_,ph_] := Module[{zz=1+eps ph,wws=(1+eps #)&/@auditOmegas,data,reco,valid,hw,hwres,solvetime},
+{solvetime,data}=AbsoluteTiming[Flatten[Table[specSolve[mu,zz,hh,ths,pr],{mu,auditHWSectors}],1]];
+reco=specReconstruct[data,zz,hh,ths,wws,pr];valid=specValidate[reco,zz,hh,ths,pr];
+hwres[stt_]:=With[{sec=stt["sector"],v=stt["normalized"]},Norm[Join[(E1[1,2]+E2[1,2])[[All,sec]] . v,(E1[2,3]+E2[2,3])[[All,sec]] . v]]];
+hw=Flatten[Table[Take[SortBy[Select[reco,#["mu"]==mu&],hwres],Length[auditHW[mu]]],{mu,auditHWSectors}],1];
+<|"h"->hh,"theta"->ths,"epsilon"->eps,"precision"->pr,"spectralTime"->solvetime,"allStates"->reco,"states"->hw,"validation"->valid,"hwResidual"->Max[hwres/@hw]|>];
+specNear1=specNear[1/2,{2/7,-3/5},10^-6,200,auditPhi];
+specNear2=specNear[1/2,{2/7,-3/5},10^-9,280,auditPhi];
+specNear3=specNear[1/3,{1/5,-4/9},10^-9,280,{-2/5,3/8,7/11}];
+specNearLimits=auditLimitError/@{specNear1,specNear2,specNear3};
+specNearSummary=MapThread[{#1["h"],#1["epsilon"],#1["precision"],Length[#1["allStates"]],Length[#1["states"]],Max[#1["validation"][[All,2]]],Max[#1["validation"][[All,4]]],Max[#2[[All,3]]],#1["spectralTime"]}&,{{specNear1,specNear2,specNear3},specNearLimits}];
+Grid[Join[{{"h","epsilon","digits","Baxter states","HW branches","Baxter coefficient residual","physical eigenvector residual","CG-limit direction error","spectral solve seconds"}},(Join[Take[#,5],N[Drop[#,5],5]]&/@specNearSummary)],Frame->All,Alignment->Left]

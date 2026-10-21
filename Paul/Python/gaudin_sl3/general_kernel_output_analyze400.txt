@@ -1,0 +1,7 @@
+
+====================================================================================================
+ANALYZE: polynomial laws, exchange rule, t = 0 factorisation, expansion ranks, top-state sum rule, block theorem
+====================================================================================================
+Lambda (4, 0, 0): pairs 15, a-degree 8, a'-degree 8 (2l1-l2 = 8), t-degree 12, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 12, ranks of Theta_n [1, 2, 4, 8, 13, 15, 15, 15, 15, 12, 10, 8, 6], top-state sum rule worst dev 0
+Lambda (4, 4, 0): pairs 5, a-degree 4, a'-degree 4 (2l1-l2 = 4), t-degree 7, exchange rule True, Theta(t=0) = theta(a) x theta(a') exactly True, rank Theta(generic) 5, ranks of Theta_n [1, 2, 3, 4, 5, 4, 3, 2], top-state sum rule worst dev 0
+block theorem: Theta^(4, 4, 0) == N (a a')^(-l2) Theta^(4, 0, 0) restricted to non-forced pairs, N = 1 : True

@@ -1,0 +1,99 @@
+# Q-functions, Wronskians, $\det N$ {#sec:q}
+
+**Punchline.** Every eigenstate is a triple of polynomial-times-exponential solutions of one third-order ODE (the oper built from $S_1,S_2,S_3$); the ODE has local exponents $\{0,\lambda_2+1,\lambda_1+2\}$ at each $\theta_s$, which forces linear relations among the jets of the solutions and fixes the Frobenius constant $\kappa_s=a_s/c_2$. The overlap of two states is detected by a $6\times6$ determinant of residue brackets whose columns come from a Lagrange identity.
+
+## The oper and its Q-functions {#sec:oper}
+
+The dual oper is
+$$
+\bigl(\partial^3-S_1\partial^2+S_2\partial-S_3\bigr)P=0,\qquad P^j=e^{\zeta_ju}\,p_j(u),\ \ \deg p_j=\mu_j,\ p_j\ \text{monic},\label{eq:oper}
+$$
+where $\mu$ is the weight of the state. For each of the three exponentials there is exactly one polynomial solution (kernel dimension 1), and $\sum\deg=|\mu|$. The XXX dual Baxter equation becomes exactly this oper at order $h^3$, with $Q^j=z_j^{u/h}q^j\to e^{\zeta_ju}p_j$.^[Agents P1 (`RESULTS-Qside.md` Q1; all 64 states of $[2,1,0]$, ODE residual $3.9\cdot10^{-55}$) and P2 (`RESULTS-xxx-limit.md` X4, sympy, symbolic $h$).]
+
+The direct Q-functions are a little subtler, and this was our first surprise. One expects them to solve the formal adjoint of (\ref{eq:oper}). They do not: the plain adjoint has \emph{no} solutions of the form $e^{-\zeta u}\times$polynomial. What is true is that $\psi_i=\Pi^{-p}Q_i$ solves the adjoint, with $\Pi(u)=(u-\theta_1)(u-\theta_2)$,
+$$
+Q_i=e^{-\zeta_iu}q_i,\quad \deg q_i=2\lambda_1-\mu_i,\qquad \text{direct oper}=\Pi^{p}\circ(\text{formal adjoint})\circ\Pi^{-p},\ \ p=\lambda_1-\lambda_3.\label{eq:direct}
+$$
+The XXX Baxter equation at order $h^3$ gives the adjoint acting on $Q_i/\nu^2$, which is the same statement for the adjoint. For $[2,1,0]$ the gauge power $2$ is forced by the degrees; for $[3,1,0]$ and $[3,2,0]$ a scan over $p=0,\dots,5$ gives no solution at $p=0,1,2$, exactly the right degrees $6-\mu_i$ at $p=3$ in all 36 sectors, and degrees raised by $2(p-3)$ above. All our data have $\lambda_3=0$, so $p=\lambda_1-\lambda_3$ and $p=\lambda_1$ are not separated by data; the exponent argument below selects the former.^[Agents P1 (gauge $2$, `RESULTS-Qside.md` section 0), P3 (`RESULTS-Qside-310.md` Q1, gauge scan table), P4 (`RESULTS-Qside-320.md` Q1), P2 (X4: the direct Baxter equation is $\nu^2\circ$adjoint$\circ\nu^{-2}$ exactly). Wrong-sign and wrong-gauge controls have no solutions to degree 8--10.] Table~\ref{tab:degrees} lists the degrees for the three representations at the top state.
+
+@table tab:degrees | Degrees of the Q-functions. $\mu$ is the state weight; dual degrees are $\mu_j$, direct degrees $2\lambda_1-\mu_i$. The vacuum has $\mu=(2\lambda_1,2\lambda_2,0)$. Sources: P1, P3, P4 (all 64/225/225 states: degrees as stated in every sector, kernel dimension 1).
+@size small
+@cols lcccc
+| $\Lambda$ | sectors | dual $\deg p_j$ (vacuum) | direct $\deg q_i$ (vacuum) | gauge power $p$ |
+|---|---|---|---|---|
+| $[2,1,0]$ | 19 | $(4,2,0)$ | $(0,2,4)$ | 2 |
+| $[3,1,0]$ | 36 | $(6,2,0)$ | $(0,4,6)$ | 3 |
+| $[3,2,0]$ | 36 | $(6,4,0)$ | $(0,2,6)$ | 3 |
+@endtable
+
+## Local exponents and Frobenius constants {#sec:frob}
+
+At $\theta_s$ the operator has a regular singular point with indicial polynomial $e(e-1)(e-2)-|\Lambda|e(e-1)+c_2e$, whose roots are
+$$
+\{0,\ \lambda_2+1,\ \lambda_1+2\}\quad\text{(dual)},\qquad\{0,\ \lambda_1-\lambda_2+1,\ \lambda_1+2\}\quad\text{(direct)}.\label{eq:exponents}
+$$
+This was confirmed in $450/450$ (state, site) cases for each of $[2,1,0]$, $[3,1,0]$, $[3,2,0]$ from the vanishing orders of the span of the three solutions; for $[3,2,0]$ the direct exponents are $\{0,2,5\}$, not $\{0,3,5\}$, and duality swaps the two patterns.^[Agents P3, P4. The duality $[3,2,0]\cong[3,1,0]^*\otimes\det^3$ exchanges $\lambda_2+1\leftrightarrow\lambda_1-\lambda_2+1$ between dual and direct opers.] A consequence of the first exponent being $\lambda_2+1$ is that the jets of the dual Q-functions at $\theta_s$ obey linear relations. For every solution $P$ of the oper,
+$$
+P'(\theta_s)=\kappa_sP(\theta_s),\qquad \kappa_s=\frac{a_s}{c_2},\label{eq:kappa}
+$$
+with the same $\kappa_s$ for all three solutions, because the coefficient of $(u-\theta_s)^{-2}$ in $(\partial^3-S_1\partial^2+S_2\partial-S_3)P$ reads $\bigl(I(1)c_1-a_sc_0\bigr)$ with $I(1)=c_2$, and no regular part enters. For $\lambda_2\ge2$ the second derivative is also tied, $P''(\theta_s)=\kappa_{2,s}P(\theta_s)$ with $\kappa_{2,s}=(a_s^2-H_sa_s+8b_s)/24$ for $[3,2,0]$. We checked the relations on all states and both sites, to $2.7\cdot10^{-78}$ ($\kappa$, adjoint, 80 digits) and $3.1\cdot10^{-57}$, $3.6\cdot10^{-57}$ ($\kappa,\kappa_2$, $[3,2,0]$).^[Agents D1 (`RESULTS-twovac-fit.md` F1(b): the constant is $a_s/3$ and involves neither $H_s$ nor the regular parts; the spec's expectation that it would was refuted) and P4 (`RESULTS-Qside-320.md` Q1).]
+
+The jet matrix $[P^{j(k)}(\theta_s)/k!]_{j,k}$ then has rank $1$ for $k\le\lambda_2$ and rank $2$ up to $k=\lambda_1+1$, jumping to $3$ at order $\lambda_1+2$ (measured for $[3,2,0]$: $3\times3$ rank 1, $3\times5$ rank 2, $3\times6$ rank 3, in $450/450$ cases). Hence the Plücker coordinates
+$$
+p_{kl}=P^{2(k)}P^{3(l)}-P^{3(k)}P^{2(l)}\ \ \text{(at }\theta_s)\label{eq:pluecker}
+$$
+vanish for $0\le k<l\le\lambda_2$ ("forced" pairs), and each non-forced $p_{kl}$ is the $2\times2$ determinant $D_s=c_2d_3-c_3d_2$ of the two non-trivial solutions' leading components times a universal function of the Frobenius coefficients. For the adjoint $p_{01}=W(\theta_s)=0$ to $1.9\cdot10^{-78}$.
+
+## The no-log conditions: Gaudin's Bethe equations {#sec:nolog}
+
+The three polynomial solutions must be free of logarithms at $\theta_s$. Resonances between the exponents $0,\lambda_2+1,\lambda_1+2$ give three independent conditions per site, six in all, on the six numbers $(H_s,a_s,b_s)$. For $\lambda_2=1$ the first of them is
+$$
+a_s^2-H_sa_s+c_2\,b_s=0,\qquad\text{i.e.}\qquad b_s=\frac{a_s(H_s-a_s)}{c_2},\label{eq:nolog1}
+$$
+($c_2=3$ for the adjoint, $4$ for $[3,1,0]$); the other two involve the Taylor coefficients of the regular parts of $S_1,S_2,S_3$ and therefore the other site's data. For $[3,2,0]$ the first condition arises at order $x^3$ and is cubic. All hold on every state and both sites to $10^{-56}$ to $10^{-60}$ ($[3,1,0]$: $1.3\cdot10^{-58}$; $[3,2,0]$: $3\cdot10^{-59}$).^[Agents P3 (`RESULTS-Qside-310.md` Q1, `frobenius_polys()` in `qside_310.py`) and P4 (`RESULTS-Qside-320.md` Q1); for the adjoint, U1 (`RESULTS-untwisted-Q.md` T2, to $10^{-148}$ at 200 digits) and U2. The number of solutions of the system versus the number of states was not counted.] We call these the Gaudin Bethe equations in Laurent-data form. In the untwisted model they are what constrains the eigenvalue data in the Casimir language of Section~\ref{sec:casimir}, and perturbatively in $\epsilon$ they determine the series of Section~\ref{sec:series} (except in two degenerate cases).
+
+## Wronskians and quantum Weyl {#sec:wronsk}
+
+The three solutions are linked by Wronskian (QQ) relations with a representation-dependent power of $\Pi$:
+$$
+\begin{aligned}
+P^aP^{b\prime}-P^bP^{a\prime}&=(\zeta_b-\zeta_a)\,e^{\sigma u}\,\Pi^{\lambda_2}\,Q_c,\\
+Q_aQ_b'-Q_bQ_a'&=(\zeta_a-\zeta_b)\,e^{-\sigma u}\,\Pi^{\lambda_1-\lambda_2}\,P^c,
+\end{aligned}\label{eq:QQ}
+$$
+for $(a,b,c)$ a permutation of $(1,2,3)$ and monic $p_j,q_i$, so that the constants are exactly $\zeta_b-\zeta_a$ and $\zeta_a-\zeta_b$. The triple Wronskian is $W=\det[P,P',P'']=\prod_{i<j}(\zeta_j-\zeta_i)\,e^{\sigma u}\,\Pi^{|\Lambda|}$, state-independent. Relative remainders of the polynomial divisions are $\le10^{-48}$ to $10^{-54}$ on all states.^[Agents P1 (adjoint, $F=\Pi$ both sides), P3 ($[3,1,0]$: direct $F=\Pi^2$, dual $F'=\Pi$), P4 ($[3,2,0]$: direct $F=\Pi$, dual $F'=\Pi^2$); plan tables of rounds 2--3 had the dual power wrong for $[3,2,0]$ and were corrected. The constants and exponential factors are the $h\to0$ images of the XXX $(1/z_b-1/z_a)\chi_3^{-u/h}$ at $z=e^{h\zeta}$.] The rule is $F=\Pi^{\lambda_1-\lambda_2}$ for the direct side, $F'=\Pi^{\lambda_2}=\Pi^{|\Lambda|-p}$ for the dual side. In particular $W(P^2,P^3)(\theta_s)=0$, and $W'(\theta_s)=(\zeta_3-\zeta_2)e^{\sigma\theta_s}\Pi'(\theta_s)Q_1(\theta_s)$ for the adjoint.
+
+The oper itself is recovered from the three solutions by the quantum-Weyl formulas
+$$
+S_1=\frac{\det[P,P',P''']}{W},\qquad S_2=-\frac{\det[P,P''',P'']}{W},\qquad S_3=\frac{\det[P''',P',P'']}{W},\label{eq:weyl}
+$$
+(rows labelled by $j$), verified on all states to $4\cdot10^{-47}$ ($[3,1,0]$) and $1.8\cdot10^{-45}$ ($[3,2,0]$).
+
+## Orthogonality and the $\det N$ overlap {#sec:detN}
+
+The SoV scalar product of an eigenstate with a vacuum is detected by a $6\times6$ determinant, and this is how we first saw the Q-structure on the Gaudin side. The orthogonality relation is not of fixed-coefficient type: it follows from the Lagrange identity $\psi\,D_B[P]-P\,D_B^\dagger[\psi]=C(P,\psi)'$ with $P=P^j$ of ket $B$ and $\psi=\Pi^{-p}Q_i$ of bra $A$. Because $D_B^\dagger\psi=\Delta D^\dagger\psi=-(\Delta S_2\psi)'-\Delta S_3\psi$ (with $\Delta S_k=S_k^B-S_k^A$; $S_1$ and all constants cancel), taking the residue at each $\theta_s$ (the residue of a derivative vanishes) gives
+$$
+\sum_m\Delta_m\,N\bigl[(s,i,j),m\bigr]=0,\qquad \Delta=(\Delta H_1,\Delta H_2,\Delta a_1,\Delta a_2,\Delta b_1,\Delta b_2),\label{eq:lagrange}
+$$
+$$
+N[\cdot,H_t]=-\mathop{\mathrm{Res}}_{\theta_s}\frac{\psi P'}{u-\theta_t},\quad N[\cdot,a_t]=\mathop{\mathrm{Res}}_{\theta_s}\frac{\psi P}{(u-\theta_t)^2},\quad N[\cdot,b_t]=\mathop{\mathrm{Res}}_{\theta_s}\frac{\psi P}{u-\theta_t},\label{eq:Ncols}
+$$
+$t=1,2$. The six non-scalar Laurent data differences $\Delta_m$ are state-dependent, so no fixed linear combination of brackets works; that is why the spec's search for fixed coefficients could never have succeeded. The identity holds to $6\cdot10^{-57}$ ($[2,1,0]$, 300 pairs), $5.5\cdot10^{-56}$ ($[3,1,0]$, 600 pairs), $8.4\cdot10^{-57}$ ($[3,2,0]$, 600 pairs).
+
+The stacked $18\times6$ matrix (rows $(s,i,j)$ for the nine pairs $(i,j)$, two sites) has rank $5$ for generic $A\ne B$, never $6$; it has rank $6$ for $A=B$. The $6\times6$ determinant $\det N$, built on the rows $(s,(i,j))$ with $(i,j)\in\{(1,3),(1,2),(2,3)\}$, vanishes for $A\neq B$ at the same twist ($\le1.6\cdot10^{-65}$ over 100 pairs, $2.2\cdot10^{-62}$ for $[3,2,0]$) and is non-zero for $A=B$ (minimum $2\cdot10^{-37}$). For a vacuum of twist $\omega$, with $R_B(\omega)=\langle\Omega_{\zeta\omega}\otimes\Omega_{\zeta\omega}|\Psi_B\rangle$ for \emph{any} normalisation of $\Psi_B$ and $D_B(\omega)$ the $\det N$ built from the ket's dual $P^j$ and the vacuum's direct $Q_i^{\rm vac,\omega}$,
+$$
+\frac{R_B(\omega)}{R_B(\omega')}=\frac{D_B(\omega)}{D_B(\omega')}\cdot\frac{D_{B_0}(\omega')}{D_{B_0}(\omega)},\qquad B_0=e_1\otimes e_1,\label{eq:ratio}
+$$
+on all 64 ($6.4\cdot10^{-55}$), 225 ($6.8\cdot10^{-52}$) and 225 ($1.6\cdot10^{-51}$) states of $[2,1,0]$, $[3,1,0]$, $[3,2,0]$; the identity is $x_0$-free. In the untwisting regime it holds on the HW branches to $5.4\cdot10^{-67}$, $6.6\cdot10^{-52}$, $2.2\cdot10^{-52}$ at $\epsilon=10^{-6}$ with $|\det N|\sim\epsilon^{12}$ for $(4,2,0),(4,1,1),(3,3,0)$, $\epsilon^{11}$ for the octets and $\epsilon^{10}$ for the singlet in $[2,1,0]$; for $[3,1,0]$, $\epsilon^{16}$ on $(6,2,0),(6,1,1),(5,3,0),(4,4,0)$, $\epsilon^{15}$ on both $(5,2,1)$ and both $(4,3,1)$, $\epsilon^{14}$ on $(4,2,2),(3,3,2)$, and the same pattern transported by duality for $[3,2,0]$. Of the 84 triples of pairs, 72 work, 6 are degenerate (all $i$ or all $j$ equal) and the 6 permutation triples fail; the XXX triple works. Controls (a$_2$ column replaced by a triple pole, swapped orientation, wrong gauge $\Pi^{-2},\Pi^{-4}$) fail at deviation $\sim1$ to $2$.^[Agents P1 (`RESULTS-Qside.md` Q3), P3 (`RESULTS-Qside-310.md` Q3), P4 (`RESULTS-Qside-320.md` Q3).] Why the same six equal-twist columns also close the mixed-twist overlaps, with no $\Delta S_1,\Delta e_2,\Delta e_3$ columns, was observed and not derived.
+
+## The rank-4 rule {#sec:rank4}
+
+About 20\% of different-sector pairs have rank $4$ instead of $5$. The rule is clean: the rank is a function of $\Delta\mu=\mu_B-\mu_A$ only, and **rank $4$ if and only if $\Delta\mu$ has exactly one positive and two negative components** (all $4032$ ordered pairs of $[2,1,0]$: $3318$ of rank 5, $714$ of rank 4; $133$ rank-4 pairs among $600$ for $[3,1,0]$, $130$ for $[3,2,0]$). The mechanism: for every $k$ with $\Delta\mu_k\le-1$ the product $\psi_k^AP_B^k$ is a rational function, its exponentials cancelling, and it decays at infinity, so its residues at $\theta_1$ and $\theta_2$ sum to zero: row$(1,k,k)+$row$(2,k,k)=0$ in all six columns (violation $\le5.4\cdot10^{-58}$). Each site's nine rows span a 3-dimensional space $S_s$, the rank is $6-\dim(S_1\cap S_2)$, each negative component of $\Delta\mu$ adds one vector to $S_1\cap S_2$, and two negative components give rank $4$. The second null vector has no closed form (open, minor).^[Agent P3, `RESULTS-Qside-310.md` section R.]
+
+## Vacuum Q-functions and vacuum Laurent data {#sec:vacQ}
+
+The vacuum covector is itself an eigencovector, with Q-functions of twist $\omega$: direct $Q_i^{\rm vac}=e^{-\omega_iu}q_i$ of degrees $2\lambda_1-\mu^{\rm vac}_i$ as in Table~\ref{tab:degrees}, with $q_1=1$ (the vacuum has $\mu^{\rm vac}=(2\lambda_1,2\lambda_2,0)$). Its Laurent data are known in closed form and independent of $\zeta$:
+$$
+H_s^{\rm vac}=\sum_i(|\Lambda|-\lambda_i)\,\omega_i\ \pm\ \frac{2e_2(\Lambda)}{\theta_{12}},\qquad a_s^{\rm vac}=c_2\,\omega_3,\qquad b_s^{\rm vac}=\omega_3\bigl(H_s^{\rm vac}-|\Lambda|\omega_3\bigr),\label{eq:vacdata}
+$$
+with the upper sign for $s=1$, $e_2(\Lambda)=\lambda_1\lambda_2+\lambda_1\lambda_3+\lambda_2\lambda_3$. The middle statement is where $|\Lambda|$ and $c_2$ were conflated before $[3,2,0]$: $a^{\rm vac}_s=8\omega_3$ for $[3,2,0]$, not $5\omega_3$. The consistency check is $\kappa^{\rm vac}=a^{\rm vac}/c_2=\omega_3$, the exponent of $P^3$. The vacuum eigenvalue functions for the three representations are tabulated in Appendix~\ref{app:conv}.^[Agents P1/P3/P4 (exact eigenvalue functions from the exact rational vacua, `RESULTS-Qside*.md` section 0), W2 task C (closed forms, $10$ representations) and W3/P4 (correction for $[3,2,0]$: $a_s^{\rm vac}=8\omega_3$ verified at $\omega_3=3/5,9/7$: $24/5$, $72/7$).]

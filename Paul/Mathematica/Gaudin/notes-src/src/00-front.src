@@ -1,0 +1,12 @@
+@title Clebsch--Gordan coefficients of $\mathrm{gl}(3)$ from separation of variables in the two-site Gaudin model: working notes on rounds 1--4
+@author Paul Ryan (project notes, compiled from the work of the 2026-10-15/16 agent rounds)
+@date 16 October 2026
+@abstract
+We want the Clebsch--Gordan coefficients of $\mathrm{gl}(3)$ for $V_\Lambda\otimes V_\Lambda$, and we want them as explicit expressions in Q-functions, obtained from separation of variables (SoV) in the two-site rational Gaudin model. These notes collect everything that four rounds of computation (chain side in Wolfram, Q side and kernels in Python, about fourteen agents) have established, and say honestly what has not been established.
+
+The main finding is that the overlap of a CG-complete two-vacua covector family with an eigenstate of the Gaudin Hamiltonians is a Q-number: a bilinear form, with a state-independent kernel, in the Plücker coordinates of the order-$(\lambda_1+1)$ jets at $\theta_1$ and $\theta_2$ of the dual Q-functions. For the adjoint the kernel is a $5\times5$ matrix of polynomials in $(\omega_1,\omega_1',1/\theta_{12})$; it was found as the formal $h\to0$ limit of the XXX ten-product formula, re-found by a direct fit, and derived from first principles from the Gaudin jet basis. Writing the Plücker coordinates through the Frobenius solution at $\theta_s$ shows that the overlap depends only on the Laurent data $(H_s,a_s)$ of the Hamiltonians at the two sites. Taking the untwisting limit $\zeta\to0$ of this expression gives, for all six highest-weight branches of the adjoint, the CG generating function of $\mathrm{adj}\otimes\mathrm{adj}$ as an exact polynomial identity, once the $\epsilon$-series of the Laurent data are known; those series are exact, polynomial in the twist direction, and algebraic with a square root on the $(4,1,1)$ and $(3,3,0)$ branches. For general $\Lambda$ we have closed forms for the one-site kernel, a block theorem reducing every two-row representation to the one-row master kernel, and the master kernel to first order in $1/\theta_{12}$ (all orders for $[l,l,0]$). No per-sector cleaning of the XXX kind is needed anywhere.
+
+What is open: the master kernel beyond first order, the Laurent-data formulas and the limit for $\lambda_1\ge3$, a derivation of the $\epsilon$-series, and the norm of the untwisted eigenvectors from the Q side. Appendices hold all the data (kernels, series, CG tables, untwisted Laurent data) and a reproducibility map.
+@endabstract
+
+@startsec 0

@@ -1,0 +1,104 @@
+# The jet formula: the overlap as a bilinear form in jets of the Q-functions {#sec:jet}
+
+**Punchline.** For any eigenstate, the normalisation-free overlap $c\,\langle\Phi_\infty|\Psi\rangle/\langle x_0^G|\Psi\rangle$ times $M(\theta_1)M(\theta_2)$ equals a bilinear form in the monomials $P^3p_{kl}$ at the two sites, with a state-independent kernel that is unique, rational, and polynomial in $\omega_1,\omega_1',1/\theta_{12}$. The number of monomials per site is $\binom{\lambda_1+2}{2}-\binom{\lambda_2+1}{2}$, namely $5,9,7$ for $[2,1,0],[3,1,0],[3,2,0]$.
+
+## The statement {#sec:jetstate}
+
+We write $Q_{\rm num}(B)=\langle\Phi_\infty|\Psi_B\rangle/\langle x_0^G|\Psi_B\rangle$; it is independent of the normalisation of $\Psi_B$. Equation~(\ref{eq:jet0}) of the overview says, with $m_{kl}=P^3p_{kl}$ evaluated at $\theta_s$ on the dual Q-functions of the state,
+$$
+c\,Q_{\rm num}\,M(\theta_1)M(\theta_2)=\sum_{(kl),(k'l')}K_{(kl),(k'l')}\,m_{kl}(\theta_1)\,m_{k'l'}(\theta_2),\qquad M=P^3\,p_{0,\lambda_2+1}.\label{eq:jet}
+$$
+Several features are worth spelling out.
+
+- *Which pairs.* $(kl)$ runs over $0\le k<l\le\lambda_1+1$ with not both $k,l\le\lambda_2$. The excluded pairs are those forced to vanish by $P^{(k)}=\kappa_{k,s}P$ for $k\le\lambda_2$ (Section~\ref{sec:frob}). Their number is $\binom{\lambda_1+2}2-\binom{\lambda_2+1}2$.
+- *The lone factor is always $P^3$.* The monomials $P^{3(c)}p_{kl}$ with $c>0$ are redundant: $P^{3\prime}p_{0l}=P^3p_{1l}$ and $P^{3\prime\prime}p_{0l}=P^3p_{2l}$ exactly (Frobenius).
+- *$M$ is the first non-forced coordinate.* $M=P^3p_{0,\lambda_2+1}\propto\Pi'(\theta_s)Q_1(\theta_s)(\zeta_3-\zeta_2)e^{\sigma\theta_s}P^3$ by the Wronskian relation (adjoint), and it is the vacuum's own monomial.
+- *Normalisation $c$.* The frame-tie scalar (\ref{eq:cfactor}). $\zeta$ enters the formula only through $c$ and the Q-functions; the kernel is $\zeta$-independent.
+- *The kernel.* Unique (the design matrix of products has full rank), rational, and homogeneous. For the adjoint $K=G/4$ with $G$ the $5\times5$ matrix of Table~\ref{tab:G210}; in terms of the symbols used in the notes there are two equivalent normalisations ($G=4K$, because the vacuum monomial is $M_{\rm vac}=2h^2W'P^3$ per site, and $\Theta=K/(\omega_1\omega_1')^{2\lambda_1-\lambda_2}$ in the companion frame), reconciled in Appendix~\ref{app:conv}.
+
+The formula was found, fitted, and derived. We describe each route.
+
+## The adjoint in detail {#sec:adjoint}
+
+For $[2,1,0]$ the pairs are $(02),(03),(12),(13),(23)$, and since $p_{12}=\kappa p_{02}$, $p_{13}=\kappa p_{03}$ on every state, a basis of five one-site monomials is
+$$
+N=\bigl(P^3p_{02},\ P^{3\prime}p_{02},\ P^3p_{03},\ P^{3\prime}p_{03},\ P^3p_{23}\bigr),\qquad\text{weights }(2,3,3,4,5),\label{eq:N5}
+$$
+(the order of D2; $P^{3\prime}p_{0l}=P^3p_{1l}$). The kernel $G_{ij}(\omega_1,\omega_1',\theta_{12})$ is a $5\times5$ matrix of polynomials listed in full in Table~\ref{tab:G210}; a few entries show the flavour, with $t=1/\theta_{12}$:
+$$
+G_{11}=-4\omega_1^2\omega_1'^2\,(3t^2+t\omega_1-t\omega_1'-\omega_1\omega_1'),\quad G_{33}=\omega_1^2\omega_1'^2,\quad G_{55}=1,\quad G_{45}=-2(2t+\omega_1).\label{eq:Gsome}
+$$
+Properties, all exact: $G$ has rank $5$; it is symmetric under site exchange in the form $G_{ji}(\omega_1,\omega_1',\theta_{12})=G_{ij}(\omega_1',\omega_1,-\theta_{12})$; each entry is homogeneous of degree $10-w_i-w_j$ in $(\omega_1,\omega_1',1/\theta_{12})$ jointly, with $w=(2,3,3,4,5)$ (checked by the scaling $u\to2u$, $\zeta,\omega\to\cdot/2$: the refitted kernel equals $G$ at $(\omega/2,2\theta_{12})$ to $5\cdot10^{-72}$); every entry is a polynomial in $(\omega_1,\omega_1')$ of total degree $\le6$ (no poles, none in $\omega_1-\omega_1'$ or $\omega_1-\zeta_j$) and in $1/\theta_{12}$ of degree $\le4$; it depends on $\theta_1,\theta_2$ only through $\theta_{12}$. Table~\ref{tab:Gtw} gives the same kernel in jets of the twisted functions $e^{-\omega_su}P^j$: in those variables the two vacua interact only through $\delta=\omega_1'-\omega_1$ and $t$, the Gaudin image of the XXX statement that they couple only through $s=a'/a$.
+
+Numerically: on all 64 states the formula holds with ratio exactly $1.0$ and maximal relative deviation $2.8\cdot10^{-56}$ at $(\omega_1,\omega_1')=(5/2,7/4)$, and $2\cdot10^{-56}$ to $3\cdot10^{-55}$ at four further parameter points (other $(\omega_1,\omega_1')$, other $\theta$, other $\zeta$).^[Agent D2, `RESULTS-twovac-limit.md` L3 (60 digits); the constant between left and right sides is exactly $1$, the one predicted from the normalisations, so no leftover scalar exists.]
+
+## Route 1: the $h\to0$ limit of the XXX ten-product formula {#sec:route1}
+
+Agent D2 took the XXX identity for the adjoint $(\infty,\infty)$ family,
+$$
+\frac{\langle\Phi_c|\Psi_c\rangle}{\langle x_0^c|\Psi_c\rangle}M^{(1)}_{\rm vac}M^{(2)}_{\rm vac}=\sum_{c,c'\in\{0,1\}}Q^3(\theta_1-ch)Q^3(\theta_2-c'h)\sum_{k=1}^{10}\mathrm{Bk2}^{(1)}[F_k,G_k]\,\mathrm{Bk2}^{(2)}[F'_k,G'_k],\label{eq:xxx10}
+$$
+with ladder points $\theta_s+mh$, $m=-3,\dots,0$, $2\times2$ bracket determinants $\mathrm{Bk2}$ of the dual Q-functions, $M^{(s)}_{\rm vac}=\mathrm{minor}_s(-3,-2)Q^3(\theta_s-h)$, and kernels rational in $s=a'/a$ and $t=\theta_{12}/h$ (parsed from cell 62 of `L2-210-two-vacua-brackets.wb`; the 40 kernel laws and ten products reproduce the printed values with 0 mismatches), and expanded it formally at $h\to0$ in the diagonal frame. The accounting is as follows.
+
+The XXX normalisation $\kappa\kappa'=h^{-8}/c$ and $\langle x_0^d|\psi\rangle=h^2\langle x_0^G|\psi\rangle$ exactly (since $x_0$ is exactly linear in $z$) give $Q_{\rm num}^{\rm XXX}\sim h^6\,c\,Q_{\rm num}^G$. Each minor is $O(h^2)$ (the $O(h)$ term is $-W(\theta_s)\cdot(m'-m)$ and vanishes), so the naive order of the right-hand side is $h^4$; the actual leading order is $h^{10}$. The cancellations at orders $h^4,\dots,h^9$ are not accidental: they follow from \emph{one} exact relation. The dual Baxter equation at $x=\theta_s$ has $\nu_3(\theta_s)=0$ and $t_3(\theta_s)=\chi_3\nu_1\nu_2(x-h)\nu_3(x-2h)|_{x=\theta_s}=0$, so
+$$
+Q^j(\theta_s-h)=\rho_s\,Q^j(\theta_s),\qquad\text{hence}\qquad\mathrm{minor}_s(-1,0)=0,\label{eq:minor10}
+$$
+with $\rho_s$ independent of $j$, exactly and to all orders in $h$, for every XXX eigenstate:
+the XXX generalisation of $W(\theta_s)=0$. With only this relation imposed and all other jets random, the right-hand side has valuation exactly $10$ (three random trials). Consequently the four ladder values of $(Q^2,Q^3)$ at $\theta_s$ lie in a 2-plane, the minors are $D$ times $(-\alpha,\rho\beta,\rho,\beta,1,0)$ with leading values $(\alpha,\beta,\rho)=(-2,3,1)$, and the leading coefficient depends only on the $n=0$ jets $J_{0,0},J_{0,2},J_{0,3}$ (and $J_{0,1}=\kappa J_{0,0}$), through the Plücker coordinates; the $O(h)$ corrections $q_1$ of the XXX Q-functions enter first at order $h^{11}$, so no extra equation for $q_1$ was needed. Two corrections to the plan came out: the vacuum monomial is $M_{\rm vac}=2h^2W'(\theta_s)P^3(\theta_s)$, not $(5/2)h^2W'P^3$ (the weight-2 minor contains an $n=1$ combination which the exact relation fixes to $p/2$), and only five of the twelve candidate monomials $\{P^{3(c)}p_{kl}\}$ occur. The result is (\ref{eq:jet}) with the table of $G$.^[Agent D2, `RESULTS-twovac-limit.md` L0--L2; reproduced exactly for the top state at finite $h=1/2$ ($e_1\otimes e_1$, exact rationals), and independently ($h^6\,c\,Q_{\rm num}$ for the top state converges to $102245/41472$, to $10^{-10}$ by Richardson, against $c\,Q_{\rm num}^G(\mathrm{top})=2.4653983410$).]
+
+A natural shortcut failed, and it is worth recording. Taking $t\to\infty$ at fixed $a=1/\omega_1$ in the XXX kernels is wrong: of the 40 kernel laws, 25 survive and all equal $s\,u_c[mm']u_{c'}[nn']$, a rank-one $U\otimes U$, and the naive right-hand side divided by the vacuum monomials equals $(1-a)^3(1-a')^3$, state independent. The Gaudin limit is $a=e^{-h\omega_1}\to1$, not fixed $a$, and all the state dependence sits in the cancellation hierarchy, invisible to a rank-one naive kernel.^[Agent D2, `RESULTS-twovac-limit.md` L4 (a plan item requested by W2).]
+
+## Route 2: the direct fit {#sec:route2}
+
+Agent D1 fitted the kernel directly from Gaudin data, without reference to XXX. With target $4\,c\,Q_{\rm num}\,(P^3p_{02})_1(P^3p_{02})_2$ and the basis $N$ (25 unknowns) on 320 rows ($5$ twist points), the residual is below the fixed-point floor $10^{-90}$, the rank is 25 (all products independent), the kernel is unique, all entries are rational, and it equals D2's $G$ to $2.8\cdot10^{-74}$; per-$\zeta$ fits agree with the stacked one to $10^{-72}$. A hypothesis ladder led to this: Table~\ref{tab:ladder} lists the levels. The direct-$Q_1$ bases do \emph{not} fit with a $\zeta$-independent kernel because $p_{03}=A_s[(\Lambda_s-\kappa)Q_1+2Q_1']$ with $\Lambda_s=2\sigma+2/\Pi'(\theta_s)$ contains $\sigma=\sum\zeta$; the Plücker form is the $\zeta$-free one. The controls fail as they should: lone index $P^2$ or $P^1$ instead of $P^3$ gives residuals $0.99$; jets built from site-1 or site-2 alone $0.37$, $0.58$; jets at wrong points $0.48$; no $M$: $0.97$.^[Agent D1, `RESULTS-twovac-fit.md` F2; fixed-point 320-bit column-pivoted QR, a $512\times400$ problem in 30 s. Larger bases (144, 576 unknowns) fit with null spaces whose sparse representative is the $N_5$ kernel.] The kernel laws were then fixed on a $3\times3$ grid of $(\omega_1,\omega_1')$ and five $\theta$ variants: each entry is a polynomial of total degree $\le6$ in $(\omega_1,\omega_1')$ with 28 coefficients, identical (exact rational comparison) to D2's analytic $G_{ij}$ in $25/25$ entries.
+
+@table tab:ladder | Hypothesis ladder for the adjoint fit (D1 F2): relative residual $\lVert Ak-y\rVert/\lVert y\rVert$, $0.0$ meaning below the $10^{-90}$ floor; 320 rows (5 twist points); $M=P^3p_{02}$ unless stated.
+@size small
+@cols llrrr
+| level | basis per site | unknowns | rank | residual |
+|---|---|---|---|---|
+| a | $N_5=\{P^3p_{02},P^{3\prime}p_{02},P^3p_{03},P^{3\prime}p_{03},P^3p_{23}\}$ | 25 | 25 | **0.0** |
+| a | direct $A_sQ_1^{(k)}P^{3(c)}$, $k\le2,c\le1$ (6) | 36 | 36 | 0.294 |
+| a | direct, $k\le1,c\le3$ (8) | 64 | 64 | 0.562 |
+| a | D2's nine direct monomials with $\kappa$ | 81 | 81 | 0.363 |
+| b | Plücker $\{p_{kl}P^{3(c)}\}$, $k<l\le3,c\le1$ (12) | 144 | 64 | 0.0 |
+| c | Plücker $k<l\le3,c\le3$ (24) | 576 | 256 | 0.0 |
+| c | direct $k\le3,c\le3$ (16) | 256 | 256 | 0.0643 |
+| ctl | $N_5$ without $M_1M_2$ | 25 | 25 | 0.966 |
+@endtable
+
+## Route 3: derivation from the jet basis {#sec:route3}
+
+The third derivation (Section~\ref{sec:B}) constructs the Gaudin K tensor of $\Phi_c^\infty$ in the jet basis that replaces the SoV basis when $h\to0$, and finds exactly 25 non-zero entries on $N_5\times N_5$, equal to $G/(4\omega_1^3\omega_1'^3)$ as an exact polynomial identity in $(1/\omega_1,1/\omega_1')$. The "4" is the jet normalisation $M_{\rm vac}=2h^2P^3p_{02}$ per site, and $c$ arises from the frame tie (\ref{eq:kappaG}) exactly.
+
+## General $\Lambda$: $[3,1,0]$ and $[3,2,0]$ {#sec:jetgen}
+
+The same fit pipeline, now with the sparse hypothesis tested first, gave the generalisation. For $[3,2,0]$ (dim 15, 225 states) with $c=\prod_\omega(\zeta_2-\omega)(\zeta_3-\omega)^3(\zeta_1-\zeta_2)^4$ and $M=P^3p_{03}$, the target is exactly (residual $0.0$ at 80 digits) a bilinear form in $P^3$ times the seven non-forced coordinates $\{p_{03},p_{04},p_{13},p_{14},p_{23},p_{24},p_{34}\}$ per site; the kernel is unique (49 unknowns, rank 49 on 1125 rows), rational, and equal for every $\zeta$ point to $\sim10^{-72}$. Dropping any one of the seven leaves a residual ($0.41$ without $p_{03}$ or $p_{04}$, $0.16,0.25,0.078,0.14,0.061$ for $p_{13},p_{14},p_{23},p_{24},p_{34}$). For $[3,1,0]$ ($c=(\zeta_2-\omega)^2(\zeta_3-\omega)^3(\zeta_1-\zeta_2)^2$ per vacuum, $M=P^3p_{02}$), greedy backward elimination from 18 features ends with the pure Plücker basis of the nine non-forced pairs, 81 unknowns, rank 81, residual $0.0$, unique rational kernel, $K_{99}=1/9$; the adjoint-like five-element basis fails ($0.316$). The pattern is the count
+$$
+\#\text{monomials}=\binom{\lambda_1+2}2-\binom{\lambda_2+1}2=6-1,\ 10-1,\ 10-3=5,\ 9,\ 7.\label{eq:count}
+$$
+In the $\nu$-variables of $[3,2,0]$ the seven monomials are $(1,\kappa,\kappa_2)\times(1,\pi_4)$ and $\pi_{34}$ with $\pi_4=p_{04}/p_{03}$, $\pi_{34}=p_{34}/p_{03}$; monomials of $\nu$-weight $\le3$ (13 of them) fail ($0.0046$), weight $\le4$ fit.^[Agent P4, `RESULTS-Qside-320.md` section J (hypothesis ladder table, $[3,1,0]$ comparison T7), points $P,P',X_1,X_2,X_3$ built at 80 digits; the wrong exponents of $c$ ($(1,3,2)$ for $[3,1,0]$) give $0.32$.] The kernel is neither symmetric at fixed $\theta_{12}$ nor does $K+K^T$ express site exchange; the exchange symmetry is $K_{ij}(\omega,\omega,1/\theta_{12})=K_{ji}(\omega,\omega,-1/\theta_{12})$ (deviation $5.8\cdot10^{-63}$).
+
+## Kernel laws {#sec:laws}
+
+Table~\ref{tab:laws} collects the laws that each kernel obeys. They were established on grids of $(\omega_1,\omega_1')$ (9 values, 72 ordered pairs, 5 twist points each) and $\theta_{12}$ (12 distinct values) with exact rational polynomial reconstruction, and the structure was verified at held-out points; Appendix~\ref{app:K} gives the data. The two sites exchange under $\theta_{12}\to-\theta_{12}$, and the first non-forced coordinate carries weight $0$, with the monomial weight $e_{kl}=k+l-\lambda_2-1$.
+
+@table tab:laws | Laws of the jet kernel for the three representations: $e$ are the monomial weights relative to $M$; the $\omega$-degree of entry $(i,j)$ is $\le$ total $-e_i-e_j$; $t=1/\theta_{12}$. Sources: D1/D2 (adjoint), P4 ($[3,2,0]$), G1 ($[3,1,0]$, `RESULTS-general-kernel.md` K0).
+@size small
+@cols p{2.6cm}p{3.4cm}p{4.4cm}p{4.2cm}
+| | $[2,1,0]$ | $[3,1,0]$ | $[3,2,0]$ |
+|---|---|---|---|
+| monomials per site | 5 | 9 | 7 |
+| pairs $(kl)$ | $(02)$, $(03)$, $(12)$, $(13)$, $(23)$ | $(02)$, $(03)$, $(04)$, $(12)$, $(13)$, $(14)$, $(23)$, $(24)$, $(34)$ | $(03)$, $(04)$, $(13)$, $(14)$, $(23)$, $(24)$, $(34)$ |
+| $e=k+l-\lambda_2-1$ | $0,1,1,2,3$ | $0,1,2,1,2,3,3,4,5$ | $0,1,1,2,2,3,4$ |
+| max $\omega$-degree | 3 each | 5 each | 4 each |
+| $t$-degree | 4 | 8 | 7 |
+| $c$ | $(\zeta_2-\omega)(\zeta_3-\omega)^2$ per vacuum, $(\zeta_1-\zeta_2)^2$ | $(\zeta_2-\omega)^2(\zeta_3-\omega)^3$, $(\zeta_1-\zeta_2)^2$ | $(\zeta_2-\omega)(\zeta_3-\omega)^3$, $(\zeta_1-\zeta_2)^4$ |
+| last entry $K_{\rm last}$ | $1/4$ | $1/9$ | $1/9$ |
+| monomials in $\Theta$ | 25 entries | 998 | 458 |
+@endtable
+
+## What went wrong first {#sec:wrong}
+
+The first fits all failed, and the failures are worth a paragraph. With the plan's vacuum monomial $M=Q_1P^3$ and the assumption that the kernel is $\zeta$-independent, no level of the ladder fit, not even the full jet space $\{J^2_aJ^3_bJ^3_c\}$ with 1295 unknowns (training residual $4\cdot10^{-2}$, hold-out error $8\cdot10^2$). The cause was normalisation: $p_{02}=A_sQ_1$ with $A_s=(\zeta_3-\zeta_2)e^{\sigma\theta_s}\Pi'(\theta_s)$ is $\zeta$-dependent, and so is the frame-tie scalar. Once one divides by $c$ and uses $M=P^3p_{02}$, the kernel is exactly $\zeta$-free. Likewise $\langle x_0^G|\Psi_B\rangle/n_B$ turns out to be, to $2\cdot10^{-77}$, a constant times $Q_1(\theta_1)P^3(\theta_1)Q_1(\theta_2)P^3(\theta_2)$ (exponent $1$ on each, $0$ on the other ten numbers), so the "x$_0$-free" target $T(B)=\langle\Phi_\infty|\Psi\rangle D_B(\omega_0)/\langle\Omega_0\otimes\Omega_0|\Psi\rangle$ is not constant times $Q_{\rm num}$ but $c_T(\zeta)\,Q_{\rm num}M_1M_2$: the two targets are the same fit with one free scalar per $\zeta$ point. And the one-site-fixed-$a$ limit is wrong, as said above. The vacuum monomial of the plan was off by a factor $5/4$ ($M_{\rm vac}=2h^2W'P^3$, not $\tfrac52h^2W'P^3$), and the twelve candidate monomials reduce to five.

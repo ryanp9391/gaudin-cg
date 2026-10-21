@@ -1,0 +1,10 @@
+import pickle, sympy as sp
+a,ap,e1,e2,h1,h2=sp.symbols('a ap e1 e2 h1 h2')
+Ae,Ke=pickle.load(open('mk_AK_e.pkl','rb'))
+Pi=(1-a*e1+a**2*e2)*(1-ap*h1+ap**2*h2)
+rest=sp.expand(Ae+a*ap*(a-ap)*(e1-h1)*Pi)
+q,r=sp.div(sp.Poly(rest,e1,e2,h1,h2),sp.Poly(Ke,e1,e2,h1,h2))
+print('rem zero',r.is_zero)
+C=sp.factor(q.as_expr()); print(C)
+D=sp.expand(q.as_expr()-Ke/2)
+print('D=',sp.factor(D))

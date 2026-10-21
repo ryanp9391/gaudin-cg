@@ -1,0 +1,449 @@
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.1cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,longtable,array}
+\usepackage[hidelinks]{hyperref}
+\def\UrlBreaks{\do\-\do\_\do\.\do\/\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z}
+\newcommand{\nb}[1]{\texttt{\path{#1}}}
+\newcommand{\nbA}{\nb{L2-210-site1-rotation-brackets.wb}}
+\newcommand{\nbG}{\nb{L2-site1-rotation-brackets-general.wb}}
+\newcommand{\Bk}{\mathrm{Bk}_2}
+\newcommand{\Pf}{\mathrm{Pf}}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\bra}[1]{\langle #1|}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+\begin{document}
+
+\title{The site-1 rotation on the SoV vacuum as ladder-1 Q-brackets\\[2pt]\large $\mathfrak{gl}(3)$ XXX, $L=2$, new conventions --- research notes of the 2026-10-10 thread}
+\author{Paul Ryan (with Claude)}
+\date{10 October 2026}
+\maketitle
+
+\setcounter{tocdepth}{1}\tableofcontents
+\bigskip
+\setcounter{section}{-1}
+
+Research notes on the 2026-10-10 thread ``the site-1 rotation on the SoV vacuum as ladder-1 Q-brackets'' (adjoint $[2,1,0]^{\otimes2}$ in full; $[3,1,0]^{\otimes2}$ and $[3,2,0]^{\otimes2}$ at the level of loci and bracket counts; untwisting not yet done). Audience: Paul Ryan and future Claude sessions. These notes are a compiled reading of the write-ups, specs and notebook result cells listed below; nothing was recomputed in Wolfram.
+
+\textbf{Primary sources.} \nb{HANDOFF.md} (the two entries ``NEWEST (2026-10-10, night)'' and ``NEWEST (2026-10-10, evening)''); the write-ups \nb{L2-210-site1-rotation-brackets.md} (adjoint result) and \nb{L2-210-localising-span.md} (the negative result that motivated the change of base); background \nb{L2-gl4-rect-untwist.md} and \nb{Two-rotations-det-overlap.md} \S0--\S3; the specs \nb{L2-210-site1-rotation-brackets-spec.md}, \nb{L2-site1-rotation-brackets-general-spec.md}, \nb{L2-210-localising-span-spec.md} (with Addenda A--C); and the two notebooks \nbA{} (36 cells) and \nbG{} (38 cells). All paths are under \nb{Paul/Mathematica/new-conventions/}. Cell numbers are 1-based positions in the \nb{.wb} file. \textbf{Neither notebook carries a native output}: VS Code did not execute cells of the new files, so every code cell was run in the shared kernel from its saved source and the printed results sit in markdown cells under the code cells. Every number below is read from such a result cell, from a cell source, or from a write-up; none was recomputed in Wolfram.
+
+\textbf{Evidence tags.} Every claim carries one of:
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item \textbf{[exact]}: a symbolic identity or an exact-rational computation (Gr\"obner bases, \texttt{Reduce}, exact ranks, exact rational matrices);
+\item \textbf{[numeric]}: true at the stated numeric points, to the stated deviation (typically eigenstates at 60 digits and a maximal relative deviation over all states), not proved;
+\item \textbf{[fitted]}: a closed form recognised from exact data at several parameter points, fitted on some and confirmed on the rest;
+\item \textbf{[conjecture]}: pattern or prediction not verified; the text says what is verified.
+\end{itemize}
+Combined tags such as \textbf{[exact/numeric]} mean that part of the statement is exact and the rest numerical.
+
+\textbf{Scope of this write-up.} No notebook, no \nb{.md}/\nb{.tex} other than this one, \nb{HANDOFF.md}, \nb{CLAUDE.md} or \nb{paper/*.tex} was edited, nothing was evaluated in Wolfram, nothing was committed. Plain-arithmetic checks made while writing are marked ``re-derived here'' and listed in Appendix~\ref{app:checks}; places where the sources disagree or are ambiguous are in Appendix~\ref{app:notes}.
+
+\textbf{Notation clash resolved.} The sources use $\alpha,\beta$ both for the Gauss parameters of the rotation and for the two ``2-plane variables'' of Part A. Here the Gauss parameters are $(\alpha,\beta,\gamma)$ (as in the write-up and in the notebooks as \texttt{gA, gB, gC}), and the 2-plane variables are $(p,q)$.
+
+\section{Summary}\label{sec:summary}
+
+\textbf{The question} (Paul). Forget the $w$-vacuum $\Omega_w$ of the two-rotation $\det_6\times\det_2$ family. Start from the SoV vacuum $x_0=e_1^{\mathsf T}\otimes e_1^{\mathsf T}$ in the companion frame, put the most generic rotation $\Phi(g)=e_1^{\mathsf T}\rho(g)\otimes e_1^{\mathsf T}$ on site~1 (three parameters), and ask for which $g$ the overlap $\langle\Phi(g)|\Psi_B\rangle/\langle x_0|\Psi_B\rangle$ can be written purely through ladder-1 brackets $\langle Q^jF\rangle_1=\sum_mF_mQ^j(\theta_1+mh)$ with explicit measures $F$, without insisting on a determinant; the $\theta_2$-ladder dependence is pulled out first (it enters only through $\lambda_2=Q^k(\theta_2)/Q^k(\theta_2-h)$).
+
+\textbf{The answer for the adjoint} (\S\,\ref{sec:adj}) \textbf{[exact; bracket form numeric, $10^{-53}$]}. With $g=e^{\alpha E_{12}}e^{\beta E_{13}}e^{\gamma E_{23}}$ and $t=\theta_{12}/h$, on the quadric
+\[
+2(t-2)\,(\beta+\alpha\gamma)=(t-3)\,\alpha^2\qquad(\text{i.e. }2(t-2)\,b_1b_3=(t-3)\,b_2^2,\ b=(1,\alpha,\beta+\alpha\gamma)\text{ the first row of }g)
+\]
+a two-parameter family of genuine rotations ($\alpha\beta\gamma\neq0$), the overlap is a sum of \emph{four} $2\times2$ bracket determinants $\Bk[F,G]$, each multiplied by a point value of $Q^3$ and, for two of them, by $\lambda_2$. Every more restrictive bracket form (one product, one $L=1$-type $3\times3$ determinant, the $\lambda_2$-pencil absorbed into the measures) contains no genuine rotation. At finite twist the family reaches all seven adjoint weights with rank 2 on $(1,1,1)$, so it is CG-complete at finite twist. The quadric coefficient is $c(t)=(t-3)/(2(t-2))$, independent of $h$ and of the ket twist $z$ \textbf{[fitted]}.
+
+\textbf{General representations} (\S\,\ref{sec:gen}). The construction goes through unchanged for $[3,1,0]$ and $[3,2,0]$ (label rule and wavefunction monomial verified on all 225 states). The automatic number of bracket determinants for a generic rotation is $5,7,11$ for $|\Lambda|=3,4,5$ (dimensions $8,15,15$). The reduced forms need $4,5,9$ brackets. The analogue of the adjoint quadric condition (every column of the vacuum group decomposable) has \emph{no} genuine rotation for $[3,1,0]$ or $[3,2,0]$, so the right generalisation is ``fewest brackets'', not ``fully decomposable vacuum group''.
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{1.7cm}cccccp{6.2cm}@{}}\toprule
+\textbf{rep} & $|\Lambda|$ & $\dim V$ & \textbf{generic} & \textbf{reduced} & \textbf{locus dim.} & \textbf{best locus (Gauss chart, $t=62/35$)} \\\midrule\endhead
+$[2,1,0]$ & 3 & 8 & 5 & 4 & 2 & $16(\beta+\alpha\gamma)=43\alpha^2$ \\
+$[3,1,0]$ & 4 & 15 & 7 & 5 & 2 and 1 & $\alpha^2=\beta+\alpha\gamma$ ($t$-independent); curve $\{243\beta=280\gamma^2,\ 351\alpha=140\gamma\}$ \\
+$[3,2,0]$ & 5 & 15 & 11 & 9 & 1 & curve $\{12493\beta=3010\gamma^2,\ 403\alpha=140\gamma\}$ (every 2-dim locus gives only 10) \\
+\bottomrule\end{longtable}\end{center}
+
+\textbf{Motivation and context.} The change of base from $\Omega_w$ to the bare SoV vacuum came from the negative result of the previous evening (\S\,\ref{sec:neg}): within the algebra generated by transfer matrices on a single vacuum, the gl(3) adjoint has no free-point torus, so no gl(4)-style clean family exists below the vacuous level.
+
+\textbf{What is not done} (\S\,\ref{sec:open}). Untwisting of the quadric family (regime $z=1+\varepsilon\varphi$, $\varepsilon$-scaling of $g$ on the locus, the Gauss factors $L_0D_0U_0$ of $P_{\rm phys}^{-1}$); closed-form measures (in progress, see \S\,\ref{sec:open}); the meaning of the quadric constant; site-2 and two-site versions; the $t$-dependence of the $[3,1,0]$ curve and a re-run of the $[3,2,0]$ Task~7.
+
+\section{Setting and notation}\label{sec:setting}
+
+\textbf{Conventions (new, 2026-10-01).} Lax $\mathcal L_{ij}(u)=(u-\theta_s)\delta_{ij}+hE_{ij}$ on each site, monodromy $T(v)=\mathcal L^{(1)}(v-\theta_1)\mathcal L^{(2)}(v-\theta_2)$, twist on the right $T^M=T\cdot M$, quantum minors with column $k$ at $v-(k-1)h$, $t_a$ the sum of principal quantum minors, $t_3$ the quantum determinant (checked exactly in \nbG{} cell 3). Generators: the plain exact GT generators \texttt{JJ} on the GT basis $\mathrm{ps}[\Lambda]$ with the highest-weight vector first. Numeric point used throughout: $h=1/2$, $\theta=(2/7,-3/5)$ ($t=\theta_{12}/h=62/35$), ket twist $z=(3/2,5/4,2/3)$, control twist $z'=(3/2,5/4,3/7)$, eigenvectors at 60 digits (\nbA{} cell 3; \nbG{} cell 3).
+
+\textbf{Companion frame and the SoV vacuum.} The ket $\Psi_B$ (an eigenstate of the twisted chain in the diagonal frame, twist $\mathrm{diag}(z)$) is moved to the companion frame by $(P_{\rm phys}^{-1}\otimes P_{\rm phys}^{-1})\Psi$, where $P_{\rm phys}=P_-P_dP_+$ is the Gauss-type physical-space matrix (\nbG{} cell 6). In this frame the SoV vacuum is $x_0=e_1^{\mathsf T}\otimes e_1^{\mathsf T}$, and $\langle x_0|\Psi\rangle$ equals the diagonal-frame $\langle(e_1P_{\rm phys}^{-1})^{\otimes2}|\psi\rangle$ \textbf{[numeric]} ($<10^{-54},10^{-49},10^{-51}$ for the three representations, \nbG{} cell 7).
+
+\textbf{Dual Q's and ladders.} $Q^j(x)=z_j^{x/h}q^j(x)$ with $q^j$ monic of degree $\mu_j-L\lambda_3$ (here $\lambda_3=0$), from the dual Baxter equation (\nbG{} cell 5; null space always one-dimensional, relative Baxter residual $<10^{-49},10^{-47},10^{-48}$). Write $v(x)=(Q^1,Q^2,Q^3)(x)$. The points of ladder $s$ are $\theta_s+mh$, $m=-1-\lambda_1,\dots,0$ ($\lambda_1+2$ points). Two exact structural facts \textbf{[numeric]}: $v(\theta_s)\parallel v(\theta_s-h)$ (2$\times$2 minors $<10^{-57}$), and for site~2 the vectors $v(\theta_2-ch)$, $c=0,\dots,\lambda_2$, are all parallel, so that
+\[
+\lambda_2^{(c_2)}:=\frac{v_k(\theta_2-c_2h)}{v_k(\theta_2-\lambda_2h)}
+\]
+is independent of $k$ (spread $<10^{-45}$); $\lambda_2^{(\lambda_2)}=1$, and for the adjoint $\lambda_2^{(0)}=\lambda_2=Q^k(\theta_2)/Q^k(\theta_2-h)$ of the question. For the adjoint the ladder-1 data can be encoded in the 2-plane variables $(p,q,\lambda_1)$: $v(\theta_1-h)=p\,v(\theta_1-3h)+q\,v(\theta_1-2h)$, $\lambda_1=v_k(\theta_1)/v_k(\theta_1-h)$ (\nb{Two-rotations-det-overlap.md} \S2); the eight site-1 wavefunctions are then $\{1,q,-p,\lambda_1,\lambda_1q,\lambda_1^2q,-\lambda_1p,-\lambda_1^2p\}$ (that note writes $\alpha,\beta$ for $p,q$).
+
+\textbf{The SoV basis of the untwisted $B$.} The untwisted $B(u)=T_{11}(u)\,\mathrm{qmin}_{12,12}(u+h)+T_{21}(u)\,\mathrm{qmin}_{12,13}(u+h)$ has simple spectrum (smallest gap of eigenvalues at $u=3/11$: $1.6\cdot10^{-5}$ for the adjoint, $4.8\cdot10^{-6}$ for $[3,1,0]$, $6.5\cdot10^{-6}$ for $[3,2,0]$); its $d^2$ left eigenvectors $\langle x|$ ($d=\dim V$) are the SoV covectors, and $x_0$ is the exact vacuum eigenvector (\nbG{} cells 9, 11). Each eigenvalue is a degree-6 polynomial whose six roots split $3+3$ over the two ladders.
+
+\textbf{Label rule} \textbf{[numeric; all roots located to $10^{-15}$ at 40 digits, 225 labels bijective]}. A SoV covector carries on each site a label $(a\,|\,bc)$ with
+\[
+\lambda_2\le a\le\lambda_1,\qquad 0\le c\le\lambda_2,\qquad c\le b\le a,
+\]
+and the three roots on that site are $\theta_s+\{-1-a,\,-b,\,-c\}h$; the number of labels is $8,15,15=\dim V$. The vacuum is $(\lambda_1|\lambda_1\lambda_2)$ with triples $(-3,-2,-1)$, $(-4,-3,-1)$, $(-4,-3,-2)$ for $[2,1,0]$, $[3,1,0]$, $[3,2,0]$ (the vacuum triples $(4,3,1)$ and $(4,3,2)$ in the usual sign convention). The bijection for the adjoint: $(1|00)\to(-2,0,0)$, $(1|10)\to(-2,-1,0)$, $(1|11)\to(-2,-1,-1)$, $(2|00)\to(-3,0,0)$, $(2|10)\to(-3,-1,0)$, $(2|20)\to(-3,-2,0)$, $(2|11)\to(-3,-1,-1)$, $(2|21)\to(-3,-2,-1)$; $[3,1,0]$ adds the seven labels $(3|\cdot)$ with $b\le3,c\le1$, and $[3,2,0]$ is listed in \nbG{} cell 11. No shifted points were needed for any rep.
+
+\textbf{Wavefunction monomial} \textbf{[numeric]} ($<10^{-43}$, $10^{-39}$, $10^{-40}$ over all labels and all states, worst of three conventions). With $n=-1-a$, $n'=-b$ and the \emph{verified sign convention}
+\[
+\mathrm{minor}(n,n'):=\det\nolimits_2[v(n'),v(n)]=v_{r_1}(n')\,v_{r_2}(n)-v_{r_2}(n')\,v_{r_1}(n)\qquad(n<n'),
+\]
+the site wavefunction of the label $(a|bc)$ is $M_{(a|bc)}=\mathrm{minor}(n,n')\,v_k(\theta-ch)$, and
+\[
+\frac{\langle x|\Psi_B\rangle}{\langle x_0|\Psi_B\rangle}=N_x\prod_{s=1}^{2}\frac{M^{(s)}_x}{M^{(s)}_{\rm vac}},
+\]
+with $N_x$ state independent and \emph{the same} for the three row/column conventions $(\{r_1,r_2\},k)=(\{1,2\},1)$, $(\{2,3\},3)$, $(\{1,3\},2)$ (max relative difference $<10^{-43}$; \nbG{} cells 10--11; \nbA{} cell 16). In the first paper-style form of the spec the minor was $\det_2[v(n),v(n')]$; this differs by an overall $-1$ on every $M_x$ and the verified convention above is the one for which $N_x$ carries no extra sign. All later formulas use rows $\{2,3\}$, $k=3$, so that the minor is $Q^2(n')Q^3(n)-Q^3(n')Q^2(n)$. The ladder-1 normalisation is $\Psi_1:=M_{(\lambda_1|\lambda_1\lambda_2)}$; for the adjoint $\Psi_1=[Q^2(\theta_1-2h)Q^3(\theta_1-3h)-Q^3(\theta_1-2h)Q^2(\theta_1-3h)]\,Q^3(\theta_1-h)$ (the ladder-1 factor of $\Psi_Q(x_0)$).
+
+\textbf{The site-2 groups.} A site-1 covector $c\otimes e_1^{\mathsf T}$, expanded in the $L=2$ SoV basis (\nbG{} cell 13), occupies exactly the site-2 labels $(\lambda_1|\lambda_1c_2)$, $c_2=0,\dots,\lambda_2$, i.e. $\lambda_2+1$ \emph{groups} ($2,2,3$ for the three reps; $12,24,28$ SoV states). Hence, exactly,
+\begin{equation}\label{eq:ovl}
+\frac{\langle c\otimes e_1^{\mathsf T}|\Psi_B\rangle}{\langle x_0|\Psi_B\rangle}\,\Psi_1=\sum_{c_2=0}^{\lambda_2}\lambda_2^{(c_2)}\sum_{x}\bigl(c\cdot K^{(c_2)}\bigr)_x\,M_x,
+\end{equation}
+with $K^{(c_2)}$ a rational $d\times d$ matrix (rows: GT index $\nu$ of the covector; columns: site-1 label $x$), depending on $(h,\theta)$ only (denominators of at most 4, 5, 6 digits; rationalisation error $<10^{-90}$, $10^{-88}$, $10^{-86}$). Ranks of $K^{(c_2)}$: $(4,8)$, $(9,15)$, $(4,9,15)$ for $c_2=0,\dots,\lambda_2$ (the last is the vacuum group). The identity \eqref{eq:ovl} holds for a generic Gauss rotation, a random integer covector and the GT basis covectors to $<10^{-42}$ \textbf{[numeric]}. For the adjoint this is the $12$-state sum of Part A: the group $c_2=0$ (site-2 label $(2|20)$) carries the factor $\lambda_2$ ($\lambda_2^1$ part, $K^{20}$, rank 4), the vacuum group the factor $1$ ($\lambda_2^0$ part, $K^{\rm vac}$, rank 8) (\nb{Two-rotations-det-overlap.md} \S3.1).
+
+\textbf{Rotation covectors.} Parametrise $g=e^{\alpha E_{12}}e^{\beta E_{13}}e^{\gamma E_{23}}$, so the first row of the unipotent $3\times3$ matrix is $b=(1,\alpha,\beta+\alpha\gamma)$ (re-derived here). ``Genuine'' means $\alpha\beta\gamma\neq0$. The orbit of $e_1^{\mathsf T}$ has dimension 3 for all three reps (Jacobian rank 3, \nbG{} cell 22). Equivalently, a rotation covector $c(a,b)$ is bilinear in $X=ab^{\mathsf T}$ with $b\cdot a=0$ (Part A, equivariant map $X$; \nbA{} cell 13); in the Gauss chart $a=(-\beta,-\gamma,1)$, $b=(1,\alpha,\beta+\alpha\gamma)$, and the whole cone is $b=a\times u$.
+
+\section{The question and the Part A background}\label{sec:question}
+
+\textbf{Part A in two sentences} (\nb{Two-rotations-det-overlap.md} \S3, cells 59--80 of \nb{L2-rotation-sov.wb}). The overlap of any site-1 covector with $e_1^{\mathsf T}$ on site~2 is an explicit short polynomial in $(p,q,\lambda_1,\lambda_2)$ (the five-line table of \S3.1 there), but neither site-2 group is an $L=1$-type determinant with transformed bra data, and the $L=1$ $\det_3\times\det_2$ is not a polynomial identity at $L=2$; locality classifies the usable ladder-1 determinants: a $3\times3$ bracket determinant is a function of $(p,q,\lambda_1)$ alone iff $F_2\propto F_1$ on $\{\theta_1-2h,\theta_1-h\}$, a four-dimensional cone that the rotations leave, while \emph{sums} of two such determinants fit every target, hence say nothing.
+
+\textbf{Paul's refinement.} Part A looked for a single \emph{local} determinant. The new question relaxes this on two counts: (i) the ladder-1 object need not be one determinant, any structured sum of brackets with explicit measures is welcome; (ii) the $\theta_2$-ladder dependence (\emph{which site-2 group}) is split off first, so that the problem on $\theta_1$ alone is a question about coefficient tensors. Concretely, fix the three Gauss parameters so that the overlap is \emph{pure ladder-1 brackets}, and pull $\lambda_2^{(c_2)}$ out as an explicit prefactor. The acceptance criterion (memory \texttt{project-qnumber-cost-constraint}) is that the cost scale with the length of the ladder and with the rank, not with $\dim V$, and not require a determinant.
+
+\section{Brackets, tensors, forms and counting arguments}\label{sec:forms}
+
+\textbf{Brackets and the dictionary} (\nbA{} cells 17--19, symbolic identities, all pass, $0.03$ s) \textbf{[exact]}. On the points $m\in\{-1-\lambda_1,\dots,0\}$ put $\langle Q^jF\rangle_1=\sum_mF_m\,Q^j(\theta_1+mh)$, with $F$ a free function on the points (measure times bra data), and
+\[
+\Bk[F,G]:=\langle Q^3F\rangle_1\langle Q^2G\rangle_1-\langle Q^2F\rangle_1\langle Q^3G\rangle_1=\sum_{n<n'}(F\wedge G)_{nn'}\,\mathrm{minor}_{23}(n,n'),\qquad(F\wedge G)_{nn'}=F_nG_{n'}-F_{n'}G_n,
+\]
+with no sign between $(F\wedge G)$ and the verified minor convention. The $L=1$-type $3\times3$ determinant expands as
+\[
+\det\bigl[\langle Q^3F_i\rangle,\langle Q^2F_i\rangle,\langle Q^3H_i\rangle\bigr]_{i=1}^3=H_1\otimes(F_2\wedge F_3)-H_2\otimes(F_1\wedge F_3)+H_3\otimes(F_1\wedge F_2),
+\]
+as tensors over (minor)$\times$(point of the third factor).
+
+\textbf{The coefficient tensor.} By \eqref{eq:ovl} and the monomial rule, for each site-2 group $c_2$ the left side is $\sum_{(nn'),c}C^{(c_2)}_{(nn'),c}\,\mathrm{minor}(n,n')\,v_k(\theta_1-ch)$: a tensor with a 2-form index $(nn')$ on the $p=\lambda_1+2$ points and a column index $c=0,\dots,\lambda_2$, linear in the covector, hence bilinear in $(a,b)$ and polynomial in $(\alpha,\beta,\gamma)$. A \emph{column} $C_{\cdot,c}$ is thus an antisymmetric $p\times p$ matrix, and a bracket determinant times a point value of $Q^3$ at $\theta_1-ch$ contributes a \emph{decomposable} column $F\wedge G$. The minors are ordered $(12),(13),(23),(14),(24),(34),\dots$ on the points taken in increasing order $m=-1-\lambda_1,\dots,0$.
+
+\textbf{Pl\"ucker and Pfaffian criteria} \textbf{[exact]}. On four points $\Pf(A)=A_{12}A_{34}-A_{13}A_{24}+A_{14}A_{23}$ and, for two forms, $A\wedge B=A_{12}B_{34}+A_{34}B_{12}-A_{13}B_{24}-A_{24}B_{13}+A_{14}B_{23}+A_{23}B_{14}$. A 2-form is decomposable ($=F\wedge G$) iff all $4\times4$ Pfaffians vanish; it has rank $\le4$ iff all $6\times6$ Pfaffians vanish (tested: $0$ for synthetic rank 4, nonzero for rank 6; \nbG{} cell 17). A decomposable form is recovered as $F=\mathrm{col}_i(A)/A_{ij}$, $G=\mathrm{col}_j(A)$. A form of rank $2r$ is a sum of $r$ wedges (Schur-complement decomposition, exact over $\mathbb Q$); hence \emph{for any covector} a column on $p_c$ support points needs $\lceil\mathrm{rank}/2\rceil\le\lceil p_c/2\rceil$ bracket determinants, the \emph{automatic count} being the sum of $\mathrm{rank}/2$ over all columns of all groups. It is polynomial in $(\lambda_1,\lambda_2)$, so Paul's ``scales with boxes'' criterion is met automatically; the loci below are where fewer suffice.
+
+\textbf{The forms}, from most to least restrictive (spec \S0):
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item \textbf{(R1)} a single product $N=\det_2[F,G]\cdot\langle Q^3H\rangle$: $C=A\otimes H$ with $A$ decomposable;
+\item \textbf{(R3)} a single $3\times3$ bracket determinant of $L=1$ type: the columns span a space of decomposables sharing a vector, i.e. $\Pf=0$ for the column and, in addition, the two decomposable columns satisfy $C_{\cdot,-1}\wedge C_{\cdot,0}=0$ (a second quadric);
+\item \textbf{(R2$\delta$)} a sum over columns of one bracket determinant times a point value of $Q^3$ (the point measures $\delta$ on the $Q^3$ factor): every column decomposable;
+\item \textbf{pencil} (decomposable for all $\lambda_2$ so that $\lambda_2$ is absorbed into the measures): $C^{0}_{\cdot,r}$, $C^{1}_{\cdot,r}$ decomposable \emph{and} $C^0_{\cdot,r}\wedge C^1_{\cdot,r}=0$; and its composite-$3\times3$ variant;
+\item \textbf{(R2)} a sum of two products with \emph{free} $H$'s: \textbf{vacuous} (every pencil of 2-forms on $\mathbb C^4$ contains two decomposable ones), and the same holds for sums of two local $3\times3$ determinants (they fit every target, including a random 8-vector, to $10^{-15}$; \nb{Two-rotations-det-overlap.md} \S3.5). These are never reported as results.
+\end{itemize}
+
+\textbf{Counting arguments: which forms are vacuous or automatic} (spec \S0 and \nbA{} cell 24, \nbG{} cells 15, 17) \textbf{[exact]}. (i) A column supported on at most three points is decomposable for every covector (every 2-form on a 3-space is). (ii) A column on four points is decomposable iff one Pl\"ucker quadric vanishes: this cuts a hypersurface in rotation space. (iii) A column on five points has rank $\le4$ automatically (no column in any of the three reps has six or more support points), and is decomposable iff the whole ideal of its $4\times4$ Pfaffians vanishes (five of them for the vacuum columns of $[3,1,0]$; the spec expected three independent conditions). (iv) For the adjoint, $N^1$ (group $c_2=0$) has both columns on three points ($\{-3,-2,-1\}$ and $\{-3,-2\}$), so (R2$\delta$) and (R3) are \emph{automatic} for it and the whole condition sits on the $\lambda_2^0$ part $N^0$ (vacuum group). The minor $(-1,0)$ never occurs because $v(\theta_1)\parallel v(\theta_1-h)$.
+
+\section{The adjoint $[2,1,0]^{\otimes 2}$}\label{sec:adj}
+
+Notebook: \nbA{} (36 cells; setup cells 3--12, results cells 13, 16, 19, 23, 26, 29, 32, 35, 36). Write-up: \nb{L2-210-site1-rotation-brackets.md}. Built by a sonnet wolfbook-builder from the spec, planned and reviewed by the main session.
+
+\subsection{Monomial table and tensors}\label{sec:adjtab}
+
+For the eight site-1 triples (\nbA{} cell 16, all 64 states, $<10^{-47}$) \textbf{[numeric]}, $\psi_x\Psi_1=M_x=\mathrm{minor}(n,n')\,v_k(r)$ with $x=(n,n';r)$ read off the triple:
+
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{tabular}{@{}lcccccccc@{}}\toprule
+label $(a|bc)$ & $(2|21)$ & $(2|11)$ & $(1|11)$ & $(2|20)$ & $(2|10)$ & $(2|00)$ & $(1|10)$ & $(1|00)$ \\
+triple $(n,n';r)$ & $(-3,-2;-1)$ & $(-3,-1;-1)$ & $(-2,-1;-1)$ & $(-3,-2;0)$ & $(-3,-1;0)$ & $(-3,0;0)$ & $(-2,-1;0)$ & $(-2,0;0)$ \\
+$\psi_x$ & $1$ & $q$ & $-p$ & $\lambda_1$ & $\lambda_1q$ & $\lambda_1^2q$ & $-\lambda_1p$ & $-\lambda_1^2p$ \\
+\bottomrule\end{tabular}\end{center}
+
+It holds for all three row/$k$ conventions of \S\,\ref{sec:setting}. The tensors $C^0$ (vacuum group, $\lambda_2^0$) and $C^1$ ($\lambda_2^1$) have rows $=$ minors in the order $(-3,-2),(-3,-1),(-2,-1),(-3,0),(-2,0),(-1,0)$ and columns $r\in\{-3,-2,-1,0\}$ (point offset $r=-c$): $C^0$ has $8$ populated slots, the slot $(-1,0;\cdot)$ and the columns $r=-3,-2$ are empty; $C^1$ has $4$: $(-3,-2;-1)$, $(-3,-2;0)$, $(-3,-1;0)$, $(-2,-1;0)$ (cell 16). The overlap identity $\langle\Phi|\Psi\rangle/\langle x_0|\Psi\rangle\cdot\Psi_1=\sum(C^0+\lambda_2C^1)\,\mathrm{minor}\,v_k$ holds to $10^{-48}$ (two rotations, rows $\{1,2\}$, $k=1$), $10^{-51}$ (rows $\{2,3\}$, $k=3$) and $10^{-48}$ for a random non-rotation covector \textbf{[numeric]}. The bilinear coefficients (cell 13, $b_3$ free) are
+\begin{align*}
+\Phi^{\rm vac}&=\Bigl\{\tfrac{a_3b_1}{3},\ \tfrac{16a_3b_2}{81},\ \tfrac{8(a_1b_1+a_2b_2-2a_3b_3)}{81},\ \tfrac{62a_2b_1+27a_3b_2}{186},\ -\tfrac{8(a_1b_1-a_2b_2)}{81},\ \tfrac{4a_1b_2}{93},\ \tfrac{43a_1b_2-16a_2b_3}{81},\ -\tfrac{8a_1b_3}{93}\Bigr\},\\
+\Phi^{20}&=\Bigl\{-\tfrac{3395a_3b_2}{5022},\ 0,\ 0,\ \tfrac{35(a_1b_1-a_2b_2)}{81},\ -\tfrac{35a_1b_2}{93},\ 0,\ -\tfrac{280a_1b_3}{2511},\ 0\Bigr\}
+\end{align*}
+in the trip order above; with $K^{\rm vac}$ of rank 8 and $K^{20}$ of rank 4. In the Gauss chart, column $r=-1$ of $C^0$ is $(1/3,\,16\alpha/81,\,-8(\beta+\alpha\gamma)/27)$ on $\{-3,-2,-1\}$ and column $r=0$ is $(\phi_4,\phi_5,\phi_7,\phi_6,\phi_8,0)$ with $\phi_6=-4\alpha\beta/93$, $\phi_8=8\beta(\beta+\alpha\gamma)/93$ (cell 23).
+
+\subsection{The exact loci}\label{sec:adjloci}
+
+\textbf{[exact]} (cell 23, Gauss chart; ``cone'' = the whole rotation cone $b=a\times u$):
+\begin{align*}
+\Pf(C^0_{\cdot,0})&=-\tfrac{4}{7533}\,\beta^2\,(16\beta+16\alpha\gamma-43\alpha^2)=\tfrac{4}{7533}\,a_1^2\,(43b_2^2-16b_1b_3),\\
+C^0_{\cdot,-1}\wedge C^0_{\cdot,0}&=-\tfrac{32}{7533}\,\alpha\beta(\beta+\alpha\gamma)=\tfrac{32}{7533}\,a_1a_3b_2b_3,\\
+C^0_{\cdot,0}\wedge C^1_{\cdot,0}&=-\tfrac{280}{7533}\,\alpha\beta^2(\beta+\alpha\gamma),\qquad \Pf(C^1_{\cdot,r})=0,\ \ C^1_{\cdot,-1}\wedge C^0_{\cdot,0}=0\ \text{identically.}
+\end{align*}
+Consequently:
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item \textbf{(R2$\delta$)}, $\Pf(C^0_{\cdot,0})=0$: $\{\beta=0\}\cup\{43b_2^2=16b_1b_3\}$. The second component is a hypersurface of the four-dimensional rotation cone (it does not contain the cone: generic rotations are not local determinants) and contains the genuine rotations; a parametrisation is $b=(1,\alpha,\tfrac{43}{16}\alpha^2)$, $\beta=\alpha(\tfrac{43}{16}\alpha-\gamma)$ with $(\alpha,\gamma)$ free. Off the quadric, (R2$\delta$) fails: the $r=0$ column of $N^0$ is not a decomposable 2-form. Test point $(\alpha,\beta,\gamma)=(1,11/16,2)$ (all parameters nonzero).
+\item \textbf{(R1)}, $C^0_{\cdot,0}\propto C^0_{\cdot,-1}$ (all nine $2\times2$ minors, exact \texttt{Reduce}): only $\alpha=\beta=0$ ($g=e^{\gamma E_{23}}$, a one-parameter degenerate family).
+\item \textbf{(R3)}, $\Pf=0$ and $C^0_{\cdot,-1}\wedge C^0_{\cdot,0}=0$ (exhaustive case analysis on the cone): $\{a_1=0\}$ (the plane $\beta=0$) $\cup\ \{a_3=0,\ 43b_2^2=16b_1b_3\}$, a two-dimensional cone at infinity of the Gauss chart, parametrised $a=(16s',-43s,0)$, $b=(43s^2,16ss',16s'^2)$. Inside the Gauss chart with $\alpha\beta\gamma\neq0$ the locus is empty. At the genuine (R2$\delta$) points $C^0_{\cdot,-1}\wedge C^0_{\cdot,0}\neq0$ (value $-473/60264$ at $(1,11/16,2)$).
+\item \textbf{pencil} ($\lambda_2$ absorbed into the measures): column $r=-1$ is automatic; for $r=0$ the two conditions $\Pf(C^0_0)=0$ and $C^0_0\wedge C^1_0=0$ have, in the Gauss chart with $\alpha\beta\gamma\neq0$, an \emph{empty} solution set (exact \texttt{Reduce}: \texttt{False}); on the cone it is $\{a_1=0\}\cup\{b\parallel e_3\}$. Negative control at the genuine (R2$\delta$) point: $\Pf(C^0_0+\lambda C^1_0)=-\tfrac{182105}{3856896}\lambda\neq0$ for all $\lambda\neq0$. The composite $3\times3$ with $\lambda_2$-dependent third column likewise requires $\beta=0$.
+\end{itemize}
+
+So the sharpest bracket form that genuine rotations admit is ``sum of two bracket determinants per $\lambda_2$-power with point measures on the $Q^3$ factor'', and it costs one quadric. At $t=62/35$: $16(\beta+\alpha\gamma)=43\alpha^2$.
+
+\subsection{The four-bracket formula and the explicit measures}\label{sec:adjform}
+
+\textbf{[exact] for the loci, [numeric] ($10^{-53}$ on all 64 states) for the identity.} On the quadric,
+\begin{equation}\label{eq:adjform}
+\frac{\langle\Phi(g)|\Psi_B\rangle}{\langle x_0|\Psi_B\rangle}\,\Psi_1=\sum_{r\in\{-1,0\}}\Bigl(\Bk[F^0_r,G^0_r]+\lambda_2\,\Bk[F^1_r,G^1_r]\Bigr)\,Q^3(\theta_1+rh),
+\end{equation}
+eight explicit four-point measures $F,G$ (rational in $g$). Per state it costs: the dual $Q^2,Q^3$ on the four ladder-1 points, $Q^3$ at $\theta_1-h$ and $\theta_1$ (already among them), and $\lambda_2$ from two ladder-2 points. Four $2\times2$ bracket determinants, no $6\times6$, no eigenvalue data; the count is set by the ladder length ($\lambda_1+1$ points plus one) and the rank, not by $\dim V$. The $\lambda_2^1$ part $N^1$ has this form for \emph{every} rotation; the quadric is the condition on $N^0$.
+
+Measures at the genuine point $(\alpha,\beta,\gamma)=(1,11/16,2)$ for the $\lambda_2^0$ part, on the points $(-3,-2,-1,0)$ (cell 23), $N^0=\Bk[F_{-1},G_{-1}]\,Q^3(\theta_1-h)+\Bk[F_0,G_0]\,Q^3(\theta_1)$:
+\begin{align*}
+F_{-1}&=(0,-1,-\tfrac{16}{27},0), & G_{-1}&=(\tfrac13,0,\tfrac{43}{54},0),\\
+F_{0}&=(0,-1,-\tfrac{217}{873},-\tfrac{11}{194}), & G_{0}&=(-\tfrac{97}{186},0,-\tfrac{301}{432},-\tfrac{473}{2976}).
+\end{align*}
+For the $\lambda_2^1$ part, a second point of the quadric, $(4,23,5)$, is worked out in \nbG{} cell 26 (group $c_2=0$ is the $\lambda_2^1$ group; $c=0\leftrightarrow r=0$, $c=1\leftrightarrow r=-1$): $(0,0)$: $F=(0,-1,\tfrac{828}{31},0)$, $G=(-\tfrac{35}{9},0,-\tfrac{276920}{837},0)$; $(0,1)$: $F=(0,-1,0,0)$, $G=(-\tfrac{6790}{837},0,0,0)$; and the vacuum group $(1,0)$: $F=(0,-1,\tfrac{248}{909},-\tfrac{368}{101})$, $G=(-\tfrac{101}{31},0,\tfrac{172}{9},-\tfrac{7912}{31})$; $(1,1)$: $F=(0,-1,-\tfrac{64}{27},0)$, $G=(1,0,\tfrac{344}{9},0)$ (four brackets, deviation $<10^{-48}$ at each of $(4,23,5),(4,27,4),(4,31,3),(4,35,2)$). The (R1) and (R3) examples: (R1) at $(0,0,3/2)$: $F=(0,-1,0,0)$, $G=(\tfrac13,0,0,0)$, $H=\delta_{-1}-\tfrac32\delta_0$; (R3) at $(\tfrac12,0,\tfrac32)$: $F_i=\delta_{-3},\delta_{-2},\delta_{-1}$ with $H_1=(0,0,\tfrac13,-\tfrac{53}{124})$, $H_2=(0,0,-\tfrac8{81},\tfrac2{27})$, $H_3=(0,0,-\tfrac29,\tfrac29)$ (cell 23; deviations $10^{-53}$).
+
+\subsection{Natural measures}\label{sec:adjnat}
+
+``Natural'' (the $\det_6$-entry type): $F_m=\mathrm{wgt}_1(m)\,\rho^m(p_0+q_0m)$, $\rho=1/w$, $\mathrm{wgt}_1(m)=1/\prod_{m'\neq m}(m'-m)h$ the one-site SoV weight. Two projective parameters, so each is one condition (\nbA{} cells 27--29, exact, at $(1,11/16,2)$ and, for $N^1$, at $(1,2,3)$) \textbf{[exact]}:
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item column $r=-1$: the plane lies in the hyperplane $F_0=0$; natural vectors exist only of type $p_0=0$, with $\rho=(-32\pm\sqrt{7990})/54$ (two real, distinct); the two natural vectors span the plane, so $F,G$ \emph{can} both be natural, but with \emph{different} $w$; a common $w$ (plane inside $V_\rho=\{\rho^m(p_0+q_0m)\}$) is impossible;
+\item column $r=0$: three natural vectors, $\rho$ the real roots of $6984\rho^3+3472\rho^2-8143\rho-4257=0$ ($-1.0547,-0.5310,1.0885$) with $q_0/p_0=(297+434\rho)/297$; any two form a natural pair with different $w$; same-$w$ impossible;
+\item delta/shift dictionary: column $-1$ contains vectors supported on each pair $\{-2,-1\},\{-3,-1\},\{-3,-2\}$ ($C_{14}=C_{24}=C_{34}=0$), i.e.\ it is a product of two 2-point (shift-type) bras; column $0$ contains exactly one 2-point vector, on $\{-3,-2\}$ ($C_{34}=0$ only);
+\item $N^1$ at $(1,2,3)$: column $-1$ is $\mathrm{span}(\delta_{-3},\delta_{-2})$, no natural vector at finite $w$; column $0$ has two $p_0=0$-type vectors, $\rho=2(-27\pm\sqrt{109})/31$;
+\item (R3) at $\beta=0$: three natural $F_i$ exist (any three $\rho$, in the $p_0=0$ curve), but $H_i$ is supported on $\{-1,0\}$ and cannot be natural.
+\end{itemize}
+A common $w$ for both bras of a column is not available on the main locus at the tested point (the conditions would be of codimension 3 in the Grassmannian of planes, against a two-parameter locus). The ``closed-form measures'' of \S\,\ref{sec:open} are the next step beyond this table.
+
+\subsection{$z$-independence and the $t$-dependence of the quadric}\label{sec:adjt}
+
+\textbf{z-independence [exact].} At $z'=(3/2,5/4,3/7)$ (same $h,\theta$; cells 3--12, 15, 18, 21, 22, 25 re-run, about 100 s) $K^{\rm vac}$ and $K^{20}$ are \emph{identical} exact rational matrices; the polynomials $\Pf(C^0_0)$, $C^0_{-1}\wedge C^0_0$, the pencil column's Pfaffian and $C^0_0\wedge C^1_0$ are identical in $(\alpha,\beta,\gamma)$; the 64-state checks hold (monomial table $10^{-48}$, overlap $10^{-48}$, bracket forms $10^{-54}$). So all loci are $z$-independent; $K$ depends on $(h,\theta)$ only (cell 35).
+
+\textbf{$t$-dependence [fitted].} In every case $\Pf(C^0_0)=\mathrm{const}\cdot\beta^2(\beta+\alpha\gamma-c\,\alpha^2)$ and only $c$ changes. Eight $(h,\theta)$ points (cell 35):
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{tabular}{@{}cccccccccc@{}}\toprule
+$h$ & $1/2$ & $1/2$ & $1/2$ & $1/2$ & $1/2$ & $1/2$ & $1/3$ & $1/3$ \\
+$\theta$ & $(\tfrac27,-\tfrac35)$ & $(\tfrac27,\tfrac15)$ & $(\tfrac27,-\tfrac{26}{105})$ & $(\tfrac27,-\tfrac{27}{28})$ & $(\tfrac27,-\tfrac{37}{42})$ & $(\tfrac27,-\tfrac1{70})$ & $(\tfrac17,-\tfrac{16}{105})$ & $(\tfrac15,-\tfrac49)$ \\
+$t$ & $\tfrac{62}{35}$ & $\tfrac6{35}$ & $\tfrac{16}{15}$ & $\tfrac52$ & $\tfrac73$ & $\tfrac35$ & $\tfrac{31}{35}$ & $\tfrac{29}{15}$ \\
+$c$ & $\tfrac{43}{16}$ & $\tfrac{99}{128}$ & $\tfrac{29}{28}$ & $-\tfrac12$ & $-1$ & $\tfrac67$ & $\tfrac{37}{39}$ & $8$ \\
+\bottomrule\end{tabular}\end{center}
+All eight satisfy $c=(t-3)/(2(t-2))$ exactly (fitted on the six $h=1/2$ points, confirmed on the two $h=1/3$ points: $t=29/15\to8$, $t=31/35\to37/39$). Hence $2(t-2)\,b_1b_3=(t-3)\,b_2^2$, depending on $t$ only, degenerating at $t=3$ ($b_2^2=0$) and at $t=2$ ($b_1b_3=0$).
+
+\subsection{CG reach at finite twist}\label{sec:adjreach}
+
+\textbf{[exact]} (cells 30--32). $P_{\rm phys}^{-1}=L_0D_0U_0$ (Gaussian elimination without pivoting) with, at $z=(3/2,5/4,2/3)$,
+\[
+L_0=\begin{pmatrix}1&0&0\\-\tfrac{23}{12}&1&0\\\tfrac56&-\tfrac23&1\end{pmatrix},\quad D_0=\mathrm{diag}\bigl(1,-\tfrac14,\tfrac{35}{72}\bigr),\quad U_0=\begin{pmatrix}1&1&1\\0&1&\tfrac{10}3\\0&0&1\end{pmatrix},
+\]
+and $e_1^{\mathsf T}\rho(P^{-1})=\rho(D_0)_{11}\,e_1^{\mathsf T}\rho(U_0)$ with $\rho(D_0)_{11}=1$: site~2 is $x_0^{(1)}=e_1^{\mathsf T}\rho(U_0)$. The undone site-1 covector is $e_1^{\mathsf T}\rho(g\,L_0D_0)$ ($D_0$ only rescales components). Reach, at three rational points of each locus:
+
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{longtable}{@{}p{4.2cm}p{6.6cm}cc@{}}\toprule
+\textbf{locus} & \textbf{weights reached (union over 3 points)} & \textbf{GT states hit} & \textbf{rank on $(1,1,1)$} \\\midrule\endhead
+quadric (R2$\delta$), genuine & all 7 & 8 of 8 & 2 \\
+$\beta=0$ (R3 / pencil) & $(1,0,2),(1,1,1),(1,2,0),(2,0,1),(2,1,0)$; not $(0,1,2),(0,2,1)$ & 6 & 1 \\
+$\alpha=\beta=0$ (R1) & $(2,1,0),(2,0,1)$ & 2 & 0 \\
+generic rotation (control) & all 7 & 8 & 2 \\
+\bottomrule\end{longtable}\end{center}
+The points used: (R2$\delta$) $(\alpha,\gamma)=(1,2),(\tfrac12,-1),(2,\tfrac13)$ with $\beta=\alpha(\tfrac{43}{16}\alpha-\gamma)$; $\beta=0$: $(\alpha,\gamma)=(\tfrac12,\tfrac32),(1,-1),(2,3)$; (R1): $\gamma=\tfrac12,\tfrac32,-2$; control $(1,2,3),(\tfrac12,\tfrac13,2),(2,-1,\tfrac12)$. So the genuine quadric family reaches everything a generic rotation does at this twist; the $\beta=0$ locus loses the two lowest weights; (R1) never reaches $(1,1,1)$.
+
+\section{General representations $[3,1,0]$ and $[3,2,0]$}\label{sec:gen}
+
+Notebook: \nbG{} (38 cells; the only rep switch is the line \texttt{Lambda = \{2,1,0\}; nL = 2; ...} of cell 3; each rep run separately, adjoint as regression). Spec: \nb{L2-site1-rotation-brackets-general-spec.md}. All Gr\"obner solves took well under 1 s (no timeout, no fallback); the setup for a dimension-15 rep takes about 5 s, the whole chain of cells about 15 s.
+
+\subsection{Tensor supports and automatic bracket counts}\label{sec:gencount}
+
+Label rule, wavefunction monomial, site-2 groups and the $K^{(c_2)}$ are as in \S\,\ref{sec:setting}. The columns of the tensors $C^{(c_2)}_{(nn'),c}$ and their supports (points $m=-1-\lambda_1,\dots,0$; slots = populated minors; rank of the 2-form for a generic rotation and for a random covector alike) \textbf{[exact/numeric]} (\nbG{} cell 17):
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{2.2cm}p{4.4cm}p{4.4cm}p{1.9cm}@{}}\toprule
+\textbf{rep} & \textbf{group $c_2$} & \textbf{column $c=0$} & \textbf{column $c=1$ ($c=2$)} & \textbf{brackets} \\\midrule\endhead
+$[2,1,0]$ & $0$ & $\{-3,-2,-1\}$ (3 slots, rk 2) & $\{-3,-2\}$ (1 slot, rk 2) & 2 \\
+ & $1$ (vac.) & $\{-3..0\}$ (5 slots, rk 4) & $\{-3,-2,-1\}$ (3 slots, rk 2) & 3 \\
+$[3,1,0]$ & $0$ & $\{-4..-1\}$ (6 slots, rk 4) & $\{-4,-3,-2\}$ (3 slots, rk 2) & 3 \\
+ & $1$ (vac.) & $\{-4..0\}$ (9 slots, rk 4) & $\{-4..-1\}$ (6 slots, rk 4) & 4 \\
+$[3,2,0]$ & $0$ & $\{-4,-3,-2\}$ (3, rk 2) & $\{-4,-3\}$ (1, rk 2); $c=2$ empty & 2 \\
+ & $1$ & $\{-4..-1\}$ (5, rk 4) & $\{-4,-3,-2\}$ (3, rk 2); $c=2$: $\{-4,-3\}$ (1, rk 2) & 4 \\
+ & $2$ (vac.) & $\{-4..0\}$ (7, rk 4) & $\{-4..-1\}$ (5, rk 4); $c=2$: $\{-4,-3,-2\}$ (3, rk 2) & 5 \\
+\bottomrule\end{longtable}\end{center}
+
+Totals (automatic count): $5,7,11$ for $|\Lambda|=3,4,5$ against $\dim V=8,15,15$ (ratios $5/8$, $7/15$, $11/15$); per group $2+3$, $3+4$, $2+4+5$. The count is set by the ladder length and the ranks, not by $\dim V$, and the rank pattern is the same for a generic rotation and for a random (non-rotation) covector. Tensor identity on all states (generic rotation $(2/3,-3/7,5/4)$, rows $\{2,3\}$, $k=3$): $<10^{-45},10^{-42},10^{-42}$ \textbf{[numeric]}; the explicit generic forms of Task~5 reproduce the overlap to the same accuracy.
+
+\subsection{Loci per column}\label{sec:genloci}
+
+All loci in the Gauss chart, \textbf{[exact]} (\nbG{} cells 19--22); ``dim'' is the dimension of the zero set in $\mathbb C^3$ including degenerate parts; ``genuine'' means $\alpha\beta\gamma\ne0$ (ideal saturated by $\alpha\beta\gamma$). The columns listed are the non-automatic ones (four or five points).
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{1.5cm}p{1.3cm}p{6.3cm}p{1.1cm}p{5.2cm}@{}}\toprule
+\textbf{rep} & \textbf{(group, col.)} & \textbf{Pfaffian / locus polynomial} & \textbf{dim} & \textbf{genuine content} \\\midrule\endhead
+$[2,1,0]$ & $(1,0)$ & $\tfrac4{837}\beta^2(43\alpha^2-16\beta-16\alpha\gamma)$ & 2 & quadric $16(\beta+\alpha\gamma)=43\alpha^2$ \\
+$[3,1,0]$ & $(0,0)$ & $\tfrac{52675}{4464}\beta(\alpha^2-\beta-\alpha\gamma)(3\alpha^2\beta-\beta^2+\alpha\beta\gamma+2\alpha^2\gamma^2)$ & 2 & two components: $\alpha^2=\beta+\alpha\gamma$ (cc $=1$) and $3\alpha^2\beta-\beta^2+\alpha\beta\gamma+2\alpha^2\gamma^2=0$ \\
+ & $(1,1)$ & $-\tfrac{43}{18}(39\alpha^2-4\beta-4\alpha\gamma)(\alpha^2-\beta-\alpha\gamma)$ & 2 & $\beta+\alpha\gamma=\tfrac{39}4\alpha^2$ and $\alpha^2=\beta+\alpha\gamma$ \\
+ & $(1,0)$ (5 pts) & five $4\times4$ Pfaffians, each a product of conic factors (cc $=\tfrac{52}{43},\tfrac{43}{16},\tfrac{1433}{344},1$), $\beta+\alpha\gamma$ and two further polynomial factors & 1 & \textbf{empty}: no genuine rotation makes this column decomposable \\
+$[3,2,0]$ & $(1,0)$ & $\tfrac{210700}{730701}\beta^3(117\alpha^2\beta-86\beta^2-43\alpha\beta\gamma+43\alpha^2\gamma^2)$ & 2 & the non-conic hypersurface $117\alpha^2\beta-86\beta^2-43\alpha\beta\gamma+43\alpha^2\gamma^2=0$ \\
+ & $(2,1)$ & $-\tfrac{14792}{7533}\beta^2(39\alpha^2-8\beta-8\alpha\gamma)$ & 2 & conic $\beta+\alpha\gamma=\tfrac{39}8\alpha^2$ \\
+ & $(2,0)$ (5 pts) & three independent $4\times4$ Pfaffians & 1 & the curve $\{1247689\beta=461332\gamma^2,\ 1117\alpha=-194\gamma\}$ \\
+\bottomrule\end{longtable}\end{center}
+(For the other columns: $[3,2,0]$ $(0,\ast)$, $(1,1)$, $(1,2)$, $(2,2)$ are automatic and group~0 column~2 is identically zero.) Observations:
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item \textbf{Joint loci.} $[3,1,0]$: group 0 $=$ the $(0,0)$ locus (dim 2); \emph{vacuum group empty}; all groups empty. $[3,2,0]$: vacuum group (all three columns) \emph{empty} (the curve of $(2,0)$ does not lie on the conic of $(2,1)$); all groups empty; the pair $\{(1,0),(2,1)\}$ gives a curve (below), the pairs $\{(1,0),(2,0)\}$ and $\{(2,0),(2,1)\}$ are empty. Maximal column sets decomposable together by a genuine rotation: $[2,1,0]$: $\{(1,0)\}$ (dim 2); $[3,1,0]$: $\{(0,0),(1,1)\}$ (dim 2, the locus $\alpha^2=\beta+\alpha\gamma$ together with the curve below); $[3,2,0]$: $\{(2,0)\}$ and $\{(1,0),(2,1)\}$ (both dim 1).
+\item \textbf{The (R2$\delta$) analogue is empty} for both dimension-15 reps: for $[3,1,0]$ the vacuum group's 5-point column $(1,0)$ has an empty genuine Pfaffian locus (only degenerate points); for $[3,2,0]$ the columns $(2,0)$ and $(2,1)$ are incompatible. Decomposability is available only for non-vacuum-group columns. The adjoint quadric $16(\beta+\alpha\gamma)=43\alpha^2$ occurs again, but only as one factor of one Pfaffian of the $[3,1,0]$ column $(1,0)$.
+\item \textbf{A $t$-independent factor.} For $[3,1,0]$ the conic $\beta+\alpha\gamma=\alpha^2$, i.e.\ $b_2^2=b_1b_3$ with $b=(1,\alpha,\alpha^2)$, is shared by the columns $(0,0)$, $(1,0)$, $(1,1)$ and has no $t$ dependence at all (\S\,\ref{sec:gent}); this is why $(0,0)$ and $(1,1)$ are decomposable together.
+\end{itemize}
+
+\subsection{Best reduced forms; explicit $[3,1,0]$ and $[3,2,0]$ formulas}\label{sec:genbest}
+
+For a generic rotation and for every genuine locus component the columns are decomposed exactly into wedges (Schur complement) and the overlap re-assembled; the bracket counts and deviations (max over all states, relative to the maximum of the exact overlap; \nbG{} cell 26) are \textbf{[numeric]}:
+
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{6.3cm}cp{3.8cm}c@{}}\toprule
+\textbf{rep} & \textbf{locus component (genuine)} & \textbf{dim} & \textbf{rational point} & \textbf{brackets} \\\midrule\endhead
+$[2,1,0]$ & generic rotation & 3 & $(\tfrac23,-\tfrac37,\tfrac54)$ & 5 \\
+ & $43\alpha^2=16(\beta+\alpha\gamma)$ & 2 & $(4,23,5)$ etc. & \textbf{4} \\
+$[3,1,0]$ & generic rotation & 3 & $(\tfrac23,-\tfrac37,\tfrac54)$ & 7 \\
+ & $\alpha^2=\beta+\alpha\gamma$ (columns $(0,0)$ and $(1,1)$) & 2 & $(-3,3,-2)$, $(-3,6,-1)$, $(-3,12,1)$, $(-3,15,2)$ & \textbf{5} \\
+ & curve $\{243\beta=280\gamma^2,\ 351\alpha=140\gamma\}$ & 1 & $(-385,\tfrac{2147145}2,-\tfrac{3861}4)$ & \textbf{5} \\
+ & $3\alpha^2\beta-\beta^2+\alpha\beta\gamma+2\alpha^2\gamma^2=0$ ($(0,0)$ only) & 2 & $(-3,-3,2)$ & 6 \\
+ & $39\alpha^2=4(\beta+\alpha\gamma)$ ($(1,1)$ only) & 2 & $(-2,33,-3)$ & 6 \\
+$[3,2,0]$ & generic rotation & 3 & $(\tfrac23,-\tfrac37,\tfrac54)$ & 11 \\
+ & curve $\{12493\beta=3010\gamma^2,\ 403\alpha=140\gamma\}$ ($(1,0)$ and $(2,1)$) & 1 & $(1,\tfrac{559}{280},\tfrac{403}{140})$ & \textbf{9} \\
+ & $(1,0)$ hypersurface; $39\alpha^2=8(\beta+\alpha\gamma)$ ($(2,1)$); curve of $(2,0)$ & 2, 2, 1 & $(-384,\tfrac{8626176}{43},-\tfrac{22464}{43})$; $(4,58,5)$; $(-385,\tfrac{176239525}{97},\tfrac{430045}{194})$ & 10 \\
+\bottomrule\end{longtable}\end{center}
+Deviations: $<10^{-45}$, $10^{-42}$, $10^{-42}$ for the three generic forms; $<10^{-48}$, $10^{-46}$, $10^{-46}$ for the best reduced forms. \textbf{Best reduced forms} (fewest brackets): $[2,1,0]$: $4=5-1$; $[3,1,0]$: $\mathbf{5=7-2}$ on the two-dimensional family $\alpha^2=\beta+\alpha\gamma$ (per group $2+3$: group 0 both columns rank 2, vacuum group column 0 rank 4, column 1 rank 2), and the same count on the curve; $[3,2,0]$: $\mathbf{9=11-2}$, only on the one-dimensional curve (every two-dimensional locus gives only 10). In every case the count tracks $|\Lambda|$ ($3,4,5$ boxes: $5,7,11$ generic and $4,5,9$ reduced), not $\dim V$.
+
+\textbf{The explicit $[3,1,0]$ formula} at the point $(\alpha,\beta,\gamma)=(-3,3,-2)$ of $\alpha^2=\beta+\alpha\gamma$ (re-checked: $9=3+6$), points $(-4,-3,-2,-1,0)$ (cell 26, deviation $<10^{-47}$, five brackets):
+\[
+\frac{\langle\Phi(g)|\Psi_B\rangle}{\langle x_0|\Psi_B\rangle}\Psi_1=\sum_{c_2=0}^{1}\lambda_2^{(c_2)}\sum_{c=0}^{1}\ \sum_{\text{wedges}}\Bk[F,G]\;Q^3(\theta_1-ch),
+\]
+with, for $(c_2,c)$:
+\begin{align*}
+(0,0)&:\ F=(0,0,0,-1,0),\ G=(-\tfrac{2835}{62},-\tfrac{365715}{248},\tfrac{40635}{62},0,0);\\
+(0,1)&:\ F=(0,-1,\tfrac43,0,0),\ G=(-\tfrac{10185}{248},0,-\tfrac{145985}{124},0,0);\\
+(1,0)&:\ \bigl[F=(0,-1,-9,0,-27),\ G=(\tfrac{43}{62},0,-\tfrac{1161}{31},-27,-\tfrac{10449}{62})\bigr]\\
+&\qquad+\bigl[F=(0,0,0,-1,0),\ G=(0,0,\tfrac{8505}8,0,-729)\bigr];\\
+(1,1)&:\ F=(0,-1,-\tfrac{387}8,43,0),\ G=(1,0,-369,344,0).
+\end{align*}
+Here $\lambda_2^{(1)}=1$ (the vacuum group) and $\lambda_2^{(0)}=Q^k(\theta_2)/Q^k(\theta_2-h)$ in the notation of \S\,\ref{sec:setting}.
+
+\textbf{The $[3,2,0]$ curve.} The best locus of $[3,2,0]$ is the curve on which the columns $(1,0)$ and $(2,1)$ are decomposable together; at $t=62/35$ it is $\{12493\beta=3010\gamma^2,\ 403\alpha=140\gamma\}$, with explicit eight-term measures (nine brackets) at $(1,\tfrac{559}{280},\tfrac{403}{140})$ listed in \nbG{} cell 26 (not reproduced here; entries have up to 17-digit numerators). Its $t$-dependence is fitted exactly through seven points (cell 36) \textbf{[fitted]}:
+\[
+\frac{\gamma}{\alpha}=\frac{t(t-4)}{6(t-2)},\qquad\frac{\beta}{\alpha^2}=-\frac{(t-3)(t-4)}{6(t-2)},\qquad\frac{\beta+\alpha\gamma}{\alpha^2}=\frac{t-4}{2(t-2)},
+\]
+the last being the conic constant of column $(2,1)$: the curve lies on the conic of $(2,1)$ and is cut out of it by a second $t$-dependent relation (the ideals at the seven $t$ values are listed in cell 37).
+
+\subsection{Reach tables, $z$- and $t$-dependence}\label{sec:gent}
+
+\textbf{Reach} \textbf{[exact]} (\nbG{} cells 28--29, same $L_0,D_0,U_0$ for all reps as in \S\,\ref{sec:adjreach}; four rational points per family). Weights of $V$: $[2,1,0]$ seven (with $(1,1,1)$ doubly degenerate); $[3,1,0]$ twelve ($(1,1,2),(1,2,1),(2,1,1)$ doubly degenerate); $[3,2,0]$ twelve ($(1,2,2),(2,1,2),(2,2,1)$ doubly degenerate). The HW states of $\Lambda\otimes\Lambda$ and the slice weights $\nu-\Lambda$ needed: $[3,1,0]$: ten HW states over eight weights, $(6,2,0),(6,1,1),(5,3,0),(5,2,1)\times2,(4,4,0),(4,3,1)\times2,(4,2,2),(3,3,2)$ (agreeing with \nb{L2-310-untwist-CG.md} \S2); $[3,2,0]$: ten HW states over eight weights, $(6,4,0),(6,3,1),(6,2,2),(5,5,0),(5,4,1)\times2,(5,3,2)\times2,(4,4,2),(4,3,3)$. Result: every genuine locus found (including all reduced-bracket loci and the one-dimensional curves) and the generic rotation reach \emph{all} weights of $V$ ($7/7$, $12/12$, $12/12$) with rank 2 on every doubly degenerate weight space, hence all required slice weights: the families are CG-complete at finite twist, exactly as the adjoint quadric. Because reach is already complete at the weight level, the table does not discriminate between reduced loci; the discriminant is the bracket count.
+
+\textbf{$z$-independence} \textbf{[exact]}: at $z'$ all $K^{(c_2)}$ and all column Pfaffians are identical to the base run for all three reps (printed flags \texttt{True}), so every locus is $z$-independent.
+
+\textbf{$t$-dependence of the conic constants} $\mathrm{cc}$ ($\beta+\alpha\gamma=\mathrm{cc}\,\alpha^2$, i.e.\ $b_1b_3=\mathrm{cc}\,b_2^2$) at seven $t$ values $62/35,\ 6/35,\ 16/15,\ 5/2,\ 7/3,\ 3/5,\ 29/15$; each Moebius branch $(at+b)/(t+d)$ was fitted exactly on three $t$ values and required to occur at the other four \textbf{[fitted]} (cell 37):
+
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{tabular}{@{}llc@{}}\toprule
+\textbf{rep, column} & \textbf{cc at the 7 values of $t$} & \textbf{fit} \\\midrule
+$[2,1,0]$ $(1,0)$ & $\tfrac{43}{16},\tfrac{99}{128},\tfrac{29}{28},-\tfrac12,-1,\tfrac67,8$ & $\tfrac{t-3}{2(t-2)}$ \\
+$[3,1,0]$ $(0,0),(1,0),(1,1)$ & $1$ at all seven & $1$ (constant) \\
+$[3,1,0]$ $(1,1)$ & $\tfrac{39}4,\tfrac{67}{32},\tfrac{22}7,-3,-5,\tfrac{17}7,31$ & $\tfrac{t-4}{t-2}$ \\
+$[3,1,0]$ $(1,0)$ & $\tfrac{52}{43},\tfrac{268}{297},\tfrac{88}{87},2,\tfrac53,\tfrac{17}{18},\tfrac{31}{24}$ & $\tfrac{2(t-4)}{3(t-3)}$ \\
+$[3,1,0]$ $(1,0)$ & as the adjoint line & $\tfrac{t-3}{2(t-2)}$ (the adjoint quadric) \\
+$[3,1,0]$ $(1,0)$ & $\tfrac{1433}{344},\tfrac{12251}{19008},\tfrac{1291}{1218},-3,-\tfrac{11}3,\tfrac{97}{126},\tfrac{353}{24}$ & none with $m+n\le4$ \\
+$[3,2,0]$ $(2,1)$ & $\tfrac{39}8,\tfrac{67}{64},\tfrac{11}7,-\tfrac32,-\tfrac52,\tfrac{17}{14},\tfrac{31}2$ & $\tfrac{t-4}{2(t-2)}$ \\
+$[3,2,0]$ $(2,0)$ & $\tfrac{13}2,\tfrac{67}{48},\tfrac{44}{21},-2,-\tfrac{10}3,\tfrac{34}{21},\tfrac{62}3$ & $\tfrac{2(t-4)}{3(t-2)}=\tfrac43\cdot\tfrac{t-4}{2(t-2)}$ \\
+\bottomrule\end{tabular}\end{center}
+The adjoint constant does not generalise by a shift $t\to t-k$ or by a common factor; the new constants have zeros and poles at the integers $t=2,3,4$, the values of $\theta_{12}/h$ at which a point $\theta_1-m_1h$ of the site-1 ladder coincides with a point $\theta_2-m_2h$ of the site-2 ladder ($m_1-m_2=t$). Other factors (the $\beta$-quadratic factor of $[3,1,0]$ $(0,0)$, the non-conic factor of $[3,2,0]$ $(1,0)$) have $t$-dependent coefficients that were not analysed, and the $t$-dependence of the $[3,1,0]$ curve $\{243\beta=280\gamma^2,\ 351\alpha=140\gamma\}$ was not fitted.
+
+\textbf{The (R2$\delta$)-analogue observation.} Because the vacuum group is never fully decomposable by a genuine rotation, the adjoint statement ``one quadric makes everything an (R2$\delta$)'' has \emph{no} counterpart: the adjoint is the exceptional case in which the only non-automatic column is the 4-point column $(1,0)$. The right generalisation is therefore the minimum bracket count over loci, $4,5,9$, tracking $|\Lambda|$.
+
+\section{Why the earlier single-vacuum algebra route failed}\label{sec:neg}
+
+Summary of \nb{L2-210-localising-span.md} (notebook \nb{L2-210-localising-span.wb}, 63 cells, four rounds; spec with Addenda A--C), as \emph{motivation} only. Paul's earlier request was a gl(3) analogue of the gl(4) rectangular result (\nb{L2-gl4-rect-untwist.md}): a covector family whose overlap is a Q-number with cost scaling like the boxes, not $\dim V$ (no determinant required), and which untwists cleanly, every CG datum at leading order with $K/S=O(\varepsilon)$.
+
+\textbf{Background, one paragraph (gl(4), not re-documented).} The two-rotation family $\langle W_{\omega,\kappa}\otimes W_\omega|$ of arXiv:2603.26617 gives all CG coefficients of the 6-rep of gl(4) at leading order because of two ingredients absent in gl(3): an abelian nilradical, so that the undo acts entrywise ($X'_{ij}=x_{ij}(\delta_j/\delta_i-1)$) with no commutator direction $E_{13}$; and two independent localising deformations at one point (the torus insertion $\kappa$ and the $\omega$-deformation), none of them pinned. In gl(3) the product locus is one isolated point $c^*$ with $y=w_2(t-1)/(t-2)$ and the $E_{13}$ direction of the undone covector drops one order.
+
+\textbf{The base and the levels.} Take $\langle\Omega_w\otimes\Omega_w|$ (overlap $\det_6$) and the commutative algebra $\mathcal A$ of transfer matrices. At $L=2$ the degrees of $t_1,t_2$ leave six non-scalar coefficient operators $a_1,\dots,a_6$ ($t_1$: 2, $t_2$: 4; $t_3$ is scalar), giving the linear span $D_1$ (dim 7), the quadratic span $D_2$ (dim 24, with four exact quadratic relations among 28 products), the cubic span $D_3$ (dim 48), and $D_4=$ everything (64: Lagrange interpolation, the excluded cost). Rational forms $P/Q$ are non-vacuous only for $(D_2,D_2)$ ($47<64$ conditions) and $(D_3,D_1)$ ($54<64$).
+
+\textbf{Results} \textbf{[exact; identical at the twist points $P1$ and $P1'$]}: the site-1 localising subspace has $\ell_1=\ell_2=3$ for $D_2$ and $D_3$: $\{\Omega_1,\ \Omega_1T_{11}^{(1)}(\theta_1-2h),\ \Omega_1T_{21}^{(1)}(\theta_1-2h)\}$, i.e.\ (1) $T_{21}(\theta_1-2h)$ \emph{is} the inverse ket-twist torus on site 1: $\Omega_1T_{21}^{(1)}=-\tfrac{128}{75}\Omega_1\rho(1/z)$ at $P1$ (eigenvalue $-3h^3\chi_3^2\prod_kz_k^{-\mu_k}=-\tfrac38\prod z_k^{2-\mu_k}$ on every weight), the gl(3) shadow of gl(4)'s $t_2(\theta_1-h)\propto\rho_1(z)^{-1}$; (2) $T_{11}^{(1)}$ is not a torus (non-scalar $2\times2$ block on $(1,1,1)$, eigenvalues $\tfrac34\chi_3/z_m$ on the 1-dim weights). Not reachable at any level: the polynomial torus at a free point, the resolvent, $\rho(z)$, a different-$w_1$ vacuum, every torus times $y$-deformed vacuum. Rational $(2,2)$ forms exist exactly for the $y$-deformation of the vacuum at common $w_1$ (solution dimensions $6/5$): since $b=r_2+r_1r_3=(w_1-z_1)/(w_1-z_3)$ is exactly $y$-independent, the vacua of common $w_1$ differ only in the $E_{23}$ parameter, so this family reads $[4,1,1]$ only and untwists cleanly there ($K/S=1.1,2.2,4.4\cdot10^{-6}$ at $\varepsilon=1,2,4\cdot10^{-6}$ \textbf{[numeric]}) but has $S\equiv0$ for $[3,3,0]$, both octets and the singlet. The rational $(3,1)$ level adds nothing.
+
+\textbf{Conclusion.} On a single vacuum the gl(3) adjoint has one free rotation-preserving deformation ($y$, moving only $E_{23}$) and \emph{no} torus with a free point; the gl(4) mechanism needs both. The write-up's suggested ways out were (i) a different base, e.g.\ sums of two vacuum determinants (only $D_1\times D_2$-type combinations non-vacuous), or (ii) non-product covectors with a short rotation decomposition. The present thread takes a third way: abandon the det$_6$ base altogether, work on the bare SoV vacuum, and relax ``Q-number'' from a product/determinant to a bracket form with explicit measures; the price is the quadric of \S\,\ref{sec:adjloci}.
+
+\section{Open problems and next steps}\label{sec:open}
+
+\begin{enumerate}\setlength{\itemsep}{2pt}
+\item \textbf{Untwisting the quadric family} (HANDOFF NEXT item 1; write-up \S3.1). Site~2 is the SoV vacuum $x_0^{(1)}=e_1^{\mathsf T}\rho(U_0(z))$ and the undone covector is $e_1^{\mathsf T}\rho(g\,L_0(z)D_0(z))$ with $g$ on the quadric. In the regime $z=1+\varepsilon\varphi$ the Gauss factors $L_0,D_0$ of $P_{\rm phys}^{-1}=L_0D_0U_0$ scale with $\varepsilon$. The question is whether $(\alpha,\beta,\gamma)$ can be chosen $\varepsilon$-dependent on the quadric so that the undone covector is a generic unipotent (all seven weights at $O(1)$, rank 2 on $(1,1,1)$) at $\varepsilon=0$: two free parameters plus a constraint that depends on $t$ and not on $\varepsilon$ is promising, but nothing has been computed. The target is then $K/S$ for the six branches and the CG data at leading order, as in \nb{L2-210-untwist-CG.wb} Tasks 1--2 (the contrasting two-rotation $\det_6\times\det_2$ family needs two orders; see \nb{Untwist-two-rotation-notes.tex}). The same question for $[3,1,0]$ is on the two-dimensional family $\alpha^2=\beta+\alpha\gamma$.
+\item \textbf{Closed-form measures} (in progress). The measures $F,G$ are known as exact rationals at isolated points of the loci; a closed form as functions of the locus parameters $(\alpha,\gamma)$ (adjoint) and of $t$ is not yet written. The natural-measure results of \S\,\ref{sec:adjnat} (different $w$ per column; no common $w$) constrain the ansatz.
+\item \textbf{Meaning of the quadric constant.} Compare $c(t)=(t-3)/(2(t-2))$ with the product point $y_0=(t-1)/(t-2)$ of the $\det_6\times\det_2$ family and with the singlet constant $\kappa_{\rm singlet}=2(t-3)/(3(t-2))$ of \nb{Untwist-two-rotation-notes.tex}. The ratio $\kappa_{\rm singlet}/c=4/3$ exactly (re-derived here), and the $[3,2,0]$ constants of column $(2,0)$ and $(2,1)$ differ by the same factor $4/3$ (\S\,\ref{sec:gent}); whether either is a coincidence is \textbf{[conjecture]}. Also open: is the quadric the image of the site-1 factor of the $\det_6\times\det_2$ family? The zeros and poles at $t=2,3,4$ coincide with the collisions of the two ladders.
+\item \textbf{Site-2 and two-site versions.} The site-2 analogue (a rotation on site~2 with $x_0$ on site~1) and both sites rotated (two quadrics?). Not started.
+\item \textbf{$[3,2,0]$ Task 7} (and the $[3,1,0]$ curve). The \nbG{} result cell 37 already holds $z$- and $t$-dependence for all three reps at eight parameter points (computed before Paul reduced the scope to $[3,1,0]$; see Appendix~\ref{app:notes}); a re-run in VS Code, an analysis of the remaining non-conic factors, and the $t$-dependence of the $[3,1,0]$ curve are still to do. Also: $[4,1,0]$ (loci of $k=2$ type) and the rectangular $[S,S,0]$ reps (abelian nilradical), as suggested in the localising-span write-up.
+\item \textbf{Tidying.} \nbA{}: cell 21 ends on a missing check key; the \texttt{pencilCheck} line of cell 25 is wrong (symbol clash \texttt{l}, redone with \texttt{ll} in the Task~5 cell); the Task~6 driver (cell 34) wipes \texttt{Global`} and must run last. \nbG{}: the Task~7 driver wipes \texttt{Global`} too. Both notebooks must be re-run in VS Code to store native outputs.
+\end{enumerate}
+
+\appendix
+
+\section{Notebook and cell maps}\label{app:cells}
+
+All notebooks are in \nb{Paul/Mathematica/new-conventions/}; cells are 1-based; ``result cell'' means a markdown cell holding the printed numbers. The first code cell of each notebook is \texttt{Quiet[ClearAll["Global`*"]]}.
+
+\subsection{\texttt{L2-210-site1-rotation-brackets.wb} (36 cells)}\label{sec:cellsA}
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{12cm}@{}}\toprule
+\textbf{cells} & \textbf{content} \\\midrule\endhead
+1--2 & title; setup note (companion frame, $h=1/2$, $\theta=(2/7,-3/5)$, $z=(3/2,5/4,2/3)$) \\
+3--5 & reset, GT generators, exact monodromy, quantum minors, $t_a$ at seven points; interpolation helper; dual Baxter operator \\
+6--7 & poles, physical-space Gauss factors, $x_0=(e_1^{\mathsf T}P_{\rm phys}^{-1})^{\otimes2}$; untwisted $B(u)$ and the $L=1$ SoV covectors \\
+8--10 & site-1 rotation in the companion frame, $N_m$, $\lambda_2$, the 12-state sum; the map $K$ \\
+11--12 & equivariant map $X$; rotation covectors $c(a,b)$ ($X=ab^{\mathsf T}$ traceless-projected, 73 s symbolic) \\
+13 & result cell, Task 0 (checks, $\Phi^{\rm vac}$, $\Phi^{20}$) \\
+14--16 & Task 1: monomial table and tensors $C^0$, $C^1$; code (15); result (16) \\
+17--19 & Task 2: bracket dictionary, $3\times3$ expansion, Pl\"ucker conventions; code (18); result (19) \\
+20--23 & Task 3: loci for $N^0$; Gauss chart (21); explicit bra functions and 64-state check (22); result (23) \\
+24--26 & Task 4: $N^1$ and the $\lambda_2$-pencil; code (25); result (26) \\
+27--29 & Task 5: natural measures; code (28); result (29) \\
+30--32 & Task 7 (reach): $L_0D_0U_0$, undone covector; code (31); result (32) \\
+33--35 & Task 6 ($z$-independence, other $(h,\theta)$): driver text (33), driver code (34), result (35) \\
+36 & final summary \\
+\bottomrule\end{longtable}\end{center}
+
+\subsection{\texttt{L2-site1-rotation-brackets-general.wb} (38 cells)}\label{sec:cellsG}
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{12cm}@{}}\toprule
+\textbf{cells} & \textbf{content} \\\midrule\endhead
+1--2 & title, one-switch statement, notation, notebook state \\
+3--6 & Task 0: generators, exact sparse monodromy, quantum determinant check (3); eigenstates and eigenvalue polynomials (4); dual $Q$'s and ladder values (5); $P_{\rm phys}$, $x_0$, companion kets (6) \\
+7 & result cell, Task 0 \\
+8--11 & Task 1: untwisted $B$, roots, labels (9); wavefunction rule, three conventions (10); result with label bijection (11) \\
+12--14 & Task 2: $e_\nu\otimes e_1$ in the SoV basis, groups, $K^{(c_2)}$ (13); result (14) \\
+15--17 & Task 3: tensors, automatic counts, tools (16); result (17) \\
+18--22 & Task 4: symbolic Gauss-chart tensors (19), Pfaffian loci (20), natural guess (21); result (22) \\
+23--26 & Task 5: subset scan of columns (24), explicit forms and verification (25); result (26) \\
+27--29 & Task 6: reach table; code (28); result (29) \\
+30--37 & Task 7: $z$- and $t$-dependence; driver (31), runs per rep (32, 33, 34), Moebius fits (35), $[3,2,0]$ curve addendum (36), result (37) \\
+38 & final summary \\
+\bottomrule\end{longtable}\end{center}
+
+\section{Checks summary}\label{app:checks}
+
+\textbf{What the notebooks check} (all from the markdown result cells):
+
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item Adjoint (\nbA{} cell 13): 64 eigenvectors residual below $10^{-40}$ (chop); all 192 dual $Q$'s found with degrees $\mu_j-L\lambda_3$ (0.47 s); $B(u)$ of degree 6, interpolation exact, simple spectrum, min gap $1.6\cdot10^{-5}$; expansion of the rotation in the SoV basis $10^{-59}$, support 12 states; $L=2$ wavefunction $=\prod_s\det_2v_k$ to $10^{-47}$; companion kets $10^{-55}$; 12-state sum $<10^{-47}$; $R_{\rm sym}$ polynomial $<10^{-47}$; 2-plane relation $10^{-51}$, eight $\psi$ $10^{-47}$; $K$ rationalisation $10^{-52}$; ranks $(8,4)$; rank-1 deviation of $X(c)$ $0$ for a rotation, $0.093$ for a random covector.
+\item Adjoint tasks: monomial table $10^{-47}$, overlap identity $10^{-48}$ to $10^{-51}$ (cell 16); bracket dictionary identities all pass (cell 19); (R2$\delta$), (R1), (R3) forms $10^{-53}$ (cell 23); pencil form at $(\tfrac12,0,\tfrac32)$ $10^{-53}$ (cell 26); natural measures exact (cell 29); reach exact (cell 32); $z'$: $K$ identical, forms $10^{-54}$; eight $(h,\theta)$ points all $c=(t-3)/(2(t-2))$ (cell 35).
+\item General reps (\nbG{} cells 7, 11, 14, 17, 22, 26, 29, 37): quantum determinant exact; eigen-residual $<10^{-53},10^{-51},10^{-52}$; Baxter residual $<10^{-49},10^{-47},10^{-48}$; wavefunction rule $<10^{-43},10^{-39},10^{-40}$; $K$ identity $<10^{-42}$; tensor identity $<10^{-45},10^{-42},10^{-42}$; best reduced forms $<10^{-48},10^{-46},10^{-46}$; Gr\"obner solves $<1$ s each; $z'$ identical; $t$-fits exact on seven points.
+\end{itemize}
+
+\textbf{Independent checks made while writing} (hand arithmetic or plain floating point in a shell; not Wolfram; nothing in the repository was touched):
+\begin{enumerate}\setlength{\itemsep}{1pt}
+\item The first row of $e^{\alpha E_{12}}e^{\beta E_{13}}e^{\gamma E_{23}}$ is $(1,\alpha,\beta+\alpha\gamma)$, so the quadric reads $2(t-2)b_1b_3=(t-3)b_2^2$.
+\item $c(t)=(t-3)/(2(t-2))$ gives $43/16$ at $t=62/35$ and $8$ at $t=29/15$; the $[3,1,0]$ constants $(t-4)/(t-2)=39/4$, $2(t-4)/(3(t-3))=52/43$ and the $[3,2,0]$ constants $(t-4)/(2(t-2))=39/8$, $2(t-4)/(3(t-2))=13/2$ at $t=62/35$; $\gamma/\alpha=t(t-4)/(6(t-2))=403/140$ at $t=62/35$.
+\item The point $(1,11/16,2)$ lies on $\beta=\alpha(\tfrac{43}{16}\alpha-\gamma)$; $(4,23,5)$ also; $(-3,3,-2)$ lies on $\alpha^2=\beta+\alpha\gamma$.
+\item With the quoted $F_{-1},G_{-1}$ at $(1,11/16,2)$, $F\wedge G=(\tfrac13,\tfrac{16}{81},-\tfrac{43}{54})$ on the minors $(-3,-2),(-3,-1),(-2,-1)$, which equals column $r=-1$ of $C^0$, $(1/3,16\alpha/81,-8(\beta+\alpha\gamma)/27)$.
+\item $\kappa_{\rm singlet}/c(t)=\tfrac{2(t-3)}{3(t-2)}\big/\tfrac{t-3}{2(t-2)}=\tfrac43$.
+\item The adjoint automatic count $2+3=5$ from the column ranks, and the totals $3+4=7$, $2+4+5=11$.
+\item The Pfaffian prefactors of the adjoint column $(1,0)$ in the two notebooks differ by exactly $7533/837=9$ (Appendix~\ref{app:notes}, item~4).
+\end{enumerate}
+
+Not checked: any printed number was recomputed in Wolfram (none was); any fitted law was re-fitted; the explicit measures of $[3,2,0]$ were not re-verified.
+
+\section{Source notes: ambiguities and inconsistencies}\label{app:notes}
+
+Reported, not resolved silently.
+
+\begin{enumerate}\setlength{\itemsep}{2pt}
+\item \textbf{Sign of $r$ in $Q^3(\theta_1-rh)$.} The write-up (\S0) writes the sum over $r\in\{-1,0\}$ with $Q^3(\theta_1-rh)$, which for $r=-1$ would be the point $\theta_1+h$; the notebook (cells 15, 22, 23) uses $r$ as the point \emph{offset}, i.e.\ the points $\theta_1-h$ and $\theta_1$ (equivalently $Q^3(\theta_1+rh)$, or $Q^3(\theta_1-ch)$ with $c=-r\in\{1,0\}$). This note uses the notebook's convention. (The monomial $v_k(\theta-ch)$ in the general spec is consistent with it.)
+\item \textbf{Convention of $\det_2$.} The spec and the general spec write $\det_2[v(n),v(n')]$ with $n<n'$; both notebooks verify, and use, $\mathrm{minor}(n,n')=\det_2[v(n'),v(n)]$, which differs by an overall $-1$ (\nbA{} cell 16; \nbG{} cell 11). The user-level statement ``$M_{(a|bc)}=\det_2[v(\theta-(1+a)h),v(\theta-bh)]\,v_k$'' holds up to that sign. The write-up's $\Psi_1$ expression (parentheses omitted) is the ladder-1 factor of $\Psi_Q(x_0)$ and agrees with the notebook's $M_{(-3,-2;-1)}$.
+\item \textbf{$w$ versus $\rho=1/w$ for natural measures.} The write-up says ``$w$ from $(-32\pm\sqrt{7990})/54$''; the notebook (cell 29) gives these as $\rho$ ($F_m=\mathrm{wgt}_4(m)\rho^m(\dots)$, $\rho=1/w$). Taken here as $\rho$.
+\item \textbf{Normalisation of the tensors.} $\Pf(C^0_{\cdot,0})=-\tfrac4{7533}\beta^2(16\beta+16\alpha\gamma-43\alpha^2)$ in \nbA{} cell 23, but $\tfrac4{837}\beta^2(43\alpha^2-16\beta-16\alpha\gamma)$ in \nbG{} cell 22 for the same adjoint column: they differ by a factor $9$ (and are written with opposite sign inside the bracket, so the zero sets coincide). The sources do not say why (different normalisation of the tensor units); the loci are unaffected. The measures quoted for the adjoint at $(4,23,5)$ come from the general notebook and have that normalisation.
+\item \textbf{Task~7 of the general notebook.} The task message says Task~7 was not run and cells 37--38 are placeholders. The cell dump contains full result cells 37 (Task~7: $z$- and $t$-dependence, 8 parameter points per rep, plus a scope note that Paul later reduced the scope to $[3,1,0]$) and 38 (final summary). I used what the dump contains; the $[3,2,0]$ numbers of cell 37 were computed before the scope reduction and are quoted as computed.
+\item \textbf{Number of reach points.} The adjoint reach table uses three rational points per locus (\nbA{} cell 32), the general notebook four (cell 29; for the adjoint quadric $(4,23,5),(4,27,4),(4,31,3),(4,35,2)$); the result is the same.
+\item \textbf{Task numbering.} In \nbA{} the cell order puts the reach table (``Task 7'', cells 30--32) before the $z$-independence section (``Task 6'', cells 33--35); the numbering follows the spec.
+\item \textbf{Spec expectations that did not hold.} The general spec expected ``likely empty or isolated'' for the full (R2$\delta$) analogue of $[3,1,0]$; the notebook finds it empty, but finds a two-dimensional family for the weaker ``fewest brackets'' ($5=7-2$). It expected three independent conditions for a five-point column, the notebook finds five $4\times4$ Pfaffians for $[3,1,0]$ $(1,0)$ and three for $[3,2,0]$ $(2,0)$. The spec's natural guess $t\to t-k$ for the quadric is refuted (\S\,\ref{sec:gent}).
+\item \textbf{Numerical quantities listed as ``cc'' for $[3,1,0]$ $(1,0)$.} The cell-37 table lists three different Moebius branches and one unfitted branch under the same column label; I report them as separate lines. Which Pfaffian factor each belongs to is in cell 20/21 outputs, not in the markdown cells I read.
+\item \textbf{Not found in the sources (not guessed).} The $\lambda_2^1$ measures of the adjoint at the test point $(1,11/16,2)$ (the write-up refers to ``eight explicit measures listed in the notebook'', but the markdown cells list the $\lambda_2^0$ pair only); the $t$-dependence of the $[3,1,0]$ curve; the explicit $[3,2,0]$ measures beyond those quoted in cell 26; any untwisting computation for the quadric family.
+\end{enumerate}
+
+\end{document}

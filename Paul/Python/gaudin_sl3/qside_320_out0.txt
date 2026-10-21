@@ -1,0 +1,57 @@
+
+==============================================================================
+SECTION 0: conventions for Lambda = (3, 2, 0)
+==============================================================================
+Lambda = (3, 2, 0)  |Lambda| = 5  theta = ['2/7', '-3/5']  one-site dim = 15  two-site dim = 225  weight sectors: 36  largest sector: 18
+HW ket index in gl3_reps ordering (0-based) = 14  GT pattern ((3,), (3, 2), (3, 2, 0)) ; annihilated by E12, E13, E23: {(1, 2): True, (1, 3): True, (2, 3): True}
+nilpotency indices (smallest k with E^k = 0 on the one-site rep): E12: 4  E23: 4  E13: 4
+partial-fraction fit (S2: 1, 1/x, 1/x^2; S3: 1, 1/x..1/x^3 per site), mismatches at extra points: 0 0 (0.8s)
+S1 = e1(zeta) + 5/x1 + 5/x2 (scalar), exact: True
+[S2(3/7), S3(-2/9)] = 0 exactly: True
+all [S_k(u), S_l(v)] = 0 exactly on a 3x3 rational grid (via the fitted Laurent form): True
+weight conservation [S2(u), E_kk^tot] = [S3(u), E_kk^tot] = 0: True
+S2 constant scalar = {Fraction(89, 24)} (e2(zeta) = 89/24 );  S3 constant scalar = {Fraction(5, 4)} (e3(zeta) = 5/4 )
+S2 double-pole coefficients scalar: True, True; value c2(Lambda) = {Fraction(8, 1)}
+   quadratic Casimir sum_i lam_i (lam_i + 3 - 2i) = 14, half = 7
+S3 triple-pole coefficient operators identically ZERO: True True
+S3 double-pole coefficient scalar? False False  (non-scalar: state dependent)
+non-scalar Laurent data: H_s (S2 simple pole): [True, True]  b_s (S3 simple): [True, True]  a_s (S3 double): [True, True]  => six non-scalar data (H1,H2,a1,a2,b1,b2)
+indicial polynomial of the dual oper at theta_s: e(e-1)(e-2) - 5 e(e-1) + c2 e = e*(e - 5)*(e - 3) ; roots {5: 1, 3: 1, 0: 1}
+H_s = sum_{i<j}[g_ii E_jj + g_jj E_ii - g_ij E_ji - g_ji E_ij]^(s) + (1/(th_s - th_s')) sum_{i<j}[...] (same formula as (2,1,0)), exact: True True
+
+==============================================================================
+SECTION 0c: vacuum Laurent data vs closed forms
+==============================================================================
+  omega: H_s - sum_i(|L|-lam_i) om_i = 420/31, -420/31 ; times th12 = 12, -12  (predicted +-k = +-12)
+  omega: a_s = 24/5, 24/5 ; a_s/om3 = 8, 8 (predicted |Lambda| = 5, observed value = c2 = 8);  b_s - om3 (H_s - |L| om3) = 0, 0
+  omega: b_s - om3 (H_s - c2 om3) = 27/25, 27/25 (for comparison)
+  omega_prime: H_s - sum_i(|L|-lam_i) om_i = 420/31, -420/31 ; times th12 = 12, -12  (predicted +-k = +-12)
+  omega_prime: a_s = 72/7, 72/7 ; a_s/om3 = 8, 8 (predicted |Lambda| = 5, observed value = c2 = 8);  b_s - om3 (H_s - |L| om3) = 0, 0
+  omega_prime: b_s - om3 (H_s - c2 om3) = 243/49, 243/49 (for comparison)
+
+==============================================================================
+SECTION 0b: bra vacuum and g' orientation
+==============================================================================
+Gauss parameters r_k(zeta,omega) = ['4/5', '-7/11', '65/44'] (rep-independent formulas)
+bra twist omega ['5/2', '7/3', '3/5']
+   variant 0  g' = P gc P^-1      : Omega x Omega left eigencovector of all S2,S3 coefficient operators: True
+   variant 1  g' = P^-1 gc P      : Omega x Omega left eigencovector of all S2,S3 coefficient operators: False
+   variant 2  g' = (P gc P^-1)^T  : Omega x Omega left eigencovector of all S2,S3 coefficient operators: False
+   exact vacuum eigenvalue functions (x1 = u-theta1, x2 = u-theta2):
+   S1 = 163/30 + 5/x1 + 5/x2
+   S2 = 131/15 + (885/31)/x1 + (8)/x1^2 + (45/31)/x2 + (8)/x2^2
+   S3 = 7/2 + (2376/155)/x1 + (24/5)/x1^2 + (0)/x1^3 + (-144/155)/x2 + (24/5)/x2^2 + (0)/x2^3
+   e2(omega) = 131/15, e3(omega) = 7/2
+   vacuum direct Q_i = e^{-om_i u} q_i (gauge 3): degrees [0, 2, 6] nullities [1, 1, 1] ; vacuum dual P^j: degrees [6, 4, 0] nullities [1, 1, 1]
+bra twist omega_prime ['7/4', '-2/5', '9/7']
+   variant 0  g' = P gc P^-1      : Omega x Omega left eigencovector of all S2,S3 coefficient operators: True
+   variant 1  g' = P^-1 gc P      : Omega x Omega left eigencovector of all S2,S3 coefficient operators: False
+   variant 2  g' = (P gc P^-1)^T  : Omega x Omega left eigencovector of all S2,S3 coefficient operators: False
+   exact vacuum eigenvalue functions (x1 = u-theta1, x2 = u-theta2):
+   S1 = 369/140 + 5/x1 + 5/x2
+   S2 = 29/28 + (48341/2170)/x1 + (8)/x1^2 + (-10459/2170)/x2 + (8)/x2^2
+   S3 = -9/10 + (44217/2170)/x1 + (72/7)/x1^2 + (0)/x1^3 + (-31383/2170)/x2 + (72/7)/x2^2 + (0)/x2^3
+   e2(omega) = 29/28, e3(omega) = -9/10
+   vacuum direct Q_i = e^{-om_i u} q_i (gauge 3): degrees [0, 2, 6] nullities [1, 1, 1] ; vacuum dual P^j: degrees [6, 4, 0] nullities [1, 1, 1]
+
+total time 21s

@@ -1,0 +1,58 @@
+# The untwisted model {#sec:untwisted}
+
+**Punchline.** At $\zeta=0$ the Laurent data of a HW state are Casimir eigenvalues: $H_1$ from $C_2$, $a_1-a_2$ from the cubic Casimir, and $b_s=0$ except in multiplicity-2 sectors. The untwisted oper is Fuchsian at infinity with three polynomial solutions of degrees $(\mu_3,\mu_2+1,\mu_1+2)$, the Weyl-shifted weight; it is a ${}_3F_2$ equation only on branches with a consecutive exponent pair. The monic twisted Q-functions have poles in $\epsilon$; the finite objects are the Plücker monomials and the Laurent data.
+
+## Laurent data from Casimirs {#sec:casimir}
+
+On the HW kets of weight $\mu$ in $V_\Lambda\otimes V_\Lambda$ at $\zeta=0$ all six Laurent operators act within the HW space, and we can compute their eigenvalues in closed form. With $T=|\Lambda|$ and the Casimirs of the GT normalisation $E_{ik}E_{ki}$ and $E_{ij}E_{jk}E_{ki}$,
+$$
+C_2(l)=\sum_il_i(l_i+4-2i),\qquad C_3(l)=l_1^3+l_2^3+l_3^3+4l_1^2+l_2^2-2l_3^2-l_1l_2-l_1l_3-l_2l_3+4l_1-2l_2-2l_3,\label{eq:Cas}
+$$
+one has $H_1=-H_2=\eta/\theta_{12}$, $a_1=-a_2=\alpha/\theta_{12}$, $b_1=-b_2=\beta/\theta_{12}^2$ with $\eta,\alpha,\beta$ independent of $\theta$ (verified at three $\theta$ points), and
+$$
+\eta=T^2-\tfrac12\bigl[C_2(\mu)-2C_2(\Lambda)\bigr],\qquad
+\alpha=\frac{4T(1+T)^2-3(1+T)C_2(\mu)+C_3(\mu)}6=\frac{(\mu_1+2)(\mu_2+1)\mu_3}2,\label{eq:etaalpha}
+$$
+(the first from $\sum_{ik}E^1_{ik}E^2_{ki}=\tfrac12(C_2^{\rm tot}-C_2^{(1)}-C_2^{(2)})$, as in (\ref{eq:H1}); the second found by an exact fit over 30 multiplicity-one sectors and then verified on every sector, and agreeing with U1's independently found product form over 23 sectors). The product is half the product of the entries of the Weyl-shifted weight $(\mu_1+2,\mu_2+1,\mu_3)$: $\alpha=0$ iff $\mu_3=0$, $\alpha=\eta$ for $\mu_3>0$ except when $\lambda_2\ge2$ where $\alpha-\eta=4,6,6,10$ for $[2,2,0]\,(4,2,2)$, $[3,2,0]\,(6,2,2)$, $(4,4,2)$, $(4,3,3)$. For the adjoint $\eta=4,6,6,9,12$ and $\alpha=0,6,0,15/2,12$ on $(4,2,0),(4,1,1),(3,3,0),(3,2,1),(2,2,2)$. In terms of the pair ($\mu_3$, cubic Casimir) this is a "determinant" of the shifted weight: a cubic Casimir quantity.
+
+In \emph{multiplicity-1} sectors $\beta=0$. In the multiplicity-2 sectors (the only ones that occur) the two copies are the eigenvectors of the $2\times2$ matrix of $S3c[1,2]=a_1$ (Table~\ref{tab:univ}): $\alpha_\pm=(\mathrm{tr}\mp\sqrt{\mathrm{disc}})/2$, $\beta=\pm\sqrt{\mathrm{disc}}$ with
+$$
+\mathrm{tr}=\eta+2c_2,\qquad\mathrm{disc}=\eta^2-4c_2^2\qquad(7\text{ of the 8 multiplicity-2 sectors}),\label{eq:multlaw}
+$$
+giving $\mathrm{disc}=45$ for $[2,1,0]$ $(3,2,1)$; $105$ and $192$ for $[3,1,0]$ $(5,2,1)$, $(4,3,1)$; $105$ and $192$ for $[3,2,0]$ $(5,4,1)$, $(5,3,2)$; and $\beta_{\rm copy}=\alpha_{\rm copy}(\eta-\alpha_{\rm copy})/c_2$ (the no-log relation). **There is one exception: $[3,2,0]$ $(5,3,2)$**, where $\mathrm{tr}=56=\eta+2c_2+18$ and $\mathrm{disc}=192$ (the prediction would have been $228$); there the no-log relation in this form fails. No closed form for $\beta(\Lambda,\mu)$ is known: it is not a function of $C_2,C_3$ alone but needs the multiplicity-space operator. For the adjoint octet $\alpha_\pm=(15\mp3\sqrt5)/2$, $\beta=\pm3\sqrt5$, with eigenvalue equation $\lambda^2-15\lambda+45=0$. At the standard point this gives $a_1=4.68085\ldots$ and $12.25463\ldots$ for the two copies.
+
+Two sum rules hold as operator identities on all of $V\otimes V$ at $\zeta=0$ (exactly, five or six representations, 37 sectors):
+$$
+b_1+b_2=0,\qquad a_1+a_2+\theta_1b_1+\theta_2b_2=0,\qquad (H_1+H_2=0).\label{eq:sumrules0}
+$$
+Hence $S_2=O(u^{-2})$ and $S_3=O(u^{-3})$ as $u\to\infty$ (no constants at $\zeta=0$): the oper is regular singular at infinity.^[Agents U1 (`RESULTS-untwisted-Q.md` T0, Fractions on exact HW kets, five representations, two $\theta$ points) and W4 (`Gaudin-untwisted-exact.wb` E2, all 37 sectors of six representations; the 45 branches in Table~\ref{tab:untw}). W4's exact tables: $\alpha_{\rm copy}$ copy 1 is the smaller, "(3,2,1)": $\alpha_\pm=(15\mp3\sqrt5)/2$.] The exact-data file lists all of it (Appendix~\ref{app:E}).
+
+## Fuchsian at infinity: three polynomial solutions {#sec:fuchs}
+
+The untwisted dual oper $\partial^3-S_1\partial^2+S_2\partial-S_3$ has, at $\theta_s$, exponents $\{0,\lambda_2+1,\lambda_1+2\}$ (Section~\ref{sec:frob}), and at infinity solutions growing as $u^k$, where for the adjoint $k$ solves $k^3-9k^2+(14+\eta)k-2\alpha=0$. The indicial roots at infinity are, on all 45 branches,
+$$
+k=(\mu_3,\ \mu_2+1,\ \mu_1+2),\label{eq:expinf}
+$$
+the Weyl-shifted weight (e.g. top $(0,3,6)$, $(4,1,1)$: $(1,2,6)$, singlet $(2,3,4)$). The Fuchs relation reads: twice the sum of the three exponents at one $\theta_s$, minus $\sum k$, equals $3$ (for the adjoint $12-\sum k=12-(|\mu|+3)=3$). No logarithms occur (all exponents differ by integers, the local monodromy at $\theta_s$ is trivial by the no-log conditions, and at infinity the exponents are integers), so \emph{all three} solutions are polynomials, of degrees $(\mu_3,\mu_2+1,\mu_1+2)$, with Wronskian proportional to $\Pi^3$ and apparent singularities at $\theta_1,\theta_2$. The exact dimension of polynomial solutions of degree $\le d$ is, for the top, $1,1,1,2,2,2,3$ ($d=0,\dots,6$), for $(4,1,1)$ $0,1,2,2,2,2,3$, and always reaches $3$. This refutes the expectation recorded in the round-4 plan that fewer than three polynomial solutions exist at $\zeta=0$ (the Wronskians of the twisted Q's degenerate as $\zeta\to0$, which suggested a degenerate solution space; Section~\ref{sec:poles} explains where the degeneracy really sits).
+
+The exact echelon bases in $x=(u-\theta_2)/\theta_{12}$ (site 2 at $x=0$, site 1 at $x=1$), all verified to solve the oper in sympy:
+$$
+\begin{aligned}
+(4,2,0):&\ \bigl\{1,\ \tfrac12x^2(2x-3),\ \tfrac14x^4(2x-3)^2\bigr\}=\{1,F,F^2\},\ \ F=\textstyle\int\Pi\ (\text{a }\mathrm{Sym}^2),\\
+(4,1,1):&\ \bigl\{\tfrac12(2x-1),\ x^2,\ \tfrac12x^4(2x^2-6x+5)\bigr\},\\
+(3,3,0):&\ \bigl\{1,\ x^2(x-1)^2,\ \tfrac14x^2(4x^3-10x+5)\bigr\},\\
+(2,2,2):&\ \bigl\{\tfrac14(2x-1)^2,\ \tfrac18(2x-1)(4x^2+2x-1),\ x^4\bigr\},\\
+(3,2,1)_{\rm copy\,0}:&\ \bigl\{\tfrac1{10}(10x-5+\sqrt5),\ \tfrac12x^2(2x-3-\sqrt5),\ \tfrac12x^4(2x-5+\sqrt5)\bigr\},
+\end{aligned}\label{eq:v0bases}
+$$
+(copy 1: $\sqrt5\to-\sqrt5$; the copies are Galois conjugate). For the top state the basis is $\{1,F,F^2\}$ with $F=\int\Pi$ (note the twisted top-state Q-functions are $e^{\zeta_3u}$ and $e^{\zeta_2u}(\Pi+\Pi'/d+\Pi''/d^2)$ with $d=\zeta_3-\zeta_2$).^[Agent U1, `RESULTS-untwisted-Q.md` T1 and `v0_bases()` in `untwisted_Q.py`; W4 E3 (exponents and degrees on all 45 branches, `Gaudin-untwisted-exact.wb`). The explicit statement for the top Q's was checked numerically at 200 digits by U1.]
+
+## The ${}_3F_2$ criterion {#sec:3F2}
+
+A natural hope was that the untwisted oper is a hypergeometric ${}_3F_2$ equation, so that its polynomial solutions would be hypergeometric polynomials. This is true only sometimes. W4 compared the oper after Möbius maps and gauge factors with the ${}_3F_2$ equation for all role assignments of the three singular points $\theta_2,\theta_1,\infty$ and found: **the oper is a ${}_3F_2$ equation if and only if some singular point carries a consecutive pair of exponents**, which happens on exactly 20 of the 45 branches. At $\theta_s$ the exponents $\{0,\lambda_2+1,\lambda_1+2\}$ contain a consecutive pair iff $\lambda_1=\lambda_2$ (pair $\{\lambda+1,\lambda+2\}$: $[1,1,0],[2,2,0]$, all five branches); at infinity iff $\mu_2=\mu_3$ or $\mu_1=\mu_2$. The parameters are $b=(-\lambda_2,-\lambda_1-1)$ with witness roles $s=0$ at $\theta_2$, $s=1$ at infinity, $s=\infty$ at $\theta_1$ and gauge $(1-x)^{\ldots}$ (for $\lambda_1=\lambda_2$: $s=x$, gauge $(1-x)^{\lambda+1}$), the parameters $a_j$ being tabulated by witness. These are degenerate integer parameters, reducible, so "hypergeometric" is not the natural frame: the polynomial bases above are the closed forms. On the other 25 branches (all with $\mu_1>\mu_2>\mu_3$ and $\lambda_1\ne\lambda_2$, including every multiplicity-2 sector) there is no consecutive pair at any of the three points, hence no ${}_3F_2$ form. U1's adjoint verdict (only $(4,1,1)$, $(3,3,0)$, $(2,2,2)$, with $X=(u-\theta_2)/(u-\theta_1)$ and gauge $(u-\theta_1)^c$, $c=2,5,3$ or $4$) agrees with W4's.^[Agent W4, `Gaudin-untwisted-exact.wb` E3; Table~\ref{tab:untw} last column. We re-counted the criterion from the exponents in the 45 branches of the data files and obtained 20.]
+
+The untwisted \emph{direct} oper (our $\Pi^p\circ$adjoint$\circ\Pi^{-p}$) has polynomial solutions of degrees $\{2\lambda_1+2-\mu_3,\,2\lambda_1+1-\mu_2,\,2\lambda_1-\mu_1\}$ on 43 of the 45 branches; the exceptions are $[1,1,0]$ $(2,2,0)$ (degrees $\{0,2,4\}$) and $[2,2,0]$ $(4,4,0)$ ($\{0,2,6\}$).
+
+## Why the twisted monic Q's have poles in $\epsilon$ {#sec:poles}
+
+We expected the untwisting limit of the twisted Q's to be the three untwisted polynomials. The monic $p_j(u;\epsilon)$ have \emph{no} coefficientwise limit: the coefficient $c_m$ of $p_j$ behaves as $\epsilon^{-\min(\mu_j-\mu_3,\ \mu_j-m)}$ (top: $P^1$ coefficients $\epsilon^{-4..0}$, $P^2$ $\epsilon^{-2..0}$, $P^3$ finite; $(4,1,1)$: $P^1$ at $\epsilon^{-3}$; $(3,3,0)$: $P^1,P^2$ at $\epsilon^{-3}$; $(3,2,1)$: $P^1$ at $\epsilon^{-2}$, $P^2$ at $\epsilon^{-1}$; singlet finite). Expanding in the exact untwisted basis $v_a(\epsilon)$ (solutions of the twisted oper with the same jets at $u=0$), $P^j=\sum_aM_{ja}(\epsilon)v_a(\epsilon)$, the matrix $M$ has pole order $\mu_j-\mu_3$ on $v_3$ and $O(\epsilon^{-(N_j-1)})$ on $v_2,v_1$, with $\det M=c_W\,\Pi(0)^3\sim\epsilon^3$ exactly; the normalised rows $(1,\rho_2,\rho_1)_j$ have $\rho=\epsilon r^{(1)}+\cdots$ with the \emph{first-order direction common to all $j$}, differing only at $\epsilon^2$ (octets, singlet) to $\epsilon^4$ (top: $R_1-R_3=O(\epsilon^4)$, $R_2-R_3=O(\epsilon^3)$). So the degeneracy sits in the monic normalisation, not in the solution space: the limiting 3-plane is the span of the untwisted polynomials and the $\zeta$-jet basis is the Smith (saturation) basis of $M$; its elementary-divisor valuations were not computed, and no closed form for $r^{(1)}$ was found. Limits of $\epsilon$-differences and derivatives: the leading Laurent coefficients of $P^j$ solve the untwisted oper, the lower ones solve $D_0p^{(n+1)}=-D_1p^{(n)}-\cdots$ (inhomogeneous), consistent with the numerics. The finite objects are the Plücker monomials and the Laurent data, which is why the formulation of Section~\ref{sec:nu} is the right one.

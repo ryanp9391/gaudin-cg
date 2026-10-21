@@ -1,0 +1,103 @@
+regime points built (200 digits, 12 eps, phi and phi2)
+######## phi = (Fraction(1, 3), Fraction(-2, 7), Fraction(5, 11))
+--- N-form (jet monomials N_i): leading polynomial L_B, identity L_B = R_B chat GF
+=== (4,2,0): k_B=0 (<x0|Psi> ~ eps^2, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 0.0
+   <x(phi)x(phi)|Psi_n> n=0..5: ['0.383', '0.0', '0.0', '0.0', '0.0', '0.0']
+   N_i exponents site1 [1, 2, 1, 2, 3] site2 [1, 2, 1, 2, 3] ; N_B = 8 (order table max|R_t|: [(0, '4.5e-206'), (1, '5.9e-103'), (2, '2.4e-93'), (3, '3.3e-84'), (4, '1.9e-75'), (5, '5.3e-67'), (6, '7.0e-59'), (7, '4.5e-51'), (8, '0.43'), (9, '0.084')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = -1.1217793595, relative residual 2.38e-43; predicted R_B = m_B/X_B = -1.1217793595, rel diff 5.95e-46
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 0.0; slice(Q) ['1.0']
+   contributing (d,n,m) at order N_B (by |term|): [((4, 2, 2), '1.45'), ((3, 2, 3), '1.2'), ((5, 1, 2), '0.994'), ((4, 1, 3), '0.953'), ((3, 3, 2), '0.65'), ((5, 2, 1), '0.614'), ((2, 3, 3), '0.549'), ((2, 2, 4), '0.536'), ((6, 1, 1), '0.43'), ((4, 3, 1), '0.366'), ((3, 1, 4), '0.347'), ((2, 4, 2), '0.149')]
+=== (4,1,1): k_B=1 (<x0|Psi> ~ eps^3, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 1.79e-103
+   <x(phi)x(phi)|Psi_n> n=0..5: ['7.97e-107', '0.0174', '4.45e-88', '0.000701', '7.08e-71', '4.87e-5']
+   N_i exponents site1 [1, 1, 2, 2, 3] site2 [1, 1, 2, 2, 3] ; N_B = 7 (order table max|R_t|: [(0, '1.7e-198'), (1, '9.9e-100'), (2, '4.1e-90'), (3, '5.6e-81'), (4, '3.2e-72'), (5, '8.8e-64'), (6, '1.2e-55'), (7, '0.19'), (8, '0.084')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = -4.8470775935, relative residual 2.7e-47; predicted R_B = m_B/X_B = -4.8470775935, rel diff 2.84e-57
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 6.38e-100; slice(Q) ['-0.7071067812']
+   contributing (d,n,m) at order N_B (by |term|): [((3, 2, 2), '2.09'), ((4, 1, 2), '2.03'), ((2, 2, 3), '1.72'), ((3, 1, 3), '1.49'), ((4, 2, 1), '1.36'), ((2, 3, 2), '1.24'), ((2, 1, 4), '0.848'), ((5, 1, 1), '0.762'), ((3, 3, 1), '0.682'), ((1, 3, 3), '0.35'), ((1, 2, 4), '0.327'), ((2, 4, 1), '0.308')]
+=== (3,3,0): k_B=1 (<x0|Psi> ~ eps^3, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 1.99e-104
+   <x(phi)x(phi)|Psi_n> n=0..5: ['3.98e-107', '0.0743', '2.22e-88', '0.00209', '3.54e-71', '0.000102']
+   N_i exponents site1 [1, 2, 1, 2, 3] site2 [1, 2, 1, 2, 3] ; N_B = 7 (order table max|R_t|: [(0, '2.0e-200'), (1, '9.7e-100'), (2, '4.0e-90'), (3, '5.4e-81'), (4, '3.2e-72'), (5, '8.6e-64'), (6, '1.1e-55'), (7, '0.19'), (8, '0.12')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = -1.13491161023, relative residual 1.8e-47; predicted R_B = m_B/X_B = -1.13491161023, rel diff 3.29e-57
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 7.46e-101; slice(Q) ['-0.7071067812']
+   contributing (d,n,m) at order N_B (by |term|): [((3, 2, 2), '1.57'), ((4, 1, 2), '1.4'), ((2, 2, 3), '1.16'), ((3, 1, 3), '0.929'), ((4, 2, 1), '0.896'), ((5, 1, 1), '0.762'), ((2, 3, 2), '0.605'), ((2, 1, 4), '0.373'), ((1, 3, 3), '0.358'), ((1, 2, 4), '0.351'), ((3, 3, 1), '0.335'), ((1, 1, 5), '0.104')]
+=== (3,2,1)a: k_B=2 (<x0|Psi> ~ eps^4, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 1.58e-100
+   <x(phi)x(phi)|Psi_n> n=0..5: ['1.47e-104', '6.03e-95', '0.00139', '0.0001', '2.18e-5', '2.88e-6']
+   N_i exponents site1 [1, 1, 1, 1, 2] site2 [1, 1, 1, 1, 2] ; N_B = 6 (order table max|R_t|: [(0, '1.1e-203'), (1, '7.4e-102'), (2, '3.0e-92'), (3, '4.1e-83'), (4, '2.4e-74'), (5, '6.6e-66'), (6, '0.2'), (7, '0.06')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = -7.59696607514, relative residual 2.94e-57; predicted R_B = m_B/X_B = -7.59696607514, rel diff 1.19e-63
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 1.21e-66; slice(Q) ['0.2088872897', '0.04931160001']
+   contributing (d,n,m) at order N_B (by |term|): [((2, 2, 2), '2.69'), ((3, 1, 2), '2.26'), ((2, 1, 3), '1.67'), ((3, 2, 1), '1.53'), ((1, 2, 3), '1.21'), ((4, 1, 1), '1.19'), ((1, 3, 2), '0.84'), ((2, 3, 1), '0.772'), ((1, 1, 4), '0.371'), ((0, 3, 3), '0.219'), ((0, 2, 4), '0.204'), ((1, 4, 1), '0.152')]
+=== (3,2,1)b: k_B=2 (<x0|Psi> ~ eps^4, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 1.95e-100
+   <x(phi)x(phi)|Psi_n> n=0..5: ['1.47e-104', '6.03e-95', '0.00139', '0.0001', '2.18e-5', '2.88e-6']
+   N_i exponents site1 [1, 1, 1, 1, 2] site2 [1, 1, 1, 1, 2] ; N_B = 6 (order table max|R_t|: [(0, '7.3e-204'), (1, '1.8e-102'), (2, '7.5e-93'), (3, '1.0e-83'), (4, '6.0e-75'), (5, '1.6e-66'), (6, '0.2'), (7, '0.06')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = -7.59696607514, relative residual 7.3e-58; predicted R_B = m_B/X_B = -7.59696607514, rel diff 1.19e-63
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 1.52e-68; slice(Q) ['-0.07978784486', '0.3379867346']
+   contributing (d,n,m) at order N_B (by |term|): [((2, 2, 2), '2.52'), ((3, 1, 2), '2.39'), ((2, 1, 3), '2.02'), ((3, 2, 1), '1.4'), ((1, 2, 3), '1.31'), ((4, 1, 1), '1.19'), ((1, 1, 4), '0.628'), ((2, 3, 1), '0.607'), ((1, 3, 2), '0.594'), ((0, 2, 4), '0.26'), ((0, 3, 3), '0.186'), ((1, 4, 1), '0.126')]
+=== (2,2,2): k_B=4 (<x0|Psi> ~ eps^6, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 2.12e-96
+   <x(phi)x(phi)|Psi_n> n=0..5: ['4.09e-104', '1.67e-94', '2.28e-85', '1.34e-76', '6.99e-6', '4.79e-60']
+   N_i exponents site1 [1, 1, 1, 1, 1] site2 [1, 1, 1, 1, 1] ; N_B = 4 (order table max|R_t|: [(0, '6.1e-203'), (1, '5.2e-103'), (2, '2.1e-93'), (3, '2.9e-84'), (4, '0.2'), (5, '0.088')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = -90.9490024709, relative residual 6.95e-75; predicted R_B = m_B/X_B = -90.9490024709, rel diff 4.12e-45
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 3.0e-102; slice(Q) ['0.1178511302']
+   contributing (d,n,m) at order N_B (by |term|): [((1, 1, 2), '4.22'), ((2, 1, 1), '3.57'), ((1, 2, 1), '2.64'), ((0, 2, 2), '1.95'), ((0, 1, 3), '1.47'), ((0, 3, 1), '0.552'), ((2, 0, 2), '1.91e-101'), ((2, 2, 0), '1.83e-101'), ((3, 1, 0), '1.69e-101'), ((1, 0, 3), '1.17e-101'), ((3, 0, 1), '9.22e-102'), ((1, 3, 0), '4.92e-102')]
+--- nu-form (nu = N/M from Laurent data): sum G nu nu = eps^(6-k_B) chat GF / X_B
+(4,2,0): k_B=0  N_B-2=6  ||Sum G nu nu||: lower orders <= 2.84e-165; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 1.82e-157; rho_B dev (16 pts) 2.51e-153; dictionary |v_Q - Psi0| = 0.0
+    X_B = <x x|Psi_kB> = 0.383219954649 ; |<xx|H_mu>| exact = ['0.38'] ; slice(Q) [(7, '1.0')]
+(4,1,1): k_B=1  N_B-2=5  ||Sum G nu nu||: lower orders <= 9.48e-63; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 5.52e-55; rho_B dev (16 pts) 3.05e-52; dictionary |v_Q - Psi0| = 6.38e-100
+    X_B = <x x|Psi_kB> = -0.0173941373669 ; |<xx|H_mu>| exact = ['0.0'] ; slice(Q) [(5, '-0.707106781187')]
+(3,3,0): k_B=1  N_B-2=5  ||Sum G nu nu||: lower orders <= 6.38e-63; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 3.72e-55; rho_B dev (16 pts) 4.42e-51; dictionary |v_Q - Psi0| = 7.46e-101
+    X_B = <x x|Psi_kB> = -0.0742883698864 ; |<xx|H_mu>| exact = ['0.0'] ; slice(Q) [(6, '-0.707106781187')]
+(3,2,1)a: k_B=2  N_B-2=4  ||Sum G nu nu||: lower orders <= 3.03e-74; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 4.31e-67; rho_B dev (16 pts) 2.97e-64; dictionary |v_Q - Psi0| = 3.22e-77
+    X_B = <x x|Psi_kB> = 0.00139299629783 ; |<xx|H_mu>| exact = ['4.1e-202', '1.0e-202'] ; slice(Q) [(2, '0.208887289734'), (4, '0.049311600013')]
+(3,2,1)b: k_B=2  N_B-2=4  ||Sum G nu nu||: lower orders <= 3.03e-74; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 4.31e-67; rho_B dev (16 pts) 1.21e-64; dictionary |v_Q - Psi0| = 3.22e-77
+    X_B = <x x|Psi_kB> = 0.00139299629783 ; |<xx|H_mu>| exact = ['4.1e-202', '1.0e-202'] ; slice(Q) [(2, '-0.0797878448606'), (4, '0.337986734608')]
+(2,2,2): k_B=4  N_B-2=2  ||Sum G nu nu||: lower orders <= 1.71e-91; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 5.21e-63; rho_B dev (16 pts) 3.36e-82; dictionary |v_Q - Psi0| = 3.0e-102
+    X_B = <x x|Psi_kB> = 6.99305349429e-6 ; |<xx|H_mu>| exact = ['2.4e-201'] ; slice(Q) [(0, '0.117851130198')]
+######## phi = (Fraction(-2, 5), Fraction(3, 8), Fraction(7, 11))
+--- N-form (jet monomials N_i): leading polynomial L_B, identity L_B = R_B chat GF
+=== (4,2,0): k_B=0 (<x0|Psi> ~ eps^2, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 0.0
+   <x(phi)x(phi)|Psi_n> n=0..5: ['0.601', '0.0', '0.0', '0.0', '0.0', '0.0']
+   N_i exponents site1 [1, 2, 1, 2, 3] site2 [1, 2, 1, 2, 3] ; N_B = 8 (order table max|R_t|: [(0, '1.3e-200'), (1, '7.8e-99'), (2, '3.2e-89'), (3, '4.3e-80'), (4, '2.5e-71'), (5, '6.9e-63'), (6, '9.1e-55'), (7, '5.9e-47'), (8, '0.15'), (9, '0.075')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = -0.0892224658458, relative residual 7.69e-39; predicted R_B = m_B/X_B = -0.0892224658458, rel diff 3.93e-41
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 0.0; slice(Q) ['1.0']
+   contributing (d,n,m) at order N_B (by |term|): [((2, 3, 3), '2.56'), ((2, 2, 4), '2.46'), ((1, 3, 4), '2.02'), ((3, 2, 3), '1.78'), ((1, 2, 5), '1.38'), ((1, 4, 3), '1.34'), ((3, 3, 2), '1.23'), ((4, 2, 2), '1.06'), ((2, 4, 2), '1.01'), ((0, 3, 5), '0.905'), ((0, 4, 4), '0.818'), ((3, 1, 4), '0.764')]
+=== (4,1,1): k_B=1 (<x0|Psi> ~ eps^3, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 9.41e-109
+   <x(phi)x(phi)|Psi_n> n=0..5: ['1.13e-111', '0.0657', '6.31e-93', '0.00033', '1.0e-75', '2.86e-6']
+   N_i exponents site1 [1, 1, 2, 2, 3] site2 [1, 1, 2, 2, 3] ; N_B = 7 (order table max|R_t|: [(0, '5.4e-201'), (1, '2.0e-99'), (2, '8.4e-90'), (3, '1.1e-80'), (4, '6.7e-72'), (5, '1.8e-63'), (6, '2.4e-55'), (7, '0.024'), (8, '0.028')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = 0.159881143518, relative residual 2.78e-46; predicted R_B = m_B/X_B = 0.159881143518, rel diff 6.16e-56
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 2.39e-105; slice(Q) ['-0.7071067812']
+   contributing (d,n,m) at order N_B (by |term|): [((2, 2, 3), '3.02'), ((2, 3, 2), '1.93'), ((1, 3, 3), '1.75'), ((1, 2, 4), '1.64'), ((3, 2, 2), '1.54'), ((2, 1, 4), '1.46'), ((3, 1, 3), '1.15'), ((0, 3, 4), '0.964'), ((1, 4, 2), '0.768'), ((0, 2, 5), '0.604'), ((0, 4, 3), '0.602'), ((4, 1, 2), '0.587')]
+=== (3,3,0): k_B=1 (<x0|Psi> ~ eps^3, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 2.86e-103
+   <x(phi)x(phi)|Psi_n> n=0..5: ['1.16e-105', '0.146', '6.47e-87', '0.00644', '1.03e-69', '0.00049']
+   N_i exponents site1 [1, 2, 1, 2, 3] site2 [1, 2, 1, 2, 3] ; N_B = 7 (order table max|R_t|: [(0, '2.4e-197'), (1, '1.5e-98'), (2, '6.3e-89'), (3, '8.6e-80'), (4, '5.0e-71'), (5, '1.4e-62'), (6, '1.8e-54'), (7, '0.03'), (8, '0.026')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = 0.0721026407243, relative residual 1.62e-45; predicted R_B = m_B/X_B = 0.0721026407243, rel diff 8.05e-55
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 1.11e-99; slice(Q) ['-0.7071067812']
+   contributing (d,n,m) at order N_B (by |term|): [((1, 3, 3), '2.74'), ((2, 2, 3), '2.59'), ((1, 2, 4), '2.46'), ((0, 3, 4), '1.89'), ((2, 3, 2), '1.8'), ((0, 4, 3), '1.26'), ((0, 2, 5), '1.23'), ((1, 4, 2), '1.2'), ((3, 2, 2), '1.12'), ((2, 1, 4), '0.971'), ((1, 1, 5), '0.769'), ((3, 1, 3), '0.66')]
+=== (3,2,1)a: k_B=2 (<x0|Psi> ~ eps^4, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 1.66e-99
+   <x(phi)x(phi)|Psi_n> n=0..5: ['6.44e-103', '2.64e-93', '0.00659', '0.000179', '8.86e-5', '1.48e-5']
+   N_i exponents site1 [1, 1, 1, 1, 2] site2 [1, 1, 1, 1, 2] ; N_B = 6 (order table max|R_t|: [(0, '2.7e-200'), (1, '8.2e-100'), (2, '3.3e-90'), (3, '4.6e-81'), (4, '2.7e-72'), (5, '7.3e-64'), (6, '0.025'), (7, '0.013')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = -0.200161163027, relative residual 2.09e-54; predicted R_B = m_B/X_B = -0.200161163027, rel diff 2.72e-63
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 1.98e-63; slice(Q) ['0.2088872897', '0.04931160001']
+   contributing (d,n,m) at order N_B (by |term|): [((1, 2, 3), '2.75'), ((2, 2, 2), '2.23'), ((1, 3, 2), '1.78'), ((0, 2, 4), '1.66'), ((2, 1, 3), '1.62'), ((0, 3, 3), '1.55'), ((1, 1, 4), '1.28'), ((3, 1, 2), '0.77'), ((2, 3, 1), '0.714'), ((0, 1, 5), '0.572'), ((0, 4, 2), '0.566'), ((3, 2, 1), '0.499')]
+=== (3,2,1)b: k_B=2 (<x0|Psi> ~ eps^4, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 1.68e-99
+   <x(phi)x(phi)|Psi_n> n=0..5: ['6.44e-103', '2.64e-93', '0.00659', '0.000179', '8.86e-5', '1.48e-5']
+   N_i exponents site1 [1, 1, 1, 1, 2] site2 [1, 1, 1, 1, 2] ; N_B = 6 (order table max|R_t|: [(0, '8.1e-201'), (1, '1.3e-100'), (2, '5.4e-91'), (3, '7.4e-82'), (4, '4.3e-73'), (5, '1.2e-64'), (6, '0.025'), (7, '0.018')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = -0.200161163027, relative residual 3.37e-55; predicted R_B = m_B/X_B = -0.200161163027, rel diff 5.68e-63
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 8.66e-64; slice(Q) ['-0.07978784486', '0.3379867346']
+   contributing (d,n,m) at order N_B (by |term|): [((1, 2, 3), '2.74'), ((2, 2, 2), '2.19'), ((1, 3, 2), '1.79'), ((2, 1, 3), '1.73'), ((0, 3, 3), '1.69'), ((0, 2, 4), '1.52'), ((1, 1, 4), '1.27'), ((3, 1, 2), '0.784'), ((0, 4, 2), '0.715'), ((2, 3, 1), '0.651'), ((3, 2, 1), '0.485'), ((0, 1, 5), '0.392')]
+=== (2,2,2): k_B=4 (<x0|Psi> ~ eps^6, expected 2+k_B), M1M2 ~ eps^2, Phi exps (16 pts) [0], max|Phi lead / GF(Psi0) - 1| 4.49e-95
+   <x(phi)x(phi)|Psi_n> n=0..5: ['1.19e-101', '4.86e-92', '6.63e-83', '3.87e-74', '9.99e-5', '1.39e-57']
+   N_i exponents site1 [1, 1, 1, 1, 1] site2 [1, 1, 1, 1, 1] ; N_B = 4 (order table max|R_t|: [(0, '1.8e-199'), (1, '3.6e-101'), (2, '1.5e-91'), (3, '2.0e-82'), (4, '0.025'), (5, '0.013')])
+   identity L_B = R_B * chat*GF(Psi0): R_B = -0.793798768412, relative residual 3.83e-72; predicted R_B = m_B/X_B = -0.793798768412, rel diff 2.74e-44
+   dictionary: Q-side G-normalised vector vs chain Psi0: max diff 8.59e-101; slice(Q) ['0.1178511302']
+   contributing (d,n,m) at order N_B (by |term|): [((0, 2, 2), '2.23'), ((0, 1, 3), '1.64'), ((1, 1, 2), '1.57'), ((1, 2, 1), '1.05'), ((0, 3, 1), '0.734'), ((2, 1, 1), '0.445'), ((1, 3, 0), '7.56e-99'), ((2, 2, 0), '4.96e-99'), ((0, 4, 0), '4.07e-99'), ((1, 0, 3), '1.21e-99'), ((3, 1, 0), '9.42e-100'), ((2, 0, 2), '8.0e-100')]
+--- nu-form (nu = N/M from Laurent data): sum G nu nu = eps^(6-k_B) chat GF / X_B
+(4,2,0): k_B=0  N_B-2=6  ||Sum G nu nu||: lower orders <= 2.86e-164; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 6.8e-157; rho_B dev (16 pts) 1.21e-152; dictionary |v_Q - Psi0| = 0.0
+    X_B = <x x|Psi_kB> = 0.600625 ; |<xx|H_mu>| exact = ['0.6'] ; slice(Q) [(7, '1.0')]
+(4,1,1): k_B=1  N_B-2=5  ||Sum G nu nu||: lower orders <= 3.56e-68; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 2.05e-60; rho_B dev (16 pts) 2.54e-57; dictionary |v_Q - Psi0| = 2.39e-105
+    X_B = <x x|Psi_kB> = 0.0657366682055 ; |<xx|H_mu>| exact = ['0.0'] ; slice(Q) [(5, '-0.707106781187')]
+(3,3,0): k_B=1  N_B-2=5  ||Sum G nu nu||: lower orders <= 1.18e-61; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 5.41e-54; rho_B dev (16 pts) 3.76e-51; dictionary |v_Q - Psi0| = 1.11e-99
+    X_B = <x x|Psi_kB> = 0.145765170015 ; |<xx|H_mu>| exact = ['0.0'] ; slice(Q) [(6, '-0.707106781187')]
+(3,2,1)a: k_B=2  N_B-2=4  ||Sum G nu nu||: lower orders <= 3.56e-73; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 5.07e-66; rho_B dev (16 pts) 8.3e-64; dictionary |v_Q - Psi0| = 7.85e-78
+    X_B = <x x|Psi_kB> = 0.00659071299926 ; |<xx|H_mu>| exact = ['1.6e-201', '3.3e-201'] ; slice(Q) [(2, '0.208887289734'), (4, '0.049311600013')]
+(3,2,1)b: k_B=2  N_B-2=4  ||Sum G nu nu||: lower orders <= 3.56e-73; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 5.07e-66; rho_B dev (16 pts) 3.48e-62; dictionary |v_Q - Psi0| = 7.85e-78
+    X_B = <x x|Psi_kB> = 0.00659071299926 ; |<xx|H_mu>| exact = ['1.6e-201', '3.3e-201'] ; slice(Q) [(2, '-0.0797878448606'), (4, '0.337986734608')]
+(2,2,2): k_B=4  N_B-2=2  ||Sum G nu nu||: lower orders <= 6.16e-90; L'_B vs chat*GF(Psi0)/X_B max rel coeff dev 1.06e-61; rho_B dev (16 pts) 1.21e-80; dictionary |v_Q - Psi0| = 8.59e-101
+    X_B = <x x|Psi_kB> = 9.98795176883e-5 ; |<xx|H_mu>| exact = ['1.6e-201'] ; slice(Q) [(0, '0.117851130198')]

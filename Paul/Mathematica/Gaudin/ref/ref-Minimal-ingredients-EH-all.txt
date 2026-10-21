@@ -1,0 +1,273 @@
+
+===== cell 1 (kind 1) =====
+# Minimal ingredients: $\Omega_{zw}$, $R$, $x_0$, $T_{(1,1)}$, $T_{(2,1)}$ — and the contamination
+
+gl(3), L=2, $[2,1,0]\otimes[2,1,0]$, Hermitian generators $EH$, new conventions. Self-contained: the first code cell clears the (shared) kernel. Everything is numeric at precision `pr` and every object is a function of the twists, so you can change $z,w,\varepsilon,\varphi,\omega$ freely.
+
+**Conventions.**
+- **Lax.** $\mathcal L^{(s)}_{ij}(u)=(u-\theta_s)\delta_{ij}+h\,E^{(s)}_{ij}$; $T(u)=\mathcal L^{(1)}(u)\mathcal L^{(2)}(u)\,M$ with the twist $M$ on the right (normally $M=\mathrm{diag}(z)$).
+- **Transfer matrices.** $t_a$ = sum of principal quantum minors (rows antisymmetrized, $k$-th factor at $u-(k-1)h$). CBR fusion: $T_{(1,1)}(u)=t_2(u)$, $T_{(2,1)}(u)=t_2(u)t_1(u+h)-t_3(u+h)$.
+- **Chain point** (P1 of `L2-diagonal-frame-overlap-EH.wb`): $h=1/2$, $\theta=(2/7,-3/5)$.
+
+**What is deliberately not here: the $Q$'s.** Every Q-formula in this project computes $T_\lambda^B\,\langle\Omega|\Psi_B\rangle$ (validated against the eigenvectors in Sections 13–14 of the EH notebook). Here that number is computed directly from the eigenvector, as `Qside`. Nothing below depends on how it is obtained.
+
+===== cell 2 (kind 2) =====
+(* fresh kernel: clears Global` for every notebook sharing this kernel (their files are untouched) *)
+ClearAll @@ Select[Names["Global`*"], FreeQ[Attributes[#], Protected] &];
+(* GT basis and gl(3) generators, verbatim from the clean L=1 notebook *)
+ps[rep_] := ps[rep] = Block[{res = (Prepend[rep, #1] &) /@ Tuples[Table[Range[rep[[1, i + 1]], rep[[1, i]]], {i, 1, Length[rep[[1]]] - 1}]]}, If[Length[res[[1, 1]]] == 1, Reverse[Sort[res]], Reverse[Sort[Flatten[ps /@ res, 1]]]]];
+dim[rep_] := dim[rep] = Length[ps[{rep}]];
+J0[k_][pat_] := J0[k][pat] = Sum[pat[[k, i]], {i, 1, k}] - Sum[pat[[k - 1, i]], {i, 1, k - 1}];
+Jp[k_][pat_] := Jp[k][pat] = -Sum[(Product[pat[[k, i]] - i - pat[[k + 1, j]] + j, {j, Range[k + 1]}]/Product[pat[[k, i]] - i - pat[[k, j]] + j, {j, Complement[Range[k], {i}]}])*v[ReplacePart[pat, {k, i} -> pat[[k, i]] + 1]], {i, 1, k}];
+Jm[k_][pat_] := Jm[k][pat] = Sum[(Product[pat[[k, i]] - i - pat[[k - 1, j]] + j, {j, Range[k - 1]}]/Product[pat[[k, i]] - i - pat[[k, j]] + j, {j, Complement[Range[k], {i}]}])*v[ReplacePart[pat, {k, i} -> pat[[k, i]] - 1]], {i, 1, k}];
+JJ[k_, l_, rep_] := JJ[k, l, rep] = Which[
+  k == l, DiagonalMatrix[J0[k] /@ ps[{rep}]],
+  l == k + 1, Transpose[Table[(Coefficient[Jp[k][ps[{rep}][[i]]], v[#1]] &) /@ ps[{rep}], {i, 1, Length[ps[{rep}]]}]],
+  l == k - 1, Transpose[Table[(Coefficient[Jm[l][ps[{rep}][[i]]], v[#1]] &) /@ ps[{rep}], {i, 1, Length[ps[{rep}]]}]],
+  l > k + 1, JJ[k, k + 1, rep] . JJ[k + 1, l, rep] - JJ[k + 1, l, rep] . JJ[k, k + 1, rep],
+  l < k - 1, JJ[k, k - 1, rep] . JJ[k - 1, l, rep] - JJ[k - 1, l, rep] . JJ[k, k - 1, rep]];
+(* rep, chain point (P1 of the EH notebook), working precision *)
+Λ = {2, 1, 0}; d1 = dim[Λ]; d2 = d1^2; id1 = IdentityMatrix[d1];
+hN = 1/2; thN = {2/7, -3/5}; θ12 = thN[[1]] - thN[[2]]; pr = 80;
+(* Hermitian generators EH = Rd.E.Rd^-1 with EH^T = EH_ji. Rd is diagonal and unrelated to the rotation R of Section 2 *)
+MsolEH = Module[{Mv = Array[mm, d1]}, Mv /. First[Solve[Join[Thread[DeleteCases[Union[Flatten[Table[DiagonalMatrix[Mv] . JJ[j, i, Λ] - Transpose[JJ[i, j, Λ]] . DiagonalMatrix[Mv], {i, 3}, {j, 3}]]], 0] == 0], {mm[1] == 1}], Mv]]];
+Rd = Sqrt[MsolEH];
+Ee[i_, j_] := Ee[i, j] = DiagonalMatrix[Rd] . JJ[i, j, Λ] . DiagonalMatrix[1/Rd];
+EN[i_, j_] := EN[i, j] = N[Ee[i, j], pr];
+EtotN[i_, j_] := EtotN[i, j] = KroneckerProduct[EN[i, j], id1] + KroneckerProduct[id1, EN[i, j]];
+(* exact entries carry surds that Mathematica does not combine canonically, so === {0} can miss true zeros *)
+zeroQ[e_] := AllTrue[Union[Flatten[{e}]], PossibleZeroQ];
+(* total weight of each two-site basis state; KroneckerProduct order, site 1 is the slow index *)
+wtBasis = Flatten[Table[Table[J0[k][p1] + J0[k][p2], {k, 3}], {p1, ps[{Λ}]}, {p2, ps[{Λ}]}], 1];
+secOf[μ_] := Flatten[Position[wtBasis, μ]];
+kron[a_, b_] := Flatten[KroneckerProduct[a, b]];
+e1 = UnitVector[d1, 1];
+(* exp of a nilpotent matrix as a finite sum starting from the identity (MatrixPower[nilpotent, 0] errors) *)
+nexp[A_] := id1 + Sum[MatrixPower[A, k]/k!, {k, 1, 4}];
+Grid[{{"one-site, two-site dimension", {d1, d2}}, {"Rd", Rd}, {"EH^T = EH_ji", And @@ Flatten[Table[zeroQ[Transpose[Ee[i, j]] - Ee[j, i]], {i, 3}, {j, 3}]]}, {"weight sectors", Length[Union[wtBasis]]}}, Frame -> All, Alignment -> Left]
+
+===== cell 3 (kind 1) =====
+## 1. Transfer matrices
+`tL2[a, u, M]` is the two-site $t_a(u)$ with twist $M$; `tL1[s, a, u, M]` is the one-site $t_a(u)$ of site $s$ alone (needed for the localized covectors). `T11`, `T21` (two-site) and `T11L1`, `T21L1` (one-site) are the fused $T_{(1,1)}$, $T_{(2,1)}$. Checks: quantum determinant $t_3=\chi_3\,\nu_1(u)\nu_2(u-h)\nu_3(u-2h)$ with $\nu_n(x)=\prod_s(x-\theta_s+h\lambda_n)$, commutativity, weight conservation.
+
+===== cell 4 (kind 2) =====
+(* one-site Lax at site s, as a 3x3 array of d1 x d1 blocks *)
+lax[s_, x_] := Table[KroneckerDelta[i, j] (x - thN[[s]]) id1 + hN EN[i, j], {i, 3}, {j, 3}];
+twistR[T_, M_] := Table[Sum[T[[i, l]] M[[l, j]], {l, 3}], {i, 3}, {j, 3}];
+mono1[s_, M_][x_] := twistR[lax[s, x], M];
+(* two-site monodromy: E^(1) = E⊗1 and E^(2) = 1⊗E, so (L^(1) L^(2))_ij = Σ_k L1_ik ⊗ L2_kj *)
+mono2[M_][x_] := With[{L1 = lax[1, x], L2 = lax[2, x]}, twistR[Table[Sum[KroneckerProduct[L1[[i, k]], L2[[k, j]]], {k, 3}], {i, 3}, {j, 3}], M]];
+(* t_a: principal quantum minors, rows antisymmetrized, k-th factor at x-(k-1)h *)
+tq[mono_, a_, x_] := Sum[Sum[Signature[σ] Dot @@ Table[mono[x - (k - 1) hN][[σ[[k]], rows[[k]]]], {k, a}], {σ, Permutations[rows]}], {rows, Subsets[Range[3], {a}]}];
+tL2[a_, x_, M_] := tq[mono2[M], a, x];
+tL1[s_, a_, x_, M_] := tq[mono1[s, M], a, x];
+T11[x_, M_] := tL2[2, x, M];
+T21[x_, M_] := tL2[2, x, M] . tL2[1, x + hN, M] - tL2[3, x + hN, M];
+T11L1[s_, x_, M_] := tL1[s, 2, x, M];
+T21L1[s_, x_, M_] := tL1[s, 2, x, M] . tL1[s, 1, x + hN, M] - tL1[s, 3, x + hN, M];
+nu[n_][x_] := Product[x - thN[[s]] + hN Λ[[n]], {s, 2}];
+Zt = DiagonalMatrix[N[{3/2, 5/4, 2/3}, pr]];
+{tt, tests} = AbsoluteTiming[{
+    Max[Abs[tL2[3, 1/3, Zt] - (Times @@ Diagonal[Zt]) nu[1][1/3] nu[2][1/3 - hN] nu[3][1/3 - 2 hN] IdentityMatrix[d2]]],
+    Max[Abs[With[{A = tL2[1, 1/3, Zt], B = tL2[2, -2/5, Zt]}, A . B - B . A]]],
+    Max[Abs[With[{A = T21[1/3, Zt]}, Table[If[wtBasis[[r]] =!= wtBasis[[c]], A[[r, c]], 0], {r, d2}, {c, d2}]]]]}];
+Grid[{{"qdet residual", tests[[1]]}, {"[t1(1/3), t2(-2/5)]", tests[[2]]}, {"off-weight entries of T21", tests[[3]]}, {"time (s)", tt}}, Frame -> All, Alignment -> Left]
+
+===== cell 5 (kind 1) =====
+## 2. $\Omega_{zw}$, $R$ and $x_0$
+- **$R$ and $\Omega_{zw}$.** $R=e^{r_1E_{12}}e^{r_2E_{13}}e^{r_3E_{23}}$ (raising operators), $\Omega_{zw}=e_1^TR$, two-site bra $\Omega=\Omega_{zw}\otimes\Omega_{zw}=(e_1\otimes e_1)^T(R\otimes R)$. The $r_i(z,w)$ make $\Omega$ the vacuum of the $w$ companion twist written in the frame where $z$ is diagonal, $G'=P_{\rm aux}G(w)P_{\rm aux}^{-1}$. $w_3$ drops out.
+- **$x_0$.** The SoV covector $e_1$ of the companion frame, carried to the diagonal frame: $x_0=(e_1^TP_{\rm phys}^{-1})^{\otimes2}$. It is used only for the normalization $\langle x_0|\Psi\rangle=1$ that the Q-formulas use.
+- **Checks** at a finite twist: $P_{\rm aux}G(z)P_{\rm aux}^{-1}=\mathrm{diag}(z)$; $\Omega$ is a left eigenvector of every $t_a(G')$; $\langle x_0|e_1e_1\rangle=(z_2-z_1)^2$.
+
+===== cell 6 (kind 2) =====
+rOm[zv_, wv_] := {(wv[[1]] - zv[[1]])/(wv[[1]] - zv[[2]]),
+   ((wv[[1]] - zv[[1]]) (zv[[1]] - wv[[2]]) (zv[[2]] - zv[[3]]))/((zv[[1]] - zv[[2]]) (wv[[1]] - zv[[3]]) (wv[[2]] - zv[[3]])),
+   ((wv[[1]] - zv[[2]]) (zv[[2]] - wv[[2]]) (zv[[1]] - zv[[3]]))/((zv[[1]] - zv[[2]]) (wv[[1]] - zv[[3]]) (zv[[3]] - wv[[2]]))};
+Rrot[zv_, wv_] := With[{r = rOm[zv, wv]}, nexp[r[[1]] EN[1, 2]] . nexp[r[[2]] EN[1, 3]] . nexp[r[[3]] EN[2, 3]]];
+RrotInv[zv_, wv_] := With[{r = rOm[zv, wv]}, nexp[-r[[3]] EN[2, 3]] . nexp[-r[[2]] EN[1, 3]] . nexp[-r[[1]] EN[1, 2]]];
+RR[zv_, wv_] := With[{g = Rrot[zv, wv]}, KroneckerProduct[g, g]];
+Om1[zv_, wv_] := e1 . Rrot[zv, wv];
+Om2[zv_, wv_] := With[{o = Om1[zv, wv]}, kron[o, o]];
+(* frame changes, verbatim from the clean L=1 notebook: P_aux G(z) P_aux^-1 = diag(z) in aux space, P_phys its physical-space twin *)
+ee[i_, j_] := Table[KroneckerDelta[i, ii] KroneckerDelta[j, jj], {ii, 3}, {jj, 3}];
+Gc[tw_] := {{Total[tw], -(tw[[1]] tw[[2]] + tw[[1]] tw[[3]] + tw[[2]] tw[[3]]), Times @@ tw}, {1, 0, 0}, {0, 1, 0}};
+rsSol[zv_] := {s1 -> zv[[1]]^2/((zv[[1]] - zv[[2]]) (zv[[1]] - zv[[3]])), s2 -> -(zv[[2]]/(zv[[1]] (zv[[2]] - zv[[3]]))), s3 -> 1/(zv[[1]] zv[[2]]), ρ1 -> -(zv[[3]]/zv[[2]]), ρ2 -> -(zv[[3]]/zv[[1]]), ρ3 -> (zv[[2]]^2 (zv[[3]] - zv[[1]]))/(zv[[1]]^2 (zv[[2]] - zv[[3]]))};
+Paux[zv_] := (MatrixExp[-ρ1 ee[2, 3]] . MatrixExp[-ρ2 ee[1, 3]] . MatrixExp[-ρ3 ee[1, 2]] . DiagonalMatrix[1/{s1, s2, s3}] . MatrixExp[-(1/zv[[1]]) ee[2, 1]] . MatrixExp[(1/(zv[[1]] zv[[2]])) ee[3, 1]] . MatrixExp[-((zv[[1]] + zv[[2]])/(zv[[1]] zv[[2]])) ee[3, 2]]) /. rsSol[zv];
+Pphys[zv_] := With[{q = rsSol[zv]}, nexp[(ρ1 /. q) EN[3, 2]] . nexp[(ρ2 /. q) EN[3, 1]] . nexp[(ρ3 /. q) EN[2, 1]] . DiagonalMatrix[Table[Product[({s1, s2, s3}[[k]] /. q)^J0[k][p], {k, 3}], {p, ps[{Λ}]}]] . nexp[(1/zv[[1]]) EN[1, 2]] . nexp[-(1/(zv[[1]] zv[[2]])) EN[1, 3]] . nexp[((zv[[1]] + zv[[2]])/(zv[[1]] zv[[2]])) EN[2, 3]]];
+x0[zv_] := With[{x = e1 . Inverse[Pphys[zv]]}, kron[x, x]];
+zT = N[{3/2, 5/4, 2/3}, pr]; wT = N[{5/2, 7/3, 3/5}, pr];
+GP = Paux[zT] . Gc[wT] . Inverse[Paux[zT]];
+Grid[{{"P_aux G(z) P_aux^-1 - diag(z)", Max[Abs[Paux[zT] . Gc[zT] . Inverse[Paux[zT]] - DiagonalMatrix[zT]]]},
+  {"Ω left eigenvector of t_a(G'), a = 1,2,3 (residuals)", Table[With[{o = Om2[zT, wT]}, With[{c = o . tL2[a, 2/9, GP]}, Max[Abs[c - (c[[1]]/o[[1]]) o]]]], {a, 3}]},
+  {"<x0|e1e1> - (z2-z1)^2", x0[zT] . kron[e1, e1] - (zT[[2]] - zT[[1]])^2},
+  {"r(z,w) at the test twist", N[rOm[zT, wT], 6]}}, Frame -> All, Alignment -> Left]
+
+===== cell 7 (kind 1) =====
+## 3. Eigenstates at small twist and the highest-weight states
+$z=e^{\varepsilon\varphi}$, $w=e^{\varepsilon\omega}$. In each weight sector that contains a highest-weight (HW) state, diagonalize $t_1+\pi t_2$ at $u=3/7$ and normalize $\langle x_0|\Psi\rangle=1$ (so $\|\Psi\|\sim\varepsilon^{-k}$). $P_{\rm HW}(\mu)$ is the orthogonal projector onto the untwisted HW vectors of weight $\mu$ (killed by the total $E_{12}$ and $E_{23}$). The **HW-limit states** are those with $\|P_{\rm HW}\Psi\|/\|\Psi\|\to1$; there should be six: $[4,2,0],[4,1,1],[3,3,0],[3,2,1]_{1,2},[2,2,2]$. The two $[3,2,1]$ copies are ordered by the eigenvalue of $t_1+\pi t_2$.
+
+===== cell 8 (kind 2) =====
+φ = {1/3, -2/7, 5/11}; ω = {3/4, -1/5, 2/9}; εs = {10^-3, 10^-4};
+zOf[ε_] := N[Exp[ε φ], pr]; wOf[ε_] := N[Exp[ε ω], pr];
+hwSecs = {{4, 2, 0}, {4, 1, 1}, {3, 3, 0}, {3, 2, 1}, {2, 2, 2}};
+hwB[μ_] := hwB[μ] = With[{sec = secOf[μ]}, Orthogonalize[Table[Normal[SparseArray[Thread[sec -> n], {d2}]], {n, NullSpace[Join[EtotN[1, 2][[All, sec]], EtotN[2, 3][[All, sec]]]]}]]];
+PHW[μ_] := PHW[μ] = Transpose[hwB[μ]] . hwB[μ];
+(* all states of the HW weight sectors at twist zv, normalized <x0|Ψ> = 1; memoized on the numeric twist *)
+statesAt[zv_] := statesAt[zv] = Module[{mix = tL2[1, 3/7, DiagonalMatrix[zv]] + N[Pi, pr] tL2[2, 3/7, DiagonalMatrix[zv]], x = x0[zv]},
+   Flatten[Table[With[{sec = secOf[μ]}, With[{es = Eigensystem[mix[[sec, sec]]]}, Table[With[{ψ = Normal[SparseArray[Thread[sec -> es[[2, k]]], {d2}]]}, With[{Ψ = ψ/(x . ψ)},
+          <|"mu" -> μ, "ev" -> es[[1, k]], "psi" -> Ψ, "hwFrac" -> Norm[PHW[μ] . Ψ]/Norm[Ψ]|>]], {k, Length[sec]}]]], {μ, hwSecs}], 1]];
+hwStates[zv_] := Select[statesAt[zv], #["hwFrac"] > 9/10 &];
+pickState[μ_, copy_, zv_] := SortBy[Select[hwStates[zv], #["mu"] === μ &], Re[#["ev"]] &][[copy]];
+hwList = {{{4, 2, 0}, 1}, {{4, 1, 1}, 1}, {{3, 3, 0}, 1}, {{3, 2, 1}, 1}, {{3, 2, 1}, 2}, {{2, 2, 2}, 1}};
+{tS, sts} = AbsoluteTiming[statesAt[zOf[εs[[1]]]]];
+Grid[Join[{{"μ", "dim weight space", "dim HW space", "HW-limit states", "‖P_HW Ψ‖/‖Ψ‖ (ε = 10^-3)"}},
+   Table[With[{s = Select[sts, #["mu"] === μ &]}, {μ, Length[secOf[μ]], Length[hwB[μ]], Count[s, x_ /; x["hwFrac"] > 9/10], N[Reverse[Sort[s[[All, "hwFrac"]]]], 4]}], {μ, hwSecs}],
+   {{"time (s)", tS}}], Frame -> All, Alignment -> Left]
+
+===== cell 9 (kind 1) =====
+## 4. Localization: $T_\lambda(\theta_1-2h)$ on site 1, two $t$'s on site 2
+- **Site 1:** $\langle\Omega|T_\lambda(\theta_1-2h)=f_\lambda\,\langle v_\lambda|\otimes\langle\Omega_{zw}|$ with $\langle v_\lambda|=\langle\Omega_{zw}|T_\lambda^{L=1,\theta_1}(\theta_1-2h)$; $f_{(1,1)}=(\theta_{12}-h)(\theta_{12}-3h)$, $f_{(2,1)}=(\theta_{12}-h)^2(\theta_{12}-3h)$.
+- **Site 2:** $\langle\Omega|t_2(\theta_2+h)=f_{(1,1)}\,\langle\Omega_{zw}|\otimes\langle\Omega_{zw}|t_2^{L=1,\theta_2}(\theta_2+h)$, and $\langle\Omega|t_2(\theta_2+h)t_1(\theta_2-h)=\langle\Omega_{zw}|\otimes\big[-(\theta_{12}-h)^2(\theta_{12}-3h)\,\langle\Omega_{zw}|t_2^{L=1}(\theta_2+h)t_1^{L=1}(\theta_2-h)+6h^4\chi_3f_{(1,1)}\langle\Omega_{zw}|\big]$.
+
+These are operator identities (no state involved), proved symbolically in Section 13 of the EH notebook. Here they are checked at the finite test twist and at small $\varepsilon$ (relative residuals).
+
+===== cell 10 (kind 2) =====
+f11 = (θ12 - hN) (θ12 - 3 hN); f21 = (θ12 - hN)^2 (θ12 - 3 hN); fλ = <|"11" -> f11, "21" -> f21|>;
+u1 = thN[[1]] - 2 hN; u2 = thN[[2]];
+(* the one-site covectors v_λ = <Ω_zw| T_λ^{L=1, site 1}(θ1 - 2h), and the two-site T_λ, both with the ket twist diag(z) *)
+vλ[λ_, zv_, wv_] := Om1[zv, wv] . Switch[λ, "11", T11L1[1, u1, DiagonalMatrix[zv]], "21", T21L1[1, u1, DiagonalMatrix[zv]]];
+Tλ[λ_, x_, zv_] := Tλ[λ, x, zv] = Switch[λ, "11", T11[x, DiagonalMatrix[zv]], "21", T21[x, DiagonalMatrix[zv]]];
+relRes[a_, b_] := Max[Abs[a - b]]/Max[Abs[b]];
+locTest[zv_, wv_] := With[{Ω = Om2[zv, wv], o = Om1[zv, wv], Z = DiagonalMatrix[zv]}, {
+   relRes[Ω . Tλ["11", u1, zv], f11 kron[vλ["11", zv, wv], o]],
+   relRes[Ω . Tλ["21", u1, zv], f21 kron[vλ["21", zv, wv], o]],
+   relRes[Ω . tL2[2, u2 + hN, Z], f11 kron[o, o . tL1[2, 2, u2 + hN, Z]]],
+   relRes[Ω . tL2[2, u2 + hN, Z] . tL2[1, u2 - hN, Z], kron[o, -(θ12 - hN)^2 (θ12 - 3 hN) o . tL1[2, 2, u2 + hN, Z] . tL1[2, 1, u2 - hN, Z] + 6 hN^4 (Times @@ zv) f11 o]]}];
+Grid[Join[{{"twist", "site 1: T(1,1)(θ1-2h)", "site 1: T(2,1)(θ1-2h)", "site 2: t2(θ2+h)", "site 2: t2(θ2+h) t1(θ2-h)"}},
+   {Prepend[locTest[zT, wT], "finite test twist"], Prepend[locTest[zOf[εs[[1]]], wOf[εs[[1]]]], "ε = 10^-3"]}], Frame -> All, Alignment -> Left]
+
+===== cell 11 (kind 1) =====
+## 5. Undoing $R$: the chain, and the signal/contamination split
+Since $\langle\Omega|=(e_1\otimes e_1)^T(R\otimes R)$, site 1's localization can be rewritten as $\langle\Omega|T_\lambda(\theta_1-2h)=f_\lambda\,c_\lambda\,(R\otimes R)$ with
+$$c_\lambda=\langle v_\lambda|R^{-1}\otimes e_1^T,\qquad \langle v_\lambda|R^{-1}=e_1^T\,T_\lambda^{L=1}[g^{-T}\mathrm{diag}(z)g^T](\theta_1-2h)\ (g=R\text{ in the fundamental}).$$
+For an eigenstate, the **chain** is
+$$c_\lambda\cdot(R\otimes R)\Psi_B=\frac{T_\lambda^B\,\langle\Omega|\Psi_B\rangle}{f_\lambda}=:\texttt{Qside}.$$
+Raising operators kill HW vectors, so $(R\otimes R)P_{\rm HW}\Psi=P_{\rm HW}\Psi$ **exactly**. That splits Qside, at any $\varepsilon$, into
+$$\texttt{Qside}=\underbrace{c_\lambda\cdot P_{\rm HW}\Psi}_{\text{signal}\ \to\ \varepsilon^{-k}\times\text{CG}}+\underbrace{c_\lambda\cdot(R\otimes R)(1-P_{\rm HW})\Psi}_{\text{contamination}},\qquad \kappa=\texttt{Qside}/\text{signal}.$$
+The naive hope was $\kappa\to1$. The table gives $\kappa$ at two values of $\varepsilon$: if they agree, the contamination is of the same order as the signal. Also included is $C=c_{(2,1)}+h z_3c_{(1,1)}$ (Section 11g of the EH notebook), whose top-weight component vanishes. "CG = 0" marks an exactly vanishing CG number; then the column shows Qside/(‖c‖‖Ψ‖) instead of $\kappa$.
+
+===== cell 12 (kind 2) =====
+(* c_λ, and the explicit form of its site-1 factor with R moved into the auxiliary twist *)
+cλ[λ_, zv_, wv_] := kron[vλ[λ, zv, wv] . RrotInv[zv, wv], e1];
+gF[zv_, wv_] := With[{r = rOm[zv, wv]}, MatrixExp[r[[1]] ee[1, 2]] . MatrixExp[r[[2]] ee[1, 3]] . MatrixExp[r[[3]] ee[2, 3]]];
+vλExplicit[λ_, zv_, wv_] := With[{M = Inverse[Transpose[gF[zv, wv]]] . DiagonalMatrix[zv] . Transpose[gF[zv, wv]]}, e1 . Switch[λ, "11", T11L1[1, u1, M], "21", T21L1[1, u1, M]]];
+cvec[λ_, zv_, wv_] := If[λ === "C", cλ["21", zv, wv] + hN zv[[3]] cλ["11", zv, wv], cλ[λ, zv, wv]];
+(* what the Q's compute: T_λ^B <Ω|Ψ_B>/f_λ, with the eigenvalue T_λ^B read off from T_λ.Ψ *)
+Qside[λ_, Ψ_, zv_, wv_] := If[λ === "C", Qside["21", Ψ, zv, wv] + hN zv[[3]] Qside["11", Ψ, zv, wv],
+   With[{k = Ordering[Abs[Ψ], -1][[1]]}, ((Tλ[λ, u1, zv] . Ψ)[[k]]/Ψ[[k]]) (Om2[zv, wv] . Ψ)/fλ[λ]]];
+chainData[μ_, copy_, λ_, ε_] := Module[{zv = zOf[ε], wv = wOf[ε], Ψ, c, q, sig, sc},
+   Ψ = pickState[μ, copy, zv]["psi"]; c = cvec[λ, zv, wv]; q = Qside[λ, Ψ, zv, wv]; sig = c . PHW[μ] . Ψ; sc = Norm[c] Norm[Ψ];
+   {Abs[c . RR[zv, wv] . Ψ - q]/sc, If[Abs[sig] < 10^-40 sc, {"CG = 0", N[q/sc, 6]}, N[q/sig, 10]]}];
+Grid[{{"<v_λ|R^-1 = e1^T T_λ[g^-T z g^T](θ1-2h), λ = (1,1), (2,1)", Table[relRes[vλ[λ, zT, wT] . RrotInv[zT, wT], vλExplicit[λ, zT, wT]], {λ, {"11", "21"}}]}}, Frame -> All, Alignment -> Left]
+
+===== cell 13 (kind 2) =====
+(* the chain identity and κ = Qside/signal for all six HW-limit states, three covectors, two ε *)
+{tC, chainTab} = AbsoluteTiming[Flatten[Table[With[{a = chainData[μc[[1]], μc[[2]], λ, εs[[1]]], b = chainData[μc[[1]], μc[[2]], λ, εs[[2]]]},
+      {μc[[1]], μc[[2]], λ, N[Max[a[[1]], b[[1]]], 3], a[[2]], b[[2]]}], {μc, hwList}, {λ, {"11", "21", "C"}}], 1]];
+Grid[Join[{{"μ", "copy", "covector", "chain residual", "κ at ε = 10^-3", "κ at ε = 10^-4"}}, chainTab,
+   {{"prediction (Section 11c)", "", "", "[3,3,0], [4,1,1](2,1): κ = (t+1)/2 =", N[(θ12/hN + 1)/2, 10], ""}, {"time (s)", tC}}], Frame -> All, Alignment -> Left]
+
+===== cell 14 (kind 1) =====
+## 6. Where the contamination comes from, weight by weight
+The vector $(R\otimes R)\Psi_\perp$, with $\Psi_\perp=(1-P_{\rm HW})\Psi$, has components only at weights $\nu\ge\mu$, because $R$ raises. So
+$$\text{contamination}=\sum_{\nu\ge\mu}c_\lambda^{(\nu)}\cdot\big[(R\otimes R)\Psi_\perp\big]_\nu .$$
+`showContam[μ, copy, λ]` lists every nonzero term. For each it gives the $\varepsilon$-power of $\|c^{(\nu)}\|$ and of $\|[(R\otimes R)\Psi_\perp]_\nu\|$ (read off from the two values of $\varepsilon$), and the term divided by the signal. The last rows give the $\varepsilon$-powers of the signal and of $\|\Psi\|$. Use it only where the signal is nonzero, i.e. not for $(1,1)$ at $[4,1,1]$ or $[2,2,2]$.
+
+**What to look for.** At $\nu=[4,2,0]$, $c^{(\nu)}$ is $O(1)$, because at $z=1$ the twist is trivial and $c_\lambda\propto e_1\otimes e_1$. The signal's $c^{(\mu)}$ is suppressed by powers of $\varepsilon$, and $[(R\otimes R)\Psi_\perp]_{420}$ is one order below $\|\Psi\|$. The two products come out at the same order.
+
+===== cell 15 (kind 2) =====
+εpow[a_, b_] := If[Abs[a] == 0 || Abs[b] == 0, "-", N[Log[Abs[b]/Abs[a]]/Log[εs[[2]]/εs[[1]]], 3]];
+contam[μ_, copy_, λ_, ε_] := Module[{zv = zOf[ε], wv = wOf[ε], Ψ, c, Ψhw, rest},
+   Ψ = pickState[μ, copy, zv]["psi"]; c = cvec[λ, zv, wv]; Ψhw = PHW[μ] . Ψ; rest = RR[zv, wv] . (Ψ - Ψhw);
+   <|"signal" -> c . Ψhw, "normPsi" -> Norm[Ψ], "terms" -> Table[{ν, Norm[c[[secOf[ν]]]], Norm[rest[[secOf[ν]]]], c[[secOf[ν]]] . rest[[secOf[ν]]]}, {ν, Union[wtBasis]}]|>];
+showContam[μ_, copy_, λ_] := Module[{A = contam[μ, copy, λ, εs[[1]]], B = contam[μ, copy, λ, εs[[2]]], keep},
+   keep = Select[Range[Length[A["terms"]]], Abs[A["terms"][[#, 4]]] > 10^-30 Abs[A["signal"]] &];
+   Grid[Join[{{"ν", "ε-power of ‖c^(ν)‖", "ε-power of ‖[(R⊗R)Ψ⊥]_ν‖", "term/signal, ε = 10^-3", "term/signal, ε = 10^-4"}},
+     Table[{A["terms"][[i, 1]], εpow[A["terms"][[i, 2]], B["terms"][[i, 2]]], εpow[A["terms"][[i, 3]], B["terms"][[i, 3]]], N[A["terms"][[i, 4]]/A["signal"], 6], N[B["terms"][[i, 4]]/B["signal"], 6]}, {i, keep}],
+     {{"sum = κ - 1", "", "", N[Total[A["terms"][[All, 4]]]/A["signal"], 6], N[Total[B["terms"][[All, 4]]]/B["signal"], 6]},
+      {"ε-power of the signal", εpow[A["signal"], B["signal"]], "", "", ""}, {"ε-power of ‖Ψ‖", εpow[A["normPsi"], B["normPsi"]], "", "", ""}}], Frame -> All, Alignment -> Left]];
+showContam[{3, 3, 0}, 1, "21"]
+
+===== cell 16 (kind 2) =====
+(* the same for an octet copy: here C kills ν = [4,2,0] and κ_C → 1 *)
+Row[{showContam[{3, 2, 1}, 1, "21"], "    ", showContam[{3, 2, 1}, 1, "C"]}]
+
+===== cell 17 (kind 1) =====
+## 7. Cancelling the contamination with $a+b\,T_{(1,1)}+c\,T_{(2,1)}$
+In the frame with $R$ undone, the bare row $\langle\Omega|\Psi\rangle$ has covector $e_1\otimes e_1$, which is pure top weight, because $\langle\Omega|=(e_1\otimes e_1)^T(R\otimes R)$. So the combination
+$$Q_v=a\,\langle\Omega|\Psi\rangle+b\,\texttt{Qside}_{(1,1)}+c\,\texttt{Qside}_{(2,1)}=\langle\Omega|\Psi\rangle\Big[a+b\,\frac{T^B_{(1,1)}}{f_{(1,1)}}+c\,\frac{T^B_{(2,1)}}{f_{(2,1)}}\Big]$$
+has covector $c_v=a\,e_1e_1+b\,c_{(1,1)}+c\,c_{(2,1)}$, and everything from Section 5 is linear in $v=(a,b,c)$.
+- **Step 1: kill the top weight with $a$.** Set $a=-(b\,c_{(1,1)}+c\,c_{(2,1)})\cdot e_1e_1=-3h^2z_2z_3\,(b-h z_3\,c)$, using the $[4,2,0]$ row of the Section 10d table. `vTop[{b,c}, d]` builds this $v$. Then the table gives $\kappa$ for $(b,c)=(1,0)$ and $(0,1)$.
+- **Step 2: the singlet.** It also has contamination from intermediate weights. For the top-killed basis covectors, $K_b$ and $K_c$ are the contaminations and $S$ the signal of $c_{(2,1)}$; the signal of $c_{(1,1)}$ on the singlet is exactly 0. The ratio $\beta=b/c=-K_c/K_b$ cancels the singlet's contamination.
+
+===== cell 18 (kind 2) =====
+(* signal S, contamination K and top-weight component of the three basis covectors e1⊗e1 (bare Ω row), c_(1,1), c_(2,1) *)
+KS[μ_, copy_, ε_, φv_, ωv_] := Module[{zv = N[Exp[ε φv], pr], wv = N[Exp[ε ωv], pr], Ψ, Ψhw, rest, cs},
+   Ψ = pickState[μ, copy, zv]["psi"]; Ψhw = PHW[μ] . Ψ; rest = RR[zv, wv] . (Ψ - Ψhw);
+   cs = {kron[e1, e1], cλ["11", zv, wv], cλ["21", zv, wv]};
+   <|"S" -> (# . Ψhw & /@ cs), "K" -> (# . rest & /@ cs), "top" -> (# . kron[e1, e1] & /@ cs), "z" -> zv, "sc" -> Norm[Ψ] Max[Norm /@ cs],
+    "Q" -> {Om2[zv, wv] . Ψ, Qside["11", Ψ, zv, wv], Qside["21", Ψ, zv, wv]}|>];
+(* v = (a, b, c) with a fixed to kill the top-weight component *)
+vTop[{b_, c_}, d_] := {-(b d["top"][[2]] + c d["top"][[3]]), b, c};
+(* κ = Q_v / signal; "CG = 0" when the signal vanishes; "0 = 0" when Q_v vanishes too *)
+κv[v_, d_] := With[{s = v . d["S"], q = v . (d["S"] + d["K"])}, Which[Abs[q] < 10^-40 d["sc"], "0 = 0", Abs[s] < 10^-40 d["sc"], "CG = 0", True, N[q/s, 8]]];
+chainResV[v_, d_] := Abs[v . d["Q"] - v . (d["S"] + d["K"])]/d["sc"];
+aCheck = With[{d = KS[{3, 3, 0}, 1, εs[[1]], φ, ω]}, Max[Abs[{d["top"][[2]] - 3 hN^2 d["z"][[2]] d["z"][[3]], d["top"][[3]] + 3 hN^3 d["z"][[2]] d["z"][[3]]^2}]]];
+{tK, topTab} = AbsoluteTiming[Table[With[{A = KS[μc[[1]], μc[[2]], εs[[1]], φ, ω], B = KS[μc[[1]], μc[[2]], εs[[2]], φ, ω]},
+     {μc[[1]], μc[[2]], κv[vTop[{1, 0}, A], A], κv[vTop[{1, 0}, B], B], κv[vTop[{0, 1}, A], A], κv[vTop[{0, 1}, B], B],
+      N[Max[chainResV[vTop[{1, 0}, A], A], chainResV[vTop[{0, 1}, A], A]], 3]}], {μc, hwList}]];
+Grid[Join[{{"μ", "copy", "κ, (b,c)=(1,0), ε=10^-3", "ε=10^-4", "κ, (b,c)=(0,1), ε=10^-3", "ε=10^-4", "chain residual"}}, topTab,
+   {{"a formula vs c_λ·e1e1", aCheck, "", "", "", "", ""}, {"time (s)", tK, "", "", "", "", ""}}], Frame -> All, Alignment -> Left]
+
+===== cell 19 (kind 2) =====
+(* the singlet: K_b/S, K_c/S and the cancelling ratio β = b/c = -K_c/K_b, for several ε and twist directions; candidate closed forms in t = θ₁₂/h *)
+singletRatios[ε_, φv_, ωv_] := With[{d = KS[{2, 2, 2}, 1, ε, φv, ωv]}, With[{Kb = vTop[{1, 0}, d] . d["K"], Kc = vTop[{0, 1}, d] . d["K"], S = vTop[{0, 1}, d] . d["S"]}, N[{Kb/S, Kc/S, -Kc/Kb}, 8]]];
+singletPred[] := With[{t = θ12/hN}, {-(t - 1)/(3 hN), (2 t - 3)/3, hN (2 t - 3)/(t - 1)}];
+dirs = {{"φ, ω", φ, ω}, {"φ' = (-2/5, 3/8, 7/11), ω", {-2/5, 3/8, 7/11}, ω}, {"φ, ω' = (1/9, 5/4, -3/7)", φ, {1/9, 5/4, -3/7}}};
+singTab[] := Join[Flatten[Table[Join[{dd[[1]], ε}, singletRatios[ε, dd[[2]], dd[[3]]]], {dd, dirs}, {ε, {10^-4, 10^-5}}], 1], {Join[{"candidate closed form", ""}, N[singletPred[], 8]]}];
+{tSing, singP1} = AbsoluteTiming[singTab[]];
+Grid[Join[{{"directions", "ε", "K_b/S", "K_c/S", "β = -K_c/K_b"}}, singP1, {{"time (s)", tSing, "", "", ""}}], Frame -> All, Alignment -> Left]
+
+===== cell 20 (kind 1) =====
+### 7b. Second chain point
+The closed forms above were recognized from one chain point, so they are **pair-fitted** until checked elsewhere. `setPoint[h, θ]` changes the chain point and drops the memoized states and transfer matrices. The cell below repeats the singlet table at P2 = $(h,\theta)=(1/3,(1/5,-4/9))$, which has $t=29/15$. It then tests the single combination
+$$v^*=\big(a,\ \beta(t),\ 1\big),\qquad \beta(t)=h\,\frac{2t-3}{t-1},\qquad a=-3h^2z_2z_3\,(\beta-h z_3),$$
+on all six states at both chain points. Finally it restores P1.
+
+===== cell 21 (kind 2) =====
+setPoint[h_, th_] := (hN = h; thN = th; θ12 = th[[1]] - th[[2]]; f11 = (θ12 - hN) (θ12 - 3 hN); f21 = (θ12 - hN)^2 (θ12 - 3 hN); fλ = <|"11" -> f11, "21" -> f21|>; u1 = thN[[1]] - 2 hN; u2 = thN[[2]];
+   DownValues[statesAt] = Select[DownValues[statesAt], ! FreeQ[#, Pattern] &]; DownValues[Tλ] = Select[DownValues[Tλ], ! FreeQ[#, Pattern] &];);
+vStar[d_] := vTop[{hN (2 θ12/hN - 3)/(θ12/hN - 1), 1}, d];
+starTab[] := Table[With[{A = KS[μc[[1]], μc[[2]], εs[[1]], φ, ω], B = KS[μc[[1]], μc[[2]], εs[[2]], φ, ω]}, {μc[[1]], μc[[2]], κv[vStar[A], A], κv[vStar[B], B]}], {μc, hwList}];
+{tP, {starP1, singP2, starP2}} = AbsoluteTiming[{starTab[], setPoint[1/3, {1/5, -4/9}]; singTab[], starTab[]}];
+setPoint[1/2, {2/7, -3/5}];
+Column[{
+  Grid[Join[{{"P2: directions", "ε", "K_b/S", "K_c/S", "β = -K_c/K_b"}}, singP2], Frame -> All, Alignment -> Left],
+  Grid[Join[{{"μ", "copy", "κ(v*) at P1, ε=10^-3", "ε=10^-4", "κ(v*) at P2, ε=10^-3", "ε=10^-4"}}, MapThread[Join, {starP1, starP2[[All, 3 ;; 4]]}], {{"time (s)", tP, "", "", "", ""}}], Frame -> All, Alignment -> Left]}]
+
+===== cell 22 (kind 2) =====
+(* rank of the two top-killed covectors restricted to the 2-dim octet HW space (leading order, ε = 10^-4): rank 2 fixes the octet mixing *)
+octetRank = Module[{zv = zOf[10^-4], wv = wOf[10^-4], d, m}, d[λ_] := cλ[λ, zv, wv] - (cλ[λ, zv, wv] . kron[e1, e1]) kron[e1, e1]; m = {hwB[{3, 2, 1}] . d["11"], hwB[{3, 2, 1}] . d["21"]}; N[SingularValueList[m]/Norm[m], 4]];
+Grid[{{"singular values of {d11, d21} on HW[3,2,1] (relative)", octetRank}}, Frame -> All, Alignment -> Left]
+
+===== cell 23 (kind 1) =====
+### Results of Section 7 (2026-10-02)
+- **Killing the top weight with $a$ is enough for every state except the singlet.** With $a=-3h^2z_2z_3(b-hz_3c)$, both $(b,c)=(1,0)$ and $(0,1)$ give $\kappa\to1$ (deviation $O(\varepsilon)$) for $[4,1,1]$ (only $(2,1)$; on $(1,1)$ both sides vanish), $[3,3,0]$, and both octets. Section 11g's $C$ is the special case $a=0$, which is why $C$ vanished on $[3,3,0]$.
+- **Octet mixing is fixed.** The two top-killed covectors have rank 2 on the octet HW space, so both octet HW states are determined up to scale by clean leading-order data.
+- **Singlet.** With the top weight killed, it still has intermediate-weight contamination. In units of the $(2,1)$ signal, it is $K_b/S=-(t-1)/(3h)$ for $c_{(1,1)}$ and $K_c/S=(2t-3)/3$ for $c_{(2,1)}$, with $t=\theta_{12}/h$. It cancels for
+$$\beta=b/c=h\,\frac{2t-3}{t-1}.$$
+  The forms were recognized at P1 ($-18/35$, $19/105$, $19/54$) and **validated at P2** ($-14/15$, $13/45$, $13/42$ predicted and observed). They are independent of $\varphi$ and $\omega$ (three direction pairs).
+- **One universal combination.** $v^*=(a,\beta,1)$, i.e.
+$$\langle\Omega|\Psi_B\rangle\Big[-3h^2z_2z_3(\beta-hz_3)+\beta\,\frac{T^B_{(1,1)}(\theta_1-2h)}{f_{(1,1)}}+\frac{T^B_{(2,1)}(\theta_1-2h)}{f_{(2,1)}}\Big]=c_{v^*}\cdot h_\mu\,\varepsilon^{-k}\,(1+O(\varepsilon)),$$
+  gives $\kappa\to1$ for all five non-top HW states at P1 and P2. $[4,2,0]$ is clean with any single $T_\lambda$.
+- **Scope.** Only $[2,1,0]^2$, two chain points, $\varepsilon\le10^{-4}$, 80 digits. The $\beta(t)$ formula rests on two points. It is singular at $t=1$, where $f_\lambda$ vanishes anyway.

@@ -1,0 +1,31 @@
+# untwisted-exact-110.txt   (agent W4, notebook Paul/Mathematica/Gaudin/Experiments/Gaudin-untwisted-exact.wb, 2026-10-16)
+# Two-site gl(3) Gaudin chain, Lambda = {1,1,0} on both sites, UNTWISTED (zeta = 0). All numbers exact: integers, rationals p/q (Wolfram InputForm), no Sqrt anywhere.
+# FORMAT: one record per line, TAB-separated fields; the first field is the tag; every other field is a Wolfram InputForm expression (nested braces = lists, p/q = rational) without spaces. Lines starting with # are comments.
+# GT basis (one site): the notebook ps[{Lambda}] order = Reverse[Sort[Gelfand-Tsetlin patterns]]; index 1 is the highest-weight pattern. Record GTBASIS lists the patterns {{l1,l2,l3},{m1,m2},{k}}; WEIGHTS1 the one-site weight (E11,E22,E33 eigenvalues) per index; GMET1 the invariant diagonal metric G (G[[1]]=1; E_ij^T G = G E_ji, the GT matrices are NOT Hermitian).
+# Two-site product basis: index (i,j) -> (i-1)*DIM + j, i = site-1 GT index (slow), j = site-2 index (fast); site 2 = highest weight is j = 1. Generators are the plain GT matrices (E_ij, i<j raising); inner product <a,b>_G = Sum g_i g_j a b.
+# Laurent data convention: S2 = Sum_s [H_s/(u-th_s) + c2/(u-th_s)^2], S3 = Sum_s [b_s/(u-th_s) + a_s/(u-th_s)^2] (untwisted: no constant, no triple pole), c2 = lam2(lam1+1). Scaling: H_s = eta_s/th12, a_s = alpha_s/th12, b_s = beta_s/th12^2, th12 = th1 - th2, with eta, alpha, beta theta-independent (verified at three theta points). THETA below is the reference point th = (2/7,-3/5), th12 = 31/35.
+# Pair notation (x0,x1) = x0 + x1*Sqrt[D0] (D0 squarefree integer; D0 = 0 means rational, x1 = 0).
+# RECORDS: REP {l1,l2,l3} | DIM | GTBASIS | WEIGHTS1 | GMET1 | THETA | NSECTORS | CAS1 cas2(Lam) cas3(Lam) | SECTOR mu mult wspace-dim dimV_mu cas2(mu) cas3(mu) |
+#   HWBASIS mu k {{idx,val},...} (canonical rational HW kets = primitive integer vectors, RowReduce order; k = 1..mult) | GRAM mu {{..}} (exact G Gram matrix of the HWBASIS kets) | LAURMAT mu A1 A2 B1 B2 eta1 (theta12-scaled m x m matrices acting as X.H = H.M on the HWBASIS kets: column j = image of ket j) |
+#   BRANCH mu copy D0 vec gnorm2 cg eta alpha beta :  vec = {{idx,vA,vB},...} nonzero entries of the HW vector vA + Sqrt[D0]*vB (unnormalised, first nonzero component positive); gnorm2 = pair (exact G-norm^2); cg = {{nu,cA,cB},...} the site-1 GT index nu slice of the vector at site-2 index 1, i.e. the unnormalised CG coefficients <e_nu (x) e_1|Psi0>; normalised C_nu = (cA + Sqrt[D0] cB)/Sqrt[gnorm2];
+#   eta, alpha, beta = {pair for s=1, pair for s=2} theta12-scaled Laurent data of the branch; branch copies in a multiplicity-2 sector are the eigenvectors of S3c[1,2] (copy 1 = smaller alpha_1).
+REP	{1,1,0}
+DIM	3
+GTBASIS	{{{1},{1,1},{1,1,0}},{{1},{1,0},{1,1,0}},{{0},{1,0},{1,1,0}}}
+WEIGHTS1	{{1,1,0},{1,0,1},{0,1,1}}
+GMET1	{1,1,1}
+THETA	{2/7,-3/5}
+NSECTORS	2
+CAS1	4	8
+SECTOR	{2,2,0}	1	1	6	12	36
+HWBASIS	{2,2,0}	1	{{1,1}}
+GRAM	{2,2,0}	{{1}}
+LAURMAT	{2,2,0}	{{0}}	{{0}}	{{0}}	{{0}}	{{2}}
+BRANCH	{2,2,0}	1	0	{{1,1,0}}	{1,0}	{{1,1,0}}	{{2,0},{-2,0}}	{{0,0},{0,0}}	{{0,0},{0,0}}
+SECTOR	{2,1,1}	1	2	3	8	24
+HWBASIS	{2,1,1}	1	{{2,1},{4,-1}}
+GRAM	{2,1,1}	{{2}}
+LAURMAT	{2,1,1}	{{4}}	{{-4}}	{{0}}	{{0}}	{{4}}
+BRANCH	{2,1,1}	1	0	{{2,1,0},{4,-1,0}}	{2,0}	{{2,-1,0}}	{{4,0},{-4,0}}	{{4,0},{-4,0}}	{{0,0},{0,0}}
+# XVEC {x_nu(z1,z2,z3)} : the one-site covector x(zeta) = e1^T P_phys^(G -1) (strings, symbolic zeta), x0^G = x(zeta) (x) x(zeta), homogeneous of degree lam2 in zeta.
+XVEC	{"-z1+z2","-z1+z3","-z2+z3"}

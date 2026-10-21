@@ -1,0 +1,571 @@
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.1cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,longtable,array}
+\usepackage[hidelinks]{hyperref}
+\def\UrlBreaks{\do\-\do\_\do\.\do\/\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z}
+\newcommand{\nb}[1]{\texttt{\path{#1}}}
+\newcommand{\cl}[2]{\textsf{[#1:#2]}}
+\newcommand{\tg}[1]{\textbf{[#1]}}
+\newcommand{\Bk}{\mathrm{Bk}_2}
+\newcommand{\Om}{\Omega}
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\vac}{\mathrm{vac}}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+\begin{document}
+
+\title{Two rotations on the two sites, as ladder brackets: site-2 mirror, two-site $K$ tensor, untwisting of $\bra{\Om_w\otimes\Om_{w'}}$, and the adjoint $(\infty,\infty)$ bracket formula\\[2pt]\large $\mathfrak{gl}(3)$ XXX, $L=2$, new conventions --- research notes of the 2026-10-11 thread (Stages A, B, D, C)}
+\author{Paul Ryan (with Claude)}
+\date{11 October 2026}
+\maketitle
+
+\setcounter{tocdepth}{1}\tableofcontents
+\bigskip
+\setcounter{section}{-1}
+
+Research notes on the 2026-10-11 thread executing \nb{Two-site-rotation-brackets-plan.md} (Stages A, B, D and C; adjoint $[2,1,0]^{\otimes2}$ in full for all four stages, $[3,1,0]^{\otimes 2}$ in Stages A, B, D and as a cost note in C, $[3,2,0]$ only in Stage A). Audience: Paul Ryan and future Claude sessions. These notes are a compiled reading of the four notebooks, the specs and the write-ups listed below; nothing was recomputed in Wolfram.
+
+\textbf{Sources.} All paths are under \nb{Paul/Mathematica/new-conventions/}. The four notebooks (cell numbers are 1-based positions in the \nb{.wb} JSON file; every claim below is cited as \cl{X}{n} with the letter fixed by this table):
+\begin{center}\small\begin{tabular}{@{}llrl@{}}\toprule
+\textbf{tag} & \textbf{notebook} & \textbf{cells} & \textbf{stage} \\\midrule
+A & \nb{L2-site2-rotation-brackets.wb} & 36 & Stage A: site-2 rotation, vacuum-family identification \\
+B & \nb{L2-two-site-rotation-brackets.wb} & 58 & Stage B: two-site $K$, R-matrix, blocks, families; follow-up Task 4b \\
+D & \nb{L2-two-vacua-untwist.wb} & 40 & Stage D: untwisting, reach, $K/S$, CG at leading order \\
+C & \nb{L2-210-two-vacua-brackets.wb} & 70 & Stage C: adjoint $(\infty,\infty)$ bracket formula, Q-side CG \\\bottomrule
+\end{tabular}\end{center}
+The stage specs \nb{L2-site2-rotation-brackets-spec.md}, \nb{L2-two-site-rotation-brackets-spec.md}, \nb{L2-two-vacua-untwist-spec.md}, \nb{L2-210-two-vacua-brackets-spec.md}, the plan \nb{Two-site-rotation-brackets-plan.md}, and the background \nb{Two-rotations-det-overlap.md} \S1, \S4, \nb{L2-210-untwist-CG.md} \S0--\S1, \nb{L2-210-localising-span-spec.md} \S6, \nb{L2-210-site1-rotation-brackets.md}, \nb{Site1-rotation-brackets-notes.tex} were read for context; the main session's running summary (\nb{HANDOFF.md}, entry ``NEWEST (2026-10-11)'') was used only to locate things --- numbers are cited to notebook cells, and the interpretations marked \tg{reading} are the main session's.
+
+\textbf{None of the four notebooks carries a native output}: VS Code did not execute cells of the newly written files, every code cell was evaluated in the shared kernel from its saved source, and the printed results sit in markdown cells (immediately below the code cell in B and C; in the following ``result'' cell in A and D). Two numbering conventions occur inside the notebooks' own text (Appendix~\ref{app:notes}, item~7); here all cell numbers are absolute positions in the file.
+
+\textbf{Evidence tags.} \tg{exact}: symbolic identity or exact rational computation (ranks, Gr\"obner/\texttt{Factor}, exact rationals); \tg{numeric, $10^{-n}$}: true at the stated points to the stated deviation (60-digit finite-twist data in A, B, C part A; 200-digit chain data in D and C part B); \tg{fitted}: closed form recognised from exact data at several parameter points, fitted on some and validated on the rest; \tg{conjecture}: not verified; \tg{reading}: interpretation by the main session, not tested by a notebook. Combined tags mean that part of the statement is exact and the rest numerical.
+
+\textbf{Scope.} No notebook, no other \nb{.md}/\nb{.tex}, \nb{HANDOFF.md}, \nb{CLAUDE.md} or \nb{paper/*.tex} was edited; nothing was evaluated in Wolfram; nothing was committed. Arithmetic done by hand while writing is marked ``re-derived here''. Places where sources disagree are collected in Appendix~\ref{app:notes} and not resolved silently.
+
+\section{Summary}\label{sec:summary}
+
+\textbf{What was asked} (Paul). Put two rotations, one on each site, on the SoV vacuum (or use a different site-2 reference than $e_1^{\mathsf T}$), keep the number of ladder-bracket determinants polynomial in the number of boxes of the representation, and untwist with the two bra twists $w,w'\to1$ independently (the old $\det_6\times\det_2$ family slaved the second vacuum to the first and degenerated).
+
+\textbf{What was found.}
+\begin{enumerate}\setlength{\itemsep}{1pt}
+\item \textbf{The $[3,1,0]$ five-bracket locus is the one-site vacuum family} \tg{exact} (\cl{A}{15}, \cl{B}{19}). The companion-frame vacuum $\Om_c[w]=e_1^{\mathsf T}\exp(E_{12}/w_1)\exp(-E_{13}/(w_1w_2))\exp(\tfrac{w_1+w_2}{w_1w_2}E_{23})$ equals $e_1^{\mathsf T}\rho(g)$ with $(\alpha,\beta,\gamma)=(1/w_1,-1/(w_1w_2),(w_1+w_2)/(w_1w_2))$, first row $(1,1/w_1,1/w_1^2)$, so $\beta+\alpha\gamma=\alpha^2$. The adjoint quadric $2(t-2)(\beta+\alpha\gamma)=(t-3)\alpha^2$ is a torus image of this family (\cl{A}{31}).
+\item \textbf{The SoV construction is site-asymmetric, and the asymmetry is the Yangian $R$-matrix} \tg{exact} (\cl{A}{18}, \cl{A}{20}, \cl{B}{36}). $e_1^{\mathsf T}\otimes e_\nu^{\mathsf T}$ expands on 35/64 (resp.\ 103/225) SoV states with all $\dim V$ site-1 labels, per-label bracket count 17/40 against 5/7 for the site-1 rotation. The $R$-matrix $R^{\Lambda\Lambda}(\theta_{12})$ on $V\otimes V$ (one-dimensional solution space, both reps) satisfies $\tilde t=RtR^{-1}$, $\tilde BR=RB$; the dressed covector $(e_1^{\mathsf T}\otimes c_2)R$ has the site-1 structure (support on $(\lambda_1|\lambda_1c_1)$, count 5/7, adjoint conic constant $cc_1(-t)$, $[3,1,0]$ best locus $\beta+\alpha\gamma=\alpha^2$), while the undressed site-2 conic is $cc_2(t)=cc_1(1-t)$ \tg{fitted, 15 $(h,\theta)$ points}.
+\item \textbf{The two-vacuum family $\Om_w\otimes\Om_{w'}$ untwists cleanly} (\cl{D}{19}--\cl{D}{40}). The undone site-1 covector $e_1^{\mathsf T}\rho(n(w)n(w')^{-1})$ has all three Gauss parameters $O(1)$ at $\varepsilon=0$ (rank 3 in the four direction parameters) \tg{exact}; every weight of $V$ sits at order $\varepsilon^0$ with rank equal to the multiplicity \tg{exact}; $K/S=O(\varepsilon)$ for every highest-weight branch (6 for the adjoint, 10 for $[3,1,0]$), the first gl(3) family with this property \tg{numeric, 200 digits}; all CG data (6/6 and 10/10) are read at leading order from the overlap alone, errors $\propto\varepsilon$, Richardson overlap-versus-chain agreement $10^{-16}$--$10^{-20}$ \tg{numeric}. Pinning $w_2'$ or fixing $w'$ entirely does \emph{not} degrade this; only $w_1'=w_1$ does (it reads one extra irrep and nothing else).
+\item \textbf{Bracket cost is generic, not cheap, for $[3,1,0]$} (\cl{B}{41}, \cl{B}{46}, \cl{B}{49}). Pivot-decomposition counts $\sum P$ (upper bounds; $\sum r$ the matrix-rank lower bound), adjoint / $[3,1,0]$: generic pair 23/54, $\det_6$ vacuum $\Om_c[w]\otimes\Om_c[w]$ 18/40, $\Om_c[w]\otimes\Om_c[w']$ 22/54, $R$-dressed two-rotation candidates 23/54. Cheapness correlates with loss of reach (common $w_1$, global rotations), with one exception: the $(\infty,\infty)$ family $w_2,w_2'\to\infty$, $w_1\neq w_1'$, which is CG-complete with only two parameters and costs 12 (adjoint; $10$ after a full pivot scan, \cl{C}{32}) but 45 for $[3,1,0]$.
+\item \textbf{Adjoint $(\infty,\infty)$ family in closed form, six CG data from the Q side} (\cl{C}{32}, \cl{C}{57}, \cl{C}{70}). Ten bracket products $=20$ $\Bk$ ($=\sum r$, attained), exact scaling law $A^{(cc')}=a^{m+m'+e}a'^{\,n+n'+e'}\kappa^{(cc')}(s)$, $s=a'/a$ \tg{exact}; kernels rational in $t$ with poles only at $t\in\{0,\pm1\}$ \tg{fitted}; no non-trivial $u$-form \tg{exact}; the Q-number equals the overlap on all 21 HW-sector states to $7.9\cdot10^{-111}$, and the six CG data of adj$\otimes$adj are reproduced from the Q side alone (Richardson versus chain $\le1.2\cdot10^{-18}$) \tg{numeric}.
+\item \textbf{Open decision}: for $[3,1,0]$ no family found is both CG-complete and near the planned target ($\sim25$ products); the best searched decomposition of the $(\infty,\infty)$ family costs 45 (lower bound 24, minimality unproved; \cl{C}{69}). Whether to accept the block formula, change the cost metric (bracket determinants of size $>2$; $\det_6$ packs 36 bracket entries), or look for a determinant form of $\bra{\Om_w\otimes\Om_{w'}}$ with non-vacuum bra data is Paul's call (\S\ref{sec:open}).
+\end{enumerate}
+
+\section{Setting and conventions}\label{sec:setting}
+
+\textbf{Chain and frames.} $\mathfrak{gl}(3)$, $L=2$ sites, representation $\Lambda=(\lambda_1,\lambda_2,0)$: $[2,1,0]$ (adjoint, $\dim V=8$, $64$ states on two sites) and $[3,1,0]$ ($\dim V=15$, 225 states); $[3,2,0]$ ($\dim V=15$) only in Stage A. New conventions: $\mathcal L_{ij}(u)=(u-\theta_s)\delta_{ij}+hE_{ij}$, $T(v)=\mathcal L^{(1)}(v-\theta_1)\mathcal L^{(2)}(v-\theta_2)$, twist on the right, plain exact Gelfand--Tsetlin generators. Numeric point throughout: $h=1/2$, $\theta=(2/7,-3/5)$, hence $t:=\theta_{12}/h=62/35$; ket twist $z=(3/2,5/4,2/3)$ (controls $z'=(3/2,5/4,3/7)$, $z''=(2,5/4,2/3)$); bra twists $w=(5/2,7/3,3/5)$, $w'=(7/4,-2/5,9/7)$ in B (\cl{B}{16}); 60-digit eigenvectors in A, B, C part A, 200 digits in D and C part B (\cl{A}{1}, \cl{B}{1}, \cl{D}{1}, \cl{C}{1}).
+The \emph{diagonal frame} has twist $\mathrm{diag}(z)$. The \emph{companion frame} is reached by $(P_{\rm phys}^{-1})^{\otimes2}$ with $P_{\rm phys}=P_-P_dP_+$; there the SoV vacuum is $x_0=e_1^{\mathsf T}\otimes e_1^{\mathsf T}$ (\cl{A}{8}: $\langle x_0^C|\mathrm{ket}\rangle$ equals the diagonal-frame value to $10^{-54}/10^{-49}$). The bracket formulas live in the companion frame; the chain-side CG extraction lives in the diagonal frame. The dictionary (\cl{D}{15}, \cl{C}{57}) is the frame tie $\Om_c[w]\parallel \Om_D[z,w]\,P_{\rm phys}(z)$ up to the scalar $\kappa(z,w)=\prod_k\Delta_k(nP_3)^{\lambda_k-\lambda_{k+1}}$ (not simply equal; $\Om_c$ is normalised to first component 1), and $\langle\Phi_c|\Psi_c\rangle/\langle x_0^c|\Psi_c\rangle=\langle\Phi_d|\psi_d\rangle/(\kappa\kappa')$ with $\kappa,\kappa'\sim\varepsilon^{-4}$ each.
+
+\textbf{SoV labels, wavefunctions, ladders.} The untwisted $B(u)$ has a simple spectrum; its left eigencovectors $\bra{x}$ carry a label $(a|bc)$ on each site with roots $\theta_s+\{-1-a,-b,-c\}h$ and the rule $\lambda_2\le a\le\lambda_1$, $0\le c\le\lambda_2$, $c\le b\le a$ (reproduced for both sites, \cl{A}{8}; $\dim V$ labels per site). The wavefunction is $\langle x|\Psi\rangle/\langle x_0|\Psi\rangle=N_x\prod_s M^{(s)}_{x}/M^{(s)}_{\vac}$ with the monomial $M^{(s)}_{(a|bc)}=\mathrm{minor}_s(-1-a,-b)\,v_3(\theta_s-ch)$, $\mathrm{minor}(n,n')=Q^2(n')Q^3(n)-Q^3(n')Q^2(n)$, $v=(Q^1,Q^2,Q^3)$ the dual Q's (verified on all states to $10^{-43}$--$10^{-46}$ for $[2,1,0]$ and $10^{-39}$--$10^{-43}$ for $[3,1,0]$ in three row/$k$ conventions, \cl{A}{8}, \cl{B}{14}).
+Ladder $s$ has the points $x_m=\theta_s+mh$, $m=-1-\lambda_1,\dots,0$ ($\lambda_1+2$ points); $\langle Q^jF\rangle_s=\sum_mF_mQ^j(x_m)$ and
+\[
+\Bk^{(s)}[F,G]=\langle Q^3F\rangle_s\langle Q^2G\rangle_s-\langle Q^2F\rangle_s\langle Q^3G\rangle_s=\sum_{n<n'}(F\wedge G)_{nn'}\,\mathrm{minor}_{23}(n,n')
+\]
+(verified, \cl{A}{20}). A 2-form on the ladder points is \emph{decomposable} (one wedge, one $\Bk$) iff its Pfaffian vanishes; a 2-form of rank $2k$ costs $k$ wedges.
+
+\textbf{Two-site covectors, $K$ tensor, blocks.} Every covector $\Phi$ on $V\otimes V$ is expanded as $\Phi=\sum_{x_1,x_2}\phi_{x_1x_2}\bra{x_1x_2}/N_{x_1x_2}$ with $\phi=\Phi\cdot K$, where $K_{\nu_1\nu_2;x_1x_2}$ is the exact rational \emph{two-site $K$ tensor} built in B (\cl{B}{24}); $\langle\Phi|\Psi\rangle/\langle x_0|\Psi\rangle\cdot M^{(1)}_\vac M^{(2)}_\vac=\sum\phi_{x_1x_2}M^{(1)}_{x_1}M^{(2)}_{x_2}$. Each label carries on each ladder a \emph{minor} $(m,m')$ and a \emph{lone point} (site~1: $Q^3(\theta_1-ch)$, site~2: $Q^3(\theta_2-c'h)$), $c,c'\in\{0,\dots,\lambda_2\}$. The \emph{blocks} $A^{(c,c')}$ are the $n_{\min}\times n_{\min}$ matrices ($n_{\min}=\binom{\lambda_1+2}{2}=6$ resp.\ $10$) of $\phi$ with rows the ladder-1 minors and columns the ladder-2 minors; there are $(\lambda_2+1)^2$ of them, so the count below is ``polynomial in the boxes by construction''.
+Two counts are reported throughout (\cl{B}{1}, \cl{B}{41}): $r=\sum_{cc'}\mathrm{rank}\,A^{(cc')}$ and $P=\sum_{cc'}P_{cc'}$, where $P_{cc'}$ is the cost $\sum_k(\mathrm{rank}\,u_k/2)(\mathrm{rank}\,w_k/2)$ of a pivot decomposition $A=\sum_ku_k\otimes w_k$ into ladder-1 and ladder-2 2-forms (the smaller of the two pivot orientations). Since every product $\Bk^{(1)}\Bk^{(2)}$ contributes a rank-one matrix, $r\le(\text{minimal number of products})\le P$ \tg{exact}; $P$ depends on the pivot choice and is not monotone in $r$ (\cl{B}{58}, item 10(i)), and the minimal count is a tensor-rank problem that was not solved except where $r=P$ is attained. Stage A also uses a different, coarser \emph{per-label} count (ladder-2 brackets with the ladder-1 monomial of each site-1 label as a scalar factor).
+
+\textbf{Gauss chart and vacua.} $g=e^{\alpha E_{12}}e^{\beta E_{13}}e^{\gamma E_{23}}$, first row of the defining-representation matrix $b=(1,\alpha,b_3)$, $b_3=\beta+\alpha\gamma$; ``genuine'' means $\alpha\beta\gamma\neq0$. One-site vacua: companion $\Om_c[w]$ (above), polynomial in $(a,s)=(1/w_1,1/w_2)$ as $\mathrm{gaussCov}\{a,-as,a+s\}$ (\cl{B}{46}); diagonal frame $\Om_D[z,w]=e_1^{\mathsf T}\rho(n(z,w))$, $n=\exp(r_1E_{12})\exp(r_2E_{13})\exp(r_3E_{23})$ with the rational $r_k(z,w)$ (\cl{D}{1}); $w_2=\infty$ is the limit, $\mathrm{gaussCov}\{a,0,a\}$ (\cl{B}{49}, \cl{D}{15}). $\Om\otimes\Om$ is an exact left eigencovector of the transfer matrices with the companion-matrix twist $G(w_1,w_2,w_3)$ for any $w_3$ (\cl{A}{15}; control $G^{\mathsf T}$ fails), in the diagonal frame with $G'(w)=P_{\rm aux}G(w)P_{\rm aux}^{-1}$, not $\mathrm{diag}(w)$ (\cl{D}{15}).
+
+\textbf{Regime.} $z=1+\varepsilon\varphi$, $w_k=1+\varepsilon\omega_k$, $w'_k=1+\varepsilon\omega'_k$ independent, $\varepsilon\in\{1,2,4\}\cdot10^{-6}$ (\S\ref{sec:D}). $K$ is exactly $z$-independent (\cl{A}{34}, \cl{B}{57}), depends on $(h,\theta)$ only through $t$ (rational) and is homogeneous of degree 0 in $(h,\theta)$ (\cl{C}{65}).
+
+\section{Stage A: the vacuum family and the site-2 mirror}\label{sec:A}
+
+Notebook A (36 cells; summary \cl{A}{36}); Stage A asks two things: what the site-1 five-bracket locus is, and what the mirror construction $\Phi=e_1^{\mathsf T}\otimes e_1^{\mathsf T}\rho(g_2)$ (rotation on site~2, vacuum on site~1) looks like.
+
+\subsection{The vacuum family is the $[3,1,0]$ locus}\label{sec:Avac}
+
+\tg{exact} (\cl{A}{15}; same results in \cl{B}{19}, \cl{B}{16}). For both reps and four resp.\ three rational $w$: $\Om_c[w]$ (dense \texttt{MatrixExp} of the rep generators) equals $\mathrm{gaussCov}\{1/w_1,-1/(w_1w_2),(w_1+w_2)/(w_1w_2)\}$; at the $3\times3$ level the first row of the Gauss product is $(1,1/w_1,1/w_1^2)$, hence $\beta+\alpha\gamma=\alpha^2$ symbolically. Converse: six rational points $(\alpha,\gamma)$ with $\beta=\alpha^2-\alpha\gamma$ (including the points $(-3,3,-2),(-3,6,-1),(-3,12,1),(-3,15,2)$ of the site-1 table) equal $\Om_c[\{1/\alpha,1/(\gamma-\alpha)\}]$ exactly. So the $[3,1,0]$ best locus is $\{\Om_c[(w_1,w_2)]:w_1=1/\alpha,\ w_2=1/(\gamma-\alpha)\}$. On the adjoint the best site-1 locus has $cc=(t-3)/(2(t-2))\neq1$ and the vacuum family costs the generic 5 brackets.
+$\Om_c[w]\otimes\Om_c[w]$ is an exact left eigencovector of $t_1,t_2,t_3$ at $u=3/7,19/23$ with the companion twist $G(w_1,w_2,w_3)=\left(\begin{smallmatrix}\chi_1&-\chi_2&\chi_3\\1&0&0\\0&1&0\end{smallmatrix}\right)$ for $w_3=3/2,-4,7/3$ and a second $w$ (any $w_3$); the control $G^{\mathsf T}$ fails for $a=1,2$.
+
+\textbf{The two $[3,1,0]$ $\lambda_2$-group measures with $\alpha=1/w_1$} \tg{exact wedge identities; numeric $10^{-43.7}$--$10^{-46.6}$ on all 225 states} (\cl{A}{15}, cell 14 of the notebook's code): with $P_3',P_4'$ the node-polynomial derivatives (supports $\{-4,-3,-2\}$, $\{-4,\dots,-1\}$ of ladder 1),
+\begin{align*}
+\text{column }(0,1):\quad & F(u)=\frac{h^4\,w_1^{-(u-\theta_1)/h}}{P_3'(u)(u-\theta_1)(u-\theta_2+h)},\quad G(u)=\frac{h^3\,w_1^{-(u-\theta_1)/h}}{P_3'(u)(u-\theta_2+h)},\quad \text{amplitude }\frac{48(t-3)(t+1)}{t\,w_1^{8}},\\
+\text{column }(0,0):\quad & F(u)=\frac{-h^4\,w_1^{-(u-\theta_1)/h}\,\omega(u)}{P_4'(u)(u-\theta_2+h)},\quad G=F\,\frac{u-\theta_1}{h},\quad \text{amplitude }\frac{-12(t-3)(w_2+3w_1)}{w_2\,w_1^{9}},
+\end{align*}
+with $\omega=1$ except $\omega(\theta_1-h)=3w_1/(w_2+3w_1)$ (symbolically $3(s-1)/(3s-2)$, $s=\gamma/\alpha=1+w_1/w_2$; no $t$-dependence). So both read as (bra twist $w_1^{-(u-\theta_1)/h}$)$\times$(SoV measure of the support)$\times\,1/(u-\theta_2+h)\times$(low-degree polynomial) \tg{exact}. The amplitudes at $t=62/35$ are $-100104/(1085\,w_1^8)$ and $516(3w_1+w_2)/(35\,w_1^9w_2)$.
+
+\subsection{The site-2 rotation is not the mirror image: support and counts}\label{sec:Asup}
+
+\tg{exact support; numeric $10^{-41}$--$10^{-46}$ identities} (\cl{A}{18}, \cl{A}{20}). For $\Phi=e_\nu^{\mathsf T}\otimes e_1^{\mathsf T}$ (site~1 rotated) only the site-2 labels $(\lambda_1|\lambda_1c_2)$ occur (12 resp.\ 24 SoV states). For $\Phi=e_1^{\mathsf T}\otimes e_\nu^{\mathsf T}$ the expansion involves \emph{all} $\dim V$ site-1 labels and all site-2 labels on a ``triangular'' set of pairs (Table~\ref{tab:Asup}); the vacuum label on either site pairs with every label on the other, the set shrinks monotonically towards the corner label $(1|00)$, and no additive weight rule exists: a naive rule $\mathrm{wt}(x_1)+\mathrm{wt}(x_2)=\Lambda+\mathrm{wt}(\nu)$ is violated by 11/51 nonzero $K$ entries ($[2,1,0]$/$[3,1,0]$) and a linear solve for any additive assignment is inconsistent (\cl{A}{18}; the support rule could not be characterised more sharply in two attempts).
+
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{longtable}{@{}p{7.2cm}ccc@{}}
+\caption{Site-2 mirror: supports and counts (\cl{A}{18}, \cl{A}{20}, \cl{A}{35}); site-1 numbers from \cl{A}{12}.}\label{tab:Asup}\\\toprule
+ & $[2,1,0]$ & $[3,1,0]$ & $[3,2,0]$ \\\midrule\endfirsthead
+ & $[2,1,0]$ & $[3,1,0]$ & $[3,2,0]$ \\\midrule\endhead
+SoV states in the support of $e_1^{\mathsf T}\otimes e_\nu^{\mathsf T}$ (of $\dim V^2$) & 35 of 64 & 103 of 225 & 122 of 225 \\
+\ \ of which with $x_1\in\{(\lambda_1|\lambda_1c_1)\}$ & 15 & 29 & 41 \\
+site-1 rotation: support & 12 & 24 & --- \\
+per-label automatic count, site 2 (generic = random covector) & \textbf{17} & \textbf{40} & \textbf{54} \\
+site-1 automatic count, generic / reduced & 5 / 4 & 7 / 5 & 11 / 9 \\
+block form: matrix ranks $r(c_1,c')$ & 3,3,3,2 & 6,6,6,4 & $\sum r=30$ \\
+block form: products (explicit; random covector) & 15 (16; 16) & 35 (38; 35) & 49 (52; 50) \\
+$z$-independence of the maps $K^{(x_1)}$ (exact, $z',z''$) & True, True & True, True & True, True \\
+\bottomrule
+\end{longtable}\end{center}
+
+The per-label count 17/40 exceeds $\dim V=8/15$ in the $[3,1,0]$ case: the ladder-2 bracket formula for a site-2 rotation on the vacuum is not a few-bracket expression, because the ladder-1 factor is the full monomial $\mathrm{minor}_1(-1-a,-b)v_3(\theta_1-ch)$ of every label rather than a single $Q^3$ ratio (\cl{A}{18}). It is still set by ladder lengths and column ranks ($\le4$), and the block-form 35--38 products at $[3,1,0]$ are of the order of the $\det_6$ Laplace count (\cl{A}{20}). \tg{exact}
+
+\subsection{Loci, reach and the best site-2 locus}\label{sec:Aloci}
+
+\tg{exact} (\cl{A}{24}; all Gr\"obner solves $<1$ s). \emph{Adjoint.} Only two columns are non-automatic: $(x_1=(2|20),c'=0)$ with Pfaffian $\propto g_B^2(g_B+g_Ag_C)^2$, genuine part $b_3=0$; and $(x_1=\vac,c'=0)$ with Pfaffian $\propto g_B^2(66g_A^2-97b_3)$ at $t=62/35$, genuine part the conic $b_3=cc\,\alpha^2$, $cc=66/97$. The joint locus of genuine rotations is empty. The constant is $cc_2(t)=(t+2)/(2(t+1))=cc_1(1-t)$ with $cc_1(t')=(t'-3)/(2(t'-2))$ the site-1 adjoint constant (re-derived here: $cc_1(1-t)=(-t-2)/(2(-t-1))$) \tg{fitted, exact on 15 $(h,\theta)$ points}; of the shifts $t'=t+k$, $k-t$ ($k=-6..6$) only $t'=1-t$ matches; $t'=-t$, $t\pm1$, $2-t$ do not. The constant is not 1: the site-2 conic is not the vacuum family. \emph{$[3,1,0]$.} 11 non-automatic columns; conic-type factors $b_3=cc\,\alpha^2$ with exact $t$-laws $\frac{2t^2+5t-4}{2(t-1)(t+2)}$, $\frac{(t-1)(8t^2+13t-7)}{6(t-2)t(t+1)}$, $\frac{t^2+3t+6}{3t(t+1)}$, $\frac{t+2}{2t}$, $\frac{2(t+3)}{3(t+1)}$ (values $2273/1188$, $-453483/96224$, $8852/9021$, $33/31$, $334/291$ at $t=62/35$) \tg{fitted, 15 points}; $cc=1$ occurs nowhere. Single 5-point columns $((3|30),0)$ and $(\vac,0)$ have empty genuine part; of 57 minimal empty sets, 25 maximal sets are jointly decomposable: 24 pairs (each a dim-1 curve; rational points found for 4) and one 4-set $\{(6,0),(6,1),(8,0),(11,0)\}$ with locus $b_3=0$.
+
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{longtable}{@{}p{6.4cm}cccc@{}}
+\caption{Site-2 loci: per-label counts and finite-twist reach (\cl{A}{24}, \cl{A}{35}).}\label{tab:Aloci}\\\toprule
+locus & $[2,1,0]$ & $[3,1,0]$ & $[3,2,0]$ & reach \\\midrule\endfirsthead
+locus & $[2,1,0]$ & $[3,1,0]$ & $[3,2,0]$ & reach \\\midrule\endhead
+generic & 17 & 40 & 54 & all weights, rank 2 on doubles \\
+vacuum family $b_3=\alpha^2$ & 17 & 40 & 54 & all \\
+adjoint-type site-1 quadric & 17 & 40 & 54 & all \\
+$b_3=0$ & \textbf{13} & \textbf{28} & \textbf{43} & \textbf{incomplete}: 5/7, 7/12, 9/12 weights \\
+conic $66\alpha^2=97b_3$ (CG-complete) & 16 & --- & --- & all \\
+dim-1 curves with rational points (CG-complete) & --- & 38 & 52--53 & all \\
+non-reduced curve & --- & --- & 42 & 9/12 weights \\
+\bottomrule
+\end{longtable}\end{center}
+
+The undo identity $\langle e_1^{\mathsf T}\otimes g_2|h\rangle=\langle e_1^{\mathsf T}\otimes e_1^{\mathsf T}\rho(g_2L_0D_0)|h\rangle$ holds exactly on all HW kets (6 resp.\ 10 HW states, 5 resp.\ 8 irreps; $g_2=(1,2,3),(-3,6,-1),(2/3,-3/7,5/4)$), because $\rho(U)\otimes\rho(U)$ fixes the HW kets (\cl{A}{24}) \tg{exact}. \textbf{Key answer} (\cl{A}{24}): the site-2 best locus is \emph{not} the vacuum family: the cheapest locus $b_3=0$ is not CG-complete, and the CG-complete reducing loci save only 1--2 brackets (16 against 17; 38 against 40).
+
+\subsection{Closed forms on $b_3=0$ and the exponent law}\label{sec:Aclosed}
+
+\tg{exact closed forms; numeric $10^{-44}$--$10^{-46}$ on all states at three fresh points} (\cl{A}{29}). On $b_3=0$ ($g_B=-g_Ag_C$, parametrised $g_2=e^{\gamma E_{23}}e^{\alpha E_{12}}$) the columns decompose exactly into 13 wedges (12 columns, $[2,1,0]$) resp.\ 28 wedges (21 columns, $[3,1,0]$), residual 0 for every column; the wedges are sparse ($|\mathrm{supp}\,G|=1$ for all but two, i.e.\ a point value of $Q$; $|\mathrm{supp}\,F|\le4$); the explicit adjoint formula is printed in \cl{A}{29}. Exponent law (with $g_C=s_Rg_A$): $A_{mm'}=g_A^{m+m'+k}a_{mm'}(s_R,t)$, $a$ of degree $\le1$ in $s_R$, offset $k$ one value per column ($k=8,\dots,5$ for the adjoint, $11,\dots,7$ for $[3,1,0]$); each coefficient is a rational function of $t$, fitted on 15 $(h,\theta)$ points and reproduced exactly (poles at $t\in\{0,\pm1\}$ for the adjoint, $\{0,\pm1,\pm2\}$ for $[3,1,0]$; numerator factors $t+k$, $k=-6..4$, i.e.\ the values $\theta_1-x_m=h(t-m)$ of the ladder-1 pole polynomial at the ladder-2 nodes) \tg{fitted}. $u$-form tests (\cl{A}{29}): no column is natural in the global SoV-measure, polynomial or cross-pole classes for degree $\le1$; the rank-2 three-point columns are $\delta_{-4}\wedge(\text{2-point vector})$ with a $t$-dependent annihilator ratio (e.g.\ $r=-8342/13527$ at $t=62/35$, $(2|20),1$) rather than the site-1 form $n_m=-m(t+m+1)$. So the expected $w_1'^{-(u-\theta_2)/h}\times\text{measure}\times\text{cross pole}\times\text{polynomial}$ form exists only as the exponent law \tg{exact}.
+
+\subsection{The adjoint quadric is a torus image of the vacuum family}\label{sec:Atorus}
+
+\tg{exact} (\cl{A}{31}). $e_1^{\mathsf T}\rho(g)\rho(D)=\rho(D)_{11}e_1^{\mathsf T}\rho(D^{-1}gD)$ and $D^{-1}gD$ has Gauss parameters $(\alpha d_2/d_1,\beta d_3/d_1,\gamma d_3/d_2)$, so $b_3$ scales by $d_3/d_1$ and $\alpha^2$ by $(d_2/d_1)^2$: the torus with $d_1d_3/d_2^2=cc$ maps $\{b_3=\alpha^2\}$ onto $\{b_3=cc\,\alpha^2\}$. Verified on the rep ($t=62/35$, $cc=43/16$, $d=(1,4,43)$; three $w$; converse with $d=(1,1,cc)$). Hence the adjoint quadric is $\{\Om_c[w]\rho(D):d_1d_3/d_2^2=(t-3)/(2(t-2))\}$ and the $[3,1,0]$ best locus is the vacuum family modulo the unimodular torus $d_1d_3=d_2^2$. With $\kappa_{\rm singlet}=2(t-3)/(3(t-2))$: $cc=(3/4)\kappa_{\rm singlet}$, i.e.\ $d_1d_3/d_2^2=\tfrac34\kappa$ (noted, nothing more). The site-1 factor of the $\det_6\times\det_2$ product point of \nb{Two-rotations-det-overlap.md} \S5 has $b_1b_3/b_2^2=1.5013,\,1.0196,\,0.9933$ at three $w$: a non-constant symmetric function of $(w_1,w_2)$, on the quadric only along a curve, and not on the vacuum family; the diagonal-frame resolvent ratio $(y-z_2)^2/((y-z_1)(y-z_3))$ equals $cc(t)$ only at $y=0.43438,\,1.53476$, not at the values used there: no identification \tg{numeric}.
+
+\subsection{$[3,2,0]$ (optional, \cl{A}{35})}\label{sec:A320}
+
+Same picture \tg{exact/numeric}: support 122 of 225 (41 with $x_1\in F_1$), per-label count 54 against site-1 11/9; the vacuum-$x_1$ conic constants are $2(t+2)/(3(t+1))$ ($c'=0$) and $(t+2)/(2(t+1))$ ($c'=1$), the latter the same function as the adjoint's (exact over 15 points); $b_3=0$ gives 43 (35 columns, 43 wedges, exponent offsets 12 to 8, poles $t\in\{0,\pm1,\pm2\}$) but reaches only 9 of 12 weights; CG-complete curves cost 52--53.
+
+\section{Stage B: the two-site $K$ tensor, the $R$-matrix, block counts}\label{sec:B}
+
+Notebook B (58 cells; summary \cl{B}{58}; follow-up Task 4b in \cl{B}{47}--\cl{B}{49}).
+
+\subsection{The $K$ tensor and supports}\label{sec:BK}
+
+\tg{exact} (\cl{B}{24}). $K$ is a $64\times64$ resp.\ $225\times225$ exact rational array (all $d^2$ GT covectors $e_{\nu_1}^{\mathsf T}\otimes e_{\nu_2}^{\mathsf T}$ expanded in the SoV basis; expansion error $1.4\cdot10^{-89}$ / $7.6\cdot10^{-150}$, rationalisation error $3.4\cdot10^{-74}$ / $3.6\cdot10^{-73}$ against the 60-digit data, denominators $\le8$ resp.\ 12 digits). It is very sparse (278 of 4096 resp.\ 2051 of 50625 entries nonzero), of full exact rank, the state--label correspondence is bijective, and it is $z$-independent exactly (rebuilt at $z',z''$, \cl{B}{57}) and rational in $t$ (rebuilt at two more $(h,\theta)$). The slice $\nu_2=1$ equals the one-site site-1 maps $K^{(c_2)}$ recomputed by an independent solve (support 12/24 states, ranks 4,8 / 9,15), and the slice $\nu_1=1$ equals Stage A's site-2 maps (35/103 states, 15/29 with $x_1\in F_1$, ranks per site-1 label $1,2,4,2,4,6,4,8$ / $1,2,4,2,4,6,5,9,2,5,9,12,4,9,15$). The overlap identity from $\phi$ holds to $10^{-45}$ / $10^{-42}$.
+
+\textbf{Supports of two-site covectors} (\cl{B}{29}; exact zero tests). Every $c_1\otimes c_2$ with generic factors, and also $\Om_c[w]\otimes\Om_c[w']$ (including $w=w'$), has the \emph{full} support, 64 resp.\ 225 label pairs, every $(c,c')$ block fully populated (slots $25,15,15,9$ resp.\ $81,54,54,36$). There is no dependence of the site-1 label set on the site-2 label: ``the measure couples the two ladders'' of \nb{Two-rotations-det-overlap.md} \S4 means that the support is everything and all information is in the coefficients ($\phi$ has rank 8 resp.\ 15 as a $d\times d$ matrix; the vacuum $\Om_c[w]\otimes\Om_c[w]$ has rank 8 resp.\ 12). The generic-pair support contains the union of the two one-site supports but is strictly larger.
+
+\subsection{The $R$-matrix: the site asymmetry is the Yangian conjugation}\label{sec:BR}
+
+The reading to be tested (main session, \tg{reading}): the reversed-order chain $\mathcal L^{(2)}\mathcal L^{(1)}=RTR^{-1}$ with the Yangian $R^{\Lambda\Lambda}(\theta_{12})$, so that $\tilde t=RtR^{-1}$, $\tilde\Psi=R\Psi$ and the SoV wavefunctions are identical, and mirror symmetry makes the cheap site-2 covectors the $R$-dressed ones.
+
+\textbf{Construction and checks} \tg{exact} (\cl{B}{36}). $R$ solves $R\,T_{ab}(u)=\tilde T_{ab}(u)R$ for all nine $(a,b)$, $\tilde T=\mathcal L^{(2)}(u-\theta_2)\mathcal L^{(1)}(u-\theta_1)$, inside the commutant of the diagonal $\mathfrak{gl}(3)$, i.e.\ the algebra generated by $1$, $C_{12}=\sum E^1_{ab}E^2_{ba}$, the cubic couplings $D_{12},D_{21}$ and two quartic couplings $Q_1,Q_2$; its dimension is $8$ resp.\ $14=\sum(\text{HW multiplicity})^2$ on $V\otimes V$ (checked), and the quartic invariants are needed (words in $1,C_{12},D_{12},D_{21}$ alone give 6 of 8 for the adjoint). The Gram matrix of the flattened residuals at $u=3/11,2/9$ has a one-dimensional null space for both reps. Then (all True for both reps): $RT_{ab}=\tilde T_{ab}R$ at a third $u=19/23$; $\tilde t_a(u)R=Rt_a(u)$ with twist $\mathrm{diag}(z)$; $\tilde B(u)R=RB(u)$; $R$ commutes with $\rho(g)\otimes\rho(g)$; $(e_1^{\mathsf T}\otimes e_1^{\mathsf T})R=e_1^{\mathsf T}\otimes e_1^{\mathsf T}$ after normalisation; $R\,R^{-1}=1$. $R$ has 322 resp.\ 2285 nonzero entries (denominators $\le7$ / 10 digits) and $R\to1$ as $\theta_{12}\to\infty$ ($\max|R-1|=0.86/1.02$ at $t=62/35$ and $0.020/0.044$ at $t=1404/7$, i.e.\ $O(1/t)$, \cl{B}{36}, \cl{B}{57}).
+
+\textbf{Dressed test} \tg{exact support and counts} (\cl{B}{36}). The correct side is $\Phi=(e_1^{\mathsf T}\otimes c_2(g_2))R$ (row vector times $R$):
+\begin{center}\small\begin{tabular}{@{}lcc@{}}\toprule
+ & $[2,1,0]$ & $[3,1,0]$ \\\midrule
+$(e_1\otimes c_2)R$: support; all with $x_1\in F_1$? & 12 of 64; True & 24 of 225; True \\
+per-label count, generic $g_2$ / $g_2=\Om_c[w']$ (dressed) & 5 / 5 & 7 / 5 \\
+the same, undressed $e_1\otimes c_2$ (Stage A) & 17 & 40 \\
+$(e_1\otimes c_2)R^{-1}$ (wrong side): support; count & 36 pairs; 17 & 106 pairs; 41 \\
+control $(c_1\otimes e_1)R$ (dressing the cheap site-1 rotation): support; counts & 35 pairs; 17, 17 & 103 pairs; 40, 41 \\\bottomrule
+\end{tabular}\end{center}
+So the $R$-dressed site-2 rotation has the site-1 structure (support only on $x_1\in F_1$, factors $v_3(\theta_1-c_1h)/v_3(\theta_1-\lambda_2h)$, count 5/7), and dressing the cheap site-1 rotation makes it expensive: the asymmetry of Stage A is the $R$-matrix conjugation $\theta_{12}\to-\theta_{12}$ \tg{exact}. \emph{Loci of the dressed covector} (symbolic Gauss chart, \cl{B}{36}): adjoint, only the column $(x_1=(2|20),c'=0)$ is non-automatic, Pfaffian $=\mathrm{const}\cdot g_B^2(167g_A^2-264\,b_3)$; the conic constant is $cc=167/264=cc_1(-t)=(t+3)/(2(t+2))$ at $t=62/35$ (re-derived here), also $37/59$ at $(h,\theta)=(1/3,(1/5,-4/9))$, $61/94$ at $(1/2,(3/7,-1/4))$, $1425/2836$ at $\theta_2=-100$ (\cl{B}{36}, \cl{B}{57}); count 4 on the conic (also on $g_B=0$). $[3,1,0]$: conic constants $\{1,404/501,167/264,3371/7348,101/66\}$; $cc=1$, the vacuum family, gives the best count 5, the mirror of the site-1 result (the constant $167/264$ also appears, count 7).
+
+\subsection{Block counts: the main table and the $\det_6$ regression}\label{sec:Bblocks}
+
+\tg{exact ranks and pivot counts; numeric identities $10^{-39}$ or better} (\cl{B}{41}, \cl{B}{58}). Blocks $(c,c')=(0,0),(0,1),(1,0),(1,1)$. $\sum r$ / $\sum P$ per row:
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{longtable}{@{}p{6.6cm}cccc@{}}
+\caption{Block counts $\sum r\,/\,\sum P$ (\cl{B}{41}; summary \cl{B}{58}, item 4).}\label{tab:Bblocks}\\\toprule
+$\Phi$ & $[2,1,0]$ $\sum r$ & $[2,1,0]$ $\sum P$ & $[3,1,0]$ $\sum r$ & $[3,1,0]$ $\sum P$ \\\midrule\endfirsthead
+$\Phi$ & $[2,1,0]$ $\sum r$ & $[2,1,0]$ $\sum P$ & $[3,1,0]$ $\sum r$ & $[3,1,0]$ $\sum P$ \\\midrule\endhead
+(a) generic pair $c_1(g_1)\otimes c_2(g_2)$ (= random covectors) & 14 & \textbf{23} & 27 & \textbf{54} \\
+(c) $\Om_c[w]\otimes\Om_c[w]$ ($=\det_6$) & 13 & \textbf{18} & 26 & \textbf{40} \\
+(d) $\Om_c[w]\otimes\Om_c[w']$ (and reverse) & 13 & \textbf{22} & 27 & \textbf{54} \\
+(e) $\Om_c[w]\otimes e_1$ & 4 & 5 & 4 & 5 \\
+(e$'$) $e_1\otimes\Om_c[w']$ & 11 & 15 & 22 & 35 \\
+(f) $c_1(g_1)\otimes e_1$ generic & 4 & 5 & 4 & 7 \\
+(f$'$) $e_1\otimes c_2(g_2)$ generic (= Stage A block form) & 11 & 15 & 22 & 35 \\
+(e3) $c_1(\text{adjoint quadric point})\otimes e_1$ & 4 & \textbf{4} & --- & --- \\
+(g) $(e_1\otimes\Om_c[w'])R$ ($R$-dressed vacuum) & 4 & \textbf{5} & 4 & \textbf{5} \\
+(g2) $(e_1\otimes c_2(\text{dressed conic}))R$ & 4 & \textbf{4} & --- & --- \\
+(h) $R$-dressed two-rotation candidates $(e_1\otimes\Om_c[w'])R(\rho(g_1)\otimes1)$, $(\Om_c[w]\otimes e_1)R(1\otimes\rho(g_2))$, $(e_1\otimes c_2)R(\rho(g_1)\otimes1)$ & 14 & \textbf{23} & 27 & \textbf{54} \\
+\bottomrule
+\end{longtable}\end{center}
+Per-block ranks: generic pair $(5,3,3,3)$ / $(9,6,6,6)$; $\det_6$ vacuum $(5,3,3,2)$ / $(8,6,6,6)$ with $P$ per block $(10,3,3,2)$ / $(22,6,6,6)$; $\Om_c[w]\otimes\Om_c[w']$ $(5,3,3,2)$ with $P=(10,5,5,2)$ / $(9,6,6,6)$ with $P=(18,12,12,12)$.
+
+\textbf{Regression for the one-site limits} \tg{exact} (\cl{B}{41}): for site~2 $=e_1$ every block has rank $\le1$ and $P(c,c')$ equals half the rank of column $c$ of the one-site tensor of the group $c_2=c'$ (checked for $\Om_c[w]\otimes e_1$ and generic $c_1\otimes e_1$ against the one-site tensors rebuilt from $K^{(c_2)}$); totals 5/5 resp.\ 5/7 are the general notebook's generic and vacuum-family counts. All four blocks are populated (slots $3,5,1,3$ / $6,9,3,6$), not only $c'=\lambda_2$.
+
+\textbf{$\det_6$ regression} (plan \S7, \cl{B}{19}, \cl{B}{41}). $\Om_c[w]\otimes\Om_c[w]$ is proportional to $\det_6[F_{\vac,w}]/\Psi_Q$ on all 64 / 225 states at $5.7\cdot10^{-46}$, $4.5\cdot10^{-44}$ / $4.4\cdot10^{-43}$, $5.2\cdot10^{-40}$ (for $w$, $w'$; vacuum direct $q$ degrees $(0,2,4)$ / $(0,4,6)$), with $\Psi_Q=M^{(1)}_\vac M^{(2)}_\vac$ to $10^{-46}/10^{-43}$ \tg{numeric}. The plan's expectation that $\sum r$ over the four blocks is bounded by the 20 Laplace terms of the single $\det_6$ is \emph{not} a valid bound: each Laplace term feeds all four $(c,c')$ blocks, so the sum is bounded by 80 (four blocks of at most 20 each; per block $r\le\min(20,n_{\min})=n_{\min}$, non-binding), and indeed $\sum r=26>20$ for $[3,1,0]$. What is visible, and passes, is that the vacuum has strictly lower ranks and counts than a generic pair (13 vs 14, 26 vs 27; 18 vs 23, 40 vs 54; $\mathrm{rank}\,\phi=12<15$ for $[3,1,0]$ versus 15 for the generic pair and for $\Om_c[w]\otimes\Om_c[w']$). The termwise comparison with the 20 Laplace terms was not done (the per-ladder $3\times3$ minors are not polynomials in the monomials without the Baxter/Pl\"ucker relations of the eigenstates). Nothing had to be fixed in the bookkeeping \tg{exact/numeric}.
+
+\textbf{The decisive comparison} (plan \S6, \cl{B}{41}). One-site counts: site 1 5 generic / 4 (adjoint quadric) / 5 ($[3,1,0]$ vacuum family) / 7 ($[3,1,0]$ generic); site 2 dressed 5/4 resp.\ 7/5, undressed 15/35. Products of one-site counts: generic$\times$generic dressed 25 / 49, best$\times$best 16 / 25, undressed 75 / 175. The count of $\Om_c[w]\otimes\Om_c[w']$ is 22 / 54: just below the generic pair (23) for the adjoint, \emph{exactly} the generic pair's counts for $[3,1,0]$, far above best$\times$best. Two different vacua do not decouple at the bracket level, and the $R$-dressed candidates (h) are exactly generic \tg{exact}.
+
+\subsection{The four-parameter family $\Om_c[w]\otimes\Om_c[w']$}\label{sec:Bfamily}
+
+\tg{exact} (\cl{B}{46}). In $(a_1,s_1,a_2,s_2)=(1/w_1,1/w_2,1/w_1',1/w_2')$ the blocks are matrices of polynomials (entries of degree $\le3$ resp.\ $\le5$ in each variable; $\le12$ resp.\ $\le22$ terms); symbolic $\phi$ equals the numeric one. The $w_2\to\infty$ limit is $\mathrm{gaussCov}\{a,0,a\}=e_1^{\mathsf T}\exp(aE_{12})\exp(aE_{23})$ (computed, and the guess was right). Generic ranks (40 of 40 random points): $(5,3,3,2)$ / $(9,6,6,6)$, $\sum P=22$ / 54.
+
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{longtable}{@{}p{5.6cm}ccccc@{}}
+\caption{Sub-families of $\Om_c[w]\otimes\Om_c[w']$ (\cl{B}{46}): $\sum r$, $\sum P$.}\label{tab:Bsub}\\\toprule
+sub-family & $[2,1,0]$ $\sum r$ & $\sum P$ & $[3,1,0]$ $\sum r$ & $\sum P$ & reach (\cl{D}{23}) \\\midrule\endfirsthead
+sub-family & $[2,1,0]$ $\sum r$ & $\sum P$ & $[3,1,0]$ $\sum r$ & $\sum P$ & reach \\\midrule\endhead
+generic (4 parameters) & 13 & 22 & 27 & 54 & complete \\
+$w'=w$ (vacuum) & 13 & 18 & 26 & 40 & (not a two-rotation family) \\
+common $w_1'=w_1$ (3 parameters) & 13 & \textbf{18} & 26 & \textbf{40} & 2 weights: no \\
+$w_2'=w_2$; $w_1'=w_2$; $w_2'=w_1$; swap; $w_1=w_2$; $w_1'=w_2'$ & 13 & 22 & 27 & 54 & generic \\
+$w_2\to\infty$ & 13 & 20 & 27 & 54 & --- \\
+$w_2'\to\infty$ & 10 & 14 & 24 & 45 & complete \\
+$w_2,w_2'\to\infty$ & 10 & 12 & 24 & 45 & complete ($w_1\neq w_1'$) \\
+$w_1'=w_1$, $w_2\to\infty$ & 12 & 14 & 24 & 27 & 2 weights: no \\
+$w_1'=w_1$, $w_2'\to\infty$ & 9 & \textbf{10} & 18 & \textbf{21} & 2 weights: no \\
+$w_1'=w_1$, $w_2,w_2'\to\infty$ (1 parameter) & 8 & \textbf{8} & 14 & \textbf{14} & global rotation \\
+$w_1,w_1'\to\infty$ (both $e_1$) & 4 & 4 & 4 & 4 & trivial \\
+\bottomrule
+\end{longtable}\end{center}
+The count drops on $w_1'=w_1$ and on the $w\to\infty$ limits, not on the other coincidences; for $[2,1,0]$ the coincidence $w_1'=w_1$ is not a matrix-rank drop (the $P$ drop is a decomposability locus), for $[3,1,0]$ the $(0,\allowbreak 0)$ rank drops $9\to8$ there. No sub-family count is a product of one-site counts. Rank-drop hypersurfaces (common irreducible factors of $\det(PAQ)$ for random small-integer $P,Q$; Gr\"obner bases not used, codimension $\ge2$ probed only through the table): coordinate hyperplanes ($a_1,a_2,s_2$), a degree-14 hypersurface (163 terms) in block $(0,\allowbreak 0)$ for the adjoint, and for $[3,1,0]$ block $(1,\allowbreak 1)$ the $t$-dependent ratio $9a_1=44a_2$ ($w_1'/w_1=44/9$), $2134a_1^2-1188a_1a_2+279a_2^2$, $210a_1^2-665a_1a_2-93s_2(a_1-a_2)$ and a degree-4 factor; block $(0,\allowbreak 0)$ of $[3,1,0]$ only through a random line section and not reliable.
+
+\subsection{Follow-up Task 4b: the $(\infty,\infty)$ family with $w_1\neq w_1'$}\label{sec:B4b}
+
+\tg{exact} (\cl{B}{49}). $\Phi=\mathrm{gaussCov}\{a,0,a\}\otimes\mathrm{gaussCov}\{a',0,a'\}$, $a=1/w_1$, $a'=1/w_1'$ (the limit is confirmed symbolically; numerically $\Om_c[\{3/2,10^6\}]$ differs from $\mathrm{gaussCov}\{2/3,0,2/3\}$ by $10^{-6}$ relative); three pairs $(2/3,-5/7),(3/2,1/4),(-4/5,7/3)$ give identical numbers; overlap identity with 12 / 45 explicit bracket products $10^{-44}$ / $10^{-39}$ (see the caution on the first two points in Appendix~\ref{app:notes}, item 6).
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{longtable}{@{}p{4.6cm}cccc@{}}
+\caption{Task 4b (\cl{B}{49}); blocks $(0,0),(0,1),(1,0),(1,1)$.}\label{tab:B4b}\\\toprule
+ & $[2,1,0]$ $r$ & $P$; $\sum r/\sum P$ & $[3,1,0]$ $r$ & $P$; $\sum r/\sum P$ \\\midrule\endfirsthead
+ & $[2,1,0]$ $r$ & $P$; $\sum r/\sum P$ & $[3,1,0]$ $r$ & $P$; $\sum r/\sum P$ \\\midrule\endhead
+\textbf{$(\infty,\infty)$, $a\neq a'$} & 3,3,2,2 & 4,4,2,2; 10 / \textbf{12} & 6,6,6,6 & 12,12,9,12; 24 / \textbf{45} \\
+$\mathrm{gaussCov}\{a,0,a\}\otimes\Om_c[w']$ & 5,3,3,2 & 8,5,5,2; 13 / 20 & 9,6,6,6 & 18,12,12,12; 27 / 54 \\
+$\Om_c[w]\otimes\mathrm{gaussCov}\{a',0,a'\}$ & 3,3,2,2 & 5,5,2,2; 10 / 14 & 6,6,6,6 & 12,12,9,12; 24 / 45 \\
+vacuum $\Om_c[w]\otimes\Om_c[w]$ & 5,3,3,2 & 10,3,3,2; 13 / 18 & 8,6,6,6 & 22,6,6,6; 26 / 40 \\
+generic pair & 5,3,3,3 & 10,5,5,3; 14 / 23 & 9,6,6,6 & 18,12,12,12; 27 / 54 \\
+global rotation $a=a'$ & 2,2,2,2 & 2,2,2,2; 8 / 8 & 2,3,3,6 & 2,3,3,6; 14 / 14 \\
+\bottomrule
+\end{longtable}\end{center}
+On the $(a,a')$ plane: generic ranks $(3,3,2,2)$ / $(6,6,6,6)$; sum $P$ on lines (two members each): $a=a'$ 8 / 14, $a=0$ 8 / 19, $a'=0$ 4 / 4 (trivial). Rank-drop components found: $[2,1,0]$: $(0,\allowbreak 1)$: $a$, $a-a'$, $a'$; $(1,\allowbreak 0)$, $(1,\allowbreak 1)$: $a'$ (the drop of block $(0,\allowbreak 0)$ from 3 to 2 on $a=a'$ is visible in the line table but not detected by the common-factor heuristic); $[3,1,0]$ blocks $(0,0),(0,1)$: $a$, $a-a'$, $a'$; $(1,\allowbreak 0)$: also $31a-66a'$, $66a-31a'$, $53a-22a'$ and a quartic; $(1,\allowbreak 1)$: also $9a-44a'$, $6a-19a'$, $2134a^2-1188aa'+279a'^2$ and a quartic. \textbf{Verdict} (\cl{B}{49}): for $[3,1,0]$ the family costs 45 against 54 (generic) and 40 (vacuum), lower bound 24, no block with $P=r$; not cheap, no wedge decomposition listed. For the adjoint it costs 12 (generic 23, vacuum 18), blocks $(1,0),(1,1)$ exact; the explicit decomposition at $(a,a')=(2/3,-5/7)$ is printed in the output cell of \cl{B}{47} (cell 48): block $(0,\allowbreak 0)$: 3 terms with ladder-1 wedges $2+1+1$, ladder-2 one wedge each; $(0,\allowbreak 1)$ the same; $(1,\allowbreak 0)$ and $(1,\allowbreak 1)$ 2 terms. The $8/14$ line is the global rotation $a=a'$ only; the earlier Task 4 listing of $w_1'=w_1$, $w_2,w_2'\to\infty$ as ``1 parameter, minimal'' (\cl{B}{46}) refers to the same line.
+
+\subsection{One-site-fixed slices and the type-pair scan}\label{sec:Bfixed}
+
+\tg{exact} (\cl{B}{54}). \emph{(A) site 2 fixed at $\Om_c[w']$, $g_1=(g_A,g_B,g_C)$ free.} Blocks are polynomial in three variables; generic ranks $(5,3,3,2)$ / $(9,6,6,6)$ (the $(1,\allowbreak 1)$ block already has the vacuum value 2 for every $g_1$). The site-1 vacuum family, $b_3=0$, and the adjoint-type conics $cc_1(t),cc_1(-t),cc_1(1-t)$ all give 22 / 54, the same as generic $g_1$: the reduction $23\to22$ relative to the generic pair is due to the fixed vacuum on site 2, not to $g_1$. Reducing loci are cross loci depending on $w'$: $\alpha=\alpha'$ (common $w_1$; 20 / 49), with the vacuum condition 18 / 40, and $\beta=0$ (20 / 54). \emph{(B) site 1 fixed at $\Om_c[w]$, $g_2$ free.} Generic 23 / 54; the site-2 vacuum family is a genuine rank-drop locus of block $(1,\allowbreak 1)$ for the adjoint ($3\to2$; count 22) but not for $[3,1,0]$ (54); $b_3=0$ gives 22 / 50; $\beta=0$ gives \textbf{16} / 48 (ranks $3,3,3,3$ resp.\ $6,6,6,6$); $\alpha=\alpha_w$ and the vacuum family 18 / 40; the three conics 23 / 54. (B) is not the mirror of (A). Best count at fixed $g_2$: 18 / 40; at fixed $g_1$: 16 / 40. \emph{Type-pair scan} over simple loci per site $\{$generic, vacuum, $\beta=0$, $\gamma=0$, $\alpha=0$, $b_3=0$, three conics$\}$: minimum 14 for the adjoint at $(\beta_1=0,\beta_2=0)$ and $(\alpha_1=0,\beta_2=0)$, and 40 for $[3,1,0]$ at $(\alpha_1=0,\beta_2=0)$; CG-completeness of these loci was not tested. The coincidence loci of the table above ($10/21$, $8/14$) are cheaper than any pair of independent simple loci.
+
+\textbf{The sites do not decouple at the bracket level} (plan \S3 item 5): the one-site best loci are not count-reducing when the other site is a vacuum, and the cross terms appear exactly as loci depending on $w'$.
+
+\subsection{Driver and conclusion of Stage B}\label{sec:Bdriver}
+
+\tg{exact} (\cl{B}{57}). Rebuilt at $(h,\theta)$ points $t=62/35$ (also with $z',z''$), $29/15$, $19/14$, $1404/7$: $K$ identical at $z',z''$; the $R$ solution space is 1-dimensional; $cc_1(-t)$ is among the dressed conic constants; dressed/undressed generic counts $5/17$ and $7/40$; $\sum P$ for (generic, vacuum, $\Om_c[w]\otimes\Om_c[w']$) $=(23,18,22)$ and $(54,40,54)$, independent of $(h,\theta,z)$ at all points; $17$--$35$ s per point for $[3,1,0]$.
+
+\textbf{Conclusion} \tg{exact counts; reading for the interpretation} (\cl{B}{58}, items 6, 7b, 12). (i) $\Om_c[w]\otimes\Om_c[w']$ is as expensive as a generic pair for $[3,1,0]$ (54 = 54), so the plan's success target ($\sim25$) is not met by $\Om_w\otimes\Om_{w'}$ itself; reductions come from coincidences ($w_1'=w_1$) and $w\to\infty$ limits. (ii) \tg{reading} Cheapness correlates with the pair becoming a near-global rotation (common $w_1$ differs only in $E_{23}$, so it reads one irrep; $w_2=w_2'=\infty$ with $w_1=w_1'$ is a global rotation and reads the top irrep only), so no cheap \emph{and} CG-complete two-vacuum family exists in this cost metric --- \emph{except} the $(\infty,\infty)$ family with $w_1\neq w_1'$, which Stage D shows to be CG-complete (\S\ref{sec:D}) and which costs 12 (adjoint, cheap) / 45 ($[3,1,0]$, not cheap). The agent's initial Stage C recommendation (common-$w_1$ family, 18/40) was overruled by the reach argument and then by Stage D. (iii) The pivot count $P$ is not monotone in $r$ (vacuum $[3,1,0]$ block $(0,\allowbreak 0)$: $r=8$, $P=22$; generic $r=9$, $P=18$), so $r$ is the robust number. (iv) Skipped: greedy/tensor-rank minimisation (done in Stage C for the $(\infty,\infty)$ family), termwise Laplace comparison, Gr\"obner bases for the rank-drop ideals, $[3,2,0]$, reach tests (Stage D).
+
+\section{Stage D: the untwisting of $\bra{\Om_w\otimes\Om_{w'}}$ (chain side)}\label{sec:D}
+
+Notebook D (40 cells; summary \cl{D}{40}). Diagonal frame, 200 digits on the chain, factorised $x_0$ (never \texttt{Inverse} at small $\varepsilon$). The family is $\Phi=\Om_D[z,w]\otimes\Om_D[z,w']$. For each highest-weight (HW) ket of $V\otimes V$ there is an HW-limit branch $\Psi_B$ of the twisted chain at $z$ (normalised $\langle x_0|\Psi_B\rangle=1$ with $x_0=(e_1^{\mathsf T}P_{\rm phys}^{-1})^{\otimes2}$); $P_{HW}$ is the $G$-orthogonal projector onto the HW space of the sector, $R_C=\langle\Phi|\Psi_B\rangle$, $S=\langle\Phi|P_{HW}\Psi_B\rangle$, $K=R_C-S$. A HW state of weight $\mu$ has its CG slice at the one-site weight $\nu=\mu-\Lambda$ (site 2 $=e_1$). The regime is $z=1+\varepsilon\varphi$ with $\varphi=(1/3,-2/7,5/11)$ (control $\varphi'=(-2/5,3/8,7/11)$), $w=(1+\varepsilon\omega_1,1+\varepsilon\omega_2)$, $w'=(1+\varepsilon\omega_1',1+\varepsilon\omega_2')$, 24 grid points $\omega_1\in\{3/4,-5/3\}$, $\omega_2\in\{-1/5,9/7,5/3\}$, $\omega_1'\in\{-12/5,7/2\}$, $\omega_2'\in\{1/8,-3/4\}$, $\varepsilon\in\{1,2,4\}\cdot10^{-6}$; $w_3,w_3'$ drop out of the covector (\cl{D}{1}).
+
+\subsection{Setup, frame tie, exact undo}\label{sec:Dsetup}
+
+\tg{exact unless stated} (\cl{D}{15}). Gelfand--Tsetlin relations, invariant positive metric, quantum determinant (200 digits, $10^{-200}$); HW kets/sectors $6/5$ (multiplicities $1,1,1,2,1$) for the adjoint and $10/8$ ($1,1,1,2,1,2,1,1$) for $[3,1,0]$; slice weights $\nu=\mu-\Lambda$: $(2,1,0)_1,(2,0,1)_1,(1,2,0)_1,(1,1,1)_2,(0,1,2)_1$ resp.\ $(3,1,0)_1,(3,0,1)_1,(2,2,0)_1,(2,1,1)_2,(1,3,0)_1,(1,2,1)_2,(1,1,2)_2,(0,2,2)_1$. (a) The frame tie holds at 6 rational points (2 with $w_2=\infty$, 1 regime point) up to the scalar $\kappa$ (the spec's wording ``equal'' is corrected: $\Om_c$ is normalised to first component 1). (b) The exact undo
+\[
+\langle\Om_D[w]\otimes\Om_D[w']|h\rangle=\langle e_1^{\mathsf T}\rho(n(w)n(w')^{-1})\otimes e_1^{\mathsf T}|h\rangle\quad\text{on all HW kets}
+\]
+holds at 7 points (2 with $w_2=\infty$, 2 in the regime), with no scalar since $e_1^{\mathsf T}\rho(n)e_1=1$; the naive $e_1\otimes e_1$ pairing differs. (c) $\Om_D[w]\otimes\Om_D[w]$ is a left eigencovector of $t_a(2/9)$ with the bra twist $G'(w)=P_{\rm aux}G(w)P_{\rm aux}^{-1}$ (control $\mathrm{diag}(w)$ fails for $t_1,t_2$). Continuity at $w_2=10^{10},10^{30}$ against $w_2=\infty$: $2.2\cdot10^{-10},2.2\cdot10^{-30}$ (adjoint). At $\varepsilon=10^{-6}$ there are 21 / 56 states and 6 / 10 branches, raising residual $\le4.1\cdot10^{-7}$ / $10^{-6}$ against $\ge1.3$ for the other states, HW fraction $1-1.7\cdot10^{-14}$ / $1-8.2\cdot10^{-14}$, exact dual Baxter residual $1.1\cdot10^{-147}$ / $2.4\cdot10^{-140}$ \tg{numeric}.
+
+\subsection{The undone unipotent}\label{sec:Dn}
+
+\tg{exact, rep-independent} (\cl{D}{19}). With $n(w)=\left(\begin{smallmatrix}1&a&b\\&1&c\\&&1\end{smallmatrix}\right)$, $a=r_1$, $c=r_3$, $b=r_2+r_1r_3=(w_1-z_1)/(w_1-z_3)$ \emph{independent of $w_2$}, put $n'=n(z,w)n(z,w')^{-1}=e^{a'E_{12}}e^{g'E_{13}}e^{c'E_{23}}$ with $g'=b'-a'c'$, hence $g'=(b-b_{w'})-(a-a_{w'})c$: it depends on $w'$ only through $w_1'$. All three are $O(1)$ at $\varepsilon=0$ (orders $0,0,0$), with ($\varphi=(f_1,f_2,f_3)$, $\omega=(o_1,o_2)$, $\omega'=(p_1,p_2)$)
+\begin{align*}
+a'_0&=\frac{(f_1-f_2)(o_1-p_1)}{(o_1-f_2)(p_1-f_2)},\qquad
+g'_0=\frac{(f_1-f_3)(f_2-f_3)(o_1-p_1)(o_2-p_1)}{(f_3-o_1)(f_3-o_2)(f_3-p_1)(p_1-f_2)}\quad(\text{independent of }p_2),\\
+c'_0&=r_3^0(\omega)-r_3^0(\omega'),\qquad r_3^0(\omega)=\frac{(o_1-f_2)(f_2-o_2)(f_1-f_3)}{(f_1-f_2)(o_1-f_3)(f_3-o_2)},
+\end{align*}
+($c'_0$ has a long closed form with numerator $N=f_2f_3(o_1+o_2-p_1-p_2)-(f_2+f_3)(o_1o_2-p_1p_2)+o_1o_2(p_1+p_2)-p_1p_2(o_1+o_2)$ in \cl{D}{19}). The map $(\omega_1,\omega_2,\omega_1',\omega_2')\mapsto(a'_0,c'_0,g'_0)$ has rank 3 (Jacobian at three generic points, one with $\varphi'$; one-dimensional fibre). The $w_2\to\infty$ limits used in Stage C: $g'_0=(f_1-f_3)(f_2-f_3)(o_1-p_1)/((f_3-o_1)(f_2-p_1)(f_3-p_1))$ (the limit $\omega_2\to\infty$ of the closed form above; \cl{C}{57}).
+
+\textbf{Controls} \tg{exact} (\cl{D}{19}): (i) $w'=w$: $n'=1$. (ii-a) the old regime's pinning $w_2'=y_0(1+\varepsilon\omega_2')$, $y_0=(t-1)/(t-2)=-27/8$: orders $(0,0,0)$, $g_0'$ the same function (only $c_0'$ loses $\omega_2'$); (ii-b) $w_2'=7/4$ fixed: same; (ii-c) $w'=(7/4,-2/5)$ fixed entirely: orders $(0,0,0)$, $a'_0=(f_1-f_2)/(f_2-o_1)$, $g'_0=-(f_1-f_3)(f_2-f_3)/((f_3-o_1)(f_3-o_2))$, and $(\omega_1,\omega_2)\mapsto(a_0',c_0',g_0')$ has rank 2; (iii) common $w_1'=w_1$: $a'\equiv g'\equiv0$ exactly, $n'=\exp(c'E_{23})$ with $c_0'=(f_1-f_3)(f_2-f_3)(f_2-o_1)(o_2-p_2)/((f_1-f_2)(f_3-o_1)(f_3-o_2)(f_3-p_2))$ (the localising-span result); (iv) common $w_2'=w_2$, $w_1'$ untwisted: orders $(0,0,0)$, $c_0'\propto(o_1-p_1)(f_2-o_2)$. \textbf{Surprise} (spec expectation not realised): the spec expected $g'$ to lose an order when $w_2'$ is pinned (the old $\det_6\times\det_2$ degeneration). It does not: the old family had the second vacuum slaved to a resolvent of the first ($y$ pinned, $g'=a'c'(z_2-w_2)/(y-z_2)$ with a pinned denominator), whereas here the two vacua are independent and $g'$ has no pinned denominator. The only way to lose a direction is $w_1'=w_1$.
+
+\subsection{Finite-twist reach}\label{sec:Dreach}
+
+\tg{exact} (\cl{D}{23}; three rational $(z,w,w')$ points per family, $z$ also varied). Rank of the components of $\varphi_u=e_1^{\mathsf T}\rho(n(z,w)n(z,w')^{-1})$ on each one-site weight space; ``CG-complete'' means every slice weight with full rank.
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{tabular}{@{}p{3.5cm}>{\centering\arraybackslash}p{1.6cm}>{\centering\arraybackslash}p{1.8cm}>{\centering\arraybackslash}p{2.9cm}>{\centering\arraybackslash}p{2.3cm}>{\centering\arraybackslash}p{1.9cm}>{\centering\arraybackslash}p{1.7cm}@{}}\toprule
+ & (i) generic & (ii) $w_1'=w_1$ & (iii) $w_2=w_2'=\infty$, $w_1'\neq w_1$ & (iii-c) same with $w_1'=w_1$ & (iv) $w_2'=\infty$ only & (v) $w_2'=w_2$ \\\midrule
+adjoint: $\sum$ ranks (of 8) & 8 & 2 & \textbf{8} & 1 & 8 & 8 \\
+adjoint: HW sectors read (of 5) & 5 & 2 & 5 & 1 & 5 & 5 \\
+$[3,1,0]$: $\sum$ ranks (of 15) & 15 & 2 & \textbf{15} & 1 & 15 & 15 \\
+$[3,1,0]$: HW sectors read (of 8) & 8 & 2 & 8 & 1 & 8 & 8 \\
+CG-complete & yes & no & \textbf{yes} & no & yes & yes \\\bottomrule
+\end{tabular}\end{center}
+Rank 2 on every double weight in the complete families. (ii) reads exactly $e_1^{\mathsf T}$ and $e_1^{\mathsf T}E_{23}$: the top irrep and one further irrep ($[4,1,1]$ resp.\ $[6,1,1]$). (iii-c) is a global rotation ($n'=1$): top weight only. \textbf{(iii) with $w_1'\neq w_1$ is not a global rotation: it reads every weight of $V$ with full rank, with only two free parameters $(w_1,w_1')$} (in the $\infty$ limit $r_2,r_3$ and hence $n(z,w)$ depend on $w_1$ only); the spec's expectation ``top irrep only'' holds only for the control (iii-c).
+
+\subsection{Regime, per-weight orders; $K/S$}\label{sec:DKS}
+
+\tg{exact} (\cl{D}{27}; exact in symbolic $\varepsilon$ at the 24 grid points, $\varphi$ and $\varphi'$ identical). In the main family every weight of $V$ (7 resp.\ 12 slice-relevant weights) has its leading order at $\varepsilon^0$, the rank of the $\varepsilon^0$ coefficient vectors over the grid equals the multiplicity (1 on single weights; 2 on $(1,1,1)$ for the adjoint, on $(2,1,1),(1,2,1),(1,1,2)$ for $[3,1,0]$) and nothing new appears at $\varepsilon^1$. The same holds for the control $w'=(7/4,-2/5)$ fixed (6 points), $w_2=w_2'=\infty$ and $w_2'=\infty$ (12 points each); for common $w_1'=w_1$ only $(2,1,0),(2,0,1)$ [$(3,1,0),(3,0,1)$] are nonzero, all others identically zero. For comparison the old $\det_6\times\det_2$ family had the depth table $\varepsilon^0,\varepsilon^1,\varepsilon^1,\varepsilon^2,\varepsilon^3,\varepsilon^3,\varepsilon^4$ (adjoint). The control with $w'$ fixed does not reproduce a depth table (spec expectation not realised): $n(z,w)n_1^{-1}$ with $n_1$ the finite limit of $n(z,w')$ is a generic unipotent.
+
+\textbf{Signal versus contamination} \tg{numeric, 200 digits} (\cl{D}{31}). \emph{Decisive expectation: $K/S=O(\varepsilon)$ for every HW branch --- confirmed} for both reps, including the adjoint singlet and both octets and all ten $[3,1,0]$ branches ($[4,4,0]$, $[4,3,1]\times2$, $[4,2,2]$, $[3,3,2]$ included, which had $\varepsilon$-constant $\kappa$ in the old family); $\max|K/S|$ doubles with $\varepsilon$ (ratios $2.000$, $2.000$) in every branch; the top branch has $K=0$ exactly; the exact undo holds to $10^{-157}$ (adjoint) / $10^{-149}$ ($[3,1,0]$) at 200 digits. The control $w'$ fixed, $w_2=w_2'=\infty$ and $w_2'=\infty$ are equally clean; common $w_1'=w_1$ reads only the top and the first irrep ($|S|<10^{-100}|R_C|$ elsewhere).
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lcccc@{\hspace{10pt}}lcccc@{}}
+\caption{$K/S$, main family (24 points) (\cl{D}{31}): $\varepsilon$-exponents of $S$ and $K$, and $\max|K/S|$ at $\varepsilon=10^{-6},2\cdot10^{-6},4\cdot10^{-6}$.}\label{tab:DKS}\\\toprule
+$[2,1,0]$ & $S$ exp & $K$ exp & $\max|K/S|$ ($10^{-6}$) & $\times2$ & $[3,1,0]$ & $S$ exp & $K$ exp & $\max|K/S|$ ($10^{-6}$) & $\times2$ \\\midrule\endfirsthead
+$[2,1,0]$ & $S$ exp & $K$ exp & $\max|K/S|$ ($10^{-6}$) & $\times2$ & $[3,1,0]$ & $S$ exp & $K$ exp & $\max|K/S|$ ($10^{-6}$) & $\times2$ \\\midrule\endhead
+$[4,2,0]$ & $-2$ & --- ($K=0$) & 0 & --- & $[6,2,0]$ & $-2$ & --- & 0 & --- \\
+$[4,1,1]$ & $-3$ & $-2$ & $4.25\cdot10^{-7}$ & 2.000 & $[6,1,1]$ & $-3$ & $-2$ & $4.25\cdot10^{-7}$ & 2.000 \\
+$[3,3,0]$ & $-3$ & $-2$ & $2.1\cdot10^{-6}$ & 2.000 & $[5,3,0]$ & $-3$ & $-2$ & $3.12\cdot10^{-7}$ & 2.000 \\
+$[3,2,1]$ (copy 1) & $-4$ & $-3$ & $1.5\cdot10^{-5}$ & 2.000 & $[5,2,1]$ (1) & $-4$ & $-3$ & $5.65\cdot10^{-7}$ & 2.000 \\
+$[3,2,1]$ (copy 2) & $-4$ & $-3$ & $8.05\cdot10^{-6}$ & 2.000 & $[5,2,1]$ (2) & $-4$ & $-3$ & $2.0\cdot10^{-5}$ & 2.000 \\
+$[2,2,2]$ & $-6$ & $-5$ & $2.57\cdot10^{-6}$ & 2.000 & $[4,4,0]$ & $-4$ & $-3$ & $4.21\cdot10^{-6}$ & 2.000 \\
+ & & & & & $[4,3,1]$ (1) & $-5$ & $-4$ & $3.69\cdot10^{-6}$ & 2.000 \\
+ & & & & & $[4,3,1]$ (2) & $-5$ & $-4$ & $1.09\cdot10^{-5}$ & 2.000 \\
+ & & & & & $[4,2,2]$ & $-6$ & $-5$ & $4.51\cdot10^{-6}$ & 2.000 \\
+ & & & & & $[3,3,2]$ & $-7$ & $-6$ & $4.44\cdot10^{-6}$ & 2.000 \\
+\bottomrule
+\end{longtable}\end{center}
+With $\varphi'$ at $\varepsilon=10^{-6}$: $\le1.6\cdot10^{-5}$ (adjoint), $\le4.4\cdot10^{-5}$ ($[3,1,0]$). The largest values in the other families at $\varepsilon=10^{-6}$ are $2.89\cdot10^{-5}$ ($w_2'=\infty$, $[4,1,1]$ and $[6,1,1]$) and $6.0\cdot10^{-6}$ (control $w'$ fixed). The exponents of $K$ are those of $S$ plus one (K exp of $[3,3,2]$ is printed as $-6.000,-5.997$ in the main family, $-6.000$ elsewhere).
+
+\subsection{CG data at leading order from the overlap alone}\label{sec:DCG}
+
+\tg{numeric} (\cl{D}{35}). For 1-dimensional slices $C:=R_C/\varphi_u(0)[\text{slice}]$ with $\varphi_u(0)$ the exact $\varepsilon^0$ coefficient vector (verified equal to $e_1^{\mathsf T}\rho(e^{a'_0E_{12}}e^{g'_0E_{13}}e^{c'_0E_{23}})$ with the closed forms at all 24 points); for 2-dimensional slices the $2\times2$ system from two grid points with independent $\varphi_u(0)[\text{slice}]$ (12 pairs). Errors and spreads are $O(\varepsilon)$ (error ratio $4.00$ between $10^{-6}$ and $4\cdot10^{-6}$ everywhere). Second-order Richardson on $f=C\varepsilon^p$, $p=-(\varepsilon\text{-exponent of the slice})$, at $\varepsilon=10^{-6},2\cdot10^{-6},4\cdot10^{-6}$: overlap-extracted limit and chain limit agree to $10^{-16}$--$10^{-20}$ (``$<10^{-N}$'' = identical to the working precision for the 1-dimensional slices of the first irreps). \textbf{All CG data are read at leading order from the overlap: 6 of 6 HW data of adj$\otimes$adj and 10 of 10 of $[3,1,0]$}, for the main family, the control $w'$ fixed, and the sub-families $w_2=w_2'=\infty$ and $w_2'=\infty$ (common $w_1'=w_1$ reads only the first two irreps).
+\begin{center}\footnotesize\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}lcp{3.7cm}c@{\hspace{6pt}}lcp{3.7cm}c@{}}
+\caption{CG slices, main family (\cl{D}{35}): chain Richardson limit of the slice and overlap-vs-chain agreement.}\label{tab:DCG}\\\toprule
+$[2,1,0]$ & dim & chain limit & agree & $[3,1,0]$ & dim & chain limit & agree \\\midrule\endfirsthead
+$[2,1,0]$ & dim & chain limit & agree & $[3,1,0]$ & dim & chain limit & agree \\\midrule\endhead
+$[4,2,0]$ & 1 & $2.60946745562$ & $<10^{-191}$ & $[6,2,0]$ & 1 & $2.60946745562$ & $<10^{-191}$ \\
+$[4,1,1]$ & 1 & $46.6745389114$ & $<10^{-184}$ & $[6,1,1]$ & 1 & $46.6745389114$ & $<10^{-184}$ \\
+$[3,3,0]$ & 1 & $10.9285389167$ & $<10^{-184}$ & $[5,3,0]$ & 1 & $-36.8838188439$ & $<10^{-183}$ \\
+$[3,2,1]$ (1) & 2 & $(248.327054711,\allowbreak -21.3321644927)$ & $1.2\cdot10^{-18}$ & $[5,2,1]$ (1) & 2 & $(-835.970434496,\allowbreak 43.3173128073)$ & $1.4\cdot10^{-19}$ \\
+$[3,2,1]$ (2) & 2 & $(11.3988399453,\allowbreak -83.3191974257)$ & $7.3\cdot10^{-18}$ & $[5,2,1]$ (2) & 2 & $(22.7423320599,\allowbreak -47.4770351603)$ & $9.7\cdot10^{-19}$ \\
+$[2,2,2]$ & 1 & $-5118.53831440$ & $1.5\cdot10^{-19}$ & $[4,4,0]$ & 1 & $-115.853020728$ & $1.7\cdot10^{-19}$ \\
+ & & & & $[4,3,1]$ (1) & 2 & $(-3129.70920645,\allowbreak 247.139873999)$ & $3.7\cdot10^{-19}$ \\
+ & & & & $[4,3,1]$ (2) & 2 & $(-65.0505836460,\allowbreak 570.310701774)$ & $4.5\cdot10^{-17}$ \\
+ & & & & $[4,2,2]$ & 2 & $(4647.35409165,\allowbreak -1549.11803055)$ & $3.3\cdot10^{-18}$ \\
+ & & & & $[3,3,2]$ & 1 & $23369.8056448$ & $7.0\cdot10^{-19}$ \\
+\bottomrule
+\end{longtable}\end{center}
+The slice normalisation is $\langle x_0|\Psi\rangle=1$, so chain limits are family- and rep-independent for shared irreps, and they reproduce the earlier notebooks' numbers: adjoint $[4,1,1]$ $46.67453891$, $[3,3,0]$ $10.92853892$, singlet $-5118.538314$, octet functionals $(u+u')\cdot C=C_1+3C_2$ $=184.3305612$ and $-238.5587523$, octet mixing $R=u\cdot C/((u+u')\cdot C)=-1.6944,\,1.0956$ (earlier $-1.694,\,1.096$); $[3,1,0]$: $46.6745$, $-36.8838$, $u'\cdot C=2C_1+8C_2$ $=-1325.402367$ and $-334.3316172$ (earlier $-1325.40\dots,\,-334.33\dots$). New $[3,1,0]$ slices: $[4,4,0]$ $-115.8530207$, $[3,3,2]$ $23369.80564$, $[4,3,1]$ $(-3129.709206,\allowbreak 247.1398740)$ and $(-65.05058365,\allowbreak 570.3107018)$, $[4,2,2]$ $(4647.354092,\allowbreak -1549.118031)$, $[5,2,1]$ $(-835.9704345,\allowbreak 43.31731281)$ and $(22.74233206,\allowbreak -47.47703516)$ (GT-index components of the slice).
+
+\subsection{The four overlaps and the exchange parity}\label{sec:Dfour}
+
+\tg{numeric} (\cl{D}{39}; one grid point $(\omega,\omega')=((3/4,-1/5),(-12/5,1/8))$, $\varepsilon=10^{-6}$, exponents from $10^{-6}\to2\cdot10^{-6}$; $w_3=1+5\varepsilon/13$, $w_3'=1-4\varepsilon/13$). Vacuum direct $Q$'s of $w,w'$ have degrees $(0,2,4)$ / $(0,4,6)$ with exact Baxter residuals $4.5\cdot10^{-191},2.5\cdot10^{-190}$ / $7.4\cdot10^{-190},9.2\cdot10^{-190}$; dual $Q$'s of all HW-sector states of degree $\mu_j$ (21 resp.\ 56 states). The diagonal overlaps are $\det_6$: $\langle\Om_w\otimes\Om_w|\Psi\rangle=c_w\det_6[B,F_\vac(w)]/\Psi_Q$ with a state-independent constant, deviation $3.2\cdot10^{-116},1.8\cdot10^{-117}$ [$2,1,0$] and $6.4\cdot10^{-77},1.5\cdot10^{-85}$ [$3,1,0$] (limited by the $\sim100$-digit $Q$-determinants) \tg{numeric}. The mixed overlaps are not $\det_6$ and are the Stage C targets.
+\begin{center}\footnotesize\setlength{\tabcolsep}{3pt}\begin{tabular}{@{}lcccccc@{}}\toprule
+adjoint, main family & $\langle ww|\Psi\rangle$ & $\langle w'w'|\Psi\rangle$ & $\langle ww'|\Psi\rangle$ & $\langle w'w|\Psi\rangle$ & exponents $(ww,w'w',ww',w'w)$ & parity \\\midrule
+$[4,2,0]$ & $2.609\mathrm{e}12$ & $2.609\mathrm{e}12$ & $2.609\mathrm{e}12$ & $2.609\mathrm{e}12$ & $-2,-2,-2,-2$ & $+$ \\
+$[4,1,1]$ & $-1.198\mathrm{e}12$ & $-2.409\mathrm{e}12$ & $-4.241\mathrm{e}18$ & $4.241\mathrm{e}18$ & $-2,-2,-3,-3$ & $-$ \\
+$[3,3,0]$ & $1.05\mathrm{e}12$ & $3.374\mathrm{e}12$ & $-9.732\mathrm{e}18$ & $9.732\mathrm{e}18$ & $-2,-2,-3,-3$ & $-$ \\
+$[3,2,1]$ (1) & $4.367\mathrm{e}18$ & $5.889\mathrm{e}18$ & $-1.515\mathrm{e}26$ & $2.066\mathrm{e}26$ & $-3,-3,-4,-4$ & (2-dim) \\
+$[3,2,1]$ (2) & $-1.153\mathrm{e}19$ & $-1.555\mathrm{e}19$ & $-1.585\mathrm{e}26$ & $1.411\mathrm{e}26$ & $-3,-3,-4,-4$ & (2-dim) \\
+$[2,2,2]$ & $-4.533\mathrm{e}25$ & $-8.244\mathrm{e}25$ & $5.02\mathrm{e}39$ & $5.02\mathrm{e}39$ & $-4,-4,-6,-6$ & $+$ \\\bottomrule
+\end{tabular}\end{center}
+The diagonal overlaps scale like $\varepsilon^{-2}$ (top) to $\varepsilon^{-4}$ ($[2,2,2]$, $[4,2,2]$, $[3,3,2]$), the mixed ones carry the CG-slice exponent ($-2$ top, $-3$ for $[4,1,1],[3,3,0],[6,1,1],[5,3,0]$, $-4$ for the octets and $[4,4,0]$, $-5$ for $[4,3,1]$, $-6$ for $[2,2,2],[4,2,2]$, $-7$ for $[3,3,2]$). For the one-dimensional slices $\langle\Om_w\otimes\Om_{w'}|\Psi\rangle=\pm\langle\Om_{w'}\otimes\Om_w|\Psi\rangle$ to the leading digits, the sign being the exchange parity of the irrep: $-$ for $[4,1,1],[3,3,0],[6,1,1],[5,3,0],[3,3,2]$; $+$ for the top irrep, $[2,2,2],[4,4,0],[4,2,2]$ ($[4,2,2]$ is a 2-dimensional slice with one copy, symmetric); for the two-copy 2-dimensional slices (octets, $[5,2,1]$, $[4,3,1]$) the two mixed overlaps differ. For $w_2=w_2'=\infty$ (also tabulated in \cl{D}{39}) the diagonal exponents are all $-2$ (the $\infty$-vacua are top-heavy) and the mixed exponents are again the slice exponents.
+
+\textbf{Surprises recorded in \cl{D}{40}}: (1) no untwisting of $w'$ is needed, pinned and fixed $w'$ are as clean as the full regime, the family needs only $w_1'\neq w_1$; (2) the sub-family $w_2=w_2'=\infty$ (with $w_1\neq w_1'$) is CG-complete at finite twist, at $\varepsilon^0$ in the regime, in $K/S$ and in the CG extraction; \cl{D}{40} attributes to it the Stage B block counts 8/14 (``cheap'') and concludes that the HANDOFF reading ``no cheap and CG-complete two-vacuum family'' is contradicted at the chain level --- but per \cl{B}{49} the 8/14 line is the global rotation $a=a'$, and the family with $w_1\neq w_1'$ costs 12 / 45 (Appendix~\ref{app:notes}, item 2); only two direction parameters $(\omega_1,\omega_1')$ remain, and the $O(\varepsilon)$ layer is open; (3) the frame tie holds up to $\kappa$, and the eigen-covector twist is $G'(w)$, not $\mathrm{diag}(w)$; (4) undo accuracy $10^{-157}$--$10^{-192}$ ($[3,3,2]$ $10^{-149}$) at 200 digits. Not done in D: the $O(\varepsilon)$ layer, and the Q side (Stage C).
+
+\section{Stage C: the adjoint $(\infty,\infty)$ family as a bracket formula, and the Q-side CG}\label{sec:C}
+
+Notebook C (70 cells; summary \cl{C}{70}); adjoint $[2,1,0]$ only, plus a $[3,1,0]$ cost note. Tasks in the order $0,1,3,2,4$ because the Task 2 and Task 4 drivers wipe \texttt{Global`} (\cl{C}{1}). The family is $\Phi(a,a')=\mathrm{gaussCov}\{a,0,a\}\otimes\mathrm{gaussCov}\{a',0,a'\}=\Om_c[(1/a,\infty)]\otimes\Om_c[(1/a',\infty)]$ (first rows $(1,a,a^2)$, $(1,a',a'^2)$); diagonal frame $\Om_{(w_1,\infty)}\otimes\Om_{(w_1',\infty)}$ with $w_1=1/a$, $w_1'=1/a'$. The identity to realise is
+\[
+\frac{\langle\Phi|\Psi\rangle}{\langle x_0|\Psi\rangle}\,M^{(1)}_\vac M^{(2)}_\vac=\sum_{c,c'\in\{0,1\}}Q^3(\theta_1-ch)\,Q^3(\theta_2-c'h)\sum_k\Bk^{(1)}[F_k,G_k]\,\Bk^{(2)}[F'_k,G'_k],
+\]
+$M^{(s)}_\vac=\mathrm{minor}_s(-3,-2)Q^3(\theta_s-h)$, ladder points $m=-3,\dots,0$.
+
+\subsection{Setup and the count: ten, not twelve}\label{sec:Ccount}
+
+Part A (60 digits) reproduces Stage B's setup (64 states, largest sector 10, eigen residual $10^{-52}$, dual Baxter $10^{-49}$, wavefunction rule $10^{-43}$, $K$: 278 nonzero rationals, rank 64; bracket identity verified symbolically) \tg{exact/numeric} (\cl{C}{21}). The four blocks $A^{(cc')}(a,a')$ ($6\times6$) are matrices of polynomials of total degree $\le3$ with $11,11,9,9$ nonzero slots; generic ranks $(3,3,2,2)$, $\sum r=10$; at $(a,a')=(2/3,-5/7),(3/2,1/4),(-4/5,7/3)$ the default pivots give $P=(4,4,2,2)$, $\sum P=12$ (rows/columns orientation $4,4,2,2\,/\,5,5,2,2$), reproducing Stage B exactly; the identity with the 12 explicit products on all 64 states is $<10^{-44}$ \tg{exact/numeric} (\cl{C}{24}).
+
+\textbf{Resolution of 12 versus ten} \tg{exact} (\cl{C}{27}, \cl{C}{32}). The 12 is the count of the \emph{default} \texttt{RowReduce} pivot choice, in which one of the three terms in blocks $(0,\allowbreak 0)$ and $(0,\allowbreak 1)$ has a ladder-1 factor of rank 4 (two wedges); the ``$3+3+2+2=10$'' of Stage B's wedge list is the number of rank-one \emph{terms} $u_k\otimes w_k$, i.e.\ the lower bound $\sum r$. The scan of \emph{all} independent pivot sets in both orientations at the generic point $(a,a')=(7/5,-4/3)$ gives: rank-3 blocks, rows orientation one admissible set ($P=4$), columns orientation 7 sets with $P=3$ (twice), $4$ (four times), $5$ (once); rank-2 blocks, all 3 sets $P=2$ in both orientations. The minimum is $3,3,2,2$: \textbf{ten products $=\sum r$, attained exactly}, because for the rank-3 blocks every one of the $3+3$ 2-forms is decomposable; the Pfaffians of all 20 ladder 2-forms vanish identically in $(a,a')$ (the code returns \texttt{\$Failed} otherwise and reconstructs the blocks exactly from the products). Winning choices: blocks $(0,0),(0,1)$: columns orientation, pivot rows $\{2,3,4\}$; $(1,\allowbreak 0)$: rows orientation, pivot columns $\{1,3\}$; $(1,\allowbreak 1)$: rows, $\{2,3\}$. The identity of the ten products holds on all 64 states at $(5/7,-4/9),(-3/5,7/4),(9/5,2/7)$ to $<10^{-45}$ with all 64 overlaps nonzero (\cl{C}{32}). \emph{Caution}: $(a,a')=(2/3,-5/7)$ has $w_1=1/a=z_1$ and $(3/2,1/4)$ has $w_1=z_3$ --- degenerate vacua for which 22 of the 64 states are orthogonal to the covector (42 nonzero overlaps); the identity holds there trivially on those states, and non-vacuity is claimed only at the generic points (\cl{C}{24}, \cl{C}{70}).
+
+\subsection{Closed forms, the scaling law and where $a-a'$ enters}\label{sec:Cclosed}
+
+\tg{exact} (\cl{C}{32}; printed in \cl{C}{29} (s-frame, $t=62/35$), \cl{C}{31} (raw rational functions of $(a,a')$, last row), \cl{C}{62} (exact in $(s,t)$)). Every block entry is homogeneous in $(a,a')$ and
+\[
+A^{(cc')}_{(mm'),(nn')}(a,a')=a^{\,m+m'+e}\,a'^{\,n+n'+e'}\,\kappa^{(cc')}_{(mm'),(nn')}(s),\qquad s=a'/a,
+\]
+with $\kappa$ a polynomial in $s$ and $(e,e')=(7,5),(7,4),(6,5),(6,4)$ for $(c,c')=(0,0),(0,1),(1,0),(1,1)$ ($e+e'=12,11,11,10$; verified in \cl{C}{29}). So on ladder~1 every wedge vector is $F_m=a^mf_m(s)$, $G_m=a^{m+e}g_m(s)$ (the bra twist $a^{(u-\theta_1)/h}$), on ladder~2 the same with $a'$ and $(F'_n,G'_n)$, and \textbf{the two ladders couple only through the single variable $s=a'/a$}; the whole $(a,a')$ plane is a one-parameter family of kernels. (This is torus covariance: $\Phi(a)=e_1^{\mathsf T}\rho(e^{aE_{12}}e^{aE_{23}})$ is $\Phi(1)$ conjugated by the diagonal torus.) Gauge: pivot $(i,j)$ a nonzero slot of the antisymmetric matrix, $F_i=0$, $F_j=-1$, $G_j=0$. Example, product 1 of block $(0,\allowbreak 0)$ (s-frame, $t=62/35$, \cl{C}{29}; $m=-3,\dots,0$):
+{\small
+\begin{align*}
+f&=\Big(0,\ -\tfrac{(s-1)(349071s-169136)}{9s(11579s-8184)},\ -1,\ 0\Big), & g&=(1,0,0,0),\
+f'&=\Big(\tfrac{35(s-1)s}{264},0,-1,0\Big), & g'&=\Big(-\tfrac{s(35s-132)}{97},\ -\tfrac{132s}{31},0,0\Big),
+\end{align*}}
+which in the raw variables is $G=(a^4,0,0,0)$, $F=\big(0,\tfrac{(169136a-349071a')(a-a')}{9a^2(8184a-11579a')a'},-\tfrac1a,0\big)$ (\cl{C}{32}; re-derived here that the two agree).
+\emph{Structure} (\cl{C}{32}): of the 160 vector entries of the ten products, 92 vanish identically, 33 are constants, 31 are monomials $c\,s^k$ (jointly monomials in $a,a'$), and only 4 are non-monomial in $s$ ($f'_{-2}$ of product 4, $f'_{-3}$ of product 5, $g_{-2}$ of product 6, $f_{-2}$ of product 8); many vectors are delta functions; $a-a'=a(1-s)$ appears through $(s-1)$ factors, the pole $1/(s-1)$ occurring once ($f'_{-2}$ of product 7, $132/(97(s-1))$ at $t=62/35$); the other poles in $s$ sit at roots of pivot minors. \emph{Rank-drop loci} (gcd of all $r\times r$ minors of the kernels): $(0,\allowbreak 0)$: $(s-1)s^2$; $(0,\allowbreak 1)$: $(s-1)s^3$; $(1,0),(1,1)$: $s$. On the lines: $a=a'$ ($s=1$) ranks $(2,2,2,2)$, $P=8$ (global rotation, Stage B's 8); $a'=0$ ($s=0$) ranks $(1,1,1,1)$, $P=4$; $a=0$ ($s=\infty$) ranks $(2,2,2,2)$, $P=8$; generic $(3,3,2,2)$, $P=10$ with optimal pivots.
+
+\subsection{$t$-dependence}\label{sec:Ct}
+
+\tg{fitted; exact at all sampled points} (\cl{C}{60}, \cl{C}{62}, \cl{C}{65}). The kernels $\kappa^{(cc')}(s)$ at three points with $t=62/35$ (base; $(h,\theta)\to(2h,2\theta)=(1,(4/7,-6/5))$; other $z=(5/3,-3/7,4/5)$) are \emph{identical}, as are $(e,e')$; $K$ is $z$-independent and, in the canonical column order of the label pairs, invariant under $(h,\theta)\to(2h,2\theta)$: the entry ratio is a single value per column equal to 1 for all 64 columns, i.e.\ homogeneity degree 0 in the normalised-wavefunction units (monic $Q$'s): $K$ depends on $(h,\theta)$ only through $t$. The scaling law holds exactly at all 15 sampled points and the minimal-$P$ closed forms exist at every point (blocks reconstructed exactly with the base pivots and gauge forced). The 15 points have 13 distinct values of $t$ ($62/35$ three times, $29/15$, $6/35$, $16/15$, $5/2$, $7/3$, $3/5$, $10/7$, $82/21$, $-2/21$, $-16/21$, $57/14$, $26/21$). Every $s$-coefficient $c_q(t)$ of every kernel entry $\kappa_{ij}(s,t)=\sum_qc_q(t)s^q$ is fitted as a rational function of $t$ of lowest total degree through 11 fit values (one null vector, 0 failures); the held-out $t=57/14,26/21$ and the two duplicates are reproduced exactly. The 40 kernel laws are printed in \cl{C}{62}; e.g.
+\begin{align*}
+\kappa^{(1,1)}_{(-3,-2),(-3,-2)}&=s, & \kappa^{(1,1)}_{(-3,-2),(-3,-1)}&=-\tfrac{2s(t+2)}{t},\
+\kappa^{(1,1)}_{(-3,-1),(-3,-1)}&=\tfrac{4s(t-2)(t+2)}{(t-1)(t+1)}, & \kappa^{(0,0)}_{(-3,-2),(-3,-2)}&=\tfrac{(s-1)(2s-1)}{t-1}.
+\end{align*}
+\textbf{Poles: the kernel coefficients have poles only at $t=0,1,-1$} (denominators $t,t^2,t-1,t+1$ and products; numerators contain $t\pm2$, $t\pm3$, $2t+1$, $3t+1$, $2t-3$, $2t^2-2t-3$, $t^2-8t+6$, $4t^2+t+1$); there is no pole at the integers 2, 3 where the ladders meet --- those enter only the pivot gauge: the closed forms $F,G,F',G'$ in $(s,t)$ have denominators in $t\in\{-2,-1,0,1,2\}$, the $s$-only factors $s,s-1,s-2$ and four mixed $(s,t)$ polynomials (vanishing curves of pivot minors; gauge artefacts). Compare the site-2 locus $b_3=0$ of Stage A, whose kernels have poles at $\{0,\pm1\}$ (adjoint) and $\{0,\pm1,\pm2\}$ ($[3,1,0]$) --- different objects.
+
+\subsection{The $u$-form: only trivial ones}\label{sec:Cu}
+
+\tg{exact} (\cl{C}{64}, \cl{C}{65}). Exact class tests on the ladder planes $P=\mathrm{span}\{f,g\}$ of the ten products (20 planes). Two planes have a two-point support (product 3 and product 6 on ladder 2: the plane is all functions on $\{-3,-2\}$; $F,G$ are delta functions, $\Bk$ is a $Q$-minor at two points); 18 planes have a three-point support. For the 18 the dimension of the intersection with each class ((a) $\mathrm{wgt}_S(m)\times$ polynomial; (b) the global six-pole SoV measure $\times$ polynomial; (c) polynomial; (d) cross-ladder poles $\times$ polynomial; (e) (d)$\times\mathrm{wgt}_S$; degrees $0,1,2$) is always the generic dimension $d$ ($0,1,2$) at three generic $(s,t)$: the plane is never contained in a natural class (dimension 2 at degree 1 would be needed); the single exception is product 10, ladder 1, whose plane contains the constant vector (class (c), degree 0). Each plane contains exactly one natural vector per class, $\mathrm{measure}(m)\cdot(m-m^\ast)$, with root $m^\ast_{\rm class}(s,t)$ an explicit rational function of $(s,t)$ of high degree; irrational roots do not occur (the obstruction is dimensional, not arithmetic); 8 of the 18 planes contain a delta function. So the ladder kernels are $a^{(u-\theta_1)/h}$ (resp.\ $a'^{(u-\theta_2)/h}$) times coefficients rational in $(s,t)$ with delta- or two-point-supported wedge vectors, and there is no explicit $F(u),G(u)$ beyond the trivial cases. M\"obius/natural-measure tests beyond the dimension counts were not run.
+
+\subsection{The Q-number at small $\varepsilon$: dictionary and verification}\label{sec:CQ}
+
+Part B (200 digits) reuses Stage D's machinery verbatim (frame tie, exact undo, HW-limit branches with dual Q's, closed forms of $n'$: \cl{C}{34}--\cl{C}{47}, summary \cl{C}{48}); regime $z=1+\varepsilon\varphi$, $\varphi=(1/3,-2/7,5/11)$, $w_1=1+\varepsilon\omega_1$, $w_1'=1+\varepsilon\omega_1'$, $w_2=w_2'=\infty$, $a=1/w_1$, $a'=1/w_1'$; direction grid $\omega_1\in\{3/4,-5/3\}$, $\omega_1'\in\{-12/5,7/2\}$, $\varepsilon\in\{1,2,4\}\cdot10^{-6}$ (\cl{C}{33}).
+\textbf{Dictionary} \tg{numeric, $4.9\cdot10^{-123}$} (\cl{C}{50}, \cl{C}{57}): $\langle\Phi_c|\Psi_c\rangle/\langle x_0^c|\Psi_c\rangle=\langle\Phi_d|\psi_d\rangle/(\kappa\kappa')$ with $\kappa=\kappa_{\rm Tie}(z,w)$, $\kappa'=\kappa_{\rm Tie}(z,w')$, $\Psi_c=(P^{-1}\otimes P^{-1})\psi_d$ and $\langle x_0^c|\Psi_c\rangle=\langle x_0^d|\psi_d\rangle=1$; at $(\omega_1,\omega_1',\varepsilon)=(3/4,-12/5,10^{-6})$: $\kappa=-1.79\cdot10^{25}$, $\kappa'=9.38\cdot10^{22}$ ($\sim\varepsilon^{-4}$ each), all 21 HW-sector states.
+\textbf{Verification} \tg{numeric} (\cl{C}{50}, \cl{C}{57}): $Q_{\rm num}(B)=\sum_{cc'}Q^3Q^3\sum_k\Bk^{(1)}\Bk^{(2)}/(M^{(1)}_\vac M^{(2)}_\vac)$ with the ten closed-form products at the exact rationals $a=1/(1+\varepsilon\omega_1)$, $a'=1/(1+\varepsilon\omega_1')$ and the 200-digit dual $Q$'s of the branch equals $\langle\Phi_c|\Psi_c\rangle/\langle x_0^c|\Psi_c\rangle$ on all 21 states with maximum relative deviation \textbf{$7.9\cdot10^{-111}$} (non-vacuity: $|Q_{\rm num}|$ between $1.3\cdot10^{-36}$ and $4.7\cdot10^{-10}$; the deviation is limited by the $\sim160$-digit $Q$'s and the $\sim37$-digit cancellation). At every one of four grid points, three $\varepsilon$ and six branches (72 checks, \cl{C}{54}) the full $R_Q=\kappa\kappa'Q_{\rm num}$ equals the chain overlap $\langle\Om_D[w]\otimes\Om_D[w']|\psi_B\rangle$ to $1.6\cdot10^{-113}$.
+
+\subsection{$\varepsilon$-exponents: where the cancellations sit}\label{sec:Cexp}
+
+\tg{exact entries; numeric exponents} (\cl{C}{52}, \cl{C}{57}; point $(\omega_1,\omega_1')=(3/4,-12/5)$; entries exact, the rest $\log_2$ ratios between $\varepsilon=10^{-6}$ and $2\cdot10^{-6}$, integer to $\le8\cdot10^{-4}$, confirmed by $2\cdot10^{-6}\to4\cdot10^{-6}$).
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{tabular}{@{}lcccccc@{}}\toprule
+branch $\mu$ & brackets $\langle Q^jF\rangle$ & $\Bk$'s & product terms & block sums & total $Q_{\rm num}$ & digits lost (in worst $\Bk$ / in the sum) \\\midrule
+$(4,2,0)$ & $-3\dots1$ & $0\dots2$ & $0,1$ & $0,0,0,0$ & $+6$ & $19.9\ /\ 36.7$ \\
+$(4,1,1)$ & $-1\dots1$ & $0\dots2$ & $0,1$ & $0,0,0,0$ & $+5$ & $6.7\ /\ 29.5$ \\
+$(3,3,0)$ & $-4\dots1$ & $0\dots2$ & $0,1$ & $0,0,0,0$ & $+5$ & $26.2\ /\ 30.9$ \\
+$(3,2,1)$, copy 1 & $-2\dots1$ & $0\dots2$ & $0,1$ & $0,0,0,0$ & $+4$ & $13.2\ /\ 23.3$ \\
+$(3,2,1)$, copy 2 & $-2\dots1$ & $0\dots2$ & $0,1$ & $0,0,0,0$ & $+4$ & $14.2\ /\ 23.4$ \\
+$(2,2,2)$ & $-1\dots1$ & $0\dots2$ & $0,1$ & $0,0,0,0$ & $+2$ & $6.8\ /\ 10.7$ \\\bottomrule
+\end{tabular}\end{center}
+Entries of $F,G,F',G'$ have orders $-1\dots1$ (only $f'_{-2}$ of product 7 has $\varepsilon^{-1}$, from $1/(s-1)$; $\varepsilon^1$ entries come from $(s-1)$ factors). Of the ten product terms, products 3 and 6 carry $\varepsilon^1$ and the other eight $\varepsilon^0$. The brackets are as large as $\varepsilon^{-3}$--$\varepsilon^{-4}$ (the dual $Q$'s of the HW-limit branches are large at the near-degenerate twist) but the $2\times2$ determinants are $O(1)\dots O(\varepsilon^2)$: the first cancellation sits \emph{inside the $\Bk$'s} (up to 26 digits at $\varepsilon=10^{-6}$); the second in the \emph{final sum over the four blocks}: every product and every block sum is $O(\varepsilon^0)$, the total is $O(\varepsilon^6\dots\varepsilon^2)$ (36.7, 29.5, 30.9, 23.3, 23.4, 10.7 digits). The total exponent equals the CG-slice exponent: $R_Q=\kappa\kappa'Q_{\rm num}\sim\varepsilon^{-8+\mathrm{total}}=\varepsilon^{-2},\varepsilon^{-3},\varepsilon^{-3},\varepsilon^{-4},\varepsilon^{-4},\varepsilon^{-6}$, exactly the mixed-overlap exponents of the Stage D table (\S\ref{sec:Dfour}). The brackets are not small; the whole $\varepsilon$-dependence of the CG datum is produced by cancellations between $O(1)$ terms, and the 200-digit precision is what makes the formula usable at $\varepsilon=10^{-6}$ (about 40 digits of headroom needed).
+
+\subsection{All six CG data from the Q side alone}\label{sec:Ccg}
+
+\tg{numeric} (\cl{C}{54}, \cl{C}{56}, \cl{C}{57}; 4 grid points, $\varepsilon=1,2,4\cdot10^{-6}$; the chain slice is used only as comparison). $\varphi_u(0)=e_1^{\mathsf T}\rho(e^{a'_0E_{12}}e^{g'_0E_{13}}e^{c'_0E_{23}})$ with the $w_2,w_2'\to\infty$ limits of the Stage D closed forms, equal to the direct leading Gauss parameters of $n(w)n(w')^{-1}$ at $w_2=w_2'=\infty$ (exact, symbolic) and to the $\varepsilon^0$ series coefficient at all four points; every one-site weight is at order $\varepsilon^0$ with rank equal to the multiplicity.
+\begin{center}\footnotesize\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}lcccp{3.3cm}cc@{}}
+\caption{CG data from $R_Q$ (\cl{C}{57}).}\label{tab:CCG}\\\toprule
+$\mu$ & slice dim & spread $(10^{-6},4\cdot10^{-6})$ & error vs chain $(1,2,4\times10^{-6})$ & Richardson limit from $R_Q$ only & $Q$ vs chain & reference \\\midrule\endfirsthead
+$\mu$ & slice dim & spread & error vs chain & Richardson limit from $R_Q$ & $Q$ vs chain & reference \\\midrule\endhead
+$(4,2,0)$ & 1 & 0 & 0 & $2.609467455621301775$ & 0 & (none earlier) \\
+$(4,1,1)$ & 1 & $1.68\cdot10^{-6}$, $6.71\cdot10^{-6}$ & $2.22,4.43,8.86\cdot10^{-6}$ & $46.67453891138101664$ & $0$ ($10^{-131}$) & $46.67453891$ \\
+$(3,3,0)$ & 1 & $1.61\cdot10^{-6}$, $6.44\cdot10^{-6}$ & $2.10,4.21,8.42\cdot10^{-6}$ & $10.92853891670459718$ & $0$ ($10^{-112}$) & $10.92853892$ \\
+$(3,2,1)$ copy 1 & 2 & $5.02\cdot10^{-6}$, $2.01\cdot10^{-5}$ & $5.31,10.6,21.2\cdot10^{-6}$ & functional $(u+u')\cdot C=184.33056123341339$ & $1.2\cdot10^{-18}$ & $184.3305612$ \\
+$(3,2,1)$ copy 2 & 2 & $1.44\cdot10^{-5}$, $5.75\cdot10^{-5}$ & $1.77,3.54,7.08\cdot10^{-5}$ & functional $-238.55875233168809$ & $5.2\cdot10^{-19}$ & $-238.5587523$ \\
+$(2,2,2)$ & 1 & $2.24\cdot10^{-6}$, $8.95\cdot10^{-6}$ & $2.27,4.53,9.07\cdot10^{-6}$ & $-5118.5383144047475541$ & $7.3\cdot10^{-19}$ & $-5118.538314$ \\
+\bottomrule
+\end{longtable}\end{center}
+All errors and spreads scale as $\varepsilon$ (ratio $4.00$ between $10^{-6}$ and $4\cdot10^{-6}$); the second-order Richardson limits agree with the chain limits to $\le1.2\cdot10^{-18}$ (to working precision for the 1-dimensional slices of the first irreps); the normalisation is Stage D's ($\langle x_0|\psi\rangle=1$), no rescaling is needed. \textbf{Octet mixing} (\cl{C}{55}, \cl{C}{56}): $R_c=u\cdot C/((u+u')\cdot C)$ with $u=e_1E_{13}$, $u'=e_1E_{23}E_{12}$ on the $(1,1,1)$ slice, $(u+u')=(1,3)$: $-1.694366610178479773$ and $1.095564214968898936$ from the Q side, equal to the chain values to $5\cdot10^{-19}$ / $4\cdot10^{-20}$ and to the earlier $-1.694$ / $1.096$.
+
+\subsection{Cost statement}\label{sec:Ccost}
+
+\cl{C}{56}, \cl{C}{70} (item 7). Ten products $=$ twenty $2\times2$ bracket determinants $\Bk$ and four block sums $(c,c')$. The ladder vectors have 18 (ladder 1) $+$ 15 (ladder 2) distinct projective classes among the $2\times20$ vectors, so $2\times33=66$ brackets $\langle Q^2F\rangle,\langle Q^3F\rangle$ (each a four-term sum; 80 without sharing); the $Q$-values needed are $Q^2,Q^3$ on the four points of each ladder, 16 numbers (the $Q^3(\theta_s-ch)$ and $M_\vac$ use the same points). Comparison: $\det_6$ is 36 bracket entries (each an 8-pole sum) and one $6\times6$ determinant; the direct sum over states is $\dim V^2=64$. The count is fixed by the ladder length and the block ranks, not by $\dim V$; it is not a determinant, and for the adjoint it is of the same order as $\det_6$ (66 four-term sums plus 20 $2\times2$ determinants against 36 eight-term sums plus one $6\times6$ determinant); its content is the closed-form $(a,a')$-dependence of a CG-complete family.
+
+\subsection{The $[3,1,0]$ note}\label{sec:C310}
+
+\tg{exact, one point} (\cl{C}{68}, \cl{C}{69}). Regression of Stage B reproduced on the symbolic blocks: ranks $(6,6,6,6)$, default pivots give 45 at three points with the explicit-bracket identity on all 225 states to $10^{-38}$--$10^{-39}$. At $(a,a')=(7/5,-4/3)$: pivot-set scan: blocks $(0,0),(0,1)$: rows orientation one admissible set ($P=12$), columns orientation 84 sets with $P$ between 17 and 24 (best 17), so 12; block $(1,\allowbreak 0)$: 9 (rows, single set; columns 12); block $(1,\allowbreak 1)$: 12 in both orientations; sum of the best $=\mathbf{45}$ (the Stage B default). Greedy elimination (cheapest term first, 400 random restarts per block): best $12,12,9,15$, i.e.\ \textbf{48} (the greedy never beats the scan: $(0,\allowbreak 0)$ and $(0,\allowbreak 1)$ are 12 in all 400 runs, $(1,\allowbreak 0)$ between 9 and 11, $(1,\allowbreak 1)$ between 15 and 21). \emph{The lower bound 24 is not attained by any searched decomposition}: every decomposition found needs on average one rank-4 (two-wedge) factor per term; best total 45 (det$_6$ 40, generic 54). The searched family is pivot decompositions and greedy Schur-complement eliminations; a general decomposition with decomposable factors (the column space meets $G(2,5)$ in a 2-dimensional family, but six independent decomposable columns with decomposable duals would be needed) was not excluded by proof \tg{exact for the searched family; minimality unproved}.
+
+\section{What it means and what is open}\label{sec:open}
+
+This section is short and factual. Statements marked \tg{reading} are the main session's interpretations (from \nb{HANDOFF.md}); the others restate notebook results.
+
+\begin{enumerate}\setlength{\itemsep}{2pt}
+\item \textbf{The cost metric (Paul's decision).} In the metric ``number of products of two $2\times2$ bracket determinants'' the best CG-complete two-vacuum family costs 10 (adjoint; $=\sum r$, \cl{C}{32}) and, for $[3,1,0]$, 45 (searched; lower bound 24; \cl{C}{69}), against the generic pair 23 / 54, the $\det_6$ vacuum 18 / 40 (\cl{B}{41}) and the plan's target $\sim25$. The $\det_6$ itself is 36 bracket entries (each an 8-pole sum) and one $6\times6$ determinant (\cl{C}{56}), so the two metrics (products of $2\times2$ determinants versus determinants of brackets) are not commensurable: ``$\det_6=40$ products'' counts only what the product-of-$2\times2$ formula would need to reproduce it. Whether to (a) accept the generic block formula (polynomial in the boxes by construction: $(\lambda_2+1)^2$ blocks of size $\binom{\lambda_1+2}{2}$, 54 products for $[3,1,0]$), (b) change the metric to bracket determinants of size $>2$, or (c) search further (the minimal count is a tensor-rank problem; lower bound 24 for $[3,1,0]$ unattained by all searched decompositions) is not decided by the notebooks.
+\item \textbf{A determinant form of $\langle\Om_w\otimes\Om_{w'}|\Psi\rangle$ with non-vacuum bra data.} The mixed overlaps are not $\det_6$ (\cl{D}{39}); the diagonal ones are (\cl{B}{19}, \cl{D}{39}). \tg{reading} The exact two-site $K$ tensor (\cl{B}{24}), z-independent and sparse, makes a linear-algebra search for a determinant form (bra data $F$ on the 6 poles, insertions, rows/columns of the $\det_6$ pattern) possible; not attempted.
+\item \textbf{$R$-dressed two-site covectors.} The $R$-dressed candidates tested, $(e_1\otimes\Om_c[w'])R(\rho(g_1)\otimes1)$ and the other order, are exactly generic (23 / 54, \cl{B}{41}); the $R$-dressed $(\infty,\infty)$ pair and dressings on both sites were not tested.
+\item \textbf{$cc_1(1-t)$ versus $cc_1(-t)$.} The undressed site-2 adjoint conic constant is $cc_1(1-t)=(t+2)/(2(t+1))$ (\cl{A}{24}, \tg{fitted}, 15 points; same function for $[3,2,0]$, \cl{A}{35}); the $R$-dressed one is $cc_1(-t)=(t+3)/(2(t+2))$ (\cl{B}{36}, checked at four $(h,\theta)$ points). \tg{reading} The main session reads the difference as the $R$ shift; no notebook derives it, and the shift of the argument by one unit of $t$ is unexplained by the cells.
+\item \textbf{The $[3,1,0]$ negative.} No family found is both CG-complete and near $\sim25$: CG-complete ones cost 45--54, the cheap ones (common $w_1$: 18/40; $\beta_2=0$: 16/48; $w_1'=w_1$ with $w_2'\to\infty$: 10/21; the type-pair $(\alpha_1=0,\beta_2=0)$: 40) lose reach or were not tested for reach (\cl{B}{54}, \cl{D}{23}). In particular the type-pair loci and the line $\beta_2=0$ were never tested for CG-completeness.
+\item \textbf{The $s$-dependence.} The $(\infty,\infty)$ formula is a one-variable ($s=a'/a$) deformation of the global rotation (\cl{C}{32}); whether $\kappa(s,t)$ is a known object (for instance a ratio of the two one-site vacuum $Q$'s) is open (\tg{reading}: raised by the main session; nothing in the cells).
+\item \textbf{Not done:} the $O(\varepsilon)$ layer of the $Q$-number; a minimality proof for $[3,1,0]$; M\"obius/natural-measure tests (\cl{C}{70}); re-running the four notebooks in VS Code to store native outputs; $[3,2,0]$ in Stages B--D.
+\end{enumerate}
+
+\appendix
+
+\section{Notebook and cell maps}\label{app:cells}
+
+Absolute cell positions; ``$p$--$q$, $r$'' means code cells $p$--$q$ with their result cell $r$ (in B and C the printed output of each code cell is the markdown cell right below it, listed only in the ranges).
+
+\subsection{\texttt{L2-site2-rotation-brackets.wb} (A, 36 cells)}
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{13cm}@{}}\toprule
+\textbf{cells} & \textbf{content} \\\midrule\endhead
+1 & title, setup, one switch (\texttt{Lambda} line of cell 2), notation \\
+2--7, 8 & setup (generators, eigenstates, dual $Q$'s, $P_{\rm phys}$/$x_0$, $B$, wavefunction rule); result 8 \\
+9--11, 12 & site-1 regression (supports, tensors, counts 5/7, reduced 4/5); result 12 \\
+13--14, 15 & vacuum-family identification, $\lambda_2$-group measures; result 15 \\
+16--17, 18 & Task 1: the mirror, support, weight rule; result 18 \\
+19, 20 & Task 2: ladder-2 tensors, counts (per-label 17/40, block form); result 20 \\
+21--23, 24 & Task 3: loci, joint loci, reach; result 24 \\
+25--28, 29 & Task 4: closed forms on $b_3=0$, verification, $u$-structure; result 29 \\
+30, 31 & Task 5: torus statement, section-5 comparison; result 31 \\
+32--33, 34 & driver ($z$-independence, $(h,\theta)$-dependence; wipes \texttt{Global`}) and analysis; result 34 \\
+35 & $[3,2,0]$ (optional) \\
+36 & summary \\\bottomrule
+\end{longtable}\end{center}
+
+\subsection{\texttt{L2-two-site-rotation-brackets.wb} (B, 58 cells)}
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{13cm}@{}}\toprule
+\textbf{cells} & \textbf{content} \\\midrule\endhead
+1 & title, notation, $P$ and $r$ \\
+2--13, 14 & setup (generators, eigenstates, $Q$'s, kets, $B$, wavefunction rule; printed outputs in 3,5,\dots,13); result 14 \\
+15--18, 19 & Task 0: $\Om_c[w]$, $\det_6$ regression; result 19 \\
+20--23, 24 & Task 1: two-site $K$, slice regressions; result 24 \\
+25 & tools (2-forms, wedges, pivot decompositions) \\
+27, 29 & Task 2: supports; result 29 \\
+30--35, 36 & Task 2b: $R$-matrix, dressed test, dressed loci; result 36 \\
+37--40, 41 & Task 3: block ranks and counts, $\det_6$ regression, decisive comparison; result 41 \\
+42--45, 46 & Task 4: four-parameter family, sub-families, rank-drop loci; result 46 \\
+47--48, 49 & Task 4b: $(\infty,\infty)$ family; result 49 \\
+50--53, 54 & Task 5: one-site-fixed slices, type-pair scan; result 54 \\
+55--56, 57 & driver (wipes \texttt{Global`}); result 57 \\
+58 & summary \\\bottomrule
+\end{longtable}\end{center}
+
+\subsection{\texttt{L2-two-vacua-untwist.wb} (D, 40 cells)}
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{13cm}@{}}\toprule
+\textbf{cells} & \textbf{content} \\\midrule\endhead
+1--2 & title, notation, regime, cell map \\
+3--14, 15 & setup, group data, vacua, HW kets, Task 0 checks, $Q$ machinery and branches; result 15 \\
+16--18, 19 & Task 1: undone unipotent, closed forms, controls; result 19 \\
+20--22, 23 & Task 1b: finite-twist reach; result 23 \\
+24--26, 27 & Task 2: per-weight $\varepsilon$-orders; result 27 \\
+28--30, 31 & Task 3: signal versus contamination, $K/S$; result 31 \\
+32--34, 35 & Task 4: CG at leading order; result 35 \\
+36--38, 39 & Task 5: $\det_6$-type data and the four overlaps; result 39 \\
+40 & summary \\\bottomrule
+\end{longtable}\end{center}
+
+\subsection{\texttt{L2-210-two-vacua-brackets.wb} (C, 70 cells)}
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}lp{13cm}@{}}\toprule
+\textbf{cells} & \textbf{content} \\\midrule\endhead
+1--2 & title, task map, notebook state \\
+3--20, 21 & Part A setup (Stage B cells + tools); result 21 \\
+22--23, 24 & Task 0: blocks in $(a,a')$, ranks, count 12, identity; result 24 \\
+25--31, 32 & Task 1: pivot scan (26--27), closed forms and scaling law (28--29), numeric identity and structure (30--31); result 32 \\
+33--47, 48 & Part B setup (Stage D machinery, closed forms of $n'$); result 48 \\
+49--56, 57 & Task 3: dictionary and $Q_{\rm num}$ (49--50), $\varepsilon$-exponents (51--52), six CG data (53--54), octet mixing and cost (55--56); result 57 \\
+58--64, 65 & Task 2: driver (59--60, wipes \texttt{Global`}), fit (61--62), $u$-form (63--64); result 65 \\
+66--68, 69 & Task 4: $[3,1,0]$ driver (67--68); result 69 \\
+70 & summary \\\bottomrule
+\end{longtable}\end{center}
+
+\section{Numeric points and grids}\label{app:points}
+
+\begin{center}\small\setlength{\tabcolsep}{3pt}\begin{longtable}{@{}p{3.2cm}p{13.2cm}@{}}\toprule
+\textbf{item} & \textbf{values (source)} \\\midrule\endhead
+base point & $h=1/2$, $\theta=(2/7,-3/5)$, $t=62/35$, $z=(3/2,5/4,2/3)$; controls $z'=(3/2,5/4,3/7)$, $z''=(2,5/4,2/3)$ (\cl{A}{1}, \cl{B}{1}) \\
+bra twists (B) & $w=(5/2,7/3,3/5)$, $w'=(7/4,-2/5,9/7)$ (\cl{B}{16}) \\
+$(h,\theta)$ points (A driver) & $(1/3,(1/5,-4/9))$ [$t=29/15$]; $(1/2,(3/7,-1/4))$ [$19/14$]; $h=1/2$, $\theta_2=1/5,-26/105,-27/28,-37/42,-1/70,-3/7,-5/3,1/3$ [$t=6/35,16/15,5/2,7/3,3/5,10/7,82/21,-2/21$] and, for $[3,1,0]$ only, $\theta_2=2/5,-4/5,-2/3,-6/5$ [$-8/35,76/35,40/21,104/35$] (\cl{A}{34}) \\
+$(h,\theta)$ points (B driver) & base, $z'$, $z''$, $(1/3,(1/5,-4/9))$, $(1/2,(3/7,-1/4))$, $\theta_2=-100$ [$t=1404/7$] (\cl{B}{57}) \\
+$(h,\theta)$ points (C driver) & 15 points, 13 distinct $t$: $62/35$ (base; $(2h,2\theta)$; $z=(5/3,-3/7,4/5)$), $29/15$, $6/35$, $16/15$, $5/2$, $7/3$, $3/5$, $10/7$, $82/21$, $-2/21$, $-16/21$, $57/14$, $26/21$; held out: $57/14$, $26/21$ (\cl{C}{60}, \cl{C}{65}) \\
+Gauss points & undo/reach (A): $g_2=(1,2,3),(-3,6,-1),(2/3,-3/7,5/4)$; closed-form verification on $b_3=0$: $(g_A,g_C)=(5/2,-3/7),(-4/3,2/5),(7/3,11/4)$; site-1 adjoint quadric point $(4,23,5)$; $[3,1,0]$ site-1 locus points $(-3,3,-2),(-3,6,-1),(-3,12,1),(-3,15,2)$ (\cl{A}{15}, \cl{A}{24}, \cl{A}{29}) \\
+reach data at $t=62/35$ (A) & $L_0=\left(\begin{smallmatrix}1&0&0\\-23/12&1&0\\5/6&-2/3&1\end{smallmatrix}\right)$, $D_0=\mathrm{diag}(1,-1/4,35/72)$, $U_0=\left(\begin{smallmatrix}1&1&1\\0&1&10/3\\0&0&1\end{smallmatrix}\right)$ (\cl{A}{24}) \\
+$w$ points (A, B) & $\Om_c[w]$ identity: $(2/3,-5/7),(-3/2,4/5),(5/3,7/2)$ (A), four points in B; measure verification at $(2/3,-5/7),(-3/2,4/5)$ (\cl{A}{15}, \cl{B}{19}); transfer-matrix tests at $u=3/7,19/23$; $R$ solve at $u=3/11,2/9$, check at $19/23$ (\cl{B}{36}) \\
+torus data (A) & $d=(1,4,43)$ ($d_1d_3/d_2^2=43/16$), $(2,3,9/2)$, $(3/2,-5/4,7/3)$, converse $(1,1,cc)$; product-point samples $w=(7/3,-5/7),(-3/2,4/5),(5/3,7/2)$ (\cl{A}{31}) \\
+$(a,a')$ points (B 4b, C) & B: $(2/3,-5/7),(3/2,1/4),(-4/5,7/3)$ (the first two degenerate vacua); C pivot scan $(7/5,-4/3)$; C identity: $(2/3,-5/7),(5/7,-4/9),(-3/5,7/4)$ (\cl{C}{24}) and $(5/7,-4/9),(-3/5,7/4),(9/5,2/7)$ (\cl{C}{32}) \\
+Stage D grid & $\varphi=(1/3,-2/7,5/11)$, $\varphi'=(-2/5,3/8,7/11)$; $\omega_1\in\{3/4,-5/3\}$, $\omega_2\in\{-1/5,9/7,5/3\}$, $\omega_1'\in\{-12/5,7/2\}$, $\omega_2'\in\{1/8,-3/4\}$ (24 points); $w_3=1+5\varepsilon/13$, $w_3'=1-4\varepsilon/13$; $\varepsilon=1,2,4\cdot10^{-6}$; sub-families inf2, inf1, common1 (12 points each), fixed-$w'$ control (6 points) (\cl{D}{1}) \\
+Stage D $\det_6$/four-overlap point & $(\omega,\omega')=((3/4,-1/5),(-12/5,1/8))$, $\varepsilon=10^{-6}$ (\cl{D}{39}) \\
+Stage C regime & same $\varphi$; $\omega_1\in\{3/4,-5/3\}$, $\omega_1'\in\{-12/5,7/2\}$; exponent table at $(3/4,-12/5)$ (\cl{C}{33}, \cl{C}{57}) \\
+precision & 60 digits (finite twist: A, B, C part A); 200 digits (D, C part B); exact rationals elsewhere \\\bottomrule
+\end{longtable}\end{center}
+
+\section{Source notes: inconsistencies and ambiguities}\label{app:notes}
+
+Reported, not resolved silently. Items 1--6 were named in the task; 7--13 were found while compiling.
+
+\begin{enumerate}\setlength{\itemsep}{2pt}
+\item \textbf{The spec's $229/342$.} \cl{B}{36} and \cl{B}{58} (item 3) state that the dressed adjoint conic constant at $t=62/35$ is $167/264=cc_1(-t)=(t+3)/(2(t+2))$ and that the spec's value $229/342$ is not equal to this (re-derived here: $167/264\approx0.6326$, $229/342\approx0.6696$) and is not matched by any shift tested; the formula, not the number, is what was confirmed (also at $t=29/15,19/14,1404/7$).
+\item \textbf{Stage D attributes the $8/14$ counts to the wrong family.} \cl{D}{23} (last bullet) and \cl{D}{40} (item 6.2) call the sub-family $w_2=w_2'=\infty$ ``cheap (Stage B block counts $8/14$)'' and conclude that the ``no cheap and CG-complete family'' reading is contradicted. Per \cl{B}{46}, \cl{B}{49} and \cl{C}{32} the exact $8/14$ is the global-rotation line $w_1'=w_1$ ($a=a'$); the CG-complete family $w_2=w_2'=\infty$, $w_1\neq w_1'$ costs 12 ($10$ after the pivot scan) for the adjoint and 45 for $[3,1,0]$. The reach statement of Stage D is correct; the cost attribution is not.
+\item \textbf{Wedge count $3+3+2+2$ versus $\sum P=12$.} \cl{B}{49} lists ``3 terms'' in blocks $(0,0),(0,1)$ and 2 in $(1,0),(1,1)$ (ten terms) next to $P=4,4,2,2$ (twelve products). \cl{C}{32} resolves it: ten is the number of rank-one terms $=\sum r$; twelve is the default-pivot count with one rank-4 (two-wedge) ladder-1 factor in each of the two rank-3 blocks; the full pivot scan attains ten.
+\item \textbf{The $\det_6$ Laplace bound.} The plan (\S1, \S7) expected $\sum r\le20$ (20 products of per-ladder $3\times3$ determinants). \cl{B}{41} derives the per-block bound $r_{cc'}\le20$ and the sum bound 80, \cl{B}{58} (item 5) states each block has $r\le\min(20,n_{\min})=n_{\min}$ (non-binding); both say $\sum r\le20$ is not valid ($\sum r=26$ for the $\det_6$ vacuum at $[3,1,0]$). The two statements in B (``bounded by 80'' in \cl{B}{41} versus ``non-binding per block'' in \cl{B}{58}) are different bounds for the same sum; neither is $\le20$. Also the units differ: the plan's 20 are products of $3\times3$ bracket minors, the notebooks' 18 / 40 are products of $2\times2$ minors, and \cl{C}{56} counts $\det_6$ as 36 bracket entries plus a $6\times6$ determinant.
+\item \textbf{The $[3,1,0]$ greedy result.} \cl{C}{68}, \cl{C}{69} and \cl{C}{70} (item 8) give: pivot scan best $45$ $(12,12,9,12)$; greedy elimination best $48$ $(12,12,9,15)$; default pivots 45. The running summary (\nb{HANDOFF.md}) states that the scan \emph{and} the 400-restart greedy give 45 $(12,12,9,12)$. The notebook is followed here.
+\item \textbf{Degenerate regression points.} \cl{C}{24} and \cl{C}{70} (item 10(iii)) note that $(a,a')=(2/3,-5/7)$ has $w_1=z_1$ and $(3/2,1/4)$ has $w_1=z_3$: degenerate vacua with 22 of 64 states orthogonal to the covector. Stage B's Task 4b used these two points among its three (\cl{B}{49}) without remarking on it, and states the overlap identity at $(2/3,-5/7)$; that identity is partly trivial there. The block ranks and counts are $K$-based and are not affected (identical numbers at the third, generic pair). Moreover \cl{C}{24} and \cl{C}{32} check the identity at different point sets (the first set contains the degenerate $(2/3,-5/7)$, the second does not).
+\item \textbf{Two cell-numbering conventions.} A and C cite absolute positions in the file. The result cells of B and D cite the ordinal of the \emph{code} cell: \cl{B}{14} ``cells 1--6 above'' (absolute 2,4,\dots,12), \cl{D}{15} ``cells 1--6'', \cl{D}{19} ``cell 7'' (absolute 17), \cl{D}{23} ``cell 8'' (21), \cl{D}{27} ``cell 9'' (25), \cl{D}{31} ``cell 10'' (29), \cl{D}{35} ``cell 11'' (33), \cl{D}{39} ``cell 12'' (37). The stage specs and this write-up use absolute positions (the Stage D pointers ``reach cell 21/23, Gauss parameters 17, K/S 29, CG 33, overlaps 37--39'' are absolute: code cell then result cell).
+\item \textbf{Adjoint conic fit points.} \cl{A}{24} and \cl{A}{36} state that $cc_2(t)=(t+2)/(2(t+1))$ was fitted over 15 $(h,\theta)$ points; \cl{A}{34} lists 11 points for $[2,1,0]$ (base, two $(h,\theta)$ points, eight $\theta_2$ values) and 15 for $[3,1,0]$ (four more added after a first run in which one $[3,1,0]$ coefficient needed numerator degree 4 over denominator degree 5), while its table says ``all 15 sampled values'' for both reps. Whether the adjoint was re-run with the 15 points is not stated.
+\item \textbf{Two meanings of ``generic'' in B.} ``Generic pair'' (\cl{B}{41}) is a pair of independent rotations (23 / 54); ``generic (4 parameters)'' in \cl{B}{46} is the generic member of $\Om_c[w]\otimes\Om_c[w']$ (22 / 54); the running summary's ``$\Om_c[w]\otimes\Om_c[w']$ 13/22, 27/54'' is the latter.
+\item \textbf{The $8/14$ line inside B.} \cl{B}{46} introduces $w_1'=w_1$, $w_2,w_2'\to\infty$ as a ``1-parameter'' minimal family (8 / 14); \cl{B}{49} shows it is the global rotation $a=a'$ only. Same fact, restated in the follow-up; the earlier text was not amended.
+\item \textbf{Pivot-dependent counts that differ between sources.} The Stage A block-form product count is 15 (explicit decomposition 16, random covector 16) for the adjoint and 35 (38; 35) for $[3,1,0]$ (\cl{A}{20}); \cl{B}{41} quotes 15 / 35. The per-label counts (17 / 40) and the block counts (15 / 35) are different upper bounds for the same covector.
+\item \textbf{``Any $w_3$''.} \cl{A}{15} and \cl{B}{19} state that $\Om_c[w]\otimes\Om_c[w]$ is an eigen-covector of $t_a$ with $G(w_1,w_2,w_3)$ for any $w_3$; the tests are at $w_3=3/2,-4,7/3$ and one second $w$ ($w_3=5/3$) (\cl{A}{15}) and at two $w$ in B: exact at those points.
+\item \textbf{Minor.} \cl{C}{57} says the top-irrep slice $2.6094674556$ has ``no earlier reference number''; \cl{D}{35} lists $2.60946745562$ for $[4,2,0]$ and $[6,2,0]$. \cl{D}{31} prints the $K$ exponent of $[3,3,2]$ as $-6.000,-5.997$ in the main family and $-6.000$ elsewhere (within the stated tolerance). \cl{A}{29} and \cl{A}{24} refer to the same $t$-fit as ``cell 33'' (code cell 33, analysis of the driver data).
+\end{enumerate}
+
+\textbf{Not reconciled / not found.} (a) The support rule of $e_1\otimes e_\nu$ (triangular set of pairs, no additive weight rule) was not characterised (\cl{A}{18}). (b) No cell derives the relation between $cc_1(1-t)$ and $cc_1(-t)$ (open item 4 of \S\ref{sec:open}). (c) The termwise comparison of the 20 $\det_6$ Laplace terms with the blocks was not done (\cl{B}{41}). (d) Whether the type-pair loci of \cl{B}{54} (e.g.\ $(\alpha_1=0,\beta_2=0)$, 40 for $[3,1,0]$) and the line $\beta_2=0$ are CG-complete was not tested. (e) The explicit 12-wedge decomposition of the adjoint $(\infty,\infty)$ family at $(2/3,-5/7)$ printed in the output cell of \cl{B}{47} (cell 48) was not read cell by cell for this write-up (only its block structure, quoted in \cl{B}{49}); the closed forms used here are those of \cl{C}{29}, \cl{C}{31}, \cl{C}{62}.
+
+\end{document}

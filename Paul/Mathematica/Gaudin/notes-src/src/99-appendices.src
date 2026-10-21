@@ -1,0 +1,135 @@
+@@appendix
+
+# Conventions and normalisations {#app:conv}
+
+This appendix reconciles the notations of the different agents and fixes every factor. The main text uses one convention throughout (the canonical one below); each source file is mapped to it.
+
+## The kernel normalisations {#app:norm}
+
+@table tab:norms | Kernel normalisations in the different sources and their relations. $c$ is the frame scalar (\ref{eq:cfactor}); $M=P^3p_{0,\lambda_2+1}$.
+@size small
+@cols p{2.3cm}p{4.6cm}p{7cm}
+| symbol | where | definition and relation |
+|---|---|---|
+| $K$ | G1, P4, main text | $c\,Q_{\rm num}M_1M_2=\sum K\,m\,m$, $m_{kl}=P^3p_{kl}$, $M$ exactly (no extra factor) |
+| $G$ | D1, D2, D3 | $4c\,Q_{\rm num}M_1M_2=\sum G\,N\,N$ (D2's "$4c$"); for the adjoint $G=4K$, because $M_{\rm vac}=2h^2P^3p_{02}$ per site in the XXX limit and $2\times2=4$ |
+| $G^s$ | U2 | $G^s:=G/4=K$ ($c\,Q_{\rm num}M_1M_2=\sum G^sNN$; U2 states "G of the spec = D2's printed G divided by 4") |
+| $\Theta$ | G1, D3 | $\Theta=K/(\omega_1\omega_1')^{2\lambda_1-\lambda_2}$, a polynomial in $(a,a',t)=(1/\omega_1,1/\omega_1',1/\theta_{12})$; adjoint: $\Theta=G/(4\omega_1^3\omega_1'^3)$ (D3, exact in 25/25 entries) |
+| $Q_{\rm num}$ | all | $\langle\Phi_\infty|\Psi\rangle/\langle x_0^G|\Psi\rangle$ in the diagonal frame; companion-frame version $Q_{\rm num}^{\rm comp}=Q_{\rm num}/(\kappa^G\kappa^{G\prime})=c\,Q_{\rm num}/(\omega_1\omega_1')^{2\lambda_1-\lambda_2}$ (D1, D3) |
+| $T(B)$ | D1 | $\langle\Phi_\infty|\Psi\rangle D_B(\omega_0)/\langle\Omega_0\otimes\Omega_0|\Psi\rangle=c_T(\zeta)\,Q_{\rm num}M_1M_2$ |
+| $\nu$ | U2 | $N_i/M=(1,\kappa,\pi,\kappa\pi,\varepsilon_s)$; the main text writes $\nu$ for this vector, and $\nu(u)=\Pi(u)$ appears only in the XXX $B$-operator discussion (Section~\ref{sec:Bxxx}) |
+| $D_2$ | W2, W3 | the quadratic localising algebra; not to be confused with D2 (agent) or $D_B$ ($\det N$) |
+| $\gamma_2,\gamma_3,d_3$ | this text | Frobenius coefficients of $f_0,f_2$ (U2 calls $\gamma_2,\gamma_3$ "$c_2,c_3$"; renamed to avoid the clash with the double pole $c_2$) |
+@endtable
+
+The relation $\Theta^{\rm adj}=G/(4\omega^3\omega'^3)$ was found by D3 to be exact; G1 verified symbolically in 25/25 entries that $\Theta$ defined from $K$ equals it, so no further factor hides in the conventions. The "4 of D2/D3" is a convention, not physics: with $M=P^3p_{0,\lambda_2+1}$ exactly one uses $K=G/4$ and no 4 appears anywhere.
+
+## Frames and bases {#app:basis}
+
+- *Frames.* Diagonal frame: states of the diagonal-twist Hamiltonians; companion frame: $\Psi_c=(P_{\rm phys}^{-1}\otimes P_{\rm phys}^{-1})|_{z=\zeta}\Psi_d$, $x_0^c=e_1\otimes e_1$ (D3), $\Phi^\infty_c=\Omega_c^\infty[\omega_1]\otimes\Omega_c^\infty[\omega_1']$. $x_0^G$ in the diagonal frame is $x(\zeta)\otimes x(\zeta)$ and $\langle x_0^c|\Psi_c\rangle=\langle x_0^d|\psi_d\rangle$.
+- *Basis orders.* Notebook (W-agents, data files): GT patterns descending, index 1 or 0 is the HW ket; `gl3_reps` (P, D, G, U agents): lowest weight first, HW ket last. Adjoint map $\mathrm{NB}\to\mathtt{gl3}$: $(7,5,6,4,2,1,3,0)$ (0-based). Weights in notebook order for the adjoint: $(2,1,0),(2,0,1),(1,2,0),(1,1,1),(1,1,1),(1,0,2),(0,2,1),(0,1,2)$; the metric diagonal $G=(1,1,1,2,6,9,4,9)$. U2's slices (`gl3` index $\nu$): top $C_7$, $(4,1,1)\ C_5$, $(3,3,0)\ C_6$, octets $(C_2,C_4)$, singlet $C_0$; W4's (notebook, 1-based): $C_1,C_2,C_3,(C_5,C_4)$ resp. $(C_4,C_5)$, $C_8$; Table~\ref{tab:cg} uses W4's.
+- *Signs.* HW kets are G-normalised with the first non-zero component, in descending GT order, positive (D1, U2); W4's canonical HW kets are primitive integer vectors (first non-zero component positive). For $(4,4,2)$ of $[3,2,0]$ the exact slice has an exactly vanishing component and the chain branch's sign convention differs; the CG cells align signs and use norm-based errors (W3).
+- *Copies.* In a multiplicity-2 sector copy 1 is the eigenvector of $S3c[1,2]$ with the smaller eigenvalue ($\alpha_1^{(0)}$); U1's "copy 0" is W4's copy 1 and $\sqrt5\to-\sqrt5$ exchanges the copies.
+- *$\theta_{12}$ units.* U1's series are in units $\theta_{12}=1$, with $H^{(n)},a^{(n)}\sim\theta_{12}^{n-1}$, $b^{(n)}\sim\theta_{12}^{n-2}$; W4's data are $\theta$-scaled, $H=\eta/\theta_{12}$, $a=\alpha/\theta_{12}$, $b=\beta/\theta_{12}^2$, with $\theta=(2/7,-3/5)$, $\theta_{12}=31/35$ for the numerical tables and series (so "$140/31$" is $4/\theta_{12}$).
+- *Kernel pair orders.* G1: lexicographic pairs $(kl)$, $0\le k<l\le\lambda_1+1$, $l\ge\lambda_2+1$. D2/D1: $N=(P^3p_{02},P^{3\prime}p_{02},P^3p_{03},P^{3\prime}p_{03},P^3p_{23})$; the map to G1's order $(02),(03),(12),(13),(23)$ is $1\to(02)$, $2\to(12)$, $3\to(03)$, $4\to(13)$, $5\to(23)$ because $P^{3\prime}p_{0l}=P^3p_{1l}$.
+- *$c$ for general $\Lambda$:* (\ref{eq:cfactor}); wrong exponents tested and excluded (Section~\ref{sec:frames}).
+
+## Numerical points and grids {#app:grids}
+
+- $\theta=(2/7,-3/5)$, $\theta_{12}=31/35$; $\theta$ variants for kernel laws: $(1/5,-4/9)$, $(3/7,-1/4)$, $(1/2,-1/3)$, $(-1/7,-6/5)$, $(4/5,-2/3)$ ($\theta_{12}=29/45,19/28,5/6,37/35,22/15$); further $\theta_{12}$ values $7/9,13/8,-9/7,-17/10,11/6,3/4,-5/3,19/13,-7/11,9/5,-13/9,25/14,-19/10,15/11,-11/7$ (G1, 12--20 values); pairs with equal $\theta_{12}$: $(2/7,-3/5),(-1/3,-128/105),(5/4,51/140)$.
+- Twist points: $P=(3/2,5/4,2/3)$, $P'=(2,5/3,-1/2)$, $X_1=(7/5,-3/4,1/6)$, $X_2=(-4/3,2/9,5/7)$, $X_3=(1/3,-2/7,5/11)$; further $X_4..X_6$ and 26 real-spectrum random rationals (D1); some triples give a complex spectrum of $S_2+\pi S_3$ and are skipped.
+- Vacuum twists: $\omega=(5/2,7/3,3/5)$, $\omega'=(7/4,-2/5,9/7)$; $\omega_0=(5/2,7/3,3/5)$ for $T(B)$; $(\omega_1,\omega_1')$: base $(5/2,7/4)$, second $(-2/5,3)$, a $3\times3$ grid $\omega_1\in\{5/2,-2/5,9/7\}\times\omega_1'\in\{7/4,3,-5/3\}$, a 9-value grid $\{5/2,-2/5,9/7,3,-5/3,7/4,11/3,-7/2,13/5\}$ (72 ordered pairs), and G1's $w'$ list up to $23/9,-3/2,10/3$.
+- Regime: $\phi=(1/3,-2/7,5/11)$, control $\phi'=(-2/5,3/8,7/11)$; $\hat\omega_1\in\{3/4,-5/3,1/2,-7/3\}$, $\hat\omega_1'\in\{-12/5,7/2,1/8,5/4\}$ (the 24-point Stage-D grid is $\{3/4,-5/3\}\times\{-1/5,9/7,5/3\}$ for $\hat\omega$ and $\{-12/5,7/2\}\times\{1/8,-3/4\}$ for $\hat\omega'$); $\epsilon\in\{1,2,4\}\cdot10^{-6}$ (chain-side, three values) and $\epsilon_k=10^{-6}2^{-k}$, $k=0..11$ (series fits, $K=12$; the extended set $K=24$, 400 digits, reliable to $n=18$).
+- Generic points for operator identities: $u_0=3/7$, $u_1=-2/9$ (note: Laurent fits at $\theta_1=3/7=u_0$ hit a pole).
+- Precision: chain 200 digits; Q side 60 (finite twist), 80 (fits, kernels), 100--120 (regime), 200 (series), 400 (extended series); fixed-point 320-bit integer QR in D1; exact Fractions in D3, G1 (one-site).
+
+## Vacuum eigenvalue functions {#app:vac}
+
+The exact eigenvalue functions of the vacuum $\Omega_{\zeta\omega}\otimes\Omega_{\zeta\omega}$ (exact rationals; $x_s=u-\theta_s$), with $S_1=e_1(\omega)+|\Lambda|(1/x_1+1/x_2)$, $e_1(\omega)=163/30$ for $\omega$ and $369/140$ for $\omega'$, and the constants $e_2(\omega)=131/15$, $e_3(\omega)=7/2$ ($e_2(\omega')=29/28$, $e_3(\omega')=-9/10$). The table lists the Laurent data of $S_2,S_3$ (the double poles are $c_2$ and $a_s=c_2\omega_3$).
+
+@table tab:vac | Vacuum Laurent data (exact). $H_s$ is the residue of $S_2$ at $\theta_s$, $b_s$ that of $S_3$, $a$ the common double pole of $S_3$. Sources: P1, P3, P4 section 0.
+@size small
+@cols llccccc
+| $\Lambda$ | twist | $H_1$ | $H_2$ | $b_1$ | $b_2$ | $a$ |
+|---|---|---|---|---|---|---|
+| $[2,1,0]$ | $\omega$ | $12539/930$ | $4139/930$ | $2173/310$ | $493/310$ | $9/5$ |
+| $[2,1,0]$ | $\omega'$ | $40463/4340$ | $1263/4340$ | $30501/4340$ | $-19899/4340$ | $27/7$ |
+| $[3,1,0]$ | $\omega$ | $5789/310$ | $1589/310$ | $3027/310$ | $507/310$ | $12/5$ |
+| $[3,1,0]$ | $\omega'$ | $54107/4340$ | $-4693/4340$ | $40869/4340$ | $-34731/4340$ | $36/7$ |
+| $[3,2,0]$ | $\omega$ | $885/31$ | $45/31$ | $2376/155$ | $-144/155$ | $24/5$ |
+| $[3,2,0]$ | $\omega'$ | $48341/2170$ | $-10459/2170$ | $44217/2170$ | $-31383/2170$ | $72/7$ |
+@endtable
+
+Check against (\ref{eq:vacdata}) for $[3,2,0]$, $\omega$: $H_1=2\omega_1+3\omega_2+5\omega_3+12/\theta_{12}=5+7+3+420/31=15+420/31=885/31$.
+
+# The kernels {#app:K}
+
+## The adjoint kernel {#app:Kadj}
+
+@include gen/tab-G210.src
+
+@include gen/tab-Gtw.src
+
+For the adjoint the canonical $\Theta$ is $G/(4\omega_1^3\omega_1'^3)$ with $\omega=1/a$. A few entries in this normalisation (G1's K0 table, pairs $(02),(03),(12),(13),(23)$, $a'=a$ primed, $t=1/\theta_{12}$): $\Theta_{(02)(02)}=1+(a-a')t-3aa't^2$, $\Theta_{(02)(03)}=-a'(2at+1)/2$, $\Theta_{(03)(02)}=a(2a't-1)/2$, $\Theta_{(03)(03)}=aa'/4$, $\Theta_{(23)(23)}=a^3a'^3/4$, $\Theta_{(13)(13)}=-a^2a'^2(3aa't^2-at+a't-1)$, $\Theta_{(03)(23)}=aa'^3(6a^2t^2+4at+1)/4$. The full table follows from $G$ above or from the exchange rule $\Theta_{ij}(a,a',t)=\Theta_{ji}(a',a,-t)$; all 25 entries are stored exactly in `general_kernel_rep_210.pkl`.
+
+## $[3,1,0]$ and $[3,2,0]$: base-point kernels {#app:K310}
+
+The exact kernel $K$ at the base point $(\omega_1,\omega_1',\theta_{12})=(5/2,7/4,31/35)$ was evaluated from G1's stored exact polynomial laws (`general_kernel_rep_310.pkl`) in the basis of pairs $(02),(03),(04),(12),(13),(14),(23),(24),(34)$, rows $i$ and columns $j$; $K_{99}=1/9$. By the block theorem (\ref{eq:blockK}) the kernel of $[3,2,0]$ is the sub-block with rows and columns $(03),(04),(13),(14),(23),(24),(34)$ (we verified exact equality of all 49 entries, at this point and at $(-2/5,3,29/45)$); it reproduces the base-point values printed by P4 (for example $K_{11}=-2477531875/3936256$, $K_{12}=-15649375/95232$, $K_{17}=1241317375/2770563$, $K_{71}=-3124391459/709264128$, $K_{77}=1/9$ in the $[3,2,0]$ order).
+
+@include gen/K310.src
+
+Laws (all verified, Table~\ref{tab:laws} and Section~\ref{sec:structure}): each entry is a polynomial in $(\omega_1,\omega_1')$. For $[3,2,0]$ the table of total degrees is rows $8,7,7,6,6,5,4$ / $7,6,6,5,5,4,3$ (twice) / $6,5,5,4,4,3,2$ (twice) / $5,4,4,3,3,2,1$ / $4,3,3,2,2,1,0$, i.e.\ $d_{ij}=8-(e_i+e_j)$ with $e=(0,1,1,2,2,3,4)$, at most degree 4 in each of $\omega_1,\omega_1'$; for $[3,1,0]$, $e=(0,1,2,1,2,3,3,4,5)$, bidegree $(5,10)$ in $(1/\omega_1',t)$ at fixed $a$, 998 monomials; the dependence on $\theta$ is through $\theta_{12}$ only (equal-$\theta_{12}$ pairs agree to $4.8\cdot10^{-72}$, $8\cdot10^{-70}$, $2.4\cdot10^{-68}$ for $[2,1,0],[2,0,0],[3,2,0]$).
+
+# The one-site kernel {#app:C}
+
+Table~\ref{tab:onesite} lists the coefficients of $\theta_{kl}(a)=c_{kl}a^{k+l-\lambda_2-1}$ for all two-row and one-row representations up to $\lambda_1=4$. They are computed from the closed form (\ref{eq:ckl}); we cross-checked the entries printed by G1 for $[1,0,0],[1,1,0],[2,0,0],[2,1,0],[2,2,0],[3,1,0],[3,2,0],[4,2,0]$ (they agree).
+
+@include gen/tab-onesite.src
+
+# The $\epsilon$-series and the CG tables {#app:D}
+
+@include gen/tab-series-exact.src
+
+@include gen/tab-series-num.src
+
+Symbolic data to higher order are in `untwisted_Q_pert_sym.pkl` (singlet to $n=6$, algebraic branches to $n=6$), `untwisted_Q_laurent_exact.pkl` (all branches $n\le5$), `untwisted_Q_octet_fit.pkl` and the data-file records `E4_SYMBOLIC` (orders $0..3$), `E4_PSI` (to order 4), `E4_GNORM`, `E5_KB`, `E5_SLICE`, `E5_GF`. The numerical $\epsilon$-series of the monomials $N_i,M$, the Plücker coordinates and the polynomial coefficients are in `untwisted_Q_series_210.pkl` (12 points, 200 digits, $n\le10$), `_ext.pkl` (24 points, 400 digits, $n\le20$, reliable to 18) and `_phi2.pkl` ($\phi'$).
+
+## CG tables {#app:CG}
+
+@include gen/tab-cg.src
+
+# The untwisted data {#app:E}
+
+@include gen/tab-untw.src
+
+The sectors of each $V_\Lambda\otimes V_\Lambda$ and their multiplicities: $[1,1,0]$: $(2,2,0),(2,1,1)$. $[2,1,0]$: $(4,2,0),(4,1,1),(3,3,0),(3,2,1)\times2,(2,2,2)$. $[2,2,0]$: $(4,4,0),(4,3,1),(4,2,2)$. $[3,1,0]$: $(6,2,0),(6,1,1),(5,3,0),(5,2,1)\times2,(4,4,0),(4,3,1)\times2,(4,2,2),(3,3,2)$. $[3,2,0]$: $(6,4,0),(6,3,1),(6,2,2),(5,5,0),(5,4,1)\times2,(5,3,2)\times2,(4,4,2),(4,3,3)$. $[4,1,0]$: $(8,2,0),(8,1,1),(7,3,0),(7,2,1)\times2,(6,4,0),(6,3,1)\times2,(6,2,2),(5,5,0),(5,4,1)\times2,(5,3,2),(4,4,2)$. Multiplicity $\le2$ everywhere (45 branches in all). One-site Casimirs $(C_2,C_3)(\Lambda)$ from the data files: $[1,1,0]$: $(4,8)$; $[2,1,0]$: $(9,30)$; $[2,2,0]$: $(12,36)$; $[3,1,0]$: $(16,72)$; $[3,2,0]$: $(19,77)$; $[4,1,0]$: $(25,140)$. The Laurent operators in the canonical HW basis, the Gram matrices and the HW kets themselves are in the files (records `LAURMAT`, `GRAM`, `HWBASIS`).
+
+# Reproducibility {#app:repro}
+
+All Python work lives in `Paul/Python/gaudin_sl3/` (run with `python -X utf8`, Python 3.13, sympy 1.14, mpmath 1.3, numpy; no `uv`), all notebooks in `Paul/Mathematica/Gaudin/Experiments/`, reference data in `Paul/Mathematica/Gaudin/ref/`. Nothing was committed by the agents; about $230$ MB of `*.pkl` caches in `Paul/Python/gaudin_sl3/` should be gitignored before committing. The four notebooks store no native outputs (results are in markdown cells below each code cell); Paul reruns them in VS Code. The common pitfall: run heavy stages separately (an all-stage run stalled under CPU contention from parallel agents).
+
+@table tab:repro | Which file produces what. Times are those reported by the agents (warm = with caches, cold = from scratch). Specs are `SPEC-*.md`/`*-spec.md` next to each file.
+@size footnotesize
+@cols p{1.0cm}p{4.2cm}p{4.6cm}p{3.6cm}
+| agent | files | produces | time, precision |
+|---|---|---|---|
+| W1 | `Experiments/Gaudin-L2-chain.wb` (48 cells, 16 code) | Hamiltonians, vacuum, localisers, two-vacua untwist and CG for $[2,1,0]$, $[3,1,0]$ (switch $\Lambda$ in the first code cell) | one clean run, 200 digits |
+| W2 | `Experiments/Gaudin-L2-chain-2.wb` (80 cells, 21 code) | $(\infty,\infty)$ family, $[3,1,0]$ fourth localiser, closed forms, A5 reference tables | every code cell run twice, 200 digits |
+| W3 | `Experiments/Gaudin-L2-chain-320.wb` (75 cells, 32 code) | $[3,2,0]$ chain side, cleaning verdict, A7 tables | one clean run, 8 min; scan cell 59 about 6 min cold |
+| W4 | `Experiments/Gaudin-untwisted-exact.wb` (39 cells, 14 code); `ref/untwisted-exact-{110,210,220,310,320,410}.txt` | exact untwisted reference data, perturbation theory, CG tables | one clean run, exact |
+| P1 | `gaudin_chain.py`, `qside.py`, `RESULTS-Qside.md`, `qside_output.txt`, `qside_cache.pkl` | Q side for $[2,1,0]$ (opers, Wronskians, $\det N$, regime) | about 75 s; 60/100 digits |
+| P2 | `xxx_chain.py`, `xxx_limit.py`, `RESULTS-xxx-limit.md` | XXX$\to$Gaudin limit, dictionary, $x_0$, localiser prediction | about 2 min (X4 sympy 95 s); exact series |
+| P3 | `qside_310.py`, `RESULTS-Qside-310.md`, `qside_310_*.pkl` | $[3,1,0]$ Q side; rank-4 rule | 4 min warm, 15 min cold; 60/100 digits |
+| P4 | `qside_320.py`, `twovac_fit_320.py` (stages T0..T7), `RESULTS-Qside-320.md`, `twovac_fit_320_*.pkl` | $[3,2,0]$ Q side and jet formula, $[3,1,0]$ comparison | 4 min warm / 8 min cold; 60/80/100 digits |
+| D1 | `twovac_fit.py`, `RESULTS-twovac-fit.md`, `twovac_fit_*.pkl` | direct fit of the adjoint kernel, kernel laws, regime Q-side CG | 2.5 min warm; 80 digits (F4: 120) |
+| D2 | `twovac_limit.py`, `RESULTS-twovac-limit.md`; input `ref/xxx-210-infinf-formula-cells.txt` | $h\to0$ limit of the ten-product formula, $G$ | about 1 min; exact, 60 digits for L3 |
+| D3 | `gaudin_B.py`, `RESULTS-gaudin-B.md`, `gaudin_B_*.pkl` | $B$ hierarchy, jet basis, K tensor, $G$ from first principles | 6 min warm / 15 min cold; exact Fractions, 80 digits for states; `GB_THETA=1/5,-4/9` repeats at another $\theta$ |
+| G1 | `general_kernel.py` (stages K1, REP, ZC, BLK, SGL, CORNER, ANALYZE), `general_kernel_bld.py`, `RESULTS-general-kernel.md`, `general_kernel_rep_<Lambda>.pkl` | general-$\Lambda$ kernels, one-site closed form, block theorem | 80 digits; per point $\sim35$ s ($[3,1,0]$, $[3,2,0]$), $[4,1,0]$ about 2 min, $[4,2,0]$ about 4 min |
+| U1 | `untwisted_Q.py` (stages T0, T1, EXPORT), `RESULTS-untwisted-Q.md`, `untwisted_Q_*.pkl` | untwisted Laurent data, oper, $\epsilon$-series | 200/400 digits |
+| U2 | `untwist_limit.py` (stages R, N, NU), `untwist_limit_frob.py`, `RESULTS-untwist-limit.md`, `untwist_limit_reg_<k>.pkl` | analytic untwisting limit for the adjoint | about 1 min with caches; 200 digits, 12 $\epsilon$ points $\sim1$ s each |
+| data | `ref/ref-*.txt` | cell dumps of the XXX notebooks used by the Python agents | -- |
+@endtable
+
+Other pitfalls recorded by the agents: a numerically vanishing feature ($p_{01}\sim10^{-78}$) must be zeroed explicitly before QR or it is counted as an independent feature; the $100$-digit regime solver needs a kernel threshold of $10^{-50}$ (the default $10^{-35}$ gives spurious lower degrees); a threshold-based degree reading of $q$ fails when the leading coefficient is $\epsilon$-suppressed (read the smallest degree admitting a kernel); the memoised `laurent` cache holds bad values after a fit at a pole; the mp eigensolver returns $10^{-59}$ imaginary noise in some sectors; the all-stage Python run stalled under contention. The notebooks were built from JSON and run cell by cell in the shared kernel (wolfbook new-notebook workaround), hence no native outputs.
+
+The sources of this document are the plans `Gaudin-sl3-CG-plan.md`, `-round2-`, `-round3-`, `-round4-`, `-round5-plan.md`, the ten `RESULTS-*.md` files, the four notebooks and the six data files named above, and the repository's `HANDOFF.md` (entries from "sl(3) GAUDIN" onwards). The generator of this document (hand-written prose plus tables built from the data files) lives in `Paul/Mathematica/Gaudin/notes-src/`.

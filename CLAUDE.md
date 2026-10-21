@@ -3,14 +3,17 @@
 **Check `HANDOFF.md` first** — it has where the previous session left off (in-flight state, open
 threads, next steps). This file covers stable structure/conventions only.
 
-Research repo (Paul Ryan) computing Clebsch-Gordan coefficients for su(4) rectangular
-representations. The repo is split into two subprojects:
+Research repo (Paul Ryan). **Project target (since 2026-10-16): Clebsch–Gordan coefficients of
+gl(3) from Separation of Variables (SoV) in the two-site Gaudin model** — the two-vacua overlap as a
+function of the Q-functions (the "jet formula"), its general-Λ kernel, and its analytic untwisting
+limit giving the CG coefficients as a generating function. gl(4)/su(4) rectangular representations
+were the original goal and are no longer a target. The repo is split into two subprojects:
 
-- **XXX** — computing CG coefficients directly in the rational gl(2)/gl(4) (XXX) spin chain via
-  Separation of Variables (SoV). **This is the current focus.**
-- **Gaudin** — the Gaudin-model version of the same problem, obtained as a scaling limit of the
-  XXX spin chain. Parked for now; only the earlier residue-evaluation and su(4)-representation
-  groundwork lives here.
+- **Gaudin** — **the current focus.** Plans per round, notebooks, reference data and the working
+  notes live under `Paul/Mathematica/Gaudin/` (see Layout); the Python cross-checks and fits under
+  `Paul/Python/gaudin_sl3/`.
+- **XXX** — CG coefficients directly in the rational gl(3)/gl(4) (XXX) spin chain via SoV. This was
+  the scaffold for the Gaudin work (the Gaudin formulas are its h → 0 limit); not actively extended.
 
 Don't mix the two: a notebook or paper edit for one subproject shouldn't casually pull in the
 other's conventions or formulas unless the task is explicitly about the scaling-limit connection
@@ -21,8 +24,16 @@ between them.
 - `paper/xxxCG.tex` — JHEP-format paper for the XXX subproject. Currently covers the Lax matrix,
   companion twist, fusion hierarchy, and SoV construction for the XXX spin chain. Source of truth
   for XXX derivations/formulas; check here before trusting a notebook ansatz.
-- `paper/gaudinCG.tex` — JHEP-format paper for the Gaudin subproject. Currently a stub
-  (title/author only) — no Gaudin-specific derivations written up yet.
+- `paper/gaudinCG.tex` — JHEP-format paper for the Gaudin subproject. Currently a gl(4)-rectangular
+  stub (title/author only); the sl(3) Gaudin CG material will replace its body (Paul's call on
+  whether to rewrite it or start `paper/gl3GaudinCG.tex`). Until then the authoritative write-up is
+  `Paul/Mathematica/Gaudin/Gaudin-sl3-CG-notes.{tex,md,pdf}` (generated from `notes-src/`).
+- `Paul/Mathematica/Gaudin/` — the sl(3) Gaudin CG program: `Gaudin-sl3-*plan.md` (one per round,
+  with the verdict blocks), `Experiments/Gaudin-*.wb` (chain-side notebooks + their `-spec.md`
+  briefs; no `Clean/` yet), `ref/*.txt` (exact machine-readable reference data for the Python
+  agents), the notes above. `Paul/Python/gaudin_sl3/` holds the Python side: `SPEC-*.md` briefs,
+  scripts, `RESULTS-*.md` reports beside each script, and `*.pkl` caches (gitignored, rebuildable).
+  `Paul/Mathematica/old-conventions/old/Gaudin/` is the OLD gl(4)/su(4) Gaudin material, not this.
 - `Paul/Mathematica/new-conventions/` — **active** notebooks going forward (2026-10-01 convention
   change). New conventions: Lax ℒ_ij(u) = u δ_ij + h E_ij (was u − h Σ E_ji⊗e_ij), companion
   twist acting on the right (TG = ℒ·G), B/C built from the untwisted T. Reference:
@@ -76,10 +87,10 @@ debug logs) — tooling artifacts, not research content.
 - **wolfbook-builder** — do live Wolfram computation directly in the `.wb` notebooks via wolfbook
   MCP tools, instead of writing a standalone `.wl` script. Covers everything from routine
   extensions to ports/generalizations and long derivation chains where a subtle error would be
-  costly (e.g. L=1 to L=2). Stays out of `paper/*.tex` and git commits/pushes. New work goes in
-  `Paul/Mathematica/new-conventions/`, not `old-conventions/`; the Gaudin subproject's notebooks
-  live under `Paul/Mathematica/old-conventions/old/Gaudin/` since it's parked. Don't assume the other subproject's notebooks
-  are relevant to a task scoped to one.
+  costly (e.g. L=1 to L=2). Stays out of `paper/*.tex` and git commits/pushes. Gaudin work goes in
+  `Paul/Mathematica/Gaudin/Experiments/` (one `-spec.md` brief per notebook; shared kernel K1); XXX
+  work in `Paul/Mathematica/new-conventions/`, never `old-conventions/`. Don't assume the other
+  subproject's notebooks are relevant to a task scoped to one. Always dispatch on `model: sonnet`.
 - **wolfbook-docs-agent** — invoke with "document the Clean notebooks" or similar. Read-only over
   `Clean/*.wb` (never `Experiments/`): generates/refreshes a companion `<NotebookName>.md` AND
   `<NotebookName>.tex` reference (symbol-by-symbol purpose/signature/dependencies/verification

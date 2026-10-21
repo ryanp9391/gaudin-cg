@@ -1,0 +1,542 @@
+{
+ "cells": [
+  {
+   "kind": 1,
+   "value": "# Two-site sl(3) Gaudin: exact ε-series of the Laurent data for [3,1,0] and [3,2,0], and their algebraic structure (round 5, agent W5, 2026-10-16)\n\nSpec: `Gaudin-Laurent-series-spec.md` (same directory). Templates: `Gaudin-untwisted-exact.wb` (W4), `Gaudin-L2-chain-320.wb` (W3). Data files written to `../ref/laurent-series-<Λ>.txt`.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* fresh kernel state; Quiet because the front-end wrapper symbol ClearAll complains about is harmless *)\nQuiet[ClearAll[\"Global`*\"]];\n$HistoryLength = 0;",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Setup: generators, metric, Lax matrix, S2/S3 (copied from W4, `Gaudin-untwisted-exact.wb`; reps restricted to adjoint, [3,1,0], [3,2,0])",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* GT basis and gl(3) generators: plain, non-Hermitian, exact rationals; E_ij raises the weight for i < j, site basis ordered with the highest-weight pattern FIRST *)\nps[rep_] := ps[rep] = Block[{res = (Prepend[rep, #1] &) /@ Tuples[Table[Range[rep[[1, i + 1]], rep[[1, i]]], {i, 1, Length[rep[[1]]] - 1}]]}, If[Length[res[[1, 1]]] == 1, Reverse[Sort[res]], Reverse[Sort[Flatten[ps /@ res, 1]]]]];\ndimOf[rep_] := dimOf[rep] = Length[ps[{rep}]];\nJ0[k_][pat_] := J0[k][pat] = Sum[pat[[k, i]], {i, 1, k}] - Sum[pat[[k - 1, i]], {i, 1, k - 1}];\nJp[k_][pat_] := Jp[k][pat] = -Sum[(Product[pat[[k, i]] - i - pat[[k + 1, j]] + j, {j, Range[k + 1]}]/Product[pat[[k, i]] - i - pat[[k, j]] + j, {j, Complement[Range[k], {i}]}])*v[ReplacePart[pat, {k, i} -> pat[[k, i]] + 1]], {i, 1, k}];\nJm[k_][pat_] := Jm[k][pat] = Sum[(Product[pat[[k, i]] - i - pat[[k - 1, j]] + j, {j, Range[k - 1]}]/Product[pat[[k, i]] - i - pat[[k, j]] + j, {j, Complement[Range[k], {i}]}])*v[ReplacePart[pat, {k, i} -> pat[[k, i]] - 1]], {i, 1, k}];\nJJ[k_, l_, rep_] := JJ[k, l, rep] = Which[\n  k == l, DiagonalMatrix[J0[k] /@ ps[{rep}]],\n  l == k + 1, Transpose[Table[(Coefficient[Jp[k][ps[{rep}][[i]]], v[#1]] &) /@ ps[{rep}], {i, 1, Length[ps[{rep}]]}]],\n  l == k - 1, Transpose[Table[(Coefficient[Jm[l][ps[{rep}][[i]]], v[#1]] &) /@ ps[{rep}], {i, 1, Length[ps[{rep}]]}]],\n  l > k + 1, JJ[k, k + 1, rep] . JJ[k + 1, l, rep] - JJ[k + 1, l, rep] . JJ[k, k + 1, rep],\n  l < k - 1, JJ[k, k - 1, rep] . JJ[k - 1, l, rep] - JJ[k - 1, l, rep] . JJ[k, k - 1, rep]];\nchecks = <||>; tims = <||>;\nzeroQ[a_] := Union[Flatten[Normal[a]]] === {0};\n(* the three representations of this notebook; adjoint first (calibration against W4's numbers) *)\nrepList = {{2, 1, 0}, {3, 1, 0}, {3, 2, 0}};\n(* build[Lam]: sparse generators of the two-site chain (site-1 index slow, site-2 fast: KroneckerProduct order), one-site invariant metric G (G[[1]] = 1, Ee[i,j]^T G = G Ee[j,i]), weights *)\nbuild[Lam_] := build[Lam] = Module[{d1, d2, id1, Ee, E1, E2, wtL1, wtB, gv, gsol, gd},\n  d1 = dimOf[Lam]; d2 = d1^2; id1 = IdentityMatrix[d1, SparseArray];\n  Ee = Table[SparseArray[JJ[i, j, Lam]], {i, 3}, {j, 3}];\n  E1 = Table[KroneckerProduct[Ee[[i, j]], id1], {i, 3}, {j, 3}];\n  E2 = Table[KroneckerProduct[id1, Ee[[i, j]]], {i, 3}, {j, 3}];\n  wtL1 = Table[Table[J0[k][p], {k, 3}], {p, ps[{Lam}]}];\n  wtB = Flatten[Table[wtL1[[i]] + wtL1[[j]], {i, d1}, {j, d1}], 1];\n  gv = Array[gg, d1];\n  gsol = Solve[Flatten[Append[Table[Transpose[Normal[Ee[[i, j]]]] . DiagonalMatrix[gv] - DiagonalMatrix[gv] . Normal[Ee[[j, i]]], {i, 3}, {j, i + 1, 3}], {gv[[1]] - 1}]] == 0, gv];\n  gd = gv /. First[gsol];\n  <|\"Lam\" -> Lam, \"d1\" -> d1, \"d2\" -> d2, \"id2\" -> IdentityMatrix[d2, SparseArray], \"Ee\" -> Ee, \"E1\" -> E1, \"E2\" -> E2, \"wtL1\" -> wtL1, \"wtB\" -> wtB, \"g1\" -> gd, \"gd2\" -> Flatten[KroneckerProduct[gd, gd]], \"gsolN\" -> Length[gsol], \"nilp\" -> Lam[[1]] - Lam[[3]], \"lamTot\" -> Total[Lam]|>];\n(* Lax matrix L_ij(u) = g_ij + E1_ij/(u-th1) + E2_ij/(u-th2) and its u-derivatives; S_k from the column determinant cdet(dd - L), normal ordered once (round 1) *)\nLm[R_, g_, ths_, u_] := Association[Flatten[Table[{l[i, j] -> g[[i, j]] R[\"id2\"] + R[\"E1\"][[i, j]]/(u - ths[[1]]) + R[\"E2\"][[i, j]]/(u - ths[[2]]), lp[i, j] -> -R[\"E1\"][[i, j]]/(u - ths[[1]])^2 - R[\"E2\"][[i, j]]/(u - ths[[2]])^2, lpp[i, j] -> 2 R[\"E1\"][[i, j]]/(u - ths[[1]])^3 + 2 R[\"E2\"][[i, j]]/(u - ths[[2]])^3}, {i, 3}, {j, 3}], 1]];\nSsym2 = {{-1, {lp[2, 2]}}, {-2, {lp[3, 3]}}, {1, {l[1, 1], l[2, 2]}}, {1, {l[1, 1], l[3, 3]}}, {-1, {l[2, 1], l[1, 2]}}, {1, {l[2, 2], l[3, 3]}}, {-1, {l[3, 1], l[1, 3]}}, {-1, {l[3, 2], l[2, 3]}}};\nSsym3 = {{1, {lpp[3, 3]}}, {-1, {l[1, 1], lp[3, 3]}}, {-1, {l[2, 2], lp[3, 3]}}, {1, {l[3, 1], lp[1, 3]}}, {1, {l[3, 2], lp[2, 3]}}, {-1, {lp[2, 2], l[3, 3]}}, {1, {lp[3, 2], l[2, 3]}}, {1, {l[1, 1], l[2, 2], l[3, 3]}}, {-1, {l[1, 1], l[3, 2], l[2, 3]}}, {-1, {l[2, 1], l[1, 2], l[3, 3]}}, {1, {l[2, 1], l[3, 2], l[1, 3]}}, {1, {l[3, 1], l[1, 2], l[2, 3]}}, {-1, {l[3, 1], l[2, 2], l[1, 3]}}};\nSk[R_, 1, g_, ths_, u_] := (Total[Diagonal[g]] + R[\"lamTot\"] (1/(u - ths[[1]]) + 1/(u - ths[[2]]))) R[\"id2\"];\nSk[R_, k_, g_, ths_, u_] := Module[{M = Lm[R, g, ths, u]}, Total[Table[t[[1]] If[t[[2]] === {}, R[\"id2\"], Dot @@ Map[M[#] &, t[[2]]]], {t, If[k == 2, Ssym2, Ssym3]}]]];\n(* per-rep structural checks: gl(3) relations, G invariant, nilpotency, the Gaudin family commutes at a twisted point *)\nDo[Module[{R = build[Lam], Ee, comm, nilp, thT = {2/7, -3/5}, gZ, pts = {3/7, -2/9, 5/11}, t0},\n  t0 = AbsoluteTime[]; Ee = R[\"Ee\"]; nilp = R[\"nilp\"];\n  comm = Flatten[Table[Normal[Ee[[i, j]] . Ee[[k, l]] - Ee[[k, l]] . Ee[[i, j]] - (KroneckerDelta[j, k] Ee[[i, l]] - KroneckerDelta[l, i] Ee[[k, j]])], {i, 3}, {j, 3}, {k, 3}, {l, 3}]];\n  gZ = DiagonalMatrix[{3/2, 5/4, 2/3}];\n  checks[{Lam, \"gl3 relations\"}] = Union[comm] === {0};\n  checks[{Lam, \"G positive invariant unique\"}] = R[\"gsolN\"] == 1 && And @@ Positive[R[\"g1\"]] && And @@ Flatten[Table[Transpose[Normal[Ee[[i, j]]]] . DiagonalMatrix[R[\"g1\"]] === DiagonalMatrix[R[\"g1\"]] . Normal[Ee[[j, i]]], {i, 3}, {j, 3}]];\n  checks[{Lam, \"[S_a(u),S_b(v)]=0 (twisted, 3 pairs)\"}] = Table[zeroQ[Sk[R, a, gZ, thT, pts[[1]]] . Sk[R, b, gZ, thT, pts[[2]]] - Sk[R, b, gZ, thT, pts[[2]]] . Sk[R, a, gZ, thT, pts[[1]]]], {a, 2, 3}, {b, a, 3}];\n  checks[{Lam, \"time\"}] = ToString[Round[1000 (AbsoluteTime[] - t0)]] <> \" ms\"], {Lam, repList}];\nGrid[List @@@ Normal[checks], Frame -> All, Alignment -> Left]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"0\" data-out-n=\"21\" data-sub-idx=\"21\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"3\" data-sub-start=\"43\" data-sub-end=\"43\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[21]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[21]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[21]= No output at Out[21]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "c7519cf2-1f1b-45cd-9bb2-71578168045d"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## E1/E2 (copied from W4): exact HW kets of V(x)V, untwisted Laurent data `lauData`, universal copies `branchData`",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* helper: write long results to a scratch file (the tool channel truncates long messages) *)\nscr = \"C:/Users/pryan/AppData/Local/Temp/claude/c--Users-pryan-git-projects-gaudin-cg/a13cc9a6-6bae-4dcb-abfb-547940cad2b5/scratchpad/\";\ndump[x_] := Export[scr <> \"dump.txt\", StringRiffle[If[ListQ[x], ToString[#, InputForm, PageWidth -> Infinity] & /@ x, {ToString[x, InputForm, PageWidth -> Infinity]}], \"\\n\"], \"Text\"];\nrefDir = \"C:/Users/pryan/git-projects/gaudin-cg/Paul/Mathematica/Gaudin/ref/\";\n(* HW vectors = common null space of the total simple raising operators E12, E23 on each total-weight sector, RowReduce canonical basis (first nonzero component positive), scaled to primitive integers; G2 = G(x)G invariant inner product *)\nck = <||>;\nsecOf[Lam_, mu_] := secOf[Lam, mu] = Flatten[Position[build[Lam][\"wtB\"], mu]];\nraiseM[Lam_] := raiseM[Lam] = With[{R = build[Lam]}, Join[R[\"E1\"][[1, 2]] + R[\"E2\"][[1, 2]], R[\"E1\"][[2, 3]] + R[\"E2\"][[2, 3]]]];\nprim[v_] := With[{w = LCM @@ Denominator[v] v}, w/GCD @@ w];\nhwK[Lam_, mu_] := hwK[Lam, mu] = With[{sec = secOf[Lam, mu]}, With[{ns = NullSpace[Normal[raiseM[Lam][[All, sec]]]]}, If[ns === {}, {}, prim /@ RowReduce[ns]]]];\nembed[Lam_, mu_, v_] := Normal[SparseArray[Thread[secOf[Lam, mu] -> v], build[Lam][\"d2\"]]];\nhwSecsOf[Lam_] := hwSecsOf[Lam] = Select[Reverse[Sort[Union[build[Lam][\"wtB\"]]]], Length[hwK[Lam, #]] > 0 &];\ngNorm2[Lam_, v_] := Total[build[Lam][\"gd2\"] v^2];\ngGram[Lam_, mu_] := With[{H = embed[Lam, mu, #] & /@ hwK[Lam, mu], g = build[Lam][\"gd2\"]}, Table[Total[g a b], {a, H}, {b, H}]];\nweylDim[mu_] := (mu[[1]] - mu[[2]] + 1) (mu[[2]] - mu[[3]] + 1) (mu[[1]] - mu[[3]] + 2)/2;\ncgSlice[Lam_, vfull_] := With[{d1 = build[Lam][\"d1\"]}, Table[vfull[[(nu - 1) d1 + 1]], {nu, d1}]];\nDo[Module[{R = build[Lam], secs, mults},\n  secs = hwSecsOf[Lam]; mults = Length[hwK[Lam, #]] & /@ secs;\n  ck[{Lam, \"HW kets annihilated by E12tot, E23tot\"}] = And @@ Flatten[Table[Normal[raiseM[Lam] . embed[Lam, mu, v]] === ConstantArray[0, 2 R[\"d2\"]], {mu, secs}, {v, hwK[Lam, mu]}]];\n  ck[{Lam, \"Sum mult*dim(mu) = d^2\"}] = Total[mults weylDim /@ secs] == R[\"d2\"];\n  ck[{Lam, \"sectors, mults\"}] = {secs, mults}], {Lam, repList}];\n(* E2: untwisted (g = 0) Laurent data applied to the exact HW kets: exact Laurent fit from rational u samples, verified at spare samples *)\nuSam = {7/13, -2/9, 5/11, 1/3, -4/5, 6/7, 7/3, 9/5, -3/2};\nbas2[ths_, u_] := {1, 1/(u - ths[[1]]), 1/(u - ths[[1]])^2, 1/(u - ths[[2]]), 1/(u - ths[[2]])^2};\nbas3[ths_, u_] := {1, 1/(u - ths[[1]]), 1/(u - ths[[1]])^2, 1/(u - ths[[1]])^3, 1/(u - ths[[2]]), 1/(u - ths[[2]])^2, 1/(u - ths[[2]])^3};\nlApply[R_, sym_, g_, ths_, u_, X_] := Module[{i = sym[[1]], j = sym[[2]], a, b},\n  a = R[\"E1\"][[i, j]] . X; b = R[\"E2\"][[i, j]] . X;\n  Switch[Head[sym], l, g[[i, j]] X + a/(u - ths[[1]]) + b/(u - ths[[2]]), lp, -a/(u - ths[[1]])^2 - b/(u - ths[[2]])^2, lpp, 2 a/(u - ths[[1]])^3 + 2 b/(u - ths[[2]])^3]];\nskApply[R_, 2, g_, ths_, u_, X_] := Total[Table[t[[1]] Fold[lApply[R, #2, g, ths, u, #1] &, X, Reverse[t[[2]]]], {t, Ssym2}]];\nskApply[R_, 3, g_, ths_, u_, X_] := Total[Table[t[[1]] Fold[lApply[R, #2, g, ths, u, #1] &, X, Reverse[t[[2]]]], {t, Ssym3}]];\nfitL[R_, kk_, bas_, g_, ths_, X_] := Module[{nb = Length[bas[ths, uSym]], pts, Ainv, vals, cs, resid},\n  pts = Take[uSam, nb]; Ainv = Inverse[Table[bas[ths, p], {p, pts}]];\n  vals = Table[skApply[R, kk, g, ths, p, X], {p, pts}];\n  cs = Table[Sum[Ainv[[j, k]] vals[[k]], {k, nb}], {j, nb}];\n  resid = Table[Total[Table[bas[ths, p][[j]] cs[[j]], {j, nb}]] - skApply[R, kk, g, ths, p, X], {p, Drop[uSam, nb]}];\n  {cs, resid}];\nlaurentX[R_, g_, ths_, X_] := Module[{f2 = fitL[R, 2, bas2, g, ths, X], f3 = fitL[R, 3, bas3, g, ths, X]},\n  <|\"S2inf\" -> f2[[1, 1]], \"H\" -> {f2[[1, 2]], f2[[1, 4]]}, \"c2\" -> {f2[[1, 3]], f2[[1, 5]]}, \"S3inf\" -> f3[[1, 1]], \"b\" -> {f3[[1, 2]], f3[[1, 5]]}, \"a\" -> {f3[[1, 3]], f3[[1, 6]]}, \"tri\" -> {f3[[1, 4]], f3[[1, 7]]},\n   \"resid\" -> Join[f2[[2]], f3[[2]]]|>];\nhwBlock[Lam_, mu_] := Transpose[embed[Lam, mu, #] & /@ hwK[Lam, mu]];\ntoHW[Lam_, mu_, X_] := Module[{sec = secOf[Lam, mu], Hs = Transpose[hwK[Lam, mu]], Xs, M},\n  Xs = X[[sec]]; M = LinearSolve[Hs, Xs];\n  {M, Hs . M === Xs && Union[Flatten[Delete[X, List /@ sec]]] === {0}}];\ncasX[R_, 2, X_] := Total[Table[(R[\"E1\"][[i, k]] + R[\"E2\"][[i, k]]) . ((R[\"E1\"][[k, i]] + R[\"E2\"][[k, i]]) . X), {i, 3}, {k, 3}], 2];\ncasX[R_, 3, X_] := Total[Table[(R[\"E1\"][[i, j]] + R[\"E2\"][[i, j]]) . ((R[\"E1\"][[j, k]] + R[\"E2\"][[j, k]]) . ((R[\"E1\"][[k, i]] + R[\"E2\"][[k, i]]) . X)), {i, 3}, {j, 3}, {k, 3}], 3];\ncas1[R_, 2] := With[{E = R[\"Ee\"], e = UnitVector[R[\"d1\"], 1]}, Total[Table[E[[i, k]] . (E[[k, i]] . e), {i, 3}, {k, 3}], 2][[1]]];\ncas1[R_, 3] := With[{E = R[\"Ee\"], e = UnitVector[R[\"d1\"], 1]}, Total[Table[E[[i, j]] . (E[[j, k]] . (E[[k, i]] . e)), {i, 3}, {j, 3}, {k, 3}], 3][[1]]];\nthPts = {{2/7, -3/5}, {1, 0}, {3/7, -1/4}};\nlauData = <||>;\nDo[Module[{R = build[Lam], c1, okInv = True, okScal = True, okFit = True, okTri = True, okC2 = True, okEta = True, okCas = True, okS2inf = True, lamT = Total[Lam]},\n  c1 = {cas1[R, 2], cas1[R, 3]};\n  Do[Module[{Hb = hwBlock[Lam, mu], m = Length[hwK[Lam, mu]], per = {}, cs2, cs3, cas},\n    cs2 = toHW[Lam, mu, casX[R, 2, Hb]]; cs3 = toHW[Lam, mu, casX[R, 3, Hb]];\n    okCas = okCas && cs2[[2]] && cs3[[2]] && cs2[[1]] === cs2[[1, 1, 1]] IdentityMatrix[m] && cs3[[1]] === cs3[[1, 1, 1]] IdentityMatrix[m];\n    cas = {cs2[[1, 1, 1]], cs3[[1, 1, 1]]};\n    Do[Module[{ths = thPts[[ip]], LD, th12, conv},\n      th12 = ths[[1]] - ths[[2]];\n      LD = laurentX[R, ConstantArray[0, {3, 3}], ths, Hb];\n      okFit = okFit && (Union[Flatten[LD[\"resid\"]]] === {0});\n      conv = Association[Table[key -> If[ListQ[LD[key]] && Length[LD[key]] == 2, toHW[Lam, mu, #] & /@ LD[key], toHW[Lam, mu, LD[key]]], {key, {\"S2inf\", \"H\", \"c2\", \"S3inf\", \"b\", \"a\", \"tri\"}}]];\n      okInv = okInv && And @@ Flatten[{conv[\"S2inf\"][[2]], conv[\"S3inf\"][[2]], conv[#][[All, 2]] & /@ {\"H\", \"c2\", \"b\", \"a\", \"tri\"}}];\n      okS2inf = okS2inf && conv[\"S2inf\"][[1]] === ConstantArray[0, {m, m}] && conv[\"S3inf\"][[1]] === ConstantArray[0, {m, m}];\n      okTri = okTri && (And @@ (#[[1]] === ConstantArray[0, {m, m}] & /@ conv[\"tri\"]));\n      okC2 = okC2 && (And @@ (#[[1]] === Lam[[2]] (Lam[[1]] + 1) IdentityMatrix[m] & /@ conv[\"c2\"]));\n      AppendTo[per, <|\"th\" -> ths, \"eta\" -> (conv[\"H\"][[All, 1]] th12), \"A\" -> (conv[\"a\"][[All, 1]] th12), \"B\" -> (conv[\"b\"][[All, 1]] th12^2)|>]], {ip, 3}];\n    okScal = okScal && (per[[1, \"eta\"]] === per[[2, \"eta\"]] === per[[3, \"eta\"]]) && (per[[1, \"A\"]] === per[[2, \"A\"]] === per[[3, \"A\"]]) && (per[[1, \"B\"]] === per[[2, \"B\"]] === per[[3, \"B\"]]);\n    okEta = okEta && (per[[1, \"eta\"]][[1]] === (lamT^2 - (cas[[1]] - 2 c1[[1]])/2) IdentityMatrix[m]) && (per[[1, \"eta\"]][[2]] === -per[[1, \"eta\"]][[1]]);\n    lauData[{Lam, mu}] = <|\"mult\" -> m, \"cas2\" -> cas[[1]], \"cas3\" -> cas[[2]], \"eta\" -> per[[1, \"eta\"]], \"A\" -> per[[1, \"A\"]], \"B\" -> per[[1, \"B\"]]|>], {mu, hwSecsOf[Lam]}];\n  ck[{Lam, \"(i) fits exact (ii) HW space invariant (iii) S2inf=S3inf=0 (iv) no triple pole (v) c2 scalar = lam2(lam1+1) (vi) Casimirs scalar\"}] = {okFit, okInv, okS2inf, okTri, okC2, okCas};\n  ck[{Lam, \"theta12 scaling of eta, A, B at 3 theta points\"}] = okScal;\n  ck[{Lam, \"H1 = (|Lam|^2 - (cas2(mu) - 2 cas2(Lam))/2)/theta12, H2 = -H1\"}] = okEta], {Lam, repList}];\n(* universal copies in multiplicity-2 sectors: eigenvectors of A1 = theta12 a_1 on the HW space, in Q(Sqrt[D0]); copy 1 = smaller alpha_1 *)\nsqfreeSplit[x_] := Module[{n = Numerator[x] Denominator[x], f, sq, kk}, f = FactorInteger[n]; sq = Times @@ (#[[1]]^Mod[#[[2]], 2] & /@ f); kk = Sqrt[n/sq]; {sq, kk/Denominator[x]}];\nqval[x0_, x1_, lam_] := {x0 + x1 lam[[1]], x1 lam[[2]]};\nbranchData[Lam_, mu_] := branchData[Lam, mu] = Module[{R = build[Lam], ld = lauData[{Lam, mu}], m, kets},\n  m = ld[\"mult\"]; kets = embed[Lam, mu, #] & /@ hwK[Lam, mu];\n  If[m == 1,\n   {<|\"copy\" -> 1, \"D0\" -> 0, \"vA\" -> kets[[1]], \"vB\" -> ConstantArray[0, R[\"d2\"]], \"gn\" -> {gNorm2[Lam, kets[[1]]], 0},\n     \"eta\" -> {{ld[\"eta\"][[1, 1, 1]], 0}, {ld[\"eta\"][[2, 1, 1]], 0}}, \"alpha\" -> {{ld[\"A\"][[1, 1, 1]], 0}, {ld[\"A\"][[2, 1, 1]], 0}}, \"beta\" -> {{ld[\"B\"][[1, 1, 1]], 0}, {ld[\"B\"][[2, 1, 1]], 0}}|>},\n   Module[{A1 = ld[\"A\"][[1]], trA, detA, disc, f, D0, lams},\n    trA = Tr[A1]; detA = Det[A1]; disc = trA^2 - 4 detA; {D0, f} = sqfreeSplit[disc];\n    lams = {{trA/2, -f/2}, {trA/2, f/2}};\n    Table[Module[{lam = lams[[ic]], cA, cB, vA, vB, num, sgn, x1, ev, c2n},\n      cA = {A1[[1, 2]], lam[[1]] - A1[[1, 1]]}; cB = {0, lam[[2]]};\n      c2n = LCM @@ Denominator[Join[cA, cB]]; cA = c2n cA; cB = c2n cB;\n      vA = cA . kets; vB = cB . kets;\n      num = N[vA + Sqrt[D0] vB, 30]; sgn = Sign[First[Select[num, Abs[#] > 10^-20 &]]];\n      vA = sgn vA; vB = sgn vB;\n      x1[X_] := X[[1, 2]]/A1[[1, 2]];\n      ev[X_] := qval[X[[1, 1]] - x1[X] A1[[1, 1]], x1[X], lam];\n      <|\"copy\" -> ic, \"D0\" -> D0, \"vA\" -> vA, \"vB\" -> vB, \"gn\" -> {Total[R[\"gd2\"] (vA^2 + D0 vB^2)], Total[R[\"gd2\"] 2 vA vB]},\n        \"eta\" -> {{ld[\"eta\"][[1, 1, 1]], 0}, {ld[\"eta\"][[2, 1, 1]], 0}}, \"alpha\" -> {ev[ld[\"A\"][[1]]], ev[ld[\"A\"][[2]]]}, \"beta\" -> {ev[ld[\"B\"][[1]]], ev[ld[\"B\"][[2]]]},\n        \"lam\" -> lam|>], {ic, 2}]]]];\nGrid[List @@@ Normal[ck] /. {a_, b_} :> {a, b}, Frame -> All, Alignment -> Left]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"1\" data-out-n=\"57\" data-sub-idx=\"39\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"5\" data-sub-start=\"93\" data-sub-end=\"93\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[57]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[57]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[57]= No output at Out[57]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "f969e1bd-135e-445a-9f3d-377844322698"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Perturbation machinery (copied from W4 E4 part 1): operator coefficient blocks as exact cubic polynomials in g = diag(zeta), degenerate Rayleigh-Schroedinger recursion, Laurent series of the commuting family",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck];\nck = <||>;\nthN = {2/7, -3/5}; th12 = 31/35;\nmons = Flatten[Table[{a, b, c}, {a, 0, 3}, {b, 0, 3 - a}, {c, 0, 3 - a - b}], 2];\npw[x_, 0] := 1; pw[x_, k_] := x^k;\nmonV[g_] := Table[pw[g[[1]], m[[1]]] pw[g[[2]], m[[2]]] pw[g[[3]], m[[3]]], {m, mons}];\ngPts = Tuples[{0, 1, -1, 2}, 3];\ngExtra = {{3/2, -5/7, 2/9}, {-4/3, 5/2, 1/7}};\ndesignM = monV /@ gPts;\nck[\"design matrix rank = 20\"] = MatrixRank[designM];\nopNames = {\"H1\", \"H2\", \"a1\", \"a2\", \"b1\", \"b2\"};\nopAt[R_, g_, sec_, Ib_] := Module[{LD = laurentX[R, DiagonalMatrix[g], thN, Ib]},\n  {LD[\"H\"][[1]], LD[\"H\"][[2]], LD[\"a\"][[1]], LD[\"a\"][[2]], LD[\"b\"][[1]], LD[\"b\"][[2]]}];\n(* operator coefficient blocks: opPolyOfT[Lam,mu,th][\"coef\"][name] = list over mons of n x n rational matrices on the weight-mu sector (the twisted Hamiltonians commute with the total Cartan) *)\nopPolyOf[Lam_, mu_] := opPolyOfT[Lam, mu, thN];\nopPolyOfT[Lam_, mu_, thArg_] := opPolyOfT[Lam, mu, thArg] = Block[{thN = thArg}, Module[{R = build[Lam], sec = secOf[Lam, mu], n, Ib, vals, design = designM, sols, offsec, chk},\n  n = Length[sec]; Ib = Normal[SparseArray[Transpose[{sec, Range[n]}] -> 1, {R[\"d2\"], n}]];\n  vals = Table[opAt[R, g, sec, Ib], {g, gPts}];\n  offsec = And @@ Flatten[Table[Union[Flatten[Delete[v[[k]], List /@ sec]]] === {0}, {v, vals}, {k, 6}]];\n  sols = Table[With[{V = Table[Flatten[vals[[ip, k]][[sec]]], {ip, Length[gPts]}]}, Partition[#, n] & /@ LinearSolve[design, V]], {k, 6}];\n  chk = And @@ Flatten[Table[With[{vx = opAt[R, g, sec, Ib]}, Table[vx[[k]][[sec]] === Total[Table[monV[g][[im]] sols[[k, im]], {im, Length[mons]}]], {k, 6}]], {g, gExtra}]];\n  <|\"coef\" -> AssociationThread[opNames -> sols], \"offsec\" -> offsec, \"extraOK\" -> chk, \"n\" -> n|>]];\n(* field arithmetic: elements are expressions a + b sq, sq^2 = dD *)\nrd[x_] := If[dD === 0, Expand[x], PolynomialRemainder[Expand[x], sq^2 - dD, sq]];\ncj[x_] := x /. sq -> -sq;\nfdiv[x_, y_] := If[dD === 0, Expand[x/y], rd[rd[x cj[y]]]/rd[y cj[y]]];\nfdotv[a_, b_] := rd[a . b];\nopSeries[ops_, name_, phi_, kmax_] := Table[Sum[(Times @@ MapThread[pw, {phi, mons[[im]]}]) ops[\"coef\"][name][[im]], {im, Select[Range[Length[mons]], Total[mons[[#]]] == k &]}], {k, 0, kmax}];\nrsSolve[Aks_, psi0_, lam0_, nMax_] := Module[{n = Length[psi0], K = Length[Aks] - 1, M0, M1, ell, ell0, ell1, lsf, lams = {lam0}, psis = {psi0}, big, kerv, split, lp, ev0},\n  ev0 = rd /@ (Aks[[1]] . psi0 - lam0 psi0);\n  If[dD === 0,\n   ell = First[NullSpace[Transpose[Aks[[1]]] - lam0 IdentityMatrix[n]]]; ell0 = ell; ell1 = 0 ell,\n   Module[{p = Coefficient[lam0, sq, 0], q = Coefficient[lam0, sq, 1], Mt0, Mt1},\n    Mt0 = Transpose[Aks[[1]]] - p IdentityMatrix[n]; Mt1 = -q IdentityMatrix[n];\n    kerv = First[NullSpace[ArrayFlatten[{{Mt0, dD Mt1}, {Mt1, Mt0}}]]];\n    ell0 = kerv[[1 ;; n]]; ell1 = kerv[[n + 1 ;; 2 n]]; ell = ell0 + sq ell1]];\n  If[dD === 0,\n   big = Join[Aks[[1]] - lam0 IdentityMatrix[n], {ell}]; lsf = Quiet[LinearSolve[big], LinearSolve::sqmat1];\n   split[v_] := Join[v, {0}],\n   Module[{p = Coefficient[lam0, sq, 0], q = Coefficient[lam0, sq, 1], M0m, M1m},\n    M0m = Aks[[1]] - p IdentityMatrix[n]; M1m = -q IdentityMatrix[n];\n    big = Join[ArrayFlatten[{{M0m, dD M1m}, {M1m, M0m}}], {Join[ell0, dD ell1], Join[ell1, ell0]}]; lsf = Quiet[LinearSolve[big], LinearSolve::sqmat1];\n    split[v_] := Join[Coefficient[#, sq, 0] & /@ v, Coefficient[#, sq, 1] & /@ v, {0, 0}]]];\n  Do[Module[{Apsi, lamn, rhs, sol},\n    Apsi = Sum[rd /@ (Aks[[k + 1]] . psis[[nn - k + 1]]), {k, 1, Min[nn, K]}];\n    lamn = fdiv[rd[ell . Apsi], rd[ell . psi0]];\n    AppendTo[lams, lamn];\n    rhs = rd /@ (-Apsi + lamn psi0 + Sum[lams[[k + 1]] psis[[nn - k + 1]], {k, 1, nn - 1}]);\n    sol = lsf[split[rhs]];\n    AppendTo[psis, If[dD === 0, rd /@ sol, rd /@ (sol[[1 ;; n]] + sq sol[[n + 1 ;; 2 n]])]]], {nn, 1, nMax}];\n  <|\"lam\" -> (rd /@ lams), \"psi\" -> psis, \"ell\" -> ell, \"ev0\" -> ev0|>];\n(* Laurent data series x(eps) of an operator-coefficient list Xks on the branch: x(eps) Psi = X(eps) Psi solved at the pivot component, full eigen-equation checked *)\nlaurSeries[Xks_, psis_, nMax_] := Module[{K = Length[Xks] - 1, pv = First@Select[Range[Length[psis[[1]]]], psis[[1, #]] =!= 0 &], ys, xs = {}, res},\n  ys = Table[Sum[rd /@ (Xks[[k + 1]] . psis[[nn - k + 1]]), {k, 0, Min[nn, K]}], {nn, 0, nMax}];\n  Do[AppendTo[xs, fdiv[rd[ys[[nn + 1, pv]] - Sum[xs[[k + 1]] psis[[nn - k + 1, pv]], {k, 0, nn - 1}]], psis[[1, pv]]]], {nn, 0, nMax}];\n  res = Table[rd /@ (ys[[nn + 1]] - Sum[xs[[k + 1]] psis[[nn - k + 1]], {k, 0, nn}]), {nn, 0, nMax}];\n  {xs, Max[Abs[Flatten[res /. sq -> 1]]] === 0 || Union[Flatten[res]] === {0}}];\ntrimOps[l_] := With[{nz = Select[Range[Length[l]], Union[Flatten[l[[#]]]] =!= {0} &]}, If[nz === {}, {l[[1]]}, Take[l, Max[nz]]]];\nserConv[a_, b_, nmax_] := Table[rd[Sum[a[[k + 1]] b[[nn - k + 1]], {k, 0, nn}]], {nn, 0, nmax}];\nrhoI = 1/7;\nphiA = {1/3, -2/7, 5/11}; phiB = {-2/5, 3/8, 7/11};\n\"machinery defined\"",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"2\" data-out-n=\"83\" data-sub-idx=\"28\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"7\" data-sub-start=\"61\" data-sub-end=\"61\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[83]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[83]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[83]= No output at Out[83]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "98d40258-ed10-4f55-9def-e85a9b35a9f6"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## B3 prelude: operator polynomials on every HW sector, and the separation test of the isolating operator H1 + a1/7 at eps -> 0",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* speed-up over the W4 version: the sector identity block is a SparseArray (25x faster than dense exact arithmetic on the 225-dim chain); results are Normal-ised *)\nopAt[R_, g_, sec_, Ib_] := Module[{LD = laurentX[R, DiagonalMatrix[g], thN, Ib]},\n  Normal /@ {LD[\"H\"][[1]], LD[\"H\"][[2]], LD[\"a\"][[1]], LD[\"a\"][[2]], LD[\"b\"][[1]], LD[\"b\"][[2]]}];\nopPolyOfT[Lam_, mu_, thArg_] := opPolyOfT[Lam, mu, thArg] = Block[{thN = thArg}, Module[{R = build[Lam], sec = secOf[Lam, mu], n, Ib, vals, design = designM, sols, offsec, chk},\n  n = Length[sec]; Ib = SparseArray[Transpose[{sec, Range[n]}] -> 1, {R[\"d2\"], n}];\n  vals = Table[opAt[R, g, sec, Ib], {g, gPts}];\n  offsec = And @@ Flatten[Table[Union[Flatten[Delete[v[[k]], List /@ sec]]] === {0}, {v, vals}, {k, 6}]];\n  sols = Table[With[{V = Table[Flatten[vals[[ip, k]][[sec]]], {ip, Length[gPts]}]}, Partition[#, n] & /@ LinearSolve[design, V]], {k, 6}];\n  chk = And @@ Flatten[Table[With[{vx = opAt[R, g, sec, Ib]}, Table[vx[[k]][[sec]] === Total[Table[monV[g][[im]] sols[[k, im]], {im, Length[mons]}]], {k, 6}]], {g, gExtra}]];\n  <|\"coef\" -> AssociationThread[opNames -> sols], \"offsec\" -> offsec, \"extraOK\" -> chk, \"n\" -> n|>]];\nClearAll[opPolyOf]; opPolyOf[Lam_, mu_] := opPolyOfT[Lam, mu, thN];\ntOp = <||>; gapTab = {};\nDo[Do[tOp[{Lam, mu}] = First@AbsoluteTiming[opPolyOf[Lam, mu]], {mu, hwSecsOf[Lam]}], {Lam, repList}];\nck[\"operator polynomials: offsec zero and extra-point exact, all sectors\"] = And @@ Flatten[Table[{opPolyOf[Lam, mu][\"offsec\"], opPolyOf[Lam, mu][\"extraOK\"]}, {Lam, repList}, {mu, hwSecsOf[Lam]}]];\n(* separation of the unperturbed eigenvalue lam0 = (eta + rho alpha)/th12 of Aop(0) = H1(0) + rho a1(0): distance to the rest of the spectrum on the weight-mu space *)\nDo[Do[Module[{ops = opPolyOf[Lam, mu], bd = branchData[Lam, mu], A0, ev, gaps},\n   A0 = N[ops[\"coef\"][\"H1\"][[1]] + rhoI ops[\"coef\"][\"a1\"][[1]], 30]; ev = Eigenvalues[A0];\n   gaps = Table[With[{lam0 = N[(b[\"eta\"][[1, 1]] + rhoI (b[\"alpha\"][[1, 1]] + Sqrt[b[\"D0\"]] b[\"alpha\"][[1, 2]]))/th12, 30]}, Sort[Abs[ev - lam0]][[1 ;; 2]]], {b, bd}];\n   AppendTo[gapTab, {Lam, mu, Length[ev], gaps}]], {mu, hwSecsOf[Lam]}], {Lam, repList}];\ndump[Join[{N[Values[tOp], 4]}, {ck[\"operator polynomials: offsec zero and extra-point exact, all sectors\"]}, gapTab /. x_?InexactNumberQ :> N[x, 4]]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<details class=\"vscode-wolfram-message-output\" style=\"color:#f44;border-left:3px solid #f44;background:rgba(255,68,68,0.08);padding:2px 6px;margin:1px 0;border-radius:0 3px 3px 0;font-family:monospace;font-size:0.85em\"><summary style=\"cursor:pointer\">4 warnings</summary><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::take: Cannot take positions 1 through 2 in {0. 10   }.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::take: Cannot take positions 1 through 2 in {0. 10   }.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::take: Cannot take positions 1 through 2 in {0. 10   }.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">General::stop: Further output of Part::take will be suppressed during this calculation.</div></details>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Part::take: Cannot take positions 1 through 2 in {0. 10   }.\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\nGeneral::stop: Further output of Part::take will be suppressed during this calculation.",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "c3c0151d-86dc-4e35-a853-58efaed85802"
+    },
+    {
+     "items": [
+      {
+       "data": "<details class=\"vscode-wolfram-message-output\" style=\"color:#f44;border-left:3px solid #f44;background:rgba(255,68,68,0.08);padding:2px 6px;margin:1px 0;border-radius:0 3px 3px 0;font-family:monospace;font-size:0.85em\"><summary style=\"cursor:pointer\">4 warnings</summary><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::take: Cannot take positions 1 through 2 in {0. 10   }.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::take: Cannot take positions 1 through 2 in {0. 10   }.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::take: Cannot take positions 1 through 2 in {0. 10   }.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">General::stop: Further output of Part::take will be suppressed during this calculation.</div></details>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Part::take: Cannot take positions 1 through 2 in {0. 10   }.\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\nGeneral::stop: Further output of Part::take will be suppressed during this calculation.",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "7be179d0-ceae-4a9c-b8dc-a2ebcf4d64c7"
+    },
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"3\" data-out-n=\"93\" data-sub-idx=\"9\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"9\" data-sub-start=\"19\" data-sub-end=\"19\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[93]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[93]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[93]= No output at Out[93]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "642a799e-fce6-43b1-b547-4b9867360a32"
+    },
+    {
+     "items": [
+      {
+       "data": "<span style=\"display:none\"></span>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Part::take: Cannot take positions 1 through 2 in {0. 10   }.\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\nGeneral::stop: Further output of Part::take will be suppressed during this calculation.\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\nGeneral::stop: Further output of Part::take will be suppressed during this calculation.",
+       "mime": "text/plain"
+      },
+      {
+       "data": "{\n\t\"name\": \"WolframKernelMessage\",\n\t\"message\": \"Part::take: Cannot take positions 1 through 2 in {0. 10   }.\\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\\nGeneral::stop: Further output of Part::take will be suppressed during this calculation.\\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\\nPart::take: Cannot take positions 1 through 2 in {0. 10   }.\\nGeneral::stop: Further output of Part::take will be suppressed during this calculation.\",\n\t\"stack\": \"\"\n}",
+       "mime": "application/vnd.code.notebook.error"
+      }
+     ],
+     "id": "d40f335c-6fe3-48b8-bf83-c66614f0efd4"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## B3: exact eps-series of every HW-limit branch of [2,1,0] (calibration), [3,1,0], [3,2,0]; rule checks",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* runBranchT: W4's runBranch generalised (any rep, any theta). zeta = eps*phi. Returns the Laurent-data series of H1,H2,a1,a2,b1,b2 (lists over orders 0..nMax, entries in Q or Q(sq), sq^2 = D0), the series state psi_n, G-norm series, eigen-equation flags. *)\nrunBranchT[Lam_, mu_, ic_, phi_, nMax_, thArg_] := Block[{thN = thArg, th12 = thArg[[1]] - thArg[[2]]}, Module[{ops = opPolyOfT[Lam, mu, thArg], sec = secOf[Lam, mu], bd = branchData[Lam, mu][[ic]], R = build[Lam], psi0, lam0, Aks, rs, ser = <||>, flags = {}, gsec, gnorm},\n  dD = bd[\"D0\"];\n  psi0 = bd[\"vA\"][[sec]] + If[dD === 0, 0, sq] bd[\"vB\"][[sec]];\n  lam0 = (bd[\"eta\"][[1, 1]] + rhoI (bd[\"alpha\"][[1, 1]] + sq bd[\"alpha\"][[1, 2]]))/th12;\n  Aks = trimOps[opSeries[ops, \"H1\", phi, 3] + rhoI opSeries[ops, \"a1\", phi, 3]];\n  rs = rsSolve[Aks, psi0, lam0, nMax];\n  Do[With[{r = laurSeries[trimOps[opSeries[ops, nm, phi, 3]], rs[\"psi\"], nMax]}, ser[nm] = r[[1]]; AppendTo[flags, r[[2]]]], {nm, opNames}];\n  gsec = R[\"gd2\"][[sec]];\n  gnorm = Table[rd[Sum[rs[\"psi\"][[k + 1]] . (gsec rs[\"psi\"][[nn - k + 1]]), {k, 0, nn}]], {nn, 0, nMax}];\n  <|\"series\" -> ser, \"psi\" -> rs[\"psi\"], \"lam\" -> rs[\"lam\"], \"gnorm\" -> gnorm, \"eigOK\" -> And @@ flags, \"ev0\" -> (Max[Abs[Flatten[rs[\"ev0\"] /. sq -> 1]]] === 0 || Union[Flatten[rs[\"ev0\"]]] === {0}), \"D0\" -> dD, \"th12\" -> th12, \"sec\" -> sec|>]];\n(* series algebra helpers: a series is the list of coefficients of eps^0..eps^nMax *)\nsPad[l_, n_] := PadRight[l, n + 1, 0];\n(* no-log type relation of site s (the constant relation for the adjoint, [3,1,0]; P4/W3's quadratic D2 relation for [3,2,0]): returns the residual series list *)\nrelRes[Lam_, mu_, phi_, r_, s_, nMax_] := Module[{H = r[\"series\"][\"H\" <> ToString[s]], a = r[\"series\"][\"a\" <> ToString[s]], b = r[\"series\"][\"b\" <> ToString[s]], th = (-1)^(s + 1) r[\"th12\"], sp = Total[phi], e2 = phi[[1]] phi[[2]] + phi[[1]] phi[[3]] + phi[[2]] phi[[3]], wv = phi . mu, c2 = Lam[[2]] (Lam[[1]] + 1), bet, gam, del, Wser, cv},\n  If[Lam =!= {3, 2, 0},\n   cv = serConv[a, H - a, nMax]; Table[rd[b[[n + 1]] - cv[[n + 1]]/c2], {n, 0, nMax}],\n   Wser = sPad[{0, wv}, nMax]; bet = sPad[{78/th, 15 sp}, nMax]; gam = sPad[{-45/(2 th), -9/2 sp}, nMax]; del = sPad[{-504/th^2, -210 sp/th, -18 sp^2 - 3 e2}, nMax];\n   cv = 3 serConv[H, H, nMax] - 7/4 serConv[H, a, nMax] + 1/4 serConv[a, a, nMax] - 3/th Wser - serConv[bet, H, nMax] - serConv[gam, a, nMax] - del;\n   Table[rd[b[[n + 1]] - cv[[n + 1]]], {n, 0, nMax}]]];\nbranchesOf[Lam_] := Flatten[Table[Table[{mu, ic}, {ic, lauData[{Lam, mu}][\"mult\"]}], {mu, hwSecsOf[Lam]}], 1];\nnMaxN = 10;\nresN = <||>; tN = <||>; ckB = <||>;\nDo[Do[Module[{mu = b[[1]], ic = b[[2]], phi = pp[[2]], r, rr, ser, bd, th1 = thN, t12 = th12, okOrd0, okH, okRel, bsum, okScal, rscal, sc, th2 = {1, 0}},\n  tN[{Lam, b, pp[[1]]}] = First@AbsoluteTiming[r = runBranchT[Lam, mu, ic, phi, nMaxN, thN]]; resN[{Lam, b, pp[[1]]}] = r;\n  dD = r[\"D0\"]; ser = r[\"series\"]; bd = branchData[Lam, mu][[ic]];\n  okOrd0 = rd[ser[\"H1\"][[1]] - (bd[\"eta\"][[1, 1]])/th12] === 0 && rd[ser[\"a1\"][[1]] - (bd[\"alpha\"][[1, 1]] + sq bd[\"alpha\"][[1, 2]])/th12] === 0 && rd[ser[\"b1\"][[1]] - (bd[\"beta\"][[1, 1]] + sq bd[\"beta\"][[1, 2]])/th12^2] === 0;\n  okH = Union[rd /@ Table[ser[\"H1\"][[n + 1]] + ser[\"H2\"][[n + 1]] - If[n == 1, Total[phi] Total[mu] - phi . mu, 0], {n, 0, nMaxN}]] === {0};\n  bsum = Table[rd[ser[\"b1\"][[n + 1]] + ser[\"b2\"][[n + 1]]], {n, 0, nMaxN}];\n  okRel = Table[Union[relRes[Lam, mu, phi, r, s, nMaxN]] === {0}, {s, 2}];\n  ckB[{Lam, b, pp[[1]]}] = <|\"eig\" -> {r[\"ev0\"], r[\"eigOK\"]}, \"ord0\" -> okOrd0, \"HsumRule\" -> okH, \"rel\" -> okRel, \"bsum\" -> (bsum /. sq -> Sqrt[dD]), \"bsumRule\" -> (bsum === sPad[{0, 0, phi[[1]] phi[[2]] mu[[3]] + phi[[1]] phi[[3]] mu[[2]] + phi[[2]] phi[[3]] mu[[1]]}, nMaxN])|>], {b, branchesOf[Lam]}, {pp, {{\"A\", phiA}, {\"B\", phiB}}}], {Lam, repList}];\ndump[Join[{N[Values[tN], 3]}, Table[{k[[1]], k[[2]], k[[3]], v[\"eig\"], v[\"ord0\"], v[\"HsumRule\"], v[\"rel\"], v[\"bsumRule\"]}, {k, Keys[ckB]}, {v, {ckB[k]}}]]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"4\" data-out-n=\"101\" data-sub-idx=\"10\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"11\" data-sub-start=\"31\" data-sub-end=\"31\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[101]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[101]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[101]= No output at Out[101]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "228662bc-fee8-4add-92ec-38f37e5aedf1"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## B3 (cont.): theta-scaling at theta = (1,0), symbolic-phi series, cross-checks",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck]; ck = <||>;\nck[\"B3 numeric: all (rep,branch,phi-point): eigen-equations exact\"] = And @@ Flatten[Table[ckB[k][\"eig\"], {k, Keys[ckB]}]];\nck[\"B3 numeric: eps^0 = W4 untwisted data\"] = And @@ Table[ckB[k][\"ord0\"], {k, Keys[ckB]}];\nck[\"B3 numeric: H1+H2 = sum_{i!=j} zeta_i mu_j (order 1 only), all orders to nMaxN\"] = And @@ Table[ckB[k][\"HsumRule\"], {k, Keys[ckB]}];\nck[\"B3 numeric: no-log relation (b=a(H-a)/c2 for [2,1,0],[3,1,0]; quadratic D2 relation for [3,2,0]) both sites, all orders\"] = And @@ Flatten[Table[ckB[k][\"rel\"], {k, Keys[ckB]}]];\nck[\"B3 numeric: b1+b2 = eps^2 (phi1 phi2 mu3 + phi1 phi3 mu2 + phi2 phi3 mu1), exactly, all orders\"] = And @@ Table[ckB[k][\"bsumRule\"], {k, Keys[ckB]}];\n(* theta scaling: H_n, a_n ~ th12^(n-1), b_n ~ th12^(n-2); compare with theta = (1,0) (th12 = 1) *)\nDo[Module[{b = k[[2]], Lam = k[[1]], r1, r2, pp = k[[3]], ph, ok},\n  ph = If[pp == \"A\", phiA, phiB];\n  r2 = runBranchT[Lam, b[[1]], b[[2]], ph, nMaxN, {1, 0}]; r1 = resN[k]; dD = r1[\"D0\"];\n  ok = And @@ Table[Union[Table[rd[r1[\"series\"][nm][[n + 1]] - r2[\"series\"][nm][[n + 1]] r1[\"th12\"]^(n - If[StringTake[nm, 1] == \"b\", 2, 1])], {n, 0, nMaxN}]] === {0}, {nm, opNames}];\n  ckB[k] = Append[ckB[k], \"scal\" -> ok]], {k, Keys[ckB]}];\nck[\"B3 numeric: theta-scaling of all six series, all orders, vs theta=(1,0)\"] = And @@ Table[ckB[k][\"scal\"], {k, Keys[ckB]}];\n(* symbolic phi to order nSym *)\nnSym = 3; pphi = {p1, p2, p3}; resS = <||>; tS = <||>;\nDo[Do[Module[{b = bb, r, Lam = Lam0, rA, rB, dd0},\n  tS[{Lam, b}] = First@AbsoluteTiming[r = runBranchT[Lam, b[[1]], b[[2]], pphi, nSym, thN]]; resS[{Lam, b}] = r; dd0 = r[\"D0\"]; dD = dd0;\n  ck[{Lam, b, \"symbolic series (orders 0..\" <> ToString[nSym] <> \") == numeric at phiA and phiB, eigen-eqs exact, relations exact\"}] = And @@ Flatten[{r[\"eigOK\"], r[\"ev0\"], Table[Union[Flatten[Table[rd /@ Expand[(r[\"series\"][nm] /. Thread[pphi -> ph[[2]]]) - Take[resN[{Lam, b, ph[[1]]}][\"series\"][nm], nSym + 1]], {nm, opNames}]]] === {0}, {ph, {{\"A\", phiA}, {\"B\", phiB}}}], Table[Union[relRes[Lam, b[[1]], pphi, r, s, nSym]] === {0}, {s, 2}]}]], {bb, branchesOf[Lam0]}], {Lam0, repList}];\ndump[Join[{N[Values[tS], 3]}, List @@@ Normal[ck] /. {a_, b_} :> {ToString[a], b}]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"5\" data-out-n=\"112\" data-sub-idx=\"12\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"13\" data-sub-start=\"18\" data-sub-end=\"18\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[112]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[112]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[112]= No output at Out[112]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "f8084bce-59f4-4287-89be-ccd141e84ab1"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Data files `ref/laurent-series-<l1><l2><l3>.txt` (series part; the E5/XVEC/PSI records are appended after B3b)",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck]; ck = <||>;\nfmt[x_] := StringReplace[ToString[x, InputForm, PageWidth -> Infinity], {\"\\n\" -> \"\", \" \" -> \"\"}];\npairOf[x_] := {Coefficient[x, sq, 0], Coefficient[x, sq, 1]};\nserPairs[l_] := pairOf /@ l;\ncleanSym[x_, dd_] := If[dd === 0, Collect[Expand[x], pphi, Factor], Collect[Expand[x /. sq -> Sqrt[dd]], pphi, Simplify]];\nhdrLines[Lam_] := {\n \"# laurent-series-\" <> StringJoin[ToString /@ Lam] <> \".txt   (agent W5, notebook Paul/Mathematica/Gaudin/Experiments/Gaudin-Laurent-series.wb, 2026-10-16)\",\n \"# Exact epsilon-series of the Laurent data of the two-site gl(3) Gaudin chain, Lambda = \" <> fmt[Lam] <> \" on both sites, TWISTED with zeta = eps*phi (zeta = diag twist g = eps*phi), theta = (2/7,-3/5) (theta12 = 31/35) unless stated.\",\n \"# FORMAT: TAB-separated records, first field = tag, every other field a Wolfram InputForm expression without spaces; lines starting with # are comments. Same conventions as untwisted-exact-*.txt (W4): GT basis, site-2 = highest weight index 1, S2 = e2(zeta) + Sum_s [H_s/(u-th_s) + c2/(u-th_s)^2], S3 = e3(zeta) + Sum_s [b_s/(u-th_s) + a_s/(u-th_s)^2], c2 = lam2(lam1+1).\",\n \"# BRANCH LABELLING: a branch = (mu, copy): mu = total weight of the HW state in V(x)V (list), copy = 1 (or 2 in multiplicity-2 sectors: the two universal copies of untwisted-exact-*.txt, eigenvectors of A1 = theta12*a_1 on the HW space in Q(Sqrt[D0]); copy 1 = SMALLER a_1 at eps=0 (alpha_1 = tr/2 - f*Sqrt[D0]/2), copy 2 = larger). The branch is the eigenvector of the commuting twisted family tending to that HW vector (G-norm-normalisation irrelevant here).\",\n \"# Pair notation {p,q} = p + q*Sqrt[D0] (D0 squarefree; D0 = 0 means rational, q = 0). The octet-like sectors with mult 2 have D0 in {105,192} for Lambda=[3,1,0] mu=(5,2,1),(4,3,1) and Lambda=[3,2,0] mu=(5,4,1),(5,3,2).\",\n \"# E4_SERIES mu copy D0 phi nmax {H1,H2} {a1,a2} {b1,b2} : each of the six lists has nmax+1 pairs {p,q} = coefficients of eps^0..eps^nmax of H_s(eps), a_s(eps), b_s(eps). phi is one of the two numeric twist directions phiA=(1/3,-2/7,5/11), phiB=(-2/5,3/8,7/11). Exact facts verified on every record: H1+H2 = eps*Sum_{i!=j} phi_i mu_j (order 1 only); b1+b2 = eps^2 (phi1 phi2 mu3 + phi1 phi3 mu2 + phi2 phi3 mu1); no-log relations (b_s = a_s(H_s-a_s)/c2 for [2,1,0],[3,1,0], c2 = 3, 4; for [3,2,0] the inhomogeneous quadratic of W3 (Gaudin-L2-chain-320.wb, task B3, with W = phi.mu eps)); scaling in theta: order-n coefficient of H_s,a_s ~ theta12^(n-1), b_s ~ theta12^(n-2).\",\n \"# E4_SYMBOLIC mu copy D0 name {order0,...,order\" <> ToString[nSym] <> \"} : the same series with symbolic phi = (p1,p2,p3) as InputForm strings (name = H1,H2,a1,a2,b1,b2); Sqrt[D0] appears only for mult-2 copies.\"};\nwriteSeriesFile[Lam_] := Module[{lines = hdrLines[Lam], add, th = {2/7, -3/5}},\n  add[tag_, args__] := AppendTo[lines, StringRiffle[Prepend[fmt /@ {args}, tag], \"\\t\"]];\n  add[\"REP\", Lam]; add[\"THETA\", th]; add[\"NMAX\", nMaxN]; add[\"NSYM\", nSym];\n  add[\"BRANCHES\", Table[{b[[1]], b[[2]]}, {b, branchesOf[Lam]}]];\n  Do[Module[{mu = b[[1]], ic = b[[2]], bd = branchData[Lam, mu][[b[[2]]]]},\n    Do[Module[{pp = pq[[1]], phi = pq[[2]], r},\n      r = resN[{Lam, b, pp}]; dD = r[\"D0\"];\n      add[\"E4_SERIES\", mu, ic, dD, phi, nMaxN, {serPairs[r[\"series\"][\"H1\"]], serPairs[r[\"series\"][\"H2\"]]}, {serPairs[r[\"series\"][\"a1\"]], serPairs[r[\"series\"][\"a2\"]]}, {serPairs[r[\"series\"][\"b1\"]], serPairs[r[\"series\"][\"b2\"]]}]], {pq, {{\"A\", phiA}, {\"B\", phiB}}}];\n    Module[{rs = resS[{Lam, b}]},\n     dD = rs[\"D0\"];\n     Do[AppendTo[lines, StringRiffle[{\"E4_SYMBOLIC\", fmt[mu], fmt[ic], fmt[dD], nm, fmt[ToString[InputForm[cleanSym[#, dD]]] & /@ rs[\"series\"][nm]] }, \"\\t\"]], {nm, opNames}]]], {b, branchesOf[Lam]}];\n  Export[refDir <> \"laurent-series-\" <> StringJoin[ToString /@ Lam] <> \".txt\", StringRiffle[lines, \"\\n\"] <> \"\\n\", \"Text\"]; Length[lines]];\nnl = Table[Lam -> writeSeriesFile[Lam], {Lam, {{3, 1, 0}, {3, 2, 0}}}];\n(* the adjoint file too, a cheap cross-check against W4's E4_SERIES records *)\nnl = Append[nl, {2, 1, 0} -> writeSeriesFile[{2, 1, 0}]];\ndump[nl]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<details class=\"vscode-wolfram-message-output\" style=\"color:#f44;border-left:3px solid #f44;background:rgba(255,68,68,0.08);padding:2px 6px;margin:1px 0;border-radius:0 3px 3px 0;font-family:monospace;font-size:0.85em\"><summary style=\"cursor:pointer\">8 warnings</summary><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partw: Part 1 of {} does not exist.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partw: Part 1 of {} does not exist.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][eta][[1,1,1]] is longer than depth of object.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partw: Part 2 of Missing[KeyAbsent, {{3, 1, 0}, mu}][eta] does not exist.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">General::stop: Further output of Part::partw will be suppressed during this calculation.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][A][[1,1,1]] is longer than depth of object.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][B][[1,1,1]] is longer than depth of object.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">General::stop: Further output of Part::partd will be suppressed during this calculation.</div></details>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Part::partw: Part 1 of {} does not exist.\nPart::partw: Part 1 of {} does not exist.\nPart::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][eta][[1,1,1]] is longer than depth of object.\nPart::partw: Part 2 of Missing[KeyAbsent, {{3, 1, 0}, mu}][eta] does not exist.\nGeneral::stop: Further output of Part::partw will be suppressed during this calculation.\nPart::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][A][[1,1,1]] is longer than depth of object.\nPart::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][B][[1,1,1]] is longer than depth of object.\nGeneral::stop: Further output of Part::partd will be suppressed during this calculation.",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "8af09e95-2ff2-4e71-ac2e-680f6b5e7e72"
+    },
+    {
+     "items": [
+      {
+       "data": "<details class=\"vscode-wolfram-message-output\" style=\"color:#f44;border-left:3px solid #f44;background:rgba(255,68,68,0.08);padding:2px 6px;margin:1px 0;border-radius:0 3px 3px 0;font-family:monospace;font-size:0.85em\"><summary style=\"cursor:pointer\">8 warnings</summary><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partw: Part 1 of {} does not exist.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partw: Part 1 of {} does not exist.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][eta][[1,1,1]] is longer than depth of object.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partw: Part 2 of Missing[KeyAbsent, {{2, 1, 0}, mu}][eta] does not exist.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">General::stop: Further output of Part::partw will be suppressed during this calculation.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][A][[1,1,1]] is longer than depth of object.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">Part::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][B][[1,1,1]] is longer than depth of object.</div><div style=\"padding:2px 0 2px 4px;border-top:1px solid rgba(255,68,68,0.15)\">General::stop: Further output of Part::partd will be suppressed during this calculation.</div></details>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Part::partw: Part 1 of {} does not exist.\nPart::partw: Part 1 of {} does not exist.\nPart::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][eta][[1,1,1]] is longer than depth of object.\nPart::partw: Part 2 of Missing[KeyAbsent, {{2, 1, 0}, mu}][eta] does not exist.\nGeneral::stop: Further output of Part::partw will be suppressed during this calculation.\nPart::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][A][[1,1,1]] is longer than depth of object.\nPart::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][B][[1,1,1]] is longer than depth of object.\nGeneral::stop: Further output of Part::partd will be suppressed during this calculation.",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "a40c0cd6-0f6d-49a4-a468-d4893ee8a7d8"
+    },
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"6\" data-out-n=\"122\" data-sub-idx=\"10\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"15\" data-sub-start=\"28\" data-sub-end=\"28\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[122]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[122]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[122]= No output at Out[122]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "e7768a94-bc4c-4155-8ab3-f720ec2a786a"
+    },
+    {
+     "items": [
+      {
+       "data": "<span style=\"display:none\"></span>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Part::partw: Part 1 of {} does not exist.\nPart::partw: Part 1 of {} does not exist.\nPart::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][eta][[1,1,1]] is longer than depth of object.\nPart::partw: Part 2 of Missing[KeyAbsent, {{3, 1, 0}, mu}][eta] does not exist.\nGeneral::stop: Further output of Part::partw will be suppressed during this calculation.\nPart::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][A][[1,1,1]] is longer than depth of object.\nPart::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][B][[1,1,1]] is longer than depth of object.\nGeneral::stop: Further output of Part::partd will be suppressed during this calculation.\nPart::partw: Part 1 of {} does not exist.\nPart::partw: Part 1 of {} does not exist.\nPart::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][eta][[1,1,1]] is longer than depth of object.\nPart::partw: Part 2 of Missing[KeyAbsent, {{2, 1, 0}, mu}][eta] does not exist.\nGeneral::stop: Further output of Part::partw will be suppressed during this calculation.\nPart::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][A][[1,1,1]] is longer than depth of object.\nPart::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][B][[1,1,1]] is longer than depth of object.\nGeneral::stop: Further output of Part::partd will be suppressed during this calculation.",
+       "mime": "text/plain"
+      },
+      {
+       "data": "{\n\t\"name\": \"WolframKernelMessage\",\n\t\"message\": \"Part::partw: Part 1 of {} does not exist.\\nPart::partw: Part 1 of {} does not exist.\\nPart::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][eta][[1,1,1]] is longer than depth of object.\\nPart::partw: Part 2 of Missing[KeyAbsent, {{3, 1, 0}, mu}][eta] does not exist.\\nGeneral::stop: Further output of Part::partw will be suppressed during this calculation.\\nPart::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][A][[1,1,1]] is longer than depth of object.\\nPart::partd: Part specification Missing[KeyAbsent, {{3, 1, 0}, mu}][B][[1,1,1]] is longer than depth of object.\\nGeneral::stop: Further output of Part::partd will be suppressed during this calculation.\\nPart::partw: Part 1 of {} does not exist.\\nPart::partw: Part 1 of {} does not exist.\\nPart::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][eta][[1,1,1]] is longer than depth of object.\\nPart::partw: Part 2 of Missing[KeyAbsent, {{2, 1, 0}, mu}][eta] does not exist.\\nGeneral::stop: Further output of Part::partw will be suppressed during this calculation.\\nPart::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][A][[1,1,1]] is longer than depth of object.\\nPart::partd: Part specification Missing[KeyAbsent, {{2, 1, 0}, mu}][B][[1,1,1]] is longer than depth of object.\\nGeneral::stop: Further output of Part::partd will be suppressed during this calculation.\",\n\t\"stack\": \"\"\n}",
+       "mime": "application/vnd.code.notebook.error"
+      }
+     ],
+     "id": "ef5fef0d-144f-4418-9db2-efae82cb7237"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## B3b: x(zeta) covectors, k_B and the leading coefficient X_B of <x(zeta)(x)x(zeta)|Psi_B>, the k_B rule",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck]; ck = <||>;\n(* x(zeta) = e1^T P_phys^(G-1) as in W4 E5A: a row vector, polynomial and homogeneous of degree lam2 in zeta; x0^G = x(zeta) (x) x(zeta) *)\nexpE[R_, c_, i_, j_] := Module[{E = Normal[R[\"Ee\"][[i, j]]], nl = R[\"nilp\"]}, IdentityMatrix[R[\"d1\"]] + Sum[c^k MatrixPower[E, k]/k!, {k, 1, nl}]];\nxOfSym[Lam_] := Module[{R = build[Lam], z = {z1, z2, z3}, sv, rv, v, dinv},\n  sv = {z1^2/((z1 - z2) (z1 - z3)), -(z2/(z1 (z2 - z3))), 1/(z1 z2)};\n  rv = {-(z3/z2), -(z3/z1), (z2^2 (z3 - z1))/(z1^2 (z2 - z3))};\n  v = UnitVector[R[\"d1\"], 1] . expE[R, -((z1 + z2)/(z1 z2)), 2, 3];\n  v = v . expE[R, 1/(z1 z2), 1, 3]; v = v . expE[R, -1/z1, 1, 2];\n  dinv = DiagonalMatrix[Table[Product[sv[[k]]^(-J0[k][p]), {k, 3}], {p, ps[{Lam}]}]];\n  v = v . dinv; v = v . expE[R, -rv[[3]], 2, 1]; v = v . expE[R, -rv[[2]], 3, 1]; v = v . expE[R, -rv[[1]], 3, 2];\n  Factor /@ Together /@ v];\nxTab = <||>;\nDo[Module[{xs = xOfSym[Lam], degs},\n  xTab[Lam] = xs;\n  degs = Table[If[xi === 0, {}, Union[{Exponent[xi /. {z1 -> t z1, z2 -> t z2, z3 -> t z3}, t]}]], {xi, xs}];\n  ck[{Lam, \"x(zeta): all components polynomial, homogeneous of degree\"}] = {And @@ (PolynomialQ[#, {z1, z2, z3}] & /@ xs), Union[Flatten[degs]]}], {Lam, repList}];\nxvP[Lam_] := xTab[Lam] /. {z1 -> p1, z2 -> p2, z3 -> p3};\nxxOf[Lam_, phi_] := Flatten[KroneckerProduct[#, #]] &[xTab[Lam] /. Thread[{z1, z2, z3} -> phi]];\nkBrule[Lam_, mu_] := 2 (Lam[[1]] - Lam[[3]]) - (mu[[1]] - mu[[3]]);\nfirstNZ[l_] := Catch[Do[If[l[[i]] =!= 0, Throw[i - 1]], {i, Length[l]}]; None];\nkBres = <||>;\nDo[Module[{b = k[[2]], Lam = k[[1]], pp = k[[3]], r, ph, xx, ov, kB, gn0, sec},\n  r = resN[k]; dD = r[\"D0\"]; ph = If[pp == \"A\", phiA, phiB]; sec = r[\"sec\"];\n  xx = xxOf[Lam, ph]; ov = Table[rd[xx[[sec]] . r[\"psi\"][[n + 1]]], {n, 0, nMaxN}];\n  kB = firstNZ[ov]; gn0 = r[\"gnorm\"][[1]];\n  kBres[k] = <|\"kB\" -> kB, \"lead\" -> pairOf[ov[[kB + 1]]], \"gn0\" -> pairOf[gn0], \"ov\" -> ov, \"D0\" -> dD|>], {k, Keys[ckB]}];\nck[\"k_B at both phi points agree; k_B == 2(l1-l3)-(mu1-mu3) for every branch (rule 'height of 2Lambda - mu')\"] = Table[And @@ Table[kBres[{Lam, b, \"A\"}][\"kB\"] == kBres[{Lam, b, \"B\"}][\"kB\"] == kBrule[Lam, b[[1]]], {b, branchesOf[Lam]}], {Lam, repList}];\nck[\"k_B table (rep -> k_B per branch in order)\"] = Table[Lam -> Table[kBres[{Lam, b, \"A\"}][\"kB\"], {b, branchesOf[Lam]}], {Lam, repList}];\ndump[List @@@ Normal[ck]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"9\" data-out-n=\"163\" data-sub-idx=\"14\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"17\" data-sub-start=\"28\" data-sub-end=\"28\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[163]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[163]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[163]= No output at Out[163]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "69e43f4d-5608-4057-abd8-0865e7a2d517"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## B3b (cont.): symbolic leading coefficient X_B, E5_KB / XVEC / PSI records appended to the data files",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck]; ck = <||>;\nleadS = <||>; tL = <||>;\nDo[Module[{Lam = Lam0, b = bb, kB, r, xs, sec},\n  kB = kBres[{Lam, b, \"A\"}][\"kB\"]; sec = secOf[Lam, b[[1]]];\n  tL[{Lam, b}] = First@AbsoluteTiming[r = If[kB <= nSym, resS[{Lam, b}], runBranchT[Lam, b[[1]], b[[2]], pphi, kB, thN]]];\n  dD = r[\"D0\"]; xs = Flatten[KroneckerProduct[xvP[Lam], xvP[Lam]]];\n  leadS[{Lam, b}] = <|\"kB\" -> kB, \"D0\" -> dD, \"lead\" -> cleanSym[rd[xs[[sec]] . r[\"psi\"][[kB + 1]]], dD], \"gn0\" -> rd[r[\"gnorm\"][[1]]], \"lowerZero\" -> (Union[Table[rd[xs[[sec]] . r[\"psi\"][[n + 1]]], {n, 0, kB - 1}]] === {0} || kB == 0)|>;\n  (* check: the symbolic lead reproduces the numeric exact lead at phiA and phiB *)\n  ck[{Lam, b, \"symbolic X_B at phiA, phiB == numeric lead, lower orders zero\"}] = And @@ Flatten[{leadS[{Lam, b}][\"lowerZero\"], Table[rd[(leadS[{Lam, b}][\"lead\"] /. If[dD === 0, {}, {Sqrt[dD] -> sq}]) /. Thread[pphi -> ph[[2]]]] === rd[kBres[{Lam, b, ph[[1]]}][\"lead\"] . {1, sq}], {ph, {{\"A\", phiA}, {\"B\", phiB}}}] /. {True -> True}}]], {Lam0, repList}, {bb, branchesOf[Lam0]}];\ndump[Join[{N[Values[tL], 3]}, List @@@ Normal[ck] /. {a_, b_} :> {ToString[a], b}]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"10\" data-out-n=\"167\" data-sub-idx=\"3\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"19\" data-sub-start=\"9\" data-sub-end=\"9\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[167]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[167]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[167]= No output at Out[167]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "18ea3288-fe74-466d-95ff-a27036cfe60b"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck]; ck = <||>;\nappendRecords[Lam_] := Module[{fn = refDir <> \"laurent-series-\" <> StringJoin[ToString /@ Lam] <> \".txt\", lines, add, nPsi = 4},\n  lines = Import[fn, \"Text\"]; lines = StringSplit[lines, \"\\n\"];\n  lines = Select[lines, ! StringStartsQ[#, \"E5_KB\"] && ! StringStartsQ[#, \"XVEC\"] && ! StringStartsQ[#, \"PSI\"] && ! StringStartsQ[#, \"GNORM\"] && ! StringStartsQ[#, \"# E5_KB\"] && ! StringStartsQ[#, \"# XVEC\"] && ! StringStartsQ[#, \"# PSI\"] && ! StringStartsQ[#, \"# GNORM\"] &];\n  add[tag_, args__] := AppendTo[lines, StringRiffle[Prepend[fmt /@ {args}, tag], \"\\t\"]];\n  AppendTo[lines, \"# E5_KB mu copy D0 kB lead gnorm0numeric_phiA gnorm0numeric_phiB : <x0^G|Psi_B> = eps^(2*lam2 + kB) lead / Sqrt[gnorm0] + ..., x0^G = x(zeta)(x)x(zeta) (XVEC, homogeneous degree lam2 in zeta); lead = <x(phi)(x)x(phi)|Psi_kB> as an InputForm STRING in symbolic phi = (p1,p2,p3) (Sqrt[D0] only for mult-2 copies), gnorm0 = {p,q} = exact G-norm^2 of Psi_0 (the primitive-integer HW vector of untwisted-exact-*.txt, pair p + q Sqrt[D0]; the series state is normalised by ell.Psi_n = 0, n>=1). kB = 2(l1-l3) - (mu1-mu3) on every branch.\"];\n  AppendTo[lines, \"# E5_KBNUM mu copy D0 phi kB {p,q} : the exact numeric lead at phiA or phiB (pair p + q Sqrt[D0]).\"];\n  AppendTo[lines, \"# XVEC {x_nu(z1,z2,z3)} : the one-site covector x(zeta), nu = GT index in the notebook order, as InputForm strings (polynomial, homogeneous of degree lam2).\"];\n  AppendTo[lines, \"# PSI mu copy D0 phi nPsi secIdx {Psi_0,...,Psi_nPsi} : the series state Psi(eps) = Sum eps^n Psi_n on the weight-mu sector of V(x)V; secIdx = product-basis indices ((i-1)*DIM+j) of the sector, each Psi_n a list of pairs {p,q} (same order as secIdx); Psi_0 = the HW ket of the BRANCH in the sector coordinates, normalisation ell.Psi_n = 0 (n >= 1) with ell the left null vector of H1(0)+a1(0)/7 - lam0. GNORM mu copy D0 phi {pairs} : G-norm^2 series of Psi(eps), orders 0..nPsi.\"];\n  add[\"XVEC\", ToString[InputForm[#]] & /@ xTab[Lam]];\n  Do[Module[{mu = b[[1]], ic = b[[2]], ls = leadS[{Lam, b}]},\n    add[\"E5_KB\", mu, ic, ls[\"D0\"], ls[\"kB\"], ToString[InputForm[ls[\"lead\"]]], pairOf[ls[\"gn0\"]]];\n    Do[Module[{k = {Lam, b, pp[[1]]}, r},\n      r = resN[k]; dD = r[\"D0\"];\n      add[\"E5_KBNUM\", mu, ic, dD, pp[[2]], kBres[k][\"kB\"], kBres[k][\"lead\"]];\n      add[\"PSI\", mu, ic, dD, pp[[2]], nPsi, r[\"sec\"], Table[pairOf /@ r[\"psi\"][[n + 1]], {n, 0, nPsi}]];\n      add[\"GNORM\", mu, ic, dD, pp[[2]], serPairs[r[\"gnorm\"][[1 ;; nPsi + 1]]]]], {pp, {{\"A\", phiA}, {\"B\", phiB}}}]], {b, branchesOf[Lam]}];\n  Export[fn, StringRiffle[lines, \"\\n\"] <> \"\\n\", \"Text\"]; Length[lines]];\ndump[Table[Lam -> appendRecords[Lam], {Lam, repList}]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"11\" data-out-n=\"170\" data-sub-idx=\"2\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"20\" data-sub-start=\"18\" data-sub-end=\"18\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[170]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[170]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[170]= No output at Out[170]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "4702a34e-9054-4857-8b28-23755b7f355a"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## C3: the cyclic subspace C_B of the HW vector and the characteristic polynomial chi_B(lambda; eps, phi) of H1 on it\n\nC_B = span{H1^i a1^j Psi_0} over Q(eps) (Q(eps,Sqrt[D0]) for the mult-2 copies; Psi_0 the HW ket of the branch). Dimension by exact rank at several rational eps (generic value = rank over Q(eps)); the restricted characteristic polynomial of H1 is computed at 3d+5 rational eps (matrix of H1 in the Krylov basis of the isolating operator A = H1 + a1/7, exact in Q(Sqrt[D0])) and interpolated: coefficient of lambda^k is a polynomial in eps of degree <= 3(d-k) (H1 has entries cubic in zeta = eps phi), checked on the spare points. The branch eigenvalue series (cell B3) must be annihilated by chi_B (to eps^10), and by exactly one irreducible factor.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck]; ck = <||>;\nopMatE[ops_, nm_, phi_, e_] := Total[MapIndexed[e^(#2[[1]] - 1) #1 &, opSeries[ops, nm, phi, 3]]];\nembedRows[uA_, uB_, D0_] := If[D0 === 0, {uA}, {Join[uA, uB], Join[D0 uB, uA]}];\nrkOf[ws_, D0_] := MatrixRank[Flatten[embedRows[#[[1]], #[[2]], D0] & /@ ws, 1]]/If[D0 === 0, 1, 2];\n(* dimension of the cyclic subspace of a commuting list of matrices acting on the vector vA + Sqrt[D0] vB (Q(Sqrt[D0])-dimension) *)\norbitDim[mats_, vA_, vB_, D0_] := Module[{basis = {}, rk = 0, queue = {{vA, vB}}, u, emb, nr},\n  While[queue =!= {}, u = First[queue]; queue = Rest[queue]; emb = embedRows[u[[1]], u[[2]], D0];\n   nr = MatrixRank[Join[basis, emb]];\n   If[nr > rk, rk = nr; basis = Join[basis, emb]; queue = Join[queue, ({# . u[[1]], # . u[[2]]} & /@ mats)]]];\n  If[D0 === 0, rk, rk/2]];\nkrylovA[A_, vA_, vB_, D0_] := Module[{ws = {{vA, vB}}, nw},\n  While[nw = {A . ws[[-1, 1]], A . ws[[-1, 2]]}; rkOf[Append[ws, nw], D0] > Length[ws], AppendTo[ws, nw]]; ws];\n(* coordinates of the pair-vector u in the (pair) basis ws *)\ncoordsIn[ws_, u_, D0_] := Module[{WA = Transpose[ws[[All, 1]]], WB = Transpose[ws[[All, 2]]], d = Length[ws], sol},\n  If[D0 === 0, sol = LinearSolve[WA, u[[1]]]; sol + 0 sq,\n   sol = LinearSolve[ArrayFlatten[{{WA, D0 WB}, {WB, WA}}], Join[u[[1]], u[[2]]]]; sol[[1 ;; d]] + sq sol[[d + 1 ;;]]]];\n(* Faddeev-LeVerrier characteristic polynomial, ascending coefficients, arithmetic reduced mod sq^2 = D0 *)\ncharCoeffs[Mx_] := Module[{nn = Length[Mx], Mk, cs = {1}, I0},\n  I0 = IdentityMatrix[nn]; Mk = ConstantArray[0, {nn, nn}];\n  Do[Mk = Map[rd, Mx . Mk + First[cs] I0, {2}]; cs = Prepend[cs, rd[-Tr[Mx . Mk]/kk]], {kk, nn}]; cs];\nsampleEps[m_] := Table[j/(j + 11), {j, 1, m}];\n(* one branch at one eps: dimensions and the pair coefficient list of the restricted char poly of H1 on K_A *)\ncycAt[Lam_, mu_, ic_, phi_, e_] := Module[{ops = opPolyOf[Lam, mu], bd = branchData[Lam, mu][[ic]], sec = secOf[Lam, mu], D0, vA, vB, H, a, b, H2, a2, b2, A, ws, d, Hm, cs, dAlg, dFull},\n  D0 = bd[\"D0\"]; dD = D0; vA = bd[\"vA\"][[sec]]; vB = bd[\"vB\"][[sec]];\n  {H, H2, a, a2, b, b2} = opMatE[ops, #, phi, e] & /@ opNames;\n  A = H + rhoI a; ws = krylovA[A, vA, vB, D0]; d = Length[ws];\n  dAlg = orbitDim[{H, a}, vA, vB, D0]; dFull = orbitDim[{H, a, b, H2, a2, b2}, vA, vB, D0];\n  Hm = Transpose[Table[coordsIn[ws, {H . ws[[k, 1]], H . ws[[k, 2]]}, D0], {k, d}]];\n  cs = charCoeffs[Hm];\n  <|\"dA\" -> d, \"dAlg\" -> dAlg, \"dFull\" -> dFull, \"cs\" -> cs|>];\n(* ascending-lambda coefficient list of chi as polynomials in eps, interpolated from the samples *)\ncycBranch[Lam_, mu_, ic_, phi_] := Module[{pts, dat, d, good, spareOK = True, cs},\n  dD = branchData[Lam, mu][[ic]][\"D0\"];\n  pts = sampleEps[4]; dat = Table[cycAt[Lam, mu, ic, phi, e], {e, pts}]; d = Max[dat[[All, \"dA\"]]];\n  pts = sampleEps[3 d + 5]; dat = Table[cycAt[Lam, mu, ic, phi, e], {e, pts}];\n  good = Flatten[Position[dat[[All, \"dA\"]], d]];\n  cs = Table[Module[{pairs = Table[{pts[[i]], dat[[i, \"cs\", k + 1]]}, {i, good}], deg = 3 (d - k), pol},\n    pol = InterpolatingPolynomial[Take[pairs, deg + 1], eps]; pol = rd[Expand[pol]];\n    If[Union[Table[rd[Expand[(pol /. eps -> p[[1]]) - p[[2]]]], {p, Drop[pairs, deg + 1]}]] =!= {0}, spareOK = False];\n    pol], {k, 0, d - 1}];\n  <|\"d\" -> d, \"dAlg\" -> Max[dat[[All, \"dAlg\"]]], \"dFull\" -> Max[dat[[All, \"dFull\"]]], \"dAll\" -> Union[dat[[All, \"dA\"]]], \"dAlgAll\" -> Union[dat[[All, \"dAlg\"]]], \"chi\" -> Append[cs, 1], \"spareOK\" -> spareOK, \"nGood\" -> Length[good], \"D0\" -> dD|>];\n(* annihilation of the series by a lambda-polynomial given as ascending coefficient list (polynomials in eps, possibly with sq) *)\nannih[cl_, Hs_, nmax_] := Module[{pwr = sPad[{1}, nmax], res = ConstantArray[0, nmax + 1]},\n  Do[res = res + serConv[sPad[CoefficientList[cl[[k + 1]], eps], nmax], pwr, nmax]; pwr = serConv[pwr, Hs, nmax], {k, 0, Length[cl] - 1}]; rd /@ res];\nchiExpr[cyc_] := Sum[cyc[\"chi\"][[k + 1]] lam^k, {k, 0, cyc[\"d\"]}] /. sq -> If[cyc[\"D0\"] === 0, 0, Sqrt[cyc[\"D0\"]]];\ncycRes = <||>;\nrunCyc[Lam_] := Do[Do[Module[{k = {Lam, b, pp[[1]]}, cyc, r = resN[{Lam, b, pp[[1]]}], facs, fcl, annih0, brF},\n   cyc = cycBranch[Lam, b[[1]], b[[2]], pp[[2]]]; dD = cyc[\"D0\"];\n   annih0 = Union[annih[cyc[\"chi\"], r[\"series\"][\"H1\"], nMaxN]] === {0};\n   facs = If[dD === 0, FactorList[chiExpr[cyc]], FactorList[chiExpr[cyc], Extension -> Sqrt[dD]]];\n   facs = Select[facs, ! FreeQ[#[[1]], lam] &];\n   fcl = Table[CoefficientList[f[[1]], lam] /. Sqrt[dD] -> sq, {f, facs}];\n   brF = Select[Range[Length[facs]], Union[annih[fcl[[#]], r[\"series\"][\"H1\"], nMaxN]] === {0} &];\n   cycRes[k] = Join[cyc, <|\"annihilated\" -> annih0, \"factors\" -> facs, \"branchFactorIdx\" -> brF, \"branchFactorDeg\" -> (Exponent[facs[[#, 1]], lam] & /@ brF)|>]], {b, branchesOf[Lam]}, {pp, {{\"A\", phiA}, {\"B\", phiB}}}], {Lam}];\nrunCyc[{2, 1, 0}];\ndump[Table[{k[[2]], k[[3]], cycRes[k][\"d\"], cycRes[k][\"dAlg\"], cycRes[k][\"dFull\"], cycRes[k][\"dAll\"], cycRes[k][\"spareOK\"], cycRes[k][\"annihilated\"], Exponent[#[[1]], lam] & /@ cycRes[k][\"factors\"], cycRes[k][\"branchFactorDeg\"]}, {k, Keys[cycRes]}]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"12\" data-out-n=\"203\" data-sub-idx=\"22\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"22\" data-sub-start=\"55\" data-sub-end=\"55\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[203]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[203]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[203]= No output at Out[203]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "33230b49-ef6b-4ee8-b26e-860bb78d14a9"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## C3 for [3,1,0] and [3,2,0] (numeric phi_A, phi_B, eps symbolic)",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "tC = <||>;\nDo[tC[Lam] = First@AbsoluteTiming[runCyc[Lam]], {Lam, {{3, 1, 0}, {3, 2, 0}}}];\ndump[Join[{tC}, Table[{k[[1]], k[[2]], k[[3]], cycRes[k][\"d\"], cycRes[k][\"dAlg\"], cycRes[k][\"dFull\"], cycRes[k][\"dAll\"], cycRes[k][\"spareOK\"], cycRes[k][\"annihilated\"], Exponent[#[[1]], lam] & /@ cycRes[k][\"factors\"], cycRes[k][\"branchFactorDeg\"]}, {k, Select[Keys[cycRes], #[[1]] =!= {2, 1, 0} &]}]]]",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## C2: closed-form 2x2 matrix of H1 on C_B for the d = 2 branches (symbolic zeta = (z1,z2,z3), symbolic theta12 via the exact scaling H^(n) ~ theta12^(n-1))\n\nBasis of the weight-mu space (dimension 2 = d): e1 = HW ket of mu (the branch limit state), e2 = the G-orthogonal complement vector (the weight-mu vector of the neighbouring irrep, a descendant of the HW vector with weight mu + (e_i - e_j) lowered). Matrix in the basis (e1,e2): M = P^-1 H1 P.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck]; ck = <||>;\nzz = {z1, z2, z3}; thS = Symbol[\"t12\"];\n(* H1, a1, b1 with symbolic zeta and theta12: sum over the homogeneous parts of the operator polynomials at theta = (1,0) times theta12^(n-1) (H, a) or theta12^(n-2) (b) *)\nopSym[Lam_, mu_, nm_] := Module[{ser = opSeries[opPolyOfT[Lam, mu, {1, 0}], nm, zz, 3]}, Sum[thS^(k - If[StringTake[nm, 1] == \"b\", 2, 1]) ser[[k + 1]], {k, 0, 3}]];\nc2Res = <||>;\nDo[Module[{Lam = k[[1]], mu = k[[2]], sec, bd, G, e1, e2, P, H, a, M, Ma, trM, detM, chiS, numChk, e = 2/5, thv = 31/35, gs, ok},\n  sec = secOf[Lam, mu]; bd = branchData[Lam, mu][[1]]; gs = build[Lam][\"gd2\"][[sec]];\n  e1 = bd[\"vA\"][[sec]]; e2 = First@NullSpace[{gs e1}];  (* G-orthogonal to e1 *)\n  P = Transpose[{e1, e2}];\n  H = opSym[Lam, mu, \"H1\"]; a = opSym[Lam, mu, \"a1\"];\n  M = Map[Factor, Inverse[P] . H . P, {2}]; Ma = Map[Factor, Inverse[P] . a . P, {2}];\n  trM = Factor[Tr[M]]; detM = Factor[Det[M]];\n  (* check against the interpolated numeric chi of cell C3 (theta12 = 31/35, eps = 2/5, phiA): eps*phi = zeta *)\n  chiS = lam^2 - trM lam + detM;\n  ok = Simplify[(chiS /. t12 -> thv /. Thread[zz -> e phiA]) - (chiExpr[cycRes[{Lam, {mu, 1}, \"A\"}]] /. eps -> e)] === 0;\n  c2Res[k] = <|\"M\" -> M, \"Ma\" -> Ma, \"tr\" -> trM, \"det\" -> detM, \"ok\" -> ok, \"e2\" -> e2, \"gn\" -> {gs e1 . e1, gs e2 . e2}|>], {k, {{{2, 1, 0}, {4, 1, 1}}, {{2, 1, 0}, {3, 3, 0}}, {{3, 1, 0}, {6, 1, 1}}, {{3, 1, 0}, {5, 3, 0}}, {{3, 2, 0}, {6, 3, 1}}, {{3, 2, 0}, {5, 5, 0}}}}];\ndump[Table[{k, c2Res[k][\"ok\"], c2Res[k][\"M\"], c2Res[k][\"Ma\"], c2Res[k][\"tr\"], c2Res[k][\"det\"], c2Res[k][\"e2\"], c2Res[k][\"gn\"]}, {k, Keys[c2Res]}]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"13\" data-out-n=\"211\" data-sub-idx=\"6\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"26\" data-sub-start=\"16\" data-sub-end=\"16\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[211]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[211]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[211]= No output at Out[211]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "bf00a644-91f4-436e-bf6a-1f329f65da11"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## C2/C3 structure: H1 is exactly LINEAR in zeta; a1 = alpha + beta H1 on the d = 2 branches; full characteristic polynomial; degrees of a1, b1 in zeta",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck]; ck = <||>;\n(* (i) H1(zeta) = H1(0) + Sum_i zeta_i (|Lam| - E1_ii) as an exact operator identity on every HW weight sector (orders >= 2 in zeta vanish) *)\nck[\"H1 operator: degree <= 1 in zeta and H1^(1) = Sum_i zeta_i (|Lam| - E^(1)_ii), all sectors of the three reps\"] = And @@ Flatten[Table[Module[{R = build[Lam], ops = opPolyOf[Lam, mu], sec = secOf[Lam, mu], ser, lamT = Total[Lam], X},\n   ser = opSeries[ops, \"H1\", zz, 3]; X = Sum[zz[[i]] (lamT IdentityMatrix[Length[sec]] - Normal[R[\"E1\"][[i, i]][[sec, sec]]]), {i, 3}];\n   {Union[Flatten[Expand[ser[[3]]]]] === {0} && Union[Flatten[Expand[ser[[4]]]]] === {0}, Union[Flatten[Expand[ser[[2]] - X]]] === {0}}], {Lam, repList}, {mu, hwSecsOf[Lam]}]];\n(* (ii) degrees in zeta of the operators a1, b1 (highest nonzero homogeneous part) *)\nck[\"max zeta-degree of H1, a1, b1 operators per rep\"] = Table[Lam -> Table[nm -> Max[Table[Max[Table[If[Union[Flatten[opSeries[opPolyOf[Lam, mu], nm, zz, 3][[k + 1]]]] =!= {0}, k, -1], {k, 0, 3}]], {mu, hwSecsOf[Lam]}]], {nm, {\"H1\", \"a1\", \"b1\"}}], {Lam, repList}];\n(* (iii) d = 2 branches: a1 = alpha + beta H1 on C_B, closed form in (zeta, theta12) *)\nabRes = <||>;\nDo[Module[{M = c2Res[k][\"M\"], Ma = c2Res[k][\"Ma\"], beta, alpha, ok},\n  beta = If[Factor[M[[1, 2]]] === 0, 0, Factor[Ma[[1, 2]]/M[[1, 2]]]]; alpha = Factor[Ma[[1, 1]] - beta M[[1, 1]]];\n  ok = Simplify[Ma - (alpha IdentityMatrix[2] + beta M)] === {{0, 0}, {0, 0}};\n  abRes[k] = <|\"alpha\" -> alpha, \"beta\" -> beta, \"ok\" -> ok|>], {k, Keys[c2Res]}];\n(* (iv) full characteristic polynomial of H1 on the weight-mu space factors: adjoint singlet *)\nck[\"adjoint (2,2,2): char poly of H1 on the whole 10-dim weight space (phiA, eps symbolic): factor degrees\"] = Module[{ops = opPolyOf[{2, 1, 0}, {2, 2, 2}], H},\n  H = opMatE[ops, \"H1\", phiA, eps]; Exponent[#[[1]], lam] & /@ FactorList[Det[lam IdentityMatrix[10] - H]] ];\nck[\"all other sectors of [2,1,0]: full char poly of H1 irreducible of degree = weight-space dim (phiA)\"] = Table[Module[{ops = opPolyOf[{2, 1, 0}, mu], H, n}, H = opMatE[ops, \"H1\", phiA, eps]; n = Length[H]; {mu, n, Exponent[#[[1]], lam] & /@ FactorList[Det[lam IdentityMatrix[n] - H]]}], {mu, {{4, 2, 0}, {4, 1, 1}, {3, 3, 0}}}];\ndump[Join[List @@@ Normal[ck], Table[{k, abRes[k]}, {k, Keys[abRes]}]]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"14\" data-out-n=\"219\" data-sub-idx=\"11\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"28\" data-sub-start=\"17\" data-sub-end=\"17\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[219]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[219]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[219]= No output at Out[219]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "eb2b4b71-77d1-4b2a-a58f-49a7c886e284"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Duality [3,2,0] = [3,1,0]* (x) det^3: sectors mu -> mu' = (6-mu3, 6-mu2, 6-mu1), twist zeta -> zeta' = -(zeta3, zeta2, zeta1)\n\nDerivation from the exact operator form H1(zeta) = H1(0) + Sum_i zeta_i (|Lam| - E^(1)_ii): in V' = V* (x) det^3 the weights are w'_i = 3 - w_(4-i), so |Lam'| = 9 - |Lam| = 5 and |Lam'| - E'_ii = 6 - (|Lam| - E_(4-i)(4-i)); with zeta'_i = -zeta_(4-i) one gets H1'(zeta') = H1(zeta) + 6/theta12 - 6 Sum zeta (the constant 6/theta12 is the Casimir shift seen at zeta = 0, all sectors). The test below: this H-relation on the series, and the empirical relation of a, b.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck]; ck = <||>;\nmuDual[mu_] := {6 - mu[[3]], 6 - mu[[2]], 6 - mu[[1]]};\nphiDual[phi_] := -Reverse[phi];\nsumPhi = Total[phiA];\ndualRes = <||>;\nDo[Module[{b = bb, mu = bb[[1]], muP, ph = phiA, phP, r1, cands, best, serH, shiftH, th = 31/35},\n  muP = muDual[mu]; phP = phiDual[ph]; r1 = resN[{{3, 1, 0}, b, \"A\"}];\n  cands = Table[Module[{r2 = runBranchT[{3, 2, 0}, muP, ic2, phP, nMaxN, thN]}, {ic2, r2}], {ic2, lauData[{{3, 2, 0}, muP}][\"mult\"]}];\n  (* pick the copy for which H1' - H1 = 6/theta12 - 6 eps Sum phi exactly *)\n  Do[Module[{r2 = c[[2]], d1, ok},\n    dD = r1[\"D0\"]; \n    ok = Quiet[Check[Union[Table[Together[Simplify[(r2[\"series\"][\"H1\"][[n + 1]] /. sq -> Sqrt[r2[\"D0\"]]) - (r1[\"series\"][\"H1\"][[n + 1]] /. sq -> Sqrt[r1[\"D0\"]]) - Switch[n, 0, 6/th, 1, -6 sumPhi, _, 0]]], {n, 0, nMaxN}]] === {0}, False]];\n    If[ok, dualRes[b] = <|\"copy2\" -> c[[1]], \"r2\" -> r2, \"muP\" -> muP|>]], {c, cands}];\n  If[! KeyExistsQ[dualRes, b], dualRes[b] = <|\"copy2\" -> None, \"muP\" -> muP, \"r2\" -> cands[[1, 2]]|>]], {bb, branchesOf[{3, 1, 0}]}];\nck[\"H-duality: H1'(zeta') = H1(zeta) + 6/theta12 - 6 Sum zeta, all 10 branches (a matching copy exists), all orders\"] = Table[{b, dualRes[b][\"muP\"], dualRes[b][\"copy2\"]}, {b, branchesOf[{3, 1, 0}]}];\n(* empirical relation of a: residual a1' + a1 - 4 H1, and of b *)\nDo[Module[{r1 = resN[{{3, 1, 0}, b, \"A\"}], r2 = dualRes[b][\"r2\"], S1, S2},\n  S1 = r1[\"series\"]; S2 = r2[\"series\"];\n  dualRes[b] = Append[dualRes[b], \"aRes\" -> Table[Simplify[(S2[\"a1\"][[n + 1]] /. sq -> Sqrt[r2[\"D0\"]]) + (S1[\"a1\"][[n + 1]] /. sq -> Sqrt[r1[\"D0\"]]) - 4 (S1[\"H1\"][[n + 1]] /. sq -> Sqrt[r1[\"D0\"]])], {n, 0, 4}]]], {b, branchesOf[{3, 1, 0}]}];\nck[\"a-residual a1' + a1 - 4 H1 (orders 0..4) per branch\"] = Table[{b, dualRes[b][\"aRes\"]}, {b, branchesOf[{3, 1, 0}]}];\ndump[List @@@ Normal[ck]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"15\" data-out-n=\"229\" data-sub-idx=\"10\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"30\" data-sub-start=\"20\" data-sub-end=\"20\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[229]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[229]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[229]= No output at Out[229]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "d0c18704-73cd-4e3d-9b6b-7c5d57b71fe8"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Final checks: chi_B = det(lambda - H1(eps)) on the weight space whenever d = dim; duality of H2, a2; summary table",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "kind": 2,
+   "value": "checks = Join[checks, ck]; ck = <||>;\nck[\"chi_B == full char poly det(lambda - H1(eps)) of the weight-mu space (checked at eps = 1/3, 2/7, 5/3, 7/9) for every branch with d = dim; d < dim only for the adjoint singlet\"] = Table[Module[{Lam = kk[[1]], mu = kk[[2, 1]], ph, n, ops, d, ok},\n   ph = If[kk[[3]] == \"A\", phiA, phiB]; ops = opPolyOf[Lam, mu]; n = Length[secOf[Lam, mu]]; d = cycRes[kk][\"d\"]; dD = cycRes[kk][\"D0\"];\n   ok = If[d == n, And @@ Table[Expand[Det[lam IdentityMatrix[n] - opMatE[ops, \"H1\", ph, e]] - (chiExpr[cycRes[kk]] /. eps -> e)] === 0, {e, {1/3, 2/7, 5/3, 7/9}}], \"d<n\"];\n   {kk, n, d, ok}], {kk, Keys[cycRes]}];\nck[\"summary d_B per rep: {mu, copy, d_B, weight-space dim, branch factor degree}\"] = Table[Lam -> Table[{b, cycRes[{Lam, b, \"A\"}][\"d\"], Length[secOf[Lam, b[[1]]]], cycRes[{Lam, b, \"A\"}][\"branchFactorDeg\"], cycRes[{Lam, b, \"A\"}][\"dAlg\"] == cycRes[{Lam, b, \"A\"}][\"d\"], cycRes[{Lam, b, \"A\"}][\"annihilated\"]}, {b, branchesOf[Lam]}], {Lam, repList}];\ndump[List @@@ Normal[ck]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"953927\" data-output-id=\"16\" data-out-n=\"233\" data-sub-idx=\"3\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"32\" data-sub-start=\"6\" data-sub-end=\"6\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[233]=</span></div><div class=\"wl-output-content\"><pre class=\"vscode-wolfram-text-output\">No output at Out[233]</pre></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[233]= No output at Out[233]",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "89a8f309-8796-46bb-a8e2-76c94fb066b3"
+    }
+   ],
+   "metadata": {}
+  },
+  {
+   "kind": 1,
+   "value": "## Summary (agent W5, 2026-10-16)\n\n**B3.** Exact eps-series of (H_s, a_s, b_s) for all 6 + 10 + 10 HW-limit branches of [2,1,0], [3,1,0], [3,2,0], numeric twist phi_A = (1/3,-2/7,5/11) and phi_B = (-2/5,3/8,7/11) to order eps^10 (exact rationals, Q(Sqrt[105]), Q(Sqrt[192]), Q(Sqrt[5]) for the mult-2 copies), symbolic phi to order 3 (all branches, <= 8 s each). Isolating operator H1 + a1/7 separates every branch at eps = 0 (minimal gap 1.08). Checks, all True on every branch and both phi: eigen-equations of all six Laurent operators exact; eps^0 = W4 untwisted data; H1 + H2 = eps Sum_{i!=j} phi_i mu_j (order 1 only); b1 + b2 = eps^2 (phi1 phi2 mu3 + phi1 phi3 mu2 + phi2 phi3 mu1) (holds for all three reps); no-log relations order by order on both sites (b = a(H-a)/c2 for [2,1,0], [3,1,0]; the W3 quadratic D2 relation for [3,2,0], W = phi.mu eps); theta-scaling H_n, a_n ~ theta12^(n-1), b_n ~ theta12^(n-2) vs theta = (1,0); symbolic series == numeric at phi_A, phi_B.\n\n**Operator structure (new).** H1(zeta) = H1(0) + Sum_i zeta_i (|Lam| - E^(1)_ii) EXACTLY (no zeta^2, zeta^3 terms) as an operator on every HW weight sector; H1(0) = (|Lam|^2 + cas2(Lam) - C2^tot/2)/theta12; a1 is linear in zeta, b1 quadratic. So chi_B = det(lambda - A - eps B), a linear pencil.\n\n**B3b.** k_B = 2(l1-l3) - (mu1-mu3) on all 26 branches at both phi (adjoint 0,1,1,2,2,4; [3,1,0] 0,1,1,2,2,2,3,3,4,5; [3,2,0] 0,1,2,1,2,2,3,3,4,5, in the sector orders of the data files); x(zeta) polynomial homogeneous of degree l2; symbolic leading coefficient X_B for every branch (E5_KB records), reproduces the numeric leads.\n\n**C3.** d_B = dim C_B = dimension of the weight-mu space of V(x)V for every branch of all three reps, EXCEPT the adjoint singlet (2,2,2): d = 8 of 10 (the full char poly of H1 there is (linear factor)^2 x (irreducible degree 8); the two missing dimensions are a decoupled doubly degenerate H1 eigenvalue linear in eps). chi_B (exact, interpolated from 3d+5 rational eps, spare points exact) is irreducible over Q(eps) (Q(eps, Sqrt[D0]) for copies), annihilates the branch series to eps^10, and equals det(lambda - H1(eps)) on the weight space (checked at 4 eps per branch). The algebra generated by H1, a1 has the same cyclic subspace as H1 alone (dAlg = dA) and as all six Laurent operators (dFull = dA).\n\n**C2.** For the d = 2 branches (adjoint (4,1,1), (3,3,0); [3,1,0] (6,1,1), (5,3,0); [3,2,0] (6,3,1), (5,5,0)): in the basis (HW ket, G-orthogonal partner = weight-mu vector of the neighbouring irrep nu = mu + e_i - e_j) H1 = (1/2) Sum_{i!=j} zeta_i mu_j + [[eta_mu/theta12, (zeta_j - zeta_i)/2], [(zeta_j - zeta_i)/2, eta_nu/theta12]] (exact symbolic in z1,z2,z3,theta12), so H1 = (1/2) Sum_{i!=j} zeta_i mu_j + (eta_mu + eta_nu)/(2 theta12) +- Sqrt[((eta_mu - eta_nu)/(2 theta12))^2 + (zeta_i - zeta_j)^2/4]; and a1 = alpha + beta H1 with beta = c2 (top-adjacent type) or 0.\n\n**Duality.** [3,2,0] = [3,1,0]* (x) det^3: mu -> mu' = (6-mu3, 6-mu2, 6-mu1), zeta -> zeta' = -(zeta3, zeta2, zeta1); the multiplicity-2 copies swap (copy 1 <-> copy 2). H1'(zeta') = H1(zeta) + 6/theta12 - 6 Sum zeta; H2' = H2 - 6/theta12 - 6 Sum zeta; a1' = 4 H1 - a1 - 24/theta12 - 12 Sum zeta; a2' = 4 H2 - a2 + 24/theta12 - 12 Sum zeta (exact on all 10 branches, all orders to 10, phi_A); b follows from the no-log relations.\n\n**Data files.** `Paul/Mathematica/Gaudin/ref/laurent-series-{210,310,320}.txt` (E4_SERIES, E4_SYMBOLIC, E5_KB, E5_KBNUM, XVEC, PSI, GNORM).\n\n**Mode.** Native outputs stored for the first cells; all printed results of later cells were read through scratch dump files (tool channel truncates long messages).",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {}
+  }
+ ],
+ "metadata": {
+  "createdBy": "wolfbook_newNotebook",
+  "createdAt": "2026-10-16T15:49:42.908Z"
+ }
+}

@@ -1,0 +1,133 @@
+# The general kernel {#sec:kernel}
+
+**Punchline.** In the companion normalisation $\Theta=K/(\omega_1\omega_1')^{2\lambda_1-\lambda_2}$ the kernel is a polynomial in $(a,a',t)=(1/\omega_1,1/\omega_1',1/\theta_{12})$. At $t=0$ it factorises into one-site kernels $\theta_i(a)\theta_j(a')$, and the one-site kernel is a dressed Wronskian with a closed form valid for all $\Lambda$. Every two-row kernel is a block of the one-row master kernel $R^{\lambda_1}$ times $\theta\otimes\theta'$ (block theorem). $R^{\lambda_1}$ is known to first order in $t$ for all pairs and to all orders for $[l,l,0]$; the general four-index form is open.
+
+## Conventions for this section {#sec:kconv}
+
+Put $n=\lambda_1+1$ and let pairs $(kl)$ run over $0\le k<l\le n$ with $l\ge\lambda_2+1$. Let $a=1/\omega_1$, $a'=1/\omega_1'$, $t=1/\theta_{12}$, $x=at$, $y=a't$, and let the monomial weight be $e_{kl}=k+l-\lambda_2-1$ (relative to $M$). The jet formula in canonical normalisation is
+$$
+c\,Q_{\rm num}\,M_1M_2=\sum K_{ij}\,m_i(\theta_1)m_j(\theta_2),\qquad \Theta:=\frac K{(\omega_1\omega_1')^{2\lambda_1-\lambda_2}},\label{eq:Thetadef}
+$$
+with $M=P^3p_{0,\lambda_2+1}$ exactly, no factor $4$. (D2's $G=4K$ for the adjoint, from its vacuum monomial $2h^2P^3p_{02}$; D3's identity (\ref{eq:Theta}) reads $\Theta=G/(4\omega_1^3\omega_1'^3)$.) The common exponential factor $e^{(\zeta_2+2\zeta_3)\theta_s}$ of all monomials of a site is dropped, since the formula is homogeneous of degree one in the monomials, so every quantity is an exact rational. We use the closed forms below only after checking them at points not used in their discovery.
+
+## The one-site kernel {#sec:onesite}
+
+At $t=0$ the sites decouple and $\Theta\to\theta(a)\otimes\theta(a')$ exactly (symbolic identity entry by entry, for all computed two-site representations). The one-site kernel $\theta_{kl}(a)$ is exactly computable for any $\Lambda$: for one site the eigenstates are GT weight vectors, the Q's are exact rationals, and the same fit gives, with rank equal to the number of pairs and residual exactly zero (eight twist points, all diagonal states, $a$-dependence from four values of $\omega$),
+$$
+\theta_{kl}(a)=c_{kl}\,a^{k+l-\lambda_2-1},\qquad c_{kl}=(-1)^{k+l-\lambda_2-1}\binom{\lambda_1-\lambda_2}{l-\lambda_2-1}\binom{\lambda_1+1}{k}\frac{l-k}{(\lambda_2+1)\binom{l}{\lambda_2+1}},\label{eq:ckl}
+$$
+independent of $\omega$ and $\zeta$, with $c_{0,\lambda_2+1}=1$. The formula was guessed from $\Lambda\le[4,2,0]$ and then correctly \emph{predicted} the other eight representations $[3,0,0],[3,3,0],[4,0,0],[4,3,0],[4,4,0],[5,1,0],[5,2,0],[5,3,0]$ (17 in all). Examples (pairs in lexicographic order): $[2,1,0]$: $(02)\,1,(03)\,{-\tfrac12},(12)\,{-\tfrac32},(13)\,1,(23)\,{-\tfrac12}$; $[1,1,0]$: $(02)\,1,(12)\,{-1}$; $[3,1,0]$: $1,-1,\tfrac13,-2,\tfrac83,-1,-2,1,-\tfrac13$. Appendix~\ref{app:C} has the table up to $\lambda_1=4$.
+
+The structure is a decomposable bivector. For $\lambda_2=0$ the generating symbol is
+$$
+\sum_{k<l}\theta^{[\lambda_1,0,0]}_{kl}\bigl(x_1^kx_2^l-x_1^lx_2^k\bigr)=(x_2-x_1)\bigl[(1-ax_1)(1-ax_2)\bigr]^{\lambda_1},\label{eq:symbol}
+$$
+exact for $\lambda_1=1,\dots,5$, and in jet language, for general $\lambda_2$,
+$$
+\sum_{k<l}\theta_{kl}(a)\,m_{kl}=\epsilon_\Lambda\,a^{-\lambda_2}\,P^3\;W\bigl[(1-a\partial)^{\lambda_1}P^2,\ (1-a\partial)^{\lambda_1}P^3\bigr](\theta),\qquad \epsilon_\Lambda=(-1)^{\lambda_2}\frac{\lambda_2!(\lambda_1-\lambda_2)!}{\lambda_1!},\label{eq:dressedW}
+$$
+a Wronskian of the two dual Q's after dressing by $(1-a\partial)^{\lambda_1}$. In Taylor-normalised jets $\tilde p_{kl}=p_{kl}/(k!\,l!)$ the kernel is $\hat g\wedge\hat h$ with $\hat g_k=(-a)^k/(n-1-k)!$, $\hat h_k=(-a)^k/(n-k)!$: it is a Plücker vector of a 2-plane, the image of the lowest-weight vector $(\xi_1-\xi_2)$ of the spin-$\lambda_1$ irrep of an auxiliary $\mathfrak{sl}_2$ under $\exp(-aS_+)$. A one-site top-state sum rule fixes the normalisation (Section~\ref{sec:sumrule}).^[Agent G1, `RESULTS-general-kernel.md` headline 1, K1 (exact Fractions; GT states with multiplicity one only: 6/8, 9/15, 12/24, \dots of the states; the others are not GT eigenvectors and were not used) and section K3(d). The symbol identity holds for $\lambda_1=1,\dots,5$ and $c^{(\lambda_2)}_{kl}/c^{(0)}_{kl}=\epsilon_\Lambda$ for all pairs.]
+
+## The block theorem {#sec:block}
+
+The second structural fact: the $\lambda_2$-dependence of the two-site kernel is trivial. For all non-forced pairs $i,j$,
+$$
+\Theta^{[\lambda_1,\lambda_2,0]}_{ij}(a,a',t)=\Bigl[\frac{\lambda_2!(\lambda_1-\lambda_2)!}{\lambda_1!}\Bigr]^2(aa')^{-\lambda_2}\;\Theta^{[\lambda_1,0,0]}_{ij}(a,a',t),\label{eq:block}
+$$
+so that, equivalently, $\Theta_{ij}=\theta_i(a)\theta_j(a')R^{\lambda_1}_{ij}(at,a't)$ with a universal, $\lambda_2$-independent Laurent polynomial $R^{\lambda_1}_{(kl),(k'l')}(x,y)$, $R(0,0)=1$, homogeneous of degree $0$ in $(a,a',\theta_{12})$ (a function of $x,y$ only; the argument is $(x,y)=(at,a't)$). All the $\lambda_2$ content is in the one-site kernel $\theta$. In the $K$ normalisation this has a particularly clean form (a rewriting of (\ref{eq:block}) that we also checked on the stored exact kernels, see below):
+$$
+K^{[\lambda_1,\lambda_2,0]}_{ij}=\Bigl[\frac{\lambda_2!(\lambda_1-\lambda_2)!}{\lambda_1!}\Bigr]^2K^{[\lambda_1,0,0]}_{ij}\quad(\text{non-forced pairs}).\label{eq:blockK}
+$$
+For $\lambda_1=3$ the prefactor is $1/9$ for both $\lambda_2=1,2$, so the $[3,1,0]$ and $[3,2,0]$ kernels in the $K$ normalisation coincide on the seven shared pairs. We confirmed this at two parameter points, $(\omega_1,\omega_1',\theta_{12})=(5/2,7/4,31/35)$ and $(-2/5,3,29/45)$, entry by entry on the exact stored polynomial laws (0 mismatches in $49$ entries each), and confirmed (\ref{eq:block}) for $[3,1,0]$ against $[3,0,0]$ at $(a,a',t)=(2/5,4/7,35/31)$ (0 mismatches in 81 entries). G1's own verification: symbolic for $\lambda_1\le3$ (all $\lambda_2$), symbolic for $[4,4,0]$ against $[4,0,0]$, direct independent fits for $[4,1,0],[4,2,0],[4,3,0]$ at two $\theta_{12}$ and two $(\omega,\omega')$ (deviation $\le3\cdot10^{-58}$). The corner block (pairs $(k,\lambda_1+1)$) equals $N(aa')^{\lambda_1-\lambda_2}$ times the single-index kernel $\Theta^{[\lambda_1,\lambda_1,0]}$, $N=[\lambda_2!(\lambda_1-\lambda_2)!/\lambda_1!]^2$.
+
+The block theorem is useful as a predictor: $[4,2,0]$ has 12 pairs and $\Theta=\tfrac1{36}(aa')^{-2}\Theta^{[4,0,0]}|$ (verified directly, deviation $\le8\cdot10^{-62}$), $[5,1,0]$ has 20 pairs, $\Theta=\tfrac1{25}(aa')^{-1}\Theta^{[5,0,0]}|$, $a$-degree $9$ and $t$-degree $16$. The $[5,1,0]$ prediction was not tested directly: a corner-block check was started but the $1225$-state build was too slow and was stopped.
+
+## Structure: polynomiality, weights, degrees {#sec:structure}
+
+Every kernel computed is a polynomial in $(a,a',t)$ with rational coefficients; each monomial $a^pa'^qt^n$ of entry $(i,j)$ obeys $p+q-n=e_i+e_j$ with $0\le p,q\le2\lambda_1-\lambda_2$ (maximum attained) and the exchange rule
+$$
+\Theta_{ij}(a,a',t)=\Theta_{ji}(a',a,-t)\quad\text{exactly}.\label{eq:exch}
+$$
+Equivalently, writing $\Theta_{ij}=\sum_nt^n\Theta_{ij,n}(a,a')$, each $\Theta_{ij,n}$ is homogeneous of degree $e_i+e_j+n$ in $(a,a')$ (the "torus" law: $\omega_1,\omega_1'$ scale like $\zeta$ and $\theta_{12}$ like $1/\zeta$). The $t$-degree is $D_t=4(\lambda_1-1)-\max(0,2\lambda_2-3)$ for $\lambda_1\ge2$, $D_t=1$ for $\lambda_1=1$, and $2l-1$ for $[l,l,0]$; the one-row sequence $1,4,8,12$ is $4(l-1)$ from $l=2$ on. The earlier guess $\binom{l+2}2-2=13$ for $[4,0,0]$ is refuted (12). Predicted: $[5,0,0]$, $[5,1,0]$: $16$; $[5,2,0]$: $15$; $[5,3,0]$: $13$. Table~\ref{tab:kstruct} summarises.
+
+@table tab:kstruct | Structure of the two-site kernels (G1 `RESULTS-general-kernel.md` K0, K2, K3): number of pairs, $a$-degree ($=2\lambda_1-\lambda_2$), $t$-degree, generic rank of $\Theta$, and ranks of the $t$-expansion coefficients $\Theta_n$. All kernels satisfy $\Theta(t=0)=\theta\otimes\theta'$, the exchange rule, and the top-state sum rule exactly. Rank-deficient at a generic point: $[1,0,0],[3,0,0],[3,1,0],[4,0,0],[4,1,0]$ (cause not understood).
+@size footnotesize
+@cols lccccl
+| $\Lambda$ | pairs | $a$-deg | $t$-deg | generic rank | ranks of $\Theta_n$, $n=0,1,\dots$ |
+|---|---|---|---|---|---|
+| $[1,0,0]$ | 3 | 2 | 1 | 2 | 1,2 |
+| $[1,1,0]$ | 2 | 1 | 1 | 2 | 1,2 |
+| $[2,0,0]$ | 6 | 4 | 4 | 6 | 1,2,4,6,6 |
+| $[2,1,0]$ | 5 | 3 | 4 | 5 | 1,2,4,5,4 |
+| $[2,2,0]$ | 3 | 2 | 3 | 3 | 1,2,3,2 |
+| $[3,0,0]$ | 10 | 6 | 8 | 8 | 1,2,4,8,10,10,10,8,6 |
+| $[3,1,0]$ | 9 | 5 | 8 | 8 | 1,2,4,8,9,9,8,6,4 |
+| $[3,2,0]$ | 7 | 4 | 7 | 7 | 1,2,4,7,7,6,4,2 |
+| $[3,3,0]$ | 4 | 3 | 5 | 4 | 1,2,3,4,3,2 |
+| $[4,0,0]$ | 15 | 8 | 12 | 12 | 1,2,4,8,13,15,15,15,15,12,10,8,6 |
+| $[4,4,0]$ | 5 | 4 | 7 | 5 | 1,2,3,4,5,4,3,2 |
+| $[4,1,0]$ | 14 | 7 | 12 | 12 | 1,2,4,8,13,14,14,14,13,10,8,6,4 (block thm) |
+| $[4,2,0]$ | 12 | 6 | 11 | 12 | 1,2,4,8,12,12,12,11,9,6,4,2 (block thm) |
+| $[4,3,0]$ | 9 | 5 | 9 | 9 | 1,2,4,7,9,9,8,6,4,2 (block thm) |
+@endtable
+
+The supports shrink with $n$: the nonzero entries of $\Theta_n$ per order are $25,23,19,12,4$ of $25$ for the adjoint and $49,47,43,37,29,19,9,2$ of $49$ for $[3,2,0]$; the top order has only two to four non-zero entries. The "two channels per order" doubling of the rank ends at $n=3$ (for $[4,0,0]$: $13$ at $n=4$, not $16$).
+
+## The first-order term {#sec:first}
+
+The coefficient of $t^1$ is known in closed form for all pairs and all representations. With $\rho(p)=(n-k)(n-l)$, $\sigma(p)=k+l-1$, $f_2(p)=2(n-1)-\sigma(p)$, $N_0=n(n-1)$, and $p=(kl)$, $q=(k'l')$,
+$$
+\Theta_{1,pq}=t\,\theta_p(a)\theta_q(a')\Bigl[\alpha_{pq}a+\beta_{pq}a'+\gamma_{pq}\frac{a^2}{a'}+\varepsilon_{pq}\frac{a'^2}{a}\Bigr],\label{eq:first}
+$$
+$$
+\alpha_{pq}=-\frac3{n^2}\rho(p)\bigl(\rho(q)-N_0\bigr)-\frac2n\rho(p)\sigma(q)+\frac1nf_2(p)\bigl(\rho(q)-N_0\bigr)+f_2(p)\sigma(q),\qquad\beta_{pq}=-\alpha_{qp},
+$$
+$$
+\gamma_{pq}=\frac{k'l'\rho(p)}{n^2},\qquad\varepsilon_{pq}=-\frac{kl\,\rho(q)}{n^2}.
+$$
+This formula was fitted on $\lambda_1=1,2,3$ and then reproduced the $\lambda_1=4$ single-index kernel and all $\lambda_2$-blocks exactly: 0 mismatches over 1062 random-point entry tests ($\lambda_1\le4$) and 675 entries of the held-out $[4,4,0]$ and $[4,0,0]$. As a matrix on the pair space $\alpha,\beta$ have rank 2 and $\gamma,\varepsilon$ rank 1; the factors $(n-k)(n-l)$ and $k'l'$ are the raising and lowering amplitudes of the spin-$n/2$ representation of the auxiliary $\mathfrak{sl}_2$ acting on the jet index (double hops: $\gamma$ raises both indices of site 1 and lowers both of site 2). On a single index ($l=l'=n$): $\alpha=(\lambda_1-k)k'$, $\beta=-(\lambda_1-k')k$, $\gamma=\varepsilon=0$. $\Theta_1$ has rank exactly 2, with $\theta(a)$ in its column space and $\theta(a')$ in its row space. Beyond first order we know the extreme terms. At order $2$ the exponent pairs $x^uy^v$ ($u+v=2$) are $(u,v)=(-2,4),(-1,3),(0,2),(1,1),(2,0),(3,-1),(4,-2)$ with coefficient ranks $1,2,4,5,4,2,1$; the extreme ones are $\tfrac12(n-k)_2(n-l)_2k'_2l'_2/(n(n-1))^2$ and its mirror. General $m$ (exact on all 225 entries of $[4,0,0]$ for $m=1,\dots,4$): the coefficient of $x^{2m}y^{-m}$ in $R_{pq}$ is
+$$
+\frac1{m!}\frac{(n-k)_m(n-l)_m(k')_m(l')_m}{(n)_m^2}=(m!)^3\frac{\binom{n-k}m\binom{n-l}m\binom{k'}m\binom{l'}m}{\binom nm^2},\label{eq:hops}
+$$
+with falling factorials $(z)_m$, and a sign $(-1)^m$ and exchanged roles for the mirror $y^{2m}x^{-m}$.
+
+For $\lambda_1=1$ the full kernel is an R-matrix: $\Theta^{[1,\lambda_2,0]}=(1+z)\,\theta(a)\otimes\theta(a')-z\,\theta(a')\otimes\theta(a)$ with $z=t/(\omega-\omega')=aa't/(a'-a)$, i.e. a permutation exchange of the two coherent states with the rational R-matrix $R(u)=u+tP$.
+
+## The single-index family $[l,l,0]$ to all orders {#sec:single}
+
+For $[l,l,0]$ (one Plücker index $k\in\{0,\dots,l\}$) the kernel is
+$$
+\Theta_{kk'}=(-1)^{k+k'}\binom lk\binom l{k'}a^ka'^{k'}\sum_{m=0}^{l-k}\sum_{m'=0}^{l-k'}\binom{l-k}m\binom{l-k'}{m'}F_{mm'}(k,k')\,(at)^m(-a't)^{m'},\label{eq:single}
+$$
+$$
+F_{00}=1,\quad F_{m0}=(k')_m,\quad F_{0m'}=(k)_{m'},\quad F_{mm'}=(k+m+1)_{m'-1}(k'+m'+1)_{m-1}\,(kk'+m'k+mk'),
+$$
+here with rising Pochhammer symbols; uniformly $F=\Gamma(k+m+m')\Gamma(k'+m+m')\,[(k+m)(k'+m')-mm']/(\Gamma(k+m+1)\Gamma(k'+m'+1))$. It is exact for $l=1,\dots,4$ (all $4+9+16+25$ entries) and \emph{predicted correctly for $l=5$}: direct fits of $[5,5,0]$ (441 states, 36 unknowns, rank 36, residual $0.0$) agree to $1.5\cdot10^{-59}$--$9.2\cdot10^{-58}$ at three parameter points. Its symbol is nice. With $A=1-a\xi$, $B=1-a'\eta$ and $\hat\Theta(\xi,\eta)=\sum\Theta_{kk'}\xi^k\eta^{k'}$,
+$$
+\hat\Theta^{[l,l,0]}=A^lB^l+t\,l^2aa'(\xi-\eta)A^{l-1}B^{l-1}+\dots,\label{eq:symbol2}
+$$
+every $t^n$ term with $n\ge1$ is divisible by $(\xi-\eta)$ (so on $\xi=\eta$, plane waves like the top state's $P^3=e^{\zeta_3u}$, there is \emph{no coupling}), and the top coefficient is $t^{2l-1}$ times $(-1)^{l+1}\frac{(2l-2)!(2l)!}{2(l-1)!\,l!}(aa')^l(\xi-\eta)$, with values $1,12,720,100800,25401600,10059033600$ for $l=1,\dots,6$ ($l\le4$ from fitted kernels, $l=5,6$ from (\ref{eq:single})). In the variables $\Xi=\omega-\xi$, $H=\omega'-\eta$, $\nu=\omega-\omega'$, $\delta=\xi-\eta=\nu-\Xi+H$, the rescaled $\hat K=(\omega\omega')^l\hat\Theta$ is $\omega$-free: $K_1=\Xi H+t\delta$, $K_2=\Xi^2H^2+4t\delta\Xi H+2t^2\delta(3\delta-2\nu)-12t^3\delta$, $K_3=\Xi^3H^3+9t\delta\Xi^2H^2+18t^2\delta\Xi H(2\delta-\nu)+\dots$. In a Laplace--Borel form, $\hat\Theta=\sum_{K,K'}\binom lK\binom l{K'}\{\mathbb E[(u+vs)^K(u'+v's')^{K'}]-KK'vv'\,\mathbb E[(u+vs_2)^{K-1}(u'+v's_2')^{K'-1}]\}$ with $u=-a\xi$, $v=at$, $u'=-a'\eta$, $v'=-a't$ and independent Gamma variables $s\sim\Gamma(K')$, $s'\sim\Gamma(K)$, $s_2\sim\Gamma(K'+1)$, $s_2'\sim\Gamma(K+1)$ (the Pochhammer symbols are the moments).
+
+Its determinants have a pattern. With $\nu=\omega-\omega'=(a'-a)/(aa')$, $T=l(l+1)/2$ and $d_l=\lceil l/2\rceil$, $\det\Theta^{[l,l,0]}=c_l(aa')^{s_l}t^T\nu^{T-d_l}p_l(\nu,t)$ with $p_l$ homogeneous of degree $d_l$:
+$$
+p_1=\nu+t,\quad p_2=\nu+3t,\quad p_3=\nu^2+6t\nu+3t^2,\quad p_4=\nu^2+10t\nu+15t^2,\quad p_5=\nu^3+15t\nu^2+45t^2\nu+15t^3.\label{eq:pl}
+$$
+The kernel loses rank at $\nu=0$ ($\omega=\omega'$, where CG-completeness fails) and on the roots of $p_l$. We note, as a curiosity, that $\Theta$ is rank-deficient at a generic point for $[1,0,0],[3,0,0],[3,1,0],[4,0,0]$ (ranks $2/3$, $8/10$, $8/9$, $12/15$): lost directions of unknown origin; all other computed representations have full rank.
+
+## The top-state sum rule {#sec:sumrule}
+
+A strong exact constraint comes from the top state $e_1\otimes e_1$, whose Q-functions are explicit: $P^3=e^{\zeta_3u}$, $P^2=e^{\zeta_2u}p_2$ with $p_2=\sum_{k\ge0}(\zeta_3-\zeta_2)^{-k}(\Pi^{\lambda_2})^{(k)}$ (from the Wronskian relation with $Q_1=e^{-\zeta_1u}$; monic, $p_2'-(\zeta_3-\zeta_2)p_2=-(\zeta_3-\zeta_2)\Pi^{\lambda_2}$). The sum rule is
+$$
+\sum_{ij}\Theta_{ij}\,m_i^{\rm top}(\theta_1)\,m_j^{\rm top}(\theta_2)=M^{\rm top}(\theta_1)M^{\rm top}(\theta_2)\,R(a)R(a'),\qquad R(a)=(1-\zeta_2a)^{\lambda_1-\lambda_2}(1-\zeta_3a)^{\lambda_1},\label{eq:sumrule}
+$$
+exact for ten representations (two-site; fully symbolic in $\zeta_2,\zeta_3,\theta_1,\theta_2,a,a'$ for $[1,0,0],[1,1,0],[2,2,0],[2,1,0]$, exact rational at 3--4 random points for the rest) and ten one-site ones. The right-hand side is not $M^{\rm top}M^{\rm top}$, as the plan had it: the companion-frame top state is not $e_1\otimes e_1$ because $P_{\rm phys}^{-1}e_{\rm hw}$ is not parallel to $e_{\rm hw}$, and $c\,a^{2\lambda_1-\lambda_2}/x_{\rm hw}=R(a)$ with $x_{\rm hw}=(\zeta_2-\zeta_1)^{\lambda_2}$ exactly. At $a=0$ the rule gives $R(0)=1$ and each further power of $a$ one linear relation between the top-state jets and $\Theta$: every candidate kernel must satisfy it.
+
+## One-row representations are the master kernels {#sec:master}
+
+The $\lambda_2=0$ representations work, with the same monomials, and are the master objects of the block theorem. The oper has exponents $\{0,1,\lambda_1+2\}$, $c_2=0$ (a scalar, see Section~\ref{sec:laurent}), $M=P^3p_{01}$ with nothing forced, and $\binom{\lambda_1+2}2$ monomials ($3,6,10$ for $[1,0,0],[2,0,0],[3,0,0]$). Nothing breaks, and in particular the plan's worry that $S_2$'s double pole would be non-scalar did not materialise.
+
+## The auxiliary $\mathfrak{sl}_2$ and what is open {#sec:auxsl2}
+
+The jet index space (jets of order $\le\lambda_1+1$, dimension $\lambda_1+2$) carries an $\mathfrak{sl}_2$ of spin $(\lambda_1+1)/2$ acting on symbols by the M\"obius map $(U_sf)(\xi_1,\xi_2)=\prod_i(1-s\xi_i)^{\lambda_1+1}f(\xi_i/(1-s\xi_i))$; the one-site kernel obeys $\theta^{(a+s)}=U_s\theta^{(a)}$ exactly (checked symbolically, $\lambda_1\le4$), a coherent state of the spin-$\lambda_1$ irrep of $\Lambda^2V$. The two-site kernel is \emph{not} covariant under the diagonal shift $a\to a+s$, $a'\to a'+s$ (tested, $\lambda_1=1,2$). Further tests that failed: $\Theta$ is not a compound matrix $\Lambda^2M$ ($\Theta_0$, $\Theta_1$ are Plücker, $\Theta_2,\Theta_3,\dots$ and $\Theta$ are not); the "box exchange" hypothesis (the kernel as a sum over permuted parameters $u=(\omega+ct,\omega'+c't)$ with shifts up to $\pm3$ in $t/2$ units) is refuted for $\lambda_1=2$ with the fused-R picture not literally a sum over parameter permutations; and the XXX R-matrix poles $(\omega-\omega'+mt)$ appear only in determinants of $\Theta$, not in its entries. The number of $t$-orders is only linear in $\lambda_1$, not quadratic as a fusion count of $\lambda_1^2$ R-matrix factors would suggest.
+
+**Open:** the four-index master kernel $R^{\lambda_1}_{(kl),(k'l')}(x,y)$ beyond first order. We know the single-index family (all orders), the first-order term (all pairs), the extreme multi-hops, universality in $\lambda_2$, the rank pattern, and the sum rule; the full-$\lambda_1=5$ grids and the full $(a',t)$ polynomial grids for $[4,1,0],[4,2,0],[4,3,0]$ (replaced by the block theorem) were not done.

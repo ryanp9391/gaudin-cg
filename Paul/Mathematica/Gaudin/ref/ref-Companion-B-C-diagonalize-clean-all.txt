@@ -1,0 +1,341 @@
+
+===== cell 1 (kind 1) =====
+# gl(3), L=1, adjoint: SoV in the new conventions (clean)
+
+This is the clean version of `Companion-B-C-diagonalize.wb`. It keeps only the final formulas and the checks that establish them; the exploration (failed operator forms, ansatz scans) stays in the original. It is self-contained: the first cell clears the kernel. Full write-up: `Companion-B-C-diagonalize-clean.md` / `.tex`.
+
+**Conventions.**
+- **Lax.** $\mathcal L_{ij}(u)=u\,\delta_{ij}+h\,E_{ij}$, with $T_{ij}(u)=\mathcal L_{ij}(u-\theta)$ and one site.
+- **Twist.** Companion form $G(z)=\begin{pmatrix}\chi_1&-\chi_2&\chi_3\\1&0&0\\0&1&0\end{pmatrix}$, with $\chi_k$ the elementary symmetric polynomials of $z$, acting on the right: $T^G=\mathcal L\,G$.
+- **Quantum minors.** Rows are antisymmetrized and column $k$ is evaluated at $u-(k-1)h$. The transfer matrices are $t_a=\sum_{|I|=a}\mathrm{qmin}_{I,I}[T^G]$.
+- **Factors.** $\nu_n(u)=u-\theta+h\lambda_n$, with rep $\lambda=(2,1,0)$.
+- **Q-functions.** *Direct* $Q_i=z_i^{-u/h}q_i$ and *dual* $Q^j=z_j^{+u/h}q^j$, with the $q$'s monic. The shift notation is $Q^{[2k]}(u)=Q(u+kh)$.
+
+**Numeric point** (one point; every shift is in units of $h$): $h=1/2$, $\theta=2/7$, $z=(3/2,5/4,2/3)$ so $\chi_3=5/4$, and second twist $w=(5/2,7/3,3/5)$.
+
+The last cell tabulates every check.
+
+===== cell 2 (kind 1) =====
+## 1. Representation and transfer matrices
+
+===== cell 3 (kind 2) =====
+(* fresh kernel state so the notebook is self-contained; this also clears the other new-conventions notebooks' session state (their files are untouched) *)
+ClearAll["Global`*"];
+(* GT basis and gl(3) generators, verbatim from the original notebook *)
+ps[rep_] := ps[rep] = Block[{res = (Prepend[rep, #1] &) /@ Tuples[Table[Range[rep[[1, i + 1]], rep[[1, i]]], {i, 1, Length[rep[[1]]] - 1}]]}, If[Length[res[[1, 1]]] == 1, Reverse[Sort[res]], Reverse[Sort[Flatten[ps /@ res, 1]]]]];
+dim[rep_] := dim[rep] = Length[ps[{rep}]];
+J0[k_][pat_] := J0[k][pat] = Sum[pat[[k, i]], {i, 1, k}] - Sum[pat[[k - 1, i]], {i, 1, k - 1}];
+Jp[k_][pat_] := Jp[k][pat] = -Sum[(Product[pat[[k, i]] - i - pat[[k + 1, j]] + j, {j, Range[k + 1]}]/Product[pat[[k, i]] - i - pat[[k, j]] + j, {j, Complement[Range[k], {i}]}])*v[ReplacePart[pat, {k, i} -> pat[[k, i]] + 1]], {i, 1, k}];
+Jm[k_][pat_] := Jm[k][pat] = Sum[(Product[pat[[k, i]] - i - pat[[k - 1, j]] + j, {j, Range[k - 1]}]/Product[pat[[k, i]] - i - pat[[k, j]] + j, {j, Complement[Range[k], {i}]}])*v[ReplacePart[pat, {k, i} -> pat[[k, i]] - 1]], {i, 1, k}];
+JJ[k_, l_, rep_] := JJ[k, l, rep] = Which[
+  k == l, DiagonalMatrix[J0[k] /@ ps[{rep}]],
+  l == k + 1, Transpose[Table[(Coefficient[Jp[k][ps[{rep}][[i]]], v[#1]] &) /@ ps[{rep}], {i, 1, Length[ps[{rep}]]}]],
+  l == k - 1, Transpose[Table[(Coefficient[Jm[l][ps[{rep}][[i]]], v[#1]] &) /@ ps[{rep}], {i, 1, Length[ps[{rep}]]}]],
+  l > k + 1, JJ[k, k + 1, rep] . JJ[k + 1, l, rep] - JJ[k + 1, l, rep] . JJ[k, k + 1, rep],
+  l < k - 1, JJ[k, k - 1, rep] . JJ[k - 1, l, rep] - JJ[k - 1, l, rep] . JJ[k, k - 1, rep]];
+checks = <||>;
+
+===== cell 4 (kind 2) =====
+Λ = {2, 1, 0}; dimΛ = dim[Λ];
+ν[n_][u_] := u - θ + h Λ[[n]];
+zs = {z[1], z[2], z[3]}; ws = {w[1], w[2], w[3]};
+χ[tw_] := {tw[[1]] + tw[[2]] + tw[[3]], tw[[1]] tw[[2]] + tw[[1]] tw[[3]] + tw[[2]] tw[[3]], tw[[1]] tw[[2]] tw[[3]]};
+Gc[tw_] := With[{c = χ[tw]}, {{c[[1]], -c[[2]], c[[3]]}, {1, 0, 0}, {0, 1, 0}}];
+Ee[i_, j_] := Ee[i, j] = JJ[i, j, Λ];
+ℒ[i_, j_][u_] := u IdentityMatrix[dimΛ] KroneckerDelta[i, j] + h Ee[i, j];
+T[i_, j_][u_] := ℒ[i, j][u - θ];
+TG[tw_][i_, j_][u_] := Sum[ℒ[i, k][u - θ] Gc[tw][[k, j]], {k, 3}];
+(* quantum minor of a monodromy Tf: rows antisymmetrized, column k at u-(k-1)h *)
+qminor[Tf_][I_, J_][u_] := Sum[Signature[σ] Dot @@ Table[Tf[σ[[k]], J[[k]]][u - (k - 1) h], {k, Length[J]}], {σ, Permutations[I]}];
+tGz = Table[Expand[Sum[qminor[TG[zs]][I, I][u], {I, Subsets[Range[3], {a}]}]], {a, 3}];
+(* t_a for any twist tw at argument v *)
+tGt[tw_, a_, v_] := tGz[[a]] /. Join[Thread[zs -> tw], {u -> v}];
+(* fused (CBR) transfer matrices T_{(a,b)} used to build the SoV bases *)
+tF[{1, 0}, v_] := tGt[zs, 1, v];
+tF[{1, 1}, v_] := tGt[zs, 2, v];
+tF[{2, 0}, v_] := tGt[zs, 1, v] . tGt[zs, 1, v + h] - tGt[zs, 2, v + h];
+tF[{2, 1}, v_] := tGt[zs, 2, v] . tGt[zs, 1, v + h] - tGt[zs, 3, v + h];
+tF[{2, 2}, v_] := tGt[zs, 2, v] . tGt[zs, 2, v + h] - tGt[zs, 3, v + h] . tGt[zs, 1, v];
+(* quantum determinant: t3 = χ3 ν1(u)ν2(u-h)ν3(u-2h) · 1 *)
+checks["qdet t3 = χ3 ν1(u)ν2(u-h)ν3(u-2h)"] = Union[Flatten[Expand[tGz[[3]] - χ[zs][[3]] ν[1][u] ν[2][u - h] ν[3][u - 2 h] IdentityMatrix[dimΛ]]]] === {0};
+checks["qdet t3 = χ3 ν1(u)ν2(u-h)ν3(u-2h)"]
+
+===== cell 5 (kind 1) =====
+## 2. B and C operators and the SoV bases
+$B(u)=T_{11}(u)\,\mathrm{qmin}_{12,12}[T](u+h)+T_{21}(u)\,\mathrm{qmin}_{12,13}[T](u+h)$, and $C(u)$ is the same with the minors at $u$; both use the **untwisted** $T$.
+
+The bases are labelled by GT patterns $\mu=\{\{\mu_{11}\},\{\mu_{21},\mu_{22}\}\}$:
+- **$\langle x_\mu|$.** Built from $\langle x_0|=e_1^T$ (pattern $\{\{2\},\{2,1\}\}$) by fused $t$'s at $\theta-2h$. They are B-eigencovectors with eigenvalue $(u-\theta+h\mu_{11}+h)(u-\theta+h\mu_{21})(u-\theta+h\mu_{22})$.
+- **$|y_\mu\rangle$.** Built from $|y_{\rm low}\rangle=e_8$ (pattern $\{\{1\},\{0,0\}\}$) by shifted $t$'s at $\theta$. They are C-eigenvectors with eigenvalue $(u-\theta+h\mu_{11})(u-\theta+h\mu_{21})(u-\theta+h\mu_{22}-h)$.
+
+The overlap matrix $\langle x_\mu|y_\nu\rangle$ is triangular and independent of $z$, with $\langle x_0|y_0\rangle=9h^4$, where $y_0=y_{\{2\},\{2,1\}}$.
+
+===== cell 6 (kind 2) =====
+QMu = qminor[T];
+Bop[u_] = T[1, 1][u] . QMu[{1, 2}, {1, 2}][u + h] + T[2, 1][u] . QMu[{1, 2}, {1, 3}][u + h];
+Cop[u_] = T[1, 1][u] . QMu[{1, 2}, {1, 2}][u] + T[2, 1][u] . QMu[{1, 2}, {1, 3}][u];
+gtpats = {{{2}, {2, 1}}, {{2}, {1, 1}}, {{1}, {1, 1}}, {{2}, {2, 0}}, {{2}, {1, 0}}, {{2}, {0, 0}}, {{1}, {1, 0}}, {{1}, {0, 0}}};
+x0pat = {{2}, {2, 1}}; ylowpat = {{1}, {0, 0}};
+xm2 = θ - 2 h;
+xB[{{2}, {2, 1}}] = {UnitVector[8, 1]};
+xB[{{2}, {1, 1}}] = xB[{{2}, {2, 1}}] . tF[{1, 0}, xm2];
+xB[{{1}, {1, 1}}] = xB[{{2}, {2, 1}}] . tF[{1, 1}, xm2];
+xB[{{2}, {2, 0}}] = xB[{{2}, {2, 1}}] . tF[{2, 0}, xm2] . Inverse[tF[{1, 0}, xm2]];
+xB[{{2}, {1, 0}}] = xB[{{2}, {2, 0}}] . tF[{1, 0}, xm2];
+xB[{{2}, {0, 0}}] = xB[{{2}, {2, 0}}] . tF[{2, 0}, xm2];
+xB[{{1}, {1, 0}}] = xB[{{2}, {2, 0}}] . tF[{1, 1}, xm2];
+xB[{{1}, {0, 0}}] = xB[{{2}, {2, 0}}] . tF[{2, 1}, xm2];
+(* shifted fused t's that build the C-eigenbasis *)
+tS[{1, 0}, v_] := tF[{1, 0}, v]; tS[{1, 1}, v_] := tF[{1, 1}, v + h]; tS[{2, 0}, v_] := tF[{2, 0}, v - h];
+tS[{2, 1}, v_] := tGt[zs, 2, v + h] . tGt[zs, 1, v - h] - tGt[zs, 3, v + h];
+yB[{{1}, {0, 0}}] = Transpose[{UnitVector[8, 8]}];
+yB[{{2}, {0, 0}}] = Simplify[tS[{2, 0}, θ] . Inverse[tF[{1, 0}, θ]] . yB[{{1}, {0, 0}}]];
+yB[{{1}, {1, 0}}] = tS[{1, 0}, θ] . yB[{{1}, {0, 0}}];
+yB[{{2}, {1, 0}}] = tS[{1, 0}, θ] . yB[{{2}, {0, 0}}];
+yB[{{2}, {2, 0}}] = tS[{2, 0}, θ] . yB[{{2}, {0, 0}}];
+yB[{{1}, {1, 1}}] = tS[{1, 1}, θ] . yB[{{1}, {0, 0}}];
+yB[{{2}, {1, 1}}] = tS[{1, 1}, θ] . yB[{{2}, {0, 0}}];
+yB[{{2}, {2, 1}}] = tS[{2, 1}, θ] . yB[{{2}, {0, 0}}];
+checks["<x_mu| are B eigencovectors"] = Union[Flatten[Simplify[Table[xB[μ] . Bop[u] - xB[μ] (u - θ + h μ[[1, 1]] + h) (u - θ + h μ[[2, 1]]) (u - θ + h μ[[2, 2]]), {μ, gtpats}]]]] === {0};
+checks["|y_mu> are C eigenvectors"] = Union[Flatten[Simplify[Table[Cop[u] . yB[μ] - yB[μ] (u - θ + h μ[[1, 1]]) (u - θ + h μ[[2, 1]]) (u - θ + h μ[[2, 2]] - h), {μ, gtpats}]]]] === {0};
+gramXY = Table[Simplify[(xB[a1] . yB[a2])[[1, 1]]], {a1, gtpats}, {a2, gtpats}];
+x0y0 = gramXY[[1, 1]];
+checks["<x0|y0> = 9h^4"] = Simplify[x0y0 - 9 h^4] === 0;
+checks["<x|y> independent of z"] = FreeQ[gramXY, z];
+{checks["<x_mu| are B eigencovectors"], checks["|y_mu> are C eigenvectors"], MatrixForm[gramXY]}
+
+===== cell 7 (kind 1) =====
+## 3. Frames: companion and diagonal twist
+$\Omega_L=e_1^TP_{pp}$ is the companion vacuum, with eigenvalue $\tau_{\rm vac}(u)=\sum_jz_j\nu_j(u)$. The Gauss factors $P_{\rm aux}$ (auxiliary space) and $P_{\rm phys}$ (physical space) satisfy:
+- $P_{\rm aux}G(z)P_{\rm aux}^{-1}=\mathrm{diag}(z)$;
+- $P_{\rm phys}\,t_1(z)\,P_{\rm phys}^{-1}=\sum_iz_i\mathcal L_{ii}(u-\theta)$, which is justified by gl(3) invariance of the Lax operator.
+
+The second twist $w$ written in the frame where $G(z)$ is diagonal is $G_{P,zw}=P_{\rm aux}G(w)P_{\rm aux}^{-1}$. Its transfer matrix `tGPzw` has the vacuum covector $\Omega_{zw}$.
+
+===== cell 8 (kind 2) =====
+τvac[tw_][u_] := Sum[tw[[j]] ν[j][u], {j, 3}];
+ee[i_, j_] := Table[KroneckerDelta[i, ii] KroneckerDelta[j, jj], {ii, 3}, {jj, 3}];
+LL = Sum[KroneckerProduct[ee[i, j], ℒ[i, j][u]], {i, 3}, {j, 3}];
+checks["gl(3) invariance of the Lax operator"] = Union[Flatten[Simplify[Table[LL . (KroneckerProduct[ee[i, j], IdentityMatrix[8]] + KroneckerProduct[IdentityMatrix[3], -Ee[j, i]]) - (KroneckerProduct[ee[i, j], IdentityMatrix[8]] + KroneckerProduct[IdentityMatrix[3], -Ee[j, i]]) . LL, {i, 3}, {j, 3}]]]] === {0};
+Ppp = MatrixExp[(1/z[1]) Ee[1, 2]] . MatrixExp[-(1/(z[1] z[2])) Ee[1, 3]] . MatrixExp[((z[1] + z[2])/(z[1] z[2])) Ee[2, 3]];
+Pmp = MatrixExp[r[1] Ee[3, 2]] . MatrixExp[r[2] Ee[3, 1]] . MatrixExp[r[3] Ee[2, 1]];
+Pdp = MatrixExp[Log[s[1]] Ee[1, 1]] . MatrixExp[Log[s[2]] Ee[2, 2]] . MatrixExp[Log[s[3]] Ee[3, 3]];
+Ppa = MatrixExp[-(1/z[1]) ee[2, 1]] . MatrixExp[(1/(z[1] z[2])) ee[3, 1]] . MatrixExp[-((z[1] + z[2])/(z[1] z[2])) ee[3, 2]];
+Pma = MatrixExp[-r[1] ee[2, 3]] . MatrixExp[-r[2] ee[1, 3]] . MatrixExp[-r[3] ee[1, 2]];
+Pda = MatrixExp[-Log[s[1]] ee[1, 1]] . MatrixExp[-Log[s[2]] ee[2, 2]] . MatrixExp[-Log[s[3]] ee[3, 3]];
+rsSol = {s[1] -> z[1]^2/((z[1] - z[2]) (z[1] - z[3])), s[2] -> -(z[2]/(z[1] (z[2] - z[3]))), s[3] -> 1/(z[1] z[2]), r[1] -> -(z[3]/z[2]), r[2] -> -(z[3]/z[1]), r[3] -> (z[2]^2 (-z[1] + z[3]))/(z[1]^2 (z[2] - z[3]))};
+Paux = Simplify[Pma . Pda . Ppa /. rsSol];
+Pphys = Simplify[Pmp . Pdp . Ppp /. rsSol];
+PphysInv = Simplify[Inverse[Ppp] . Inverse[Pdp] . Inverse[Pmp] /. rsSol];
+checks["Paux G(z) Paux^-1 = diag(z)"] = Union[Flatten[Simplify[Paux . Gc[zs] . Inverse[Paux] - DiagonalMatrix[zs]]]] === {0};
+checks["Pphys t1(z) Pphys^-1 = sum z_i L_ii"] = Union[Flatten[Simplify[Pphys . tGz[[1]] . PphysInv - Sum[ℒ[i, i][u - θ] z[i], {i, 3}]]]] === {0};
+ΩL = {UnitVector[8, 1]} . Ppp;
+checks["Omega_L companion vacuum"] = Union[Flatten[Simplify[ΩL . tGz[[1]] - τvac[zs][u] ΩL]]] === {0};
+GPzw = Simplify[Paux . Gc[ws] . Inverse[Paux]];
+tGPzw[u_] = Sum[ℒ[i, k][u - θ] GPzw[[k, i]], {i, 3}, {k, 3}];
+Ωzw = {UnitVector[8, 1]} . MatrixExp[r1 Ee[1, 2]] . MatrixExp[r2 Ee[1, 3]] . MatrixExp[r3 Ee[2, 3]] /. {r1 -> (w[1] - z[1])/(w[1] - z[2]), r2 -> ((w[1] - z[1]) (-w[2] + z[1]) (z[2] - z[3]))/((z[1] - z[2]) (w[1] - z[3]) (w[2] - z[3])), r3 -> ((w[1] - z[2]) (-w[2] + z[2]) (z[1] - z[3]))/((z[1] - z[2]) (w[1] - z[3]) (-w[2] + z[3]))};
+checks["Omega_zw vacuum of tGPzw"] = Union[Flatten[Simplify[Ωzw . tGPzw[u] - Ωzw τvac[ws][u]]]] === {0};
+KeyTake[checks, {"gl(3) invariance of the Lax operator", "Paux G(z) Paux^-1 = diag(z)", "Pphys t1(z) Pphys^-1 = sum z_i L_ii", "Omega_L companion vacuum", "Omega_zw vacuum of tGPzw"}]
+
+===== cell 9 (kind 1) =====
+## 4. Eigenstates, Baxter equations, QQ relation
+**Direct equation** (on $Q_i=z_i^{-x/h}q_i$, with $\deg q_i=\lambda_1-\mu_i$):
+$$\nu_1(x)\nu_1(x+h)\nu_1(x+2h)Q(x-h)-t_1(x)\nu_1(x+h)\nu_1(x+2h)Q(x)+t_2(x+h)\nu_1(x+2h)Q(x+h)-t_3(x+2h)Q(x+2h)=0.$$
+**Dual equation** (on $Q^j=z_j^{+x/h}q^j$, with $\deg q^j=\mu_j-\lambda_3$), in uniform form:
+$$\nu_3(x)\nu_3(x-h)\nu_3(x-2h)Q(x+h)-t_1(x)\nu_3(x-h)\nu_3(x-2h)Q(x)+t_2(x)\nu_3(x-2h)Q(x-h)-t_3(x)Q(x-2h)=0.$$
+**QQ relation** (polynomial parts; the exponentials differ by $\chi_3^{-u/h}$):
+$$Q_a(u)Q_b(u+h)-Q_b(u)Q_a(u+h)\propto\Big(\tfrac1{z_b}-\tfrac1{z_a}\Big)F_\lambda(u)Q^c(u),\qquad F_\lambda=\prod_{n=\lambda_2+1}^{\lambda_1}(u-\theta+nh).$$
+The weight $\mu$ of a state is read off from $t_1(\theta)=h\sum_iz_i\mu_i$, i.e. in the frame where the twist is diagonal.
+
+===== cell 10 (kind 2) =====
+pt = {h -> 1/2, θ -> 2/7, z[1] -> 3/2, z[2] -> 5/4, z[3] -> 2/3, w[1] -> 5/2, w[2] -> 7/3, w[3] -> 3/5};
+prec = 60; hN = h /. pt; thN = θ /. pt;
+(* max |coefficient| of a polynomial in var; the 0 floor handles an exactly-zero polynomial (empty coefficient list) *)
+maxc[e_, var_] := Max[Abs[Flatten[CoefficientList[Chop[Expand[e], 10^-40], var]]], 0];
+wts = Union[Table[J0[k][p], {p, ps[{Λ}]}, {k, 3}]];
+nu[n_][xx_] := ν[n][xx] /. pt;
+opDir[tt_, Q_, xx_] := nu[1][xx] nu[1][xx + hN] nu[1][xx + 2 hN] Q[xx - hN] - (tt[[1]] /. u -> xx) nu[1][xx + hN] nu[1][xx + 2 hN] Q[xx] + (tt[[2]] /. u -> xx + hN) nu[1][xx + 2 hN] Q[xx + hN] - (tt[[3]] /. u -> xx + 2 hN) Q[xx + 2 hN];
+opDual[tt_, Q_, xx_] := nu[3][xx] nu[3][xx - hN] nu[3][xx - 2 hN] Q[xx + hN] - (tt[[1]] /. u -> xx) nu[3][xx - hN] nu[3][xx - 2 hN] Q[xx] + (tt[[2]] /. u -> xx) nu[3][xx - 2 hN] Q[xx - hN] - (tt[[3]] /. u -> xx) Q[xx - 2 hN];
+(* minimal-degree monic q with Q = zz^(s x/h) q solving op; {} if none up to degree 4 *)
+solveQ[op_, tt_, zz_, s_] := Module[{c, eqs, ns, res = {}},
+  Do[If[res === {},
+    eqs = CoefficientList[Chop[Expand[op[tt, Function[yy, zz^(s (yy - X)/hN) Sum[c[j] yy^j, {j, 0, d}]], X]], 10^-40], X];
+    ns = If[eqs === {}, {UnitVector[d + 1, d + 1]}, NullSpace[N[Table[Coefficient[e, c[j]], {e, eqs}, {j, 0, d}], prec], Tolerance -> 10^-30]];
+    If[Length[ns] > 0, res = Expand[#/Coefficient[#, X, d]] &[Sum[ns[[1, j + 1]] X^j, {j, 0, d}]]]], {d, 0, 4}]; res];
+(* all data for one twist: right/left eigenvectors (left matched to right by eigenvalue), t_a eigenvalues, weights, Q's *)
+stateData[tw_] := Module[{twv = tw /. pt, tGn, mix, evR, vecR, evL, vecL, vals},
+  tGn = Table[Expand[tGt[tw, a, u] /. pt], {a, 3}];
+  mix = N[(tGn[[1]] + Pi tGn[[2]]) /. u -> 3/7, prec];
+  {evR, vecR} = Eigensystem[mix]; {evL, vecL} = Eigensystem[Transpose[mix]];
+  vals = Table[With[{k = Ordering[Abs[ψ], -1][[1]]}, Table[Chop[Expand[(N[tGn[[a]], prec] . ψ)[[k]]/ψ[[k]]], 10^-40], {a, 3}]], {ψ, vecR}];
+  <|"tw" -> twv, "tGn" -> tGn, "vecR" -> vecR, "vecL" -> Table[vecL[[First[Ordering[Abs[evL - evR[[A]]], 1]]]], {A, Length[evR]}], "vals" -> vals,
+    "mu" -> Table[First[MinimalBy[wts, Abs[(tt[[1]] /. u -> thN) - hN twv . #] &]], {tt, vals}],
+    "qd" -> Table[solveQ[opDir, tt, twv[[i]], -1], {tt, vals}, {i, 3}], "qu" -> Table[solveQ[opDual, tt, twv[[j]], 1], {tt, vals}, {j, 3}]|>];
+QD[S_, A_, i_, xx_] := N[S["tw"][[i]]^(-xx/hN), prec] (S["qd"][[A, i]] /. X -> xx);
+QU[S_, A_, j_, xx_] := N[S["tw"][[j]]^(xx/hN), prec] (S["qu"][[A, j]] /. X -> xx);
+SZ = stateData[zs]; SW = stateData[ws]; nS = Length[SZ["vals"]];
+checks["all direct and dual Q's found (z and w)"] = FreeQ[{SZ["qd"], SZ["qu"], SW["qd"], SW["qu"]}, {}];
+checks["deg q_i = λ1 - μ_i"] = And @@ Flatten[Table[Exponent[S["qd"][[A, i]], X] == Λ[[1]] - S["mu"][[A, i]], {S, {SZ, SW}}, {A, nS}, {i, 3}]];
+checks["deg q^j = μ_j - λ3"] = And @@ Flatten[Table[Exponent[S["qu"][[A, j]], X] == S["mu"][[A, j]] - Λ[[3]], {S, {SZ, SW}}, {A, nS}, {j, 3}]];
+checks["weights = adjoint weight multiset"] = Sort[SZ["mu"]] === Sort[Table[J0[k][p], {p, ps[{Λ}]}, {k, 3}]];
+(* QQ: polynomial parts, all states and cyclic (a,b;c) *)
+Flam[xx_] := Product[xx - θ + n h, {n, Λ[[2]] + 1, Λ[[1]]}] /. pt;
+checks["QQ: Q_a Q_b^[2] - Q_b Q_a^[2] = (1/z_b-1/z_a) F Q^c"] = Max[Table[With[{zz = SZ["tw"], q = SZ["qd"][[A]], qc = SZ["qu"][[A, abc[[3]]]], a = abc[[1]], b = abc[[2]]},
+     maxc[q[[a]] (q[[b]] /. X -> X + hN)/zz[[b]] - q[[b]] (q[[a]] /. X -> X + hN)/zz[[a]] - (1/zz[[b]] - 1/zz[[a]]) Flam[X] qc, X]], {A, nS}, {abc, {{1, 2, 3}, {2, 3, 1}, {3, 1, 2}}}]];
+KeyTake[checks, {"all direct and dual Q's found (z and w)", "deg q_i = λ1 - μ_i", "deg q^j = μ_j - λ3", "weights = adjoint weight multiset", "QQ: Q_a Q_b^[2] - Q_b Q_a^[2] = (1/z_b-1/z_a) F Q^c"}]
+
+===== cell 11 (kind 1) =====
+## 5. Wronskian (quantum Weyl) formula for every $T_\lambda$
+Let $D_{k_1k_2k_3}(x)=\det_{j,c}Q^j(x+k_ch)$, with $z_j^{x/h}$ stripped from each row. Expanding the vanishing $4\times4$ determinant (rows $Q^1,Q^2,Q^3,Q$; column shifts $+h,0,-h,-2h$) along its last row reproduces the dual equation, so
+$$t_1=\nu_3(x)\frac{D_{1,-1,-2}}{D_{0,-1,-2}},\quad t_2=\nu_3(x)\nu_3(x-h)\frac{D_{1,0,-2}}{D_{0,-1,-2}},\quad t_3=\nu_3(x)\nu_3(x-h)\nu_3(x-2h)\frac{D_{1,0,-1}}{D_{0,-1,-2}}.$$
+More generally, with CBR $T_\lambda(u)=\det_{1\le i,j\le\lambda_1}t_{\lambda'_j+i-j}(u+(i-1)h)$ ($t_0=1$; $t_a=0$ for $a<0$ or $a>3$):
+$$T_\lambda(x)=\prod_{(r,c)\in\lambda}\nu_3\big(x+(c-r)h\big)\;\frac{D_{\lambda_1,\lambda_2-1,\lambda_3-2}(x)}{D_{0,-1,-2}(x)}.$$
+
+===== cell 12 (kind 2) =====
+casD[S_, A_, ks_, xx_] := Det[Table[S["tw"][[j]]^k (S["qu"][[A, j]] /. X -> xx + k hN), {j, 3}, {k, ks}]];
+cbrT[tt_, lam_, v_] := Module[{lp = DeleteCases[lam, 0], n, lc, ta},
+  ta[a_, yy_] := Which[a == 0, 1, a < 0 || a > 3, 0, True, tt[[a]] /. u -> yy];
+  n = If[lp === {}, 0, First[lp]]; lc = Table[Count[lp, _?(# >= j &)], {j, n}];
+  If[n == 0, 1, Expand[Det[Table[ta[lc[[j]] + i - j, v + (i - 1) hN], {i, n}, {j, n}]]]]];
+contentP[lam_, xx_] := Product[nu[3][xx + (c - r) hN], {r, 3}, {c, lam[[r]]}];
+lamList = Select[Tuples[Range[0, 3], 3], #[[1]] >= #[[2]] >= #[[3]] && Total[#] > 0 &];
+checks["t1,t2,t3 Wronskian formulas"] = Max[Table[With[{tt = SZ["vals"][[A]] /. u -> X, d0 = casD[SZ, A, {0, -1, -2}, X]},
+     {maxc[d0 tt[[1]] - nu[3][X] casD[SZ, A, {1, -1, -2}, X], X], maxc[d0 tt[[2]] - nu[3][X] nu[3][X - hN] casD[SZ, A, {1, 0, -2}, X], X],
+      maxc[d0 tt[[3]] - nu[3][X] nu[3][X - hN] nu[3][X - 2 hN] casD[SZ, A, {1, 0, -1}, X], X]}], {A, nS}]];
+(* CBR reproduces the fused matrices used for the SoV bases *)
+tFn = Association[Table[ab -> Expand[tF[ab, u] /. pt], {ab, {{1, 0}, {1, 1}, {2, 0}, {2, 1}, {2, 2}}}]];
+checks["CBR det = fused tF eigenvalues"] = Max[Table[With[{ψ = SZ["vecR"][[A]]}, With[{k = Ordering[Abs[ψ], -1][[1]]}, maxc[(N[tFn[ab], prec] . ψ)[[k]]/ψ[[k]] - cbrT[SZ["vals"][[A]], ab, u], u]]], {A, nS}, {ab, Keys[tFn]}]];
+(* quantum Weyl formula, all 19 λ in a 3x3 box, as a polynomial identity (multiplied through by D_{0,-1,-2}) *)
+checks["T_λ = content product x D_{λ-δ}/D_{-δ}, all λ in 3x3"] = Max[Table[maxc[cbrT[SZ["vals"][[A]], lam, X] casD[SZ, A, {0, -1, -2}, X] - contentP[lam, X] casD[SZ, A, lam - {0, 1, 2}, X], X], {A, nS}, {lam, lamList}]];
+KeyTake[checks, {"t1,t2,t3 Wronskian formulas", "CBR det = fused tF eigenvalues", "T_λ = content product x D_{λ-δ}/D_{-δ}, all λ in 3x3"}]
+
+===== cell 13 (kind 1) =====
+## 6. Reduction at $x=\theta-2h$
+Write $v(p)=(Q^1,Q^2,Q^3)(p)$ for the dual columns.
+- **Degeneracies.** The dual equation at $x=\theta+h$ gives $v(\theta)\parallel v(\theta-h)$. At $x=\theta-h$ it then makes $v(\theta-3h),v(\theta-2h),v(\theta-h)$ dependent. So $v(\theta-3h),\dots,v(\theta)$ lie in one 2-plane.
+- **Reduction.** At $x=\theta-2h$ every $3\times3$ ratio collapses:
+$$T_\lambda(\theta-2h)=\begin{cases}P_\lambda(\theta-2h)\,\dfrac{\det_2[v(\theta+(\lambda_1-2)h),\,v(\theta+(\lambda_2-3)h)]}{\det_2[v(\theta-2h),\,v(\theta-3h)]}&\lambda_3=0,\ \lambda_1\le2,\\[4pt]0&\text{otherwise,}\end{cases}$$
+  for any choice of the two rows. Only $(1),(1,1),(2),(2,1)$ survive; $(2,2)$ vanishes through the parallel pair.
+
+===== cell 14 (kind 2) =====
+(* dual column at θ+m h with row prefactor z_j^(θ/h) stripped; direct column likewise with z_i^(-θ/h) *)
+colV[S_, A_, m_] := Table[S["tw"][[j]]^m (S["qu"][[A, j]] /. X -> thN + m hN), {j, 3}];
+colU[S_, A_, m_] := Table[S["tw"][[i]]^(-m) (S["qd"][[A, i]] /. X -> thN + m hN), {i, 3}];
+checks["v(θ) || v(θ-h)"] = Max[Table[Norm[Flatten[Minors[Transpose[{colV[SZ, A, 0], colV[SZ, A, -1]}], 2]]], {A, nS}]];
+checks["v(θ-3h), v(θ-2h), v(θ-h) dependent"] = Max[Table[Abs[Det[{colV[SZ, A, -3], colV[SZ, A, -2], colV[SZ, A, -1]}]], {A, nS}]];
+min2[S_, A_, {m1_, m2_}, rows_] := Det[Table[colV[S, A, m][[j]], {j, rows}, {m, {m1, m2}}]];
+checks["T_λ(θ-2h): 2x2 formula or 0, all λ, all row pairs"] = Max[Table[Abs[cbrT[SZ["vals"][[A]], lam, thN - 2 hN] -
+      If[lam[[3]] == 0 && lam[[1]] <= 2, contentP[lam, thN - 2 hN] min2[SZ, A, {lam[[1]] - 2, lam[[2]] - 3}, rows]/min2[SZ, A, {-2, -3}, rows], 0]], {A, nS}, {lam, lamList}, {rows, {{1, 2}, {1, 3}, {2, 3}}}]];
+KeyTake[checks, {"v(θ) || v(θ-h)", "v(θ-3h), v(θ-2h), v(θ-h) dependent", "T_λ(θ-2h): 2x2 formula or 0, all λ, all row pairs"}]
+
+===== cell 15 (kind 1) =====
+## 7. SoV wavefunctions
+- **Kets.** $|\Psi\rangle$ is a right eigenvector, normalized by $\langle x_0|\Psi\rangle=1$. Since every $\langle x_\mu|$ is $\langle x_0|$ times $t$'s at $\theta-2h$, $\langle x_\mu|\Psi\rangle$ is a product of $T_\lambda(\theta-2h)$; for example $\langle x_{\{2\},\{2,0\}}|\Psi\rangle=T_{20}/T_{10}$. With Section 6 this gives
+$$\langle x_\mu|\Psi\rangle=N_\mu\,\frac{\det_2[v(x_{21}),v(x_1)]\,v_k(x_{22})}{\det_2[v(\theta-2h),v(\theta-3h)]\,v_k(\theta-h)},$$
+  where $x_1=\theta-(\mu_{11}+1)h$, $x_{21}=\theta-\mu_{21}h$ and $x_{22}=\theta-\mu_{22}h$ are the B-roots.
+- **Bras.** $\langle\Psi|$ is a right eigenvector of the transposed $t$'s, normalized by $\langle\Psi|y_0\rangle=1$. With the direct columns $u(p)=(Q_1,Q_2,Q_3)(p)$, which satisfy $u(\theta-2h)\parallel u(\theta-h)$,
+$$\frac{\langle\Psi|y_\mu\rangle}{\langle\Psi|y_{\rm low}\rangle}=N'_\mu\,\frac{\det_2[u(y_{21}),u(y_{22})]\,u_k(y_1)}{(\text{same at }y_{\rm low})},$$
+  where $y_1=\theta-\mu_{11}h$, $y_{21}=\theta-\mu_{21}h$ and $y_{22}=\theta-(\mu_{22}-1)h$ are the C-roots.
+
+$N_\mu$ and $N'_\mu$ do not depend on the state, and the choice of rows and $k$ is free.
+
+===== cell 16 (kind 2) =====
+x0N = N[Flatten[xB[x0pat] /. pt], prec]; y0N = N[Flatten[yB[x0pat] /. pt], prec];
+kets[S_] := Table[v/(x0N . v), {v, S["vecR"]}];
+bras[S_] := Table[wv/(wv . y0N), {wv, S["vecL"]}];
+ketZ = kets[SZ]; braZ = bras[SZ];
+xN = Association[Table[μ -> N[Flatten[xB[μ] /. pt], prec], {μ, gtpats}]];
+yN = Association[Table[μ -> N[Flatten[yB[μ] /. pt], prec], {μ, gtpats}]];
+predX[A_, μ_] := With[{Tm = cbrT[SZ["vals"][[A]], #, thN - 2 hN] &}, Switch[μ,
+    {{2}, {2, 1}}, 1, {{2}, {1, 1}}, Tm[{1, 0}], {{1}, {1, 1}}, Tm[{1, 1}], {{2}, {2, 0}}, Tm[{2, 0}]/Tm[{1, 0}],
+    {{2}, {1, 0}}, Tm[{2, 0}], {{2}, {0, 0}}, Tm[{2, 0}]^2/Tm[{1, 0}], {{1}, {1, 0}}, Tm[{2, 0}] Tm[{1, 1}]/Tm[{1, 0}], {{1}, {0, 0}}, Tm[{2, 0}] Tm[{2, 1}]/Tm[{1, 0}]]];
+checks["<x_mu|Psi> = products of T(θ-2h)"] = Max[Table[Abs[xN[μ] . ketZ[[A]] - predX[A, μ]], {A, nS}, {μ, gtpats}]];
+psiX[S_, A_, μ_, {a_, b_}, k_] := With[{m1 = -(μ[[1, 1]] + 1), m21 = -μ[[2, 1]], m22 = -μ[[2, 2]]}, (colV[S, A, m21][[a]] colV[S, A, m1][[b]] - colV[S, A, m21][[b]] colV[S, A, m1][[a]]) colV[S, A, m22][[k]]];
+NmuX = Table[(xN[μ] . ketZ[[A]]) psiX[SZ, A, x0pat, {1, 2}, 1]/psiX[SZ, A, μ, {1, 2}, 1], {A, nS}, {μ, gtpats}];
+checks["x-side Q form: N_mu state-independent (all rows, k)"] = Max[Table[With[{nm = Table[(xN[μ] . ketZ[[A]]) psiX[SZ, A, x0pat, rows, k]/psiX[SZ, A, μ, rows, k], {A, nS}, {μ, gtpats}]}, Max[Abs[nm/ConstantArray[nm[[1]], nS] - 1]]], {rows, {{1, 2}, {1, 3}, {2, 3}}}, {k, 3}]];
+checks["u(θ-2h) || u(θ-h)"] = Max[Table[Norm[Flatten[Minors[Transpose[{colU[SZ, A, -2], colU[SZ, A, -1]}], 2]]], {A, nS}]];
+yRoots[μ_] := {-μ[[1, 1]], -μ[[2, 1]], -(μ[[2, 2]] - 1)};
+phiY[S_, A_, μ_, {a_, b_}, k_] := With[{r = yRoots[μ]}, (colU[S, A, r[[2]]][[a]] colU[S, A, r[[3]]][[b]] - colU[S, A, r[[2]]][[b]] colU[S, A, r[[3]]][[a]]) colU[S, A, r[[1]]][[k]]];
+checks["y-side Q form: N'_mu state-independent (all rows, k)"] = Max[Table[With[{nm = Table[(braZ[[A]] . yN[μ])/(braZ[[A]] . yN[ylowpat]) phiY[SZ, A, ylowpat, rows, k]/phiY[SZ, A, μ, rows, k], {A, nS}, {μ, gtpats}]}, Max[Abs[nm/ConstantArray[nm[[1]], nS] - 1]]], {rows, {{1, 2}, {1, 3}, {2, 3}}}, {k, 3}]];
+NmuXvalues = Thread[gtpats -> Chop[NmuX[[1]], 10^-30]];
+{KeyTake[checks, {"<x_mu|Psi> = products of T(θ-2h)", "x-side Q form: N_mu state-independent (all rows, k)", "u(θ-2h) || u(θ-h)", "y-side Q form: N'_mu state-independent (all rows, k)"}], NmuXvalues}
+
+===== cell 17 (kind 1) =====
+## 8. Functional orthogonality and norms
+**Bracket.** $\langle f\rangle=\sum_{n=\lambda_3}^{\lambda_1}\frac{f(\theta-nh)}{\prod_{m\ne n}(m-n)h}$, the residues of $\rho=\prod_{n=\lambda_3}^{\lambda_1}(x-\theta+nh)^{-1}$.
+
+**Derivation.** Adjointness of the direct and dual operators under $\mu=\prod_{n=\lambda_3}^{\lambda_1+2}(x-\theta+nh)^{-1}$, with $\varphi=\frac{\nu_1(x+h)\nu_1(x+2h)}{\nu_3(x-h)\nu_3(x-2h)}$, together with $\delta t_1=$ const, $\delta t_2$ linear and $\delta t_3=0$, gives for each $(i,j)$:
+$$-\delta I_1\langle P^jQ_i\rangle+a\langle P^jQ_i^{[2]}\rangle+b\langle P^{j[-2]}Q_i\rangle=0.$$
+So $\det N$, the $3\times3$ determinant with rows $(i,j)\in\{(1,3),(1,2),(2,3)\}$ and these three columns, vanishes between different states with the same twist.
+
+**Orientation.** $P^j$ are the **ket's** dual $Q$'s and $Q_i$ the **bra's** direct $Q$'s, as the SoV expansion requires.
+
+**Norm.** Let $c_0$ be the coefficient of the $(x_0,y_0)$ term $\Psi_Q(x_0)\Phi_Q(y_0)$ when $\det N$ is expanded with the $Q$'s as symbols. Then
+$$\langle\Psi_A|\Psi_B\rangle=\frac{\det N[\text{ket }B\text{ dual},\ \text{bra }A\text{ direct}]}{c_0\,\langle x_0|y_0\rangle\,\Psi_Q^B(x_0)\,\Phi_Q^A(y_0)},$$
+with
+- $\Psi_Q(x_0)=[Q^2(\theta-2h)Q^3(\theta-3h)-Q^3(\theta-2h)Q^2(\theta-3h)]\,Q^3(\theta-h)$,
+- $\Phi_Q(y_0)=[Q_1(\theta-2h)Q_2(\theta)-Q_2(\theta-2h)Q_1(\theta)]\,Q_1(\theta-2h)$,
+- $c_0=1/(4h^6)$ and $\langle x_0|y_0\rangle=9h^4$.
+
+===== cell 18 (kind 2) =====
+polesN = Range[Λ[[3]], Λ[[1]]];
+wgt[n_] := 1/Product[(m - n) hN, {m, DeleteCases[polesN, n]}];
+(* det N with ket K's dual Q's (state B) and bra Br's direct Q's (state A) *)
+detN[K_, B_, Br_, A_] := Det[Table[Sum[With[{xx = thN - n hN}, wgt[n] {-QU[K, B, j, xx] QD[Br, A, i, xx], QU[K, B, j, xx] QD[Br, A, i, xx + hN], QU[K, B, j, xx - hN] QD[Br, A, i, xx]}], {n, polesN}], {ij, {{1, 3}, {1, 2}, {2, 3}}}, {i, {ij[[1]]}}, {j, {ij[[2]]}}][[All, 1, 1]]];
+psiQ[S_, B_] := (QU[S, B, 2, thN - 2 hN] QU[S, B, 3, thN - 3 hN] - QU[S, B, 3, thN - 2 hN] QU[S, B, 2, thN - 3 hN]) QU[S, B, 3, thN - hN];
+phiQ[S_, A_] := (QD[S, A, 1, thN - 2 hN] QD[S, A, 2, thN] - QD[S, A, 2, thN - 2 hN] QD[S, A, 1, thN]) QD[S, A, 1, thN - 2 hN];
+(* c0: expand det N with the Q's as symbols (h symbolic); Qu = ket dual, Qd = bra direct *)
+rowSym[{i_, j_}] := Sum[(1/Product[(m - n) h, {m, DeleteCases[polesN, n]}]) {-Qu[j][-n] Qd[i][-n], Qu[j][-n] Qd[i][-n + 1], Qu[j][-n - 1] Qd[i][-n]}, {n, polesN}];
+detSym = Expand[Det[rowSym /@ {{1, 3}, {1, 2}, {2, 3}}]];
+termSym = Expand[(Qu[2][-2] Qu[3][-3] - Qu[3][-2] Qu[2][-3]) Qu[3][-1] (Qd[1][-2] Qd[2][0] - Qd[2][-2] Qd[1][0]) Qd[1][-2]];
+c0List = Table[Coefficient[detSym, mon/(mon /. (Qu | Qd)[_][_] -> 1)]/(mon /. (Qu | Qd)[_][_] -> 1), {mon, List @@ termSym}];
+c0 = Simplify[First[c0List]];
+checks["c0 = 1/(4h^6), same on all four (x0,y0) monomials"] = (Simplify[c0List - c0] === {0, 0, 0, 0}) && Simplify[c0 - 1/(4 h^6)] === 0;
+gramZ = Table[braZ[[A]] . ketZ[[B]], {A, nS}, {B, nS}];
+detZ = Table[detN[SZ, B, SZ, A], {A, nS}, {B, nS}];
+offR[mm_] := Max[Abs[mm - DiagonalMatrix[Diagonal[mm]]]]/Min[Abs[Diagonal[mm]]];
+checks["<Psi_A|Psi_B> diagonal (same twist)"] = offR[gramZ];
+checks["det N^{AB} diagonal (same twist)"] = offR[detZ];
+checks["norm formula, same twist"] = Max[Table[Abs[gramZ[[A, A]] (c0 x0y0 /. pt) psiQ[SZ, A] phiQ[SZ, A]/detZ[[A, A]] - 1], {A, nS}]];
+KeyTake[checks, {"c0 = 1/(4h^6), same on all four (x0,y0) monomials", "<Psi_A|Psi_B> diagonal (same twist)", "det N^{AB} diagonal (same twist)", "norm formula, same twist"}]
+
+===== cell 19 (kind 1) =====
+## 9. Scalar product between different twists
+The bra $\langle\Psi_{A,w}|$ is an eigenstate of $t(w)$ and the ket $|\Psi_{B,z}\rangle$ an eigenstate of $t(z)$, both in the companion frame. $x_0$ and $y_0$ do not depend on the twist. The formula of Section 8 holds for the full $8\times8$ matrix, with each state's own twisted $Q$'s; nothing else changes.
+
+===== cell 20 (kind 2) =====
+braW = bras[SW];
+gramWZ = Table[braW[[A]] . ketZ[[B]], {A, nS}, {B, nS}];
+predWZ = Table[detN[SZ, B, SW, A]/((c0 x0y0 /. pt) psiQ[SZ, B] phiQ[SW, A]), {A, nS}, {B, nS}];
+checks["y0 twist-independent"] = Max[Abs[N[Flatten[yB[x0pat] /. pt], prec] - N[Flatten[yB[x0pat] /. Thread[zs -> ws] /. pt], prec]]];
+checks["mixed twists: all 64 <Psi_A,w|Psi_B,z> match"] = Max[Abs[Flatten[predWZ/gramWZ - 1]]];
+checks["mixed twists: smallest |overlap| (not a zero test)"] = Min[Abs[Flatten[gramWZ]]];
+KeyTake[checks, {"y0 twist-independent", "mixed twists: all 64 <Psi_A,w|Psi_B,z> match", "mixed twists: smallest |overlap| (not a zero test)"}]
+
+===== cell 21 (kind 1) =====
+## 10. Diagonal frame: $\Omega_{zw}\cdot\Psi$
+- **The ket.** $|\Psi_{\rm diag}\rangle=P_{\rm phys}|\Psi_{B,z}\rangle$ is an eigenstate of the diagonal-twist transfer matrix.
+- **The bra.** $P_{\rm phys}\,t(w)\,P_{\rm phys}^{-1}=$ `tGPzw`, so $\Omega_{zw}P_{\rm phys}$ is the $w$-vacuum bra in the companion frame. It is the weight-$(2,1,0)$ state with $t_1=\tau_{\rm vac}(w)$.
+- **The formula.**
+$$\Omega_{zw}\cdot\Psi_{{\rm diag},B}=\big(\Omega_{zw}P_{\rm phys}\cdot y_0\big)\,\frac{\det N[Q^j_{B,z},\,Q_{i,{\rm vac},w}]}{c_0\langle x_0|y_0\rangle\,\Psi_Q^{B,z}(x_0)\,\Phi_Q^{{\rm vac},w}(y_0)}.$$
+
+===== cell 22 (kind 2) =====
+PphN = N[Pphys /. pt, prec]; PphInvN = N[PphysInv /. pt, prec]; OmN = N[Flatten[Ωzw /. pt], prec];
+checks["Pphys t1(w) Pphys^-1 = tGPzw"] = maxc[PphN . N[SW["tGn"][[1]], prec] . PphInvN - N[tGPzw[u] /. pt, prec], u];
+tauW = Expand[τvac[ws][u] /. pt];
+iVac = First[Ordering[Table[maxc[SW["vals"][[A, 1]] - tauW, u], {A, nS}], 1]];
+checks["w-vacuum found: t1 = τvac(w)"] = maxc[SW["vals"][[iVac, 1]] - tauW, u];
+checks["w-vacuum has weight (2,1,0)"] = SW["mu"][[iVac]] === Λ;
+lhsD = Table[OmN . (PphN . ketZ[[B]]), {B, nS}];
+rhsD = Table[(OmN . PphN . y0N) detN[SZ, B, SW, iVac]/((c0 x0y0 /. pt) psiQ[SZ, B] phiQ[SW, iVac]), {B, nS}];
+checks["diagonal frame: Omega_zw.Psi_diag = det of Q's (all 8)"] = Max[Abs[rhsD/lhsD - 1]];
+checks["diagonal frame: smallest |Omega_zw.Psi| (not a zero test)"] = Min[Abs[lhsD]];
+KeyTake[checks, {"Pphys t1(w) Pphys^-1 = tGPzw", "w-vacuum found: t1 = τvac(w)", "w-vacuum has weight (2,1,0)", "diagonal frame: Omega_zw.Psi_diag = det of Q's (all 8)", "diagonal frame: smallest |Omega_zw.Psi| (not a zero test)"}]
+
+===== cell 23 (kind 1) =====
+## 11. Summary of checks
+Boolean checks must be `True`. Numeric checks are residuals and must be below $10^{-25}$; the two "smallest overlap" entries are sizes, shown to confirm the comparisons are not between near-zero numbers.
+
+===== cell 24 (kind 2) =====
+passQ[k_, v_] := Which[v === True, True, v === False, False, StringContainsQ[k, "smallest"], v > 10^-3, NumericQ[v], v < 10^-25, True, False];
+Grid[Prepend[KeyValueMap[{#1, If[NumericQ[#2], ScientificForm[N[#2, 3], 3], #2], If[passQ[#1, #2], Style["PASS", Darker[Green]], Style["FAIL", Red]]} &, checks], {"check", "value", ""}], Frame -> All, Alignment -> Left]

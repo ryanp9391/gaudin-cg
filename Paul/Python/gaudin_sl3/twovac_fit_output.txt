@@ -1,0 +1,238 @@
+
+====================================================================================================
+F0: setup and sanity (point P)
+====================================================================================================
+zeta = ['3/2', '5/4', '2/3']  theta = ['2/7', '-3/5']  digits 80  HW index 7
+states 64  max ODE residual of all 6 Q: 1.18e-74
+  Omega^inf[zeta,5/2] vs vacuum_covector_1site at omega=(5/2,1e6,3/5): max projective diff 2.17e-6 (expected O(1e-6))
+  Omega^inf[zeta,7/4] vs vacuum_covector_1site at omega=(7/4,1e6,3/5): max projective diff 8.97e-7 (expected O(1e-6))
+  x0^G one-site direction mapped to notebook order (component 5 = 1): ['0.1', '0.33333333', '0.1', '0.56666667', '0.3', '1.0', '0.46666667', '0.7']
+  RESULTS-xxx-limit X1c direction (notebook order)                  : ['0.1', '0.33333333', '0.1', '0.56666667', '0.3', '1.0', '0.46666667', '0.7']
+  max diff: 1.05e-81
+  <x0^G|Psi> for all 64 states (max-component normalised vectors): min |.| = 0.000173, max |.| = 8.29
+  <Phi_inf|Psi> at (w1,w1p) = (5/2,7/4): min |.| = 0.0139, max |.| = 8.53; vanishing states (|.|<1e-30): []
+  T(B)/Qnum(B): max_B |ratio/ratio_0 - 1| = 1.01   (ratio_0 = -4317011.3969026382506)
+  |D_B(omega0)| min/max = 0.000209 / 3.51e+6 ; |<Omega_D Omega_D|Psi>| min = 0.00267
+  the 64 Qnum(B) = <Phi_inf|Psi>/<x0^G|Psi> at P, (w1,w1p) = (5/2,7/4); labels (S2(3/7), S3(-2/9)), 30 digits:
+    0 (0, 2, 4)  S2=241.886574074 S3=22.1766209586  Qnum=0.253508729033204557680082155607
+    1 (0, 3, 3)  S2=253.395874499 S3=5.98904084862  Qnum=1.15874335883112538979056682139
+    2 (0, 3, 3)  S2=239.337921797 S3=22.1364896715  Qnum=0.449265235326803304569438163469
+    3 (0, 4, 2)  S2=237.236111111 S3=21.583100738  Qnum=0.805594405594405594405594405594
+    4 (1, 1, 4)  S2=254.542740437 S3=-7.59946706427  Qnum=2.13451542235256489327527133243
+    5 (1, 1, 4)  S2=240.848463266 S3=20.7307327771  Qnum=0.406705143681896922824261888695
+    6 (1, 2, 3)  S2=272.285134106 S3=-117.409826344  Qnum=-0.920661591283456937976117435176
+    7 (1, 2, 3)  S2=273.170786004 S3=45.6237529303  Qnum=30.1781188671848413654194157422
+    8 (1, 2, 3)  S2=252.204085518 S3=-11.1067677082  Qnum=3.38483797479443260364773630212
+    9 (1, 2, 3)  S2=238.246251765 S3=21.283377958  Qnum=0.724248734238530764055897742807
+   10 (1, 2, 3)  S2=238.312986251 S3=19.115256233  Qnum=0.709769498338291045066808958897
+   11 (1, 2, 3)  S2=252.447423022 S3=5.79056746117  Qnum=2.08899075397879793386480306816
+   12 (1, 3, 2)  S2=272.397851645 S3=-126.388279844  Qnum=-5.67352714215725975855073866908
+   13 (1, 3, 2)  S2=268.583742289 S3=44.8588786616  Qnum=42.1744224394317362320283322044
+   14 (1, 3, 2)  S2=250.017478843 S3=-14.9767520197  Qnum=5.28730955670731295172642170788
+   15 (1, 3, 2)  S2=236.218704554 S3=20.8467339982  Qnum=1.29719773707509224751613991665
+   16 (1, 3, 2)  S2=249.709383286 S3=5.89997393352  Qnum=4.45575545356921539593089498378
+   17 (1, 3, 2)  S2=235.788117161 S3=18.3101386631  Qnum=1.27012020507803476583742042463
+   18 (1, 4, 1)  S2=247.974119339 S3=-19.0548309533  Qnum=8.12105324252633065834250048724
+   19 (1, 4, 1)  S2=233.465695476 S3=17.4404295287  Qnum=2.30403135030019765205677765397
+   20 (2, 0, 4)  S2=239.893518519 S3=19.1127938135  Qnum=0.633771822583011394200205389017
+   21 (2, 1, 3)  S2=270.331273076 S3=-115.717260263  Qnum=2.00323773120720165030813336136
+   22 (2, 1, 3)  S2=273.231219007 S3=44.5152660415  Qnum=62.4332394637677680334876622297
+   23 (2, 1, 3)  S2=250.974779348 S3=-12.1156914646  Qnum=5.05891044382157822100336125835
+   24 (2, 1, 3)  S2=237.453490675 S3=17.1202233313  Qnum=1.08802767143766624041240719271
+   25 (2, 1, 3)  S2=237.170467133 S3=20.294147964  Qnum=1.15282823063051186851030306567
+   26 (2, 1, 3)  S2=251.526270761 S3=5.56466769028  Qnum=3.6966615178817129965739939336
+   27 (2, 2, 2)  S2=271.429142898 S3=-126.942230512  Qnum=-8.74987116648368666185380821055
+   28 (2, 2, 2)  S2=267.204828154 S3=-114.991594601  Qnum=8.59177961019141483570761805321
+   29 (2, 2, 2)  S2=271.172969649 S3=42.0603312203  Qnum=123.243276092009976759468690107
+   30 (2, 2, 2)  S2=267.432811749 S3=43.815399717  Qnum=66.8619724650923944497654061034
+   31 (2, 2, 2)  S2=290.171336626 S3=-73.6645167581  Qnum=-337.035439887346346344907199481
+   32 (2, 2, 2)  S2=248.854166667 S3=-16.122806281  Qnum=7.77494916542965268433348740139
+   33 (2, 2, 2)  S2=235.106741053 S3=15.003827715  Qnum=1.90410498359827616742949946422
+   34 (2, 2, 2)  S2=235.215551845 S3=20.0739238269  Qnum=2.06385043014182332611447478913
+   35 (2, 2, 2)  S2=234.766618026 S3=17.6544019964  Qnum=2.02241738889703070214456811196
+   36 (2, 2, 2)  S2=248.854166667 S3=5.58801328524  Qnum=7.77494916542965268433348740139
+   37 (2, 3, 1)  S2=265.680810113 S3=-117.834431364  Qnum=6.36584434583621857764584601498
+   38 (2, 3, 1)  S2=268.580756044 S3=38.3279766339  Qnum=198.398960962639796195305237752
+   39 (2, 3, 1)  S2=246.875807798 S3=-20.2790784835  Qnum=11.7471688234907768557795807223
+   40 (2, 3, 1)  S2=232.803027712 S3=13.0403773979  Qnum=3.45751015590191716397720507905
+   41 (2, 3, 1)  S2=232.52000417 S3=16.8119842066  Qnum=3.66343193289251549326607418645
+   42 (2, 3, 1)  S2=246.324316385 S3=5.37797386353  Qnum=16.0760931881441263467440146654
+   43 (2, 4, 0)  S2=230.592592593 S3=11.0406101319  Qnum=6.4
+   44 (3, 0, 3)  S2=250.631526746 S3=5.3015635113  Qnum=6.38894048800148390953518394975
+   45 (3, 0, 3)  S2=236.123102883 S3=19.1889597775  Qnum=1.81261207628512053046424815435
+   46 (3, 1, 2)  S2=270.404796089 S3=-127.040985978  Qnum=-14.1838178553931493963768466727
+   47 (3, 1, 2)  S2=266.590686734 S3=42.4644685764  Qnum=105.436056098579340580070830511
+   48 (3, 1, 2)  S2=247.716327731 S3=-17.3131307791  Qnum=11.1393886339230384898272374595
+   49 (3, 1, 2)  S2=233.795061605 S3=16.4329549594  Qnum=3.17530051269508691459355106159
+   50 (3, 1, 2)  S2=234.225648998 S3=19.2611325341  Qnum=3.24299434268773061879034979162
+   51 (3, 1, 2)  S2=248.024423288 S3=5.21561823373  Qnum=13.2182738917682823793160542697
+   52 (3, 2, 1)  S2=265.641615587 S3=-120.172814609  Qnum=-7.31414486408524122947693295724
+   53 (3, 2, 1)  S2=266.527267486 S3=37.0351523844  Qnum=239.748388778190684180832025063
+   54 (3, 2, 1)  S2=245.803904503 S3=-21.5245975368  Qnum=16.5958709899426724745926021526
+   55 (3, 2, 1)  S2=231.669467733 S3=13.2663846812  Qnum=5.63872434790975663580853784013
+   56 (3, 2, 1)  S2=245.560567 S3=4.83769304381  Qnum=26.8906572442002145734236828446
+   57 (3, 2, 1)  S2=231.602733247 S3=16.1073556757  Qnum=5.75375383311721662555518762341
+   58 (3, 3, 0)  S2=243.248758956 S3=4.01432667334  Qnum=53.8872911996143203735629919467
+   59 (3, 3, 0)  S2=229.554481785 S3=11.0053127081  Qnum=10.2675475100630989812757177308
+   60 (4, 0, 2)  S2=233.25 S3=18.4062221224  Qnum=5.03496503496503496503496503497
+   61 (4, 1, 1)  S2=244.759300425 S3=-22.7816964456  Qnum=23.0139305990070737138959799249
+   62 (4, 1, 1)  S2=230.701347723 S3=15.2716664053  Qnum=8.92290675718512118797634130224
+   63 (4, 2, 0)  S2=228.599537037 S3=10.9275586613  Qnum=16.0
+
+====================================================================================================
+F1: jet data at theta_s, Wronskian facts, Frobenius constraint (point P)
+====================================================================================================
+  (a) Wronskian: max |p01|/(|J2_0 J3_1|+|J3_0 J2_1|) = 1.86e-78 (p01 = W(P2,P3)(theta_s)); max rel dev of p02 from (z3-z2) e^{sum z theta_s} Pi'(theta_s) Q1(theta_s) = 1.42e-76
+  (b) Frobenius P^j'(theta_s) = kappa_s P^j(theta_s), kappa_s := a_s/3 (a_s = coefficient of (u-theta_s)^-2 in S3): max over states, sites, j of |J1 - kappa J0|/(|J1| + |kappa J0|) = 2.7e-78
+      derivation: indicial polynomial rho(rho-1)(rho-2) - 3 rho(rho-1) + 3 rho = rho(rho-2)(rho-4). Acting on c0 + c1 x + ... (x = u-theta_s), the x^-2 coefficient of the oper
+      is I(1) c1 - a_s c0 with I(1) = 1(-1)(-3) = 3: only the leading singular parts 3/x (S1), 3/x^2 (S2) and the double pole a_s/x^2 of S3 enter;
+      H_s, b_s and the regular parts of S1, S2 first appear at order x^-1 (c2). => kappa_s = c1/c0 = a_s/3.
+      kappa_s (site 1 | site 2), states 0..7: ['1.5', '1.5', '1.5', '1.5', '3.6399631', '1.3681014', '3.0214549', '5.323376'] | ['1.5', '1.5', '1.5', '1.5', '-0.88996308', '1.3818986', '-2.8773513', '-0.10213962']
+  (c) jet matrix [J^j_k] j=1..3 (columns normalised): k=0..3: max over states, sites of sigma_3/sigma_1 = 4.48e-79 (rank 2); k=0..4: min sigma_3/sigma_1 = 4.99e-10 (rank 3)
+      structure: exponent-4 solution has J_0..J_3 = 0, exponent-2 solution has J_0 = J_1 = 0; all three have J_1 = kappa_s J_0.
+
+====================================================================================================
+F0b: x0 normalisations, per-zeta scalars, T versus Qnum
+====================================================================================================
+  frame-tie scalar of W2: kappa^G(zeta,omega) = Delta_1 Delta_2 = w^3/((z2-w)(z3-w)^2(z1-z2)); c(zeta,w,w') := (z2-w)(z3-w)^2(z2-w')(z3-w')^2(z1-z2)^2 = w^3 w'^3/(kappa kappa')
+  Qnum_D2 := <Phi_inf|Psi>/<x_D2 (x) x_D2|Psi> with x_D2 = (z2-z1, z3-z1, z2-z1, 2z3-z1-z2, 3(z2-z1), 3(z3-z1), 2(z3-z2), 3(z3-z2)) (notebook order, mapped to gl3_reps order)
+  P   my-x0 vs x_D2 overlap ratio: 1.0 (state spread 2.43e-77) | T/(Qnum M1 M2), M=Q1 P3: -0.007275092151 (spread 1.29e-75) | T/(Qnum_D2 (P3p02)_1 (P3p02)_2): 0.07975669748 (spread 1.19e-75) | T/Qnum state spread 1.01
+  Pp  my-x0 vs x_D2 overlap ratio: 1.0 (state spread 2.75e-78) | T/(Qnum M1 M2), M=Q1 P3: -1.777560251 (spread 2.07e-74) | T/(Qnum_D2 (P3p02)_1 (P3p02)_2): 1.305807745 (spread 2.07e-74) | T/Qnum state spread 2.57e+4
+  X1  my-x0 vs x_D2 overlap ratio: 1.0 (state spread 4.73e-79) | T/(Qnum M1 M2), M=Q1 P3: -90.17374941 (spread 4.38e-75) | T/(Qnum_D2 (P3p02)_1 (P3p02)_2): 176.8230461 (spread 4.38e-75) | T/Qnum state spread 2.07
+  X2  my-x0 vs x_D2 overlap ratio: 1.0 (state spread 7.28e-78) | T/(Qnum M1 M2), M=Q1 P3: -1.873950314 (spread 2.77e-75) | T/(Qnum_D2 (P3p02)_1 (P3p02)_2): 8.708929467 (spread 3.9e-75) | T/Qnum state spread 53.0
+  X3  my-x0 vs x_D2 overlap ratio: 1.0 (state spread 3.88e-77) | T/(Qnum M1 M2), M=Q1 P3: -1.755714176 (spread 1.19e-72) | T/(Qnum_D2 (P3p02)_1 (P3p02)_2): 4.782334724 (spread 1.19e-72) | T/Qnum state spread 1.0
+  => T(B) = c_T(zeta) Qnum(B) M1 M2 with a state-independent but zeta-DEPENDENT c_T; T/Qnum is NOT state independent (<x0|Psi>/n_B = const M1 M2, exponents 1 on Q1(th_s), P3(th_s), 0 on the rest: log-regression residual 2e-77).
+
+====================================================================================================
+F2: the fit (base point (w1,w1p) = (5/2,7/4), theta = (2/7,-3/5)); target Y0 = 4 c Qnum_D2, with factor M1 M2 (M = P3 p02) or without
+====================================================================================================
+  rows: 320 (5 zeta points), 512 (8 zeta points); kernel ZETA-INDEPENDENT after the c(zeta,w,w') scaling (stacked over all points)
+  level (basis per site; same on both sites)                             unknowns  sitrank  rank   null  rows  resid (M)    resid (no M)
+  a  N5 = {P3^(c) p_kl}: (02,c0),(02,c1),(03,c0),(03,c1),(23,c0)  [D2 ba 25        5/5      25     0     320   0.0          0.966       
+  a  A_s Q1^(k) P3^(c), k<=2, c<=1  (direct basis 6)                     36        6/6      36     0     320   0.294        0.944       
+  a  A_s Q1^(k) P3^(c), k<=1, c<=3  (8)                                  64        8/8      64     0     512   0.562        0.921       
+  a  D2 direct monomials with kappa = P3'/P3 (9)                         81        9/9      81     0     320   0.363        0.871       
+  b  Plucker basis {p_kl P3^(c)}, k<l<=3, c<=1 (12)                      144       8/8      64     80    320   0.0          0.916       
+  c  Plucker k<l<=3, c<=3 (24)                                           576       16/16    256    320   512   0.0          0.692       
+  c  A_s Q1^(k) P3^(c), k<=3, c<=3 (16)                                  256       16/16    256    0     512   0.0643       0.747       
+  (T(B) as target: T = c_T(zeta) Qnum M1 M2 with a zeta-dependent constant, so T at stacked zeta points equals the M-column above only up to one free scalar per zeta point; not refit)
+  d  N5 with K = K0 + sum_m Delta_m K_m (Laurent data H1,H2,a1,a2,b1,b2): unknowns 175 rank 119 null 56 resid 0.0
+     minimal-norm representative: |K0| = 652.0, |K_m| (m=1..6) = ['19.4', '16.6', '12.6', '17.7', '14.5', '15.4']  (nonzero only because the Laurent data are linearly tied to the jets, kappa_s = a_s/3 and H1 + H2 = const - W: the null space is 56-dim; the K0-only fit has residual 0 at rank 25, so no Laurent-dependent kernel is needed)
+  Kernel at the base point in basis N5 (fit over 5 zeta points, 320 rows; rank 25, null 0 => unique):
+     i\j     1                        2                        3                        4                        5                       
+     1       -2786875/123008          698893125/1906624        -361375/1984             453618375/1847042        -23065925/119164        
+     2       -609539175/3813248       -20215755/61504          5269159875/59105344      -5815005/238328          218655/3844             
+     3       77175/3968               -5328599325/59105344     1225/64                  -4894925/238328          96825/3844              
+     4       981927415/29552672       34151355/476656          -7935795/476656          -2275/1922               -295/31                 
+     5       -6878473/953312          -157773/15376            43169/15376              63/62                    1                       
+     all 25 entries rational (denominators <= 1e12, 50-digit test): 25/25; max |fit - D2 G| = 2.76e-74
+  12x12 Plucker level: rank 64, null 80 (of 144), residual 0.0
+     minimal-norm representative: |K|_F = 471.0, support (|entry|>1e-30) 49 of 144, rational entries 144
+     sparse representative: the N5 kernel above (25 nonzero entries, support in {P3p02, P3'p02, P3p03, P3'p03, P3p23}^2, = 5 of the 12 Plucker-basis elements per site); it is minimal since the 25 products are independent (rank 25).
+  Controls (basis N5 shape, same target Y0 with M; must FAIL):
+     lone index P2 instead of P3: rank 25 resid 0.988
+     lone index P1 instead of P3: rank 25 resid 0.989
+     both factors from the site-1 jets (swapped/collapsed sites): rank 14 resid 0.365
+     both factors from the site-2 jets: rank 14 resid 0.58
+     jets taken at the wrong points (u = 0, 1/3) with the true target: rank 25 resid 0.482
+     right basis but target without the M1 M2 factor: rank 25 resid 0.966
+
+====================================================================================================
+F3: kernel laws over the (w1,w1p) grid, theta variants, scaling symmetry, per-zeta independence
+====================================================================================================
+  (0) stacked fit over 5 zeta points: rank 25, residual 0.0
+      per-zeta-point fits (64 rows, 25 unknowns, rank <= 25) versus the stacked kernel:
+        zeta P   rank 25 residual 0.0  max |G_zeta - G_stacked| = 1.96e-73
+        zeta Pp  rank 25 residual 0.0  max |G_zeta - G_stacked| = 2.05e-73
+        zeta X1  rank 25 residual 0.0  max |G_zeta - G_stacked| = 2.07e-73
+        zeta X2  rank 25 residual 0.0  max |G_zeta - G_stacked| = 4.4e-73
+        zeta X3  rank 25 residual 0.0  max |G_zeta - G_stacked| = 3.33e-72
+  (1) 3x3 grid w1 in {5/2,-2/5,9/7} x w1p in {7/4,3,-5/3} (theta base), kernel fit vs the analytic D2 kernel:
+        (5/2, 7/4): rank 25 residual 0.0  max |fit - D2 G| = 2.05e-73  rational entries 25/25
+        (5/2, 3): rank 25 residual 0.0  max |fit - D2 G| = 3.24e-72  rational entries 25/25
+        (5/2, -5/3): rank 25 residual 0.0  max |fit - D2 G| = 7.12e-75  rational entries 25/25
+        (-2/5, 7/4): rank 25 residual 0.0  max |fit - D2 G| = 1.08e-73  rational entries 25/25
+        (-2/5, 3): rank 25 residual 0.0  max |fit - D2 G| = 1.89e-73  rational entries 25/25
+        (-2/5, -5/3): rank 25 residual 0.0  max |fit - D2 G| = 5.59e-74  rational entries 25/25
+        (9/7, 7/4): rank 25 residual 0.0  max |fit - D2 G| = 4.88e-74  rational entries 25/25
+        (9/7, 3): rank 25 residual 0.0  max |fit - D2 G| = 4.25e-73  rational entries 25/25
+        (9/7, -5/3): rank 25 residual 0.0  max |fit - D2 G| = 9.4e-75  rational entries 25/25
+  (2) each kernel entry as a polynomial of total degree <= 6 in (w1,w1p) at theta base: fit on all ordered pairs of 9 values with w1 != w1p (72 points; 28 coefficients)
+      max residual of the 25 polynomial fits: 0.0; all coefficients rational: True
+      fitted polynomial laws equal the D2 analytic G_ij(w1,w1p,1/theta12) (exact rational comparison): 25/25 identical
+      no poles: every entry is a polynomial in (w1,w1p) (fit residual above), none in w1 - w1p or w1 - zeta_j (the kernel is zeta-free).
+  (3) theta variants at (w1,w1p) = (5/2,7/4): kernel fit (5 zeta points each) vs D2
+        theta = (1/5,-4/9) (theta12 = 29/45): rank 25 residual 0.0  max |fit - D2 G| = 2.28e-73
+        theta = (3/7,-1/4) (theta12 = 19/28): rank 25 residual 0.0  max |fit - D2 G| = 5.43e-74
+        theta = (1/2,-1/3) (theta12 = 5/6): rank 25 residual 0.0  max |fit - D2 G| = 4.92e-75
+        theta = (-1/7,-6/5) (theta12 = 37/35): rank 25 residual 0.0  max |fit - D2 G| = 1.09e-74
+        theta = (4/5,-2/3) (theta12 = 22/15): rank 25 residual 0.0  max |fit - D2 G| = 9.5e-75
+      entry-wise polynomials in thi = 1/theta12 of degree <= 4 (6 theta values, 5 coefficients, 1 redundant check):
+        max residual 0.0; identical to the D2 polynomial in thi at (5/2,7/4): 25/25
+  (4) scaling symmetry u -> c u, g -> g/c at c = 2: data at (2 theta, zeta/2, omega/2)
+        rank 25 residual 0.0  max |fit - D2 G(w/2, 2 theta)| = 5.27e-72
+        entrywise ratio G'_ij / G_ij (base point) and 2^-(10-w_i-w_j) (D2 homogeneity degree) times the jet-scaling factor:
+           0.015625   0.03125   0.03125    0.0625     0.125
+            0.03125    0.0625    0.0625     0.125      0.25
+            0.03125    0.0625    0.0625     0.125      0.25
+             0.0625     0.125     0.125      0.25       0.5
+              0.125      0.25      0.25       0.5       1.0
+        D2 homogeneity check G(w/2, w'/2, thi/2) = 2^-(10-w_i-w_j) G(w, w', thi) exactly: True
+  (5) (w1,w1p) -> (eps w1, eps w1p): epsilon-order of each kernel entry (lowest total degree of the fitted polynomial in (w1,w1p); thi fixed):
+             4    2    4    0    0
+             2    2    0    0    0
+             4    0    4    0    0
+             0    0    0    0    0
+             0    0    0    0    0
+
+====================================================================================================
+F4: untwisting regime, zeta = eps phi, w = eps w^, 120 digits; Q-side formula vs the chain; Q-side CG
+====================================================================================================
+  eps = 1/1000000: eigen residual 2.12e-118 (0s); branch sectors [(4, 2, 0), (4, 1, 1), (3, 3, 0), (3, 2, 1), (3, 2, 1), (2, 2, 2)]; raising residuals (selected, next) {(4, 2, 0): ['0.0'], (4, 1, 1): ['2.32e-7', '1.41'], (3, 3, 0): ['1.94e-7', '1.41'], (3, 2, 1): ['2.15e-7', '2.15e-7', '2.05'], (2, 2, 2): ['3.45e-7', '1.37']}
+        Q degrees (dual; direct; nullities) per branch: [([4, 2, 0], [0, 2, 4], 'all1'), ([4, 1, 1], [0, 3, 3], 'all1'), ([3, 3, 0], [1, 1, 4], 'all1'), ([3, 2, 1], [1, 2, 3], 'all1'), ([3, 2, 1], [1, 2, 3], 'all1'), ([2, 2, 2], [2, 2, 2], 'all1')]
+  eps = 1/500000: eigen residual 7.0e-118 (0s); branch sectors [(4, 2, 0), (4, 1, 1), (3, 3, 0), (3, 2, 1), (3, 2, 1), (2, 2, 2)]; raising residuals (selected, next) {(4, 2, 0): ['0.0'], (4, 1, 1): ['4.64e-7', '1.41'], (3, 3, 0): ['3.88e-7', '1.41'], (3, 2, 1): ['4.3e-7', '4.3e-7', '2.05'], (2, 2, 2): ['6.91e-7', '1.37']}
+        Q degrees (dual; direct; nullities) per branch: [([4, 2, 0], [0, 2, 4], 'all1'), ([4, 1, 1], [0, 3, 3], 'all1'), ([3, 3, 0], [1, 1, 4], 'all1'), ([3, 2, 1], [1, 2, 3], 'all1'), ([3, 2, 1], [1, 2, 3], 'all1'), ([2, 2, 2], [2, 2, 2], 'all1')]
+  eps = 1/250000: eigen residual 2.17e-118 (0s); branch sectors [(4, 2, 0), (4, 1, 1), (3, 3, 0), (3, 2, 1), (3, 2, 1), (2, 2, 2)]; raising residuals (selected, next) {(4, 2, 0): ['0.0'], (4, 1, 1): ['9.27e-7', '1.41'], (3, 3, 0): ['7.75e-7', '1.41'], (3, 2, 1): ['8.59e-7', '8.59e-7', '2.05'], (2, 2, 2): ['1.38e-6', '1.37']}
+        Q degrees (dual; direct; nullities) per branch: [([4, 2, 0], [0, 2, 4], 'all1'), ([4, 1, 1], [0, 3, 3], 'all1'), ([3, 3, 0], [1, 1, 4], 'all1'), ([3, 2, 1], [1, 2, 3], 'all1'), ([3, 2, 1], [1, 2, 3], 'all1'), ([2, 2, 2], [2, 2, 2], 'all1')]
+  Q-side formula  Qform = (1/4c) sum_ij G_ij N_i(th1) N_j(th2) / (M1 M2)   versus chain  Qnum = <Phi|Psi>/<x0^G|Psi>,  max relative deviation over the 4 grid points, per branch:
+     eps = 1/1000000: (4, 2, 0) dev 1.16e-90 (cancellation 30.8 digits); (4, 1, 1) dev 5.19e-98 (cancellation 23.6 digits); (3, 3, 0) dev 4.07e-91 (cancellation 25.3 digits); (3, 2, 1) dev 6.25e-97 (cancellation 24.4 digits); (3, 2, 1) dev 1.38e-96 (cancellation 25.1 digits); (2, 2, 2) dev 4.5e-91 (cancellation 13.6 digits)
+     eps = 1/500000: (4, 2, 0) dev 1.61e-92 (cancellation 29.3 digits); (4, 1, 1) dev 5.7e-99 (cancellation 22.4 digits); (3, 3, 0) dev 3.05e-91 (cancellation 24.0 digits); (3, 2, 1) dev 2.91e-98 (cancellation 23.2 digits); (3, 2, 1) dev 9.3e-98 (cancellation 23.9 digits); (2, 2, 2) dev 2.88e-91 (cancellation 13.0 digits)
+     eps = 1/250000: (4, 2, 0) dev 3.54e-94 (cancellation 27.8 digits); (4, 1, 1) dev 2.37e-100 (cancellation 21.2 digits); (3, 3, 0) dev 5.14e-93 (cancellation 22.8 digits); (3, 2, 1) dev 1.66e-99 (cancellation 22.0 digits); (3, 2, 1) dev 1.29e-98 (cancellation 22.7 digits); (2, 2, 2) dev 3.53e-93 (cancellation 12.4 digits)
+  epsilon-exponents p (quantity ~ eps^p; from eps = 1e-6 -> 2e-6 | 2e-6 -> 4e-6), first grid point (w^1,w^1') = (3/4,-12/5), branch by branch:
+     (4, 2, 0): P3(th1) 1.874e-7|3.747e-7 kappa_1 1.0|1.0 p02(1) 1.0|1.0 p03(1) 1.0|1.0 p23(1) 3.0|3.0 N1(1)..: |N|max 1.0|1.0 sum G N N 8.0|8.0 |G N N| max term 3.0|3.0 c 8.0|8.0 M1M2 2.0|2.0 Qnum(chain) -2.0|-2.0 <x0|Psi> 2.0|2.0
+     (4, 1, 1): P3(th1) 4.238e-7|8.477e-7 kappa_1 5.393e-8|1.079e-7 p02(1) 1.0|1.0 p03(1) 2.0|2.0 p23(1) 3.0|3.0 N1(1)..: |N|max 1.0|1.0 sum G N N 7.0|7.0 |G N N| max term 3.0|3.0 c 8.0|8.0 M1M2 2.0|2.0 Qnum(chain) -3.0|-3.0 <x0|Psi> 3.0|3.0
+     (3, 3, 0): P3(th1) 1.874e-7|3.747e-7 kappa_1 1.0|1.0 p02(1) 1.0|1.0 p03(1) 1.0|1.0 p23(1) 3.0|3.0 N1(1)..: |N|max 1.0|1.0 sum G N N 7.0|7.0 |G N N| max term 3.0|3.0 c 8.0|8.0 M1M2 2.0|2.0 Qnum(chain) -3.0|-3.0 <x0|Psi> 3.0|3.0
+     (3, 2, 1): P3(th1) 2.425e-7|4.85e-7 kappa_1 3.651e-7|7.303e-7 p02(1) 1.0|1.0 p03(1) 1.0|1.0 p23(1) 2.0|2.0 N1(1)..: |N|max 1.0|1.0 sum G N N 6.0|6.0 |G N N| max term 2.0|2.0 c 8.0|8.0 M1M2 2.0|2.0 Qnum(chain) -4.0|-4.0 <x0|Psi> 4.0|4.0
+     (3, 2, 1): P3(th1) 3.317e-7|6.635e-7 kappa_1 1.617e-8|3.234e-8 p02(1) 1.0|1.0 p03(1) 1.0|1.0 p23(1) 2.0|2.0 N1(1)..: |N|max 1.0|1.0 sum G N N 6.0|6.0 |G N N| max term 2.0|2.0 c 8.0|8.0 M1M2 2.0|2.0 Qnum(chain) -4.0|-4.0 <x0|Psi> 4.0|4.0
+     (2, 2, 2): P3(th1) 3.708e-7|7.417e-7 kappa_1 5.347e-8|1.069e-7 p02(1) 1.0|1.0 p03(1) 1.0|1.0 p23(1) 1.0|1.0 N1(1)..: |N|max 1.0|1.0 sum G N N 4.0|4.0 |G N N| max term 2.0|2.0 c 8.0|8.0 M1M2 2.0|2.0 Qnum(chain) -6.0|-6.0 <x0|Psi> 6.0|6.0
+     kernel entries G_ij: eps-order of the entry at (w1,w1p) -> eps (w^) : table of lowest total degree (F3 (5)); thi = 1/theta12 is eps-free.
+  CG from the Q side alone: for each branch the limit eps -> 0 of the ratios rho_a = Qform(grid a)/Qform(grid 0) (Richardson in eps from 1,2,4e-6; error O(eps^3));
+  with Psi_B -> v_B in the exact highest-weight space H_mu (untwisting): <Phi_a|v_B> = Qnum_a <x0|v_B> => the linear system (f_a - rho_a f_0)(v) = 0, f_a(v) = <Phi_a|v> (Phi_a exact, eps-free).
+   branch (4, 2, 0): HW space dim 1; consistency singular values of the 3x1 system ['5.79e-90']; rho_a(Q side, limit) = ['1.0', '1.0', '1.0'] ; chain rho_a = ['1.0', '1.0', '1.0']
+       Q-side vector (G-norm 1, sign: first nonzero GT component > 0): slice <a, hw|v> (a = gl3_reps index of the first factor): [(7, '1.0')]
+       chain-side eigenvector projected on H (eps=1e-6), same normalisation: max |v_Q - v_chain| = 0.0  (O(eps) expected); |v - Pv|/|v| of the chain vector = 0.0
+   branch (4, 1, 1): HW space dim 1; consistency singular values of the 3x1 system ['5.95e-20']; rho_a(Q side, limit) = ['0.818289504857', '-0.0324263038549', '-0.214136798998'] ; chain rho_a = ['0.818289504857', '-0.0324263038549', '-0.214136798998']
+       Q-side vector (G-norm 1, sign: first nonzero GT component > 0): slice <a, hw|v> (a = gl3_reps index of the first factor): [(5, '-0.707106781187')]
+       chain-side eigenvector projected on H (eps=1e-6), same normalisation: max |v_Q - v_chain| = 9.68e-122  (O(eps) expected); |v - Pv|/|v| of the chain vector = 1.64e-7
+   branch (3, 3, 0): HW space dim 1; consistency singular values of the 3x1 system ['2.8e-19']; rho_a(Q side, limit) = ['0.487571129081', '-0.174603174603', '-0.687032045523'] ; chain rho_a = ['0.487571129081', '-0.174603174603', '-0.687032045523']
+       Q-side vector (G-norm 1, sign: first nonzero GT component > 0): slice <a, hw|v> (a = gl3_reps index of the first factor): [(6, '-0.707106781187')]
+       chain-side eigenvector projected on H (eps=1e-6), same normalisation: max |v_Q - v_chain| = 9.68e-122  (O(eps) expected); |v - Pv|/|v| of the chain vector = 1.37e-7
+   branch (3, 2, 1): HW space dim 2; consistency singular values of the 3x2 system ['0.723', '3.64e-20']; rho_a(Q side, limit) = ['0.733223361576', '0.02053459544', '0.157867160066'] ; chain rho_a = ['0.733223361576', '0.02053459544', '0.157867160066']
+       Q-side vector (G-norm 1, sign: first nonzero GT component > 0): slice <a, hw|v> (a = gl3_reps index of the first factor): [(2, '0.208887289734'), (4, '0.049311600013')]
+       chain-side eigenvector projected on H (eps=1e-6), same normalisation: max |v_Q - v_chain| = 1.08e-9  (O(eps) expected); |v - Pv|/|v| of the chain vector = 8.23e-8
+   branch (3, 2, 1): HW space dim 2; consistency singular values of the 3x2 system ['0.753', '5.67e-19']; rho_a(Q side, limit) = ['-0.16434558767', '-0.0194039421019', '0.129004381313'] ; chain rho_a = ['-0.16434558767', '-0.0194039421019', '0.129004381313']
+       Q-side vector (G-norm 1, sign: first nonzero GT component > 0): slice <a, hw|v> (a = gl3_reps index of the first factor): [(2, '-0.0797878448606'), (4, '0.337986734608')]
+       chain-side eigenvector projected on H (eps=1e-6), same normalisation: max |v_Q - v_chain| = 1.08e-9  (O(eps) expected); |v - Pv|/|v| of the chain vector = 8.23e-8
+   branch (2, 2, 2): HW space dim 1; consistency singular values of the 3x1 system ['1.46e-18']; rho_a(Q side, limit) = ['-0.373964006175', '-0.000788598886267', '0.0192070080153'] ; chain rho_a = ['-0.373964006175', '-0.000788598886267', '0.0192070080153']
+       Q-side vector (G-norm 1, sign: first nonzero GT component > 0): slice <a, hw|v> (a = gl3_reps index of the first factor): [(0, '0.117851130198')]
+       chain-side eigenvector projected on H (eps=1e-6), same normalisation: max |v_Q - v_chain| = 0.0  (O(eps) expected); |v - Pv|/|v| of the chain vector = 1.5e-7
+
+====================================================================================================
+F5: cross-checks with D2 (RESULTS-twovac-limit.md) and W2 (Gaudin-L2-chain-2.wb, A5-1 table of the [2,1,0] run)
+====================================================================================================
+  W2 A5-1 rows parsed: 134
+  matching by the (S2(3/7), S3(-2/9)) labels (tolerance 1e-20): unmatched 70 of 134 (the unmatched rows belong to other zeta points of the W2 table, e.g. the second zeta point)
+  max relative difference of Qnum(B) between this code (x0 of D2/W2, Phi_inf) and W2: (5/2,7/4): 3.32e-31 ; (-2/5,3): 2.83e-31  (30 digits printed by W2)
+  D2: kernel G fitted here equals D2's analytic G at 9 + 72 (w1,w1p) points, 6 theta values, c = 2 scaling (F2, F3); D2's printed vacuum monomial P3 p02 and constant 1 reproduced (F2 level a).
+
+total 131s

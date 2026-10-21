@@ -1,0 +1,314 @@
+
+==============================================================================================================
+B0: port and verify B(u)  (exact; untwisted T, new conventions)
+==============================================================================================================
+check of the gl(3) relations on the one-site generators: violations = 0
+B(u) is a polynomial of degree 6 in h; nnz of B_0..B_6 at u0 = 3/7: [64, 64, 232, 251, 247, 178, 75]
+B_0 = nu(u)^3 * 1 : True
+[B(3/7), B(-2/9)] = 0 at h = 1/2 exactly: True
+degree 6 in u: leading coefficient is the identity: True ; interpolation from 7 points reproduces B(19/23) exactly: True
+one-site labels (a|bc) -> roots {-1-a,-b,-c}:
+    (2, 2, 1) (-3, -2, -1)
+    (2, 1, 1) (-3, -1, -1)
+    (1, 1, 1) (-2, -1, -1)
+    (2, 2, 0) (-3, -2, 0)
+    (2, 1, 0) (-3, -1, 0)
+    (2, 0, 0) (-3, 0, 0)
+    (1, 1, 0) (-2, -1, 0)
+    (1, 0, 0) (-2, 0, 0)
+the 64 label-rule eigenvalues each have a 1-dim exact left nullspace of B(3/7)-lambda_x: 64 / 64; and the covector is an eigencovector of B(-2/9) with the label-rule eigenvalue (u independence): 64 / 64   (0.9s)
+the 64 eigenvalues are pairwise distinct (simple spectrum): True
+trace B(3/7) = sum of the label-rule eigenvalues: True
+the 64 pairs (l1,l2) (first site slow): first 8 = [((2, 2, 1), (2, 2, 1)), ((2, 2, 1), (2, 1, 1)), ((2, 2, 1), (1, 1, 1)), ((2, 2, 1), (2, 2, 0)), ((2, 2, 1), (2, 1, 0)), ((2, 2, 1), (2, 0, 0)), ((2, 2, 1), (1, 1, 0)), ((2, 2, 1), (1, 0, 0))] ...
+
+==============================================================================================================
+B1: the h-expansion B = nu^3 [1 + h b1 + h^2 b2 + ...] in Gaudin Lax terms
+==============================================================================================================
+u = 3/7: b_k(u) = Taylor/Lax formula (t = 1 + hL + h^2 C, k = 0..6): True ; orders 7, 8 of the formula vanish: True
+u = -2/9: b_k(u) = Taylor/Lax formula (t = 1 + hL + h^2 C, k = 0..6): True ; orders 7, 8 of the formula vanish: True
+u = 5/3: b_k(u) = Taylor/Lax formula (t = 1 + hL + h^2 C, k = 0..6): True ; orders 7, 8 of the formula vanish: True
+u = 3/7: b1 = 2 L11 + L22 + nu'/nu: True ; b2 = [2C11 + C22 + L11' + L11^2 + 2 L11 L22 - L21 L12 + L21 L23] + (nu'/nu)(2L11+L22) + s2: True
+u = -2/9: b1 = 2 L11 + L22 + nu'/nu: True ; b2 = [2C11 + C22 + L11' + L11^2 + 2 L11 L22 - L21 L12 + L21 L23] + (nu'/nu)(2L11+L22) + s2: True
+u = 5/3: b1 = 2 L11 + L22 + nu'/nu: True ; b2 = [2C11 + C22 + L11' + L11^2 + 2 L11 L22 - L21 L12 + L21 L23] + (nu'/nu)(2L11+L22) + s2: True
+b1(u0) diagonal in the GT product basis: True
+b1(u0) = sum_s (2 E^s_11 + E^s_22 + 1)/(u-theta_s): eigenvalue w_s = 1 + a + b + c per site; explicit check of the multiset:
+   multiset of diag(b1) == multiset of sum_s (1+a+b+c)_s/(u0-theta_s) over the 64 labels: True
+   b1(u0) eigenspaces (generic u0): number 25, dimensions [1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+   dimension tally: {1: 4, 2: 12, 4: 9}
+
+==============================================================================================================
+B1: commutators  [b_i(u), b_j(v)],  u = 3/7, v = -2/9
+==============================================================================================================
+nonzero [b_i(u), b_j(v)] (1 = nonzero), rows i, cols j = 1..6:
+   i=1  0 1 1 1 1 1
+   i=2  1 1 1 1 1 1
+   i=3  1 1 1 1 1 1
+   i=4  1 1 1 1 1 1
+   i=5  1 1 1 1 1 1
+   i=6  1 1 1 1 1 0
+   order h^2: sum_{i+j=2} [b_i(u), b_j(v)] = 0: True
+   order h^3: sum_{i+j=3} [b_i(u), b_j(v)] = 0: True
+   order h^4: sum_{i+j=4} [b_i(u), b_j(v)] = 0: True
+   order h^5: sum_{i+j=5} [b_i(u), b_j(v)] = 0: True
+   order h^6: sum_{i+j=6} [b_i(u), b_j(v)] = 0: True
+   order h^7: sum_{i+j=7} [b_i(u), b_j(v)] = 0: True
+   order h^8: sum_{i+j=8} [b_i(u), b_j(v)] = 0: True
+same-u commutators [b_i(u), b_j(u)] nonzero for (i,j) in [(1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4)]
+b1 vs the Lax entries: [b1(u), L_ij(v)] etc. are not zero (b1 Cartan only); [b1(u), b1(v)]: True
+
+==============================================================================================================
+B1: b2 compressed to the b1-eigenspaces (generic u0 = 3/7) vs the label-rule prediction
+==============================================================================================================
+compressed-b2 eigenvalues on every b1-eigenspace = the h^2 coefficients of the label-rule eigenvalue series  (second-order degenerate PT; all 25 eigenspaces): True
+  number of distinct (b1, compressed-b2) pairs = 64 of 64  (b2 splits every b1-eigenspace completely: True)
+
+==============================================================================================================
+B1: full characteristic polynomials of b_k(u0) (generalised eigenspaces of single b_k) 
+==============================================================================================================
+   b1(u0): factor types (degree, multiplicity): count {(1, 1): 4, (1, 2): 12, (1, 4): 9}
+   b2(u0): factor types (degree, multiplicity): count {(1, 1): 62, (1, 2): 1}
+      repeated root 245/6 of b2: dim ker(b2-lam) = 1, dim ker (b2-lam)^2 = 2
+   b3(u0): factor types (degree, multiplicity): count {(1, 1): 56, (1, 2): 2, (1, 4): 1}
+   b4(u0): factor types (degree, multiplicity): count {(1, 1): 38, (1, 2): 5, (1, 16): 1}
+   b5(u0): factor types (degree, multiplicity): count {(1, 1): 15, (1, 2): 6, (1, 37): 1}
+   b6(u0): factor types (degree, multiplicity): count {(1, 1): 3, (1, 2): 3, (1, 55): 1}
+
+==============================================================================================================
+B2: SoV covectors <x|(h) as exact rational functions of h
+==============================================================================================================
+(deg den, max deg num) of the r-normalised covector components, tally over the 64 labels: {(0, 0): 11, (1, 1): 23, (2, 2): 19, (3, 3): 7, (4, 4): 3, (5, 5): 1}
+maximal degrees: den 5, num 5
+q(0) = 1 for all labels (the covector is analytic at h = 0 with <x|.r = 1): True
+held-out exact validation (6 unseen h, incl. h=7/3 and h<0): v(h)B(h) = lambda_x(h) v(h), v.r = 1: 64 / 64
+distinct leading covectors <x|_0 (projectively): 64  among 64 labels
+class sizes: {1: 64}
+   rank span{<x|_k : k <= 0} = 64
+   rank span{<x|_k : k <= 1} = 64
+   rank span{<x|_k : k <= 2} = 64
+   rank span{<x|_k : k <= 3} = 64
+   rank span{<x|_k : k <= 4} = 64
+   rank span{<x|_k : k <= 5} = 64
+   rank span{<x|_k : k <= 6} = 64
+
+==============================================================================================================
+B2 (diagonal frame): P_phys^{-1}(e^{h zeta}) as an exact h-series and the frame change of the SoV covectors
+==============================================================================================================
+zeta point P (Fraction(3, 2), Fraction(5, 4), Fraction(2, 3))
+P_phys^{-1}(e^{h zeta}) series built (0.4s); valuation of every entry: [1]
+first row e1 P^{-1} equals D2's linear forms (z2-z1, z3-z1, z2-z1, 2z3-z1-z2, 3(z2-z1), 3(z3-z1), 2(z3-z2), 3(z3-z2)): True
+diagonal-frame covectors f^d_x(h) = f_x(h)(P (x) P) built (10.7s)
+h-valuation v_x of f^d_x (vacuum = 2): {2: 64}
+  v_x - v_vac against the depth D(x) = sum_s (6 - (1+a+b+c)) : True ; equal to depth for all labels: False
+rank of the 64 normalised leading covectors (h^0 term of f^d_x / h^{v_x}): 1
+leading covector of the vacuum label = x^G (x) x^G (D2's x0^G, per site (z2-z1,...)'):  True
+all 64 leading covectors are proportional to x^G (x) x^G (single class): True
+lattice saturation done / loaded (0.0s)
+jet defects d_y (number of extra divisions by h), tally: {0: 1, 1: 4, 2: 8, 3: 12, 4: 14, 5: 12, 6: 8, 7: 4, 8: 1}
+rank of the 64 jet leading covectors: 64
+
+==============================================================================================================
+B3 (result): exact wavefunction matrix W of the jet basis  [zeta point P]
+==============================================================================================================
+rationalised entries: 0 failures; nonzero entries: 1517 of 4096
+filtration: W[y, (i,j)] = 0 whenever w_i + w_j - 4 > d_y (jet defect of y): True (0 violations)
+graded blocks (level d: #jet covectors, #products of weight 4+d, rank of the leading block): [(0, 1, 1, 1), (1, 4, 4, 4), (2, 8, 8, 8), (3, 12, 12, 12), (4, 14, 14, 14), (5, 12, 12, 12), (6, 8, 8, 8), (7, 4, 4, 4), (8, 1, 1, 1)]
+block W^(d,d) invertible at every level (the leading part of <y|psi> is a pure weight-(4+d) combination): True
+
+==============================================================================================================
+B3 (zeta dependence): W at P, Pp, X1
+==============================================================================================================
+P max |W - W_P| = 0  defects equal: True
+Pp max |W - W_P| = 33900888577574/2941414385  defects equal: True
+X1 max |W - W_P| = 7398963862420348926950544/640686399391060278025  defects equal: True
+
+==============================================================================================================
+B3 (frames): the monomial covectors <i,j| in the Gaudin companion frame at several zeta (is the rule zeta independent there?)
+==============================================================================================================
+P <0,0|^c (the x0 covector in the Gaudin companion frame) support: [0] value 1
+Pp <0,0|^c (the x0 covector in the Gaudin companion frame) support: [0] value 1
+X1 <0,0|^c (the x0 covector in the Gaudin companion frame) support: [0] value 1
+Pp monomial covectors <mu|^c proportional to those at P (exactly): 64 / 64
+   scalars (first 8): ['1', '1', '1', '1', '1', '1', '1', '1']
+X1 monomial covectors <mu|^c proportional to those at P (exactly): 64 / 64
+   scalars (first 8): ['1', '1', '1', '1', '1', '1', '1', '1']
+
+==============================================================================================================
+B4: the Gaudin K tensor: Phi_c^inf = Omega_c^inf[a] (x) Omega_c^inf[a'] expanded in the monomial (jet) basis
+==============================================================================================================
+companion-frame monomial covectors <i,j|^c (zeta independent, exact): 833 nonzero entries of 4096; inverse: 975 nonzero
+Omega_c^inf[a] components (notebook order): [1, a, a, a**2, 3*a**2, 3*a**3, 0, 0]
+nonzero K-tensor entries Theta_(i,j) (jet monomials m_i(th1) m_j(th2)): 25 of 64
+   support (i,j) with i,j in W_NAMES order: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 5), (1, 0), (1, 1), (1, 2), (1, 3), (1, 5), (2, 0), (2, 1), (2, 2), (2, 3), (2, 5), (3, 0), (3, 1), (3, 2), (3, 3), (3, 5), (5, 0), (5, 1), (5, 2), (5, 3), (5, 5)]
+   in terms of N5 = (P3p02, P3'p02, P3p03, P3'p03, P3p23) ~ W indices [0, 1, 2, 3, 5] : all support inside N5 x N5: True
+1/theta12 = 35/31
+Theta_(N5_i, N5_j)(a, a') == G_ij(1/a, 1/a', 1/theta12) a^3 a'^3 / 4  (= G/(4 w1^3 w1'^3)), exact polynomial identity in (a, a'), entries failing: [] (of 25)
+
+==============================================================================================================
+B3/B4 verification: the zeta-independent companion-frame monomial covectors vs the Gaudin states at P, Pp, X1 (80 digits)
+==============================================================================================================
+zeta point P ((Fraction(3, 2), Fraction(5, 4), Fraction(2, 3))): max over 64 states x 64 jets of | <mu|^c Psi_c/<x0|Psi_c - m_i(th1) m_j(th2)/(M1 M2) | / | . | = 6.05e-76
+zeta point Pp ((Fraction(2, 1), Fraction(5, 3), Fraction(-1, 2))): max over 64 states x 64 jets of | <mu|^c Psi_c/<x0|Psi_c - m_i(th1) m_j(th2)/(M1 M2) | / | . | = 1.39e-74
+zeta point X1 ((Fraction(7, 5), Fraction(-3, 4), Fraction(1, 6))): max over 64 states x 64 jets of | <mu|^c Psi_c/<x0|Psi_c - m_i(th1) m_j(th2)/(M1 M2) | / | . | = 1.5e-73
+
+==============================================================================================================
+B4: homogeneity, structure of the K tensor entries Theta_ij(a, a', 1/theta12)
+==============================================================================================================
+
+==============================================================================================================
+B4: the Gaudin K tensor: Phi_c^inf = Omega_c^inf[a] (x) Omega_c^inf[a'] expanded in the monomial (jet) basis
+==============================================================================================================
+companion-frame monomial covectors <i,j|^c (zeta independent, exact): 833 nonzero entries of 4096; inverse: 975 nonzero
+Omega_c^inf[a] components (notebook order): [1, a, a, a**2, 3*a**2, 3*a**3, 0, 0]
+nonzero K-tensor entries Theta_(i,j) (jet monomials m_i(th1) m_j(th2)): 25 of 64
+   support (i,j) with i,j in W_NAMES order: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 5), (1, 0), (1, 1), (1, 2), (1, 3), (1, 5), (2, 0), (2, 1), (2, 2), (2, 3), (2, 5), (3, 0), (3, 1), (3, 2), (3, 3), (3, 5), (5, 0), (5, 1), (5, 2), (5, 3), (5, 5)]
+   in terms of N5 = (P3p02, P3'p02, P3p03, P3'p03, P3p23) ~ W indices [0, 1, 2, 3, 5] : all support inside N5 x N5: True
+1/theta12 = 35/31
+Theta_(N5_i, N5_j)(a, a') == G_ij(1/a, 1/a', 1/theta12) a^3 a'^3 / 4  (= G/(4 w1^3 w1'^3)), exact polynomial identity in (a, a'), entries failing: [] (of 25)
+N5 jet weights: [2, 3, 3, 4, 5]
+entries (i,j) of the N5 x N5 block: lowest/highest total degree in (a,a') and number of monomials (thi = 1/theta12 numeric):
+   (0,0)  deg_in_(a,a'): 0..2   #terms 4   [w_i+w_j-4 = 0]
+   (0,1)  deg_in_(a,a'): 1..4   #terms 10   [w_i+w_j-4 = 1]
+   (0,2)  deg_in_(a,a'): 1..2   #terms 2   [w_i+w_j-4 = 1]
+   (0,3)  deg_in_(a,a'): 2..6   #terms 9   [w_i+w_j-4 = 2]
+   (0,4)  deg_in_(a,a'): 3..6   #terms 6   [w_i+w_j-4 = 3]
+   (1,0)  deg_in_(a,a'): 1..4   #terms 10   [w_i+w_j-4 = 1]
+   (1,1)  deg_in_(a,a'): 2..4   #terms 8   [w_i+w_j-4 = 2]
+   (1,2)  deg_in_(a,a'): 2..6   #terms 9   [w_i+w_j-4 = 2]
+   (1,3)  deg_in_(a,a'): 3..6   #terms 7   [w_i+w_j-4 = 3]
+   (1,4)  deg_in_(a,a'): 4..6   #terms 4   [w_i+w_j-4 = 4]
+   (2,0)  deg_in_(a,a'): 1..2   #terms 2   [w_i+w_j-4 = 1]
+   (2,1)  deg_in_(a,a'): 2..6   #terms 9   [w_i+w_j-4 = 2]
+   (2,2)  deg_in_(a,a'): 2..2   #terms 1   [w_i+w_j-4 = 2]
+   (2,3)  deg_in_(a,a'): 3..6   #terms 5   [w_i+w_j-4 = 3]
+   (2,4)  deg_in_(a,a'): 4..6   #terms 3   [w_i+w_j-4 = 4]
+   (3,0)  deg_in_(a,a'): 2..6   #terms 9   [w_i+w_j-4 = 2]
+   (3,1)  deg_in_(a,a'): 3..6   #terms 7   [w_i+w_j-4 = 3]
+   (3,2)  deg_in_(a,a'): 3..6   #terms 5   [w_i+w_j-4 = 3]
+   (3,3)  deg_in_(a,a'): 4..6   #terms 4   [w_i+w_j-4 = 4]
+   (3,4)  deg_in_(a,a'): 5..6   #terms 2   [w_i+w_j-4 = 5]
+   (4,0)  deg_in_(a,a'): 3..6   #terms 6   [w_i+w_j-4 = 3]
+   (4,1)  deg_in_(a,a'): 4..6   #terms 4   [w_i+w_j-4 = 4]
+   (4,2)  deg_in_(a,a'): 4..6   #terms 3   [w_i+w_j-4 = 4]
+   (4,3)  deg_in_(a,a'): 5..6   #terms 2   [w_i+w_j-4 = 5]
+   (4,4)  deg_in_(a,a'): 6..6   #terms 1   [w_i+w_j-4 = 6]
+
+==============================================================================================================
+B4: equal-twist family Phi = Omega_D[zeta,w] (x) Omega_D[zeta,w] (finite w2): K tensor and the Q-number against P1's det N
+==============================================================================================================
+equal twist w = (Fraction(5, 2), Fraction(7, 3), Fraction(3, 5)) : nonzero jet coefficients vartheta_(i,j): 64 of 64
+   by jet level d = w_i + w_j - 4: {0: 1, 1: 4, 2: 8, 3: 12, 4: 14, 5: 12, 6: 8, 7: 4, 8: 1}
+   one-site monomials involved on site 1: [0, 1, 2, 3, 4, 5, 6, 7] site 2: [0, 1, 2, 3, 4, 5, 6, 7]
+Q-number from the pairing vs from the jet expansion sum_mu vartheta_mu m_mu/(M1 M2): max rel. deviation over 64 states: 5.57e-75
+Qnum_eq(B) M1 M2 / det N_B(w): state-independent? max |ratio/ratio_0 - 1| = 1.19e-75 ; ratio_0 = 12.5381319888976
+
+==============================================================================================================
+B5: operators b_k(u) in the Gaudin companion-frame jet basis  (b_k acting on covectors from the right; matrix B_k = Y b_k Y^-1)
+==============================================================================================================
+u = 3/7
+   b_1: nonzero 935 of 4096; block lower-triangular w.r.t. the jet level (b_k F_d subset F_d): True; diagonal = sum_s (6 - depth_s)/(u-theta_s) of the monomial class: True; triangular w.r.t. the (depth_1, depth_2) class partial order: False
+   b_2: nonzero 1509 of 4096; block lower-triangular w.r.t. the jet level (b_k F_d subset F_d): True
+   b_3: nonzero 1603 of 4096; block lower-triangular w.r.t. the jet level (b_k F_d subset F_d): True
+u = -2/9
+   b_1: nonzero 935 of 4096; block lower-triangular w.r.t. the jet level (b_k F_d subset F_d): True; diagonal = sum_s (6 - depth_s)/(u-theta_s) of the monomial class: True; triangular w.r.t. the (depth_1, depth_2) class partial order: False
+   b_2: nonzero 1509 of 4096; block lower-triangular w.r.t. the jet level (b_k F_d subset F_d): True
+   b_3: nonzero 1603 of 4096; block lower-triangular w.r.t. the jet level (b_k F_d subset F_d): True
+
+==============================================================================================================
+B4: frame tie scalar kappa^G (origin of c) and the K tensor in the XXX-derived (saturation) jet basis
+==============================================================================================================
+   w = 5/2: Omega_c^inf[1/w] P_G^-1 = rho * Omega_D^inf[zeta,w] with the single scalar rho = [Fraction(-121, 1800)] ; D2/W2 kappa^G = w^3/((z2-w)(z3-w)^2(z1-z2)) = -1800/121 ; rho * kappa^G == 1: True
+   w = -2/5: Omega_c^inf[1/w] P_G^-1 = rho * Omega_D^inf[zeta,w] with the single scalar rho = [Fraction(-22, 3)] ; D2/W2 kappa^G = w^3/((z2-w)(z3-w)^2(z1-z2)) = -3/22 ; rho * kappa^G == 1: True
+   w = 9/7: Omega_c^inf[1/w] P_G^-1 = rho * Omega_D^inf[zeta,w] with the single scalar rho = [Fraction(-169, 104976)] ; D2/W2 kappa^G = w^3/((z2-w)(z3-w)^2(z1-z2)) = -104976/169 ; rho * kappa^G == 1: True
+   (a,a') = (2/3,-5/7): nonzero Theta_mu (adapted monomial basis): 25 ; nonzero phi_y in the saturation (XXX-derived) jet basis: 36 of 64
+   phi_y nonzero by jet defect level: {0: 1, 1: 4, 2: 8, 3: 10, 4: 8, 5: 4, 6: 1}
+
+==============================================================================================================
+B3: table of the saturation jet basis y -> products m_i(theta_1) m_j(theta_2)   (zeta = P; all 64 rows)
+==============================================================================================================
+one-site monomials m_i: 0: P3 p02 (w=2), 1: P3' p02 (w=3), 2: P3 p03 (w=3), 3: P3' p03 (w=4), 4: P3' p12 (w=4), 5: P3 p23 (w=5), 6: P3' p13 (w=5), 7: P3' p23 (w=6)
+y= 0 ((2, 2, 1), (2, 2, 1)) d=0  top-level part: (16)m0 m0   (1 terms in all)
+y= 1 ((2, 1, 1), (2, 2, 1)) d=1  top-level part: (432/35)m1 m0 + (144/35)m2 m0   (3 terms in all)
+y= 2 ((2, 2, 0), (2, 2, 1)) d=1  top-level part: (32)m1 m0 + (32)m2 m0   (3 terms in all)
+y= 3 ((2, 2, 1), (2, 1, 1)) d=1  top-level part: (432/35)m0 m1 + (144/35)m0 m2   (3 terms in all)
+y= 4 ((2, 2, 1), (2, 2, 0)) d=1  top-level part: (32)m0 m1 + (32)m0 m2   (3 terms in all)
+y= 5 ((1, 1, 1), (2, 2, 1)) d=2  top-level part: (288/35)m3 m0 + (-288/35)m4 m0   (6 terms in all)
+y= 6 ((2, 1, 0), (2, 2, 1)) d=2  top-level part: (288/35)m3 m0 + (864/35)m4 m0   (6 terms in all)
+y= 7 ((2, 1, 1), (2, 1, 1)) d=2  top-level part: (11664/1225)m1 m1 + (3888/1225)m1 m2 + (3888/1225)m2 m1 + (1296/1225)m2 m2   (9 terms in all)
+y= 8 ((2, 1, 1), (2, 2, 0)) d=2  top-level part: (864/35)m1 m1 + (864/35)m1 m2 + (288/35)m2 m1 + (288/35)m2 m2   (9 terms in all)
+y= 9 ((2, 2, 0), (2, 1, 1)) d=2  top-level part: (864/35)m1 m1 + (288/35)m1 m2 + (864/35)m2 m1 + (288/35)m2 m2   (9 terms in all)
+y=10 ((2, 2, 0), (2, 2, 0)) d=2  top-level part: (64)m1 m1 + (64)m1 m2 + (64)m2 m1 + (64)m2 m2   (9 terms in all)
+y=11 ((2, 2, 1), (1, 1, 1)) d=2  top-level part: (288/35)m0 m3 + (-288/35)m0 m4   (6 terms in all)
+y=12 ((2, 2, 1), (2, 1, 0)) d=2  top-level part: (288/35)m0 m3 + (864/35)m0 m4   (6 terms in all)
+y=13 ((1, 1, 0), (2, 2, 1)) d=3  top-level part: (3456/1225)m5 m0   (7 terms in all)
+y=14 ((1, 1, 1), (2, 1, 1)) d=3  top-level part: (7776/1225)m3 m1 + (2592/1225)m3 m2 + (-7776/1225)m4 m1 + (-2592/1225)m4 m2   (16 terms in all)
+y=15 ((1, 1, 1), (2, 2, 0)) d=3  top-level part: (576/35)m3 m1 + (576/35)m3 m2 + (-576/35)m4 m1 + (-576/35)m4 m2   (16 terms in all)
+y=16 ((2, 0, 0), (2, 2, 1)) d=3  top-level part: (-1152/35)m5 m0 + (2304/35)m6 m0   (10 terms in all)
+y=17 ((2, 1, 0), (2, 1, 1)) d=3  top-level part: (7776/1225)m3 m1 + (2592/1225)m3 m2 + (23328/1225)m4 m1 + (7776/1225)m4 m2   (16 terms in all)
+y=18 ((2, 1, 0), (2, 2, 0)) d=3  top-level part: (576/35)m3 m1 + (576/35)m3 m2 + (1728/35)m4 m1 + (1728/35)m4 m2   (16 terms in all)
+y=19 ((2, 1, 1), (1, 1, 1)) d=3  top-level part: (7776/1225)m1 m3 + (-7776/1225)m1 m4 + (2592/1225)m2 m3 + (-2592/1225)m2 m4   (16 terms in all)
+y=20 ((2, 1, 1), (2, 1, 0)) d=3  top-level part: (7776/1225)m1 m3 + (23328/1225)m1 m4 + (2592/1225)m2 m3 + (7776/1225)m2 m4   (16 terms in all)
+y=21 ((2, 2, 0), (1, 1, 1)) d=3  top-level part: (576/35)m1 m3 + (-576/35)m1 m4 + (576/35)m2 m3 + (-576/35)m2 m4   (16 terms in all)
+y=22 ((2, 2, 0), (2, 1, 0)) d=3  top-level part: (576/35)m1 m3 + (1728/35)m1 m4 + (576/35)m2 m3 + (1728/35)m2 m4   (16 terms in all)
+y=23 ((2, 2, 1), (1, 1, 0)) d=3  top-level part: (3456/1225)m0 m5   (7 terms in all)
+y=24 ((2, 2, 1), (2, 0, 0)) d=3  top-level part: (-1152/35)m0 m5 + (2304/35)m0 m6   (10 terms in all)
+y=25 ((1, 0, 0), (2, 2, 1)) d=4  top-level part: (13824/1225)m7 m0   (13 terms in all)
+y=26 ((1, 1, 0), (2, 1, 1)) d=4  top-level part: (93312/42875)m5 m1 + (31104/42875)m5 m2   (17 terms in all)
+y=27 ((1, 1, 0), (2, 2, 0)) d=4  top-level part: (6912/1225)m5 m1 + (6912/1225)m5 m2   (17 terms in all)
+y=28 ((1, 1, 1), (1, 1, 1)) d=4  top-level part: (5184/1225)m3 m3 + (-5184/1225)m3 m4 + (-5184/1225)m4 m3 + (5184/1225)m4 m4   (27 terms in all)
+y=29 ((1, 1, 1), (2, 1, 0)) d=4  top-level part: (5184/1225)m3 m3 + (15552/1225)m3 m4 + (-5184/1225)m4 m3 + (-15552/1225)m4 m4   (27 terms in all)
+y=30 ((2, 0, 0), (2, 1, 1)) d=4  top-level part: (-31104/1225)m5 m1 + (-10368/1225)m5 m2 + (62208/1225)m6 m1 + (20736/1225)m6 m2   (24 terms in all)
+y=31 ((2, 0, 0), (2, 2, 0)) d=4  top-level part: (-2304/35)m5 m1 + (-2304/35)m5 m2 + (4608/35)m6 m1 + (4608/35)m6 m2   (24 terms in all)
+y=32 ((2, 1, 0), (1, 1, 1)) d=4  top-level part: (5184/1225)m3 m3 + (-5184/1225)m3 m4 + (15552/1225)m4 m3 + (-15552/1225)m4 m4   (27 terms in all)
+y=33 ((2, 1, 0), (2, 1, 0)) d=4  top-level part: (5184/1225)m3 m3 + (15552/1225)m3 m4 + (15552/1225)m4 m3 + (46656/1225)m4 m4   (27 terms in all)
+y=34 ((2, 1, 1), (1, 1, 0)) d=4  top-level part: (93312/42875)m1 m5 + (31104/42875)m2 m5   (17 terms in all)
+y=35 ((2, 1, 1), (2, 0, 0)) d=4  top-level part: (-31104/1225)m1 m5 + (62208/1225)m1 m6 + (-10368/1225)m2 m5 + (20736/1225)m2 m6   (24 terms in all)
+y=36 ((2, 2, 0), (1, 1, 0)) d=4  top-level part: (6912/1225)m1 m5 + (6912/1225)m2 m5   (17 terms in all)
+y=37 ((2, 2, 0), (2, 0, 0)) d=4  top-level part: (-2304/35)m1 m5 + (4608/35)m1 m6 + (-2304/35)m2 m5 + (4608/35)m2 m6   (24 terms in all)
+y=38 ((2, 2, 1), (1, 0, 0)) d=4  top-level part: (13824/1225)m0 m7   (13 terms in all)
+y=39 ((1, 0, 0), (2, 1, 1)) d=5  top-level part: (373248/42875)m7 m1 + (124416/42875)m7 m2   (30 terms in all)
+y=40 ((1, 0, 0), (2, 2, 0)) d=5  top-level part: (27648/1225)m7 m1 + (27648/1225)m7 m2   (30 terms in all)
+y=41 ((1, 1, 0), (1, 1, 1)) d=5  top-level part: (62208/42875)m5 m3 + (-62208/42875)m5 m4   (27 terms in all)
+y=42 ((1, 1, 0), (2, 1, 0)) d=5  top-level part: (62208/42875)m5 m3 + (186624/42875)m5 m4   (27 terms in all)
+y=43 ((1, 1, 1), (1, 1, 0)) d=5  top-level part: (62208/42875)m3 m5 + (-62208/42875)m4 m5   (27 terms in all)
+y=44 ((1, 1, 1), (2, 0, 0)) d=5  top-level part: (-20736/1225)m3 m5 + (41472/1225)m3 m6 + (20736/1225)m4 m5 + (-41472/1225)m4 m6   (39 terms in all)
+y=45 ((2, 0, 0), (1, 1, 1)) d=5  top-level part: (-20736/1225)m5 m3 + (20736/1225)m5 m4 + (41472/1225)m6 m3 + (-41472/1225)m6 m4   (39 terms in all)
+y=46 ((2, 0, 0), (2, 1, 0)) d=5  top-level part: (-20736/1225)m5 m3 + (-62208/1225)m5 m4 + (41472/1225)m6 m3 + (124416/1225)m6 m4   (39 terms in all)
+y=47 ((2, 1, 0), (1, 1, 0)) d=5  top-level part: (62208/42875)m3 m5 + (186624/42875)m4 m5   (27 terms in all)
+y=48 ((2, 1, 0), (2, 0, 0)) d=5  top-level part: (-20736/1225)m3 m5 + (41472/1225)m3 m6 + (-62208/1225)m4 m5 + (124416/1225)m4 m6   (39 terms in all)
+y=49 ((2, 1, 1), (1, 0, 0)) d=5  top-level part: (373248/42875)m1 m7 + (124416/42875)m2 m7   (30 terms in all)
+y=50 ((2, 2, 0), (1, 0, 0)) d=5  top-level part: (27648/1225)m1 m7 + (27648/1225)m2 m7   (30 terms in all)
+y=51 ((1, 0, 0), (1, 1, 1)) d=6  top-level part: (248832/42875)m7 m3 + (-248832/42875)m7 m4   (45 terms in all)
+y=52 ((1, 0, 0), (2, 1, 0)) d=6  top-level part: (248832/42875)m7 m3 + (746496/42875)m7 m4   (45 terms in all)
+y=53 ((1, 1, 0), (1, 1, 0)) d=6  top-level part: (746496/1500625)m5 m5   (25 terms in all)
+y=54 ((1, 1, 0), (2, 0, 0)) d=6  top-level part: (-248832/42875)m5 m5 + (497664/42875)m5 m6   (37 terms in all)
+y=55 ((1, 1, 1), (1, 0, 0)) d=6  top-level part: (248832/42875)m3 m7 + (-248832/42875)m4 m7   (45 terms in all)
+y=56 ((2, 0, 0), (1, 1, 0)) d=6  top-level part: (-248832/42875)m5 m5 + (497664/42875)m6 m5   (37 terms in all)
+y=57 ((2, 0, 0), (2, 0, 0)) d=6  top-level part: (82944/1225)m5 m5 + (-165888/1225)m5 m6 + (-165888/1225)m6 m5 + (331776/1225)m6 m6   (55 terms in all)
+y=58 ((2, 1, 0), (1, 0, 0)) d=6  top-level part: (248832/42875)m3 m7 + (746496/42875)m4 m7   (45 terms in all)
+y=59 ((1, 0, 0), (1, 1, 0)) d=7  top-level part: (2985984/1500625)m7 m5   (40 terms in all)
+y=60 ((1, 0, 0), (2, 0, 0)) d=7  top-level part: (-995328/42875)m7 m5 + (1990656/42875)m7 m6   (61 terms in all)
+y=61 ((1, 1, 0), (1, 0, 0)) d=7  top-level part: (2985984/1500625)m5 m7   (40 terms in all)
+y=62 ((2, 0, 0), (1, 0, 0)) d=7  top-level part: (-995328/42875)m5 m7 + (1990656/42875)m6 m7   (61 terms in all)
+y=63 ((1, 0, 0), (1, 0, 0)) d=8  top-level part: (11943936/1500625)m7 m7   (64 terms in all)
+
+==============================================================================================================
+B2: grading, leading covectors as joint eigenvectors, filtration ranks
+==============================================================================================================
+each SoV covector f_x(h) is supported on a single H_tot level, equal to the label depth D(x) = sum_s (6 - (1+a+b+c)): True
+leading covectors <x|_0 (companion frame): left eigenvectors of b1(u0): 64/64 ; of the b1-block-compressed b2 (sum_S P_S b2 P_S): 64/64
+diagonal frame, zeta = P: rank span{ R_x,k : k <= K } for K = 0..9 : [1, 5, 13, 25, 39, 51, 59, 63, 64, 64] (R_x = f^d_x/h^2; lattice-saturated cumulative jet counts are 1,5,13,25,39,51,59,63,64)
+
+==============================================================================================================
+B1: the H_tot = 2E11 + E22 grading of the b_k and simultaneous triangularisability (Lie algebra generated by the b_k(u))
+==============================================================================================================
+one-site H depths (5 - (2n1+n2)) in notebook order: [0, 1, 1, 2, 2, 3, 3, 4] ; two-site level sizes: {0: 1, 1: 4, 2: 8, 3: 12, 4: 14, 5: 12, 6: 8, 7: 4, 8: 1}
+every B_k(u) is block diagonal in the two-site H_tot-grading (B commutes with H1 + H2 = 2E11 + E22 summed over sites): True
+   level D=0 (block size 1): all B_k^(m) are scalar on this block
+   level D=1 (block size 4): dim of the Lie algebra generated by all B_k^(m) (k=1..6, u^m coefficients, traceless parts) = 9; derived series dims: 6, 3, 0, 0
+   level D=2 (block size 8): dim of the Lie algebra generated by all B_k^(m) (k=1..6, u^m coefficients, traceless parts) = 29; derived series dims: 22, 12, 1, 0
+   level D=3 (block size 12): dim of the Lie algebra generated by all B_k^(m) (k=1..6, u^m coefficients, traceless parts) = 57; derived series dims: 46, 27, 4, 0
+   level D=4 (block size 14): dim of the Lie algebra generated by all B_k^(m) (k=1..6, u^m coefficients, traceless parts) = 80; derived series dims: 67, 45, 10, 0
+   level D=5 (block size 12): dim of the Lie algebra generated by all B_k^(m) (k=1..6, u^m coefficients, traceless parts) = 57; derived series dims: 46, 27, 4, 0
+   level D=6 (block size 8): dim of the Lie algebra generated by all B_k^(m) (k=1..6, u^m coefficients, traceless parts) = 29; derived series dims: 22, 12, 1, 0
+   level D=7 (block size 4): dim of the Lie algebra generated by all B_k^(m) (k=1..6, u^m coefficients, traceless parts) = 9; derived series dims: 6, 3, 0, 0
+   level D=8 (block size 1): all B_k^(m) are scalar on this block

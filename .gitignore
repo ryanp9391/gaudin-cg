@@ -16,3 +16,6 @@
 .venv/
 __pycache__/
 *.pyc
+
+# Gaudin Python caches (hundreds of MB of states/Q-functions; rebuilt by the scripts)
+Paul/Python/gaudin_sl3/*.pkl

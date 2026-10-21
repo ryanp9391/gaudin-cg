@@ -1,0 +1,65 @@
+# Surprises and corrections along the way {#sec:surprises}
+
+**Punchline.** About two dozen of our own expectations were wrong or had to be sharpened. We list them candidly, with where each was caught, because the pattern (conflating $|\Lambda|$ with $c_2$, expecting degeneracy where there was none, expecting too many monomials) tells us where to be careful with $\lambda_1\ge3$ and $\lambda_3>0$.
+
+@table tab:surprises | Corrections to the plans, in the order they were found. "Round" is the plan round that carried the wrong expectation; the correcting agent is in the last column.
+@size footnotesize
+@cols p{0.3cm}p{5.2cm}p{5.8cm}p{2.6cm}
+| \# | expected | found | by |
+|---|---|---|---|
+| 1 | $H_1=+[\ldots]$ (plan, round 1) | sign is $-$: $H_1=-[\sum\zeta_iE_{ii}+\sum E^1_{ik}E^2_{ki}/\theta_{12}]+|\Lambda|\sigma+|\Lambda|^2/\theta_{12}$, $H_1+H_2=-W+2|\Lambda|\sigma$ | W1 |
+| 2 | $x_0$ (XXX limit) not parallel to the Gaudin $x_0^G$ | exactly parallel ($10^{-31}$), $x_0\sim h$ per site, $x$ linear in $z$ at all orders | P2, D2 |
+| 3 | twelve $P^{3(c)}p_{kl}$ monomials per site | five (adjoint); in general $\binom{\lambda_1+2}2-\binom{\lambda_2+1}2$ with the lone factor always $P^3$ | D1, D2, P4 |
+| 4 | $M_{\rm vac}=\tfrac52h^2W'P^3$ | $2h^2W'P^3$ (the weight-2 minor contains an $n=1$ piece fixed by $\mathrm{minor}(-1,0)=0$) | D2 |
+| 5 | $S_2$ double pole $=|\Lambda|$ (or Casimir$/2$) | $c_2=\lambda_2(\lambda_1+1)$ | P3, then P4 |
+| 6 | $a_s^{\rm vac}=|\Lambda|\omega_3$, $f(S3c)=|\Lambda|\zeta_3$ | $c_2\omega_3$, $c_2\zeta_3$ (equal on $[2,1,0]$, $[3,1,0]$) | P4, W3 |
+| 7 | the direct oper is the formal adjoint | the adjoint has no $e^{-\zeta u}\times$polynomial solutions; direct $=\Pi^p\circ$adjoint$\circ\Pi^{-p}$, $p=\lambda_1-\lambda_3$ | P1, P2, P3 |
+| 8 | dual Wronskian $F'=\Pi$ for $[3,2,0]$ | $F'=\Pi^{\lambda_2}=\Pi^2$; direct exponents $\{0,2,5\}$, not $\{0,3,5\}$ | P4 |
+| 9 | $c_H$ has $1/\theta_{12}$ coefficient $2\lambda_1$ | $2e_2(\Lambda)$ ($2\lambda_1\lambda_2$ for $\lambda_3=0$) | W2 |
+| 10 | the $[3,1,0]$ fourth localiser is a single product, $S3c[s,1]=c_\Lambda S3c(H-S3c)$ | two quadratic monomials plus a $W$ term; for $[3,2,0]$ no $c_\Lambda$ at all, $\gamma$ changed $2\to1$ | W2, W3 |
+| 11 | $\ell_1=1$ risk: no localiser inside $D_2$ | $\ell_1=3$ already inside $D_1$; every Laurent coefficient localises | W1 |
+| 12 | $\omega_1'$ fixed control fails in Gaudin as in XXX | passes at finite $\omega_2$, fails at $\omega_2=\infty$ | W1, W2 |
+| 13 | fixed-coefficient orthogonality among brackets | the relation has state-dependent $\Delta$ (Lagrange identity); six residue columns | P1 |
+| 14 | $\zeta$-independent kernel with vacuum monomial $M=Q_1P^3$ | $M=P^3p_{0,\lambda_2+1}$ and the scalar $c$ are needed; direct-$Q_1$ bases carry a hidden $\sigma$ | D1 |
+| 15 | naive $t\to\infty$ at fixed $a$ gives the Gaudin kernel | gives a rank-one state-independent $(1-a)^3(1-a')^3$; wrong limit | D2 |
+| 16 | the SoV covectors degenerate at $h\to0$ in the companion frame | they are independent there; the degeneracy lives in the diagonal frame ($P^{-1}_{\rm phys}=O(h)$) | D3 |
+| 17 | one polynomial Gaudin $B_G(u)$ | none; solvable hierarchy, no polynomial of low degree | D3 |
+| 18 | cleaning needed for $(5,3,2)$ etc. | no cleaning anywhere ($K/S=O(\epsilon)$ on all branches) | W1--W3 |
+| 19 | top-state sum rule $=M^{\rm top}M^{\rm top}$ | extra factor $R(a)R(a')$, $R=(1-\zeta_2a)^{\lambda_1-\lambda_2}(1-\zeta_3a)^{\lambda_1}$ | G1 |
+| 20 | $\lambda_2=0$: $S_2$ double pole non-scalar | scalar $0$; one-row reps are the master kernels | G1 |
+| 21 | $\le2$ polynomial solutions of the untwisted oper | all three are polynomials, degrees $(\mu_3,\mu_2+1,\mu_1+2)$ | U1, W4 |
+| 22 | the untwisted oper is $_3F_2$ | only with a consecutive exponent pair (20 of 45 branches) | U1, W4 |
+| 23 | the monic twisted Q's have untwisted limits | poles in $\epsilon$; finite objects are Plücker monomials and Laurent data | U1 |
+| 24 | $\hat c$ clears all denominators of $e_1\rho(n')$ | not the weight-$(0,2,1)$ component $-2a'g'$ with $(\phi_2-\hat\omega_1')^{-2}$ (harmless) | U2 |
+| 25 | $\det N$ rank 5 for all $A\ne B$ | rank 4 iff $\Delta\mu$ has one positive and two negative components | P3 |
+| 26 | gauge power fixed by $\lambda_3=0$ data | $p=\lambda_1-\lambda_3$ vs $\lambda_1$ not separated (all data $\lambda_3=0$) | P3, P4 |
+| 27 | octet copies distinguished only at higher order | they split already at $\epsilon^0$ by $a_s^{(0)}$ (while $H_s^{(0)}$ coincide) | U2 |
+@endtable
+
+A few of these deserve a sentence more than the table gives. The first plan said that with the XXX-like ansatz the Gaudin formula would involve twelve monomials and $M_{\rm vac}=\tfrac52h^2W'P^3$ (items 3, 4); both numbers came from the heuristic that the XXX ladder points $\theta_s+mh$ become the order-3 jet, and in fact the true count follows from the Frobenius structure of the oper. The \emph{cleaning question} (item 18) was Paul's own: whether the per-sector, per-copy cleaning of the single-vacuum approach can be avoided; the plan's careful list of expected failures ($(5,3,2)$, multiplicity 3) is a good example of a plan that was too pessimistic. The conflation of $|\Lambda|$ and $c_2$ (items 5, 6) is the one to remember: on $[2,1,0]$ and $[3,1,0]$ one has $\lambda_2=1$ and hence $c_2=\lambda_1+1=|\Lambda|$, so the two quantities coincide and only $[3,2,0]$ could tell them apart. Finally, item 21 is a good reminder that exponents integer-spaced with trivial monodromy mean polynomial solutions: the "degeneracy" of the Wronskians at $\zeta=0$ does not reduce the solution space.
+
+# Outlook: the round-5 plan {#sec:outlook}
+
+**Punchline.** The adjoint works end to end. Round 5 aims to turn "the adjoint works" into "the formula": a closed form for the master kernel $R^{\lambda_1}$, the Laurent-data form and untwisting limit for $[3,1,0]$ and $[3,2,0]$, a derivation of the $\epsilon$-series, the norm of the untwisted eigenvectors from the Q side, and the write-up. Nothing below is implemented; Paul asked for the plan, not for work.^[`Paul/Mathematica/Gaudin/Gaudin-sl3-round5-plan.md` (written 2026-10-16 about 18:00, not dispatched). Suggested allocation is sonnet agents only, $\le4$ Python agents at once, the wolfbook builder alone on the kernel K1.]
+
+## WP-A: the master kernel in closed form {#sec:WPA}
+
+The goal is a four-index closed form of $R^{\lambda_1}_{(kl),(k'l')}(x,y)$, $x=at$, $y=a't$, valid for all $\lambda_1$; then every $\Lambda$ follows by the block theorem and $\theta\otimes\theta'$. Data in hand: exact $R$ for $\lambda_1\le4$ ($[4,0,0]$: 225 entries), the first-order formula, the single-index $\Gamma$-form, the extreme-hop coefficients, the exchange rule, homogeneity, the rank pattern $1,2,4,8$ and the top-state sum rule. Three attempts are planned: (A1) a fit-guided Pochhammer ansatz generalising the $\Gamma$-form, validated on a new representation, $[5,0,0]$ (1225 states), done at 40 digits through the $\nu$-form, which needs only Laurent data and no Q-solving, so that Section~\ref{sec:nu} pays off computationally; (A2) a structural derivation of the jet basis for one-row representations $V_{(\lambda_1,0,0)}=\mathrm{Sym}^{\lambda_1}(\mathbb{C}^3)$ in the polynomial realisation $E_{ij}=x_i\partial_j$, where the SoV wavefunction rule becomes explicit differential or integral operators (start with $\lambda_1=1,2$); (A3) the auxiliary $\mathfrak{sl}_2$: is $R$ covariant under a twisted shift $(a,a',t)\to(a+s,a'+s,t')$? If so $R$ is fixed by its value at $a=0$, that is by the one-site data plus finitely many coefficients; also whether $R^{\lambda_1}$ is the spin-$(\lambda_1+1)/2$ fusion of the $\lambda_1=1$ R-matrix form. Acceptance: $R^{\lambda_1}$ reproduces all exact kernels for $\lambda_1\le4$ and predicts $[5,0,0]$ (and $[5,1,0]$) on $\ge200$ states to $\ge30$ digits.
+
+## WP-B: Laurent-data form and the limit for $[3,1,0]$, $[3,2,0]$ {#sec:WPB}
+
+(B1) Derive $\nu_{kl}$ for general $(\lambda_1,\lambda_2)$ from the Frobenius recursion at $\theta_s$ (exponents $\{0,\lambda_2+1,\lambda_1+2\}$; the order-$(\lambda_1+1)$ jet lies in a 2-plane with coefficients rational in $(H_s,a_s,b_s)$), prove that $P^3D_s$ cancels between the sides, and verify on the 225 states of $[3,1,0]$ and $[3,2,0]$ to $10^{-50}$. (B2) Run U2's pipeline for both representations: $k_B$ per branch (10 each) and the depth; test whether $k_B$ follows a weight rule (adjoint $0,1,1,2,2,4$) and the exact CG tables of the data files. (B3) The exact $\epsilon$-series of the Laurent data for the $10+10$ branches (duality check: $[3,2,0]$'s series are the dual images of $[3,1,0]$'s). Acceptance: all 20 CG tables from the Q side to $\ge30$ digits, $\phi$-independent.
+
+## WP-C: the mechanism of the $\epsilon$-series {#sec:WPC}
+
+(C1) Implement the degenerate solver: Fredholm alternative at each order for the rank-5 cases (top state, octets), symbolic in $\phi$, to $n=8$, from the Bethe side alone. (C2) Identify the $2\times2$ mixings behind the algebraic $(4,1,1)$, $(3,3,0)$ forms and the algebraic degrees on the others; conjecture for $H_s(\zeta)$ on a HW-limit branch as eigenvalues of a finite matrix built from the twisted $\mathfrak{gl}_3$ Casimirs. (C3) Closed form via Casimirs on the chain side: the Laurent operators on the $\mu$-isotypic component are expressible through $C_2$, $C_3$, $\sum\zeta_kE_{kk}$ and products; write them in that algebra and diagonalise symbolically on each isotypic component (small matrices since the twist mixes only within weight spaces). Acceptance: an algorithm or formula producing the series of every branch of $[2,1,0]$, $[3,1,0]$, $[3,2,0]$ exactly.
+
+## WP-D: the norm from the Q side {#sec:WPD}
+
+The CG formula fixes the generating function up to one constant per branch, the G-norm. Classical results say the norm of a Gaudin Bethe vector is the Hessian of the Yang--Yang function at the Bethe roots (Reshetikhin--Varchenko, Mukhin--Varchenko); here the Bethe equations are the no-log conditions. Hypothesis: $\langle\Psi|\Psi\rangle_G/\langle x_0|\Psi\rangle^2$ is proportional to the determinant of the Jacobian of the six no-log conditions with respect to the Laurent data, or to the equal-twist $\det N$ suitably normalised (D3's observation that $Q_{\rm num}^{\rm eq}M_1M_2/\det N_B$ is state-independent is norm-like). Test numerically on the 64 states, then take the untwisting limit; if none of the candidates is state-independent the true Yang--Yang Hessian in terms of Q-zeros is needed, a different formalism, and the plan says to flag it and stop.
+
+## WP-E, WP-F: the write-up and housekeeping {#sec:WPE}
+
+The notes you are reading are E1. E2 is the paper: `paper/gaudinCG.tex` is a gl(4)-rectangular stub, to be replaced by the sl(3) Gaudin CG paper (recommended) or a new file; proposed structure: introduction; the two-site model, cdet, Laurent data, opers; vacua, frames and the two-vacua family (no cleaning); the jet formula (basis, K tensor, block theorem, one-site kernel, master kernel); the overlap as a function of Laurent data; the untwisting limit; worked example adj$\otimes$adj; outlook; appendices on conventions, kernels, series. Housekeeping: rerun the four Gaudin notebooks in VS Code to store native outputs (the agents stored none), gitignore `*.pkl` ($\approx230$ MB in `Paul/Python/gaudin_sl3/`) before committing, promote the notebooks to `Clean/` and run the docs agent, update `CLAUDE.md`'s outdated goal statement, a one-file demonstration `cg_from_Q.py`, and the backlog: $[4,2,0]$ (dim 27, multiplicity 3) as the last cleaning check, the $(5,3,2)$ exception of the multiplicity-2 law and $\beta(\Lambda,\mu)$, the second null vector of the rank-4 pairs, the $\lambda_3>0$ dependence of the gauge rule.
+
+The decisions that are Paul's: the paper file; the priority between WP-A (the more striking result) and WP-C/D (the more complete one, no chain input); whether to spend a round on $[4,2,0]$ before writing; and the update of `CLAUDE.md`.

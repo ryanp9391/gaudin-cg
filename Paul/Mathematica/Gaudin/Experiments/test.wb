@@ -1,0 +1,26 @@
+{
+ "cells": [
+  {
+   "kind": 2,
+   "value": "1+1",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wl-output-block\"><div class=\"wl-output-header\" style=\"display:flex;align-items:center;gap:6px;width:100%;min-height:22px;\" data-session-epoch=\"775518\" data-output-id=\"0\" data-out-n=\"1\" data-sub-idx=\"0\" data-output-format=\"WLLatex\" data-output-is-graphics=\"0\" data-cell-idx=\"0\" data-sub-start=\"0\" data-sub-end=\"0\"><span style=\"font-size:10px;color:#888;margin-right:8px;\">Out[1]=</span></div><div class=\"wl-output-content\"><div class=\"vscode-wolfram-wllatex-prerendered\" data-page-width-em=\"80\" data-latex-b64=\"Mg==\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">2</span></span></span></span></span></div></div></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Out[1]= 2",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "cf05ba34-1a34-4f03-8c2b-327cde7b512e"
+    }
+   ],
+   "metadata": {}
+  }
+ ],
+ "metadata": {}
+}
