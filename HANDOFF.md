@@ -4,6 +4,26 @@ Where the last session left off. Read this first when picking the project back u
 history log (that's `git log`) — only what's still open or in-flight. Overwrite
 freely each session rather than appending.
 
+## >>> FOR THE UBUNTU MACHINE (2026-10-21): run the SU(3) [2a,a,0] timing sweep <<<
+
+Paul's ask: time how long the Munich (Alex–Kalus–Huckleberry–von Delft, arXiv:1009.0437) code takes to
+compute the **highest-weight-state CGCs only** of μ = [2a,a,0] inside [2a,a,0] ⊗ [2a,a,0] (SU(3), N=3;
+a=1 is the 8 in 8⊗8), for a = 1,2,3,… run **one at a time**. **Do a = 1,2,3 first and report back to
+Paul**; go on toward a = 7 only if the growth isn't steep.
+
+- Code: `Paul/Cpp/AlexCGC/`. `cgc_hw_bench` is our modified build that stops after
+  `compute_highest_weight_coeffs()` (see its README). This hasn't run yet: the Windows machine has no
+  g++/LAPACK/WSL, and Paul chose to run it on the Ubuntu box instead of installing a toolchain.
+- New script `sweep_2aa0.sh` (commit 687a9fc): `bash Paul/Cpp/AlexCGC/sweep_2aa0.sh [amax=3] [reps=5] [limit_s=60]`.
+  It builds the binary if missing (`build.sh`; needs `liblapack-dev libblas-dev`). It prints dim, multiplicity,
+  hw-solve time, total (+LR) time, growth vs. the previous a, and wall-clock time; it stops once a single
+  hw-solve exceeds limit_s and adds its rows to `results/sweep_2aa0.csv`. I only dry-ran it with a fake binary.
+- Things to check: the `mult` column should be a+1 if my expectation is right (2 for the adjoint).
+  Wall-clock time per a is ≈ (reps+1) × hw-solve, because of one untimed warm-up solve; use reps=1 for big a.
+  For comparison, the old SU(4) [S,S,0,0]² sweep (`results/hw_timings.txt`) grew ~×5 per step in S.
+- Report the a=1..3 table plus growth factors to Paul. Commit the CSV only if he wants it, and clear this
+  section once the sweep is done.
+
 ## Moved out (2026-10-11): su(4) alternating chain f⊗f̄ thread
 
 The su(4) alternating-chain thread (SoV basis, localisation, free-parameter rotations on few sites) now lives in the
