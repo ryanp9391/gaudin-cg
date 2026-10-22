@@ -15,7 +15,7 @@ copies and our Gaudin copies), D2 same-machine SU(4) timing table (Munich as dis
 D3 Munich on multiplicity products vs G3, D4 `RESULTS-G7-munich-comparison.md` + raw outputs in `Paul/Cpp/AlexCGC/results/su4-same-machine/` + a HANDOFF block. Memory
 rule for the original Munich: n_W·dim²·8 B (9.5 GB at S = 8, 33 GB at S = 9 — do not run S ≥ 9 with the original).
 
-## >>> DONE (2026-10-22, Windows): gl(4) programme G1–G6 — all six packages complete and re-verified by the session (details below; G6 notes being updated with G4) <<<
+## >>> DONE (2026-10-22, Windows): gl(4) programme G1–G6 — all six packages complete and re-verified by the session; COMMITTED and pushed (f1043da: G1–G5 + G7 brief; e0c8d1a: the 21-page notes with G4 folded in) <<<
 
 Paul (2026-10-22): "Check out gl4-slice-engine-plan.md and start implementing with sonnet subagents." Directory `Paul/Python/gaudin_gl4/` (briefs
 `SPEC-G<k>-*.md`, reports `RESULTS-G<k>-*.md`, output `*_output.txt`, tests `test_*.py`), reference data `Paul/Mathematica/Gaudin/ref/gl4-*.txt`. **Nothing committed.**
@@ -97,7 +97,7 @@ y_ik = m_ik − i; M^{V₄ᵃ} = (y_k+3)M^{V₃}; M^{V₄ᵇ} = −(y_a−y_i+2y
 5/5, 7/7), none for the middle string or mixed classes. (5) V_red,3 is NOT Jacobi in general (graph a path in 29/44 spaces with m = w, 19/106 with m < w; K₄ at (5,4,2,1)).
 (6) **Polynomiality:** a cyclic coordinate exists in 181/181 sectors ⇒ every slice component is a polynomial in (v₃,v₄ᵃ,v₄ᵇ) with rational coefficients (7e-46), of minimal
 degree = the dimension-counting bound in 162/181 sectors (affine for most m ≤ 4, quadratic 5 ≤ m ≤ 10, cubic m = 11,12). Not proved: any of it (BGG argument in RESULTS-G4 §2.5
-with one missing step). **G6 RESUMED** (09:55) to fold G4 into notes §7, status table §9.1, §9.3 and regenerate .md/.pdf.
+with one missing step). **G6 folded G4 into the notes** (§7 ≈ 2.3 pages, §9.1 status rows, §9.3 next = proof of the Weyl identity; 21 pages, 0 errors; RESULTS-G6 §6 lists four small inconsistencies in RESULTS-G4's wording — reported, not fixed).
 
 **Answers given to Paul this session (for the record):** (a) the engine computes the HW CG coefficients fast (Munich's own benchmark object), NOT the descendants (output-bound,
 ~10⁸ entries at S = 8; a mechanical lowering package would add them); (b) Q-functions for gl(4), any λ, λ′, μ (untwisted, two sites): `oper_gl4.solve_sector` (exact triples)
