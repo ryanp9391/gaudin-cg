@@ -137,7 +137,7 @@ ACCENTS = {
 
 def conv_code(s):
     s = s.replace('\\_', '_').replace('\\{', '{').replace('\\}', '}').replace('\\%', '%').replace('\\dots', '...').replace('\\&', '&')
-    s = s.replace('$\\lambda$', 'λ').replace('~', ' ')
+    s = s.replace('$\\lambda$', 'λ').replace('~', ' ').replace('\\allowbreak ', '').replace('\\allowbreak', '')
     return s
 
 PREFIX = {'gd': 'GD/', 'gl': 'GL/', 'cpp': 'CPP/', 'py': 'PY3/', 'src': ''}
@@ -218,7 +218,7 @@ def inline(s):
                     out.append('…')
                 elif cmd == 'vspace':
                     next_arg()
-                elif cmd in ('medskip', 'bigskip', 'smallskip', 'noindent', 'centering', 'small', 'footnotesize', 'normalsize'):
+                elif cmd in ('medskip', 'bigskip', 'smallskip', 'noindent', 'centering', 'small', 'footnotesize', 'normalsize', 'par', 'raggedright'):
                     pass
                 elif cmd == 'v':
                     a = next_arg(); out.append({'r': 'ř'}.get(a, a))
