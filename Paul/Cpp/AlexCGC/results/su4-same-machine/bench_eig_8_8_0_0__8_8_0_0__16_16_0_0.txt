@@ -1,0 +1,15 @@
+SU(4)   S = (8 8 0 0) (x) S' = (8 8 0 0) -> target S'' = (16 16 0 0)
+dim S = 825,  dim S' = 825,  dim S'' = 8721,  outer multiplicity = 1
+timed repetitions = 1  (headline = minimum)
+
+PROF ncoeff=0 nstates=0 alloc_s=0 fill_s=0 svd_s=0 dense_GB=0 eig_null=-1 eig_next=-1
+TIMINGS
+  highest-weight solve only         min   24.525 ms   median   24.525 ms   mean   24.525 ms
+  decomposition (LR) only           min    9.277 us   median    9.277 us   mean    9.277 us
+  total: labels -> h.w. CGCs        min   24.534 ms   median   24.534 ms   mean   24.534 ms
+
+HIGHEST-WEIGHT CGCs  (Q(M''] = 8721)
+  alpha = 1:
+    Q(M)  Q(M')      CGC
+    825     825     1.000000000000
+    (sum of CGC^2 = 1.000000000000)

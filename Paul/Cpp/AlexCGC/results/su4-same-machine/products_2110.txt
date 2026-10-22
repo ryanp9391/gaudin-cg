@@ -1,0 +1,8 @@
+# product (2, 1, 1, 0)^2: 6 irreps, sum m = 7, max m = 2; cmds: ./cgc_hw_bench 4 L L MU reps machine (reps 5 if nW<300, 3 if <1000, else 1) | HW_MODE=eig ./cgc_hw_prof_ob ... ; load 0.58 0.99 1.14 1/1567 256732
+# mu_munich  m  dimmu  nW  reps  mem_orig_GB  orig_hw_s  orig_rss_MB  eig_hw_s  eig_rss_MB  compact_hw_s  compact_rss_MB   (NA = not run: memory/time guard)
+0 0 0 0 1 1 21 5 0.000 8.42e-05 5 8.0936e-05 7 0.000135345 7
+2 1 1 0 2 15 10 5 0.000 5.9092e-05 5 8.1936e-05 7 8.2583e-05 7
+2 2 0 0 1 20 4 5 0.000 3.4233e-05 5 6.4474e-05 7 3.2759e-05 7
+3 1 0 0 1 45 2 5 0.000 2.2614e-05 5 2.6256e-05 7 2.8539e-05 7
+3 3 2 0 1 45 2 5 0.000 2.2673e-05 5 2.6431e-05 7 2.0197e-05 7
+4 2 2 0 1 84 1 5 0.000 1.7369e-05 4 1.7052e-05 6 9.351e-06 6

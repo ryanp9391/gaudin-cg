@@ -1,0 +1,54 @@
+# slice_ops_gl4.py stage=bench  (Python 3.10.12, numpy 2.2.6, scipy 1.15.3, mpmath 1.3.0; Linux-6.8.0-138-generic-x86_64-with-glibc2.35; 2026-10-22 13:47)
+
+======================================================================================================================================================
+G3.5  TIMING: n_W-free part t_a (PRV spaces + the three reduced operators on every M_mu + joint eigen-decomposition + copies' slices) vs t_b (+ full reconstruction of every copy)
+======================================================================================================================================================
+  machine: Linux-6.8.0-138-generic-x86_64-with-glibc2.35; Python 3.10.12, numpy 2.2.6, scipy 1.15.3, mpmath 1.3.0; single process; min over cold runs (caches cleared); perf_counter
+  family [2a,a,0,0]^2
+    a lam              dimV irreps copies max m max w   max nW |      t_a |      t_b |     entries |    resid | breakdown t_gen / t_gen_na / t_rs / t_prv / t_red / t_ops / t_eig | t_setup / t_recon | words (V3,V4a,V4b) | worst joint-diag offdiag, min joint dist | float64 copies: t_eig_f, t_a_f, t_b_f, max |ev - ev_mp|, max offdiag
+    1 [2,1,0,0]          20      7      8     2     2       20 |   0.0109 |   0.0122 |          59 |  3.5e-16 | 0.0006 / 0.0003 / 0.0001 / 0.0001 / 0.0050 / 0.0038 / 0.0010 | 0.0009 / 0.0004 | 36/53/66 | 2.7e-51, 6.708 | 0.0003, 0.0102, 0.0115, 1.6e-16, 1.5e-17   [min of 5 cold runs]
+    2 [4,2,0,0]         126     24     32     3     4      174 |   0.0524 |   0.0583 |        1287 |  1.7e-15 | 0.0038 / 0.0039 / 0.0003 / 0.0008 / 0.0050 / 0.0314 / 0.0071 | 0.0026 / 0.0033 | 36/61/67 | 1.4e-49, 10.25 | 0.0008, 0.0461, 0.0520, 2.0e-16, 1.1e-16   [min of 5 cold runs]
+    3 [6,3,0,0]         480     58     90     4     7      920 |   0.2100 |   0.2365 |       14208 |  6.8e-15 | 0.0155 / 0.0205 / 0.0009 / 0.0034 / 0.0051 / 0.1350 / 0.0296 | 0.0083 / 0.0182 | 36/61/67 | 3.0e-48, 13.75 | 0.0020, 0.1824, 0.2090, 2.1e-16, 7.2e-16   [min of 5 cold runs]
+    4 [8,4,0,0]        1375    115    205     5    11     3541 |   0.6880 |   0.7826 |      101092 |  8.6e-15 | 0.0483 / 0.0916 / 0.0024 / 0.0138 / 0.0051 / 0.4275 / 0.0993 | 0.0225 / 0.0721 | 36/61/66 | 8.9e-48, 17.23 | 0.0048, 0.5934, 0.6881, 2.0e-16, 2.4e-15   [min of 3 cold runs]
+    5 [10,5,0,0]       3276    201    406     6    15    10968 |   1.8209 |   2.0903 |      531186 |  1.3e-14 | 0.1632 / 0.2541 / 0.0052 / 0.0467 / 0.0050 / 1.0956 / 0.2511 | 0.0511 / 0.2183 | 36/61/67 | 4.1e-47, 20.71 | 0.0088, 1.5786, 1.8480, 2.2e-16, 3.7e-15   [min of 3 cold runs]
+    6 [12,6,0,0]       6860    322    728     7    20    29028 |   4.0033 |   4.9137 |     2236946 |  9.1e-14 | 0.3426 / 0.5429 / 0.0096 / 0.1382 / 0.0050 / 2.3900 / 0.5750 | 0.1157 / 0.7947 | 36/61/67 | 9.7e-47, 24.19 | 0.0207, 3.4489, 4.3593, 3.7e-16, 7.1e-15   [min of 2 cold runs]
+   separation of the copies by subsets of the commuting triple (sectors with m >= 2; number of sectors where the spectrum of the subset is DEGENERATE, 50-digit eigenvalues, tolerance 1e-20):
+     a = 1 [2,1,0,0]        1 sectors with m >= 2: {V3}: 0, {V4a}: 1, {V4b}: 1, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 1, {V3,V4a,V4b}: 0
+     a = 2 [4,2,0,0]        7 sectors with m >= 2: {V3}: 0, {V4a}: 7, {V4b}: 7, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 7, {V3,V4a,V4b}: 0
+     a = 3 [6,3,0,0]       24 sectors with m >= 2: {V3}: 0, {V4a}: 24, {V4b}: 24, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 24, {V3,V4a,V4b}: 0
+     a = 4 [8,4,0,0]       58 sectors with m >= 2: {V3}: 0, {V4a}: 58, {V4b}: 58, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 58, {V3,V4a,V4b}: 0
+     a = 5 [10,5,0,0]     115 sectors with m >= 2: {V3}: 0, {V4a}: 115, {V4b}: 115, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 115, {V3,V4a,V4b}: 0
+     a = 6 [12,6,0,0]     201 sectors with m >= 2: {V3}: 0, {V4a}: 201, {V4b}: 201, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 201, {V3,V4a,V4b}: 0
+  family [3a,2a,a,0]^2
+    a lam              dimV irreps copies max m max w   max nW |      t_a |      t_b |     entries |    resid | breakdown t_gen / t_gen_na / t_rs / t_prv / t_red / t_ops / t_eig | t_setup / t_recon | words (V3,V4a,V4b) | worst joint-diag offdiag, min joint dist | float64 copies: t_eig_f, t_a_f, t_b_f, max |ev - ev_mp|, max offdiag
+    1 [3,2,1,0]          64     16     30     4     4      152 |   0.0608 |   0.0641 |        1069 |  3.0e-15 | 0.0020 / 0.0018 / 0.0002 / 0.0004 / 0.0053 / 0.0356 / 0.0156 | 0.0015 / 0.0018 | 39/67/65 | 1.8e-48, 6.708 | 0.0008, 0.0460, 0.0494, 2.0e-16, 5.0e-15   [min of 5 cold runs]
+    2 [6,4,2,0]         729     76    297    12    15     4743 |   1.7494 |   1.7979 |      185606 |  5.9e-15 | 0.0255 / 0.0375 / 0.0012 / 0.0289 / 0.0051 / 0.8478 / 0.8034 | 0.0120 / 0.0365 | 39/67/69 | 1.2e-44, 10.25 | 0.0055, 0.9515, 1.0000, 4.2e-16, 1.8e-12   [min of 3 cold runs]
+    3 [9,6,3,0]        4096    213   1592    27    32    59008 |  26.6316 |  27.1783 |     8889611 |  3.5e-14 | 0.1814 / 0.3555 / 0.0058 / 0.1167 / 0.0054 / 8.0087 / 17.9581 | 0.1299 / 0.4168 | 39/67/69 | 5.0e-43, 12.52 | 0.0428, 8.7163, 9.2629, 9.7e-16, 5.5e-12   [min of 3 cold runs]
+   separation of the copies by subsets of the commuting triple (sectors with m >= 2; number of sectors where the spectrum of the subset is DEGENERATE, 50-digit eigenvalues, tolerance 1e-20):
+     a = 1 [3,2,1,0]        8 sectors with m >= 2: {V3}: 2, {V4a}: 1, {V4b}: 1, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 1, {V3,V4a,V4b}: 0
+     a = 2 [6,4,2,0]       56 sectors with m >= 2: {V3}: 19, {V4a}: 8, {V4b}: 6, {V3,V4a}: 1, {V3,V4b}: 0, {V4a,V4b}: 6, {V3,V4a,V4b}: 0
+     a = 3 [9,6,3,0]      179 sectors with m >= 2: {V3}: 69, {V4a}: 13, {V4b}: 13, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 13, {V3,V4a,V4b}: 0
+
+  cost of the reduction relative to gl(3) (same machine, same cold-run protocol; gl(3): slice_engine.bench_one, ONE operator = the 24-term V_red, exact application + float64 eigen-decomposition;
+  gl(4): t_ops = the THREE reduced operators (V3, V4a, V4b: 36 / 61 / 67 words at lam' = [2a,a,0,0]) applied exactly to every PRV basis vector of every irrep):
+   gl(3) [ 8, 4,0]^2: dim   125, irreps  41, copies   85, max w  5 | t_Vred 0.0213 s =  250 us per copy ( 519 us per irrep) | t_a 0.0282 s, t_b 0.0390 s
+   gl(3) [14, 7,0]^2: dim   512, irreps 113, copies  344, max w  8 | t_Vred 0.1103 s =  321 us per copy ( 976 us per irrep) | t_a 0.1457 s, t_b 0.2119 s
+   gl(3) [20,10,0]^2: dim  1331, irreps 221, copies  891, max w 11 | t_Vred 0.3216 s =  361 us per copy (1455 us per irrep) | t_a 0.4379 s, t_b 0.6767 s
+   gl(3) [28,14,0]^2: dim  3375, irreps 421, copies 2255, max w 15 | t_Vred 0.8550 s =  379 us per copy (2031 us per irrep) | t_a 1.2686 s, t_b 2.1101 s
+   gl(4) [ 2, 1,0,0]^2: dim    20, irreps   7, copies    8, max w  2 | t_ops 0.0038 s =  469 us per copy for the triple =  156 us per operator and copy ( 536 us per irrep) | t_a 0.0109 s (t_a_f 0.0102 s with float64 eig), t_b 0.0122 s
+   gl(4) [ 4, 2,0,0]^2: dim   126, irreps  24, copies   32, max w  4 | t_ops 0.0314 s =  983 us per copy for the triple =  328 us per operator and copy (1310 us per irrep) | t_a 0.0524 s (t_a_f 0.0461 s with float64 eig), t_b 0.0583 s
+   gl(4) [ 6, 3,0,0]^2: dim   480, irreps  58, copies   90, max w  7 | t_ops 0.1350 s = 1500 us per copy for the triple =  500 us per operator and copy (2328 us per irrep) | t_a 0.2100 s (t_a_f 0.1824 s with float64 eig), t_b 0.2365 s
+   gl(4) [ 8, 4,0,0]^2: dim  1375, irreps 115, copies  205, max w 11 | t_ops 0.4275 s = 2085 us per copy for the triple =  695 us per operator and copy (3717 us per irrep) | t_a 0.6880 s (t_a_f 0.5934 s with float64 eig), t_b 0.7826 s
+   gl(4) [10, 5,0,0]^2: dim  3276, irreps 201, copies  406, max w 15 | t_ops 1.0956 s = 2699 us per copy for the triple =  900 us per operator and copy (5451 us per irrep) | t_a 1.8209 s (t_a_f 1.5786 s with float64 eig), t_b 2.0903 s
+   gl(4) [12, 6,0,0]^2: dim  6860, irreps 322, copies  728, max w 20 | t_ops 2.3900 s = 3283 us per copy for the triple = 1094 us per operator and copy (7422 us per irrep) | t_a 4.0033 s (t_a_f 3.4489 s with float64 eig), t_b 4.9137 s
+
+  multiplicity-free family [S,S,0,0]^2:
+   S = 4: dim V 105, irreps 15, max w 3, max nW 147 | t_a 0.0224 s (gen 0.0036, gen_na 0.0029, rs 0.0003, prv 0.0003, red 0.0050, ops 0.0096, eig 0.0007), t_b 0.0301 s | worst HW resid 9.8e-16
+   S = 8: dim V 825, irreps 45, max w 5, max nW 1749 | t_a 0.1044 s (gen 0.0277, gen_na 0.0323, rs 0.0020, prv 0.0016, red 0.0050, ops 0.0340, eig 0.0019), t_b 0.1680 s | worst HW resid 5.4e-15
+  [4,4,0,0]^2 (m = 1 everywhere, 15 irreps): the scalars (V_red,3, V_red,4a, V_red,4b) on M_mu:
+     {8,8,0,0}: (0, 0, 0); {8,7,1,0}: (40, 0, 0); {8,6,2,0}: (70, 0, 0); {8,5,3,0}: (90, 0, 0); {8,4,4,0}: (100, 0, 0); {7,7,1,1}: (90, 0, 180); {7,6,2,1}: (120, 0, 240); {7,5,3,1}: (140, 0, 280); {7,4,4,1}: (150, 0, 300); {6,6,2,2}: (160, 0, 432); {6,5,3,2}: (180, 0, 504); {6,4,4,2}: (190, 0, 540); {5,5,3,3}: (210, 0, 672); {5,4,4,3}: (220, 0, 720); {4,4,4,4}: (240, 0, 840)
+  [8,8,0,0]^2 (m = 1 everywhere, 45 irreps): the scalars (V_red,3, V_red,4a, V_red,4b) on M_mu:
+     {16,16,0,0}: (0, 0, 0); {16,15,1,0}: (144, 0, 0); {16,14,2,0}: (270, 0, 0); {16,13,3,0}: (378, 0, 0); {16,12,4,0}: (468, 0, 0); {16,11,5,0}: (540, 0, 0); {16,10,6,0}: (594, 0, 0); {16,9,7,0}: (630, 0, 0); {16,8,8,0}: (648, 0, 0); {15,15,1,1}: (306, 0, 612); {15,14,2,1}: (432, 0, 864); {15,13,3,1}: (540, 0, 1080); {15,12,4,1}: (630, 0, 1260); {15,11,5,1}: (702, 0, 1404); {15,10,6,1}: (756, 0, 1512); {15,9,7,1}: (792, 0, 1584); {15,8,8,1}: (810, 0, 1620); {14,14,2,2}: (576, 0, 1632); {14,13,3,2}: (684, 0, 2040); {14,12,4,2}: (774, 0, 2380); {14,11,5,2}: (846, 0, 2652); {14,10,6,2}: (900, 0, 2856); {14,9,7,2}: (936, 0, 2992); {14,8,8,2}: (954, 0, 3060); {13,13,3,3}: (810, 0, 2880); {13,12,4,3}: (900, 0, 3360); {13,11,5,3}: (972, 0, 3744); {13,10,6,3}: (1026, 0, 4032); {13,9,7,3}: (1062, 0, 4224); {13,8,8,3}: (1080, 0, 4320); {12,12,4,4}: (1008, 0, 4200); {12,11,5,4}: (1080, 0, 4680); {12,10,6,4}: (1134, 0, 5040); {12,9,7,4}: (1170, 0, 5280); {12,8,8,4}: (1188, 0, 5400); {11,11,5,5}: (1170, 0, 5460); {11,10,6,5}: (1224, 0, 5880); {11,9,7,5}: (1260, 0, 6160); {11,8,8,5}: (1278, 0, 6300); {10,10,6,6}: (1296, 0, 6552); {10,9,7,6}: (1332, 0, 6864); {10,8,8,6}: (1350, 0, 7020); {9,9,7,7}: (1386, 0, 7392); {9,8,8,7}: (1404, 0, 7560); {8,8,8,8}: (1440, 0, 7920)
+  closed forms on [S,S,0,0]^2 (m = 1): V_red,3 = (S+1)/2 (C2(top) - C2(mu)), V_red,4a = 0, V_red,4b = F(mu) - F(top), F = (2S+1)/4 C2 - C4/4 + C2^2/8 (Perelomov-Popov chain Casimirs, top = (2S,2S,0,0)): checked on S = 1..10: 285 irreps, 0 mismatches
+
+total time 132.3s

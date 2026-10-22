@@ -1,0 +1,334 @@
+== 2a: multiplicity-free irreps of [S,S,0,0]^2 vector by vector (up to one global sign), tolerance 1e-09
+  product      mu (Munich)    n_ours  n_mun  mism    max dev  sign     secs status
+  S=1          2 2 0 0             1      1     0   0.00e+00    +1     0.00 MATCH
+  S=1          2 1 1 0             2      2     0   4.44e-16    -1     0.00 MATCH
+  S=1          0 0 0 0             6      6     0   1.11e-16    +1     0.00 MATCH
+  S=2          4 4 0 0             1      1     0   0.00e+00    +1     0.00 MATCH
+  S=2          4 3 1 0             2      2     0   5.55e-16    -1     0.00 MATCH
+  S=2          4 2 2 0             3      3     0   1.11e-16    +1     0.00 MATCH
+  S=2          2 2 0 0             6      6     0   7.22e-16    +1     0.00 MATCH
+  S=2          2 1 1 0            12     12     0   7.22e-16    -1     0.00 MATCH
+  S=2          0 0 0 0            20     20     0   8.33e-17    +1     0.00 MATCH
+  S=3          6 6 0 0             1      1     0   0.00e+00    +1     0.00 MATCH
+  S=3          6 5 1 0             2      2     0   5.55e-16    -1     0.00 MATCH
+  S=3          6 4 2 0             3      3     0   1.11e-16    +1     0.00 MATCH
+  S=3          6 3 3 0             4      4     0   5.55e-17    -1     0.00 MATCH
+  S=3          4 4 0 0             6      6     0   3.33e-16    +1     0.00 MATCH
+  S=3          4 3 1 0            12     12     0   3.33e-16    +1     0.00 MATCH
+  S=3          4 2 2 0            18     18     0   4.72e-16    +1     0.00 MATCH
+  S=3          2 2 0 0            20     20     0   6.94e-16    +1     0.00 MATCH
+  S=3          2 1 1 0            40     40     0   6.80e-16    -1     0.00 MATCH
+  S=3          0 0 0 0            50     50     0   5.55e-16    -1     0.00 MATCH
+  S=4          8 8 0 0             1      1     0   0.00e+00    +1     0.00 MATCH
+  S=4          8 7 1 0             2      2     0   4.44e-16    -1     0.00 MATCH
+  S=4          8 6 2 0             3      3     0   2.22e-16    +1     0.00 MATCH
+  S=4          8 5 3 0             4      4     0   1.11e-16    -1     0.00 MATCH
+  S=4          8 4 4 0             5      5     0   5.55e-17    +1     0.00 MATCH
+  S=4          6 6 0 0             6      6     0   4.44e-16    -1     0.00 MATCH
+  S=4          6 5 1 0            12     12     0   5.00e-16    -1     0.00 MATCH
+  S=4          6 4 2 0            18     18     0   5.00e-16    -1     0.00 MATCH
+  S=4          6 3 3 0            24     24     0   1.11e-15    +1     0.00 MATCH
+  S=4          4 4 0 0            20     20     0   7.22e-16    -1     0.00 MATCH
+  S=4          4 3 1 0            40     40     0   6.80e-16    -1     0.00 MATCH
+  S=4          4 2 2 0            60     60     0   8.60e-16    -1     0.00 MATCH
+  S=4          2 2 0 0            50     50     0   9.16e-16    -1     0.00 MATCH
+  S=4          2 1 1 0           100    100     0   7.91e-16    -1     0.00 MATCH
+  S=4          0 0 0 0           105    105     0   6.94e-16    -1     0.00 MATCH
+  S=6          0 0 0 0           336    336     0   1.73e-16    -1     0.00 MATCH
+  S=6          2 1 1 0           392    392     0   9.71e-16    -1     0.00 MATCH
+  S=6          6 4 2 0           150    150     0   8.05e-16    -1     0.00 MATCH
+  S=6          12 12 0 0           1      1     0   0.00e+00    +1     0.00 MATCH
+  S=8          0 0 0 0           825    825     0   7.22e-16    -1     0.00 MATCH
+  S=8          2 1 1 0          1080   1080     0   1.39e-15    -1     0.00 MATCH
+  S=8          8 6 2 0           315    315     0   1.22e-15    -1     0.00 MATCH
+  S=8          16 16 0 0           1      1     0   0.00e+00    +1     0.00 MATCH(prof)
+  2a: 42 MATCH of 42; max deviation over matches 1.39e-15
+
+== 2b: (2, 1, 0, 0) (x) (2, 1, 0, 0) : 7 irreps, sum m = 8, max m = 2
+  mu=(4, 2, 0, 0) (Munich 4 2 0 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=0.0e+00  supp ours/Munich=1/1  signed-perm=True  OK  (0.0 s)
+  mu=(4, 1, 1, 0) (Munich 4 1 1 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(3, 3, 0, 0) (Munich 3 3 0 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(3, 2, 1, 0) (Munich 3 2 1 0) m=2  maxdev|1-sv|=4.44e-16  orthM=7.8e-16 resid=1.0e-15  supp ours/Munich=6/6  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.950   -0.312]
+      [  -0.312   -0.950]
+  mu=(3, 1, 1, 1) (Munich 2 0 0 0) m=1  maxdev|1-sv|=1.11e-15  orthM=2.0e-15 resid=8.1e-16  supp ours/Munich=12/12  signed-perm=True  OK  (0.0 s)
+  mu=(2, 2, 2, 0) (Munich 2 2 2 0) m=1  maxdev|1-sv|=8.88e-16  orthM=1.6e-15 resid=3.9e-16  supp ours/Munich=8/8  signed-perm=True  OK  (0.0 s)
+  mu=(2, 2, 1, 1) (Munich 1 1 0 0) m=1  maxdev|1-sv|=2.22e-16  orthM=4.4e-16 resid=2.0e-15  supp ours/Munich=16/16  signed-perm=True  OK  (0.0 s)
+
+== 2b: (2, 1, 1, 0) (x) (2, 1, 1, 0) : 6 irreps, sum m = 7, max m = 2
+  mu=(4, 2, 2, 0) (Munich 4 2 2 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=0.0e+00  supp ours/Munich=1/1  signed-perm=True  OK  (0.0 s)
+  mu=(4, 2, 1, 1) (Munich 3 1 0 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(3, 3, 2, 0) (Munich 3 3 2 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(3, 3, 1, 1) (Munich 2 2 0 0) m=1  maxdev|1-sv|=2.22e-16  orthM=0.0e+00 resid=3.8e-16  supp ours/Munich=4/4  signed-perm=True  OK  (0.0 s)
+  mu=(3, 2, 2, 1) (Munich 2 1 1 0) m=2  maxdev|1-sv|=5.55e-16  orthM=3.3e-16 resid=3.0e-15  supp ours/Munich=10/10  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.994   -0.111]
+      [  -0.111    0.994]
+  mu=(2, 2, 2, 2) (Munich 0 0 0 0) m=1  maxdev|1-sv|=4.44e-16  orthM=1.1e-15 resid=1.8e-15  supp ours/Munich=15/15  signed-perm=True  OK  (0.0 s)
+
+== 2b: (2, 1, 0, 0) (x) (1, 1, 0, 0) : 4 irreps, sum m = 4, max m = 1
+  mu=(3, 2, 0, 0) (Munich 3 2 0 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=0.0e+00  supp ours/Munich=1/1  signed-perm=True  OK  (0.0 s)
+  mu=(3, 1, 1, 0) (Munich 3 1 1 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(2, 2, 1, 0) (Munich 2 2 1 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.3e-15 resid=3.3e-16  supp ours/Munich=3/3  signed-perm=True  OK  (0.0 s)
+  mu=(2, 1, 1, 1) (Munich 1 0 0 0) m=1  maxdev|1-sv|=0.00e+00  orthM=2.2e-16 resid=6.8e-16  supp ours/Munich=9/9  signed-perm=True  OK  (0.0 s)
+
+== 2b: (1, 1, 0, 0) (x) (2, 1, 0, 0) : 4 irreps, sum m = 4, max m = 1
+  mu=(3, 2, 0, 0) (Munich 3 2 0 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=0.0e+00  supp ours/Munich=1/1  signed-perm=True  OK  (0.0 s)
+  mu=(3, 1, 1, 0) (Munich 3 1 1 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(2, 2, 1, 0) (Munich 2 2 1 0) m=1  maxdev|1-sv|=4.44e-16  orthM=1.2e-15 resid=4.8e-16  supp ours/Munich=3/3  signed-perm=True  OK  (0.0 s)
+  mu=(2, 1, 1, 1) (Munich 1 0 0 0) m=1  maxdev|1-sv|=2.22e-16  orthM=0.0e+00 resid=7.9e-16  supp ours/Munich=9/9  signed-perm=True  OK  (0.0 s)
+
+== 2b: (2, 2, 1, 0) (x) (2, 1, 1, 0) : 6 irreps, sum m = 7, max m = 2
+  mu=(4, 3, 2, 0) (Munich 4 3 2 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=0.0e+00  supp ours/Munich=1/1  signed-perm=True  OK  (0.0 s)
+  mu=(4, 3, 1, 1) (Munich 3 2 0 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(4, 2, 2, 1) (Munich 3 1 1 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.3e-15 resid=3.3e-16  supp ours/Munich=3/3  signed-perm=True  OK  (0.0 s)
+  mu=(3, 3, 3, 0) (Munich 3 3 3 0) m=1  maxdev|1-sv|=4.44e-16  orthM=6.7e-16 resid=1.9e-16  supp ours/Munich=3/3  signed-perm=True  OK  (0.0 s)
+  mu=(3, 3, 2, 1) (Munich 2 2 1 0) m=2  maxdev|1-sv|=5.55e-16  orthM=1.2e-15 resid=2.5e-15  supp ours/Munich=9/9  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.328   -0.945]
+      [  -0.945    0.328]
+  mu=(3, 2, 2, 2) (Munich 1 0 0 0) m=1  maxdev|1-sv|=2.22e-16  orthM=4.4e-16 resid=1.8e-15  supp ours/Munich=17/17  signed-perm=True  OK  (0.0 s)
+
+== 2b: (3, 2, 1, 0) (x) (3, 2, 1, 0) : 16 irreps, sum m = 30, max m = 4
+  mu=(6, 4, 2, 0) (Munich 6 4 2 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=0.0e+00  supp ours/Munich=1/1  signed-perm=True  OK  (0.0 s)
+  mu=(6, 4, 1, 1) (Munich 5 3 0 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(6, 3, 3, 0) (Munich 6 3 3 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(6, 3, 2, 1) (Munich 5 2 1 0) m=2  maxdev|1-sv|=4.44e-16  orthM=7.8e-16 resid=1.0e-15  supp ours/Munich=6/6  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.950   -0.312]
+      [  -0.312   -0.950]
+  mu=(6, 2, 2, 2) (Munich 4 0 0 0) m=1  maxdev|1-sv|=8.88e-16  orthM=1.6e-15 resid=3.9e-16  supp ours/Munich=8/8  signed-perm=True  OK  (0.0 s)
+  mu=(5, 5, 2, 0) (Munich 5 5 2 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(5, 5, 1, 1) (Munich 4 4 0 0) m=1  maxdev|1-sv|=2.22e-16  orthM=0.0e+00 resid=3.8e-16  supp ours/Munich=4/4  signed-perm=True  OK  (0.0 s)
+  mu=(5, 4, 3, 0) (Munich 5 4 3 0) m=2  maxdev|1-sv|=4.44e-16  orthM=7.8e-16 resid=1.0e-15  supp ours/Munich=6/6  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.950   -0.312]
+      [  -0.312   -0.950]
+  mu=(5, 4, 2, 1) (Munich 4 3 1 0) m=4  maxdev|1-sv|=6.66e-16  orthM=8.6e-16 resid=2.1e-15  supp ours/Munich=18/18  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.516    0.033   -0.048    0.854]
+      [  -0.338    0.288   -0.856   -0.264]
+      [  -0.668   -0.624    0.167   -0.370]
+      [  -0.417    0.726    0.486   -0.252]
+  mu=(5, 3, 3, 1) (Munich 4 2 2 0) m=3  maxdev|1-sv|=9.99e-16  orthM=1.3e-15 resid=3.4e-15  supp ours/Munich=28/28  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.763   -0.322   -0.560]
+      [  -0.393    0.458   -0.798]
+      [   0.514    0.829    0.223]
+  mu=(5, 3, 2, 2) (Munich 3 1 0 0) m=3  maxdev|1-sv|=6.66e-16  orthM=1.3e-15 resid=3.5e-15  supp ours/Munich=44/44  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.880   -0.465    0.094]
+      [   0.347    0.495   -0.797]
+      [   0.323    0.734    0.597]
+  mu=(4, 4, 4, 0) (Munich 4 4 4 0) m=1  maxdev|1-sv|=8.88e-16  orthM=1.6e-15 resid=3.9e-16  supp ours/Munich=8/8  signed-perm=True  OK  (0.0 s)
+  mu=(4, 4, 3, 1) (Munich 3 3 2 0) m=3  maxdev|1-sv|=1.78e-15  orthM=2.7e-15 resid=3.5e-15  supp ours/Munich=32/32  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.923   -0.029    0.384]
+      [  -0.383    0.175   -0.907]
+      [   0.041    0.984    0.172]
+  mu=(4, 4, 2, 2) (Munich 2 2 0 0) m=2  maxdev|1-sv|=3.33e-16  orthM=5.6e-16 resid=2.9e-15  supp ours/Munich=48/48  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.235   -0.972]
+      [   0.972    0.235]
+  mu=(4, 3, 3, 2) (Munich 2 1 1 0) m=3  maxdev|1-sv|=6.66e-16  orthM=1.7e-15 resid=5.9e-15  supp ours/Munich=84/84  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.985   -0.081    0.154]
+      [  -0.002    0.880    0.475]
+      [   0.174    0.468   -0.866]
+  mu=(3, 3, 3, 3) (Munich 0 0 0 0) m=1  maxdev|1-sv|=2.22e-16  orthM=2.2e-16 resid=2.2e-15  supp ours/Munich=64/64  signed-perm=True  OK  (0.0 s)
+
+== 2b: (4, 2, 0, 0) (x) (4, 2, 0, 0) : 24 irreps, sum m = 32, max m = 3
+  mu=(8, 4, 0, 0) (Munich 8 4 0 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=0.0e+00  supp ours/Munich=1/1  signed-perm=True  OK  (0.0 s)
+  mu=(8, 3, 1, 0) (Munich 8 3 1 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=7.1e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(8, 2, 2, 0) (Munich 8 2 2 0) m=1  maxdev|1-sv|=4.44e-16  orthM=6.7e-16 resid=1.9e-16  supp ours/Munich=3/3  signed-perm=True  OK  (0.0 s)
+  mu=(7, 5, 0, 0) (Munich 7 5 0 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=7.1e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(7, 4, 1, 0) (Munich 7 4 1 0) m=2  maxdev|1-sv|=2.22e-16  orthM=2.2e-16 resid=7.9e-16  supp ours/Munich=6/6  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.909   -0.416]
+      [  -0.416   -0.909]
+  mu=(7, 3, 2, 0) (Munich 7 3 2 0) m=2  maxdev|1-sv|=1.11e-16  orthM=4.4e-16 resid=1.5e-15  supp ours/Munich=10/10  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.959   -0.284]
+      [  -0.284    0.959]
+  mu=(7, 3, 1, 1) (Munich 6 2 0 0) m=1  maxdev|1-sv|=4.44e-16  orthM=1.1e-15 resid=1.3e-15  supp ours/Munich=12/12  signed-perm=True  OK  (0.0 s)
+  mu=(7, 2, 2, 1) (Munich 6 1 1 0) m=1  maxdev|1-sv|=2.22e-16  orthM=2.2e-16 resid=1.2e-15  supp ours/Munich=22/22  signed-perm=True  OK  (0.0 s)
+  mu=(6, 6, 0, 0) (Munich 6 6 0 0) m=1  maxdev|1-sv|=4.44e-16  orthM=6.7e-16 resid=1.9e-16  supp ours/Munich=3/3  signed-perm=True  OK  (0.0 s)
+  mu=(6, 5, 1, 0) (Munich 6 5 1 0) m=2  maxdev|1-sv|=4.44e-16  orthM=3.7e-16 resid=1.4e-15  supp ours/Munich=10/10  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.135    0.991]
+      [  -0.991    0.135]
+  mu=(6, 4, 2, 0) (Munich 6 4 2 0) m=3  maxdev|1-sv|=4.44e-16  orthM=1.2e-15 resid=2.4e-15  supp ours/Munich=20/20  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.228   -0.600    0.767]
+      [  -0.230    0.799    0.556]
+      [   0.946    0.050    0.321]
+  mu=(6, 4, 1, 1) (Munich 5 3 0 0) m=1  maxdev|1-sv|=4.44e-16  orthM=6.7e-16 resid=3.4e-15  supp ours/Munich=24/24  signed-perm=True  OK  (0.0 s)
+  mu=(6, 3, 3, 0) (Munich 6 3 3 0) m=1  maxdev|1-sv|=4.44e-16  orthM=4.4e-16 resid=9.9e-16  supp ours/Munich=24/24  signed-perm=True  OK  (0.0 s)
+  mu=(6, 3, 2, 1) (Munich 5 2 1 0) m=2  maxdev|1-sv|=1.11e-15  orthM=7.9e-16 resid=3.5e-15  supp ours/Munich=54/54  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.870    0.493]
+      [  -0.493   -0.870]
+  mu=(6, 2, 2, 2) (Munich 4 0 0 0) m=1  maxdev|1-sv|=3.33e-16  orthM=4.4e-16 resid=2.4e-15  supp ours/Munich=75/75  signed-perm=True  OK  (0.0 s)
+  mu=(5, 5, 2, 0) (Munich 5 5 2 0) m=1  maxdev|1-sv|=0.00e+00  orthM=4.4e-16 resid=1.4e-15  supp ours/Munich=12/12  signed-perm=True  OK  (0.0 s)
+  mu=(5, 5, 1, 1) (Munich 4 4 0 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=2.3e-15  supp ours/Munich=24/24  signed-perm=True  OK  (0.0 s)
+  mu=(5, 4, 3, 0) (Munich 5 4 3 0) m=2  maxdev|1-sv|=4.44e-16  orthM=5.6e-16 resid=2.1e-15  supp ours/Munich=30/30  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.835   -0.550]
+      [   0.550    0.835]
+  mu=(5, 4, 2, 1) (Munich 4 3 1 0) m=2  maxdev|1-sv|=4.44e-16  orthM=1.1e-15 resid=3.7e-15  supp ours/Munich=70/70  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.975   -0.224]
+      [   0.224    0.975]
+  mu=(5, 3, 3, 1) (Munich 4 2 2 0) m=1  maxdev|1-sv|=2.22e-16  orthM=2.2e-16 resid=3.7e-15  supp ours/Munich=98/98  signed-perm=True  OK  (0.0 s)
+  mu=(5, 3, 2, 2) (Munich 3 1 0 0) m=1  maxdev|1-sv|=0.00e+00  orthM=4.4e-16 resid=3.7e-15  supp ours/Munich=132/132  signed-perm=True  OK  (0.0 s)
+  mu=(4, 4, 4, 0) (Munich 4 4 4 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.3e-15 resid=1.7e-15  supp ours/Munich=27/27  signed-perm=True  OK  (0.0 s)
+  mu=(4, 4, 3, 1) (Munich 3 3 2 0) m=1  maxdev|1-sv|=2.22e-16  orthM=4.4e-16 resid=2.9e-15  supp ours/Munich=72/72  signed-perm=True  OK  (0.0 s)
+  mu=(4, 4, 2, 2) (Munich 2 2 0 0) m=1  maxdev|1-sv|=8.88e-16  orthM=1.9e-15 resid=3.4e-15  supp ours/Munich=102/102  signed-perm=True  OK  (0.0 s)
+
+== 2b: (4, 2, 1, 0) (x) (4, 2, 1, 0) : 27 irreps, sum m = 56, max m = 5
+  mu=(8, 4, 2, 0) (Munich 8 4 2 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=0.0e+00  supp ours/Munich=1/1  signed-perm=True  OK  (0.0 s)
+  mu=(8, 4, 1, 1) (Munich 7 3 0 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(8, 3, 3, 0) (Munich 8 3 3 0) m=1  maxdev|1-sv|=6.66e-16  orthM=1.4e-15 resid=1.6e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(8, 3, 2, 1) (Munich 7 2 1 0) m=2  maxdev|1-sv|=4.44e-16  orthM=7.8e-16 resid=1.0e-15  supp ours/Munich=6/6  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.950   -0.312]
+      [  -0.312   -0.950]
+  mu=(8, 2, 2, 2) (Munich 6 0 0 0) m=1  maxdev|1-sv|=8.88e-16  orthM=1.6e-15 resid=3.9e-16  supp ours/Munich=8/8  signed-perm=True  OK  (0.0 s)
+  mu=(7, 5, 2, 0) (Munich 7 5 2 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=7.1e-16  supp ours/Munich=2/2  signed-perm=True  OK  (0.0 s)
+  mu=(7, 5, 1, 1) (Munich 6 4 0 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=2.2e-16  supp ours/Munich=4/4  signed-perm=True  OK  (0.0 s)
+  mu=(7, 4, 3, 0) (Munich 7 4 3 0) m=2  maxdev|1-sv|=0.00e+00  orthM=2.2e-16 resid=7.7e-16  supp ours/Munich=6/6  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.923   -0.386]
+      [  -0.386   -0.923]
+  mu=(7, 4, 2, 1) (Munich 6 3 1 0) m=4  maxdev|1-sv|=4.44e-16  orthM=7.8e-16 resid=2.3e-15  supp ours/Munich=18/18  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.240    0.647   -0.542    0.480]
+      [  -0.164   -0.674   -0.720    0.014]
+      [   0.706    0.272   -0.426   -0.495]
+      [   0.645   -0.230    0.081    0.724]
+  mu=(7, 3, 3, 1) (Munich 6 2 2 0) m=3  maxdev|1-sv|=1.11e-15  orthM=1.9e-15 resid=2.8e-15  supp ours/Munich=28/28  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.266   -0.427    0.864]
+      [  -0.045   -0.901   -0.431]
+      [   0.963    0.075   -0.259]
+  mu=(7, 3, 2, 2) (Munich 5 1 0 0) m=3  maxdev|1-sv|=5.55e-16  orthM=1.1e-15 resid=3.4e-15  supp ours/Munich=44/44  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.952   -0.286    0.109]
+      [   0.247    0.504   -0.827]
+      [   0.182    0.815    0.551]
+  mu=(6, 6, 2, 0) (Munich 6 6 2 0) m=1  maxdev|1-sv|=4.44e-16  orthM=6.7e-16 resid=1.9e-16  supp ours/Munich=3/3  signed-perm=True  OK  (0.0 s)
+  mu=(6, 6, 1, 1) (Munich 5 5 0 0) m=1  maxdev|1-sv|=2.22e-16  orthM=1.1e-16 resid=4.5e-16  supp ours/Munich=6/6  signed-perm=True  OK  (0.0 s)
+  mu=(6, 5, 3, 0) (Munich 6 5 3 0) m=2  maxdev|1-sv|=1.33e-15  orthM=1.6e-15 resid=1.2e-15  supp ours/Munich=10/10  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.373    0.928]
+      [  -0.928    0.373]
+  mu=(6, 5, 2, 1) (Munich 5 4 1 0) m=4  maxdev|1-sv|=6.66e-16  orthM=1.6e-15 resid=3.1e-15  supp ours/Munich=30/30  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.776    0.515   -0.301   -0.204]
+      [  -0.506    0.378   -0.760    0.152]
+      [  -0.194   -0.173   -0.147   -0.954]
+      [   0.323   -0.750   -0.556    0.156]
+  mu=(6, 4, 4, 0) (Munich 6 4 4 0) m=1  maxdev|1-sv|=2.22e-16  orthM=2.2e-16 resid=7.1e-16  supp ours/Munich=14/14  signed-perm=True  OK  (0.0 s)
+  mu=(6, 4, 3, 1) (Munich 5 3 2 0) m=5  maxdev|1-sv|=8.88e-16  orthM=1.3e-15 resid=5.6e-15  supp ours/Munich=60/60  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.717   -0.396    0.281    0.102    0.489]
+      [  -0.563    0.355    0.204    0.185   -0.693]
+      [   0.362   -0.406    0.797    0.026   -0.261]
+      [  -0.191   -0.411   -0.204   -0.802   -0.330]
+      [  -0.026    0.619    0.450   -0.557    0.321]
+  mu=(6, 4, 2, 2) (Munich 4 2 0 0) m=4  maxdev|1-sv|=2.44e-15  orthM=5.6e-15 resid=6.1e-15  supp ours/Munich=92/92  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.742   -0.619   -0.257   -0.012]
+      [   0.005   -0.326    0.822   -0.467]
+      [   0.656    0.633    0.359    0.197]
+      [   0.137    0.330   -0.360   -0.862]
+  mu=(6, 3, 3, 2) (Munich 4 1 1 0) m=3  maxdev|1-sv|=8.88e-16  orthM=1.0e-15 resid=6.3e-15  supp ours/Munich=126/126  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.802   -0.543    0.251]
+      [  -0.537    0.838    0.097]
+      [  -0.263   -0.057   -0.963]
+  mu=(5, 5, 4, 0) (Munich 5 5 4 0) m=1  maxdev|1-sv|=0.00e+00  orthM=0.0e+00 resid=8.3e-16  supp ours/Munich=12/12  signed-perm=True  OK  (0.0 s)
+  mu=(5, 5, 3, 1) (Munich 4 4 2 0) m=3  maxdev|1-sv|=6.66e-16  orthM=1.2e-15 resid=3.8e-15  supp ours/Munich=48/48  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.988   -0.155   -0.017]
+      [  -0.070    0.345    0.936]
+      [   0.140   -0.926    0.352]
+  mu=(5, 5, 2, 2) (Munich 3 3 0 0) m=2  maxdev|1-sv|=1.11e-15  orthM=1.8e-15 resid=4.5e-15  supp ours/Munich=72/72  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.909    0.418]
+      [   0.418   -0.909]
+  mu=(5, 4, 4, 1) (Munich 4 3 3 0) m=2  maxdev|1-sv|=9.99e-16  orthM=1.7e-15 resid=3.5e-15  supp ours/Munich=68/68  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [  -0.982   -0.188]
+      [  -0.188    0.982]
+  mu=(5, 4, 3, 2) (Munich 3 2 1 0) m=4  maxdev|1-sv|=9.99e-16  orthM=2.6e-15 resid=9.3e-15  supp ours/Munich=178/178  signed-perm=False  OK  (0.0 s)
+    sv = [1. 1. 1. 1.]
+    Q (rows = our canonical copies k, cols = Munich alpha):
+      [   0.706   -0.657    0.249   -0.088]
+      [   0.381    0.666    0.607   -0.207]
+      [   0.408    0.238   -0.227    0.852]
+      [   0.437    0.260   -0.720   -0.473]
+  mu=(5, 3, 3, 3) (Munich 2 0 0 0) m=1  maxdev|1-sv|=1.55e-15  orthM=3.3e-15 resid=5.5e-15  supp ours/Munich=240/240  signed-perm=True  OK  (0.0 s)
+  mu=(4, 4, 4, 2) (Munich 2 2 2 0) m=1  maxdev|1-sv|=1.89e-15  orthM=3.9e-15 resid=2.6e-15  supp ours/Munich=65/65  signed-perm=True  OK  (0.0 s)
+  mu=(4, 4, 3, 3) (Munich 1 1 0 0) m=1  maxdev|1-sv|=2.22e-16  orthM=5.6e-16 resid=4.5e-15  supp ours/Munich=158/158  signed-perm=True  OK  (0.0 s)
+
+  2b summary: 94 sectors, 94 OK, sum m = 148; worst max|1-sv| = 2.44e-15; worst Munich orthonormality = 5.55e-15
+
+== 2b: [6,4,2,0] (x) [6,4,2,0]: six largest-m sectors from the repaired profiler (HW_MODE=eig, prints all m alpha copies, 12 decimals)
+  mu=(9, 7, 5, 3) (Munich 6 4 2 0) m=12 n_W=916  maxdev|1-sv|=1.63e-12  orthM=1.7e-12 resid=2.9e-11  supp ours/Munich=840/840  signed-perm=False  OK  (munich 0.00 s, total 0.6 s)
+    sv = [1.000000000002 1.000000000001 1.000000000001 1.
+ 1.             1.             1.             1.
+ 0.999999999999 0.999999999999 0.999999999999 0.999999999998]
+  mu=(10, 7, 5, 2) (Munich 8 5 3 0) m=11 n_W=252  maxdev|1-sv|=1.43e-12  orthM=1.7e-12 resid=1.5e-11  supp ours/Munich=252/252  signed-perm=False  OK  (munich 0.00 s, total 0.5 s)
+    sv = [1.000000000001 1.000000000001 1.000000000001 1.
+ 1.             1.             1.             0.999999999999
+ 0.999999999999 0.999999999999 0.999999999999]
+  mu=(10, 7, 4, 3) (Munich 7 4 1 0) m=10 n_W=372  maxdev|1-sv|=1.35e-12  orthM=1.3e-12 resid=1.7e-11  supp ours/Munich=372/372  signed-perm=False  OK  (munich 0.00 s, total 0.4 s)
+    sv = [1.000000000001 1.000000000001 1.             1.
+ 1.             1.             1.             0.999999999999
+ 0.999999999999 0.999999999999]
+  mu=(9, 8, 5, 2) (Munich 7 6 3 0) m=10 n_W=372  maxdev|1-sv|=1.28e-12  orthM=1.0e-12 resid=1.6e-11  supp ours/Munich=300/300  signed-perm=False  OK  (munich 0.00 s, total 0.4 s)
+    sv = [1.000000000001 1.000000000001 1.000000000001 1.
+ 1.             1.             1.             0.999999999999
+ 0.999999999999 0.999999999999]
+  mu=(10, 8, 4, 2) (Munich 8 6 2 0) m=10 n_W=144  maxdev|1-sv|=1.42e-12  orthM=1.2e-12 resid=1.0e-11  supp ours/Munich=144/144  signed-perm=False  OK  (munich 0.00 s, total 0.4 s)
+    sv = [1.000000000001 1.000000000001 1.000000000001 1.
+ 1.             1.             1.             0.999999999999
+ 0.999999999999 0.999999999999]
+  mu=(10, 6, 5, 3) (Munich 7 3 2 0) m=9 n_W=530  maxdev|1-sv|=1.08e-12  orthM=1.0e-12 resid=2.0e-11  supp ours/Munich=530/530  signed-perm=False  OK  (munich 1.14 s, total 1.6 s)
+    sv = [1.000000000001 1.000000000001 1.             1.
+ 1.             1.             1.             0.999999999999
+ 0.999999999999]
+munich_bridge selftest: 29/29 rotated-copy outputs accepted, 39/39 corrupted outputs rejected

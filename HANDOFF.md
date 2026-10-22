@@ -4,6 +4,13 @@ Where the last session left off. Read this first when picking the project back u
 history log (that's `git log`) — only what's still open or in-flight. Overwrite
 freely each session rather than appending.
 
+## >>> DONE (2026-10-22, Ubuntu): gl(4) Munich comparison (SPEC-G7) -- report `Paul/Python/gaudin_gl4/RESULTS-G7-munich-comparison.md` <<<
+
+**D1 correct:** 42 of 42 multiplicity-free irreps of [S,S,0,0]^2 MATCH Munich (max dev 1.4e-15; the S=8 `16 16 0 0` one only via the repaired profiler because `hwcgc.sh` hit the 1800 s timeout); 100 multiplicity sectors (sum m = 210, m up to 12; 94 through the original `clebsch`, 6 of [6,4,2,0]^2 through the profiler) span the same subspace as our canonical copies (max |1-sv| 2.4e-15 original, 1.6e-12 profiler); the rotation Q between Munich's Gram-Schmidt copies and our Gaudin copies is never a signed permutation (tables in `munich_bridge_output.txt`). Python 3.10.12: all five test files pass, no shim.
+**D2/D3 timings (one laptop, 1 thread, load ~1):** multiplicity products (headline, section 1 of RESULTS): orig/ours t_b = 0.02 ([2,1,1,0]^2), 0.26, 0.97, 1.9 ([4,2,1,0]^2), 4.8, 53 ([6,3,0,0]^2); repaired eig / ours t_b = 0.02 ... 0.5 up to [4,3,1,0]^2, then 4.3, 22 ([6,4,2,0]^2, 39 s vs 1.8 s), 51 ([8,4,0,0]^2), 14 ([9,6,3,0]^2 partial; n_W up to 59008 not runnable by Munich, ours 27 s). Rectangular S=8: orig 84.6 s, eig 3.7 s, compact 22.5 s, ours t_b 0.093 s: x908 / x38 / x242; eig S=9,10,11: 15, 57, 202 s (x109, x258, x622), RSS 1.1 GB at S=11 (no memory wall). Original reproduces the July table within 6 %.
+Not run: S=9 original (33 GB), eig S=12, big irreps beyond n_W / memory guards, original on [6,4,2,0]^2 and [9,6,3,0]^2 (see RESULTS section 4).
+Files to commit (nothing committed): `Paul/Python/gaudin_gl4/munich_bridge.py`, `munich_bridge_output.txt`, `RESULTS-G7-munich-comparison.md`, `Paul/Cpp/AlexCGC/test_prof.sh`, `Paul/Cpp/AlexCGC/results/su4-same-machine/` (raw outputs, scripts, summaries; `cgc_hw_prof*` binaries are untracked, do not commit), this HANDOFF block. Replacement text for section 8 of the notes is in RESULTS section 5 (notes not edited).
+
 ## >>> FOR THE UBUNTU LAPTOP (written 2026-10-22, Paul: "set up a precise pipeline to compare to Munich"): brief `Paul/Python/gaudin_gl4/SPEC-G7-munich-comparison-ubuntu.md` <<<
 
 Prerequisite: the gl(4) material of 2026-10-22 must be committed on Windows and pulled on the laptop (`Paul/Python/gaudin_gl4/`, `Paul/Mathematica/Gaudin/ref/gl4-*.txt`,

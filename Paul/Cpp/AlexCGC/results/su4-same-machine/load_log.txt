@@ -1,0 +1,74 @@
+[12:11:34] load before 0.51 0.78 1.07 2/1538 243394
+[12:11:34] orig_S1 done rc=0 load after 0.51 0.78 1.07 2/1538 243438 maxrss_kB=6016 wall=0:00.05
+[12:11:34] load before 0.51 0.78 1.07 3/1538 243442
+[12:11:34] orig_S2 done rc=0 load after 0.51 0.78 1.07 1/1538 243511 maxrss_kB=6016 wall=0:00.09
+[12:11:34] load before 0.51 0.78 1.07 1/1538 243515
+[12:11:35] orig_S3 done rc=0 load after 0.51 0.78 1.07 1/1538 243624 maxrss_kB=7128 wall=0:00.17
+[12:11:35] load before 0.51 0.78 1.07 2/1538 243628
+[12:11:35] orig_S4 done rc=0 load after 0.51 0.78 1.07 3/1538 243787 maxrss_kB=19000 wall=0:00.35
+[12:11:35] load before 0.51 0.78 1.07 1/1538 243791
+[12:11:36] orig_S5 done rc=0 load after 0.51 0.78 1.07 1/1538 244010 maxrss_kB=98964 wall=0:01.03
+[12:11:36] load before 0.51 0.78 1.07 2/1538 244014
+[12:11:41] orig_S6 done rc=0 load after 0.55 0.78 1.07 1/1540 244311 maxrss_kB=527912 wall=0:05.36
+[12:11:41] load before 0.55 0.78 1.07 1/1540 244315
+[12:12:12] orig_S7 done rc=0 load after 0.78 0.82 1.07 2/1540 244749 maxrss_kB=2394752 wall=0:30.61
+[12:12:12] load before 0.78 0.82 1.07 2/1540 244753
+[12:15:02] orig_S8 done rc=0 load after 1.75 1.14 1.14 1/1638 245738 maxrss_kB=9335296 wall=2:49.87
+[12:15:02] load before 1.75 1.14 1.14 1/1638 245742
+[12:15:02] orig3_S4 done rc=0 load after 1.75 1.14 1.14 5/1638 245901 maxrss_kB=19072 wall=0:00.37
+[12:15:02] load before 1.75 1.14 1.14 2/1638 245905
+[12:15:13] orig3_S6 done rc=0 load after 1.63 1.13 1.14 1/1635 246262 maxrss_kB=527808 wall=0:10.40
+[12:15:13] load before 1.63 1.13 1.14 1/1635 246266
+[12:20:59] orig3_S8 done rc=0 load after 1.97 1.53 1.30 1/1555 247705 maxrss_kB=9334144 wall=5:46.45
+BATCH_A_DONE
+[12:21:08] load before 1.81 1.51 1.29 2/1547 247732
+[12:21:08] eig_S1 done rc=0 load after 1.81 1.51 1.29 1/1547 247771 maxrss_kB=7808 wall=0:00.10
+[12:21:08] load before 1.81 1.51 1.29 1/1547 247775
+[12:21:08] eig_S2 done rc=0 load after 1.81 1.51 1.29 1/1547 247844 maxrss_kB=7936 wall=0:00.11
+[12:21:08] load before 1.81 1.51 1.29 2/1547 247848
+[12:21:09] eig_S3 done rc=0 load after 1.81 1.51 1.29 2/1548 247958 maxrss_kB=8192 wall=0:00.19
+[12:21:09] load before 1.81 1.51 1.29 1/1548 247962
+[12:21:09] eig_S4 done rc=0 load after 1.75 1.50 1.29 1/1548 248121 maxrss_kB=8820 wall=0:00.34
+[12:21:09] load before 1.75 1.50 1.29 1/1548 248125
+[12:21:09] eig_S5 done rc=0 load after 1.75 1.50 1.29 1/1545 248381 maxrss_kB=12248 wall=0:00.55
+[12:21:09] load before 1.75 1.50 1.29 1/1545 248385
+[12:21:11] eig_S6 done rc=0 load after 1.75 1.50 1.29 1/1543 248674 maxrss_kB=19888 wall=0:01.02
+[12:21:11] load before 1.75 1.50 1.29 2/1543 248678
+[12:21:13] eig_S7 done rc=0 load after 1.75 1.50 1.29 3/1549 249061 maxrss_kB=43532 wall=0:02.58
+[12:21:13] load before 1.75 1.50 1.29 4/1549 249065
+[12:21:21] eig_S8 done rc=0 load after 2.02 1.56 1.32 1/1550 249538 maxrss_kB=100900 wall=0:08.23
+[12:21:21] load before 2.02 1.56 1.32 1/1550 249542
+[12:21:53] eig_S9 done rc=0 load after 2.06 1.62 1.34 1/1553 250138 maxrss_kB=235784 wall=0:31.58
+[12:21:53] load before 2.06 1.62 1.34 2/1553 250142
+[12:23:48] eig_S10 done rc=0 load after 1.22 1.46 1.32 1/1546 250897 maxrss_kB=531908 wall=1:54.74
+[12:23:48] load before 1.22 1.46 1.32 1/1546 250901
+[12:30:33] eig_S11 done rc=0 load after 1.15 1.24 1.26 1/1541 252037 maxrss_kB=1146756 wall=6:45.07
+[12:30:33] load before 1.15 1.24 1.26 1/1541 252041
+[12:49:52] eig_S12 killed (priority change), discarded
+[12:49:52] load before 1.08 1.17 1.23 1/1551 253339
+[12:49:52] compact_S1 done rc=0 load after 1.08 1.17 1.23 2/1551 253383 maxrss_kB=7936 wall=0:00.06
+[12:49:52] load before 1.08 1.17 1.23 3/1551 253387
+[12:49:52] compact_S2 done rc=0 load after 1.08 1.17 1.23 1/1551 253456 maxrss_kB=7936 wall=0:00.11
+[12:49:52] load before 1.08 1.17 1.23 1/1551 253460
+[12:49:52] compact_S3 done rc=0 load after 1.08 1.17 1.23 1/1551 253569 maxrss_kB=8448 wall=0:00.20
+[12:49:52] load before 1.08 1.17 1.23 1/1551 253573
+[12:49:53] compact_S4 done rc=0 load after 1.08 1.17 1.23 1/1550 253732 maxrss_kB=8680 wall=0:00.34
+[12:49:53] load before 1.08 1.17 1.23 1/1550 253736
+[12:49:53] compact_S5 done rc=0 load after 1.08 1.17 1.23 1/1550 253955 maxrss_kB=11312 wall=0:00.68
+[12:49:53] load before 1.08 1.17 1.23 1/1550 253959
+[12:49:55] compact_S6 done rc=0 load after 1.07 1.16 1.22 1/1549 254248 maxrss_kB=20296 wall=0:01.95
+[12:49:55] load before 1.07 1.16 1.22 1/1549 254252
+[12:50:04] compact_S7 done rc=0 load after 1.06 1.16 1.22 1/1544 254637 maxrss_kB=43320 wall=0:08.70
+[12:50:04] load before 1.06 1.16 1.22 1/1544 254641
+[12:50:50] compact_S8 done rc=0 load after 1.08 1.15 1.21 1/1539 255177 maxrss_kB=104980 wall=0:45.67
+[12:50:50] load before 1.08 1.15 1.21 1/1539 255181
+[12:50:50] proforig_S4 done rc=0 load after 1.08 1.15 1.21 1/1539 255340 maxrss_kB=21452 wall=0:00.37
+[12:50:50] load before 1.08 1.15 1.21 2/1539 255344
+[12:50:54] proforig_S6 done rc=0 load after 1.08 1.15 1.21 1/1548 255644 maxrss_kB=531476 wall=0:03.99
+[12:50:54] load before 1.08 1.15 1.21 1/1548 255648
+[12:50:54] eig3_S4 done rc=0 load after 1.07 1.14 1.21 1/1547 255807 maxrss_kB=8968 wall=0:00.38
+[12:50:54] load before 1.07 1.14 1.21 1/1547 255811
+[12:50:56] eig3_S6 done rc=0 load after 1.07 1.14 1.21 1/1547 256100 maxrss_kB=20180 wall=0:01.33
+[12:50:56] load before 1.07 1.14 1.21 1/1547 256104
+[12:51:11] eig3_S8 done rc=0 load after 1.06 1.14 1.21 1/1537 256574 maxrss_kB=105180 wall=0:14.92
+BATCH_B2_DONE

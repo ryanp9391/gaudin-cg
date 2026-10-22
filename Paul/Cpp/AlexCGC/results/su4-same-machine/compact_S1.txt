@@ -1,0 +1,10 @@
+SU(4):  irreps mu in  [1,1,0,0] (x) [1,1,0,0]
+        highest-weight-state CGC timing  (reps=1, headline = minimum)
+
+mu                    dim   mult       hw-solve     total(+LR)
+---------------- -------- ------ -------------- --------------
+(0 0 0 0)               1      1  0.000030178 s  0.000033411 s
+(2 1 1 0)              15      1  0.000016043 s  0.000017990 s
+(2 2 0 0)              20      1  0.000008706 s  0.000011837 s
+
+irreps mu: 3    total highest-weight-solve time: 0.000054927 s

@@ -1,0 +1,6 @@
+load before 1.21 1.11 1.09 1/1818 266628
+after products 1.07 1.08 1.08 4/1829 266714
+after bench12 1.23 1.13 1.10 1/1840 266975
+after slice_ops bench 1.53 1.31 1.17 1/1833 267185
+after bench12 multithread 2.46 2.10 1.51 2/1823 267498
+DONE
