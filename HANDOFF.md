@@ -17,6 +17,20 @@ rule for the original Munich: n_W·dim²·8 B (9.5 GB at S = 8, 33 GB at S = 9 �
 
 ## >>> DONE (2026-10-22, Windows): gl(4) programme G1–G6 — all six packages complete and re-verified by the session; COMMITTED and pushed (f1043da: G1–G5 + G7 brief; e0c8d1a: the 21-page notes with G4 folded in) <<<
 
+**SU(4) LITERATURE CHECK DONE (2026-10-22 afternoon, `Paul/Mathematica/Gaudin/Literature-check-SU4-CG.md`, 135 kB, brief `Literature-check-SU4-CG-brief.md`; verdict table K1–K7, codes
+table, must-cite list, and a row-by-row table of corrections for `gl4-slice-engine-notes` §9.2/§1/§4.2/§5.4/§6.2/§6.5/§8.3 — NOT yet applied to the notes, Paul's call).**
+Bottom line: no SU(4) analogue of the Draayer–Akiyama/ndsu3lib lineage; nothing faster than Munich for SU(4) HW vectors; the engine is NOT pre-empted (closest: Mudrov 2022
+slice + extremal projector as a criterion; Gliske–Klink–Ton-That HW-first Maple algorithm; Dang et al. 2024 U(4) null spaces). **Labelling by polynomial invariants is a
+THEOREM for U(N)** (Klink–Ton-That 1996; Gliske–Klink–Ton-That 2005; SU(4) example Klink–Ton-That–Wills 1993) — so "operators exist and suffice" is not new; the specific
+Gaudin triple, the cubic-alone failure and the exchange-parity forcing were not found; CPV call higher rank open; no sl_N (N ≥ 4) two-site paper 2021–26. Naive traces failing
+from degree 4 is KNOWN (Chervov–Rybnikov–Talalaev 2004, Talalaev 2004). Weyl/BGG identity: not found; the check sketches a category-O proof (dominant Verma modules are
+projective ⇒ Hom(M(μ),·) exact on the BGG complex — the notes' "one missing step"). Oper dictionary/degrees/completeness = MTV Glasgow Math. J. 2009 Thm 2.1 + Rybnikov;
+adjoint+gauge ≈ Mukhin–Varchenko 2004 §6.1. Codes landscape: Munich is the only general-N GT code distributed by its authors (ports: SUNRepresentations.jl, pyclebsch 2025;
+LSU U(3)/U(4) papers 2024); QSpace (bottom-up, no canonical multiplicity basis, SU(4) store "several hours"); CGSU4 (Kuhn–Walliser 2008, SU(4)-specific, not benchmarked —
+recommended to obtain and run); the Munich group's unreleased Weyl-chamber variant (Everding 2011) speeds up descendants only. Corrections flagged: "Munich is the only
+general-N code" (inaccurate), "the SU(4) sweep of the Munich code of [1]" (it is OUR sweep; the paper has no SU(4) data), the Verma-module interpretation in §5.4 needs
+"generic λ′" (EV Lemma 1; at integral λ′ the Verma slice map is not injective — the finite-dimensional PRV statement used by the engine is unaffected), §6.2 "expected" → MTV Thm 2.1.
+
 Paul (2026-10-22): "Check out gl4-slice-engine-plan.md and start implementing with sonnet subagents." Directory `Paul/Python/gaudin_gl4/` (briefs
 `SPEC-G<k>-*.md`, reports `RESULTS-G<k>-*.md`, output `*_output.txt`, tests `test_*.py`), reference data `Paul/Mathematica/Gaudin/ref/gl4-*.txt`. **Nothing committed.**
 Session facts: `gl3_reps._raise/_lower` are general-N (all 256 gl(4) relations exact); no C++ compiler/WSL on this Windows box (Munich binary not buildable →
