@@ -24,6 +24,17 @@ rule for the original Munich: n_W·dim²·8 B (9.5 GB at S = 8, 33 GB at S = 9 �
 
 ## >>> DONE (2026-10-22, Windows): gl(4) programme G1–G6 — all six packages complete and re-verified by the session; COMMITTED and pushed (f1043da: G1–G5 + G7 brief; e0c8d1a: the 21-page notes with G4 folded in) <<<
 
+**G7 DONE on the Ubuntu laptop (2026-10-22, commit 0386c93 pulled here; `RESULTS-G7-munich-comparison.md`, `munich_bridge.py`, `Paul/Cpp/AlexCGC/results/su4-same-machine/`;
+the Windows session re-ran `munich_bridge.py compare all` from the cached raw Munich outputs: identical agreement). The literal Munich comparison is settled:** 42/42
+multiplicity-free irreps of [S,S,0,0]² (S ≤ 4 all; S = 6, 8 selected incl. the singlet) MATCH vector by vector to 1.4e-15 after one global sign; 100 multiplicity sectors
+(Σm = 210, m ≤ 12, eight products incl. all of [3,2,1,0]², [4,2,0,0]², [4,2,1,0]² and six sectors of [6,4,2,0]²) agree as subspaces to 2.4e-15 (1.6e-12 from the profiler's
+12-decimal output); the rotation Q between Munich's Gram–Schmidt copies and the Gaudin copies is never a signed permutation. Same machine (i5-1345U, single thread), S = 8:
+Munich as distributed 84.6 s, repaired (eig, OpenBLAS) 3.74 s, ours t_b 0.093 s → **×908 vs orig, ×38 vs repaired**; vs repaired ×109 / ×258 / ×622 at S = 9/10/11 (eig is
+cubic in n_W, no memory wall; orig needs 33 GB at S = 9). Repair factor in SU(4): 1.9 (S = 4) → 22.6 (S = 8). Multiplicity products: ours faster than orig from [4,2,1,0]²
+(×1.9), [6,3,0,0]² ×53; [6,4,2,0]²: eig 39 s vs ours 1.8 s; [8,4,0,0]²: orig 73.8 s on the 80 irreps it could run vs ours 0.78 s for all 115; [9,6,3,0]²: no Munich variant
+runs 47 of 213 irreps (n_W ≤ 59 008), ours 26.8 s for all 1592 copies. All five test suites pass under the laptop's Python 3.10. Not run there: orig S ≥ 9 (memory), eig S = 12,
+compact S ≥ 9, the originals on [6,4,2,0]²/[9,6,3,0]². G6 was told to fold G7 and the SU(4) literature check into the notes (in progress).
+
 **SU(4) LITERATURE CHECK DONE (2026-10-22 afternoon, `Paul/Mathematica/Gaudin/Literature-check-SU4-CG.md`, 135 kB, brief `Literature-check-SU4-CG-brief.md`; verdict table K1–K7, codes
 table, must-cite list, and a row-by-row table of corrections for `gl4-slice-engine-notes` §9.2/§1/§4.2/§5.4/§6.2/§6.5/§8.3 — NOT yet applied to the notes, Paul's call).**
 Bottom line: no SU(4) analogue of the Draayer–Akiyama/ndsu3lib lineage; nothing faster than Munich for SU(4) HW vectors; the engine is NOT pre-empted (closest: Mudrov 2022

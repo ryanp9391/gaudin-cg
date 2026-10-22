@@ -1,27 +1,27 @@
 # The slice engine for $\mathrm{gl}(4)$: highest-weight Clebsch–Gordan vectors and the two-site Gaudin missing labels
 
-*Paul Ryan (project notes; draft compiled from the work packages G1–G5 of 22 October 2026) — 22 October 2026*
+*Paul Ryan (project notes; draft compiled from the work packages G1–G5 and two literature checks of 21–22 October 2026) — 22 October 2026*
 
 *(Markdown twin of `gl4-slice-engine-notes.tex`, generated from it by a small script: same sections, same numbering of equations, tables and footnotes. Math is written in `$…$` / `$$…$$`, tables are pipe tables, footnotes are collected at the end.)*
 
 ## Abstract
 
-For two irreducible representations $V_\lambda$, $V_{\lambda'}$ of $\mathrm{gl}(4)$ the highest-weight (HW) Clebsch–Gordan vectors of $V_\lambda\otimes V_{\lambda'}$ are normally found as a null space on a weight space of dimension $n_W$ (up to 1749 in the SU(4) benchmark $[8,8,0,0]^{\otimes2}$ of the Munich code).
+For two irreducible representations $V_\lambda$, $V_{\lambda'}$ of $\mathrm{gl}(4)$ the highest-weight (HW) Clebsch–Gordan vectors of $V_\lambda\otimes V_{\lambda'}$ are normally found as a null space on a weight space of dimension $n_W$ (up to 1749 in our SU(4) benchmark $[8,8,0,0]^{\otimes2}$ of the Munich code).
 The criterion of Kostant and of Parthasarathy, Ranga Rao and Varadarajan says that a HW vector is determined by a *slice* of dimension $w\le5$ there, subject to three $\mathrm{sl}(2)$ string conditions.
-Used as an algorithm it gives all 45 HW vectors of $[8,8,0,0]^{\otimes2}$ in 0.09 s on our machine, against 80 s for the Munich code on a different machine, and it reaches sizes the Munich code does not (dimension 19 481 in 4.6 s).
+Used as an algorithm it gives all 45 HW vectors of $[8,8,0,0]^{\otimes2}$ in 0.09 s, against 85 s for the Munich code as distributed (a factor 908) and 3.7 s for the same code with its linear algebra repaired (a factor 38, growing with $S$), on one laptop, and it continues to sizes beyond our Munich runs (dimension 19 481 in 4.6 s).
 For multiplicities $m\ge2$ gl(4) has three missing labels.
 We show that they are the $t$-independent Laurent coefficients $V_3,V_4^{a},V_4^{b}$ of the two-site Gaudin characteristic determinant: they commute and have a simple joint spectrum on every multiplicity space tested (180 exactly, 1864 at 50 digits, $m\le51$), whereas the cubic operator alone, which suffices for gl(3), does not.
 They reduce to universal polynomials on the slice space, which gives canonical copies without any object of the size of $n_W$.
 The oper side is forced: the Laurent data of the fourth-order Fuchsian oper are explicit in the triple and the central characters, and an exact Q-system solve reproduces the joint spectrum.
 On the GT lattice the physical part of the spectrum on a weight space is cut out by an exact Weyl-type alternating sum over translated weights (verified on 832 sectors).
-We say which statements are theorems, which are exact verifications on tested cases, and which are measurements.
+We say which statements are theorems, which are exact verifications on tested cases, and which are measurements, and what two literature checks found (Section 9).
 
 ## 1. Punchline
 
-Take two copies of the SU(4) irrep $[8,8,0,0]$ (dimension 825, the largest case of the SU(4) sweep of the Munich code of Alex, Kalus, Huckleberry and von Delft [1]) and ask for the highest-weight (HW) vector of each of the 45 irreps $\mu$ in $V\otimes V$, written in the product of Gelfand–Tsetlin (GT) bases.
+Take two copies of the SU(4) irrep $[8,8,0,0]$ (dimension 825, the largest case of our SU(4) sweep of the Munich code of Alex, Kalus, Huckleberry and von Delft [1], whose paper has no SU(4) data) and ask for the highest-weight (HW) vector of each of the 45 irreps $\mu$ in $V\otimes V$, written in the product of Gelfand–Tsetlin (GT) bases.
 All 45 are multiplicity-free.
 The largest, the singlet, has $n_W=1749$ components, and the standard algorithm finds it as the null space of the raising operators on that weight space.
-The whole problem costs 80.2 s in the Munich code on an i5 laptop (18.7 s for the singlet), growing by a factor 5–7 per unit of $S$ in $[S,S,0,0]$.[^1]
+The whole problem costs 84.6 s in our run of the distributed Munich code on an i5 laptop (80.2 s in July; 18.7 s for the singlet), growing by a factor 5–7 per unit of $S$ in $[S,S,0,0]$.[^1]
 
 *The problem is much smaller than that.*
 A HW vector $\Psi$ of $V_\lambda\otimes V_{\lambda'}$ is determined by its *slice* $\psi_{\rm top}$: the components in which the second factor sits on its highest-weight state.
@@ -42,13 +42,13 @@ On the oper side the Laurent data are forced, with no fit, the polynomial soluti
 On the GT lattice the three operators share one 21-point stencil, and the physical part of the spectrum on a weight space satisfies an exact Weyl-type alternating-sum identity over the translates $w\cdot\lambda'$ (832 sectors, 0 failures; verified, not proved) (Section 7).
 
 *Numbers.*
-All 45 HW vectors of $[8,8,0,0]^{\otimes2}$ take 0.026 s without writing the vectors out and 0.093 s with all of them written in double precision, on an i7 desktop, against 80.2 s for the Munich code on an i5 laptop; $S=10$ takes 0.23 s and $S=20$ (dimension 19 481, $3.1\cdot10^6$ coefficients) 4.6 s (Section 8).
-With multiplicities, the slices of all 1592 canonical copies of $[9,6,3,0]^{\otimes2}$ ($m\le27$) take 6.4 s (23 s with 50-digit eigenvalues); the Munich SU(4) data are multiplicity-free, so there is no comparison there.
+All 45 HW vectors of $[8,8,0,0]^{\otimes2}$ take 0.030 s without writing the vectors out and 0.093 s with all of them written in double precision, against 84.6 s for the original Munich code and 3.7 s for its repaired variant on the same laptop; $S=20$ (dimension 19 481, $3.1\cdot10^6$ coefficients) takes 4.6 s on the i7 desktop (Section 8).
+With multiplicities, all 1592 canonical copies of $[9,6,3,0]^{\otimes2}$ ($m\le27$) and their full vectors take 26.8 s on the laptop, where no Munich variant runs the 47 largest irreps; the original is slower than the engine from $[4,2,1,0]^{\otimes2}$ on.
 
 *Three points up front.*
-First, the Munich code is the only general-$N$ code we know; the comparison is across two machines and against the code as distributed, and the SU(3)-specific codes that match or beat our engine for $N=3$ have no counterpart for $N=4$.
-Second, the slice theorem and the reduction rule are theorems; commutation and simple spectrum on tested sectors, the intertwining relations, the Weyl identity and the closed forms are exact verifications, not proofs for all $\lambda,\lambda'$ (Section 9 tabulates the status of each statement).
-Third, the Gaudin algebra as a missing-label resolver is classical [7, 8, 9, 10, 11] and for $N=3$ the operator is known [16, 17]; what is new is in Section 9, with the caveat that our literature check concerned gl(3).
+First, the Munich code is the only general-$N$ Gelfand–Tsetlin code currently distributed by its authors (SUNRepresentations.jl and pyclebsch are ports; QSpace, GroupMath and the Iowa Maple package are different schemes); the comparison is on one laptop, against the code as distributed and against a repaired variant; a Weyl-chamber variant exists but is unreleased and accelerates the descendants, not the HW step; and ndsu3lib, the SU(3)-specific code that matches or beats our engine for $N=3$, has no SU(4) counterpart in print (CGSU4, 2008, was not benchmarked; Section 9.1).
+Second, the slice theorem and the reduction rule are theorems; commutation and simple spectrum on tested sectors, the intertwining relations, the Weyl identity and the closed forms are exact verifications, not proofs for all $\lambda,\lambda'$ (Section 10 tabulates the status of each statement).
+Third, labelling the multiplicity by polynomial invariants of the product is a theorem for U(N) [27, 26], the Gaudin algebra as a missing-label resolver is classical [7, 8, 9, 10, 11], and for $N=3$ the operator is known [16, 17]; what is new is in Section 10, relative to two literature checks (Section 9).
 
 ## 2. The problem and the standard algorithm
 
@@ -61,18 +61,18 @@ For every $\mu$ and each of its $m_\mu$ copies we want the HW vector: the vector
 The rest of $V_\mu$ follows by lowering.
 The first factor is site 1 and the second site 2, as in the Gaudin chain; for $m_\mu\ge2$ one also needs a distinguished basis of the multiplicity space (Section 4).
 
-The Munich benchmark family is $\lambda=\lambda'=[S,S,0,0]$, with $\dim V_\lambda=(S+1)(S+2)^2(S+3)/12$: 6, 20, 50, 105, 196, 336, 540, 825 for $S=1,\dots,8$.
-The product has $(S+1)(S+2)/2$ irreps, all of multiplicity one.
-The cost driver is $n_W$, the dimension of the weight-$\mu$ subspace of $V_\lambda\otimes V_{\lambda'}$ in which $\Psi$ lives; it is largest for the singlet $\mu=(S,S,S,S)$: 6, 22, 62, 147, 308, 588, 1044, 1749 for $S=1,\dots,8$, and 4290 at $S=10$, 86 779 at $S=20$.[^2]
+The benchmark family is $\lambda=\lambda'=[S,S,0,0]$, with $\dim V_\lambda=(S+1)(S+2)^2(S+3)/12$ (825 at $S=8$) and $(S+1)(S+2)/2$ irreps in the product, all of multiplicity one.
+The cost driver is $n_W$, the dimension of the weight-$\mu$ subspace of $V_\lambda\otimes V_{\lambda'}$ in which $\Psi$ lives; it is largest for the singlet $\mu=(S,S,S,S)$: 1749 at $S=8$, 4290 at $S=10$, 86 779 at $S=20$ (Table 2).[^2]
 
 ### 2.2. What the standard code costs
 
 The Munich code works with GT patterns and finds the HW coefficients as the null space of the raising operators on that weight space; everything else follows by lowering.[^3]
-Its SU(4) sweep gives, as the sum of the highest-weight solves over all irreps, $2.8\times10^{-5}$ s, 0.86 ms, 10.7 ms, 57 ms, 0.36 s, 2.5 s, 15.3 s and 80.2 s for $S=1,\dots,8$ (13th-gen i5-1345U, g++ 11.4, LAPACK 3.10, one run per irrep).[^4]
-The singlet alone takes 18.7 s at $S=8$, 23% of the total, because $n_W=1749$ is largest there.
-The cost per irrep tracks the size of the linear system, of order $n_W^3$; the profile of the same routine for gl(3) traced it to a dense singular value decomposition (gl(3) notes, Section 2.2), and we did not repeat the profile for SU(4).
-For gl(3) the routine became 19 times faster, 206 s to 10.9 s at $[14,7,0]^{\otimes2}$, after the SVD was replaced and an optimised BLAS linked; no such repair was made for SU(4), so every Munich number below is for the code as distributed.
-The code was not run for $S\ge9$.
+Our SU(4) sweep of the distributed code gives, as the sum of the highest-weight solves over all irreps, $2.8\times10^{-5}$ s at $S=1$ to 80.2 s at $S=8$ in July and 84.6 s at $S=8$ on 22 October (13th-gen i5-1345U, g++ 11.4, LAPACK 3.10, one run per irrep; Table 2).[^4]
+The singlet alone takes 18.7 s at $S=8$ (23% of the total; $n_W=1749$).
+The Munich paper says only that the speed “depends polynomially on the dimensions of the irreps” (su(5) with dimensions $35\times224$ “a few minutes”, $280\times420$ “several hours”, on a 2 GHz CPU in 2010; no exponent and no SU(4) number).
+The cost model, a cost per irrep of order $n_W^3$ tracking the size of the linear system, is our own: our profile of the same routine for gl(3) traced it to a dense singular value decomposition (gl(3) notes, Section 2.2), and we did not repeat the profile for SU(4).
+For gl(3) the routine became 19 times faster, 206 s to 10.9 s at $[14,7,0]^{\otimes2}$, after the SVD was replaced and an optimised BLAS linked; the same kind of repair for SU(4) gains a factor 1.9 to 22.6 for $S=4$ to 8 (Section 8.1).
+The original was not run for $S\ge9$ (it needs 33 GB at $S=9$); the repaired variant runs to $S=11$.
 
 ## 3. The slice theorem for gl(N) and the level recursion
 
@@ -146,22 +146,10 @@ Its smallest non-null eigenvalue of $A^{T}A$ is not 1 as for gl(3) but about $1/
 
 ### 3.4. How big is the problem now?
 
-Table 1 shows what the theorem buys.[^10]
-The singlet of $[8,8,0,0]^{\otimes2}$ has $n_W=1749$ but $w=1$: its slice is the lowest-weight vector of $V_\lambda$, a single number, and the recursion produces the rest.
+Some examples show what the theorem buys.[^10]
+The singlet of $[8,8,0,0]^{\otimes2}$ has $n_W=1749$ but $w=1$: its slice is the lowest-weight vector of $V_\lambda$, a single number, and the recursion produces the rest; at $(12,12,4,4)$ one has $w=5$ and $n_W=259$, with $M_\mu$ a line in a 5-dimensional weight space.
 For the rectangular family $w\le\lfloor S/2\rfloor+1$ while $n_W$ grows by a factor about 2.5 from $S=8$ to $S=10$.
-With multiplicities the string conditions bite: at $(9,7,5,3)$ of $[6,4,2,0]^{\otimes2}$ the space $M_\mu$ is 12-dimensional inside a 15-dimensional weight space, while $n_W=916$.
-
-**Table 1.** Problem sizes for seven irreps of three products: multiplicity $m$, slice length $w=\dim V_\lambda[\mu-\lambda']$ and number $n_W$ of components of the full vector.
-
-| product | irrep $\mu$ | $m$ | $w$ | $n_W$ | the slice space $M_\mu$ |
-| :--- | :--- | ---: | ---: | ---: | :--- |
-| $[8,8,0,0]^{\otimes2}$ | $(8,8,8,8)$ (singlet) | 1 | 1 | 1749 | the lowest-weight vector of $V_\lambda$ |
-|  | $(12,12,4,4)$ | 1 | 5 | 259 | a line in a 5-dimensional weight space |
-| $[6,4,2,0]^{\otimes2}$ | $(6,6,6,6)$ (singlet) | 1 | 1 | 4743 | the lowest-weight vector of $V_\lambda$ |
-|  | $(9,7,5,3)$ | 12 | 15 | 916 | 12 of 15 dimensions |
-| $[3,2,1,0]^{\otimes2}$ | $(5,4,2,1)$ | 4 | 4 | 18 | all of $V_\lambda[\mu-\lambda']$ |
-|  | $(4,4,2,2)$ | 2 | 4 | 68 | 2 of 4 dimensions |
-|  | $(3,3,3,3)$ (singlet) | 1 | 1 | 152 | the lowest-weight vector of $V_\lambda$ |
+With multiplicities the string conditions bite: at $(9,7,5,3)$ of $[6,4,2,0]^{\otimes2}$ the space $M_\mu$ is 12-dimensional inside a 15-dimensional weight space, while $n_W=916$; at $(5,4,2,1)$ and $(4,4,2,2)$ of $[3,2,1,0]^{\otimes2}$ ($m=4$ and 2, $w=4$, $n_W=18$ and 68) it is all of the weight space and 2 of its 4 dimensions.
 
 ## 4. The missing-label operators: the two-site Gaudin triple
 
@@ -191,11 +179,11 @@ $$
 
 are exactly $t$-independent (proved; also checked at two values of $t$), with 88, 152 and 324 merged terms.[^13]
 The top poles are central scalars, $S_{k,k}=T_k(\lambda)$ (Section 6.1); for instance $S_{2,2}=\lambda_2(\lambda_1+1)+\lambda_3(\lambda_1+\lambda_2+2)+\lambda_4(\lambda_1+\lambda_2+\lambda_3+3)$, while for $\lambda_4=0$ one has $S_{3,3}=(\lambda_1+2)(\lambda_2+1)\lambda_3$ and $S_{4,4}=0$, so for two-row irreps only the double pole is non-zero.
-The independent non-scalar content of the 18 operators is one cubic and two quartic invariants, in line with the count $(N-1)(N-2)/2=3$ of missing labels: each $S_{k,j}$ at either pole is an integer combination of $V_3,V_4^a,V_4^b$ plus scalars (Table 3).
+The independent non-scalar content of the 18 operators is one cubic and two quartic invariants, in line with the count $(N-1)(N-2)/2=3$ of missing labels: each $S_{k,j}$ at either pole is an integer combination of $V_3,V_4^a,V_4^b$ plus scalars (Table 1).
 
 ### 4.2. Commutativity and structure
 
-Commutativity of all the Laurent coefficients is the theorem of Talalaev [14]; what we check is that the explicit term lists of the column-ordered determinant commute.
+Commutativity of all the Laurent coefficients is the theorem of Talalaev [14], the column-ordered determinant being his quantum determinant in the form of Chervov and Falqui [41]; what we check is that the explicit term lists commute.
 In exact arithmetic on the whole space ($t=31/35$ and $-3/7$) all 18 operators commute pairwise and with the 16 total generators on $[1,0,0,0]\otimes[1,1,0,0]$, $[1,1,0,0]\otimes[2,1,0,0]$, $[2,1,0,0]^{\otimes2}$ and $[2,1,1,0]^{\otimes2}$ (0 violations); in float64 also on $[3,2,0,0]^{\otimes2}$ and $[3,2,1,0]^{\otimes2}$ (dimensions 3600 and 4096, residual about $10^{-15}$).[^14]
 
 The structure is exact in the PBW normal form of $U(\mathrm{gl}_4)\otimes U(\mathrm{gl}_4)$.
@@ -223,7 +211,8 @@ Here $C_2^1=\sum e^1_{ij}e^1_{ji}$; the second form of $V_3$ differs from $T(1,1
 For general $N$ the coefficient of $\eta$ in (6) is $(N-2)/2$ (solved exactly for $N=3,\dots,6$), so for $N=3$ the same engine gives $V_3=V+\tfrac12\eta$, with $V$ the 36-term vertex operator of the gl(3) notes (an identity in $U(\mathrm{gl}_3)\otimes U(\mathrm{gl}_3)$), and the two sets of notes agree.
 Equation (6) says that the cdet produces the gl(3)-type antisymmetrised vertex operator summed over the four 3-subsets of $\{1,2,3,4\}$ plus $\eta$.
 In the trace basis the quartic operators contain the two traces of bidegree $(2,2)$ only in the combination $T(1,1,2,2)+\tfrac12T(1,2,1,2)$ (explicit forms in G2 §6): taken separately they do *not* commute with $V_3$ on 20 of the 22 sectors with $m\ge2$ of $[3,2,1,0]^{\otimes2}$ and $[4,2,1,0]^{\otimes2}$, nor with $V_4^a,V_4^b$ on 17.
-The naive trace invariants are therefore not the missing-label operators; the quantum correction is the relative weight $\tfrac12$.[^15]
+The naive trace invariants are therefore not the missing-label operators; the quantum correction is the relative weight $\tfrac12$.
+That naive trace Hamiltonians fail to commute from degree 4 on is known (Chervov–Rybnikov–Talalaev [40]: $[\mathrm{Tr}\,L^4(z),\mathrm{Tr}\,L^2(u)]\ne0$; Talalaev [14]: “unavoidable quantum corrections”); the weight $\tfrac12$ is its explicit gl(4) form.[^15]
 
 ### 4.3. Spectrum: the cubic operator alone is not enough
 
@@ -233,15 +222,7 @@ Simplicity of the spectrum of the *whole* Gaudin algebra on the multiplicity spa
 
 The new fact for $N=4$ is that the cubic operator alone does not separate the copies.
 The exact discriminant of $V_3$ vanishes on some sectors of every larger product with $\lambda=\lambda'$: 2, 2, 6, 6, 8 and 19 sectors of $[3,2,1,0]^{\otimes2}$, $[4,2,1,0]^{\otimes2}$, $[4,3,1,0]^{\otimes2}$, $[5,3,1,0]^{\otimes2}$, $[5,3,2,0]^{\otimes2}$ and $[6,4,2,0]^{\otimes2}$; it is simple on every sector of the products with $\lambda\ne\lambda'$ and of the small $\lambda=\lambda'$ ones.
-Two examples are in Table 2: at $(4,4,2,2)$ of $[3,2,1,0]^{\otimes2}$, $m=2$ and $V_3=81$ is a scalar; at $(5,4,2,1)$, $m=4$ and $V_3=57$ occurs twice; in both the triple has distinct joint values.
-
-**Table 2.** Two sectors of $[3,2,1,0]^{\otimes2}$ where $V_3$ is degenerate: the joint eigenvalue triples $(V_3,V_4^a,V_4^b)$ (rounded).
-
-| $\mu$ | $m$ | triples | site exchange $P$ |
-| :--- | ---: | :--- | :--- |
-| $(4,4,2,2)$ | 2 | $(81,\,76.748,\,21.757)$, $(81,\,49.252,\,104.243)$ | both copies fixed, parities $++$ |
-| $(5,4,2,1)$ | 4 | $(67.392,\,70.981,\,-16.981)$, $(46.608,\,19.019,\,34.981)$, | 2-cycles $(1,4)$, $(2,3)$; |
-|  |  | $(57,\,50.697,\,21.303)$, $(57,\,21.303,\,50.697)$ | $V_3=57=c/2$ on the pair $(2,3)$ |
+Two examples in $[3,2,1,0]^{\otimes2}$ (rounded triples $(V_3,V_4^a,V_4^b)$): at $(4,4,2,2)$, $m=2$ and $V_3=81$ is a scalar, the triples being $(81,76.748,21.757)$ and $(81,49.252,104.243)$; at $(5,4,2,1)$, $m=4$ and $V_3=57$ occurs twice, the triples being $(67.392,70.981,-16.981)$, $(46.608,19.019,34.981)$, $(57,50.697,21.303)$ and $(57,21.303,50.697)$; in both the triple has distinct joint values.
 
 *Part of the degeneracy is forced.*
 For $\lambda=\lambda'$ the exchange $P:(\nu,q)\mapsto(q,\nu)$ preserves every HW space and conjugates the family: $PV_3P=-V_3+c$, $PV_4^aP=-2V_4^a-V_4^b+c'$, $PV_4^bP=3V_4^a+2V_4^b-c'$ with scalars $c,c'$ (exact, 57 of 57 sectors; the relations follow from the dictionary of Section 6.1, where $c=\tau_3$, $c'=\tau_4$).
@@ -320,11 +301,13 @@ Because the reduction is polynomial in $\lambda'$, $V_{\mathrm{red}}(s_i\cdot\la
 
    5814 tests on nine products, 1130 of them non-trivial (one side non-zero), 0 failures.
    Since $M_\mu=\bigcap_i\ker E_i^{k_i}$, this is a second, representation-theoretic reason why the reduced operators preserve $M_\mu$ (the first is Section 5.1); it involves the non-dominant weight $s_i\cdot\lambda'$, for which there is no finite-dimensional module.
-2. *Commutation on the whole weight space, for every $\lambda'$.* The three reduced operators commute on all of $W$, not only on $M_\mu$ (nine products, 0 failures), and on every weight space of dimension $\ge2$ of $V_\lambda=[3,2,1,0],[4,2,0,0],[2,1,1,0]$ for generic non-dominant rational $\lambda'$ such as $(\tfrac13,\tfrac57,-2,\tfrac45)$ and for $\lambda'=0$ (168, 456 and 12 tests, 0 failures).
+2. *Commutation on the whole weight space, for every $\lambda'$.* The three reduced operators commute on all of $W$, not only on $M_\mu$ (nine products, 0 failures), and on every weight space of dimension $\ge2$ of $V_\lambda=[3,2,1,0],[4,2,0,0],[2,1,1,0]$ for generic non-dominant rational $\lambda'$ such as $(\tfrac13,\tfrac57,-2,\tfrac45)$ and for $\lambda'=0$ (168, 456 and 12 tests, 0 failures); for generic $\lambda'$ it follows from Talalaev's theorem transported by the slice isomorphism below, and polynomiality in $\lambda'$ extends it to all $\lambda'$ (an argument of the SU(4) literature check, not carried out here).
 3. *$M_\mu$ is a spectral subspace.* The joint spectrum on each whole weight space $W$ is simple ($w$ distinct triples at 50 digits) and the $m$ triples of $M_\mu$ are among them; the other $w-m$ eigenvectors violate a string condition.
    For $[6,4,2,0]^{\otimes2}$ the 76 weight spaces have $\sum w=424$ and $\sum m=297$, so 127 of the 424 eigenvectors are spurious.
 
-A natural interpretation, *not proved here*: for generic $\lambda'$ the operators $V_{\mathrm{red}}(\lambda')$ are the Gaudin missing-label operators on the singular vectors of $V_\lambda\otimes M(\lambda')$, $M(\lambda')$ a Verma module, the slice identifies the singular vectors of weight $\mu$ with $W$, and (12) says the operators are compatible with the embeddings $M(s_i\cdot\lambda')\hookrightarrow M(\lambda')$.[^24]
+A natural interpretation, *not proved here*: for generic $\lambda'$ the operators $V_{\mathrm{red}}(\lambda')$ are the Gaudin missing-label operators on the singular vectors of $V_\lambda\otimes M(\lambda')$, $M(\lambda')$ a Verma module, and the slice identifies the singular vectors of weight $\mu$ with $W$ (Etingof–Varchenko, Lemma 1: an isomorphism for generic or sufficiently dominant $\lambda'$ [45]; Verma-module Gaudin theory: Frenkel [13], §5; dynamical Weyl group: [45, 46]; slice and shifted extremal projector: Mudrov [47]).
+At integral dominant $\lambda'$ the slice map is not injective unless $w=m$: its image is $M_\mu$ and its kernel, of dimension $w-m$, consists of the singular vectors coming from $M(s_i\cdot\lambda')$, which have zero slice (for sl(2), $V=V(2)$, $\lambda'=\mu=0$ the unique singular vector $x_2\otimes fv$ has zero slice).
+Then (12) is to be read as the transpose of the maps induced by the embeddings $M(s_i\cdot\lambda')\hookrightarrow M(\lambda')$; the finite-dimensional PRV statement used by the engine (Section 3.2) is unaffected.[^24]
 
 ### 5.5. Canonical copies and the engine
 
@@ -372,13 +355,13 @@ $e_k$ the elementary symmetric functions of $y$; $T_k(\nu)$ is the central chara
 Let $\tau_k=T_k(\mu)-T_k(\lambda)-T_k(\lambda')$; then $\tau_2=n_1n_2-\Omega$ with $\Omega=\tfrac12\big(C_2(\mu)-C_2(\lambda)-C_2(\lambda')\big)$.
 
 **Proposition** (dictionary).
-On $M_\mu$ the Laurent data are those of Table 3.
+On $M_\mu$ the Laurent data are those of Table 1.
 *Derivation.* At fixed $k$ the unknowns are the $2(k-1)$ non-top Laurent coefficients at the two poles; the top poles are central.
 Since $s_k=O(u^{-k})$ and, because $L\to E^{\rm tot}/u$, the coefficient of $u^{-k}$ is the single-site word polynomial with $E\to E^{\rm tot}$, i.e. $T_k(\mu)$ on $V_\mu$, the expansion at infinity gives $k$ linear relations (the coefficient of $u^{-r}$ vanishes for $r<k$ and equals $T_k(\mu)$ for $r=k$).
 That leaves $2(k-1)-k=k-2$ free parameters, namely $0,1,2$ for $k=2,3,4$: one cubic and two quartic labels, which we call $V_3,V_4^a,V_4^b$ by (5).
-Solving gives Table 3; its integer part is the table found independently in G2 §6 by exact linear algebra in the PBW algebra.
+Solving gives Table 1; its integer part is the table found independently in G2 §6 by exact linear algebra in the PBW algebra.
 
-**Table 3.** The dictionary. Left: $t^{k-j}S^{(1)}_{k,j}$ at $\theta_1$; right: $(-t)^{k-j}S^{(2)}_{k,j}$ at $\theta_2$; $\tau_k=T_k(\mu)-T_k(\lambda)-T_k(\lambda')$.
+**Table 1.** The dictionary. Left: $t^{k-j}S^{(1)}_{k,j}$ at $\theta_1$; right: $(-t)^{k-j}S^{(2)}_{k,j}$ at $\theta_2$; $\tau_k=T_k(\mu)-T_k(\lambda)-T_k(\lambda')$.
 
 | $k$ | $j$ | at $\theta_1$ | at $\theta_2$ |
 | :---: | :---: | :--- | :--- |
@@ -401,7 +384,8 @@ In gl(3) the corresponding relation was $V=a_1-\tfrac12\eta$; here $V_3=tS_{3,2}
 
 The indicial polynomials of $D$ at $\theta_1$, $\theta_2$ and $\infty$ do not depend on the triple: they are $\prod_c(e-(\lambda_c+4-c))$, $\prod_c(e-(\lambda'_c+4-c))$ and $\prod_c(n-(\mu_c+4-c))$ (134 of 134 sectors, as identities of affine forms in the triple), the Fuchs relation (sum of exponents $=6$) holds, and polynomial solutions can only have the degrees $d_j=\mu_j+4-j$, $d_1>d_2>d_3>d_4$.
 For all 210 copies of the 134 sectors of 11 products, the null space of the pencil of $D$ on polynomials of degree $\le d_j$ has dimension $5-j$ (exact rank on the 88 rational triples; a 60-digit singular value decomposition with a gap of at least $3\times10^{59}$ on the 122 irrational copies), the four polynomial solutions have Wronskian proportional to $(u-\theta_1)^{|\lambda|}(u-\theta_2)^{|\lambda'|}$ (deviation $\le2\times10^{-59}$), and their vanishing orders at $\theta_1,\theta_2$ are $\{\lambda_c+4-c\}$, $\{\lambda'_c+4-c\}$; all 630 perturbed and 210 random triples are rejected.[^28]
-That the oper has these polynomial solutions is what the Gaudin/oper correspondence leads one to expect [12, 13, 8]; the statement above is its explicit verification, copy by copy.
+That the oper has these polynomial solutions, of exactly the degrees $d_j=\mu_j+4-j$ (a Schubert cell of spaces of polynomials), is a theorem: eigenvectors of the Bethe algebra correspond bijectively to monic Fuchsian operators with polynomial kernel and these exponents (Mukhin–Tarasov–Varchenko, Theorem 2.1 of [42], the bijection being Theorem 7.1 of [10]; for all values of the parameters, Rybnikov [8]; see also [12, 13]).
+The statement above is therefore a copy-by-copy check of our conventions (central characters, $T_k$, Table 1), not of the correspondence.
 
 ### 6.3. The exact Q-system solve
 
@@ -411,7 +395,7 @@ The Frobenius recursion at infinity, with the free parameters at resonances fixe
 Each generator vanishes exactly on the commuting restrictions of $(V_3,V_4^a,V_4^b)$ to $M_\mu$, so $J\subseteq K$, the ideal of the $m$ joint triples; a Gröbner basis gives $\dim_{\mathbb{Q}}\mathbb{Q}[v]/J=m$, the number of distinct points, hence $J=K$: the solution set $\Sigma$ is exactly the joint spectrum, each point simple (Jacobian of rank 3).
 This holds on all 165 sectors of 12 products ($\sum m=279$, $m\le5$, 64 sectors with $m\ge2$) and on the 15 largest-multiplicity sectors of $[5,3,1,0]^{\otimes2}$, $[5,3,2,0]^{\otimes2}$, $[6,4,2,0]^{\otimes2}$ ($m\le12$): 180 sectors in all.
 Points computed from $J$ alone agree with the triples of the full operators to $2.8\times10^{-58}$ at worst on the 165 sectors and to $10^{-55}$ on the $m=12$ sector $(9,7,5,3)$ of $[6,4,2,0]^{\otimes2}$ ($n_W=916$, $d=(12,9,6,3)$), the one where $\{V_3,V_4^a\}$ fails, which takes 17 s including the HW space; sectors with $m\le5$ take at most 1 s.[^29]
-For $(5,4,2,1)$ of $[3,2,1,0]^{\otimes2}$, where $V_3=57$ occurs twice, $\Sigma$ consists of the four distinct triples of Table 2.
+For $(5,4,2,1)$ of $[3,2,1,0]^{\otimes2}$, where $V_3=57$ occurs twice, $\Sigma$ consists of the four distinct triples of Section 4.3.
 
 *All four degree conditions are needed.*
 Take a subset $S$ of the four conditions and ask whether its solution set is exactly the joint spectrum, on the 68 sectors of eight small products (Gröbner basis, 5 s limit).
@@ -420,7 +404,7 @@ For gl(3) the analogous lesson was that two of the three Baxter systems over-cou
 
 ### 6.4. $\mu_4=0$ and the rectangular family
 
-On every sector with $\mu_4=0$ (and $\lambda_4=\lambda'_4=0$) the oper forces $V_4^a=V_4^b=0$: the constant is the polynomial solution of degree $d_4=\mu_4=0$, so $s_4\equiv0$, and in Table 3 $\tau_4=0$ because every $y_4$ vanishes.
+On every sector with $\mu_4=0$ (and $\lambda_4=\lambda'_4=0$) the oper forces $V_4^a=V_4^b=0$: the constant is the polynomial solution of degree $d_4=\mu_4=0$, so $s_4\equiv0$, and in Table 1 $\tau_4=0$ because every $y_4$ vanishes.
 This was checked on all 47 such sectors of the 11 products of Section 6.2 (54 copies, 7 with $m\ge2$: the triples of the full operators are $(v_3,0,0)$ to $10^{-40}$), and it follows from the polynomial-solution statement above; the three-parameter solve is then the one-parameter, gl(3)-type solve in $V_3$.
 In the rectangular family $[S,S,0,0]\otimes[P,P,0,0]$ one finds $V_4^a\equiv0$ and $V_4^b=T_4(\mu)$ (Section 6.5).[^31]
 
@@ -434,7 +418,7 @@ $$
 \mathrm{gaudinODE}=8\,(z-w_1)^2(z-w_2)^2\;\Pi^{p}\circ D^{\dagger}\circ\Pi^{-p},\qquad\Pi^{p}=(z-w_1)^{S}(z-w_2)^{P}, \tag{15}
 $$
 
-with $D^\dagger=\partial^4+\partial^3s_1+\partial^2s_2+\partial s_3+s_4$ the formal adjoint of our oper: an adjoint plus a gauge.
+with $D^\dagger=\partial^4+\partial^3s_1+\partial^2s_2+\partial s_3+s_4$ the formal adjoint of our oper: an adjoint plus a gauge, a statement of a known type (the dual space of polynomials through divided Wronskians has the reversed factorisation and the exponents in reversed order: Mukhin–Varchenko [44], §6.1; classically Lagrange's adjoint).
 Matching coefficient by coefficient is linear in $(v_3,v_4^a,v_4^b,T_2(\mu),T_3(\mu),T_4(\mu))$; among the 16 (for $(1,1)$) and 50 (for $(2,1)$) gauges $p$ and site assignments scanned exactly one is consistent, $p=(S,P)$ with $S$ at $w_1=\theta_1$, and its unique solution equals the exact triple of the full operators and the central characters on all 28 irreps; with these substituted the two operators coincide as exact rational functions of $z$ (28 of 28).
 With $N=S+P$ and $\mathrm{Cas2}=C_2(\mu)$, the symbolic solution is
 
@@ -447,7 +431,7 @@ $$
 
 and $T_2(\mu)=\tfrac12(4N^2+6N-\mathrm{Cas2})$, $T_3(\mu)=\tfrac12(N+2)(2N(N+2)-\mathrm{Cas2})$, with $\mathrm{Cas4}$ the notebook's quartic Casimir.
 The notebook's degrees are ours reversed, $\mathrm{degQ}_k=d_{5-k}$, and its solutions are built from ours: $Q_j=W_3[P_k,\,k\ne j]\big/\big((z-w_1)^S(z-w_2)^P\big)$, the $3\times3$ Wronskians of three of our four polynomial solutions, are polynomials of degree $\mathrm{degQ}_j$ and solve `gaudinODE` exactly (112 of 112).
-The gauge power $p=(S,P)$ is the gl(4) version of $p=\lambda_1-\lambda_3$ of gl(3).
+The gauge power $p=(S,P)$ is the gl(4) version of $p=\lambda_1-\lambda_3$ of gl(3); the identification with the notebook's ODE and its Casimir dictionary are new bookkeeping around that known structure.
 This is verified on the five $(S,P)$ listed, not proved for all.[^32]
 
 ## 7. Structure on the GT lattice
@@ -499,15 +483,17 @@ So the one-step union is not disjoint, but no triple needs a translate of length
 *gl(3).* The same identity ($S_3$, $\rho=(2,1,0)$, $V=tS_{3,2}$) holds on all 227 sectors of seven products (among them $[14,7,0]^{\otimes2}$ with 113 sectors and 344 copies), with $S=T$, $|S|\le1$ and depth $\le1$.[^35]
 
 *Status.* Identity (18) is *argued*, not proved.
-If $V_{\mathrm{red}}(w\cdot\lambda')$ on $V_\lambda[\mu-w\cdot\lambda']$ are the Gaudin operators on the singular vectors of $V_\lambda\otimes M(w\cdot\lambda')$ (the interpretation of Section 5.4), then decomposition by joint eigenvalue is an exact functor, because the Gaudin algebra commutes with gl(4), and $V_\lambda\otimes(\text{BGG resolution of }L(\lambda'))$ resolves the $\tau$-part of $V_\lambda\otimes L(\lambda')$ by the $\tau$-parts of $V_\lambda\otimes M(w\cdot\lambda')$ with signs $(-1)^{\ell(w)}$.
-(18) says that taking singular vectors of weight $\mu$ (only left exact) preserves this Euler characteristic $\tau$ by $\tau$, as it does for dimensions: that last step is what the data confirm and what is not proved.
+For generic $\lambda'$ the operators $V_{\mathrm{red}}(\lambda')$ on $V_\lambda[\mu-\lambda']$ are the Gaudin operators on the singular vectors of $V_\lambda\otimes M(\lambda')$ (Etingof–Varchenko, Lemma 1 [45]; the Verma-module setting is that of Frenkel [13], §5, Styrkas–Tarasov–Varchenko [46] and Mudrov [47]); at integral dominant $\lambda'$ the slice map has a kernel of dimension $w-m$ (Section 5.4), and the finite-dimensional PRV statement used by the engine is unaffected.
+Granting the identification at all $w\cdot\lambda'$, decomposition by joint eigenvalue is an exact functor, because the Gaudin algebra commutes with gl(4), and $V_\lambda\otimes(\text{BGG resolution of }L(\lambda'))$ resolves the $\tau$-part of $V_\lambda\otimes L(\lambda')$ by the $\tau$-parts of $V_\lambda\otimes M(w\cdot\lambda')$ with signs $(-1)^{\ell(w)}$.
+(18) says that taking singular vectors of weight $\mu$ (a priori only left exact) preserves this Euler characteristic $\tau$ by $\tau$, as it does for dimensions: that last step is what the data confirm.
+A *proposed route* to a proof, not a proof: for dominant integral $\mu$ the Verma module $M(\mu)$ is projective in category $\mathcal O$, so $\mathrm{Hom}(M(\mu),\cdot)$ is exact on the BGG complex and joint characteristic polynomials are multiplicative on exact sequences; the action on singular vectors would be identified with $V_{\mathrm{red}}$ by deforming $(\mu,\lambda')$ at fixed $\mu-\lambda'$, and $S=T$ and the depth bound as pointwise statements need separate arguments.[^36]
 
 ### 7.3. Which eigenlines are physical
 
 For gl(3) the physical eigenvalues of $V$ on $W$ are the $m$ largest when only $E_{23}$ is active and the $m$ smallest when only $E_{12}$ is active (all 70 sectors with $w>m$ of seven products, no exception); the “$m$ largest” of `PY3/RESULTS-jacobi-cg.md` §4 is the $E_{23}$ half.
 For gl(4) no single ordering works: by $V_3$ the physical set is the top $m$ in 20 and the bottom $m$ in 9 of the 78 training sectors with $w>m$ (six products), similarly for $V_4^a$, $V_4^b$ and G2's generic combination, and no linear functional $aV_3+bV_4^a+cV_4^b$ works on all 78.
 Sorted by the active strings $A=\{i:E_i^{k_i}\ \text{non-void on}\ W\}$ (intrinsic), a linear functional with physical $=$ top $m$ exists for $A=\{1\}$ and for $A=\{3\}$ (linear programme on the training sectors; exact on the held-out sectors, 5 of 5 and 7 of 7): $\ell_1\approx-V_3+0.27V_4^a+0.10V_4^b$ and $\ell_3\approx V_4^a-0.49V_3+0.33V_4^b$, maximum-margin points, not canonical.
-For the middle string $A=\{2\}$ (21 training sectors) and every mixed class none exists.[^36]
+For the middle string $A=\{2\}$ (21 training sectors) and every mixed class none exists.[^37]
 
 ### 7.4. Chain structure and polynomiality
 
@@ -516,151 +502,203 @@ For $m=w$ the zero pattern is symmetric; for 43 of the 106 spaces with $m<w$ it 
 
 *Polynomiality.* Some coordinate of $M_\mu$ is cyclic for the triple in all 181 sectors with $m\ge2$, so every component of every copy is a polynomial in $(v_3,v_4^a,v_4^b)$ with rational coefficients, exactly (reproducing G3's 50-digit copies to $7\times10^{-46}$).
 The minimal total degree equals the dimension-counting minimum $d_{\rm gen}(m)=\min\{d:\binom{d+3}{3}\ge m\}$ in 162 sectors and $d_{\rm gen}+1$ in 19, never less: affine in 122 of the 138 sectors with $m\le4$, quadratic for $5\le m\le10$ (three sectors need cubic), cubic for $m=11,12$, against degree $m-1$ for a single operator (for $m=12$: 3 against 11).
-So $\mathrm{slice}_k=p_k(V)$ of the gl(3) chain becomes a polynomial in the triple of the degree of $m$ generic points; on the whole weight space a cyclic lattice point exists in 150 of 150 spaces.[^37]
+Per sector this is interpolation on the $m$ joint points, so the degree statement concerns the position of the joint spectrum rather than the CG coefficients as such.
+So $\mathrm{slice}_k=p_k(V)$ of the gl(3) chain becomes a polynomial in the triple of the degree of $m$ generic points; on the whole weight space a cyclic lattice point exists in 150 of 150 spaces.[^38]
 
 ## 8. The benchmark and its caveats
 
-**Punchline.** On the Munich family $[S,S,0,0]^{\otimes2}$ the engine is about 860 times faster than the Munich code at $S=8$, where the latter takes 80 s, and it continues to $S=20$; on multiplicity families it resolves up to 51 copies per sector in seconds.
-Every number has a caveat: two machines, the Munich code as distributed, Python overhead for $S\le2$, exact against float arithmetic.
+**Punchline.** On one laptop (i5-1345U, single thread) the engine computes all HW vectors of $[8,8,0,0]^{\otimes2}$ in 0.093 s, against 84.6 s for the Munich code as distributed (a factor 908) and 3.7 s for the same code with its linear algebra repaired (a factor 38 that grows with $S$: 622 at $S=11$).
+On products with multiplicities it is faster than the original from $[4,2,1,0]^{\otimes2}$ on and than the repaired code from $[6,3,0,0]^{\otimes2}$ on, and its HW vectors coincide with Munich's to $1.4\times10^{-15}$ ($m=1$) and as subspaces to $2.4\times10^{-15}$ ($m\ge2$).
+Caveats: one run per irrep, a background load, Python against C++.
 
 ### 8.1. The multiplicity-free family
 
-Table 4 puts the Munich sweep next to the engine on $[S,S,0,0]^{\otimes2}$.
-Both produce the same object, the HW vector with all $n_W$ coefficients of every irrep, and the family is multiplicity-free, so no operator enters.
+Table 2 compares, on $[S,S,0,0]^{\otimes2}$ and on one machine, the original Munich code (`cgc_hw_bench`, reference LAPACK/BLAS), a repaired variant of its HW solve (`eig`: OpenBLAS, the HW vectors as eigenvectors of $AA^{T}$ instead of a full SVD) and the engine.
+All produce the HW vector with all $n_W$ coefficients of every irrep, and the family is multiplicity-free, so no operator enters.
 $t_a$ is the part that never touches $n_W$ (exact GT generators, Racah–Speiser, exact PRV spaces); $t_b$ adds the metric, the float matrices and left inverses, and the float64 reconstruction of every full vector.
-Engine: i7-12700KF, minimum of five cold runs, the quietest of three blocks of the whole table (run-to-run differences at most 3% between two re-runs and 15% for the first block, during which another job was running); Munich: i5-1345U, one run per irrep.[^38]
+The laptop is the 13th-gen i5-1345U (Ubuntu, g++ 11.4, Python 3.10, single thread); the original reproduces the July timings to $1.0\pm0.06$ for $S\ge4$.[^39]
 
-**Table 4.** $[S,S,0,0]^{\otimes2}$: highest-weight solve of all irreps. Munich (i5-1345U, as distributed, hw-solve only) against the engine (i7-12700KF); ratio = Munich${}/t_b$. `n/a`: not run.
+**Table 2.** $[S,S,0,0]^{\otimes2}$ on one laptop (i5-1345U, single thread): highest-weight solve of all irreps by the original Munich code, its repaired variant (`eig`) and the engine; best of three at $S=4,6,8$, else one run; ratios are Munich${}/t_b$; RSS: peak memory of the Munich variants; (33 GB): memory the original would need.
 
-| $S$ | $\dim V$ | irreps | max $w$ | max $n_W$ | Munich [s] | $t_a$ [s] | $t_b$ [s] | ratio | worst resid. |
+| $S$ | $\dim V$ | max $n_W$ | orig [s] | eig [s] | $t_a$ [s] | $t_b$ [s] | orig$/t_b$ | eig$/t_b$ | RSS [MB] |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 6 | 3 | 1 | 6 | 0.0000279 | 0.0002 | 0.0007 | 0.04 | $1.9\times10^{-16}$ |
-| 2 | 20 | 6 | 2 | 22 | 0.000858 | 0.0007 | 0.0018 | 0.48 | $2.9\times10^{-16}$ |
-| 3 | 50 | 10 | 2 | 62 | 0.0107 | 0.0016 | 0.0040 | 2.7 | $5.9\times10^{-16}$ |
-| 4 | 105 | 15 | 3 | 147 | 0.0574 | 0.0034 | 0.0088 | 6.5 | $8.2\times10^{-16}$ |
-| 5 | 196 | 21 | 3 | 308 | 0.355 | 0.0064 | 0.0179 | 20 | $1.8\times10^{-15}$ |
-| 6 | 336 | 28 | 4 | 588 | 2.49 | 0.0110 | 0.0326 | 76 | $1.8\times10^{-15}$ |
-| 7 | 540 | 36 | 4 | 1044 | 15.3 | 0.0171 | 0.0572 | 268 | $1.3\times10^{-15}$ |
-| 8 | 825 | 45 | 5 | 1749 | 80.2 | 0.0258 | 0.0932 | 860 | $5.6\times10^{-15}$ |
-| 10 | 1716 | 66 | 6 | 4290 | n/a | 0.0579 | 0.228 | – | $2.8\times10^{-15}$ |
-| 12 | 3185 | 91 | 7 | 9191 | n/a | 0.103 | 0.443 | – | $1.3\times10^{-14}$ |
-| 16 | 8721 | 153 | 9 | 31 977 | n/a | 0.322 | 1.62 | – | $2.6\times10^{-13}$ |
-| 20 | 19 481 | 231 | 11 | 86 779 | n/a | 0.824 | 4.59 | – | $3.9\times10^{-11}$ |
+| 3 | 50 | 62 | 0.0077 | 0.0045 | 0.0018 | 0.0043 | 1.8 | 1.1 | 6 / 8 |
+| 4 | 105 | 147 | 0.0313 | 0.0258 | 0.0039 | 0.0096 | 3.3 | 2.7 | 18 / 8 |
+| 5 | 196 | 308 | 0.353 | 0.0928 | 0.0076 | 0.0189 | 19 | 4.9 | 96 / 11 |
+| 6 | 336 | 588 | 2.45 | 0.227 | 0.0131 | 0.0349 | 70 | 6.5 | 515 / 19 |
+| 7 | 540 | 1044 | 15.0 | 1.02 | 0.0200 | 0.0588 | 255 | 17 | 2338 / 42 |
+| 8 | 825 | 1749 | 84.4 | 3.52 | 0.0299 | 0.0929 | 908 | 38 | 9116 / 98 |
+| 9 | 1210 | 2794 | (33 GB) | 15.5 | 0.0442 | 0.142 | – | 109 | – / 230 |
+| 10 | 1716 | 4290 | – | 56.8 | 0.0677 | 0.220 | – | 258 | – / 519 |
+| 11 | 2366 | 6370 | – | 202 | 0.0894 | 0.325 | – | 622 | – / 1119 |
 
-Munich's total grows by a factor 5.2–7.0 per unit of $S$ between $S=4$ and $S=8$; the engine's $t_b$ by 2.0 from $S=4$ to 5, decreasing to 1.4 from $S=11$ to 12, in proportion to the number of coefficients written ($\propto S^{5.9}$: 580 at $S=4$, 52 090 at $S=10$, $3.06\times10^6$ at $S=20$).
-At $S=8$ the singlet, Munich's slowest row (18.7 s), takes 4.5 ms once the per-$\lambda'$ setup of 16 ms has been paid and 45 ms cold; per-irrep speed-ups run from 101 (the top irrep) to 4100 (the singlet), and the sum over the 45 irreps is 80.19 s against 0.052 s (warm, setup excluded).
-For $S\le2$ the Munich C++ is faster in absolute terms (28 $\mu$s against 0.7 ms at $S=1$, 0.86 ms against 1.8 ms at $S=2$): the Python overhead regime, with the crossover at $S=3$.
+The original grows by a factor 5.2–7.0 per unit of $S$ between $S=4$ and $S=8$ and needs 33 GB at $S=9$ (not run); the repaired variant grows by about 3.6 per step and has no memory wall (1.1 GB at $S=11$), but its ratio to the engine keeps growing: it is cubic in $n_W$ while $t_b$ is bound by the number of coefficients written.
+The repair factor orig$/$eig is 1.9 at $S=4$, 3.8, 9.5, 14.7 at $S=7$ and 22.6 at $S=8$, against 19 for gl(3) at $[14,7,0]^{\otimes2}$.
+For $S\le2$ the original is faster (54 $\mu$s against 0.8 ms at $S=1$, 0.66 against 1.9 ms at $S=2$): Python overhead, crossover at $S=3$.
 
-### 8.2. Multiplicity families
+### 8.2. Multiplicity products
 
-For $m\ge2$ the engine also resolves the multiplicities, so $t_a$ now contains the reduction (4 ms per $\lambda'$), the exact application of the three reduced operators to the PRV basis, and the joint eigen-decomposition; $t_b$ adds the recursion setup and the reconstruction of every full copy.
-Table 5 gives the scaling family $[2a,a,0,0]^{\otimes2}$, the gl(4) analogue of $[2a,a,0]$ ($\max m=a+1$), and the stress family $[3a,2a,a,0]^{\otimes2}$ ($\max m=4,12,27,51$, one irrep each time).
-The Munich SU(4) data are multiplicity-free, so no comparison exists; its null-space method would need an $n_W\times n_W$ null space per irrep with $n_W$ up to 29 028 at $a=6$, and it was not run.
+For $m\ge2$ the engine also resolves the multiplicities: $t_a$ then contains the reduction of the three operators (4 ms per $\lambda'$), their exact application to the PRV basis and the joint eigen-decomposition, and $t_b$ adds the recursion setup and the reconstruction of every full copy.
+Table 3 compares, on the same laptop, whole products $P\otimes P$: the sum of the Munich HW solves over all irreps (the original, `eig`, and `compact`, which stores only the used columns of the same SVD) against all canonical copies and full vectors of the engine.
+Munich returns $m$ orthonormal HW vectors per irrep, in an arbitrary basis of the multiplicity space; the engine returns the canonical copies as well as the full vectors.
+Guards: the original only if the memory $n_W\dim^2\cdot8$ B is at most 10 GB (and not at $[6,4,2,0]^{\otimes2}$, $[9,6,3,0]^{\otimes2}$), `eig` for $n_W\le6000$, `compact` for $n_W\le1500$.
 
-**Table 5.** Canonical copies on multiplicity families (i7-12700KF; minimum of 5/3/2 cold runs, one run for the rows marked $\ast$; the rows $a=1,3,5,7$ of the first family are in `GL/benchmark_gl4.md`). $t_a$ with a 50-digit eigen-decomposition and $t_a^f$ with float64; $t_b^f$: float64 eigen-decomposition and all full vectors written (n/a: slices only).
+**Table 3.** Whole products $P\otimes P$ on one laptop (i5-1345U, single thread): sums of the Munich HW solves over all irreps (in parentheses: the number of irreps run when fewer than all) against the engine's canonical copies and full vectors ($t_a$, $t_b$); Munich: minimum of 5/3/1 runs for $n_W<300$/$<1000$/larger, engine: minimum of 2–3 cold runs; ratios are Munich${}/t_b$.
 
-| family, $a$ | $\dim V$ | irreps | copies | max $m$ | max $w$ | max $n_W$ | $t_a$ [s] | $t_a^{f}$ [s] | $t_b^{f}$ [s] |
-| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| $[2a,a,0,0]^{\otimes2}$, 2 | 126 | 24 | 32 | 3 | 4 | 174 | 0.041 | 0.035 | 0.041 |
-| 4 | 1375 | 115 | 205 | 5 | 11 | 3541 | 0.518 | 0.432 | 0.525 |
-| 6 | 6860 | 322 | 728 | 7 | 20 | 29 028 | 3.16 | 2.61 | 3.34 |
-| 8$^\ast$ | 23 085 | 693 | 1905 | 9 | 33 | 146 025 | 12.0 | 9.89 | n/a |
-| $[3a,2a,a,0]^{\otimes2}$, 1 | 64 | 16 | 30 | 4 | 4 | 152 | 0.049 | 0.035 | 0.038 |
-| 2 | 729 | 76 | 297 | 12 | 15 | 4743 | 1.47 | 0.709 | 0.757 |
-| 3 | 4096 | 213 | 1592 | 27 | 32 | 59 008 | 23.4 | 6.42 | 6.91 |
-| 4$^\ast$ | 15 625 | 459 | 5945 | 51 | 65 | 426 425 | 258 | 37.2 | n/a |
+| $P$ | irreps | $\sum m$ | max $m$ | max $n_W$ | orig [s] | eig [s] | compact [s] | $t_a$ [s] | $t_b$ [s] | orig$/t_b$ | eig$/t_b$ |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| $[3,2,1,0]$ | 16 | 30 | 4 | 152 | 0.0168 | 0.0110 | 0.0133 | 0.0609 | 0.0643 | 0.26 | 0.17 |
+| $[4,2,0,0]$ | 24 | 32 | 3 | 174 | 0.0558 | 0.0339 | 0.0426 | 0.0510 | 0.0575 | 0.97 | 0.59 |
+| $[4,2,1,0]$ | 27 | 56 | 5 | 368 | 0.291 | 0.0553 | 0.131 | 0.147 | 0.154 | 1.9 | 0.36 |
+| $[4,3,1,0]$ | 31 | 69 | 5 | 577 | 0.944 | 0.107 | 0.346 | 0.187 | 0.197 | 4.8 | 0.54 |
+| $[6,3,0,0]$ | 58 | 90 | 4 | 920 | 12.7 | 1.03 | 3.06 | 0.212 | 0.238 | 53 | 4.3 |
+| $[6,4,2,0]$ | 76 | 297 | 12 | 4743 | – | 39.4 | 8.02 (65) | 1.74 | 1.79 | – | 22 |
+| $[8,4,0,0]$ | 115 | 205 | 5 | 3541 | 73.8 (80) | 40.3 | 35.0 (101) | 0.693 | 0.785 | $\ge94$ | 51 |
+| $[9,6,3,0]$ | 213 | 1592 | 27 | 59 008 | – | 385 (166) | 120 (128) | 26.2 | 26.8 | – | 14 |
 
-*Where the time goes.*
-The reduction is negligible.
-At $[12,6,0,0]^{\otimes2}$ ($a=6$, 728 copies) $t_a=3.16$ s is generators 0.65 s, Racah–Speiser and PRV spaces 0.10 s, *exact application of the reduced operators 1.84 s* and the 50-digit eigen-decomposition 0.56 s; $t_b=3.89$ s adds 0.09 s of setup and 0.64 s for all 728 vectors ($2.2\times10^6$ coefficients).
-With exact Python fractions the three reduced operators thus cost about three times the level recursion: the $n_W$-free part is cheap relative to Munich's $n_W^3$ but not relative to the recursion, and a float or modular application was not written.
-For large multiplicity the 50-digit eigen-decomposition dominates (17.0 of 23.4 s at $[9,6,3,0]^{\otimes2}$, 221 of 258 s at $[12,8,4,0]^{\otimes2}$); the float64 version is 40 to 1600 times cheaper and accurate to $2.1\times10^{-15}$ in the eigenvalues.
-Per operator and copy the gl(4) reduced operators cost 678 $\mu$s at $[10,5,0,0]^{\otimes2}$ ($w\le15$), 2.6 times the 24-word gl(3) operator at the same $w$.[^39]
+The original is slower than the engine from $[4,2,1,0]^{\otimes2}$ on (a factor 1.9; 5 at $[4,3,1,0]^{\otimes2}$, 53 at $[6,3,0,0]^{\otimes2}$) and runs out of memory beyond $[6,3,0,0]^{\otimes2}$ ($n_W\dim^2\cdot8$ B is 20 GB at $[6,4,2,0]^{\otimes2}$, 54 GB at $[8,4,0,0]^{\otimes2}$, 8 TB at $[9,6,3,0]^{\otimes2}$); the repaired code is faster than the engine up to $[4,3,1,0]^{\otimes2}$ and slower from $[6,3,0,0]^{\otimes2}$ on (a factor 4.3, and 22 at $[6,4,2,0]^{\otimes2}$).
+On the 80 irreps of $[8,4,0,0]^{\otimes2}$ run by all three variants the original needs 73.8 s, `eig` 7.57 s and `compact` 8.89 s, against 0.785 s for the whole product with the engine; at $[9,6,3,0]^{\otimes2}$ no Munich variant runs the 47 irreps with $n_W>6000$ (up to 59 008; the dense matrix of `eig` would need 28 GB), while the engine does all 213 irreps with all 1592 copies in 26.8 s, 26.2 s of it $t_a$ (the exact missing-label computation dominates, not $n_W$).
+The stress family $[12,8,4,0]^{\otimes2}$ (5945 copies, $m\le51$) takes 258 s on the i7 desktop (37 s with float64 instead of 50-digit eigenvalues, accurate to $2.1\times10^{-15}$).[^40]
 
 ### 8.3. Caveats
 
-*Two machines, one code state.*
-Munich: 13th-gen i5-1345U (Ubuntu, g++ 11.4, LAPACK 3.10), one run per irrep, the code as distributed; engine: i7-12700KF (Windows 11, Python 3.13, numpy 2.5.2, scipy 1.18.1), single process, minimum of five cold runs.
-The single-thread speeds of the two CPUs differ by a factor of order 1–2, so the ratios of Table 4 are orders of magnitude, not a measured speed-up.
-For gl(3) the repair of the same routine bought a factor 19 (gl(3) notes, Table 2); for SU(4) no such run exists, so the 860 at $S=8$ is against the code as distributed, and a repair would reduce it by an amount that was not measured.
+*One machine, with its caveats.*
+All numbers of Tables 2 and 3 were measured on the Ubuntu laptop, single thread (the engine does not use more than one core meaningfully), the original linked against reference LAPACK/BLAS 3.10 and the repaired variants against OpenBLAS 0.3.34; the repaired variants are ours, not the Munich group's, whose Weyl-chamber variant is unreleased and was not run (Section 9.1).
+Munich: one run per irrep for the rectangular family (best of three at $S=4,6,8$), minima of 5/3/1 runs for the products; engine: minima of two or three cold runs; the laptop carried a background load of about one core, and for tiny products the engine's fixed overhead dominates.
+The multiplicity bases differ (Zarand's convention, a reduced row echelon form followed by Gram–Schmidt, against the Gaudin eigenbasis): the products compare a solver for $m$ arbitrary HW vectors with canonical copies and full vectors, C++ with Python.
+Our vectors are float64 with HW residual at most $1.3\times10^{-14}$ up to $S=12$, $2.6\times10^{-13}$ at $S=16$ and $3.9\times10^{-11}$ at $S=20$ (i7), the exact recursion rounded at the end keeping $10^{-15}$ at 1–16 s per vector.[^41]
 
-*What is compared, and precision.*
-Munich's routine returns the null vector of each irrep in an orthonormal GT basis, up to sign; ours is the plain GT basis, converted by $\mathrm{CGC}=\pm\Psi\sqrt{g_\nu g_q/\mathrm{GNORM2}}$.
-Our vectors are float64 with HW residual at most $1.3\times10^{-14}$ up to $S=12$, $2.6\times10^{-13}$ at $S=16$ and $3.9\times10^{-11}$ at $S=20$: beyond $S\approx16$ the double-precision recursion degrades by a factor 2.4–3.7 per unit of $S$, while the exact recursion rounded at the end keeps $10^{-15}$ at 1–16 s per vector (Python fractions, not vectorised).[^40]
-
-*What was not run.*
-The literal comparison of our HW vectors with the Munich ones: the binary cannot be built on the Windows machine.
-The two GT bases do coincide (pattern order equal to Munich's index $Q(M)$ on 17 irreps, 6024 lowering matrix elements equal to Munich's `lowering_coeff`$^2$ exactly), so the comparison should be a formality up to one global sign; G1 §9 gives the 19 `hwcgc.sh` commands for $S\le3$ and a tested comparer.
+*The literal comparison.*
+On 22 October the HW coefficients of the original Munich code were compared with ours on the laptop: for 42 multiplicity-free irreps (all 34 irreps of $[S,S,0,0]^{\otimes2}$ for $S\le4$ and eight at $S=6,8$, one of them via the repaired profiler) they coincide up to one global sign with maximal deviation $1.4\times10^{-15}$; in 100 multiplicity sectors (sum of multiplicities 210, $m\le12$, nine products) the spans of Munich's Gram–Schmidt copies and of our canonical copies agree to $2.4\times10^{-15}$ ($1.6\times10^{-12}$ for the six sectors of $[6,4,2,0]^{\otimes2}$, read from 12-decimal output), and the rotation between the two bases is never a signed permutation.[^42]
 
 *The gl(3) context.*
 At $[14,7,0]^{\otimes2}$ (113 irreps, 344 copies) the gl(3) slice engine takes 0.10 s ($t_a$) and 0.17 s ($t_b$) on the i7, against 206 s for the Munich code as distributed and 10.9 s repaired on the i5 (gl(3) notes, Table 2).
-The SU(3)-specific ndsu3lib [20], on the same i5 laptop, needs 0.80 ms for the HW row only (0.116 s for all reduced coefficients of all states): it is faster than the slice engine at $a=7$ for the HW data, and the Jacobi-chain route overtakes it at about $a=15$.[^41]
-So “orders of magnitude” holds against general-$N$ null-space codes only; ndsu3lib is specific to SU(3) and has no counterpart for $N=4$.
+The SU(3)-specific ndsu3lib [20], on the same i5 laptop, needs 0.80 ms for the HW row only (0.116 s for all reduced coefficients of all states): it is faster than the slice engine at $a=7$ for the HW data, and the Jacobi-chain route overtakes it at about $a=15$.[^43]
+So the advantage holds against general-$N$ null-space codes only (for gl(4) a factor 908 over the original and 38 over the repaired code at $S=8$); ndsu3lib is specific to SU(3) and has no SU(4) counterpart in print: the SU(4)-specific program CGSU4 [29] (Kuhn–Walliser 2008, arbitrary irreps in the chain SU(4)$\supset$SU(3)$\times$U(1)) was not obtained and not benchmarked, and the Weyl-chamber variant of the Munich code accelerates the descendants, not the HW step (Section 9.1).
 
-## 9. What is classical, what is new, what is next
+## 9. The literature: SU(3) and SU(4)
 
-### 9.1. Status of the statements
+**Punchline.** This section is written from two literature checks only: of 21 October (gl(3), `GD/Literature-check-missing-label.md`) and of 22 October (SU(4), SU(N), the structural statements, `GD/Literature-check-SU4-CG.md`).
+They found no SU(4) analogue of the SU(3)-specific Draayer–Akiyama lineage, no SU(4) timing of any code in print apart from our sweep of the Munich code, no numerical level recursion for $N\ge4$, no identification of the Gaudin triple as the SU(4) missing labels, and no statement of (12) or (18).
+In the reference list $^\dagger$ marks an abstract or catalogue record only (or a description at second hand) and $^\ddagger$ a source not accessed.
 
-Table 6 lists each statement with the way it is established.
+### 9.1. Codes for Clebsch–Gordan coefficients
+
+*SU(3).*
+The standard tools descend from Draayer and Akiyama [19] (recurrences from seed coefficients in the chain SU(3)$\supset$U(1)$\times$SU(2), canonical multiplicity basis): SU3lib [34] is the same algorithm in multiprecision C++ and ndsu3lib [20] uses the Draayer–Akiyama and Millener algorithms; the 1973 library returns wrong results beyond $\Sigma_w>65$ and ndsu3lib is tested to $\Sigma_w\le81$.
+Our run of ndsu3lib on the i5 laptop of the Munich timings gives 0.80 ms for the HW row of $[14,7,0]^{\otimes2}$ against 0.10–0.17 s for the slice engine on the i7: ndsu3lib is faster for the HW data at $a=7$, and the Jacobi-chain route overtakes it at $a\approx15$ (Section 8.3).
+
+*General $N$ and SU(4).*
+The Munich code [1] is the only general-$N$ Gelfand–Tsetlin code currently distributed by its authors and the ancestor of the other public ones (Table 4): SUNRepresentations.jl and pyclebsch are ports [22, 23], and the LSU papers on U(3) and U(4) use its null spaces [24].
+The Munich group's Weyl-chamber variant [21] (“a factor of order $N!$”, no timings) has the same HW null space, so its gain is in the descendants, and it is not distributed.
+QSpace [25] has a history-dependent multiplicity basis (“no simple way to fix a canonical OM basis”) and avoids fusing two large multiplets for SU($N\ge4$); the Maple package [26] and GroupMath [28] are other schemes.
+The SU(4)-specific CGSU4 [29] (arbitrary irreps in the chain SU(4)$\supset$SU(3)$\times$U(1); program summary and run times not accessed) predates the Munich code; the printed SU(4) tables are $15\times15$ and $20\times15$ [30], the nuclear SU(4)$\supset$SU(2)$\times$SU(2) literature is largely analytic [31], and Rowe–Repka treat su(4) in a u(3)-coupled basis [32].
+**No SU(4) timing of any of these is in print**: our sweep of the distributed Munich code (Section 8.1) is the only one the checks found.
+
+**Table 4.** Codes for Clebsch–Gordan coefficients, condensed from Section 1 of the SU(4) check: largest case and timing as printed; “ours” marks this repository's numbers.
+
+| code | algorithm | basis, multiplicity | $N$ | largest case, timing |
+| :--- | :--- | :--- | :--- | :--- |
+| D–A, SU3lib, ndsu3lib [19, 34, 20] | recurrences from seed coefficients | SU(3)$\supset$U(1)$\times$SU(2); canonical | 3 | ours: 0.8 ms HW row at $[14,7,0]^{\otimes2}$ |
+| Munich [1] | HW null space of the raising operators; lowering | GT; Zarand (rref, Gram–Schmidt) | any | su(5) $280\times420$: hours (2 GHz, 2010); ours: 84.4 s (3.5 s repaired) at $[8,8,0,0]^{\otimes2}$ |
+| Munich, Weyl-chamber variant [21] | same HW null space; lowering in the dominant chamber | GT | any | “order $N!$” (descendants); unreleased |
+| SUNRep.jl, pyclebsch, Dang et al. [22, 23, 24] | Munich null spaces; pyclebsch adds $S_n$-adapted symmetrisation | GT; Zarand or $S_n$-adapted | any | pyclebsch: six-fold singlet “upwards of a minute” |
+| QSpace [25] | numerical, bottom-up, 128 bit | not GT; first come first served | any | SU(4) store “several hours” |
+| Gliske et al. [26]; GroupMath [28] | HW vector into Bargmann space (Maple); invariants | GT (U($N$)), generalised Casimirs; arbitrary | any | 3-fold SU(3) minutes, 4-fold hours; “no limit” |
+| CGSU4 [29]; SU(4) tables [30] | eigenfunction method; Baird–Biedenharn | SU(3)$\times$U(1) chain | 4 | CGSU4 not accessed; tables $15\times15$, $20\times15$ |
+
+### 9.2. The missing-label problem
+
+The number of labels is $(N-1)(N-2)/2$, “at most 3” for SU(4) (Pan–Draayer; Sharp–Lee) [36, 38].
+The canonical Biedenharn–Louck scheme (abstracts only) is complete for U(3) and for adjoint operators in all U($n$) but not worked out for SU(4)$\times$SU(4), and canonical coefficients are unique only up to SO($m$) rotations of the multiplicity labels (Pan–Draayer II) [37, 36].
+Klink and Ton-That showed that the multiplicity can always be specified by polynomial group invariants, and Gliske, Klink and Ton-That that the eigenvalues of generalised Casimir operators always suffice [27, 26] (SU(4) example: Klink–Ton-That–Wills, not seen); their “binary coupling” operators “do not work in general” (Gliske's thesis; no counterexample), and a dictionary to the Gaudin triple (expected through Howe duality, an inference of the check) is in no source read.
+Extremal projectors give the SU(3) labelling operator of Pluhař–Smirnov–Tolstoy and projection formulas for u($n$) [6, 16, 39]; no sl$_N$ ($N\ge4$) generalisation of that operator was found.
+The integrable realisation is the Gaudin algebra [7, 8, 9, 10, 11]: simple joint spectrum, generating function Talalaev's quantum characteristic polynomial (the column determinant is Chervov–Falqui's form), naive trace Hamiltonians failing from degree 4 [14, 40, 41].
+For sl(3), Campoamor-Stursberg–Musso (abstract only) and Crampé–Poulain d'Andecy–Vinet identify the labelling operator with the two-site Gaudin model [18, 17]; our $V$ equals their $X$ up to a Casimir constant (first check, four sectors), and they call the centraliser for higher rank “another open problem”.
+No sl$_N$ ($N\ge4$) two-site missing-label paper was found in searches up to 22 October 2026.
+
+### 9.3. The slice theorem and highest-weight-first algorithms
+
+The slice statement is Kostant's lemma in the form of Parthasarathy–Ranga Rao–Varadarajan and Kumar [2, 3, 4] (Zhelobenko's book [5] was not accessed).
+As a parametrisation of singular vectors it is the “expectation value” of Verma intertwiners of Etingof–Varchenko (Lemma 1: $\mathrm{Hom}(M_\lambda,M_{\lambda-\mu}\otimes V)\cong V[\mu]$ for generic or sufficiently dominant $\lambda$) [45], and the basis of Mudrov's criterion for complete reducibility (with the shifted extremal projector; introduction read) [47]: a criterion, not a CG engine.
+Highest-weight-first constructions are Gliske et al., the null spaces of the Munich code and of Dang et al., Rowe–Repka (abstract only) and Pan–Draayer; for SU(3) the chain of extremal coefficients (Braunschweig's conjecture, proved by Williams [35]) and the vector-coherent-state codes [33].
+Reduction algebras and Zhelobenko operators [48] (abstract only) are the natural algebraic home of the reduced operators; the reduction rule was not looked for there.
+No numerical level recursion with consistency and dangling conditions for $N\ge4$ was found.
+
+### 9.4. The oper side
+
+Opers encode the Gaudin eigenvalues [12, 13]; for finite-dimensional modules the bijection with monic Fuchsian operators of polynomial kernel, with exponents $\lambda^{(s)}_N,\lambda^{(s)}_{N-1}+1,\dots$ at the finite points and the degrees $\mu_j+N-j$, is a theorem (Mukhin–Tarasov–Varchenko, Theorem 2.1 [42]; all parameters: Rybnikov [8]), and the naive Bethe ansatz is not complete [44].
+The oper is the universal G-oper $\mathrm{Det}(L(u)-\partial_u)$ of Chervov–Talalaev [15], its leading data being Capelli-type central characters; the dual space and adjoint operator are Mukhin–Varchenko's [44], and XXX$\to$Gaudin as $h\to0$ is that of [43, 14].
+The Verma-module structure behind our intertwining and Weyl statements is in the literature (Weyl-twisted exponents on tensor products of Verma modules: Frenkel [13], §5, read in part; the dynamical Weyl group as restriction of Verma intertwiners: Etingof–Varchenko [45]; regularised intertwiners [46]); (12) and (18) themselves are not.
+
+### 9.5. What is new, relative to the two checks
+
+Not found in print: a numerical level recursion with string and dangling conditions for $N\ge4$; the identification of one cubic and two quartic Laurent coefficients of the two-site cdet as the three SU(4) missing labels with simple joint spectrum, the failure of the cubic alone and the exchange-parity forcing; the stencil and product formulas; (12) and (18); polynomiality of the copies in the form of Section 7.4 (per sector elementary; for sl(2) Hahn polynomials).
+Section 10.2 states what is classical and what new; the category-$\mathcal O$ sketch of Section 7.2 and the density argument of Section 5.4 are inferences of the SU(4) check, not found in print.
+## 10. What is classical, what is new, what is next
+
+### 10.1. Status of the statements
+
+Table 5 lists each statement with the way it is established.
 “Verified” means exact or high-precision agreement on the tested cases, not a proof for all $\lambda,\lambda',\mu$.
 
-**Table 6.** Status of the statements. *Theorem*: classical or proved here. *Exact identity*: a finite computation in $U(\mathrm{gl}_4)^{\otimes2}$. *Verified*: tested cases only.
+**Table 5.** Status of the statements. *Theorem*: classical or proved here. *Exact identity*: a finite computation in $U(\mathrm{gl}_4)^{\otimes2}$. *Verified*: tested cases only.
 
 | statement | status | Section |
 | :--- | :--- | ---: |
 | slice theorem with $N-1$ string conditions, $\dim M_\mu=m_\mu$ | classical theorem [2, 3] | 3.2 |
-| level recursion fixes $\Psi$ from the slice; $A_b$ injective | proved; implementation verified (26 products, exact twin) | 3.1, 3.3 |
-| the dangling conditions are needed in the exact twin for $N=4$ | verified (253 of 1655 slices) | 3.3 |
+| level recursion fixes $\Psi$ from the slice; $A_b$ injective; dangling conditions needed in the exact twin for $N=4$ | proved; implementation verified (26 products, exact twin); dangling conditions: 253 of 1655 slices | 3.1, 3.3 |
 | Laurent coefficients of the cdet commute; $S_{k,j}\propto t^{\,j-k}$, so $V_3,V_4^a,V_4^b$ are $t$-independent | commutation: theorem [14], term lists verified; homogeneity proved | 4.1, 4.2 |
-| identities (6)–(8); naive traces fail | exact; scalar remainders verified (81 sectors) | 4.2 |
+| identities (6)–(8); naive traces fail | exact; scalar remainders verified (81 sectors); failure from degree 4 known [40, 14] | 4.2 |
 | simple joint spectrum of the triple | theorem for the Gaudin algebra [8, 9, 10, 11]; verified: 180 sectors exact, 1864 at 50 digits | 4.3 |
-| $V_3$ alone degenerate (43 of 180); $\{V_3,V_4^b\}$ separates; $\{V_3,V_4^a\}$ fails on 2 | exact discriminants; tested products | 4.3 |
-| $PV_3P=-V_3+c$; forced degeneracy for $\lvert m_+-m_-\rvert\ge2$ | from the dictionary; forced/accidental split observed | 4.3 |
+| $V_3$ alone degenerate (43 of 180); $\{V_3,V_4^b\}$ separates; $\{V_3,V_4^a\}$ fails on 2; $PV_3P=-V_3+c$, forced degeneracy for $\lvert m_+-m_-\rvert\ge2$ | exact discriminants on tested products; exchange relation from the dictionary; forced/accidental split observed | 4.3 |
 | reduction rule; universality in $\lambda'$; $M_\mu$ preserved | proved | 5.1 |
 | direct route agrees with the reduced operators; closed forms (10), (11) | exact (46 + 598 irreps, 2275 $\theta_2$ checks; 898 pairs); closed forms follow from identities and rule | 5.2, 5.3 |
-| BGG intertwining; commutation on $W$ for all $\lambda'$; $M_\mu$ spectral | verified (5814 tests, nine products); not proved | 5.4 |
+| BGG intertwining; commutation on $W$ for all $\lambda'$; $M_\mu$ spectral | verified (5814 tests, nine products); not proved; commutation for all $\lambda'$ follows from [14] by density (inference of the SU(4) check) | 5.4 |
 | Eq. (13) on $[S,S,0,0]^{\otimes2}$ | verified, $S\le10$ (285 irreps) | 5.5 |
-| the triple generates the 18 Laurent coefficients mod scalars; dictionary of Table 3, $c=\tau_3$, $c'=\tau_4$ | exact identity; dictionary proved given $T_k$ (70 partitions), verified on 95 sectors | 6.1 |
-| polynomial solutions of degrees $\mu_j+4-j$, Wronskian, exponents; $\mu_4=0\Rightarrow V_4^a=V_4^b=0$ | verified on 210 copies; $\mu_4=0$ on 47 sectors, follows from the former | 6.2, 6.4 |
+| the triple generates the 18 Laurent coefficients mod scalars; dictionary of Table 1, $c=\tau_3$, $c'=\tau_4$ | exact identity; dictionary proved given $T_k$ (70 partitions), verified on 95 sectors | 6.1 |
+| polynomial solutions of degrees $\mu_j+4-j$, Wronskian, exponents; $\mu_4=0\Rightarrow V_4^a=V_4^b=0$ | theorem for finite-dimensional modules [42, 8]; our conventions verified on 210 copies; $\mu_4=0$ on 47 sectors, follows from the former | 6.2, 6.4 |
 | $\Sigma$ = joint spectrum; all four degree conditions needed | exact certificate per sector (180 sectors); pencil analysis on 68 | 6.3 |
-| `gaudinODE` is adjoint plus gauge of the oper | verified, 28 irreps of five $(S,P)$ | 6.5 |
-| speed against the Munich code | measurement, two machines, code as distributed | 8 |
-| Weyl/BGG identity (18); $S=T$; translates of length $\le2$ suffice; signed lattice count $=m$ | verified: 832 sectors, 22 products, 0 failures (gl(3): 227); argued, one step unproved | 7.2 |
+| `gaudinODE` is adjoint plus gauge of the oper | known type [44]; identification verified, 28 irreps of five $(S,P)$ | 6.5 |
+| speed against the Munich code (original, repaired) | measurement: one laptop, single thread | 8.1, 8.2 |
+| Munich HW coefficients coincide with ours | verified: 42 irreps with $m=1$ to $1.4\times10^{-15}$; 100 multiplicity sectors (spans) to $2.4\times10^{-15}$ | 8.3 |
+| Weyl/BGG identity (18); $S=T$; translates of length $\le2$ suffice; signed lattice count $=m$ | verified: 832 sectors, 22 products, 0 failures (gl(3): 227); argued, one step unproved; category-$\mathcal O$ route proposed | 7.2 |
 | 21-point stencil; product formula (17) on 12 of 20 off-diagonal classes; the rest: linear factors $\times$ irreducible $Q$ | derived symbolically; 17 730 exact held-out tests; not proved | 7.1 |
 | no single ordering of the triple picks the physical eigenlines; linear functionals for $A=\{1\},\{3\}$, none for $\{2\}$; gl(3) top/bottom rule; $V_{\mathrm{red},3}$ not Jacobi in general | verified (78 + 28 sectors; 70 gl(3) sectors; 150 weight spaces) | 7.3, 7.4 |
-| components of every copy are polynomials in the triple, of the counting degree | verified, exact (181 sectors with $m\ge2$) | 7.4 |
+| components of every copy are polynomials in the triple, of the counting degree | verified, exact (181 sectors with $m\ge2$); per sector a statement about the joint spectrum | 7.4 |
 
-### 9.2. Classical and new
+### 10.2. Classical and new
 
 *Classical.*
-The slice criterion is the lemma of Kostant and the theorem of Parthasarathy, Ranga Rao and Varadarajan [2, 3] (statement in Kumar [4]; Zhelobenko [5] in the physics literature); related reductions have precedents as algorithms for SU(3): the extremal-projector method of Asherova, Smirnov and Tolstoy [6] and, in the nuclear-physics literature, recursions from extremal coefficients with a canonical zero pattern (Draayer–Akiyama and its descendants [19, 20]).
-That the Gaudin (argument-shift, Bethe) algebra resolves multiplicities, with simple joint spectrum on every multiplicity space, is known [7, 8, 9, 10, 11]; its eigenvalues are encoded by opers [12, 13]; the quantum characteristic polynomial is Talalaev's [14, 15].
-For $N=3$ the operator is the missing-label operator of Pluhař, Smirnov and Tolstoy and of Crampé, Poulain d'Andecy and Vinet [16, 17], who also identify it with the two-site Gaudin model (with Campoamor-Stursberg and Musso [18]) and propose computing Clebsch–Gordan coefficients from Gaudin correlation functions.
+The slice criterion is the lemma of Kostant and the theorem of Parthasarathy, Ranga Rao and Varadarajan [2, 3] (statement in Kumar [4]; Zhelobenko [5] in the physics literature); its parametrisation of singular vectors is the “expectation value” of Verma intertwiners of Etingof–Varchenko [45] (Lemma 1, generic or sufficiently dominant weights) and, with the shifted extremal projector, Mudrov's criterion for complete reducibility [47]; highest-weight-first algorithms exist for U($N$) [26, 32, 24, 36] and SU(3) [6, 19, 20], but no numerical level recursion for $N\ge4$ was found (Section 9.3).
+Polynomial invariants of the product resolve the multiplicity for U($N$) and compact groups (a theorem: Klink–Ton-That 1996, Gliske–Klink–Ton-That 2005 [27, 26]; SU(4) example: Klink–Ton-That–Wills 1993), and SU(4) has 3 labels (Pan–Draayer [36]).
+The Gaudin (argument-shift, Bethe) algebra resolves multiplicities with simple joint spectrum [7, 8, 9, 10, 11]; its eigenvalues are encoded by opers [12, 13] with polynomial kernel (MTV Theorem 2.1 [42]); the quantum characteristic polynomial is Talalaev's [14, 15], and naive trace Hamiltonians fail to commute from degree 4 [40, 14].
+For $N=3$ the operator is that of Pluhař, Smirnov and Tolstoy and of Crampé, Poulain d'Andecy and Vinet [16, 17], who identify it with the two-site Gaudin model (with Campoamor-Stursberg and Musso [18]), propose computing Clebsch–Gordan coefficients from Gaudin correlation functions and call the higher-rank centraliser “another open problem”; no sl$_N$ ($N\ge4$) two-site missing-label paper was found (checked 22 October 2026).
 
-*New, as far as we know.*
-The explicit gl(4) engine with $N-1$ string conditions and a level recursion whose exact twin needs the dangling conditions, with the SU(4) benchmark;
-the exact triple $V_3,V_4^a,V_4^b$ with its $t$-independence and structure identities, the failure of the naive trace invariants (the quantum correction has weight $\tfrac12$) and of the cubic operator alone, with the exchange-parity argument;
-the reduction rule with normal ordering, the universal polynomials, the canonical copies and the intertwining facts;
-the Weyl-type identity on a weight space, the common stencil and product formula of the three operators, and the polynomiality of the copies in the triple;
-the forced dictionary with $T_k$, $\tau_k$, the exact Q-system solve (all four degree conditions needed), $\mu_4=0\Rightarrow V_4^a=V_4^b=0$, and the July-2026 gl(4) ODE as the adjoint of the oper up to a gauge.
-The literature check of 21 October concerned gl(3) and the SU(4) literature was not searched separately: “new” is relative to that check and the references cited here.
+*New, as far as the two checks found.*
+The explicit gl(4) engine with $N-1$ string conditions and a level recursion whose exact twin needs the dangling conditions, with the SU(4) benchmark (the Munich group has an unreleased Weyl-chamber variant accelerating the descendants, and no SU(4) timing of any general-$N$ code is published);
+the identification of the exact triple $V_3,V_4^a,V_4^b$ (with its $t$-independence and structure identities) as the three missing labels with simple joint spectrum, the failure of the cubic operator alone with exact counts, and the exchange-parity forcing (the failure of naive trace invariants from degree 4 is known and the weight $\tfrac12$ is its explicit gl(4) form; generalised Casimirs are the classical alternative labelling);
+the reduction rule with normal ordering, the universal polynomials, the canonical copies and the intertwining facts (Verma-module setting: [45, 46, 47]; commutation on all of $W$ for every $\lambda'$ follows from Talalaev's theorem, Etingof–Varchenko's Lemma 1 and density);
+the Weyl-type identity (not found in print; a category-$\mathcal O$ route to a proof is in Section 7.2), the stencil and product formula, and the polynomiality of the copies (per sector a statement about the position of the joint spectrum);
+the explicit gl(4) dictionary, the exact Q-system solve (all four degree conditions needed), $\mu_4=0\Rightarrow V_4^a=V_4^b=0$ and the identification of the July-2026 ODE with the adjoint of the oper up to a gauge, which are new bookkeeping around known structure (dictionary, exponents, degrees: MTV Theorem 2.1, Rybnikov, Chervov–Talalaev; dual space and adjoint: Mukhin–Varchenko).
+The two checks (21 October, gl(3); 22 October, SU(4), SU(N), the structural statements) found no prior numerical level recursion for $N\ge4$, no prior identification of the Gaudin triple as the SU(4) missing labels and no prior statement of (12) or (18); “new” is relative to them and to the references cited here (Section 9).
 
-### 9.3. Next
+### 10.3. Next
 
-1. A proof of the Weyl identity (18): the missing step is that taking singular vectors of weight $\mu$ preserves the Euler characteristic joint eigenvalue by joint eigenvalue (for instance through the Verma flag and the vanishing of $\mathrm{Ext}^1$ between the relevant Verma modules for dominant $\mu$); likewise for $S=T$, the exclusion of $|\Delta m_{12}|=2$ and the closed forms of Section 7.1.
+1. A proof of the Weyl identity (18): the missing step is that taking singular vectors of weight $\mu$ preserves the Euler characteristic joint eigenvalue by joint eigenvalue (for instance through the projectivity of $M(\mu)$ for dominant $\mu$, Section 7.2, once that sketch is checked); likewise for $S=T$, the exclusion of $|\Delta m_{12}|=2$ and the closed forms of Section 7.1.
 2. What Section 7 leaves open: explicit $Q$ for the remaining classes and the diagonal, a rule for the middle string and the mixed classes (and the full cone of separating functionals), and the Weyl test beyond $[8,4,0,0]^{\otimes2}$ ($[9,6,3,0]^{\otimes2}$ was not run).
    Further proofs: commutation of the reduced operators on the whole weight space for every $\lambda'$; the intertwining relation; simple spectrum of the triple beyond the cited theorem; the closed forms (13).
-3. The literal comparison with the Munich HW vectors on the machine where the binary builds ($S\le3$ first), a same-machine Munich SU(4) run including a repaired variant, and a search of the SU(4) Clebsch–Gordan literature.
-4. A float or modular application of the reduced operators (10–100 times faster than exact fractions by estimate; not written), and a compiled version.
-5. gl(N), $N\ge5$: the slice engine runs for $N=5$ on nine products as a smoke test and the coefficient $(N-2)/2$ in (6) is solved for $N\le6$, but the $(N-1)(N-2)/2$ missing-label operators of higher $N$ were not constructed.
-6. Where this material goes: into the gl(3) slice-engine notes, or into the paper.
+3. The SU(4) literature search is done (Section 9).
+   Remaining: obtain CGSU4 [29] and run it on $[S,S,0,0]^{\otimes2}$, $S\le4$, on the machine of the slice engine (and the Weyl-chamber variant of the Munich code, if released); a test of Klink-type generalised Casimirs against the triple on a small product such as $[2,1,0,0]^{\otimes2}$; a last search for $\mathrm{sl}_N$ missing-label papers shortly before submission.
+4. A float or modular application of the reduced operators (not written; 10–100 times faster than exact fractions by estimate), and a compiled version.
+5. gl(N), $N\ge5$: the engine runs for $N=5$ on nine products as a smoke test and the coefficient $(N-2)/2$ in (6) is solved for $N\le6$, but the missing-label operators of higher $N$ were not constructed.
+   Where this material goes, into the gl(3) slice-engine notes or into the paper, is open.
 
 ## A. Conventions
 
 - *One-site basis.* GT patterns of $\mathrm{gl}(N)$ with rows of length $1,\dots,N$, the last row equal to $\lambda$, in the order of `gl3_reps.gt_patterns($\lambda$)`: ascending lexicographic in (row $N-1$, …, row 1), highest-weight state *last*; Python indices are 0-based, the reference files 1-based (the Wolfram notebooks use another order; the map is by pattern).
 - *Generators and metric.* Plain rational, non-unitary GT matrices acting on kets as columns for $E_{i,i+1}$, $E_{i+1,i}$ and the diagonal ones; the others by commutators, $E_{ij}=[E_{i,j-1},E_{j-1,j}]$, $E_{ji}=[E_{j,j-1},E_{j-1,i}]$ for $j>i+1$ (path-independent; all 256 relations hold exactly on nine irreps).
-  Weights are the eigenvalues of $(E_{11},\dots,E_{44})$, $\alpha_i=\epsilon_i-\epsilon_{i+1}$.
-  The invariant metric is the diagonal $G$ with $E_{ij}^TG=GE_{ji}$, $G[\mathrm{HW}]=1$; the float recursion runs in the orthonormal basis $\tilde e_q=e_q/\sqrt{g_q}$, which is Munich's (pattern index $Q(M)$ = our index $+1$; its SU(4) label is $\mu-\mu_4(1,1,1,1)$).
+  Weights are the eigenvalues of $(E_{11},\dots,E_{44})$. The invariant metric is the diagonal $G$ with $E_{ij}^TG=GE_{ji}$, $G[\mathrm{HW}]=1$; the float recursion runs in the orthonormal basis $\tilde e_q=e_q/\sqrt{g_q}$, which is Munich's (pattern index $Q(M)$ = our index $+1$; its SU(4) label is $\mu-\mu_4(1,1,1,1)$).
 - *Two sites, slices, copies.* $\Psi=\sum\Psi[\nu,q]\,e_\nu\otimes e_q$, site 1 $=V_\lambda$ (index $\nu$, slow), site 2 $=V_{\lambda'}$ ($q$, fast); the slice is $\Psi[\,\cdot\,,q_{\rm top}]\in V_\lambda[\mu-\lambda']$.
   The basis of $M_\mu$ is the reduced row echelon form of the exact null space; copies are ordered lexicographically by $(V_3,V_4^a,V_4^b)$ and normalised so that the first non-zero slice component is 1.
   Multiplicities by Racah–Speiser with $\rho=(3,2,1,0)$ over the weights of the second factor; the PRV test runs over the union of the candidate sets of both factors, including those of multiplicity 0.
@@ -668,24 +706,8 @@ The literature check of 21 October concerned gl(3) and the SU(4) literature was 
 
 ## B. The reduced universal polynomial of $V_3$
 
-Table 7 and the list below give the 39 words of $V_{\mathrm{red},3}$, the reduction of the 88 terms of $V_3$ (word $=$ product of site-1 generators $E_{ij}$, leftmost acting last; $\lambda'_i$ written $l_i$): three words of one generator, twelve of two and twenty-four of three.
-For $\lambda'_3=\lambda'_4=0$ the three words with coefficient $l_3+l_4$ drop out (36 words).
-The closed form (10) is a different presentation of the same operator (Section 5.2).
-
-**Table 7.** Universal $V_{\mathrm{red},3}$: the 15 words of degree $\le2$ with their coefficients (polynomials in $l_i=\lambda'_i$); the 24 cubic words are listed below.
-
-| word | coefficient | word | coefficient | word | coefficient |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| $E_{22}$ | $l_3+l_4$ | $E_{11}E_{44}$ | $l_2+l_3$ | $E_{32}E_{23}$ | $1-l_1-l_4$ |
-| $E_{33}$ | $l_1+l_2+2l_4$ | $E_{21}E_{12}$ | $-(l_3+l_4)$ | $E_{33}E_{44}$ | $l_1+l_2$ |
-| $E_{44}$ | $2(l_1+l_2+l_3)$ | $E_{22}E_{33}$ | $l_1+l_4$ | $E_{41}E_{14}$ | $-(l_2+l_3)$ |
-| $E_{11}E_{22}$ | $l_3+l_4$ | $E_{22}E_{44}$ | $l_1+l_3$ | $E_{42}E_{24}$ | $1-l_1-l_3$ |
-| $E_{11}E_{33}$ | $l_2+l_4$ | $E_{31}E_{13}$ | $-(l_2+l_4)$ | $E_{43}E_{34}$ | $2-l_1-l_2$ |
-
-
-The 24 cubic words all have coefficient $\pm1$.
-$+1$: $E_{11}E_{32}E_{23}$, $E_{11}E_{42}E_{24}$, $E_{11}E_{43}E_{34}$, $E_{21}E_{33}E_{12}$, $E_{21}E_{44}E_{12}$, $E_{22}E_{43}E_{34}$, $E_{31}E_{22}E_{13}$, $E_{31}E_{44}E_{13}$, $E_{32}E_{44}E_{23}$, $E_{41}E_{22}E_{14}$, $E_{41}E_{33}E_{14}$, $E_{42}E_{33}E_{24}$.
-$-1$: $E_{21}E_{32}E_{13}$, $E_{21}E_{42}E_{14}$, $E_{31}E_{12}E_{23}$, $E_{31}E_{23}E_{12}$, $E_{31}E_{43}E_{14}$, $E_{32}E_{43}E_{24}$, $E_{41}E_{12}E_{24}$, $E_{41}E_{13}E_{34}$, $E_{41}E_{24}E_{12}$, $E_{41}E_{34}E_{13}$, $E_{42}E_{23}E_{34}$, $E_{42}E_{34}E_{23}$.
+The reduction of the 88 terms of $V_3$ is a polynomial of 39 words in the site-1 generators $E_{ij}$ (leftmost acting last) with coefficients in $\mathbb{Q}[\lambda']$: three words of one generator, twelve of two and twenty-four of three, the latter with coefficient $\pm1$ (twelve of each sign); for $\lambda'_3=\lambda'_4=0$ the three words with coefficient $\pm(\lambda'_3+\lambda'_4)$ drop out (36 words).
+The words and their coefficients are printed by the engine (`GL/slice_ops_gl4_output.txt`, lines 21–60), and the closed form (10) is a different presentation of the same operator (Section 5.2).
 
 ## C. Reproduction
 
@@ -697,67 +719,124 @@ Times are for the i7-12700KF; the output of one run of `all` is stored beside ea
 - G3, `slice_ops_gl4.py`: `order`, `reduce`, `gl3`, `direct`, `copies`, `bench`, `ref`, `verify`, `all` (477 s with the option `ext`); 9 tests, 1.5 s.
 - G5, `oper_gl4.py`: `dict`, `exps`, `solve`, `search`, `wb`, `big`, `all` (516 s: 11, 45, 175, 60, 170, 100 s), and `wbsym` (150 s, not in `all`); 7 tests, 5 s.
 - G4, `structure_gl4.py`: `stencil`, `symbolic`, `symq`, `univ`, `weyl`, `rule`, `chain`, `poly`, `cycW`, `all` (`run`, `merge` assemble per-stage parts; `stencil` 7 s, `weyl` 45 s, `rule` 5 s, `chain` 1.4 s, `poly` 4.9 s, `cycW` 2.9 s, `univ` 7 s, `symq` 294 s, `symbolic` 1061 s); 9 tests, 7 s; all tables in `structure_gl4_tables.txt`.
+- G7, `munich_bridge.py`: `selftest`, `compare`, `sector` (29 of 29 rotated outputs accepted, 39 of 39 corrupted ones rejected); raw Munich outputs and timings in `CPP/results/su4-same-machine/`.
 
 The reference data, in `GD/ref/`, are exact machine-readable files with a documented header:
 
-- `gl4-cg-slices-{2100,2110,3210,2100-1100,2210-2110,2200,3300,4400,6600,8800}.txt` (G1, 250 kB): GT bases, weights, metric; per sector $(\mu,m,w,n_W,\dim V_\mu,C_2(\mu))$, weight space, PRV basis, $m=1$ slices, residuals, exact $G$-norms and full vectors (for $\dim V_\lambda\dim V_{\lambda'}\le2000$); re-verified from the text with independent code (0 mismatches at $10^{-12}$).
+- `gl4-cg-slices-*.txt` (G1, ten files, 250 kB): GT bases, weights, metric; per sector $(\mu,m,w,n_W,\dim V_\mu,C_2(\mu))$, weight space, PRV basis, $m=1$ slices, residuals, exact $G$-norms and full vectors (for $\dim V_\lambda\dim V_{\lambda'}\le2000$); re-verified from the text with independent code (0 mismatches at $10^{-12}$).
 - `gl4-gaudin-ops.txt` (G2, 87 kB): 12 operators $S_{k,j}$ at $\theta_1$, `V3`, `V4a`, `V4b` as term lists (loader `load_terms`).
-- `gl4-cg-copies-{2100,2110,3210,2210-2110,4200,6420}.txt` (G3): the slice records plus the exact matrices of the reduced triple and the canonical copies to 30 digits (0 mismatches).
-- `gl4-oper-dictionary.txt` (G5, 135 lines): 18 dictionary lines (Table 3), the Casimir formulas, and the joint triples of 146 copies to 25 digits.
+- `gl4-cg-copies-*.txt` (G3, six files): slice records, exact matrices of the reduced triple and canonical copies to 30 digits (0 mismatches).
+- `gl4-oper-dictionary.txt` (G5, 135 lines): the 18 dictionary lines (Table 1), the Casimir formulas and the joint triples of 146 copies to 25 digits.
 
 ## References
 
 [1] A. Alex, M. Kalus, A. Huckleberry and J. von Delft, *A numerical algorithm for the explicit calculation of SU(N) and SL(N,C) Clebsch–Gordan coefficients*, J. Math. Phys. 52 (2011) 023507, arXiv:1009.0437.
 
-[2] B. Kostant, *A formula for the multiplicity of a weight*, Trans. Amer. Math. Soc. 93 (1959) 53–73 (Lemma 4.1).
+[2] B. Kostant, Trans. Amer. Math. Soc. 93 (1959) 53–73 (Lemma 4.1).$^\dagger$
 
-[3] K. R. Parthasarathy, R. Ranga Rao and V. S. Varadarajan, *Representations of complex semi-simple Lie groups and Lie algebras*, Ann. of Math. 85 (1967) 383–429.
+[3] K. R. Parthasarathy, R. Ranga Rao and V. S. Varadarajan, Ann. of Math. 85 (1967) 383–429.$^\dagger$
 
 [4] S. Kumar, *Tensor product decomposition*, Proc. ICM Hyderabad 2010, vol. IV (statement of Kostant's lemma).
 
-[5] D. P. Zhelobenko, *Compact Lie Groups and Their Representations*, AMS Transl. Math. Monographs 40, 1973.
+[5] D. P. Zhelobenko, *Compact Lie Groups and Their Representations*, AMS Transl. Math. Monographs 40, 1973.$^\ddagger$
 
-[6] R. M. Asherova, Yu. F. Smirnov and V. N. Tolstoy, Theor. Math. Phys. 8 (1971) 813–825 (extremal projectors).
+[6] R. M. Asherova, Yu. F. Smirnov and V. N. Tolstoy, Theor. Math. Phys. 8 (1971) 813–825 (extremal projectors).$^\dagger$
 
-[7] E. B. Vinberg, *On certain commutative subalgebras of a universal enveloping algebra*, Izv. Akad. Nauk SSSR Ser. Mat. 54 (1990) 3–25 [Math. USSR-Izv. 36 (1991) 1–22].
+[7] E. B. Vinberg, Izv. Akad. Nauk SSSR Ser. Mat. 54 (1990) 3–25 [Math. USSR-Izv. 36 (1991) 1–22].$^\dagger$
 
-[8] L. G. Rybnikov, *Argument shift method and the Gaudin model*, Funct. Anal. Appl. 40 (2006) 188–199, arXiv:math/0606380; *A proof of the Gaudin Bethe Ansatz conjecture*, arXiv:1608.04625.
+[8] L. G. Rybnikov, Funct. Anal. Appl. 40 (2006) 188–199, arXiv:math/0606380; *A proof of the Gaudin Bethe Ansatz conjecture*, Int. Math. Res. Not. (online 2018), arXiv:1608.04625 (print issue not verified).$^\dagger$
 
-[9] B. Feigin, E. Frenkel and L. Rybnikov, Duke Math. J. 155 (2010) 337–363, arXiv:0712.1183.
+[9] B. Feigin, E. Frenkel and L. Rybnikov, Duke Math. J. 155 (2010) 337–363, arXiv:0712.1183.$^\dagger$
 
-[10] E. Mukhin, V. Tarasov and A. Varchenko, J. Amer. Math. Soc. 22 (2009) 909–940, arXiv:0711.4079.
+[10] E. Mukhin, V. Tarasov and A. Varchenko, J. Amer. Math. Soc. 22 (2009) 909–940, arXiv:0711.4079.$^\dagger$
 
-[11] I. Halacheva, J. Kamnitzer, L. Rybnikov and A. Weekes, Duke Math. J. 169 (2020) 2337–2419, arXiv:1708.05105.
+[11] I. Halacheva, J. Kamnitzer, L. Rybnikov and A. Weekes, Duke Math. J. 169 (2020) 2337–2419, arXiv:1708.05105.$^\dagger$
 
-[12] B. Feigin, E. Frenkel and N. Reshetikhin, Commun. Math. Phys. 166 (1994) 27–62, hep-th/9402022.
+[12] B. Feigin, E. Frenkel and N. Reshetikhin, Commun. Math. Phys. 166 (1994) 27–62, hep-th/9402022.$^\dagger$
 
-[13] E. Frenkel, *Opers on the projective line, flag manifolds and Bethe Ansatz*, Mosc. Math. J. 4 (2004) 655–705, arXiv:math/0308269; *Gaudin model and opers*, Progr. Math. 237 (2005) 1–58, arXiv:math/0407524.
+[13] E. Frenkel, Mosc. Math. J. 4 (2004) 655–705, arXiv:math/0308269; *Gaudin model and opers*, Progr. Math. 237 (2005) 1–58, arXiv:math/0407524.
 
-[14] D. Talalaev, *Quantization of the Gaudin system*, Funct. Anal. Appl. 40 (2006) 73–77, arXiv:hep-th/0404153.
+[14] D. Talalaev, *Quantization of the Gaudin system* (journal title: *The quantum Gaudin system*), Funct. Anal. Appl. 40 (2006) 73–77, arXiv:hep-th/0404153.
 
-[15] A. Chervov and D. Talalaev, *Quantum spectral curves, quantum integrable systems and the geometric Langlands correspondence*, arXiv:hep-th/0604128.
+[15] A. Chervov and D. Talalaev, arXiv:hep-th/0604128 (*Quantum spectral curves, quantum integrable systems and the geometric Langlands correspondence*); arXiv:hep-th/0409007 (*Universal G-oper and Gaudin eigenproblem*).$^\dagger$
 
-[16] Z. Pluhař, Yu. F. Smirnov and V. N. Tolstoy, *Clebsch–Gordan coefficients of SU(3) with simple symmetry properties*, J. Phys. A 19 (1986) 21–28.
+[16] Z. Pluhař, Yu. F. Smirnov and V. N. Tolstoy, J. Phys. A 19 (1986) 21–28.$^\dagger$
 
-[17] N. Crampé, L. Poulain d'Andecy and L. Vinet, *The missing label of $\mathrm{su}_3$ and its symmetry*, Commun. Math. Phys. 400 (2023) 179–213, arXiv:2110.03521; *A Calabi–Yau algebra with $E_6$ symmetry and the Clebsch–Gordan series of $\mathfrak{sl}_3$*, J. Lie Theory 31 (2021) 1085–1112, arXiv:2005.13444.
+[17] N. Crampé, L. Poulain d'Andecy and L. Vinet, *The missing label of $\mathrm{su}_3$ and its symmetry*, Commun. Math. Phys. 400 (2023) 179–213, arXiv:2110.03521; J. Lie Theory 31 (2021) 1085–1112, arXiv:2005.13444.
 
-[18] R. Campoamor-Stursberg and F. Musso, *Two-body homogeneous rational Gaudin models and the missing label problem*, J. Phys. A 46 (2013) 335201.
+[18] R. Campoamor-Stursberg and F. Musso, J. Phys. A 46 (2013) 335201.$^\dagger$
 
-[19] J. P. Draayer and Y. Akiyama, J. Math. Phys. 14 (1973) 1904–1912.
+[19] J. P. Draayer and Y. Akiyama, J. Math. Phys. 14 (1973) 1904–1912; Y. Akiyama and J. P. Draayer, Comput. Phys. Commun. 5 (1973) 405–415.$^\dagger$
 
 [20] Herko, Caprio, McCoy and Fasano (ndsu3lib), Eur. Phys. J. A 62 (2026) 95, arXiv:2505.08993.
 
-Talalaev and Chervov–Talalaev are quoted from memory, and Rybnikov 2020 and Kumar were seen only by abstract in the literature check, `GD/Literature-check-missing-label.md`.
+[21] L. Everding, *Calculation of Clebsch–Gordan coefficients via Weyl group symmetry*, Bachelorarbeit, LMU Munich, 12 August 2011; A. Alex, L. Everding, P. Littelmann and J. von Delft, APS March Meeting 2012, W26.11 (abstract only).
+
+[22] SUNRepresentations.jl, `github.com/QuantumKitHub/SUNRepresentations.jl` (README).
+
+[23] P. Balaji et al., Phys. Rev. D 113 (2026) 094505, arXiv:2509.25865; pyclebsch, `github.com/hepqis-uiuc/pyclebsch`.
+
+[24] P. Dang, J. P. Draayer, F. Pan et al., Eur. Phys. J. Plus 139 (2024) 704, arXiv:2405.06843, and 933, arXiv:2407.09665.
+
+[25] A. Weichselbaum, Ann. Phys. 327 (2012) 2972–3047, arXiv:1202.5664; Phys. Rev. Research 2 (2020) 023385, arXiv:1910.13736; SciPost Phys. Codebases 40 (2024), arXiv:2405.06632.
+
+[26] S. Gliske, W. H. Klink and T. Ton-That, Acta Appl. Math. 88 (2005) 229–249 and 95 (2007) 51–72;$^\dagger$ S. Gliske, thesis, University of Iowa, 2006.
+
+[27] W. H. Klink and T. Ton-That, J. Math. Phys. 37 (1996) 6468–6485; W. H. Klink, T. Ton-That and R. G. Wills, J. Phys. A 26 (1993) 3229–3242; R. T. Aulwes, W. H. Klink and T. Ton-That, J. Phys. A 34 (2001) 8237–8257.$^\dagger$
+
+[28] R. M. Fonseca, Comput. Phys. Commun. 267 (2021) 108085, arXiv:2011.01764 (GroupMath); Comput. Phys. Commun. 183 (2012) 2298, arXiv:1106.5016 (Susyno).
+
+[29] M. Kuhn and H. Walliser, Comput. Phys. Commun. 179 (2008) 733–740 (CGSU4; Mendeley Data DOI 10.17632/fd728s4ntc.1).$^\dagger$
+
+[30] V. Rabl, G. Campbell Jr. and K. C. Wali, J. Math. Phys. 16 (1975) 2494; E. M. Haacke, J. W. Moffat and P. Savaria, ibid. 17 (1976) 2041–2066; C. Garcia-Recio and L. L. Salcedo, ibid. 52 (2011) 043503, arXiv:1010.5667.$^\dagger$
+
+[31] K. T. Hecht and S. C. Pang, J. Math. Phys. 10 (1969) 1571–1616; J. P. Draayer, ibid. 11 (1970) 3225–3238; A. Partensky and C. Maguin, ibid. 19 (1978) 511–525.$^\dagger$
+
+[32] D. J. Rowe and J. Repka, Found. Phys. 27 (1997) 1179–1209 (su(4)); J. Math. Phys. 38 (1997) 4363–4388 (SU(2), SU(3)).$^\dagger$
+
+[33] D. J. Rowe and C. Bahri, J. Math. Phys. 41 (2000) 6544–6565;$^\dagger$ C. Bahri, D. J. Rowe and J. P. Draayer, Comput. Phys. Commun. 159 (2004) 121–143.
+
+[34] T. Dytrych, D. Langr, J. P. Draayer, K. D. Launey and D. Gazda, Comput. Phys. Commun. 269 (2021) 108137 (SU3lib).
+
+[35] H. T. Williams, arXiv:nucl-th/9309023.
+
+[36] F. Pan and J. P. Draayer, J. Math. Phys. 39 (1998) 5631–5641, arXiv:quant-ph/9704014; ibid. 5642–5662, arXiv:quant-ph/9704015.$^\dagger$
+
+[37] L. C. Biedenharn and J. D. Louck, Commun. Math. Phys. 8 (1968) 89–131; J. D. Louck and L. C. Biedenharn, J. Math. Phys. 11 (1970) 2368–2414; L. C. Biedenharn, J. D. Louck et al., ibid. 13 (1972) 1957, 1985; 14 (1973) 1336; 26 (1985) 1458.$^\dagger$
+
+[38] R. T. Sharp and D. Lee, Rev. Mex. Fis. 20 (1970) 203–215.
+
+[39] V. N. Tolstoy, arXiv:1010.4054 (review); V. N. Tolstoy and J. P. Draayer, Czech. J. Phys. 50 (2000) 1359–1369.$^\dagger$
+
+[40] A. Chervov, L. Rybnikov and D. Talalaev, arXiv:hep-th/0404106 (journal reference not found).$^\dagger$
+
+[41] A. Chervov and G. Falqui, J. Phys. A 41 (2008) 194006.$^\dagger$
+
+[42] E. Mukhin, V. Tarasov and A. Varchenko, Glasgow Math. J. 51 (2009) 137–145, arXiv:0712.0981.
+
+[43] E. Mukhin, V. Tarasov and A. Varchenko, J. Stat. Mech. (2006) P08002, arXiv:math/0605015.
+
+[44] E. Mukhin and A. Varchenko, Commun. Contemp. Math. 6 (2004) 111–163, arXiv:math/0209017; Trans. Amer. Math. Soc. 359 (2007) 5383–5418, arXiv:math/0501144.$^\dagger$
+
+[45] P. Etingof and A. Varchenko, Adv. Math. 167 (2002) 74–127, arXiv:math/0011001.
+
+[46] K. Styrkas, V. Tarasov and A. Varchenko, Adv. Math. 185 (2004) 91–135, arXiv:math/0206294.$^\dagger$
+
+[47] A. Mudrov, J. Pure Appl. Algebra 226 (2022) 106902, arXiv:1911.09933.
+
+[48] S. Khoroshkin and O. Ogievetsky, J. Algebra 319 (2008) 2113–2165, arXiv:math/0606259.$^\dagger$
+
+Unmarked entries were read at least in part by the checks; data from their appendices (arXiv, Crossref, INSPIRE records).
 
 ---
 
-[^1]: `CPP/results/hw_timings.txt`; G1 §6. Convention for all footnotes: paths are relative to the repository root, with GL = `Paul/Python/gaudin_gl4`, GD = `Paul/Mathematica/Gaudin`, CPP = `Paul/Cpp/AlexCGC`, PY3 = `Paul/Python/gaudin_sl3`; G1 to G5 refer to `GL/RESULTS-G1-slice-engine-gl4.md`, `GL/RESULTS-G2-gaudin-gl4-ops.md`, `GL/RESULTS-G3-slice-ops-gl4.md`, `GL/RESULTS-G4-structure-gl4.md`, `GL/RESULTS-G5-oper-gl4.md`; § refers to a section of the file named. “The gl(3) notes” are `GD/Slice-engine-notes.tex` and its `.md` and `.pdf` twins.
+[^1]: `CPP/results/hw_timings.txt`; G1 §6, G7 §2. Convention for all footnotes: paths are relative to the repository root, with GL = `Paul/Python/gaudin_gl4`, GD = `Paul/Mathematica/Gaudin`, CPP = `Paul/Cpp/AlexCGC`, PY3 = `Paul/Python/gaudin_sl3`; G1 to G5 and G7 refer to the reports `RESULTS-G1-slice-engine-gl4.md`, `-G2-gaudin-gl4-ops.md`, `-G3-slice-ops-gl4.md`, `-G4-structure-gl4.md`, `-G5-oper-gl4.md` and `-G7-munich-comparison.md` in GL; § refers to a section of the file named. “The gl(3) notes” are `GD/Slice-engine-notes.tex` and its `.md` and `.pdf` twins.
 
 [^2]: G1 §3 (column max $n_W$), G1 §6; per-irrep $n_W$ at $S=8$: G1 §4.1.
 
-[^3]: `CPP/README.md`, sections “Highest-weight-state CGCs only” and “Benchmarking just the highest-weight state”; the algorithm is described in Ref. [1]. The routine timed in the SU(4) sweep is `compute_highest_weight_coeffs()`, without the Littlewood–Richardson step and without the descendants.
+[^3]: `CPP/README.md`, sections “Highest-weight-state CGCs only” and “Benchmarking just the highest-weight state”; the algorithm: Ref. [1]. The timed routine is `compute_highest_weight_coeffs()`, without the Littlewood–Richardson step and the descendants.
 
-[^4]: `CPP/results/hw_timings.txt` (generated 2026-07-22); the same numbers in G1 §6 and in Table 4.
+[^4]: `CPP/results/hw_timings.txt` (generated 2026-07-22), G1 §6; the new run: G7 §2.
 
 [^5]: G1 §0, G1 §4. The smallest singular-value ratio of the blocks $A_b$, which controls the conditioning, is 0.33 at $S=10$, 0.25 at $S=20$, 0.23 for $[6,4,2,0]^{\otimes2}$ and 0.18 for $[9,6,3,0]^{\otimes2}$.
 
@@ -769,7 +848,7 @@ Talalaev and Chervov–Talalaev are quoted from memory, and Rybnikov 2020 and Ku
 
 [^9]: G1 §5.
 
-[^10]: Rows 1–2: `GD/ref/gl4-cg-slices-8800.txt`, records SECTOR (fields $\mu$, $m$, $w$, $n_W$, $\dim V_\mu$, $C_2(\mu)$); rows 3–4: `GD/ref/gl4-cg-copies-6420.txt`; rows 5–7: `GD/ref/gl4-cg-copies-3210.txt`; G1 §4.1, G3 §10.
+[^10]: G1 §4.1, G3 §10; records SECTOR (fields $\mu$, $m$, $w$, $n_W$, $\dim V_\mu$, $C_2(\mu)$) of `GD/ref/gl4-cg-slices-8800.txt`, `GD/ref/gl4-cg-copies-6420.txt`, `GD/ref/gl4-cg-copies-3210.txt`.
 
 [^11]: `GD/Gaudin-sl3-CG-notes.md` §1.1, eqs. (3)–(4); the quantum characteristic polynomial of the Gaudin Lax matrix is Talalaev's [14, 15].
 
@@ -797,7 +876,7 @@ Talalaev and Chervov–Talalaev are quoted from memory, and Rybnikov 2020 and Ku
 
 [^23]: G3 §3–G3 §5.
 
-[^24]: G3 §7, with the table of the nine products.
+[^24]: G3 §7, with the table of the nine products. The sl(2) example and the transposed reading are an inference of the SU(4) literature check (`GD/Literature-check-SU4-CG.md`, §5(a) and §9), not found in print.
 
 [^25]: G3 §8, G3 §8.1.
 
@@ -821,15 +900,19 @@ Talalaev and Chervov–Talalaev are quoted from memory, and Rybnikov 2020 and Ku
 
 [^35]: G4 §2.2–G4 §2.5.
 
-[^36]: G4 §4.
+[^36]: `GD/Literature-check-SU4-CG.md`, §5(b): an inference of that check, “not checked by computer”; the projectivity of dominant Verma modules is recalled there without confirmation online.
 
-[^37]: G4 §5.1, G4 §5.2.
+[^37]: G4 §4.
 
-[^38]: G1 §6; the Munich column is `CPP/results/hw_timings.txt`. Full table (also $S=14$) with the breakdown of $t_a$, $t_b$ and the entries written: `GL/benchmark_gl4.md`.
+[^38]: G4 §5.1, G4 §5.2.
 
-[^39]: G3 §9; with PRV basis vectors in place of copies (no operators) the numbers are in G1 §7.
+[^39]: G7 §2; `CPP/results/su4-same-machine/rect_table.md`. Full table (also $S\ge12$, and the i7 desktop numbers up to $S=20$) with the breakdown of $t_a$, $t_b$: `GL/benchmark_gl4.md`.
 
-[^40]: G1 §4.4.
+[^40]: G7 §1, `CPP/results/su4-same-machine/products_summary.txt`; i7 numbers: G3 §9, `GL/benchmark_gl4.md`.
 
-[^41]: `HANDOFF.md`, “DONE (2026-10-21 night, Ubuntu): ndsu3lib benchmark”; `Paul/Cpp/ndsu3lib-bench/RESULTS.md`.
+[^41]: G1 §4.4.
+
+[^42]: G7 §3, G7 §5; the GT bases coincide (Munich's $Q(M)$ is our index $+1$, orthonormal basis = ours rescaled by $1/\sqrt g$, trivial sign gauge).
+
+[^43]: `HANDOFF.md`, “DONE (2026-10-21 night, Ubuntu): ndsu3lib benchmark”; `Paul/Cpp/ndsu3lib-bench/RESULTS.md`.
 

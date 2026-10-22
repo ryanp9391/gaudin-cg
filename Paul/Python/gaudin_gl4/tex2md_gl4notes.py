@@ -74,7 +74,7 @@ cite_num = {k: i + 1 for i, k in enumerate(bib_keys)}
 pre_bib = body[:bib_m.start()] if bib_m else body
 post_bib = body[bib_m.end():] if bib_m else ''
 # the bibliography may be wrapped in a font-size group "{\footnotesize ... }": strip a dangling group
-pre_bib = re.sub(r'\{\\(footnotesize|small)\s*$', '', pre_bib.rstrip())
+pre_bib = re.sub(r'\{\\(footnotesize|small|scriptsize)\s*$', '', pre_bib.rstrip())
 post_bib = post_bib.strip()
 if post_bib.startswith('}'):
     post_bib = post_bib[1:].strip()
@@ -218,7 +218,7 @@ def inline(s):
                     out.append('…')
                 elif cmd == 'vspace':
                     next_arg()
-                elif cmd in ('medskip', 'bigskip', 'smallskip', 'noindent', 'centering', 'small', 'footnotesize', 'normalsize', 'par', 'raggedright'):
+                elif cmd in ('medskip', 'bigskip', 'smallskip', 'noindent', 'centering', 'small', 'footnotesize', 'scriptsize', 'normalsize', 'par', 'raggedright'):
                     pass
                 elif cmd == 'v':
                     a = next_arg(); out.append({'r': 'ř'}.get(a, a))
