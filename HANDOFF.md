@@ -4,7 +4,110 @@ Where the last session left off. Read this first when picking the project back u
 history log (that's `git log`) — only what's still open or in-flight. Overwrite
 freely each session rather than appending.
 
-## >>> FOR TOMORROW (2026-10-21 night, Paul: "set up a plan for the guy tomorrow to implement", NOT started): the slice engine + Gaudin missing-label operators for gl(4) <<<
+## >>> FOR THE UBUNTU LAPTOP (written 2026-10-22, Paul: "set up a precise pipeline to compare to Munich"): brief `Paul/Python/gaudin_gl4/SPEC-G7-munich-comparison-ubuntu.md` <<<
+
+Prerequisite: the gl(4) material of 2026-10-22 must be committed on Windows and pulled on the laptop (`Paul/Python/gaudin_gl4/`, `Paul/Mathematica/Gaudin/ref/gl4-*.txt`,
+`Paul/Mathematica/Gaudin/gl4-slice-engine-notes.{tex,md}`; ≈ 3.5 MB of text; PDFs are gitignored). On the laptop: venv `Paul/Python/.venv` (Python 3.10.12 — the gl(4) code
+parses as 3.10 but was only run under 3.13; the five test files are the first step), `bash Paul/Cpp/AlexCGC/build.sh` + the repaired profiler `cgc_hw_prof.cpp` built twice
+(reference BLAS / OpenBLAS; `HW_MODE` = orig | compact | eig). The brief gives every command: D1 literal correctness (42 multiplicity-free irreps vector by vector via
+`hwcgc.sh` + `slice_engine_gl4.py munichcmp`; ≥ 100 multiplicity sectors subspace by subspace via a new `munich_bridge.py` with the rotation Q between Munich's Gram–Schmidt
+copies and our Gaudin copies), D2 same-machine SU(4) timing table (Munich as distributed S ≤ 8, Munich repaired S ≤ 8–10, ours S ≤ 12; single-thread, load and RSS recorded),
+D3 Munich on multiplicity products vs G3, D4 `RESULTS-G7-munich-comparison.md` + raw outputs in `Paul/Cpp/AlexCGC/results/su4-same-machine/` + a HANDOFF block. Memory
+rule for the original Munich: n_W·dim²·8 B (9.5 GB at S = 8, 33 GB at S = 9 — do not run S ≥ 9 with the original).
+
+## >>> DONE (2026-10-22, Windows): gl(4) programme G1–G6 — all six packages complete and re-verified by the session (details below; G6 notes being updated with G4) <<<
+
+Paul (2026-10-22): "Check out gl4-slice-engine-plan.md and start implementing with sonnet subagents." Directory `Paul/Python/gaudin_gl4/` (briefs
+`SPEC-G<k>-*.md`, reports `RESULTS-G<k>-*.md`, output `*_output.txt`, tests `test_*.py`), reference data `Paul/Mathematica/Gaudin/ref/gl4-*.txt`. **Nothing committed.**
+Session facts: `gl3_reps._raise/_lower` are general-N (all 256 gl(4) relations exact); no C++ compiler/WSL on this Windows box (Munich binary not buildable →
+literal Munich comparison deferred to the Ubuntu laptop; G1's RESULTS §9 has the 19 `hwcgc.sh` commands, the conversion CGC = ±Ψ√(g_νg_q/GNORM2) and a ready
+comparer `python -X utf8 slice_engine_gl4.py munichcmp S m1 m2 m3 m4 file`; Munich's GT basis = ours, trivial sign gauge). CLAUDE.md goal statement + memory updated.
+
+**G1 DONE (`glN_reps.py`, `test_glN_reps.py` 10/10, `slice_engine_gl4.py`, `RESULTS-G1-slice-engine-gl4.md`, ten `ref/gl4-cg-slices-*.txt`; session re-ran `tests`, `prv`,
+`verify`, `brute`: all 0 mismatches).** Exact sparse GT irreps of gl(N) (N = 3 identical to `slice_engine.Rep`/`GL3Rep`; N = 4: 256 relations exact on 9 irreps; N = 5 too);
+dim M_μ = Racah–Speiser on EVERY dominant candidate (incl. multiplicity 0) of 26 products (λ ≠ λ′ both orders, [S,S,0,0]² S ≤ 10, [4,2,0,0]², [6,4,2,0]² (m ≤ 12), [9,6,3,0]²
+(m ≤ 27)); level recursion residual ≤ 9.1e-15 on all of [S,S,0,0]² S ≤ 10, exact twin 0 violations everywhere (1655/1655 out-of-M_μ slices rejected); Munich-style brute
+force 0 mismatches. **Benchmark [S,S,0,0]² (all HW vectors; Munich = i5-1345U, ours i7-12700KF):** S = 8: t_a 26 ms / t_b 93 ms vs Munich 80.19 s (×860); S = 10: 0.23 s
+(Munich cannot run); S = 12: 0.44 s; S = 20 (dim 19 481, 3.06·10⁶ coefficients): 4.6 s; Munich ×5–7 per unit S, ours ×1.4–2. **Surprises:** for gl(4) the recursion's
+consistency (T) conditions do NOT imply the PRV string conditions — the exact twin needs the dangling (D) rows (15% of random out-of-M_μ slices pass T); AᵀA gap ≈ 1/S
+(not 1); float64 residual grows ×2.4–3.7 per unit S beyond S = 14 (`hw_from_slice_rounded` cures). Families: [3a,2a,a,0]² max m = 4, 12, 27, 51 (a = 1..4); [2a,a,0,0]²,
+[2a,a,a,0]² max m = a+1; [9,6,3,0]² (1592 vectors, m ≤ 27) all vectors in 0.73 s.
+
+**G2 DONE (`gaudin_gl4_ops.py`, `test_gaudin_gl4_ops.py` 11/11, `RESULTS-G2-gaudin-gl4-ops.md`, `ref/gl4-gaudin-ops.txt`; session re-ran the tests: pass).** Exact
+noncommutative cdet(∂−L) engine for gl(N): N = 3 reproduces the notes' eq. (4) exactly; the column-ordered cdet commutes (the row-ordered one is not even gl(N)-invariant);
+every Laurent coefficient is homogeneous, S_{k,j} = t^{j−k}Ŝ, so the triple **V₃ = tS_{3,2}, V₄ᵃ = tS_{4,3}, V₄ᵇ = t²S_{4,2} is exactly t-independent**; all 18 coefficients at
+θ₁, θ₂ commute pairwise and with gl(4)^{tot} exactly on four products; gl(3) facts reproduced (tS_{3,2} = V + η₁/2 as an identity in U(gl₃)⊗U(gl₃)); double pole
+S_{2,2} = e₂(λ) + Σ_k(k−1)λ_k (general: S_{m,m} = (−1)^m a_{N−m} from Π_c(θ − y_c), y_c = λ_c + N − c). **On all 180 sectors with m ≥ 2 of 14 products (m ≤ 12, up to
+[6,4,2,0]², dim 531 441): the triple commutes, is self-adjoint for G⊗G, real, and the JOINT spectrum is simple (exact certificates). BUT V₃ ALONE IS DEGENERATE on some
+λ = λ′ sectors** ([3,2,1,0]²: (4,4,2,2) m = 2 where V₃ is scalar, (5,4,2,1) m = 4 with 57 twice; 19 of 56 sectors of [6,4,2,0]²): the site exchange P gives PV₃P = −V₃ + c,
+so V₃ − c/2 is P-odd and has ≥ |p₊ − p₋| zero modes; {V₃, V₄ᵇ} separates every sector tested, {V₃, V₄ᵃ} fails once ((9,7,5,3), m = 12). Structure (exact PBW identities):
+V₃ = Σ_{|I|=3} D(2,1)_I + ((N−2)/2)η, η = n₁n₂ − Ω = tS_{2,1} (= the gl(3) vertex operator summed over 3-subsets for N = 4), = T(1,1,2) + scalars; V₄ᵃ = D(3,1) + V₃ − η/3;
+V₄ᵇ = D(2,2) − D(3,1) + ½(ΣD(1,2) − ΣD(2,1)) − η/6; naive traces T(1,1,2,2), T(1,2,1,2) do NOT commute, only T(1,1,2,2) + ½T(1,2,1,2) does; every Laurent coefficient
+(θ₁, θ₂) is an integer combination of the triple + Casimir scalars (table §6c). Term counts V₃ 88 / V₄ᵃ 152 / V₄ᵇ 324; V₃, V₄ᵃ have ≤ 1 site-2 factor per term, V₄ᵇ ≤ 2.
+
+**G5 DONE (`oper_gl4.py`, `test_oper_gl4.py` 7/7, `RESULTS-G5-oper-gl4.md`, `ref/gl4-oper-dictionary.txt`; session re-ran the tests and the `dict` stage: 0 violations on
+95 sectors).** (1) **The oper dictionary is forced, not fitted:** with y_c(ν) = ν_c + 4 − c, F_ν(θ) = Π_c(θ − y_c) = Σ_k a_k θ(θ−1)…(θ−k+1), T_k(ν) = (−1)^k a_{4−k}(ν)
+(T₂ = e₂(y) − 3e₁(y) + 7, T₃ = e₃ − e₂ + e₁ − 1, T₄ = Π y_c; in trace-form Casimirs T₂ = −C₂/2 + n²/2 + 3n/2, …) and τ_k = T_k(μ) − T_k(λ) − T_k(λ′): every Laurent
+coefficient S^{(s)}_{k,j} = (±t)^{j−k}(integer combination of V₃, V₄ᵃ, V₄ᵇ [G2 §6c] + {T_k(λ), T_k(λ′), ±τ_k}); e.g. tS_{3,2} = V₃, t²S_{3,1} = −2V₃ + τ₃; derived from
+"top poles central + S_k = O(u^{−k}) + u^{−k} coefficient = T_k(μ)", which leaves exactly 0, 1, 2 free parameters for k = 2, 3, 4. (2) Exponents {λ_c+4−c} at θ₁, {λ′_c+4−c}
+at θ₂, polynomial solutions of degrees μ_j + 4 − j for all 210 copies of 134 sectors, Wronskian ∝ (u−θ₁)^{|λ|}(u−θ₂)^{|λ′|}, negative tests all rejected (the brief's
+σ_min/σ_max ≥ 1e-6 criterion was mis-scaled; the degree-exactly-d₁ residual separates true/perturbed by 47 orders). (3) **Independent exact solve = gl(4) `qsSolve`:**
+Frobenius recursion at ∞ → polynomial conditions in (v₃,v₄ᵃ,v₄ᵇ) → Gröbner; dim ℚ[v]/J = m and J ⊆ K ⇒ **Σ = exactly G2's joint spectrum on 165/165 sectors (m ≤ 5,
+incl. all of [3,2,1,0]², [4,2,1,0]²) and the 15 largest sectors of [5,3,1,0]², [5,3,2,0]², [6,4,2,0]² (m ≤ 12), ≥ 55 digits, Jacobian rank 3 everywhere; ≤ 1 s per sector
+to m = 5, 12–17 s at m = 12.** Pencil-bug analysis: no single degree condition cuts out the spectrum (P₄ alone is a curve), {4,3,2} works on 60/68 small sectors, **only
+all four conditions work everywhere**; the 8 failures all have μ₁ = μ₂ and need P₁. (4) **μ₄ = 0 ⇒ V₄ᵃ = V₄ᵇ = 0 exactly** (the constant is the d₄ = 0 solution ⇒ s₄ ≡ 0) —
+explains G2's "{V₄ᵃ,V₄ᵇ} fails on μ₄ = 0 sectors"; there the problem is the 1-parameter gl(3)-type one in V₃. (5) **July-2026 `gaudinODE` (GaudinSolver.wb, [S,S,0,0]⊗
+[P,P,0,0]) = 8Π²·Π^p ∘ D† ∘ Π^{−p}, p = (S,P)** (S at w₁ = θ₁; unique among 16/50 gauges scanned; coefficient-by-coefficient exact on 28 irreps), Casimir dictionary
+v₃ = (S+1)(2N(N+2) − Cas2)/2, v₄ᵃ = 0, v₄ᵇ = T₄(μ) = (Cas2² + 2(N+1)Cas2 − 2Cas4 + 4N(N+2)(N+3))/8, N = S+P; their degQ_k = our d_{5−k}; Q_j = W₃[P_k, k≠j]/((z−w₁)^S(z−w₂)^P)
+solves gaudinODE (112/112). Caveats: evidence on tested sectors, not a proof for all λ, λ′, μ (the dictionary itself is a proof given G2's identities).
+
+**G3 DONE (`slice_ops_gl4.py`, `test_slice_ops_gl4.py` 9/9, `RESULTS-G3-slice-ops-gl4.md`, six `ref/gl4-cg-copies-*.txt` incl. [6,4,2,0]²; session re-ran the tests and the
+`gl3` stage: 0 mismatches).** The reduction rule (normal-order the site-2 word; a lowering factor kills; Cartan → λ′; raising transferred to site 1 as −e¹ in REVERSED order to
+the right of the site-1 word) gives universal polynomials in λ′: V₃ 88 → 39 words, V₄ᵇ 324 → 85. N = 3: reduced tS_{3,2} = `slice_engine.vred_apply` + η₁/2 exactly (35 PRV
+vectors). gl(4) direct route (full operator on exact HW vectors, slice AND whole vector) exact for V₃, V₄ᵃ, V₄ᵇ, S_{3,1}, S_{4,1} on 46 irreps + 598 more vectors + 2275 θ₂
+checks: 0 mismatches; the reduced operators preserve M_μ, commute, reproduce G2's char polys/joint triples (≤ 1.3e-39); scalars of t²S_{3,1} = −2V₃ + c, t³S_{4,1} = −3(V₄ᵃ+V₄ᵇ) + c′
+have Casimir closed forms (252 irreps) and equal G2's exchange constants. Canonical copies by JOINT diagonalisation (V₃ alone insufficient): diagonal ≤ 8.5e-43, self-adjoint,
+G⊗G-orthogonal (≤ 5.8e-47 exact), = G2's eigenbasis; exchange structure: signed permutations; {V₃,V₄ᵇ} separates all 1864 sectors up to m = 51. **New exact structure (§7):
+(a) BGG intertwining E_i^{k_i}V_red(λ′) = V_red(s_i·λ′)E_i^{k_i} (dot action; 0 failures, explains M_μ-invariance); (b) the reduced triple commutes on the WHOLE weight space
+for EVERY λ′ incl. non-dominant (⇒ Gaudin operators on singular vectors of V_λ⊗M(λ′)); (c) M_μ is a spectral subspace: joint spectrum simple on W, the m physical triples
+among the w.** Timing (exact Fractions; "f" = float64 eigen): [2a,a,0,0]² a = 1..6: t_a/t_b = 0.009/0.010, 0.041/0.046, 0.17/0.19, 0.52/0.61, 1.38/1.66, 3.16/3.89 s
+(a = 8 slices 12 s); [3a,2a,a,0]²: a = 2 (m ≤ 12) 1.47/1.52 s, a = 3 (m ≤ 27) 23.4 s (6.4 f), a = 4 (m ≤ 51) 258 s (37 f); the exact operator application is 56–62 % of t_a
+(≈ 3× the whole level recursion at [12,6,0,0]²); the 50-digit eigen dominates at large m (float64 eigen accurate to 2e-15, 40–1600× cheaper). Not done: float/modular fast
+path for the operators; proofs of (a)–(c) and of the closed forms. Brief correction: normal ordering is a no-op on the cdet term lists themselves (needed only for other
+representatives such as the antisymmetrised V₄ᵇ); the (5,4,2,1) V₃-degeneracy is accidental, (4,4,2,2) is the forced one.
+
+**G6 DONE (`Paul/Mathematica/Gaudin/gl4-slice-engine-notes.{tex,md,pdf}` — 20 pages, session recompiled: 0 errors; `Paul/Python/gaudin_gl4/benchmark_gl4.md`,
+`RESULTS-G6-notes-benchmark-gl4.md`, helper `tex2md_gl4notes.py` regenerates the .md from the .tex).** Sections 1–9 + appendices (conventions, the 39 universal words
+of V₃, reproduction), 20 references from the literature check; §9.1 tabulates the status of every claim (theorem / exact identity / verified on tested cases); §7
+(GT-lattice structure) carries G3 §7 and marks the G4 questions pending. G6's cross-checks: G3's scalars c, c′ ARE G5's τ₃, τ₄ (46 sectors, 0 mismatches); the hand-reduced
+and engine-reduced V₃ are the same operator on all of V_λ; G5 §5.1's side remark "Cas2 = C₂ − |μ|²/4" was wrong (Cas2 = C₂^{gl}(μ) = Σμ_i(μ_i+5−2i) exactly; corrected in
+place by the session, marked); "180 sectors" means different things in G2 (m ≥ 2 sectors, joint-simple certificates) and G5 (sectors solved exactly, all m); {V₃,V₄ᵃ} fails
+on two sectors in all ([6,4,2,0]² m = 12 and [12,8,4,0]² m = 50). G6's proposal (Paul's call): keep the gl(4) notes standalone, add only a pointer + the SU(4) benchmark table
+to `Slice-engine-notes`, and a "gl(N) outlook" section in the paper with V₃ = V + η/2 as the bridge; quote ×860 only as "against the code as distributed, two machines".
+
+**G4 DONE (`structure_gl4.py`, `test_structure_gl4.py` 9/9, `RESULTS-G4-structure-gl4.md`, `structure_gl4_tables.txt`; session re-ran the tests: pass).** (1) **The
+Weyl/BGG identity holds exactly:** Σ_{w∈S₄} sgn(w)·mult_τ(V_red(w·λ′) on V_λ[μ−w·λ′]) = [τ ∈ Spec M_μ] (dot action) on 832 sectors of 22 products (Σm = 1944, 3408 triples
+at 1e-30; [6,4,2,0]² all 76 sectors; held-out products incl. λ ≠ λ′, λ₄ > 0, up to [8,4,0,0]²), 0 failures; wrong variants fail (no signs: 11/16…; no ρ-shift: 1/16…); one-step
+version S(τ) = T(τ) on all 3408 triples, 81 spurious triples violate two strings and cancel by inclusion–exclusion over {e, s_i, s_j, w_ij}; no translate of length ≥ 3 needed;
+signed lattice count = m everywhere; gl(3) check on 7 products incl. [14,7,0]², with the **corrected gl(3) ordering rule: physical = m LARGEST eigenvalues of V when only E₂₃
+is active, m SMALLEST when only E₁₂ is active** (RESULTS-jacobi-cg's "m largest" is the E₂₃ half). (2) Stencils: the same 21 displacements {Δm₁₂ ∈ {0,±1}} × {row-3 move 0 or a
+gl(3) root} for all three operators; the |Δm₁₂| = 2 classes of V₄ cancel exactly. (3) Closed forms: 12 of 20 off-diagonal classes = ONE product formula (M^{V₃} in l-coordinates
+y_ik = m_ik − i; M^{V₄ᵃ} = (y_k+3)M^{V₃}; M^{V₄ᵇ} = −(y_a−y_i+2y_k−q₃+5)M^{V₃}; 17 730 exact held-out tests); the other 8 classes + diagonal = linear factors × irreducible Q
+(degrees 3/6/11 for V₃; the six cubics explicit). (4) No single ordering picks the physical eigenlines; a linear functional exists for the end strings A = {1}, {3} (held-out
+5/5, 7/7), none for the middle string or mixed classes. (5) V_red,3 is NOT Jacobi in general (graph a path in 29/44 spaces with m = w, 19/106 with m < w; K₄ at (5,4,2,1)).
+(6) **Polynomiality:** a cyclic coordinate exists in 181/181 sectors ⇒ every slice component is a polynomial in (v₃,v₄ᵃ,v₄ᵇ) with rational coefficients (7e-46), of minimal
+degree = the dimension-counting bound in 162/181 sectors (affine for most m ≤ 4, quadratic 5 ≤ m ≤ 10, cubic m = 11,12). Not proved: any of it (BGG argument in RESULTS-G4 §2.5
+with one missing step). **G6 RESUMED** (09:55) to fold G4 into notes §7, status table §9.1, §9.3 and regenerate .md/.pdf.
+
+**Answers given to Paul this session (for the record):** (a) the engine computes the HW CG coefficients fast (Munich's own benchmark object), NOT the descendants (output-bound,
+~10⁸ entries at S = 8; a mechanical lowering package would add them); (b) Q-functions for gl(4), any λ, λ′, μ (untwisted, two sites): `oper_gl4.solve_sector` (exact triples)
++ `Oper` + `poly_solutions_mp/exact` (the four polynomial solutions, degrees μ_j+4−j); direct Q's by Wronskian/gauge verified only for [S,S,0,0]⊗[P,P,0,0]; no wrapper yet;
+(c) direct joint diagonalisation beats feeding Baxter eigenvalues by orders of magnitude (eig: 8 ms float for all copies of [10,5,0,0]² vs Gröbner 12–17 s per m = 12 sector);
+the real cost is building the reduced operators (exact Fractions, 56–62 % of t_a) → next: float/compiled application, closed-form stencils (G4), high-precision eigenvectors
+from exact char polys. **Open for Paul:** commit (nothing committed), the literal Munich comparison on the Ubuntu laptop (G1 §9), notes/paper merge (G6 §5), the descendant
+(lowering) package if full CG tables are wanted, a Q-function wrapper with the general-rep gauge, proofs (commutativity for all λ, λ′; BGG intertwining; the Weyl identity).
+
+## >>> PLAN (2026-10-21 night, Paul: "set up a plan for the guy tomorrow to implement"; STARTED 2026-10-22, see above): the slice engine + Gaudin missing-label operators for gl(4) <<<
 
 **Plan: `Paul/Mathematica/Gaudin/gl4-slice-engine-plan.md`** — why gl(4) (the SU(3) state of the art, Draayer–Akiyama/ndsu3lib, is SU(3)-specific:
 one missing label and an SU(3) zero-pattern prescription; for N ≥ 4 only the Munich null-space code exists, and its own SU(4) [S,S,0,0]² sweep in

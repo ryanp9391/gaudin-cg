@@ -1,0 +1,88 @@
+# gl4-cg-slices-3300.txt   (WP-G1 of the gl(4) slice-engine programme; generator Paul/Python/gaudin_gl4/slice_engine_gl4.py `python -X utf8 slice_engine_gl4.py ref 3 3 0 0`; 2026-10-22)
+# Highest-weight (HW) Clebsch-Gordan data of gl(4), V_Lambda (x) V_Lambda' with Lambda = {3,3,0,0} (REP, dim DIM) and Lambda' = {3,3,0,0} (REP2, dim DIM2): for EVERY irrep mu of the decomposition the PRV/Zhelobenko slice space M_mu (its exact canonical basis), and for the multiplicity-free irreps (m = 1) the normalised slice, the exact full HW vector (small products), its exact G-norm^2 and the float HW residual of the engine.
+# FORMAT: one record per line, TAB-separated fields, first field = tag, other fields nested braces = lists (Wolfram InputForm style). p/q = exact rationals (integers without denominator); residuals are Python floats (e.g. 1.2e-15); NO other decimals are written (every slice/vector entry below is an exact rational). Lines starting with # are comments. Same record style as ref/cg-slices-420.txt (gl(3)).
+# ORDER OF THE GT BASES (binding for every index below): the order of gl3_reps.gt_patterns(Lambda) = itertools.product order = ascending lexicographic in (row N-1 = second-to-top row, row N-2, ..., row 1 = singleton) of the pattern {{k},{m1,m2},{..},{l1,...,l4}} (rows 1..4); the HIGHEST-WEIGHT state is the LAST index (= DIM, resp. DIM2). All indices nu, q, idx are 1-BASED in this order. GTBASIS / GTBASIS2 list the patterns in exactly this order (nested braces). For N = 3 the order is that of GL3Rep(Lambda).patterns.
+#   Matrices act on kets as columns, E e_col = sum_row M[row,col] e_row; plain rational non-unitary GT matrices of glN_reps.GLNRep (E_{k,k+1} = gl3_reps._raise(k,.), E_{k+1,k} = gl3_reps._lower(k,.), targets outside the pattern set dropped; E_ij = [E_{i,j-1},E_{j-1,j}], E_ji = [E_{j,j-1},E_{j-1,i}] for j > i+1; all 256 relations [E_ij,E_kl] = d_jk E_il - d_li E_kj verified exactly). WEIGHTS1/WEIGHTS2 = (E11,E22,E33,E44) eigenvalues per index. GMET1/GMET2 = invariant diagonal metric G (E_ij^T G = G E_ji for all i,j, G[HW] = 1), exact; orthonormal basis e~_q = e_q/sqrt(g_q).
+# TWO SITES: Psi = sum Psi[nu,q] e_nu (x) e_q, site 1 = first factor V_Lambda (nu, slow), site 2 = second factor V_Lambda' (q, fast); 1-based flat index idx = (nu-1)*DIM2 + q. The SLICE of a vector Psi of weight mu is psi_top[nu] = Psi[nu, q_top] (site 2 = HW state q_top = index DIM2), a vector in the weight space V_Lambda[mu-Lambda'] of SITE 1 (weight space = all nu whose GT weight equals mu-Lambda').
+# THEOREM USED (Kostant 1959 / PRV 1967): Psi -> slice is an isomorphism from the HW vectors of weight mu onto M_mu = { v in V_Lambda[mu-Lambda'] : E_{i,i+1}^(Lambda'_i - Lambda'_{i+1} + 1) v = 0, i = 1..3 }; dim M_mu = m = multiplicity of mu in V_Lambda (x) V_Lambda' (Racah-Speiser, checked for every irrep and every dominant candidate). The string exponents come from Lambda' (site 2), the weight space lives in V_Lambda (site 1). The full vector is recovered from the slice by the level recursion over the weights of site 2 (slice_engine_gl4.py; exact twin verifies all consistency and dangling conditions).
+# RECORDS: REP | REP2 | DIM | DIM2 | GTBASIS | GTBASIS2 | WEIGHTS1 | WEIGHTS2 | GMET1 | GMET2 | NSECTORS | NCOPIES | then per sector (descending lexicographic mu): SECTOR, WSPACE, PRVBASIS x m, then for m = 1: COPY, HWRESID, GNORM2, VEC (small products), and for m >= 2 (small products) PRVVEC x m |
+#   SECTOR mu m w nW dimVmu cas2mu : m = multiplicity = dim M_mu; w = dim V_Lambda[mu-Lambda'] = length of a slice; nW = dim of the weight-mu subspace of V_Lambda (x) V_Lambda' (number of entries of a full vector); dimVmu = Weyl dimension of the irrep mu; cas2mu = Sum_i mu_i (mu_i + N + 1 - 2i) (N = 4) |
+#   WSPACE mu {nu,...} : the 1-based GT indices (ascending) of the weight space V_Lambda[mu-Lambda'] (site 1); the slice / PRVBASIS positions are aligned with this list |
+#   PRVBASIS mu {{nu,val},...} : one line per basis vector of M_mu, k = 1..m in line order; EXACT rationals; nonzero entries of the slice; canonical basis = RREF nullspace with columns in ascending GT index, basis vector k = 1 at the k-th free column and 0 at the other free columns (so the coordinates of a slice are its free entries). For m >= 2 these are NOT yet the canonical copies (WP-G3 will add the joint eigenvectors of the Gaudin missing-label operators) |
+#   COPY mu 1 0 {{nu,val},...} : (m = 1 only) the normalised slice = the PRVBASIS vector divided by its first nonzero component (ascending nu), so the first nonzero value is exactly 1; EXACT rationals; the 0 is a PLACEHOLDER for the eigenvalue of the missing-label operators (filled by WP-G3; irrelevant for m = 1 up to a constant) |
+#   HWRESID mu 1 residual : max over i < j of ||(E_ij (x) 1 + 1 (x) E_ij) Psi|| / ||Psi|| (invariant norm = Frobenius norm in the orthonormal basis) for the full vector reconstructed by the FLOAT recursion (double precision) from COPY mu 1, plus the total-weight check (deviation 0 asserted) |
+#   GNORM2 mu 1 value : G-norm^2 = Sum_{nu,q} g_nu g_q Psi[nu,q]^2 (G = GMET1 (x) GMET2, invariant norm) of the FULL vector whose slice is COPY mu 1, EXACT rational (from the exact recursion) |
+#   (no VEC / PRVVEC records in this file: DIM*DIM2 > 2000; regenerate with slice_engine_gl4.hw_from_slice_exact / hw_from_slice)
+# SUMMARY (self-check of this file): 10 sectors, 10 multiplicity-free irreps (COPY), 0 exact full vectors written (VEC/PRVVEC), exact reconstructions run 10 (149 exact conditions verified, 0 exact HW violations over all E_ij with i<j); max HWRESID (float recursion, all E_ij) 5.89e-16; weight deviation 0; GNORM2 vs float mismatches 0
+REP	{3,3,0,0}
+REP2	{3,3,0,0}
+DIM	50
+DIM2	50
+GTBASIS	{{{0},{0,0},{3,0,0},{3,3,0,0}},{{0},{1,0},{3,0,0},{3,3,0,0}},{{1},{1,0},{3,0,0},{3,3,0,0}},{{0},{2,0},{3,0,0},{3,3,0,0}},{{1},{2,0},{3,0,0},{3,3,0,0}},{{2},{2,0},{3,0,0},{3,3,0,0}},{{0},{3,0},{3,0,0},{3,3,0,0}},{{1},{3,0},{3,0,0},{3,3,0,0}},{{2},{3,0},{3,0,0},{3,3,0,0}},{{3},{3,0},{3,0,0},{3,3,0,0}},{{0},{1,0},{3,1,0},{3,3,0,0}},{{1},{1,0},{3,1,0},{3,3,0,0}},{{1},{1,1},{3,1,0},{3,3,0,0}},{{0},{2,0},{3,1,0},{3,3,0,0}},{{1},{2,0},{3,1,0},{3,3,0,0}},{{2},{2,0},{3,1,0},{3,3,0,0}},{{1},{2,1},{3,1,0},{3,3,0,0}},{{2},{2,1},{3,1,0},{3,3,0,0}},{{0},{3,0},{3,1,0},{3,3,0,0}},{{1},{3,0},{3,1,0},{3,3,0,0}},{{2},{3,0},{3,1,0},{3,3,0,0}},{{3},{3,0},{3,1,0},{3,3,0,0}},{{1},{3,1},{3,1,0},{3,3,0,0}},{{2},{3,1},{3,1,0},{3,3,0,0}},{{3},{3,1},{3,1,0},{3,3,0,0}},{{0},{2,0},{3,2,0},{3,3,0,0}},{{1},{2,0},{3,2,0},{3,3,0,0}},{{2},{2,0},{3,2,0},{3,3,0,0}},{{1},{2,1},{3,2,0},{3,3,0,0}},{{2},{2,1},{3,2,0},{3,3,0,0}},{{2},{2,2},{3,2,0},{3,3,0,0}},{{0},{3,0},{3,2,0},{3,3,0,0}},{{1},{3,0},{3,2,0},{3,3,0,0}},{{2},{3,0},{3,2,0},{3,3,0,0}},{{3},{3,0},{3,2,0},{3,3,0,0}},{{1},{3,1},{3,2,0},{3,3,0,0}},{{2},{3,1},{3,2,0},{3,3,0,0}},{{3},{3,1},{3,2,0},{3,3,0,0}},{{2},{3,2},{3,2,0},{3,3,0,0}},{{3},{3,2},{3,2,0},{3,3,0,0}},{{0},{3,0},{3,3,0},{3,3,0,0}},{{1},{3,0},{3,3,0},{3,3,0,0}},{{2},{3,0},{3,3,0},{3,3,0,0}},{{3},{3,0},{3,3,0},{3,3,0,0}},{{1},{3,1},{3,3,0},{3,3,0,0}},{{2},{3,1},{3,3,0},{3,3,0,0}},{{3},{3,1},{3,3,0},{3,3,0,0}},{{2},{3,2},{3,3,0},{3,3,0,0}},{{3},{3,2},{3,3,0},{3,3,0,0}},{{3},{3,3},{3,3,0},{3,3,0,0}}}
+GTBASIS2	{{{0},{0,0},{3,0,0},{3,3,0,0}},{{0},{1,0},{3,0,0},{3,3,0,0}},{{1},{1,0},{3,0,0},{3,3,0,0}},{{0},{2,0},{3,0,0},{3,3,0,0}},{{1},{2,0},{3,0,0},{3,3,0,0}},{{2},{2,0},{3,0,0},{3,3,0,0}},{{0},{3,0},{3,0,0},{3,3,0,0}},{{1},{3,0},{3,0,0},{3,3,0,0}},{{2},{3,0},{3,0,0},{3,3,0,0}},{{3},{3,0},{3,0,0},{3,3,0,0}},{{0},{1,0},{3,1,0},{3,3,0,0}},{{1},{1,0},{3,1,0},{3,3,0,0}},{{1},{1,1},{3,1,0},{3,3,0,0}},{{0},{2,0},{3,1,0},{3,3,0,0}},{{1},{2,0},{3,1,0},{3,3,0,0}},{{2},{2,0},{3,1,0},{3,3,0,0}},{{1},{2,1},{3,1,0},{3,3,0,0}},{{2},{2,1},{3,1,0},{3,3,0,0}},{{0},{3,0},{3,1,0},{3,3,0,0}},{{1},{3,0},{3,1,0},{3,3,0,0}},{{2},{3,0},{3,1,0},{3,3,0,0}},{{3},{3,0},{3,1,0},{3,3,0,0}},{{1},{3,1},{3,1,0},{3,3,0,0}},{{2},{3,1},{3,1,0},{3,3,0,0}},{{3},{3,1},{3,1,0},{3,3,0,0}},{{0},{2,0},{3,2,0},{3,3,0,0}},{{1},{2,0},{3,2,0},{3,3,0,0}},{{2},{2,0},{3,2,0},{3,3,0,0}},{{1},{2,1},{3,2,0},{3,3,0,0}},{{2},{2,1},{3,2,0},{3,3,0,0}},{{2},{2,2},{3,2,0},{3,3,0,0}},{{0},{3,0},{3,2,0},{3,3,0,0}},{{1},{3,0},{3,2,0},{3,3,0,0}},{{2},{3,0},{3,2,0},{3,3,0,0}},{{3},{3,0},{3,2,0},{3,3,0,0}},{{1},{3,1},{3,2,0},{3,3,0,0}},{{2},{3,1},{3,2,0},{3,3,0,0}},{{3},{3,1},{3,2,0},{3,3,0,0}},{{2},{3,2},{3,2,0},{3,3,0,0}},{{3},{3,2},{3,2,0},{3,3,0,0}},{{0},{3,0},{3,3,0},{3,3,0,0}},{{1},{3,0},{3,3,0},{3,3,0,0}},{{2},{3,0},{3,3,0},{3,3,0,0}},{{3},{3,0},{3,3,0},{3,3,0,0}},{{1},{3,1},{3,3,0},{3,3,0,0}},{{2},{3,1},{3,3,0},{3,3,0,0}},{{3},{3,1},{3,3,0},{3,3,0,0}},{{2},{3,2},{3,3,0},{3,3,0,0}},{{3},{3,2},{3,3,0},{3,3,0,0}},{{3},{3,3},{3,3,0},{3,3,0,0}}}
+WEIGHTS1	{{0,0,3,3},{0,1,2,3},{1,0,2,3},{0,2,1,3},{1,1,1,3},{2,0,1,3},{0,3,0,3},{1,2,0,3},{2,1,0,3},{3,0,0,3},{0,1,3,2},{1,0,3,2},{1,1,2,2},{0,2,2,2},{1,1,2,2},{2,0,2,2},{1,2,1,2},{2,1,1,2},{0,3,1,2},{1,2,1,2},{2,1,1,2},{3,0,1,2},{1,3,0,2},{2,2,0,2},{3,1,0,2},{0,2,3,1},{1,1,3,1},{2,0,3,1},{1,2,2,1},{2,1,2,1},{2,2,1,1},{0,3,2,1},{1,2,2,1},{2,1,2,1},{3,0,2,1},{1,3,1,1},{2,2,1,1},{3,1,1,1},{2,3,0,1},{3,2,0,1},{0,3,3,0},{1,2,3,0},{2,1,3,0},{3,0,3,0},{1,3,2,0},{2,2,2,0},{3,1,2,0},{2,3,1,0},{3,2,1,0},{3,3,0,0}}
+WEIGHTS2	{{0,0,3,3},{0,1,2,3},{1,0,2,3},{0,2,1,3},{1,1,1,3},{2,0,1,3},{0,3,0,3},{1,2,0,3},{2,1,0,3},{3,0,0,3},{0,1,3,2},{1,0,3,2},{1,1,2,2},{0,2,2,2},{1,1,2,2},{2,0,2,2},{1,2,1,2},{2,1,1,2},{0,3,1,2},{1,2,1,2},{2,1,1,2},{3,0,1,2},{1,3,0,2},{2,2,0,2},{3,1,0,2},{0,2,3,1},{1,1,3,1},{2,0,3,1},{1,2,2,1},{2,1,2,1},{2,2,1,1},{0,3,2,1},{1,2,2,1},{2,1,2,1},{3,0,2,1},{1,3,1,1},{2,2,1,1},{3,1,1,1},{2,3,0,1},{3,2,0,1},{0,3,3,0},{1,2,3,0},{2,1,3,0},{3,0,3,0},{1,3,2,0},{2,2,2,0},{3,1,2,0},{2,3,1,0},{3,2,1,0},{3,3,0,0}}
+GMET1	{429981696,35831808,35831808,3981312,1990656,995328,746496,248832,62208,20736,995328,995328,497664,221184,110592,55296,41472,41472,62208,20736,5184,1728,6912,3456,1728,12288,6144,3072,1152,1152,384,6912,2304,576,192,384,192,96,48,48,1296,432,108,36,48,24,12,3,3,1}
+GMET2	{429981696,35831808,35831808,3981312,1990656,995328,746496,248832,62208,20736,995328,995328,497664,221184,110592,55296,41472,41472,62208,20736,5184,1728,6912,3456,1728,12288,6144,3072,1152,1152,384,6912,2304,576,192,384,192,96,48,48,1296,432,108,36,48,24,12,3,3,1}
+NSECTORS	10
+NCOPIES	10
+SECTOR	{6,6,0,0}	1	1	1	336	96
+WSPACE	{6,6,0,0}	{50}
+PRVBASIS	{6,6,0,0}	{{50,1}}
+COPY	{6,6,0,0}	1	0	{{50,1}}
+HWRESID	{6,6,0,0}	1	0.00e+00
+GNORM2	{6,6,0,0}	1	1
+SECTOR	{6,5,1,0}	1	1	2	735	84
+WSPACE	{6,5,1,0}	{49}
+PRVBASIS	{6,5,1,0}	{{49,1}}
+COPY	{6,5,1,0}	1	0	{{49,1}}
+HWRESID	{6,5,1,0}	1	0.00e+00
+GNORM2	{6,5,1,0}	1	6
+SECTOR	{6,4,2,0}	1	1	3	729	76
+WSPACE	{6,4,2,0}	{47}
+PRVBASIS	{6,4,2,0}	{{47,1}}
+COPY	{6,4,2,0}	1	0	{{47,1}}
+HWRESID	{6,4,2,0}	1	0.00e+00
+GNORM2	{6,4,2,0}	1	40
+SECTOR	{6,3,3,0}	1	1	4	300	72
+WSPACE	{6,3,3,0}	{44}
+PRVBASIS	{6,3,3,0}	{{44,1}}
+COPY	{6,3,3,0}	1	0	{{44,1}}
+HWRESID	{6,3,3,0}	1	0.00e+00
+GNORM2	{6,3,3,0}	1	144
+SECTOR	{5,5,1,1}	1	2	8	105	68
+WSPACE	{5,5,1,1}	{31,37}
+PRVBASIS	{5,5,1,1}	{{31,1}}
+COPY	{5,5,1,1}	1	0	{{31,1}}
+HWRESID	{5,5,1,1}	1	2.52e-16
+GNORM2	{5,5,1,1}	1	1792
+SECTOR	{5,4,2,1}	1	2	14	175	60
+WSPACE	{5,4,2,1}	{30,34}
+PRVBASIS	{5,4,2,1}	{{30,1}}
+COPY	{5,4,2,1}	1	0	{{30,1}}
+HWRESID	{5,4,2,1}	1	4.20e-16
+GNORM2	{5,4,2,1}	1	9216
+SECTOR	{5,3,3,1}	1	1	18	84	56
+WSPACE	{5,3,3,1}	{28}
+PRVBASIS	{5,3,3,1}	{{28,1}}
+COPY	{5,3,3,1}	1	0	{{28,1}}
+HWRESID	{5,3,3,1}	1	3.87e-16
+GNORM2	{5,3,3,1}	1	30720
+SECTOR	{4,4,2,2}	1	2	32	20	48
+WSPACE	{4,4,2,2}	{13,15}
+PRVBASIS	{4,4,2,2}	{{13,1}}
+COPY	{4,4,2,2}	1	0	{{13,1}}
+HWRESID	{4,4,2,2}	1	4.99e-16
+GNORM2	{4,4,2,2}	1	8709120
+SECTOR	{4,3,3,2}	1	1	42	15	44
+WSPACE	{4,3,3,2}	{12}
+PRVBASIS	{4,3,3,2}	{{12,1}}
+COPY	{4,3,3,2}	1	0	{{12,1}}
+HWRESID	{4,3,3,2}	1	5.23e-16
+GNORM2	{4,3,3,2}	1	23224320
+SECTOR	{3,3,3,3}	1	1	62	1	36
+WSPACE	{3,3,3,3}	{1}
+PRVBASIS	{3,3,3,3}	{{1,1}}
+COPY	{3,3,3,3}	1	0	{{1,1}}
+HWRESID	{3,3,3,3}	1	5.89e-16
+GNORM2	{3,3,3,3}	1	21499084800

@@ -1,0 +1,1159 @@
+
+======================================================================================================================================================
+Q1  STENCILS: lattice displacements (dm12, dm13, dm23) of the nonzero matrix elements of V_red,3 / V_red,4a / V_red,4b on the weight-space lattice
+======================================================================================================================================================
+  Structural stencil = weight-zero part of the Minkowski sum of the moves of the generators of each universal reduced word (E_{k,k+1}: raises ONE entry of row k; E_{k+1,k}: lowers one entry
+  of row k; E_ii: no move; E_ij, |i-j| > 1: one entry in each of the rows min..max-1, as GLNRep builds them by commutators).  A displacement is the change of (m12, m13, m23); the other entries
+  follow from the weight (m22 = const - m12, m33 = const - m13 - m23).  gl(3) analogue: {0, +-(1,-1)} in (m1, m2).
+
+  op     words     stencil size   max |d|_1    symmetric under d -> -d
+  V3     39        21             3            True
+  V4a    78        35             4            True
+  V4b    85        35             4            True
+
+  structural stencil of V3 (displacement : number of words that can produce it):
+     (-1, -1, 0)    15
+     (-1, -1, 1)    15
+     (-1, 0, -1)    15
+     (-1, 0, 0)     24
+     (-1, 0, 1)     15
+     (-1, 1, -1)    15
+     (-1, 1, 0)     15
+     (0, -1, 0)     18
+     (0, -1, 1)     18
+     (0, 0, -1)     18
+     (0, 0, 0)      39
+     (0, 0, 1)      18
+     (0, 1, -1)     18
+     (0, 1, 0)      18
+     (1, -1, 0)     15
+     (1, -1, 1)     15
+     (1, 0, -1)     15
+     (1, 0, 0)      24
+     (1, 0, 1)      15
+     (1, 1, -1)     15
+     (1, 1, 0)      15
+
+  Data stencil: union over all weight spaces of dim >= 2 of V_lam, (a) GENERIC lam' (3 rational non-dominant weights, e.g. (1/3, 5/7, -2, 4/5)), (b) the dominant lam' = lam of the product
+  (the stencil of a dominant lam' can be smaller: coefficients that vanish identically at special lam').  Sizes (number of displacements incl. 0) and containment in the structural stencil:
+  V_lam        op    | generic lam' (size, in struct.) | dominant lam' = lam (size) | max nonzero entries per displacement
+  [2,1,0,0]    V3    |   7  contained            |   7                        | 24
+  [2,1,0,0]    V4a   |   0  contained            |   0                        | 0
+  [2,1,0,0]    V4b   |   7  contained            |   5                        | 22
+  [3,2,1,0]    V3    |  19  contained            |  19                        | 120
+  [3,2,1,0]    V4a   |  17  contained            |  17                        | 118
+  [3,2,1,0]    V4b   |  19  contained            |  19                        | 118
+  [4,2,1,0]    V3    |  21  contained            |  21                        | 312
+  [4,2,1,0]    V4a   |  19  contained            |  19                        | 306
+  [4,2,1,0]    V4b   |  21  contained            |  21                        | 306
+  [4,3,1,0]    V3    |  21  contained            |  21                        | 416
+  [4,3,1,0]    V4a   |  21  contained            |  21                        | 410
+  [4,3,1,0]    V4b   |  21  contained            |  21                        | 411
+  [4,2,2,0]    V3    |   9  contained            |   9                        | 126
+  [4,2,2,0]    V4a   |   9  contained            |   9                        | 126
+  [4,2,2,0]    V4b   |   9  contained            |   8                        | 126
+  [5,3,2,1]    V3    |  21  contained            |  21                        | 311
+  [5,3,2,1]    V4a   |  21  contained            |  21                        | 310
+  [5,3,2,1]    V4b   |  21  contained            |  21                        | 312
+  [6,4,2,0]    V3    |  21  contained            |  21                        | 1989
+  [6,4,2,0]    V4a   |  21  contained            |  21                        | 1974
+  [6,4,2,0]    V4b   |  21  contained            |  21                        | 1974
+
+  Union over the reps above:
+   V3   structural  21 | generic-lam' data  21 (equal to structural: True; symmetric: True) | dominant-lam' data  21
+   V4a  structural  35 | generic-lam' data  21 (equal to structural: False; symmetric: True) | dominant-lam' data  21
+        structural displacements never seen with generic lam': [(-2, -1, 0), (-2, -1, 1), (-2, 0, -1), (-2, 0, 0), (-2, 0, 1), (-2, 1, -1), (-2, 1, 0), (2, -1, 0), (2, -1, 1), (2, 0, -1), (2, 0, 0), (2, 0, 1), (2, 1, -1), (2, 1, 0)]
+   V4b  structural  35 | generic-lam' data  21 (equal to structural: False; symmetric: True) | dominant-lam' data  21
+        structural displacements never seen with generic lam': [(-2, -1, 0), (-2, -1, 1), (-2, 0, -1), (-2, 0, 0), (-2, 0, 1), (-2, 1, -1), (-2, 1, 0), (2, -1, 0), (2, -1, 1), (2, 0, -1), (2, 0, 0), (2, 0, 1), (2, 1, -1), (2, 1, 0)]
+
+  Stencils by operator (data, generic lam'): displacement lists
+   V3: [(-1, -1, 0), (-1, -1, 1), (-1, 0, -1), (-1, 0, 0), (-1, 0, 1), (-1, 1, -1), (-1, 1, 0), (0, -1, 0), (0, -1, 1), (0, 0, -1), (0, 0, 0), (0, 0, 1), (0, 1, -1), (0, 1, 0), (1, -1, 0), (1, -1, 1), (1, 0, -1), (1, 0, 0), (1, 0, 1), (1, 1, -1), (1, 1, 0)]
+   V4a: [(-1, -1, 0), (-1, -1, 1), (-1, 0, -1), (-1, 0, 0), (-1, 0, 1), (-1, 1, -1), (-1, 1, 0), (0, -1, 0), (0, -1, 1), (0, 0, -1), (0, 0, 0), (0, 0, 1), (0, 1, -1), (0, 1, 0), (1, -1, 0), (1, -1, 1), (1, 0, -1), (1, 0, 0), (1, 0, 1), (1, 1, -1), (1, 1, 0)]
+   V4b: [(-1, -1, 0), (-1, -1, 1), (-1, 0, -1), (-1, 0, 0), (-1, 0, 1), (-1, 1, -1), (-1, 1, 0), (0, -1, 0), (0, -1, 1), (0, 0, -1), (0, 0, 0), (0, 0, 1), (0, 1, -1), (0, 1, 0), (1, -1, 0), (1, -1, 1), (1, 0, -1), (1, 0, 0), (1, 0, 1), (1, 1, -1), (1, 1, 0)]
+  [stage stencil finished in 6.8 s]
+
+======================================================================================================================================================
+Q2  CLOSED-FORM MATRIX ELEMENTS (symbolic GT formulas through the universal reduced words; exact line reconstruction; held-out verification)
+======================================================================================================================================================
+  Method: the universal reduced operator (G3: 39 / 78 / 85 words with coefficients in Q[lam']) is applied to a GENERIC GT pattern with symbolic labels; every intermediate state is kept (no
+  boundary treatment).  Coefficients are sums of terms c * prod(affine forms)^e (GT factors y_a - y_b + c, Cartan sums, lam'-monomials), never expanded.  The sum over the terms of one
+  displacement class is simplified by exact line reconstruction (see the module docstring): N = M * D (D = maximal denominator) is a polynomial in the line parameter, interpolated exactly and
+  factored over Q; the axis roots are clustered into affine forms, kept if they are genuine factors on generic lines; the remainder is the non-linear part Q.
+  Variables: y_ik = m_ik - i (rows 1..3), y_j4 = lam_j - j; forms are printed in the GT labels m_ik, l_j = lam_j (site-1 irrep) and q_j = lam'_j (site-2 highest weight).
+
+  V3: 21 displacement classes with terms (5052 terms in all) [34 s]: 0 identically zero after summation (|dm12| = 2), 12 fully factorising, 9 with a non-linear part; identification checks all True: True
+  V3: closed forms by displacement class d = (dm12, dm13, dm23); M_d(x) = kappa * prod (forms)^e   [GT labels m_ik, l_j = lam_j, q_j = lam'_j]
+   d=(0, -1, 0)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m23^1,m33^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m33 - l2 - 1) (m33 - l3) (m22 - m13 - 1) (m33 - l4 + 1) (m33 - l1 - 2) (m12 - m13)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 1)
+   d=(0, -1, 1)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m23^1,m33^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m22 - m13 - 1) (m23 - l2) (m12 - m13) (m23 - l4 + 2) (m23 - l3 + 1) (m23 - l1 - 1)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23)
+   d=(0, 0, -1)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m13^1,m33^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m22 - m23) (m33 - l4 + 1) (m33 - l2 - 1) (m33 - l1 - 2) (m12 - m23 + 1) (m33 - l3)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33)
+   d=(0, 0, 0)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 11 (degrees per variable: m11^2,m12^4,m22^4,m13^6,m23^6,m33^6,l1^1,l2^1,l3^1,l4^1,q1^1,q2^1,q3^1,q4^1)
+                     linear numerator: 1
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 2) (m13 - m33 + 3) (m13 - m23) (m23 - m33 + 2) (m13 - m33 + 1) (m23 - m33)
+   d=(0, 0, 1)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m13^1,m23^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m22 - m33 + 1) (m23 - l2) (m23 - l1 - 1) (m23 - l3 + 1) (m12 - m33 + 2) (m23 - l4 + 2)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33 + 2)
+   d=(0, 1, -1)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m13^1,m33^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m13 - l1) (m13 - l3 + 2) (m13 - l2 + 1) (m13 - l4 + 3) (m12 - m23 + 1) (m22 - m23)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23 + 2)
+   d=(0, 1, 0)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m13^1,m23^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m22 - m33 + 1) (m13 - l3 + 2) (m13 - l4 + 3) (m13 - l1) (m12 - m33 + 2) (m13 - l2 + 1)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 3)
+   d=(-1, -1, 0)   kappa=-1  numerator: (m11 - m12) (m22 - m23) (m33 - l2 - 1) (m33 - l1 - 2) (m22 - m13 - 1) (m22 - m13) (m11 - m22 + q1 - q2 + 1) (m33 - l3) (m33 - l4 + 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 1)
+   d=(-1, -1, 1)   kappa=+1  numerator: (m11 - m22 + q1 - q2 + 1) (m22 - m13 - 1) (m22 - m13) (m23 - l3 + 1) (m11 - m12) (m23 - l4 + 2) (m23 - l1 - 1) (m23 - l2) (m22 - m33 + 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23)
+   d=(-1, 0, -1)   kappa=+1  numerator: (m11 - m12) (m11 - m22 + q1 - q2 + 1) (m33 - l1 - 2) (m33 - l4 + 1) (m33 - l3) (m22 - m23 + 1) (m22 - m13 - 1) (m22 - m23) (m33 - l2 - 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33)
+   d=(-1, 0, 0)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 6 (degrees per variable: m13^3,m23^3,m33^3,l1^1,l2^1,l3^1,l4^1)
+                     linear numerator: (m11 - m12) (m22 - m13 - 1) (m11 - m22 + q1 - q2 + 1) (m22 - m33 + 1) (m22 - m23)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 2) (m13 - m33 + 3) (m13 - m23) (m23 - m33 + 2) (m13 - m33 + 1) (m23 - m33)
+   d=(-1, 0, 1)    kappa=+1  numerator: (m22 - m33 + 1) (m22 - m33 + 2) (m11 - m22 + q1 - q2 + 1) (m11 - m12) (m23 - l1 - 1) (m23 - l4 + 2) (m23 - l3 + 1) (m22 - m13 - 1) (m23 - l2)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33 + 2)
+   d=(-1, 1, -1)   kappa=+1  numerator: (m13 - l3 + 2) (m13 - l2 + 1) (m11 - m22 + q1 - q2 + 1) (m22 - m33 + 1) (m22 - m23) (m22 - m23 + 1) (m11 - m12) (m13 - l1) (m13 - l4 + 3)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23 + 2)
+   d=(-1, 1, 0)    kappa=-1  numerator: (m11 - m12) (m13 - l1) (m13 - l2 + 1) (m11 - m22 + q1 - q2 + 1) (m13 - l4 + 3) (m13 - l3 + 2) (m22 - m33 + 2) (m22 - m33 + 1) (m22 - m23)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 3)
+   d=(1, -1, 0)    kappa=-1  numerator: (m12 - m23 + 1) (m12 - m13) (m12 - m13 + 1) (m33 - l2 - 1) (m11 - m22 + 1) (m33 - l1 - 2) (m33 - l3) (m33 - l4 + 1) (m11 - m12 + q1 - q2)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 1)
+   d=(1, -1, 1)    kappa=+1  numerator: (m12 - m33 + 2) (m11 - m22 + 1) (m23 - l4 + 2) (m23 - l2) (m23 - l3 + 1) (m11 - m12 + q1 - q2) (m23 - l1 - 1) (m12 - m13) (m12 - m13 + 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23)
+   d=(1, 0, -1)    kappa=+1  numerator: (m12 - m13) (m33 - l4 + 1) (m33 - l2 - 1) (m33 - l1 - 2) (m11 - m12 + q1 - q2) (m12 - m23 + 2) (m12 - m23 + 1) (m11 - m22 + 1) (m33 - l3)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33)
+   d=(1, 0, 0)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 6 (degrees per variable: m13^3,m23^3,m33^3,l1^1,l2^1,l3^1,l4^1)
+                     linear numerator: (m12 - m23 + 1) (m11 - m22 + 1) (m11 - m12 + q1 - q2) (m12 - m33 + 2) (m12 - m13)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 2) (m13 - m33 + 3) (m13 - m23) (m23 - m33 + 2) (m13 - m33 + 1) (m23 - m33)
+   d=(1, 0, 1)     kappa=+1  numerator: (m23 - l2) (m12 - m33 + 3) (m12 - m33 + 2) (m11 - m22 + 1) (m12 - m13) (m23 - l3 + 1) (m11 - m12 + q1 - q2) (m23 - l1 - 1) (m23 - l4 + 2)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33 + 2)
+   d=(1, 1, -1)    kappa=+1  numerator: (m13 - l1) (m11 - m12 + q1 - q2) (m13 - l3 + 2) (m12 - m23 + 1) (m12 - m23 + 2) (m13 - l4 + 3) (m13 - l2 + 1) (m12 - m33 + 2) (m11 - m22 + 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23 + 2)
+   d=(1, 1, 0)     kappa=-1  numerator: (m13 - l3 + 2) (m12 - m33 + 2) (m12 - m33 + 3) (m11 - m22 + 1) (m13 - l2 + 1) (m13 - l1) (m12 - m23 + 1) (m11 - m12 + q1 - q2) (m13 - l4 + 3)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 3)
+
+  V4a: 35 displacement classes with terms (25342 terms in all) [230 s]: 14 identically zero after summation (|dm12| = 2), 12 fully factorising, 9 with a non-linear part; identification checks all True: True
+  V4a: closed forms by displacement class d = (dm12, dm13, dm23); M_d(x) = kappa * prod (forms)^e   [GT labels m_ik, l_j = lam_j, q_j = lam'_j]
+   d=(0, -1, 0)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m23^1,m33^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m33 - l2 - 1) (m33 - l4 + 1) (m12 - m13) (m33 - l1 - 2) (m33 - l3) (m22 - m13 - 1) (m23 + 1)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 1)
+   d=(0, -1, 1)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m23^1,m33^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m12 - m13) (m33) (m22 - m13 - 1) (m23 - l1 - 1) (m23 - l4 + 2) (m23 - l3 + 1) (m23 - l2)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23)
+   d=(0, 0, -1)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m13^1,m33^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m33 - l1 - 2) (m22 - m23) (m13 + 2) (m12 - m23 + 1) (m33 - l4 + 1) (m33 - l3) (m33 - l2 - 1)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33)
+   d=(0, 0, 0)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 12 (degrees per variable: m11^2,m12^4,m22^4,m13^6,m23^6,m33^6,l1^1,l2^1,l3^1,l4^1,q1^1,q2^1,q3^1,q4^1)
+                     linear numerator: 1
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 2) (m13 - m33 + 3) (m13 - m23) (m23 - m33 + 2) (m13 - m33 + 1) (m23 - m33)
+   d=(0, 0, 1)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m13^1,m23^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m23 - l1 - 1) (m12 - m33 + 2) (m22 - m33 + 1) (m23 - l4 + 2) (m13 + 2) (m23 - l2) (m23 - l3 + 1)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33 + 2)
+   d=(0, 1, -1)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m13^1,m33^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m12 - m23 + 1) (m13 - l4 + 3) (m13 - l2 + 1) (m13 - l3 + 2) (m22 - m23) (m33) (m13 - l1)
+                     denominator: (m12 - m22) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23 + 2)
+   d=(0, 1, 0)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 3 (degrees per variable: m11^2,m12^3,m22^3,m13^1,m23^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m13 - l3 + 2) (m22 - m33 + 1) (m12 - m33 + 2) (m13 - l4 + 3) (m23 + 1) (m13 - l1) (m13 - l2 + 1)
+                     denominator: (m12 - m22) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 3)
+   d=(-1, -1, 0)   kappa=-1  numerator: (m11 - m22 + q1 - q2 + 1) (m33 - l3) (m22 - m13 - 1) (m22 - m13) (m22 - m23) (m33 - l1 - 2) (m33 - l2 - 1) (m33 - l4 + 1) (m23 + 1) (m11 - m12)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 1)
+   d=(-1, -1, 1)   kappa=+1  numerator: (m23 - l1 - 1) (m11 - m22 + q1 - q2 + 1) (m23 - l3 + 1) (m11 - m12) (m22 - m33 + 1) (m22 - m13) (m22 - m13 - 1) (m33) (m23 - l2) (m23 - l4 + 2)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23)
+   d=(-1, 0, -1)   kappa=+1  numerator: (m11 - m22 + q1 - q2 + 1) (m11 - m12) (m33 - l3) (m33 - l1 - 2) (m22 - m23 + 1) (m22 - m23) (m22 - m13 - 1) (m13 + 2) (m33 - l4 + 1) (m33 - l2 - 1)
+                     denominator: (m12 - m22) (m12 - m22 + 1) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33)
+   d=(-1, 0, 0)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 7 (degrees per variable: m13^3,m23^3,m33^3,l1^1,l2^1,l3^1,l4^1)
+                     linear numerator: (m11 - m22 + q1 - q2 + 1) (m11 - m12) (m22 - m23) (m22 - m13 - 1) (m22 - m33 + 1)
+                     denominator: (m12 - m22) (m12 - m22 + 1) (m13 - m23 + 2) (m13 - m33 + 3) (m13 - m23) (m23 - m33 + 2) (m13 - m33 + 1) (m23 - m33)
+   d=(-1, 0, 1)    kappa=+1  numerator: (m11 - m22 + q1 - q2 + 1) (m22 - m13 - 1) (m23 - l3 + 1) (m11 - m12) (m23 - l4 + 2) (m13 + 2) (m23 - l2) (m22 - m33 + 1) (m23 - l1 - 1) (m22 - m33 + 2)
+                     denominator: (m12 - m22) (m12 - m22 + 1) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33 + 2)
+   d=(-1, 1, -1)   kappa=+1  numerator: (m11 - m12) (m13 - l3 + 2) (m22 - m33 + 1) (m13 - l4 + 3) (m33) (m13 - l2 + 1) (m22 - m23) (m22 - m23 + 1) (m13 - l1) (m11 - m22 + q1 - q2 + 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23 + 2)
+   d=(-1, 1, 0)    kappa=-1  numerator: (m11 - m22 + q1 - q2 + 1) (m11 - m12) (m13 - l1) (m13 - l2 + 1) (m22 - m33 + 1) (m22 - m33 + 2) (m13 - l3 + 2) (m13 - l4 + 3) (m22 - m23) (m23 + 1)
+                     denominator: (m12 - m22) (m12 - m22 + 1) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 3)
+   d=(1, -1, 0)    kappa=-1  numerator: (m12 - m23 + 1) (m11 - m22 + 1) (m23 + 1) (m33 - l4 + 1) (m12 - m13) (m12 - m13 + 1) (m33 - l1 - 2) (m11 - m12 + q1 - q2) (m33 - l2 - 1) (m33 - l3)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 1)
+   d=(1, -1, 1)    kappa=+1  numerator: (m23 - l1 - 1) (m11 - m12 + q1 - q2) (m23 - l4 + 2) (m12 - m13 + 1) (m12 - m13) (m11 - m22 + 1) (m23 - l3 + 1) (m33) (m23 - l2) (m12 - m33 + 2)
+                     denominator: (m12 - m22 + 2) (m12 - m22 + 1) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23)
+   d=(1, 0, -1)    kappa=+1  numerator: (m11 - m12 + q1 - q2) (m12 - m13) (m11 - m22 + 1) (m12 - m23 + 1) (m12 - m23 + 2) (m13 + 2) (m33 - l1 - 2) (m33 - l4 + 1) (m33 - l3) (m33 - l2 - 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33)
+   d=(1, 0, 0)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 7 (degrees per variable: m13^3,m23^3,m33^3,l1^1,l2^1,l3^1,l4^1)
+                     linear numerator: (m11 - m12 + q1 - q2) (m11 - m22 + 1) (m12 - m23 + 1) (m12 - m33 + 2) (m12 - m13)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 2) (m13 - m33 + 3) (m13 - m23) (m23 - m33 + 2) (m13 - m33 + 1) (m23 - m33)
+   d=(1, 0, 1)     kappa=+1  numerator: (m12 - m13) (m12 - m33 + 3) (m12 - m33 + 2) (m11 - m12 + q1 - q2) (m23 - l4 + 2) (m13 + 2) (m23 - l2) (m11 - m22 + 1) (m23 - l1 - 1) (m23 - l3 + 1)
+                     denominator: (m12 - m22 + 2) (m12 - m22 + 1) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33 + 2)
+   d=(1, 1, -1)    kappa=+1  numerator: (m11 - m12 + q1 - q2) (m11 - m22 + 1) (m12 - m23 + 2) (m12 - m23 + 1) (m13 - l3 + 2) (m13 - l2 + 1) (m33) (m13 - l4 + 3) (m12 - m33 + 2) (m13 - l1)
+                     denominator: (m12 - m22 + 2) (m12 - m22 + 1) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23 + 2)
+   d=(1, 1, 0)     kappa=-1  numerator: (m11 - m12 + q1 - q2) (m12 - m33 + 3) (m12 - m33 + 2) (m13 - l2 + 1) (m11 - m22 + 1) (m13 - l1) (m12 - m23 + 1) (m13 - l4 + 3) (m23 + 1) (m13 - l3 + 2)
+                     denominator: (m12 - m22 + 2) (m12 - m22 + 1) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 3)
+   d=(-2, -1, 0)   = 0 identically
+   d=(-2, -1, 1)   = 0 identically
+   d=(-2, 0, -1)   = 0 identically
+   d=(-2, 0, 0)    = 0 identically
+   d=(-2, 0, 1)    = 0 identically
+   d=(-2, 1, -1)   = 0 identically
+   d=(-2, 1, 0)    = 0 identically
+   d=(2, -1, 0)    = 0 identically
+   d=(2, -1, 1)    = 0 identically
+   d=(2, 0, -1)    = 0 identically
+   d=(2, 0, 0)     = 0 identically
+   d=(2, 0, 1)     = 0 identically
+   d=(2, 1, -1)    = 0 identically
+   d=(2, 1, 0)     = 0 identically
+
+  V4b: 35 displacement classes with terms (26118 terms in all) [241 s]: 14 identically zero after summation (|dm12| = 2), 12 fully factorising, 9 with a non-linear part; identification checks all True: True
+  V4b: closed forms by displacement class d = (dm12, dm13, dm23); M_d(x) = kappa * prod (forms)^e   [GT labels m_ik, l_j = lam_j, q_j = lam'_j]
+   d=(0, -1, 0)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 4 (degrees per variable: m11^2,m12^3,m22^3,m23^2,m33^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m33 - l3) (m22 - m13 - 1) (m33 - l4 + 1) (m12 - m13) (m33 - l2 - 1) (m33 - l1 - 2)
+                     denominator: (m12 - m22) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 1)
+   d=(0, -1, 1)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 4 (degrees per variable: m11^2,m12^3,m22^3,m23^1,m33^2,q1^1,q2^1,q3^1)
+                     linear numerator: (m12 - m13) (m23 - l4 + 2) (m22 - m13 - 1) (m23 - l1 - 1) (m23 - l3 + 1) (m23 - l2)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23)
+   d=(0, 0, -1)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 4 (degrees per variable: m11^2,m12^3,m22^3,m13^2,m33^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m33 - l4 + 1) (m33 - l2 - 1) (m33 - l3) (m22 - m23) (m12 - m23 + 1) (m33 - l1 - 2)
+                     denominator: (m12 - m22) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33)
+   d=(0, 0, 0)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 12 (degrees per variable: m11^2,m12^4,m22^4,m13^6,m23^6,m33^6,l1^1,l2^1,l3^1,l4^1,q1^1,q2^1,q3^1,q4^1)
+                     linear numerator: 1
+                     denominator: (m12 - m22) (m12 - m22 + 2) (m13 - m23 + 2) (m13 - m33 + 3) (m13 - m23) (m23 - m33 + 2) (m13 - m33 + 1) (m23 - m33)
+   d=(0, 0, 1)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 4 (degrees per variable: m11^2,m12^3,m22^3,m13^2,m23^1,q1^1,q2^1,q3^1)
+                     linear numerator: (m23 - l1 - 1) (m23 - l2) (m23 - l4 + 2) (m12 - m33 + 2) (m22 - m33 + 1) (m23 - l3 + 1)
+                     denominator: (m12 - m22 + 2) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33 + 2)
+   d=(0, 1, -1)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 4 (degrees per variable: m11^2,m12^3,m22^3,m13^1,m33^2,q1^1,q2^1,q3^1)
+                     linear numerator: (m13 - l1) (m12 - m23 + 1) (m13 - l2 + 1) (m13 - l3 + 2) (m22 - m23) (m13 - l4 + 3)
+                     denominator: (m12 - m22) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23 + 2)
+   d=(0, 1, 0)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 4 (degrees per variable: m11^2,m12^3,m22^3,m13^1,m23^2,q1^1,q2^1,q3^1)
+                     linear numerator: (m13 - l3 + 2) (m13 - l2 + 1) (m12 - m33 + 2) (m13 - l4 + 3) (m22 - m33 + 1) (m13 - l1)
+                     denominator: (m12 - m22) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 3)
+   d=(-1, -1, 0)   kappa=+1  numerator: (m11 - m22 + q1 - q2 + 1) (m22 + 2*m23 - m33 - q3 + 2) (m33 - l3) (m22 - m13 - 1) (m22 - m13) (m22 - m23) (m33 - l1 - 2) (m33 - l2 - 1) (m33 - l4 + 1) (m11 - m12)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 1)
+   d=(-1, -1, 1)   kappa=-1  numerator: (m22 - m23 + 2*m33 - q3 - 1) (m23 - l1 - 1) (m11 - m22 + q1 - q2 + 1) (m23 - l3 + 1) (m11 - m12) (m22 - m33 + 1) (m22 - m13) (m22 - m13 - 1) (m23 - l2) (m23 - l4 + 2)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23)
+   d=(-1, 0, -1)   kappa=-1  numerator: (m11 - m22 + q1 - q2 + 1) (m11 - m12) (m33 - l3) (m33 - l1 - 2) (m22 - m23 + 1) (m22 - m23) (m22 - m13 - 1) (m33 - l4 + 1) (m22 + 2*m13 - m33 - q3 + 4) (m33 - l2 - 1)
+                     denominator: (m12 - m22) (m12 - m22 + 1) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33)
+   d=(-1, 0, 0)    NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 7 (degrees per variable: m22^1,m13^5,m23^5,m33^5,l1^1,l2^1,l3^1,l4^1,q3^1,q4^1)
+                     linear numerator: (m11 - m22 + q1 - q2 + 1) (m11 - m12) (m22 - m23) (m22 - m13 - 1) (m22 - m33 + 1)
+                     denominator: (m12 - m22) (m12 - m22 + 1) (m13 - m23 + 2) (m13 - m33 + 3) (m13 - m23) (m23 - m33 + 2) (m13 - m33 + 1) (m23 - m33)
+   d=(-1, 0, 1)    kappa=-1  numerator: (m11 - m12) (m22 + 2*m13 - m23 - q3 + 3) (m23 - l4 + 2) (m23 - l2) (m23 - l3 + 1) (m22 - m33 + 1) (m22 - m33 + 2) (m22 - m13 - 1) (m23 - l1 - 1) (m11 - m22 + q1 - q2 + 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33 + 2)
+   d=(-1, 1, -1)   kappa=-1  numerator: (m13 - l3 + 2) (m22 - m33 + 1) (m22 - m13 + 2*m33 - q3 - 2) (m11 - m12) (m22 - m23) (m22 - m23 + 1) (m13 - l2 + 1) (m13 - l1) (m11 - m22 + q1 - q2 + 1) (m13 - l4 + 3)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23 + 2)
+   d=(-1, 1, 0)    kappa=+1  numerator: (m13 - l3 + 2) (m11 - m22 + q1 - q2 + 1) (m22 - m13 + 2*m23 - q3) (m13 - l4 + 3) (m22 - m33 + 1) (m22 - m33 + 2) (m22 - m23) (m13 - l2 + 1) (m13 - l1) (m11 - m12)
+                     denominator: (m12 - m22 + 1) (m12 - m22) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 3)
+   d=(1, -1, 0)    kappa=+1  numerator: (m33 - l1 - 2) (m33 - l4 + 1) (m12 - m13 + 1) (m12 - m13) (m11 - m12 + q1 - q2) (m12 + 2*m23 - m33 - q3 + 3) (m33 - l2 - 1) (m33 - l3) (m12 - m23 + 1) (m11 - m22 + 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 1)
+   d=(1, -1, 1)    kappa=-1  numerator: (m23 - l4 + 2) (m23 - l1 - 1) (m11 - m12 + q1 - q2) (m12 - m33 + 2) (m11 - m22 + 1) (m12 - m23 + 2*m33 - q3) (m12 - m13 + 1) (m12 - m13) (m23 - l2) (m23 - l3 + 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23)
+   d=(1, 0, -1)    kappa=-1  numerator: (m12 + 2*m13 - m33 - q3 + 5) (m33 - l2 - 1) (m33 - l4 + 1) (m11 - m22 + 1) (m12 - m13) (m11 - m12 + q1 - q2) (m12 - m23 + 2) (m12 - m23 + 1) (m33 - l3) (m33 - l1 - 2)
+                     denominator: (m12 - m22 + 2) (m12 - m22 + 1) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33)
+   d=(1, 0, 0)     NOT a product of linear forms: [linear numerator factors] x Q, Q a polynomial of total degree 7 (degrees per variable: m12^1,m13^5,m23^5,m33^5,l1^1,l2^1,l3^1,l4^1,q3^1,q4^1)
+                     linear numerator: (m11 - m12 + q1 - q2) (m12 - m23 + 1) (m11 - m22 + 1) (m12 - m13) (m12 - m33 + 2)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 2) (m13 - m33 + 3) (m13 - m23) (m23 - m33 + 2) (m13 - m33 + 1) (m23 - m33)
+   d=(1, 0, 1)     kappa=-1  numerator: (m23 - l1 - 1) (m23 - l4 + 2) (m12 + 2*m13 - m23 - q3 + 4) (m23 - l2) (m12 - m13) (m11 - m12 + q1 - q2) (m23 - l3 + 1) (m12 - m33 + 2) (m11 - m22 + 1) (m12 - m33 + 3)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m23 - m33 + 2)
+   d=(1, 1, -1)    kappa=-1  numerator: (m12 - m13 + 2*m33 - q3 - 1) (m11 - m12 + q1 - q2) (m12 - m23 + 1) (m12 - m23 + 2) (m13 - l1) (m13 - l3 + 2) (m11 - m22 + 1) (m12 - m33 + 2) (m13 - l4 + 3) (m13 - l2 + 1)
+                     denominator: (m12 - m22 + 1) (m12 - m22 + 2) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m23 + 2)
+   d=(1, 1, 0)     kappa=+1  numerator: (m11 - m12 + q1 - q2) (m13 - l1) (m11 - m22 + 1) (m13 - l2 + 1) (m13 - l4 + 3) (m13 - l3 + 2) (m12 - m13 + 2*m23 - q3 + 1) (m12 - m33 + 2) (m12 - m33 + 3) (m12 - m23 + 1)
+                     denominator: (m12 - m22 + 2) (m12 - m22 + 1) (m13 - m23 + 1) (m13 - m33 + 2) (m23 - m33 + 1) (m13 - m33 + 3)
+   d=(-2, -1, 0)   = 0 identically
+   d=(-2, -1, 1)   = 0 identically
+   d=(-2, 0, -1)   = 0 identically
+   d=(-2, 0, 0)    = 0 identically
+   d=(-2, 0, 1)    = 0 identically
+   d=(-2, 1, -1)   = 0 identically
+   d=(-2, 1, 0)    = 0 identically
+   d=(2, -1, 0)    = 0 identically
+   d=(2, -1, 1)    = 0 identically
+   d=(2, 0, -1)    = 0 identically
+   d=(2, 0, 0)     = 0 identically
+   d=(2, 0, 1)     = 0 identically
+   d=(2, 1, -1)    = 0 identically
+   d=(2, 1, 0)     = 0 identically
+
+  Explicit non-linear parts Q~ (the polynomial left after dividing N by its linear factors), reconstructed exactly by interpolation in the support variables (V3: all six row-3 moves with dm12 = 0;
+  V4a, V4b: the class (0,-1,0) as an example); printed in the GT labels m_ik, l_j = lam_j, q_j = lam'_j:
+   V3 d=(0, -1, 0): Q~ has 47 terms, total degree 3: m11**2*m12 + m11**2*m22 - 2*m11**2*m23 - m11*m12**2 - 2*m11*m12*m22 + 2*m11*m12*m23 + m11*m12*q1 - m11*m12*q2 + m11*m12 - m11*m22**2 + 2*m11*m22*m23 + m11*m22*q1 - m11*m22*q2 + m11*m22 - 2*m11*m23*q1 + 2*m11*m23*q2 - 2*m11*m23 + m12**3 - m12**2*m23 - m12**2*m33 + m12**2*q2 - m12**2*q3 + 3*m12**2 + 2*m12*m22*m33 - 2*m12*m22*q1 + 2*m12*m22*q3 - 5*m12*m22 + m12*m23*q1 - m12*m23*q2 - 2*m12*m33 + m12*q1 + m12*q2 - 2*m12*q3 + 4*m12 + m22**3 - m22**2*m23 - m22**2*m33 + m22**2*q2 - m22**2*q3 + m22*m23*q1 - m22*m23*q2 + 2*m22*m23 + 2*m22*m33 - m22*q1 - m22*q2 + 2*m22*q3 - 4*m22   [11 s]
+   V3 d=(0, -1, 1): Q~ has 49 terms, total degree 3: -m11**2*m12 - m11**2*m22 + 2*m11**2*m33 - 2*m11**2 + m11*m12**2 + 2*m11*m12*m22 - 2*m11*m12*m33 - m11*m12*q1 + m11*m12*q2 + m11*m12 + m11*m22**2 - 2*m11*m22*m33 - m11*m22*q1 + m11*m22*q2 + m11*m22 + 2*m11*m33*q1 - 2*m11*m33*q2 + 2*m11*m33 - 2*m11*q1 + 2*m11*q2 - 2*m11 - m12**3 + m12**2*m23 + m12**2*m33 - m12**2*q2 + m12**2*q3 - 3*m12**2 - 2*m12*m22*m23 + 2*m12*m22*q1 - 2*m12*m22*q3 + 3*m12*m22 + 2*m12*m23 - m12*m33*q1 + m12*m33*q2 - 2*m12*q2 + 2*m12*q3 - 2*m12 - m22**3 + m22**2*m23 + m22**2*m33 - m22**2*q2 + m22**2*q3 - 2*m22*m23 - m22*m33*q1 + m22*m33*q2 - 2*m22*m33 + 2*m22*q1 - 2*m22*q3 + 4*m22   [12 s]
+   V3 d=(0, 0, -1): Q~ has 50 terms, total degree 3: -m11**2*m12 + 2*m11**2*m13 - m11**2*m22 + 2*m11**2 + m11*m12**2 - 2*m11*m12*m13 + 2*m11*m12*m22 - m11*m12*q1 + m11*m12*q2 - 3*m11*m12 - 2*m11*m13*m22 + 2*m11*m13*q1 - 2*m11*m13*q2 + 2*m11*m13 + m11*m22**2 - m11*m22*q1 + m11*m22*q2 - 3*m11*m22 + 2*m11*q1 - 2*m11*q2 + 2*m11 - m12**3 + m12**2*m13 + m12**2*m33 - m12**2*q2 + m12**2*q3 - 2*m12**2 - m12*m13*q1 + m12*m13*q2 - 2*m12*m22*m33 + 2*m12*m22*q1 - 2*m12*m22*q3 + 5*m12*m22 + 2*m12*m33 - 2*m12*q1 + 2*m12*q3 - 4*m12 + m13*m22**2 - m13*m22*q1 + m13*m22*q2 - 2*m13*m22 - m22**3 + m22**2*m33 - m22**2*q2 + m22**2*q3 + m22**2 - 2*m22*m33 + 2*m22*q2 - 2*m22*q3 + 2*m22   [12 s]
+   V3 d=(0, 0, 1): Q~ has 49 terms, total degree 3: -m11**2*m12 + 2*m11**2*m13 - m11**2*m22 + 2*m11**2 + m11*m12**2 - 2*m11*m12*m13 + 2*m11*m12*m22 - m11*m12*q1 + m11*m12*q2 - 3*m11*m12 - 2*m11*m13*m22 + 2*m11*m13*q1 - 2*m11*m13*q2 + 2*m11*m13 + m11*m22**2 - m11*m22*q1 + m11*m22*q2 - 3*m11*m22 + 2*m11*q1 - 2*m11*q2 + 2*m11 - m12**3 + m12**2*m13 + m12**2*m23 - m12**2*q2 + m12**2*q3 - m12**2 - m12*m13*q1 + m12*m13*q2 - 2*m12*m22*m23 + 2*m12*m22*q1 - 2*m12*m22*q3 + 3*m12*m22 + 2*m12*m23 - 2*m12*q1 + 2*m12*q3 - 2*m12 + m13*m22**2 - m13*m22*q1 + m13*m22*q2 - 2*m13*m22 - m22**3 + m22**2*m23 - m22**2*q2 + m22**2*q3 + 2*m22**2 - 2*m22*m23 + 2*m22*q2 - 2*m22*q3   [11 s]
+   V3 d=(0, 1, -1): Q~ has 49 terms, total degree 3: -m11**2*m12 - m11**2*m22 + 2*m11**2*m33 - 2*m11**2 + m11*m12**2 + 2*m11*m12*m22 - 2*m11*m12*m33 - m11*m12*q1 + m11*m12*q2 + m11*m12 + m11*m22**2 - 2*m11*m22*m33 - m11*m22*q1 + m11*m22*q2 + m11*m22 + 2*m11*m33*q1 - 2*m11*m33*q2 + 2*m11*m33 - 2*m11*q1 + 2*m11*q2 - 2*m11 - m12**3 + m12**2*m13 + m12**2*m33 - m12**2*q2 + m12**2*q3 - 2*m12**2 - 2*m12*m13*m22 + 2*m12*m13 + 2*m12*m22*q1 - 2*m12*m22*q3 + m12*m22 - m12*m33*q1 + m12*m33*q2 - 2*m12*q2 + 2*m12*q3 + m13*m22**2 - 2*m13*m22 - m22**3 + m22**2*m33 - m22**2*q2 + m22**2*q3 + m22**2 - m22*m33*q1 + m22*m33*q2 - 2*m22*m33 + 2*m22*q1 - 2*m22*q3 + 2*m22   [11 s]
+   V3 d=(0, 1, 0): Q~ has 46 terms, total degree 3: m11**2*m12 + m11**2*m22 - 2*m11**2*m23 - m11*m12**2 - 2*m11*m12*m22 + 2*m11*m12*m23 + m11*m12*q1 - m11*m12*q2 + m11*m12 - m11*m22**2 + 2*m11*m22*m23 + m11*m22*q1 - m11*m22*q2 + m11*m22 - 2*m11*m23*q1 + 2*m11*m23*q2 - 2*m11*m23 + m12**3 - m12**2*m13 - m12**2*m23 + m12**2*q2 - m12**2*q3 + m12**2 + 2*m12*m13*m22 - 2*m12*m13 - 2*m12*m22*q1 + 2*m12*m22*q3 - m12*m22 + m12*m23*q1 - m12*m23*q2 + m12*q1 + m12*q2 - 2*m12*q3 - m13*m22**2 + 2*m13*m22 + m22**3 - m22**2*m23 + m22**2*q2 - m22**2*q3 - 2*m22**2 + m22*m23*q1 - m22*m23*q2 + 2*m22*m23 - m22*q1 - m22*q2 + 2*m22*q3   [11 s]
+   V4a d=(0, -1, 0): Q~ has 47 terms, total degree 3: m11**2*m12 + m11**2*m22 - 2*m11**2*m23 - m11*m12**2 - 2*m11*m12*m22 + 2*m11*m12*m23 + m11*m12*q1 - m11*m12*q2 + m11*m12 - m11*m22**2 + 2*m11*m22*m23 + m11*m22*q1 - m11*m22*q2 + m11*m22 - 2*m11*m23*q1 + 2*m11*m23*q2 - 2*m11*m23 + m12**3 - m12**2*m23 - m12**2*m33 + m12**2*q2 - m12**2*q3 + 3*m12**2 + 2*m12*m22*m33 - 2*m12*m22*q1 + 2*m12*m22*q3 - 5*m12*m22 + m12*m23*q1 - m12*m23*q2 - 2*m12*m33 + m12*q1 + m12*q2 - 2*m12*q3 + 4*m12 + m22**3 - m22**2*m23 - m22**2*m33 + m22**2*q2 - m22**2*q3 + m22*m23*q1 - m22*m23*q2 + 2*m22*m23 + 2*m22*m33 - m22*q1 - m22*q2 + 2*m22*q3 - 4*m22   [14 s]
+   V4b d=(0, -1, 0): Q~ has 163 terms, total degree 4: -m11**2*m12**2 - m11**2*m12*m23 + m11**2*m12*m33 + m11**2*m12*q3 - 3*m11**2*m12 - m11**2*m22**2 - m11**2*m22*m23 + m11**2*m22*m33 + m11**2*m22*q3 - m11**2*m22 + 4*m11**2*m23**2 - 2*m11**2*m23*m33 - 2*m11**2*m23*q3 + 4*m11**2*m23 + m11*m12**3 + m11*m12**2*m22 + m11*m12**2*m23 - m11*m12**2*m33 - m11*m12**2*q1 + m11*m12**2*q2 - m11*m12**2*q3 + 2*m11*m12**2 + m11*m12*m22**2 + 2*m11*m12*m22*m23 - 2*m11*m12*m22*m33 - 2*m11*m12*m22*q3 + 4*m11*m12*m22 - 4*m11*m12*m23**2 + 2*m11*m12*m23*m33 - m11*m12*m23*q1 + m11*m12*m23*q2 + 2*m11*m12*m23*q3 - 5*m11*m12*m23 + m11*m12*m33*q1 - m11*m12*m33*q2 + m11*m12*m33 + m11*m12*q1*q3 - 3*m11*m12*q1 - m11*m12*q2*q3 + 3*m11*m12*q2 + m11*m12*q3 - 3*m11*m12 + m11*m22**3 + m11*m22**2*m23 - m11*m22**2*m33 - m11*m22**2*q1 + m11*m22**2*q2 - m11*m22**2*q3 - 4*m11*m22*m23**2 + 2*m11*m22*m23*m33 - m11*m22*m23*q1 + m11*m22*m23*q2 + 2*m11*m22*m23*q3 - 5*m11*m22*m23 + m11*m22*m33*q1 - m11*m22*m33*q2 + m11*m22*m33 + m11*m22*q1*q3 - m11*m22*q1 - m11*m22*q2*q3 + m11*m22*q2 + m11*m22*q3 - m11*m22 + 4*m11*m23**2*q1 - 4*m11*m23**2*q2 + 4*m11*m23**2 - 2*m11*m23*m33*q1 + 2*m11*m23*m33*q2 - 2*m11*m23*m33 - 2*m11*m23*q1*q3 + 4*m11*m23*q1 + 2*m11*m23*q2*q3 - 4*m11*m23*q2 - 2*m11*m23*q3 + 4*m11*m23 - m12**3*m22 - 2*m12**3*m23 + m12**3*q1 + m12**3 + m12**2*m22*m23 + m12**2*m22*m33 - m12**2*m22*q2 + m12**2*m22*q3 - 3*m12**2*m22 + 2*m12**2*m23**2 + 2*m12**2*m23*m33 - m12**2*m23*q1 - 2*m12**2*m23*q2 + 2*m12**2*m23*q3 - 7*m12**2*m23 - m12**2*m33*q1 - m12**2*m33 + m12**2*q1*q2 - m12**2*q1*q3 + 3*m12**2*q1 + m12**2*q2 - m12**2*q3 + 3*m12**2 - m12*m22**3 + m12*m22**2*m23 + m12*m22**2*m33 - m12*m22**2*q2 + m12*m22**2*q3 - 6*m12*m22*m23*m33 + 4*m12*m22*m23*q1 + 2*m12*m22*m23*q2 - 6*m12*m22*m23*q3 + 13*m12*m22*m23 + 2*m12*m22*m33*q2 - m12*m22*m33 - 2*m12*m22*q1*q2 + m12*m22*q1 + 2*m12*m22*q2*q3 - 5*m12*m22*q2 - m12*m22*q3 + m12*m22 - 2*m12*m23**2*q1 + 2*m12*m23**2*q2 + m12*m23*m33*q1 - m12*m23*m33*q2 + 6*m12*m23*m33 + m12*m23*q1*q3 - 5*m12*m23*q1 - m12*m23*q2*q3 - m12*m23*q2 + 6*m12*m23*q3 - 12*m12*m23 - m12*m33*q1 - m12*m33*q2 + 2*m12*q1*q2 - m12*q1*q3 + m12*q1 - m12*q2*q3 + 3*m12*q2 - 2*m22**3*m23 + m22**3*q1 + 2*m22**2*m23**2 + 2*m22**2*m23*m33 - m22**2*m23*q1 - 2*m22**2*m23*q2 + 2*m22**2*m23*q3 - m22**2*m33*q1 + m22**2*q1*q2 - m22**2*q1*q3 - 2*m22*m23**2*q1 + 2*m22*m23**2*q2 - 4*m22*m23**2 + m22*m23*m33*q1 - m22*m23*m33*q2 - 4*m22*m23*m33 + m22*m23*q1*q3 + m22*m23*q1 - m22*m23*q2*q3 + 5*m22*m23*q2 - 4*m22*m23*q3 + 8*m22*m23 + m22*m33*q1 + m22*m33*q2 - 2*m22*q1*q2 + m22*q1*q3 - m22*q1 + m22*q2*q3 - 3*m22*q2   [175 s]
+
+  Held-out verification against G3 (exact Fractions, all weight spaces of V_lam, every source pattern, every displacement class; lam' = lam (dominant) and generic rational lam'):
+  op     V_lam        classes  lam'                           tests (valid source and valid target) / of which nonzero entries / mismatches / pole skips
+  V3     [3,2,1,0]    F only   dominant lam'=lam              32 / 28 / 0 / 0   [38 weight spaces, 0.0s]
+  V3     [3,2,1,0]    F only   generic rational (2 values)    64 / 64 / 0 / 0   [76 weight spaces, 0.0s]
+  V3     [4,3,1,0]    F only   dominant lam'=lam              150 / 125 / 0 / 0   [79 weight spaces, 0.1s]
+  V3     [4,3,1,0]    F only   generic rational (2 values)    300 / 300 / 0 / 0   [158 weight spaces, 0.1s]
+  V3     [5,3,2,1]    F only   dominant lam'=lam              108 / 104 / 0 / 0   [68 weight spaces, 0.1s]
+  V3     [5,3,2,1]    F only   generic rational (2 values)    216 / 216 / 0 / 0   [136 weight spaces, 0.1s]
+  V3     [6,4,2,0]    F only   dominant lam'=lam              1248 / 1138 / 0 / 0   [201 weight spaces, 0.5s]
+  V3     [6,4,2,0]    F only   generic rational (2 values)    2496 / 2496 / 0 / 0   [402 weight spaces, 1.0s]
+  V4a    [3,2,1,0]    F only   dominant lam'=lam              32 / 21 / 0 / 0   [38 weight spaces, 0.0s]
+  V4a    [3,2,1,0]    F only   generic rational (2 values)    64 / 48 / 0 / 0   [76 weight spaces, 0.1s]
+  V4a    [4,3,1,0]    F only   dominant lam'=lam              158 / 92 / 0 / 0   [79 weight spaces, 0.1s]
+  V4a    [4,3,1,0]    F only   generic rational (2 values)    316 / 220 / 0 / 0   [158 weight spaces, 0.2s]
+  V4a    [5,3,2,1]    F only   dominant lam'=lam              114 / 104 / 0 / 0   [68 weight spaces, 0.1s]
+  V4a    [5,3,2,1]    F only   generic rational (2 values)    228 / 216 / 0 / 0   [136 weight spaces, 0.2s]
+  V4a    [6,4,2,0]    F only   dominant lam'=lam              1518 / 922 / 0 / 0   [201 weight spaces, 0.7s]
+  V4a    [6,4,2,0]    F only   generic rational (2 values)    3036 / 2016 / 0 / 0   [402 weight spaces, 1.5s]
+  V4b    [3,2,1,0]    F only   dominant lam'=lam              32 / 26 / 0 / 0   [38 weight spaces, 0.0s]
+  V4b    [3,2,1,0]    F only   generic rational (2 values)    64 / 62 / 0 / 0   [76 weight spaces, 0.1s]
+  V4b    [4,3,1,0]    F only   dominant lam'=lam              158 / 116 / 0 / 0   [79 weight spaces, 0.2s]
+  V4b    [4,3,1,0]    F only   generic rational (2 values)    316 / 289 / 0 / 0   [158 weight spaces, 0.2s]
+  V4b    [5,3,2,1]    F only   dominant lam'=lam              114 / 101 / 0 / 0   [68 weight spaces, 0.1s]
+  V4b    [5,3,2,1]    F only   generic rational (2 values)    228 / 215 / 0 / 0   [136 weight spaces, 0.2s]
+  V4b    [6,4,2,0]    F only   dominant lam'=lam              1518 / 1103 / 0 / 0   [201 weight spaces, 0.8s]
+  V4b    [6,4,2,0]    F only   generic rational (2 values)    3036 / 2449 / 0 / 0   [402 weight spaces, 1.6s]
+  factorising classes, all held-out runs: 15546 tests (12471 nonzero entries), 0 mismatches, 0 pole skips
+
+  All classes (non-factorising ones via the polynomial extrapolation of Q, completeness of the stencil), rep [3,2,1,0]:
+  op     V_lam        classes  lam'                           tests / nonzero entries / mismatches / uncovered nonzero entries of G3 (not in the stencil)
+  V3     [3,2,1,0]    all      dominant lam'=lam              152 / 146 / 0 / 0   [38 weight spaces, zero-denominator skips 0 (of which the true entry is 0: 0), 11.9s]
+  V3     [3,2,1,0]    all      generic rational               152 / 152 / 0 / 0   [38 weight spaces, zero-denominator skips 0 (of which the true entry is 0: 0), 12.2s]
+  V4a    [3,2,1,0]    all      dominant lam'=lam              152 / 119 / 0 / 0   [38 weight spaces, zero-denominator skips 0 (of which the true entry is 0: 0), 65.4s]
+  V4a    [3,2,1,0]    all      generic rational               152 / 132 / 0 / 0   [38 weight spaces, zero-denominator skips 0 (of which the true entry is 0: 0), 64.8s]
+  V4b    [3,2,1,0]    all      dominant lam'=lam              152 / 134 / 0 / 0   [38 weight spaces, zero-denominator skips 0 (of which the true entry is 0: 0), 67.5s]
+  V4b    [3,2,1,0]    all      generic rational               152 / 150 / 0 / 0   [38 weight spaces, zero-denominator skips 0 (of which the true entry is 0: 0), 68.4s]
+  [stage symbolic finished in 1060.9 s]
+
+======================================================================================================================================================
+Q2 (continued)  EXPLICIT NON-LINEAR PARTS OF THE ROW-3 MOVES (dm12 = 0)
+======================================================================================================================================================
+
+  Explicit non-linear parts Q~ (the polynomial left after dividing N by its linear factors), reconstructed exactly by interpolation in the support variables (V3: all six row-3 moves with dm12 = 0;
+  V4a, V4b: the class (0,-1,0) as an example); printed in the GT labels m_ik, l_j = lam_j, q_j = lam'_j:
+   V3 d=(0, -1, 0): Q~ has 47 terms, total degree 3: m11**2*m12 + m11**2*m22 - 2*m11**2*m23 - m11*m12**2 - 2*m11*m12*m22 + 2*m11*m12*m23 + m11*m12*q1 - m11*m12*q2 + m11*m12 - m11*m22**2 + 2*m11*m22*m23 + m11*m22*q1 - m11*m22*q2 + m11*m22 - 2*m11*m23*q1 + 2*m11*m23*q2 - 2*m11*m23 + m12**3 - m12**2*m23 - m12**2*m33 + m12**2*q2 - m12**2*q3 + 3*m12**2 + 2*m12*m22*m33 - 2*m12*m22*q1 + 2*m12*m22*q3 - 5*m12*m22 + m12*m23*q1 - m12*m23*q2 - 2*m12*m33 + m12*q1 + m12*q2 - 2*m12*q3 + 4*m12 + m22**3 - m22**2*m23 - m22**2*m33 + m22**2*q2 - m22**2*q3 + m22*m23*q1 - m22*m23*q2 + 2*m22*m23 + 2*m22*m33 - m22*q1 - m22*q2 + 2*m22*q3 - 4*m22   [12 s]
+   V3 d=(0, -1, 1): Q~ has 49 terms, total degree 3: -m11**2*m12 - m11**2*m22 + 2*m11**2*m33 - 2*m11**2 + m11*m12**2 + 2*m11*m12*m22 - 2*m11*m12*m33 - m11*m12*q1 + m11*m12*q2 + m11*m12 + m11*m22**2 - 2*m11*m22*m33 - m11*m22*q1 + m11*m22*q2 + m11*m22 + 2*m11*m33*q1 - 2*m11*m33*q2 + 2*m11*m33 - 2*m11*q1 + 2*m11*q2 - 2*m11 - m12**3 + m12**2*m23 + m12**2*m33 - m12**2*q2 + m12**2*q3 - 3*m12**2 - 2*m12*m22*m23 + 2*m12*m22*q1 - 2*m12*m22*q3 + 3*m12*m22 + 2*m12*m23 - m12*m33*q1 + m12*m33*q2 - 2*m12*q2 + 2*m12*q3 - 2*m12 - m22**3 + m22**2*m23 + m22**2*m33 - m22**2*q2 + m22**2*q3 - 2*m22*m23 - m22*m33*q1 + m22*m33*q2 - 2*m22*m33 + 2*m22*q1 - 2*m22*q3 + 4*m22   [12 s]
+   V3 d=(0, 0, -1): Q~ has 50 terms, total degree 3: -m11**2*m12 + 2*m11**2*m13 - m11**2*m22 + 2*m11**2 + m11*m12**2 - 2*m11*m12*m13 + 2*m11*m12*m22 - m11*m12*q1 + m11*m12*q2 - 3*m11*m12 - 2*m11*m13*m22 + 2*m11*m13*q1 - 2*m11*m13*q2 + 2*m11*m13 + m11*m22**2 - m11*m22*q1 + m11*m22*q2 - 3*m11*m22 + 2*m11*q1 - 2*m11*q2 + 2*m11 - m12**3 + m12**2*m13 + m12**2*m33 - m12**2*q2 + m12**2*q3 - 2*m12**2 - m12*m13*q1 + m12*m13*q2 - 2*m12*m22*m33 + 2*m12*m22*q1 - 2*m12*m22*q3 + 5*m12*m22 + 2*m12*m33 - 2*m12*q1 + 2*m12*q3 - 4*m12 + m13*m22**2 - m13*m22*q1 + m13*m22*q2 - 2*m13*m22 - m22**3 + m22**2*m33 - m22**2*q2 + m22**2*q3 + m22**2 - 2*m22*m33 + 2*m22*q2 - 2*m22*q3 + 2*m22   [12 s]
+   V3 d=(0, 0, 1): Q~ has 49 terms, total degree 3: -m11**2*m12 + 2*m11**2*m13 - m11**2*m22 + 2*m11**2 + m11*m12**2 - 2*m11*m12*m13 + 2*m11*m12*m22 - m11*m12*q1 + m11*m12*q2 - 3*m11*m12 - 2*m11*m13*m22 + 2*m11*m13*q1 - 2*m11*m13*q2 + 2*m11*m13 + m11*m22**2 - m11*m22*q1 + m11*m22*q2 - 3*m11*m22 + 2*m11*q1 - 2*m11*q2 + 2*m11 - m12**3 + m12**2*m13 + m12**2*m23 - m12**2*q2 + m12**2*q3 - m12**2 - m12*m13*q1 + m12*m13*q2 - 2*m12*m22*m23 + 2*m12*m22*q1 - 2*m12*m22*q3 + 3*m12*m22 + 2*m12*m23 - 2*m12*q1 + 2*m12*q3 - 2*m12 + m13*m22**2 - m13*m22*q1 + m13*m22*q2 - 2*m13*m22 - m22**3 + m22**2*m23 - m22**2*q2 + m22**2*q3 + 2*m22**2 - 2*m22*m23 + 2*m22*q2 - 2*m22*q3   [12 s]
+   V3 d=(0, 1, -1): Q~ has 49 terms, total degree 3: -m11**2*m12 - m11**2*m22 + 2*m11**2*m33 - 2*m11**2 + m11*m12**2 + 2*m11*m12*m22 - 2*m11*m12*m33 - m11*m12*q1 + m11*m12*q2 + m11*m12 + m11*m22**2 - 2*m11*m22*m33 - m11*m22*q1 + m11*m22*q2 + m11*m22 + 2*m11*m33*q1 - 2*m11*m33*q2 + 2*m11*m33 - 2*m11*q1 + 2*m11*q2 - 2*m11 - m12**3 + m12**2*m13 + m12**2*m33 - m12**2*q2 + m12**2*q3 - 2*m12**2 - 2*m12*m13*m22 + 2*m12*m13 + 2*m12*m22*q1 - 2*m12*m22*q3 + m12*m22 - m12*m33*q1 + m12*m33*q2 - 2*m12*q2 + 2*m12*q3 + m13*m22**2 - 2*m13*m22 - m22**3 + m22**2*m33 - m22**2*q2 + m22**2*q3 + m22**2 - m22*m33*q1 + m22*m33*q2 - 2*m22*m33 + 2*m22*q1 - 2*m22*q3 + 2*m22   [12 s]
+   V3 d=(0, 1, 0): Q~ has 46 terms, total degree 3: m11**2*m12 + m11**2*m22 - 2*m11**2*m23 - m11*m12**2 - 2*m11*m12*m22 + 2*m11*m12*m23 + m11*m12*q1 - m11*m12*q2 + m11*m12 - m11*m22**2 + 2*m11*m22*m23 + m11*m22*q1 - m11*m22*q2 + m11*m22 - 2*m11*m23*q1 + 2*m11*m23*q2 - 2*m11*m23 + m12**3 - m12**2*m13 - m12**2*m23 + m12**2*q2 - m12**2*q3 + m12**2 + 2*m12*m13*m22 - 2*m12*m13 - 2*m12*m22*q1 + 2*m12*m22*q3 - m12*m22 + m12*m23*q1 - m12*m23*q2 + m12*q1 + m12*q2 - 2*m12*q3 - m13*m22**2 + 2*m13*m22 + m22**3 - m22**2*m23 + m22**2*q2 - m22**2*q3 - 2*m22**2 + m22*m23*q1 - m22*m23*q2 + 2*m22*m23 - m22*q1 - m22*q2 + 2*m22*q3   [11 s]
+   V4a d=(0, -1, 0): Q~ has 47 terms, total degree 3: m11**2*m12 + m11**2*m22 - 2*m11**2*m23 - m11*m12**2 - 2*m11*m12*m22 + 2*m11*m12*m23 + m11*m12*q1 - m11*m12*q2 + m11*m12 - m11*m22**2 + 2*m11*m22*m23 + m11*m22*q1 - m11*m22*q2 + m11*m22 - 2*m11*m23*q1 + 2*m11*m23*q2 - 2*m11*m23 + m12**3 - m12**2*m23 - m12**2*m33 + m12**2*q2 - m12**2*q3 + 3*m12**2 + 2*m12*m22*m33 - 2*m12*m22*q1 + 2*m12*m22*q3 - 5*m12*m22 + m12*m23*q1 - m12*m23*q2 - 2*m12*m33 + m12*q1 + m12*q2 - 2*m12*q3 + 4*m12 + m22**3 - m22**2*m23 - m22**2*m33 + m22**2*q2 - m22**2*q3 + m22*m23*q1 - m22*m23*q2 + 2*m22*m23 + 2*m22*m33 - m22*q1 - m22*q2 + 2*m22*q3 - 4*m22   [14 s]
+   V4b d=(0, -1, 0): Q~ has 163 terms, total degree 4: -m11**2*m12**2 - m11**2*m12*m23 + m11**2*m12*m33 + m11**2*m12*q3 - 3*m11**2*m12 - m11**2*m22**2 - m11**2*m22*m23 + m11**2*m22*m33 + m11**2*m22*q3 - m11**2*m22 + 4*m11**2*m23**2 - 2*m11**2*m23*m33 - 2*m11**2*m23*q3 + 4*m11**2*m23 + m11*m12**3 + m11*m12**2*m22 + m11*m12**2*m23 - m11*m12**2*m33 - m11*m12**2*q1 + m11*m12**2*q2 - m11*m12**2*q3 + 2*m11*m12**2 + m11*m12*m22**2 + 2*m11*m12*m22*m23 - 2*m11*m12*m22*m33 - 2*m11*m12*m22*q3 + 4*m11*m12*m22 - 4*m11*m12*m23**2 + 2*m11*m12*m23*m33 - m11*m12*m23*q1 + m11*m12*m23*q2 + 2*m11*m12*m23*q3 - 5*m11*m12*m23 + m11*m12*m33*q1 - m11*m12*m33*q2 + m11*m12*m33 + m11*m12*q1*q3 - 3*m11*m12*q1 - m11*m12*q2*q3 + 3*m11*m12*q2 + m11*m12*q3 - 3*m11*m12 + m11*m22**3 + m11*m22**2*m23 - m11*m22**2*m33 - m11*m22**2*q1 + m11*m22**2*q2 - m11*m22**2*q3 - 4*m11*m22*m23**2 + 2*m11*m22*m23*m33 - m11*m22*m23*q1 + m11*m22*m23*q2 + 2*m11*m22*m23*q3 - 5*m11*m22*m23 + m11*m22*m33*q1 - m11*m22*m33*q2 + m11*m22*m33 + m11*m22*q1*q3 - m11*m22*q1 - m11*m22*q2*q3 + m11*m22*q2 + m11*m22*q3 - m11*m22 + 4*m11*m23**2*q1 - 4*m11*m23**2*q2 + 4*m11*m23**2 - 2*m11*m23*m33*q1 + 2*m11*m23*m33*q2 - 2*m11*m23*m33 - 2*m11*m23*q1*q3 + 4*m11*m23*q1 + 2*m11*m23*q2*q3 - 4*m11*m23*q2 - 2*m11*m23*q3 + 4*m11*m23 - m12**3*m22 - 2*m12**3*m23 + m12**3*q1 + m12**3 + m12**2*m22*m23 + m12**2*m22*m33 - m12**2*m22*q2 + m12**2*m22*q3 - 3*m12**2*m22 + 2*m12**2*m23**2 + 2*m12**2*m23*m33 - m12**2*m23*q1 - 2*m12**2*m23*q2 + 2*m12**2*m23*q3 - 7*m12**2*m23 - m12**2*m33*q1 - m12**2*m33 + m12**2*q1*q2 - m12**2*q1*q3 + 3*m12**2*q1 + m12**2*q2 - m12**2*q3 + 3*m12**2 - m12*m22**3 + m12*m22**2*m23 + m12*m22**2*m33 - m12*m22**2*q2 + m12*m22**2*q3 - 6*m12*m22*m23*m33 + 4*m12*m22*m23*q1 + 2*m12*m22*m23*q2 - 6*m12*m22*m23*q3 + 13*m12*m22*m23 + 2*m12*m22*m33*q2 - m12*m22*m33 - 2*m12*m22*q1*q2 + m12*m22*q1 + 2*m12*m22*q2*q3 - 5*m12*m22*q2 - m12*m22*q3 + m12*m22 - 2*m12*m23**2*q1 + 2*m12*m23**2*q2 + m12*m23*m33*q1 - m12*m23*m33*q2 + 6*m12*m23*m33 + m12*m23*q1*q3 - 5*m12*m23*q1 - m12*m23*q2*q3 - m12*m23*q2 + 6*m12*m23*q3 - 12*m12*m23 - m12*m33*q1 - m12*m33*q2 + 2*m12*q1*q2 - m12*q1*q3 + m12*q1 - m12*q2*q3 + 3*m12*q2 - 2*m22**3*m23 + m22**3*q1 + 2*m22**2*m23**2 + 2*m22**2*m23*m33 - m22**2*m23*q1 - 2*m22**2*m23*q2 + 2*m22**2*m23*q3 - m22**2*m33*q1 + m22**2*q1*q2 - m22**2*q1*q3 - 2*m22*m23**2*q1 + 2*m22*m23**2*q2 - 4*m22*m23**2 + m22*m23*m33*q1 - m22*m23*m33*q2 - 4*m22*m23*m33 + m22*m23*q1*q3 + m22*m23*q1 - m22*m23*q2*q3 + 5*m22*m23*q2 - 4*m22*m23*q3 + 8*m22*m23 + m22*m33*q1 + m22*m33*q2 - 2*m22*q1*q2 + m22*q1*q3 - m22*q1 + m22*q2*q3 - 3*m22*q2   [176 s]
+
+  Verification of the classes with an explicit polynomial (closed form = linear factors x explicit Q~, evaluated with the exact Laurent handling of removable poles) against G3, all weight spaces:
+   V3   [3,2,1,0]    dominant lam'=lam    6 classes: 40 tests (40 nonzero entries), 0 mismatches, 0 pole skips  [0.1s]
+   V3   [3,2,1,0]    generic rational     6 classes: 40 tests (40 nonzero entries), 0 mismatches, 0 pole skips  [0.1s]
+   V3   [4,3,1,0]    dominant lam'=lam    6 classes: 164 tests (164 nonzero entries), 0 mismatches, 0 pole skips  [0.3s]
+   V3   [4,3,1,0]    generic rational     6 classes: 164 tests (164 nonzero entries), 0 mismatches, 0 pole skips  [0.2s]
+   V3   [5,3,2,1]    dominant lam'=lam    6 classes: 120 tests (117 nonzero entries), 0 mismatches, 0 pole skips  [0.2s]
+   V3   [5,3,2,1]    generic rational     6 classes: 120 tests (120 nonzero entries), 0 mismatches, 0 pole skips  [0.2s]
+   V4a  [3,2,1,0]    dominant lam'=lam    1 classes: 6 tests (6 nonzero entries), 0 mismatches, 0 pole skips  [0.0s]
+   V4a  [3,2,1,0]    generic rational     1 classes: 6 tests (6 nonzero entries), 0 mismatches, 0 pole skips  [0.0s]
+   V4a  [4,3,1,0]    dominant lam'=lam    1 classes: 20 tests (20 nonzero entries), 0 mismatches, 0 pole skips  [0.1s]
+   V4a  [4,3,1,0]    generic rational     1 classes: 20 tests (20 nonzero entries), 0 mismatches, 0 pole skips  [0.1s]
+   V4a  [5,3,2,1]    dominant lam'=lam    1 classes: 20 tests (20 nonzero entries), 0 mismatches, 0 pole skips  [0.1s]
+   V4a  [5,3,2,1]    generic rational     1 classes: 20 tests (20 nonzero entries), 0 mismatches, 0 pole skips  [0.1s]
+   V4b  [3,2,1,0]    dominant lam'=lam    1 classes: 6 tests (6 nonzero entries), 0 mismatches, 0 pole skips  [0.1s]
+   V4b  [3,2,1,0]    generic rational     1 classes: 6 tests (6 nonzero entries), 0 mismatches, 0 pole skips  [0.1s]
+   V4b  [4,3,1,0]    dominant lam'=lam    1 classes: 20 tests (19 nonzero entries), 0 mismatches, 0 pole skips  [0.2s]
+   V4b  [4,3,1,0]    generic rational     1 classes: 20 tests (20 nonzero entries), 0 mismatches, 0 pole skips  [0.2s]
+   V4b  [5,3,2,1]    dominant lam'=lam    1 classes: 20 tests (20 nonzero entries), 0 mismatches, 0 pole skips  [0.2s]
+   V4b  [5,3,2,1]    generic rational     1 classes: 20 tests (20 nonzero entries), 0 mismatches, 0 pole skips  [0.2s]
+  [stage symq finished in 293.8 s]
+
+======================================================================================================================================================
+Q2 (continued)  ONE FORMULA FOR THE 12 FACTORISING CLASSES OF V3, V4a, V4b
+======================================================================================================================================================
+  In l-coordinates y_ik = m_ik - i (rows 1..3), Y_s = lam_s - s, q = lam' ; a, b = the RAISED / LOWERED entry of row 2, i, j, k = the RAISED / LOWERED / SPECTATOR entry of row 3 of the displacement:
+    M^{V3}  = (y11 - y_b)(y11 - y_a + q1 - q2)(y_a - y_j)(y_a - y_j + 1)(y_a - y_k) prod_{s=1..4}(y_i - Y_s) / [ (y_a - y_b)(y_a - y_b + 1)(y_i - y_j)(y_i - y_j + 1)(y_j - y_k)(y_i - y_k) ]
+    M^{V4a} = (y_k + 3) M^{V3},      M^{V4b} = - (y_a - y_i + 2 y_k - q3 + 5) M^{V3}
+  (found from the 36 factor lists of the symbolic stage; the sign of V3 is +1 for all 12 classes in this orientation; the relations to V3 hold exactly for all 12 classes, 120 random-point tests of the term sums)
+  V_lam        lam'                               tests (valid source and target) / nonzero entries / mismatches / pole skips   (V3, V4a, V4b together)
+  [3,2,1,0]    dominant lam' = lam                96 / 75 / 0 / 0   [0.1s]
+  [3,2,1,0]    generic rational (2 values)        192 / 174 / 0 / 0   [0.1s]
+  [4,3,1,0]    dominant lam' = lam                450 / 333 / 0 / 0   [0.2s]
+  [4,3,1,0]    generic rational (2 values)        900 / 809 / 0 / 0   [0.4s]
+  [5,3,2,1]    dominant lam' = lam                324 / 309 / 0 / 0   [0.2s]
+  [5,3,2,1]    generic rational (2 values)        648 / 647 / 0 / 0   [0.4s]
+  [6,4,2,0]    dominant lam' = lam                3744 / 3163 / 0 / 0   [1.3s]
+  [6,4,2,0]    generic rational (2 values)        7488 / 6961 / 0 / 0   [2.4s]
+  [4,2,2,0]    dominant lam' = lam                96 / 92 / 0 / 0   [0.1s]
+  [4,2,2,0]    generic rational (2 values)        192 / 192 / 0 / 0   [0.1s]
+  [5,4,2,1]    dominant lam' = lam                450 / 369 / 0 / 0   [0.2s]
+  [5,4,2,1]    generic rational (2 values)        900 / 899 / 0 / 0   [0.4s]
+  [6,3,2,1]    dominant lam' = lam                750 / 731 / 0 / 0   [0.3s]
+  [6,3,2,1]    generic rational (2 values)        1500 / 1499 / 0 / 0   [0.6s]
+  TOTAL: 17730 tests (16253 nonzero entries), 0 mismatches, 0 pole skips
+  [stage univ finished in 7.0 s]
+
+======================================================================================================================================================
+Q3 + Q6  THE WEYL / BGG CHARACTERISATION OF THE PHYSICAL SPECTRUM
+======================================================================================================================================================
+  Conjecture: for every joint triple tau,  sum_{w in S_4} sgn(w) mult_tau( V_red(w.lam') on V_lam[mu - w.lam'] ) = [tau in Spec(M_mu)],  w.lam' = w(lam' + rho) - rho,  rho = (3,2,1,0).
+  Test: for every sector mu, all 24 Weyl translates; the operators V_red,k at the (generally non-dominant) weight w.lam' on the WHOLE weight space V_lam[mu - w.lam'] (G3 reduced operators, universal
+  polynomials evaluated at w.lam'), joint spectra at 50 digits (mpmath eigen-decomposition of the generic combination V3 + 7/19 V4a + 11/13 V4b, every operator conjugated to the eigenbasis),
+  triples matched across the translate spaces (tolerance 1e-30), signed counts compared with the indicator of the m physical triples (joint eigenvalues of the reduced operators on M_mu, PRV basis).
+  Sectors: kind "all" = every dominant mu with |mu| = |lam| + |lam'| for which some translate space is non-empty (the irreps of Racah-Speiser AND formal/multiplicity-0 candidates).
+  [2,1,0,0]^2  [all sectors]: sectors 7 (sum m = 8, 9 translate spaces, 10 distinct triples): signed count = indicator on 7, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 7/7; closest distinct triples 6.708, worst identification deviation 0.0  (0.0 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 5, 1: 7, 2: 7, 3: 7, 4: 7, 5: 7, 6: 7 (of 7)
+     one-step analysis (identity-space eigenvectors, 10 triples): physical <=> no string violated: 10/10; violated set S subset of inherited set T (BGG): 10/10; S = T: 10/10; spurious triples 2: one string violated 2, two or more 0
+     per sector:  mu  m  w(identity)  #translate spaces (lengths: dims)  #triples  signed-count failures  min depth  [fail details]
+     (4,2,0,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (4,1,1,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (3,3,0,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (3,2,1,0)      m=2   w=2   spaces=1  dims by length 0:2                                triples=2   fails=0 depth=0
+     (3,1,1,1)      m=1   w=2   spaces=2  dims by length 0:2,1:1                            triples=2   fails=0 depth=1
+     (2,2,2,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (2,2,1,1)      m=1   w=2   spaces=2  dims by length 0:2,1:1                            triples=2   fails=0 depth=1
+  [2,1,0,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 8
+     lengths (0, 1)                 physical=False signed=+0 : 2
+  [2,1,1,0]^2  [all sectors]: sectors 6 (sum m = 7, 7 translate spaces, 8 distinct triples): signed count = indicator on 6, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 6/6; closest distinct triples 13.86, worst identification deviation 4.28e-50  (0.0 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 5, 1: 6, 2: 6, 3: 6, 4: 6, 5: 6, 6: 6 (of 6)
+     one-step analysis (identity-space eigenvectors, 8 triples): physical <=> no string violated: 8/8; violated set S subset of inherited set T (BGG): 8/8; S = T: 8/8; spurious triples 1: one string violated 1, two or more 0
+     per sector:  mu  m  w(identity)  #translate spaces (lengths: dims)  #triples  signed-count failures  min depth  [fail details]
+     (4,2,2,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (4,2,1,1)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (3,3,2,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (3,3,1,1)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (3,2,2,1)      m=2   w=3   spaces=2  dims by length 0:3,1:1                            triples=3   fails=0 depth=1
+     (2,2,2,2)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+  [2,1,1,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 7
+     lengths (0, 1)                 physical=False signed=+0 : 1
+  [3,2,1,0]^2  [all sectors]: sectors 16 (sum m = 30, 22 translate spaces, 36 distinct triples): signed count = indicator on 16, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 16/16; closest distinct triples 6.708, worst identification deviation 0.0  (0.1 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 11, 1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16 (of 16)
+     one-step analysis (identity-space eigenvectors, 36 triples): physical <=> no string violated: 36/36; violated set S subset of inherited set T (BGG): 36/36; S = T: 36/36; spurious triples 6: one string violated 6, two or more 0
+     per sector:  mu  m  w(identity)  #translate spaces (lengths: dims)  #triples  signed-count failures  min depth  [fail details]
+     (6,4,2,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (6,4,1,1)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (6,3,3,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (6,3,2,1)      m=2   w=2   spaces=1  dims by length 0:2                                triples=2   fails=0 depth=0
+     (6,2,2,2)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (5,5,2,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (5,5,1,1)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (5,4,3,0)      m=2   w=2   spaces=1  dims by length 0:2                                triples=2   fails=0 depth=0
+     (5,4,2,1)      m=4   w=4   spaces=1  dims by length 0:4                                triples=4   fails=0 depth=0
+     (5,3,3,1)      m=3   w=4   spaces=2  dims by length 0:4,1:1                            triples=4   fails=0 depth=1
+     (5,3,2,2)      m=3   w=4   spaces=2  dims by length 0:4,1:1                            triples=4   fails=0 depth=1
+     (4,4,4,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (4,4,3,1)      m=3   w=4   spaces=2  dims by length 0:4,1:1                            triples=4   fails=0 depth=1
+     (4,4,2,2)      m=2   w=4   spaces=3  dims by length 0:4,1:2                            triples=4   fails=0 depth=1
+     (4,3,3,2)      m=3   w=4   spaces=2  dims by length 0:4,1:1                            triples=4   fails=0 depth=1
+     (3,3,3,3)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+  [3,2,1,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 30
+     lengths (0, 1)                 physical=False signed=+0 : 6
+  [4,2,0,0]^2  [all sectors]: sectors 26 (sum m = 32, 45 translate spaces, 59 distinct triples): signed count = indicator on 26, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 26/26; closest distinct triples 10.0, worst identification deviation 1.71e-49  (0.2 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 11, 1: 25, 2: 26, 3: 26, 4: 26, 5: 26, 6: 26 (of 26)
+     one-step analysis (identity-space eigenvectors, 59 triples): physical <=> no string violated: 59/59; violated set S subset of inherited set T (BGG): 59/59; S = T: 59/59; spurious triples 27: one string violated 26, two or more 1
+     per sector:  mu  m  w(identity)  #translate spaces (lengths: dims)  #triples  signed-count failures  min depth  [fail details]
+     (8,4,0,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (8,3,1,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (8,2,2,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (8,2,1,1)      m=0   w=1   spaces=2  dims by length 0:1,1:1                            triples=1   fails=0 depth=1
+     (7,5,0,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (7,4,1,0)      m=2   w=2   spaces=1  dims by length 0:2                                triples=2   fails=0 depth=0
+     (7,3,2,0)      m=2   w=2   spaces=1  dims by length 0:2                                triples=2   fails=0 depth=0
+     (7,3,1,1)      m=1   w=3   spaces=2  dims by length 0:3,1:2                            triples=3   fails=0 depth=1
+     (7,2,2,1)      m=1   w=2   spaces=2  dims by length 0:2,1:1                            triples=2   fails=0 depth=1
+     (6,6,0,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (6,5,1,0)      m=2   w=2   spaces=1  dims by length 0:2                                triples=2   fails=0 depth=0
+     (6,4,2,0)      m=3   w=3   spaces=1  dims by length 0:3                                triples=3   fails=0 depth=0
+     (6,4,1,1)      m=1   w=4   spaces=2  dims by length 0:4,1:3                            triples=4   fails=0 depth=1
+     (6,3,3,0)      m=1   w=2   spaces=2  dims by length 0:2,1:1                            triples=2   fails=0 depth=1
+     (6,3,2,1)      m=2   w=4   spaces=2  dims by length 0:4,1:2                            triples=4   fails=0 depth=1
+     (6,2,2,2)      m=1   w=3   spaces=2  dims by length 0:3,1:2                            triples=3   fails=0 depth=1
+     (5,5,2,0)      m=1   w=2   spaces=2  dims by length 0:2,1:1                            triples=2   fails=0 depth=1
+     (5,5,1,1)      m=1   w=3   spaces=4  dims by length 0:3,1:3,2:1                        triples=3   fails=0 depth=2
+     (5,4,3,0)      m=2   w=2   spaces=1  dims by length 0:2                                triples=2   fails=0 depth=0
+     (5,4,2,1)      m=2   w=4   spaces=2  dims by length 0:4,1:2                            triples=4   fails=0 depth=1
+     (5,3,3,1)      m=1   w=3   spaces=3  dims by length 0:3,1:2                            triples=3   fails=0 depth=1
+     (5,3,2,2)      m=1   w=4   spaces=2  dims by length 0:4,1:3                            triples=4   fails=0 depth=1
+     (4,4,4,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (4,4,3,1)      m=1   w=2   spaces=2  dims by length 0:2,1:1                            triples=2   fails=0 depth=1
+     (4,4,2,2)      m=1   w=3   spaces=2  dims by length 0:3,1:2                            triples=3   fails=0 depth=1
+     (4,3,3,2)      m=0   w=2   spaces=3  dims by length 0:2,1:2                            triples=2   fails=0 depth=1
+  [4,2,0,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 32
+     lengths (0, 1)                 physical=False signed=+0 : 26
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 1
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((5, 5, 1, 1), ('1234', '1243', '2134', '2143'), 0, 0)]
+  [4,2,1,0]^2  [all sectors]: sectors 27 (sum m = 56, 44 translate spaces, 77 distinct triples): signed count = indicator on 27, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 27/27; closest distinct triples 10.0, worst identification deviation 1.71e-49  (0.3 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 14, 1: 27, 2: 27, 3: 27, 4: 27, 5: 27, 6: 27 (of 27)
+     one-step analysis (identity-space eigenvectors, 77 triples): physical <=> no string violated: 77/77; violated set S subset of inherited set T (BGG): 77/77; S = T: 77/77; spurious triples 21: one string violated 21, two or more 0
+     per sector:  mu  m  w(identity)  #translate spaces (lengths: dims)  #triples  signed-count failures  min depth  [fail details]
+     (8,4,2,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (8,4,1,1)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (8,3,3,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (8,3,2,1)      m=2   w=2   spaces=1  dims by length 0:2                                triples=2   fails=0 depth=0
+     (8,2,2,2)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (7,5,2,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (7,5,1,1)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (7,4,3,0)      m=2   w=2   spaces=1  dims by length 0:2                                triples=2   fails=0 depth=0
+     (7,4,2,1)      m=4   w=4   spaces=1  dims by length 0:4                                triples=4   fails=0 depth=0
+     (7,3,3,1)      m=3   w=4   spaces=2  dims by length 0:4,1:1                            triples=4   fails=0 depth=1
+     (7,3,2,2)      m=3   w=4   spaces=2  dims by length 0:4,1:1                            triples=4   fails=0 depth=1
+     (6,6,2,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (6,6,1,1)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (6,5,3,0)      m=2   w=2   spaces=1  dims by length 0:2                                triples=2   fails=0 depth=0
+     (6,5,2,1)      m=4   w=4   spaces=1  dims by length 0:4                                triples=4   fails=0 depth=0
+     (6,4,4,0)      m=1   w=2   spaces=2  dims by length 0:2,1:1                            triples=2   fails=0 depth=1
+     (6,4,3,1)      m=5   w=6   spaces=2  dims by length 0:6,1:1                            triples=6   fails=0 depth=1
+     (6,4,2,2)      m=4   w=6   spaces=2  dims by length 0:6,1:2                            triples=6   fails=0 depth=1
+     (6,3,3,2)      m=3   w=6   spaces=3  dims by length 0:6,1:3                            triples=6   fails=0 depth=1
+     (5,5,4,0)      m=1   w=1   spaces=1  dims by length 0:1                                triples=1   fails=0 depth=0
+     (5,5,3,1)      m=3   w=4   spaces=2  dims by length 0:4,1:1                            triples=4   fails=0 depth=1
+     (5,5,2,2)      m=2   w=4   spaces=3  dims by length 0:4,1:2                            triples=4   fails=0 depth=1
+     (5,4,4,1)      m=2   w=4   spaces=2  dims by length 0:4,1:2                            triples=4   fails=0 depth=1
+     (5,4,3,2)      m=4   w=6   spaces=3  dims by length 0:6,1:2                            triples=6   fails=0 depth=1
+     (5,3,3,3)      m=1   w=4   spaces=3  dims by length 0:4,1:3                            triples=4   fails=0 depth=1
+     (4,4,4,2)      m=1   w=2   spaces=2  dims by length 0:2,1:1                            triples=2   fails=0 depth=1
+     (4,4,3,3)      m=1   w=2   spaces=2  dims by length 0:2,1:1                            triples=2   fails=0 depth=1
+  [4,2,1,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 56
+     lengths (0, 1)                 physical=False signed=+0 : 21
+  [6,4,2,0]^2  [all sectors]: sectors 76 (sum m = 297, 143 translate spaces, 424 distinct triples): signed count = indicator on 76, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 76/76; closest distinct triples 10.25, worst identification deviation 1.37e-48  (4.3 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 32, 1: 73, 2: 76, 3: 76, 4: 76, 5: 76, 6: 76 (of 76)
+     one-step analysis (identity-space eigenvectors, 424 triples): physical <=> no string violated: 424/424; violated set S subset of inherited set T (BGG): 424/424; S = T: 424/424; spurious triples 127: one string violated 124, two or more 3
+  [6,4,2,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 297
+     lengths (0, 1)                 physical=False signed=+0 : 124
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 3
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((9, 9, 3, 3), ('1234', '1243', '2134', '2143'), 0, 0), ((8, 8, 4, 4), ('1234', '1243', '2134', '2143'), 0, 0), ((7, 7, 5, 5), ('1234', '1243', '2134', '2143'), 0, 0)]
+  [3,2,1,0]x[4,2,1,0]  [all sectors]: sectors 20 (sum m = 38, 24 translate spaces, 42 distinct triples): signed count = indicator on 20, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 20/20; closest distinct triples 8.544, worst identification deviation 8.55e-50  (0.1 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 16, 1: 20, 2: 20, 3: 20, 4: 20, 5: 20, 6: 20 (of 20)
+     one-step analysis (identity-space eigenvectors, 42 triples): physical <=> no string violated: 42/42; violated set S subset of inherited set T (BGG): 42/42; S = T: 42/42; spurious triples 4: one string violated 4, two or more 0
+  [3,2,1,0]x[4,2,1,0]: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 38
+     lengths (0, 1)                 physical=False signed=+0 : 4
+  [4,2,1,0]x[3,2,1,0]  [all sectors]: sectors 20 (sum m = 38, 38 translate spaces, 62 distinct triples): signed count = indicator on 20, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 20/20; closest distinct triples 7.0, worst identification deviation 3.42e-49  (0.2 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 9, 1: 20, 2: 20, 3: 20, 4: 20, 5: 20, 6: 20 (of 20)
+     one-step analysis (identity-space eigenvectors, 62 triples): physical <=> no string violated: 62/62; violated set S subset of inherited set T (BGG): 62/62; S = T: 62/62; spurious triples 24: one string violated 24, two or more 0
+  [4,2,1,0]x[3,2,1,0]: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 38
+     lengths (0, 1)                 physical=False signed=+0 : 24
+  [4,2,2,0]^2  [all sectors]: sectors 23 (sum m = 26, 37 translate spaces, 42 distinct triples): signed count = indicator on 23, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 23/23; closest distinct triples 27.23, worst identification deviation 3.42e-49  (0.1 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 11, 1: 23, 2: 23, 3: 23, 4: 23, 5: 23, 6: 23 (of 23)
+     one-step analysis (identity-space eigenvectors, 42 triples): physical <=> no string violated: 42/42; violated set S subset of inherited set T (BGG): 42/42; S = T: 42/42; spurious triples 16: one string violated 16, two or more 0
+  [4,2,2,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 26
+     lengths (0, 1)                 physical=False signed=+0 : 16
+  [4,3,1,0]^2  [all sectors]: sectors 31 (sum m = 69, 52 translate spaces, 94 distinct triples): signed count = indicator on 31, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 31/31; closest distinct triples 5.898, worst identification deviation 6.84e-49  (0.4 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 15, 1: 29, 2: 31, 3: 31, 4: 31, 5: 31, 6: 31 (of 31)
+     one-step analysis (identity-space eigenvectors, 94 triples): physical <=> no string violated: 94/94; violated set S subset of inherited set T (BGG): 94/94; S = T: 94/94; spurious triples 25: one string violated 23, two or more 2
+  [4,3,1,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 69
+     lengths (0, 1)                 physical=False signed=+0 : 23
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 2
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((6, 6, 2, 2), ('1234', '1243', '2134', '2143'), 0, 0), ((5, 5, 3, 3), ('1234', '1243', '2134', '2143'), 0, 0)]
+  [3,2,0,0]x[2,1,1,0]  [all sectors]: sectors 10 (sum m = 8, 19 translate spaces, 19 distinct triples): signed count = indicator on 10, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 10/10; closest distinct triples 4.0, worst identification deviation 1.71e-49  (0.0 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 4, 1: 10, 2: 10, 3: 10, 4: 10, 5: 10, 6: 10 (of 10)
+     one-step analysis (identity-space eigenvectors, 19 triples): physical <=> no string violated: 19/19; violated set S subset of inherited set T (BGG): 19/19; S = T: 19/19; spurious triples 11: one string violated 11, two or more 0
+  [3,2,0,0]x[2,1,1,0]: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0, 1)                 physical=False signed=+0 : 11
+     lengths (0,)                   physical=True  signed=+1 : 8
+  [2,1,1,0]x[2,2,1,0]  [all sectors]: sectors 6 (sum m = 7, 7 translate spaces, 8 distinct triples): signed count = indicator on 6, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 6/6; closest distinct triples 17.09, worst identification deviation 0.0  (0.0 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 5, 1: 6, 2: 6, 3: 6, 4: 6, 5: 6, 6: 6 (of 6)
+     one-step analysis (identity-space eigenvectors, 8 triples): physical <=> no string violated: 8/8; violated set S subset of inherited set T (BGG): 8/8; S = T: 8/8; spurious triples 1: one string violated 1, two or more 0
+  [2,1,1,0]x[2,2,1,0]: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 7
+     lengths (0, 1)                 physical=False signed=+0 : 1
+  [5,3,1,0]^2  [all sectors]: sectors 49 (sum m = 136, 88 translate spaces, 198 distinct triples): signed count = indicator on 49, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 49/49; closest distinct triples 9.165, worst identification deviation 6.84e-49  (1.4 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 21, 1: 47, 2: 49, 3: 49, 4: 49, 5: 49, 6: 49 (of 49)
+     one-step analysis (identity-space eigenvectors, 198 triples): physical <=> no string violated: 198/198; violated set S subset of inherited set T (BGG): 198/198; S = T: 198/198; spurious triples 62: one string violated 60, two or more 2
+  [5,3,1,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 136
+     lengths (0, 1)                 physical=False signed=+0 : 60
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 2
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((7, 7, 2, 2), ('1234', '1243', '2134', '2143'), 0, 0), ((6, 6, 3, 3), ('1234', '1243', '2134', '2143'), 0, 0)]
+  [5,3,2,0]^2  [all sectors]: sectors 45 (sum m = 121, 79 translate spaces, 171 distinct triples): signed count = indicator on 45, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 45/45; closest distinct triples 10.0, worst identification deviation 6.84e-49  (1.0 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 21, 1: 45, 2: 45, 3: 45, 4: 45, 5: 45, 6: 45 (of 45)
+     one-step analysis (identity-space eigenvectors, 171 triples): physical <=> no string violated: 171/171; violated set S subset of inherited set T (BGG): 171/171; S = T: 171/171; spurious triples 50: one string violated 50, two or more 0
+  [5,3,2,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 121
+     lengths (0, 1)                 physical=False signed=+0 : 50
+  [6,3,0,0]^2  [all sectors]: sectors 65 (sum m = 90, 132 translate spaces, 217 distinct triples): signed count = indicator on 65, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 65/65; closest distinct triples 13.75, worst identification deviation 1.37e-48  (0.9 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 19, 1: 57, 2: 65, 3: 65, 4: 65, 5: 65, 6: 65 (of 65)
+     one-step analysis (identity-space eigenvectors, 217 triples): physical <=> no string violated: 217/217; violated set S subset of inherited set T (BGG): 217/217; S = T: 217/217; spurious triples 127: one string violated 118, two or more 9
+  [6,3,0,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0, 1)                 physical=False signed=+0 : 118
+     lengths (0,)                   physical=True  signed=+1 : 90
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 9
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((9, 4, 4, 1), ('1234', '1243', '1324', '1423'), 0, 0), ((8, 8, 1, 1), ('1234', '1243', '2134', '2143'), 0, 0), ((8, 7, 2, 1), ('1234', '1243', '2134', '2143'), 0, 0), ((8, 4, 4, 2), ('1234', '1243', '1324', '1423'), 0, 0), ((7, 7, 3, 1), ('1234', '1243', '2134', '2143'), 0, 0), ((7, 7, 2, 2), ('1234', '1243', '2134', '2143'), 0, 0)]
+  [5,2,1,1]x[3,2,2,1]  [all sectors]: sectors 12 (sum m = 8, 27 translate spaces, 23 distinct triples): signed count = indicator on 12, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 12/12; closest distinct triples 7.0, worst identification deviation 1.71e-49  (0.1 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 4, 1: 9, 2: 12, 3: 12, 4: 12, 5: 12, 6: 12 (of 12)
+     one-step analysis (identity-space eigenvectors, 23 triples): physical <=> no string violated: 23/23; violated set S subset of inherited set T (BGG): 23/23; S = T: 23/23; spurious triples 15: one string violated 12, two or more 3
+  [5,2,1,1]x[3,2,2,1]: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0, 1)                 physical=False signed=+0 : 12
+     lengths (0,)                   physical=True  signed=+1 : 8
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 3
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((5, 5, 5, 2), ('1234', '1324', '2134', '3124'), 0, 0), ((5, 5, 4, 3), ('1234', '1324', '2134', '3124'), 0, 0), ((5, 4, 4, 4), ('1234', '1243', '1324', '1423'), 0, 0)]
+  [5,4,2,1]^2  [all sectors]: sectors 31 (sum m = 69, 52 translate spaces, 94 distinct triples): signed count = indicator on 31, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 31/31; closest distinct triples 5.898, worst identification deviation 1.37e-48  (0.4 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 15, 1: 29, 2: 31, 3: 31, 4: 31, 5: 31, 6: 31 (of 31)
+     one-step analysis (identity-space eigenvectors, 94 triples): physical <=> no string violated: 94/94; violated set S subset of inherited set T (BGG): 94/94; S = T: 94/94; spurious triples 25: one string violated 23, two or more 2
+  [5,4,2,1]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 69
+     lengths (0, 1)                 physical=False signed=+0 : 23
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 2
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((8, 8, 4, 4), ('1234', '1243', '2134', '2143'), 0, 0), ((7, 7, 5, 5), ('1234', '1243', '2134', '2143'), 0, 0)]
+  [6,3,2,1]^2  [all sectors]: sectors 41 (sum m = 82, 73 translate spaces, 131 distinct triples): signed count = indicator on 41, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 41/41; closest distinct triples 13.75, worst identification deviation 1.37e-48  (0.7 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 18, 1: 40, 2: 41, 3: 41, 4: 41, 5: 41, 6: 41 (of 41)
+     one-step analysis (identity-space eigenvectors, 131 triples): physical <=> no string violated: 131/131; violated set S subset of inherited set T (BGG): 131/131; S = T: 131/131; spurious triples 49: one string violated 48, two or more 1
+  [6,3,2,1]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 82
+     lengths (0, 1)                 physical=False signed=+0 : 48
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 1
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((9, 5, 5, 5), ('1234', '1243', '1324', '1423'), 0, 0)]
+  [8,4,0,0]^2  [all sectors]: sectors 131 (sum m = 205, 292 translate spaces, 614 distinct triples): signed count = indicator on 131, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 131/131; closest distinct triples 17.23, worst identification deviation 2.74e-48  (4.2 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 29, 1: 106, 2: 131, 3: 131, 4: 131, 5: 131, 6: 131 (of 131)
+     one-step analysis (identity-space eigenvectors, 614 triples): physical <=> no string violated: 614/614; violated set S subset of inherited set T (BGG): 614/614; S = T: 614/614; spurious triples 409: one string violated 373, two or more 36
+  [8,4,0,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0, 1)                 physical=False signed=+0 : 373
+     lengths (0,)                   physical=True  signed=+1 : 205
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 36
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((13, 5, 5, 1), ('1234', '1243', '1324', '1423'), 0, 0), ((12, 6, 5, 1), ('1234', '1243', '1324', '1423'), 0, 0), ((12, 5, 5, 2), ('1234', '1243', '1324', '1423'), 0, 0), ((12, 5, 5, 2), ('1234', '1243', '1324', '1423'), 0, 0), ((11, 11, 1, 1), ('1234', '1243', '2134', '2143'), 0, 0), ((11, 10, 2, 1), ('1234', '1243', '2134', '2143'), 0, 0)]
+  [4,4,2,0]x[4,3,2,1]  [all sectors]: sectors 21 (sum m = 27, 41 translate spaces, 51 distinct triples): signed count = indicator on 21, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 21/21; closest distinct triples 24.0, worst identification deviation 6.84e-49  (0.2 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 8, 1: 20, 2: 21, 3: 21, 4: 21, 5: 21, 6: 21 (of 21)
+     one-step analysis (identity-space eigenvectors, 51 triples): physical <=> no string violated: 51/51; violated set S subset of inherited set T (BGG): 51/51; S = T: 51/51; spurious triples 24: one string violated 23, two or more 1
+  [4,4,2,0]x[4,3,2,1]: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 27
+     lengths (0, 1)                 physical=False signed=+0 : 23
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 1
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((6, 6, 4, 4), ('1234', '1243', '2134', '2143'), 0, 0)]
+  [7,4,1,0]^2  [all sectors]: sectors 109 (sum m = 396, 222 translate spaces, 681 distinct triples): signed count = indicator on 109, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 109/109; closest distinct triples 13.44, worst identification deviation 2.74e-48  (7.9 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 36, 1: 98, 2: 109, 3: 109, 4: 109, 5: 109, 6: 109 (of 109)
+     one-step analysis (identity-space eigenvectors, 681 triples): physical <=> no string violated: 681/681; violated set S subset of inherited set T (BGG): 681/681; S = T: 681/681; spurious triples 285: one string violated 270, two or more 15
+  [7,4,1,0]^2: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 396
+     lengths (0, 1)                 physical=False signed=+0 : 270
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 15
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((11, 5, 5, 3), ('1234', '1243', '1324', '1423'), 0, 0), ((10, 10, 2, 2), ('1234', '1243', '2134', '2143'), 0, 0), ((10, 9, 3, 2), ('1234', '1243', '2134', '2143'), 0, 0), ((10, 8, 3, 3), ('1234', '1243', '2134', '2143'), 0, 0), ((10, 5, 5, 4), ('1234', '1243', '1324', '1423'), 0, 0), ((9, 9, 4, 2), ('1234', '1243', '2134', '2143'), 0, 0)]
+  [6,4,2,0]x[5,3,1,0]  [all sectors]: sectors 60 (sum m = 194, 133 translate spaces, 347 distinct triples): signed count = indicator on 60, FAIL on 0 sectors (0 triples); eigendecomposition not ok in 0 sectors; non-simple spaces 0; signed lattice count = m on 60/60; closest distinct triples 10.25, worst identification deviation 1.37e-48  (3.4 s)
+     truncation depth (sum over translates of length <= L only): sectors OK at L = 0: 20, 1: 54, 2: 60, 3: 60, 4: 60, 5: 60, 6: 60 (of 60)
+     one-step analysis (identity-space eigenvectors, 347 triples): physical <=> no string violated: 347/347; violated set S subset of inherited set T (BGG): 347/347; S = T: 347/347; spurious triples 153: one string violated 147, two or more 6
+  [6,4,2,0]x[5,3,1,0]: occurrence pattern of a triple over the Weyl translates (lengths of the translates containing it), physical?, signed count -> number of triples
+     lengths (0,)                   physical=True  signed=+1 : 194
+     lengths (0, 1)                 physical=False signed=+0 : 147
+     lengths (0, 1, 1, 2)           physical=False signed=+0 : 6
+     triples occurring in three or more translate spaces (sector, permutations of the translates containing them, signed count, physical): [((9, 4, 4, 4), ('1234', '1243', '1324', '1423'), 0, 0), ((8, 8, 3, 2), ('1234', '1243', '2134', '2143'), 0, 0), ((8, 7, 3, 3), ('1234', '1243', '2134', '2143'), 0, 0), ((7, 7, 4, 3), ('1234', '1243', '2134', '2143'), 0, 0), ((7, 6, 4, 4), ('1234', '1243', '2134', '2143'), 0, 0), ((6, 6, 5, 4), ('1234', '1243', '2134', '2143'), 0, 0)]
+
+  MAIN TABLE (one row per product; sectors = all dominant mu with a non-empty translate space):
+  product                  sectors  sum m   spaces   triples | signed=ind. failures   | lattice cnt  | one-step: S<=T / S=T / multi (of triples) | sectors needing depth L = 0 / 1 / 2 / >2 | longest translate
+  [2,1,0,0]^2                    7      8        9        10 | 7/7        0          | 7/7          | 10 / 10 / 0 (of 10)                | 5 / 2 / 0 / 0   | 1
+  [2,1,1,0]^2                    6      7        7         8 | 6/6        0          | 6/6          | 8 / 8 / 0 (of 8)                   | 5 / 1 / 0 / 0   | 1
+  [3,2,1,0]^2                   16     30       22        36 | 16/16      0          | 16/16        | 36 / 36 / 0 (of 36)                | 11 / 5 / 0 / 0   | 1
+  [4,2,0,0]^2                   26     32       45        59 | 26/26      0          | 26/26        | 59 / 59 / 1 (of 59)                | 11 / 14 / 1 / 0   | 2
+  [4,2,1,0]^2                   27     56       44        77 | 27/27      0          | 27/27        | 77 / 77 / 0 (of 77)                | 14 / 13 / 0 / 0   | 1
+  [6,4,2,0]^2                   76    297      143       424 | 76/76      0          | 76/76        | 424 / 424 / 3 (of 424)             | 32 / 41 / 3 / 0   | 2
+  [3,2,1,0]x[4,2,1,0]           20     38       24        42 | 20/20      0          | 20/20        | 42 / 42 / 0 (of 42)                | 16 / 4 / 0 / 0   | 1
+  [4,2,1,0]x[3,2,1,0]           20     38       38        62 | 20/20      0          | 20/20        | 62 / 62 / 0 (of 62)                | 9 / 11 / 0 / 0   | 1
+  [4,2,2,0]^2                   23     26       37        42 | 23/23      0          | 23/23        | 42 / 42 / 0 (of 42)                | 11 / 12 / 0 / 0   | 1
+  [4,3,1,0]^2                   31     69       52        94 | 31/31      0          | 31/31        | 94 / 94 / 2 (of 94)                | 15 / 14 / 2 / 0   | 2
+  [3,2,0,0]x[2,1,1,0]           10      8       19        19 | 10/10      0          | 10/10        | 19 / 19 / 0 (of 19)                | 4 / 6 / 0 / 0   | 1
+  [2,1,1,0]x[2,2,1,0]            6      7        7         8 | 6/6        0          | 6/6          | 8 / 8 / 0 (of 8)                   | 5 / 1 / 0 / 0   | 1
+  [5,3,1,0]^2                   49    136       88       198 | 49/49      0          | 49/49        | 198 / 198 / 2 (of 198)             | 21 / 26 / 2 / 0   | 2
+  [5,3,2,0]^2                   45    121       79       171 | 45/45      0          | 45/45        | 171 / 171 / 0 (of 171)             | 21 / 24 / 0 / 0   | 1
+  [6,3,0,0]^2                   65     90      132       217 | 65/65      0          | 65/65        | 217 / 217 / 9 (of 217)             | 19 / 38 / 8 / 0   | 2
+  [5,2,1,1]x[3,2,2,1]           12      8       27        23 | 12/12      0          | 12/12        | 23 / 23 / 3 (of 23)                | 4 / 5 / 3 / 0   | 2
+  [5,4,2,1]^2                   31     69       52        94 | 31/31      0          | 31/31        | 94 / 94 / 2 (of 94)                | 15 / 14 / 2 / 0   | 2
+  [6,3,2,1]^2                   41     82       73       131 | 41/41      0          | 41/41        | 131 / 131 / 1 (of 131)             | 18 / 22 / 1 / 0   | 2
+  [8,4,0,0]^2                  131    205      292       614 | 131/131    0          | 131/131      | 614 / 614 / 36 (of 614)            | 29 / 77 / 25 / 0   | 2
+  [4,4,2,0]x[4,3,2,1]           21     27       41        51 | 21/21      0          | 21/21        | 51 / 51 / 1 (of 51)                | 8 / 12 / 1 / 0   | 2
+  [7,4,1,0]^2                  109    396      222       681 | 109/109    0          | 109/109      | 681 / 681 / 15 (of 681)            | 36 / 62 / 11 / 0   | 2
+  [6,4,2,0]x[5,3,1,0]           60    194      133       347 | 60/60      0          | 60/60        | 347 / 347 / 6 (of 347)             | 20 / 34 / 6 / 0   | 2
+  TOTAL                        832   1944     1586      3408 | 832/832    0          | 832/832      | 3408 / 3408 / 81 (of 3408)         |
+  spurious triples (w > m): 1464; one violated string 1383, two or more 81 (these need the length-2 translate of the inclusion-exclusion)
+
+  Sensitivity (the test must be able to fail): the same signed count with deliberately wrong rules, per product (sectors where the identity "signed count = indicator" still holds):
+     [3,2,1,0]^2    dot action + signs (the conjecture): 16/16;  all signs +1: 11/16;  plain Weyl action w(lam') without the rho-shift: 1/16
+     [4,2,1,0]^2    dot action + signs (the conjecture): 27/27;  all signs +1: 14/27;  plain Weyl action w(lam') without the rho-shift: 2/27
+     [6,4,2,0]^2    dot action + signs (the conjecture): 76/76;  all signs +1: 32/76;  plain Weyl action w(lam') without the rho-shift: 8/76
+
+  gl(3) sanity check of the same statement (S_3, rho = (2,1,0), the single operator V = t S_{3,2} reduced by the same engine, N = 3):
+     [4,2,0]^2          sectors   13 (sum m   19,   15 spaces,   21 triples): signed count = indicator 13/13, failures 0; depth needed L=0/1/2/3: 11/2/0/0; one-step S<=T 21/21, S=T 21/21, multi 0; lattice count 13/13; ordering of the physical eigenvalues of V on W, sectors with w > m, by (active string, direction): {((2,), 'top'): 1, ((1,), 'bottom'): 1}
+     [6,3,0]^2          sectors   25 (sum m   44,   31 spaces,   50 triples): signed count = indicator 25/25, failures 0; depth needed L=0/1/2/3: 19/6/0/0; one-step S<=T 50/50, S=T 50/50, multi 0; lattice count 25/25; ordering of the physical eigenvalues of V on W, sectors with w > m, by (active string, direction): {((2,), 'top'): 3, ((1,), 'bottom'): 3}
+     [8,4,0]^2          sectors   41 (sum m   85,   53 spaces,   99 triples): signed count = indicator 41/41, failures 0; depth needed L=0/1/2/3: 29/12/0/0; one-step S<=T 99/99, S=T 99/99, multi 0; lattice count 41/41; ordering of the physical eigenvalues of V on W, sectors with w > m, by (active string, direction): {((2,), 'top'): 6, ((1,), 'bottom'): 6}
+     [6,4,2]^2          sectors   13 (sum m   19,   15 spaces,   21 triples): signed count = indicator 13/13, failures 0; depth needed L=0/1/2/3: 11/2/0/0; one-step S<=T 21/21, S=T 21/21, multi 0; lattice count 13/13; ordering of the physical eigenvalues of V on W, sectors with w > m, by (active string, direction): {((2,), 'top'): 1, ((1,), 'bottom'): 1}
+     [14,7,0]^2         sectors  113 (sum m  344,  155 spaces,  412 triples): signed count = indicator 113/113, failures 0; depth needed L=0/1/2/3: 71/42/0/0; one-step S<=T 412/412, S=T 412/412, multi 0; lattice count 113/113; ordering of the physical eigenvalues of V on W, sectors with w > m, by (active string, direction): {((2,), 'top'): 21, ((1,), 'bottom'): 21}
+     [4,2,0]x[3,1,0]    sectors   10 (sum m   13,   14 spaces,   17 triples): signed count = indicator 10/10, failures 0; depth needed L=0/1/2/3: 6/4/0/0; one-step S<=T 17/17, S=T 17/17, multi 0; lattice count 10/10; ordering of the physical eigenvalues of V on W, sectors with w > m, by (active string, direction): {((2,), 'top'): 3, ((1,), 'bottom'): 1}
+     [5,2,1]x[4,3,0]    sectors   12 (sum m   14,   15 spaces,   17 triples): signed count = indicator 12/12, failures 0; depth needed L=0/1/2/3: 9/3/0/0; one-step S<=T 17/17, S=T 17/17, multi 0; lattice count 12/12; ordering of the physical eigenvalues of V on W, sectors with w > m, by (active string, direction): {((1,), 'bottom'): 2}
+     cross-check with gaudin_sl3/jacobi_cg: [4,2,0]: the 50-digit physical spectra of the N = 3 family used here equal jacobi_cg.physical_V + eta_1/2 on 13/13 sectors (worst deviation 8.55e-50)
+     cross-check with gaudin_sl3/jacobi_cg: [6,3,0]: the 50-digit physical spectra of the N = 3 family used here equal jacobi_cg.physical_V + eta_1/2 on 25/25 sectors (worst deviation 1.71e-49)
+     cross-check with gaudin_sl3/jacobi_cg: [6,4,2]: the 50-digit physical spectra of the N = 3 family used here equal jacobi_cg.physical_V + eta_1/2 on 13/13 sectors (worst deviation 3.42e-49)
+     cross-check with gaudin_sl3/jacobi_cg: [8,4,0]: the 50-digit physical spectra of the N = 3 family used here equal jacobi_cg.physical_V + eta_1/2 on 41/41 sectors (worst deviation 6.84e-49)
+  [stage weyl finished in 45.2 s]
+
+======================================================================================================================================================
+Q4  WHICH EIGENLINES ARE PHYSICAL?  ranks of the physical triples in the orderings by V3, V4a, V4b and G2's generic combination, candidate rules, held-out products
+======================================================================================================================================================
+  Sectors with w > m only (w = m: every eigenline is physical).  rank 1 = largest eigenvalue.  S = strings E_i^{k_i} violated by the spurious eigenvectors of the sector (BGG: inherited from s_i.lam').
+  direction of an ordering on a sector: top = every physical value above every spurious one, bottom = every physical below every spurious one, none = interleaved, tie = no strict gap.
+
+  [2,1,0,0]^2 [training]: 2 sectors with w > m  (0.0 s)
+     mu            m  w  active strings  S(spurious)   ranks of the PHYSICAL triples in V3 | V4a | V4b | G   (directions V3/V4a/V4b/G)
+     (3,1,1,1)     1  2  [3]             [3]           [1] | [1] | [1] | [1]   (top/tie/top/top)
+     (2,2,1,1)     1  2  [3]             [3]           [1] | [1] | [1] | [1]   (top/tie/top/top)
+
+  [2,1,1,0]^2 [training]: 1 sectors with w > m  (0.0 s)
+     mu            m  w  active strings  S(spurious)   ranks of the PHYSICAL triples in V3 | V4a | V4b | G   (directions V3/V4a/V4b/G)
+     (3,2,2,1)     2  3  [2]             [2]           [1, 3] | [1, 3] | [1, 3] | [2, 3]   (none/none/none/bottom)
+
+  [3,2,1,0]^2 [training]: 5 sectors with w > m  (0.1 s)
+     mu            m  w  active strings  S(spurious)   ranks of the PHYSICAL triples in V3 | V4a | V4b | G   (directions V3/V4a/V4b/G)
+     (5,3,3,1)     3  4  [2]             [2]           [1, 2, 4] | [1, 3, 4] | [1, 2, 4] | [1, 3, 4]   (none/none/none/none)
+     (5,3,2,2)     3  4  [3]             [3]           [1, 2, 3] | [1, 2, 3] | [1, 3, 4] | [1, 2, 3]   (top/top/none/top)
+     (4,4,3,1)     3  4  [1]             [1]           [2, 3, 4] | [2, 3, 4] | [1, 2, 3] | [1, 2, 3]   (bottom/bottom/top/top)
+     (4,4,2,2)     2  4  [1, 3]          [1, 3]        [2, 2] | [2, 3] | [1, 3] | [1, 4]   (none/none/none/none)
+     (4,3,3,2)     3  4  [2]             [2]           [1, 2, 4] | [1, 2, 4] | [2, 3, 4] | [2, 3, 4]   (none/none/bottom/bottom)
+
+  [4,2,0,0]^2 [training]: 13 sectors with w > m  (0.1 s)
+     mu            m  w  active strings  S(spurious)   ranks of the PHYSICAL triples in V3 | V4a | V4b | G   (directions V3/V4a/V4b/G)
+     (7,3,1,1)     1  3  [3]             [3]           [2] | [1] | [1] | [1]   (none/tie/top/top)
+     (7,2,2,1)     1  2  [3]             [3]           [1] | [1] | [1] | [1]   (top/tie/top/top)
+     (6,4,1,1)     1  4  [3]             [3]           [2] | [1] | [1] | [1]   (none/tie/top/top)
+     (6,3,3,0)     1  2  [2]             [2]           [1] | [1] | [1] | [1]   (top/tie/tie/top)
+     (6,3,2,1)     2  4  [3]             [3]           [1, 2] | [1, 1] | [1, 1] | [1, 2]   (top/tie/top/top)
+     (6,2,2,2)     1  3  [3]             [3]           [1] | [1] | [1] | [1]   (top/tie/top/top)
+     (5,5,2,0)     1  2  [1]             [1]           [2] | [1] | [1] | [2]   (bottom/tie/tie/bottom)
+     (5,5,1,1)     1  3  [1, 3]          [1, 3]        [2] | [1] | [1] | [1]   (none/tie/top/top)
+     (5,4,2,1)     2  4  [3]             [3]           [1, 3] | [1, 1] | [1, 1] | [1, 2]   (none/tie/top/top)
+     (5,3,3,1)     1  3  [2, 3]          [2, 3]        [1] | [1] | [1] | [1]   (top/tie/tie/top)
+     (5,3,2,2)     1  4  [3]             [3]           [1] | [1] | [1] | [1]   (top/tie/top/top)
+     (4,4,3,1)     1  2  [3]             [3]           [1] | [1] | [1] | [1]   (top/tie/top/top)
+     (4,4,2,2)     1  3  [3]             [3]           [1] | [1] | [1] | [1]   (top/tie/top/top)
+
+  [4,2,1,0]^2 [training]: 13 sectors with w > m  (0.3 s)
+     mu            m  w  active strings  S(spurious)   ranks of the PHYSICAL triples in V3 | V4a | V4b | G   (directions V3/V4a/V4b/G)
+     (7,3,3,1)     3  4  [2]             [2]           [1, 2, 4] | [1, 3, 4] | [1, 2, 4] | [1, 3, 4]   (none/none/none/none)
+     (7,3,2,2)     3  4  [3]             [3]           [1, 2, 3] | [1, 2, 3] | [1, 3, 4] | [1, 2, 3]   (top/top/none/top)
+     (6,4,4,0)     1  2  [2]             [2]           [1] | [1] | [1] | [1]   (top/tie/tie/top)
+     (6,4,3,1)     5  6  [2]             [2]           [1, 2, 3, 5, 6] | [1, 2, 4, 5, 6] | [1, 2, 3, 5, 6] | [1, 3, 4, 5, 6]   (none/none/none/none)
+     (6,4,2,2)     4  6  [3]             [3]           [1, 2, 2, 5] | [1, 2, 3, 4] | [1, 4, 5, 6] | [1, 3, 4, 5]   (none/top/none/none)
+     (6,3,3,2)     3  6  [2, 3]          [2, 3]        [1, 2, 4] | [1, 2, 5] | [2, 5, 6] | [2, 3, 5]   (none/none/none/none)
+     (5,5,3,1)     3  4  [1]             [1]           [2, 3, 4] | [2, 3, 4] | [1, 2, 3] | [1, 2, 3]   (bottom/bottom/top/top)
+     (5,5,2,2)     2  4  [1, 3]          [1, 3]        [2, 2] | [2, 3] | [1, 3] | [1, 4]   (none/none/none/none)
+     (5,4,4,1)     2  4  [2]             [2]           [1, 4] | [1, 4] | [2, 4] | [2, 4]   (none/none/none/none)
+     (5,4,3,2)     4  6  [2, 3]          [2, 3]        [1, 2, 4, 5] | [1, 2, 3, 5] | [2, 4, 5, 6] | [2, 3, 5, 6]   (none/none/none/none)
+     (5,3,3,3)     1  4  [2, 3]          [2, 3]        [1] | [1] | [3] | [3]   (top/top/none/none)
+     (4,4,4,2)     1  2  [2]             [2]           [2] | [1] | [2] | [2]   (bottom/tie/bottom/bottom)
+     (4,4,3,3)     1  2  [3]             [3]           [1] | [1] | [1] | [1]   (top/tie/top/top)
+
+  [6,4,2,0]^2 [training]: 44 sectors with w > m  (3.9 s)
+
+  [3,2,1,0]x[4,2,1,0] [HELD-OUT]: 4 sectors with w > m  (0.1 s)
+     mu            m  w  active strings  S(spurious)   ranks of the PHYSICAL triples in V3 | V4a | V4b | G   (directions V3/V4a/V4b/G)
+     (6,3,3,1)     3  4  [2]             [2]           [1, 2, 4] | [1, 3, 4] | [1, 2, 4] | [1, 3, 4]   (none/none/none/none)
+     (6,3,2,2)     3  4  [3]             [3]           [1, 2, 3] | [1, 2, 3] | [1, 3, 4] | [1, 2, 3]   (top/top/none/top)
+     (5,4,2,2)     3  4  [3]             [3]           [1, 2, 3] | [1, 2, 3] | [1, 3, 4] | [1, 3, 4]   (top/top/none/none)
+     (5,3,3,2)     3  4  [2]             [2]           [1, 2, 4] | [1, 2, 4] | [2, 3, 4] | [2, 3, 4]   (none/none/bottom/bottom)
+
+  [4,2,2,0]^2 [HELD-OUT]: 8 sectors with w > m  (0.1 s)
+     mu            m  w  active strings  S(spurious)   ranks of the PHYSICAL triples in V3 | V4a | V4b | G   (directions V3/V4a/V4b/G)
+     (7,4,4,1)     2  3  [2]             [2]           [1, 3] | [1, 3] | [1, 3] | [2, 3]   (none/none/none/bottom)
+     (7,4,3,2)     2  3  [2]             [2]           [1, 3] | [1, 3] | [1, 3] | [2, 3]   (none/none/none/bottom)
+     (6,5,4,1)     2  3  [2]             [2]           [1, 3] | [1, 3] | [1, 3] | [2, 3]   (none/none/none/bottom)
+     (6,5,3,2)     2  3  [2]             [2]           [1, 3] | [1, 3] | [1, 3] | [2, 3]   (none/none/none/bottom)
+     (6,4,4,2)     3  6  [2]             [2]           [1, 3, 6] | [1, 3, 6] | [1, 4, 6] | [4, 5, 6]   (none/none/none/bottom)
+     (6,4,3,3)     1  3  [2, 3]          [2, 3]        [1] | [1] | [3] | [3]   (top/top/bottom/bottom)
+     (5,5,4,2)     1  3  [1, 2]          [1, 2]        [3] | [3] | [1] | [2]   (bottom/bottom/top/none)
+     (5,4,4,3)     2  3  [2]             [2]           [1, 3] | [1, 3] | [1, 3] | [2, 3]   (none/none/none/bottom)
+
+  [4,3,1,0]^2 [HELD-OUT]: 16 sectors with w > m  (0.4 s)
+     mu            m  w  active strings  S(spurious)   ranks of the PHYSICAL triples in V3 | V4a | V4b | G   (directions V3/V4a/V4b/G)
+     (8,4,2,2)     1  2  [3]             [3]           [1] | [1] | [2] | [2]   (top/top/bottom/bottom)
+     (7,5,2,2)     3  5  [3]             [3]           [1, 2, 4] | [1, 2, 3] | [1, 4, 5] | [1, 3, 5]   (none/top/none/none)
+     (7,4,4,1)     3  4  [2]             [2]           [1, 2, 4] | [1, 3, 4] | [1, 2, 4] | [1, 3, 4]   (none/none/none/none)
+     (7,4,3,2)     4  5  [3]             [3]           [1, 2, 3, 4] | [1, 2, 3, 4] | [1, 2, 4, 5] | [1, 2, 3, 5]   (top/top/none/none)
+     (7,3,3,3)     1  2  [3]             [3]           [1] | [1] | [1] | [1]   (top/tie/top/top)
+     (6,6,4,0)     1  2  [1]             [1]           [2] | [1] | [1] | [2]   (bottom/tie/tie/bottom)
+     (6,6,3,1)     3  5  [1]             [1]           [2, 4, 5] | [2, 3, 5] | [1, 3, 4] | [1, 3, 4]   (none/none/none/none)
+     (6,6,2,2)     2  5  [1, 3]          [1, 3]        [2, 2] | [2, 3] | [1, 4] | [1, 5]   (none/none/none/none)
+     (6,5,4,1)     4  5  [1]             [1]           [2, 3, 4, 5] | [2, 3, 4, 5] | [1, 2, 3, 4] | [1, 2, 3, 4]   (bottom/bottom/top/top)
+     (6,5,3,2)     5  7  [1, 3]          [1, 3]        [2, 3, 3, 3, 6] | [2, 2, 4, 5, 5] | [1, 2, 2, 5, 6] | [1, 2, 3, 4, 7]   (none/none/none/none)
+     (6,4,4,2)     4  5  [2]             [2]           [1, 2, 2, 5] | [1, 2, 4, 5] | [1, 2, 4, 5] | [1, 3, 4, 5]   (none/none/none/none)
+     (6,4,3,3)     3  5  [3]             [3]           [1, 2, 4] | [1, 3, 4] | [1, 3, 4] | [1, 2, 3]   (none/none/none/top)
+     (5,5,5,1)     1  2  [1]             [1]           [2] | [2] | [1] | [1]   (bottom/bottom/top/top)
+     (5,5,4,2)     3  5  [1]             [1]           [2, 4, 5] | [3, 4, 5] | [1, 2, 3] | [1, 2, 3]   (none/bottom/top/top)
+     (5,5,3,3)     2  5  [1, 3]          [1, 3]        [2, 2] | [3, 4] | [1, 4] | [1, 4]   (none/none/none/none)
+     (5,4,4,3)     3  4  [2]             [2]           [1, 2, 4] | [1, 2, 4] | [2, 3, 4] | [2, 3, 4]   (none/none/bottom/bottom)
+
+  Direction statistics, TRAINING products (sectors with w > m), per ordering and per active strings A:
+     active strings A | V3                                 | V4a                                | V4b                                | G                                 
+     (1,)         | bottom 6, none 4                   | bottom 4, none 4, tie 2            | none 4, tie 2, top 4               | bottom 2, none 4, top 4           
+     (1, 2)       | bottom 1, none 4                   | bottom 1, none 4                   | none 5                             | none 5                            
+     (1, 2, 3)    | none 2                             | none 2                             | none 2                             | none 2                            
+     (1, 3)       | none 9                             | none 8, tie 1                      | none 8, top 1                      | none 8, top 1                     
+     (2,)         | bottom 2, none 16, top 3           | bottom 1, none 16, tie 4           | bottom 3, none 14, tie 3, top 1    | bottom 4, none 13, top 4          
+     (2, 3)       | none 6, top 3                      | none 6, tie 1, top 2               | none 8, tie 1                      | none 8, top 1                     
+     (3,)         | none 8, top 14                     | none 1, tie 12, top 9              | bottom 1, none 9, top 12           | bottom 1, none 7, top 14          
+     ALL          | bottom 9, none 49, top 20          | bottom 6, none 41, tie 20, top 11  | bottom 4, none 50, tie 6, top 18   | bottom 7, none 47, top 24         
+
+  Direction statistics, HELD-OUT products (sectors with w > m), per ordering and per active strings A:
+     active strings A | V3                                 | V4a                                | V4b                                | G                                 
+     (1,)         | bottom 3, none 2                   | bottom 3, none 1, tie 1            | none 1, tie 1, top 3               | bottom 1, none 1, top 3           
+     (1, 2)       | bottom 1                           | bottom 1                           | top 1                              | none 1                            
+     (1, 3)       | none 3                             | none 3                             | none 3                             | none 3                            
+     (2,)         | none 11                            | none 11                            | bottom 2, none 9                   | bottom 8, none 3                  
+     (2, 3)       | top 1                              | top 1                              | bottom 1                           | bottom 1                          
+     (3,)         | none 2, top 5                      | none 1, tie 1, top 5               | bottom 1, none 5, top 1            | bottom 1, none 3, top 3           
+     ALL          | bottom 4, none 18, top 6           | bottom 4, none 16, tie 2, top 6    | bottom 4, none 18, tie 1, top 5    | bottom 11, none 11, top 6         
+
+  Direction statistics, TRAINING products (sectors with w > m), per ordering and per violated strings S:
+     violated strings S | V3                                 | V4a                                | V4b                                | G                                 
+     (1,)         | bottom 6, none 4                   | bottom 4, none 4, tie 2            | none 4, tie 2, top 4               | bottom 2, none 4, top 4           
+     (1, 2)       | bottom 1, none 4                   | bottom 1, none 4                   | none 5                             | none 5                            
+     (1, 2, 3)    | none 2                             | none 2                             | none 2                             | none 2                            
+     (1, 3)       | none 9                             | none 8, tie 1                      | none 8, top 1                      | none 8, top 1                     
+     (2,)         | bottom 2, none 16, top 3           | bottom 1, none 16, tie 4           | bottom 3, none 14, tie 3, top 1    | bottom 4, none 13, top 4          
+     (2, 3)       | none 6, top 3                      | none 6, tie 1, top 2               | none 8, tie 1                      | none 8, top 1                     
+     (3,)         | none 8, top 14                     | none 1, tie 12, top 9              | bottom 1, none 9, top 12           | bottom 1, none 7, top 14          
+     ALL          | bottom 9, none 49, top 20          | bottom 6, none 41, tie 20, top 11  | bottom 4, none 50, tie 6, top 18   | bottom 7, none 47, top 24         
+
+  Linear separability (LP, margin maximised): is there a linear functional l = a V3 + b V4a + c V4b with  physical = top-m of l  on EVERY training sector of the class?  Then the same l on the held-out sectors
+  of the class (exactly the physical set picked?).  margin > 0: separable (the value is the smallest normalised gap l . (tau_phys - tau_spur) / |tau_phys - tau_spur|).
+   classes by active strings A:
+     (1,)       training  10 sectors (  79 pairs): SEPARABLE  margin +0.0232  l = (-1.000, +0.269, +0.103);  linear rule picks the physical set on training 10/10, on HELD-OUT 5/5
+     (1, 2)     training   5 sectors (  87 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 2/5, on HELD-OUT 1/1
+                quadratic functional (9 monomials of degree <= 2 in the triple): SEPARABLE, margin +0.0000; picks the physical set on training 5/5, on HELD-OUT 0/1
+     (1, 2, 3)  training   2 sectors (  71 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 0/2, on HELD-OUT 0/0
+                quadratic functional (9 monomials of degree <= 2 in the triple): SEPARABLE, margin +0.0000; picks the physical set on training 2/2, on HELD-OUT 0/0
+     (1, 3)     training   9 sectors ( 147 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 0/9, on HELD-OUT 0/3
+                quadratic functional (9 monomials of degree <= 2 in the triple): not separable
+     (2,)       training  21 sectors ( 149 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 2/21, on HELD-OUT 0/11
+                quadratic functional (9 monomials of degree <= 2 in the triple): SEPARABLE, margin +0.0029; picks the physical set on training 21/21, on HELD-OUT 10/11
+     (2, 3)     training   9 sectors ( 109 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 0/9, on HELD-OUT 0/1
+                quadratic functional (9 monomials of degree <= 2 in the triple): not separable
+     (3,)       training  22 sectors ( 111 pairs): SEPARABLE  margin +0.1437  l = (-0.487, +1.000, +0.329);  linear rule picks the physical set on training 22/22, on HELD-OUT 7/7
+   classes by violated strings S:
+     (1,)       training  10 sectors (  79 pairs): SEPARABLE  margin +0.0232  l = (-1.000, +0.269, +0.103);  linear rule picks the physical set on training 10/10, on HELD-OUT 5/5
+     (1, 2)     training   5 sectors (  87 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 2/5, on HELD-OUT 1/1
+                quadratic functional (9 monomials of degree <= 2 in the triple): SEPARABLE, margin +0.0000; picks the physical set on training 5/5, on HELD-OUT 0/1
+     (1, 2, 3)  training   2 sectors (  71 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 0/2, on HELD-OUT 0/0
+                quadratic functional (9 monomials of degree <= 2 in the triple): SEPARABLE, margin +0.0000; picks the physical set on training 2/2, on HELD-OUT 0/0
+     (1, 3)     training   9 sectors ( 147 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 0/9, on HELD-OUT 0/3
+                quadratic functional (9 monomials of degree <= 2 in the triple): not separable
+     (2,)       training  21 sectors ( 149 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 2/21, on HELD-OUT 0/11
+                quadratic functional (9 monomials of degree <= 2 in the triple): SEPARABLE, margin +0.0029; picks the physical set on training 21/21, on HELD-OUT 10/11
+     (2, 3)     training   9 sectors ( 109 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 0/9, on HELD-OUT 0/1
+                quadratic functional (9 monomials of degree <= 2 in the triple): not separable
+     (3,)       training  22 sectors ( 111 pairs): SEPARABLE  margin +0.1437  l = (-0.487, +1.000, +0.329);  linear rule picks the physical set on training 22/22, on HELD-OUT 7/7
+   classes by ALL sectors:
+     ()         training  78 sectors ( 753 pairs): not separable  margin -0.0000  l = (-0.000, -0.000, -0.000);  linear rule picks the physical set on training 16/78, on HELD-OUT 6/28
+                quadratic functional (9 monomials of degree <= 2 in the triple): not separable
+  [stage rule finished in 5.3 s]
+
+======================================================================================================================================================
+Q5(a)  SPARSITY GRAPH OF THE REDUCED OPERATORS ON THE LATTICE R_nu (vertices = lattice points of W, edges = nonzero off-diagonal matrix elements)
+======================================================================================================================================================
+  For every weight space W = V_lam[mu - lam'] of every irrep (identity translate): connected?  path (then tridiagonal in the path order)?  tree?  maximal degree, bandwidth after reverse Cuthill-McKee.
+
+  [2,1,0,0]^2  (0.0 s)   [weight spaces of dimension >= 2]
+     operator     kind    spaces  connected   paths  trees     asym   mean bw   max bw  max deg     max w
+     V3           m<w          2          2       2      2        0      1.00        1        1         2
+     V3           m=w          1          1       1      1        0      1.00        1        1         2
+     V3|V4a|V4b   m<w          2          2       2      2        0      1.00        1        1         2
+     V3|V4a|V4b   m=w          1          1       1      1        0      1.00        1        1         2
+     V3|V4b       m<w          2          2       2      2        0      1.00        1        1         2
+     V3|V4b       m=w          1          1       1      1        0      1.00        1        1         2
+     V4b          m<w          2          2       2      2        0      1.00        1        1         2
+     V4b          m=w          1          0       1      1        0      0.00        0        0         2
+
+  [2,1,1,0]^2  (0.0 s)   [weight spaces of dimension >= 2]
+     operator     kind    spaces  connected   paths  trees     asym   mean bw   max bw  max deg     max w
+     V3           m<w          1          1       0      0        0      2.00        2        2         3
+     V3|V4a|V4b   m<w          1          1       0      0        0      2.00        2        2         3
+     V3|V4b       m<w          1          1       0      0        0      2.00        2        2         3
+     V4b          m<w          1          1       0      0        0      2.00        2        2         3
+
+  [3,2,1,0]^2  (0.0 s)   [weight spaces of dimension >= 2]
+     operator     kind    spaces  connected   paths  trees     asym   mean bw   max bw  max deg     max w
+     V3           m<w          5          5       0      0        2      3.00        3        3         4
+     V3           m=w          3          3       2      2        0      1.67        3        3         4
+     V3|V4a|V4b   m<w          5          5       0      0        2      3.00        3        3         4
+     V3|V4a|V4b   m=w          3          3       2      2        0      1.67        3        3         4
+     V3|V4b       m<w          5          5       0      0        2      3.00        3        3         4
+     V3|V4b       m=w          3          3       2      2        0      1.67        3        3         4
+     V4b          m<w          5          5       0      0        2      3.00        3        3         4
+     V4b          m=w          3          2       2      2        0      1.00        2        3         4
+
+  [4,2,0,0]^2  (0.1 s)   [weight spaces of dimension >= 2]
+     operator     kind    spaces  connected   paths  trees     asym   mean bw   max bw  max deg     max w
+     V3           m<w         13         13       6      6        2      1.69        3        3         4
+     V3           m=w          5          5       5      5        0      1.00        1        2         3
+     V3|V4a|V4b   m<w         13         13       6      6        2      1.69        3        3         4
+     V3|V4a|V4b   m=w          5          5       5      5        0      1.00        1        2         3
+     V3|V4b       m<w         13         13       6      6        2      1.69        3        3         4
+     V3|V4b       m=w          5          5       5      5        0      1.00        1        2         3
+     V4b          m<w         13         11       6      6        3      1.54        3        3         4
+     V4b          m=w          5          0       5      5        0      0.00        0        0         3
+
+  [4,2,1,0]^2  (0.1 s)   [weight spaces of dimension >= 2]
+     operator     kind    spaces  connected   paths  trees     asym   mean bw   max bw  max deg     max w
+     V3           m<w         13         13       3      3        4      2.77        4        5         6
+     V3           m=w          5          5       3      3        0      1.80        3        3         4
+     V3|V4a|V4b   m<w         13         13       3      3        4      2.77        4        5         6
+     V3|V4a|V4b   m=w          5          5       3      3        0      1.80        3        3         4
+     V3|V4b       m<w         13         13       3      3        4      2.77        4        5         6
+     V3|V4b       m=w          5          5       3      3        0      1.80        3        3         4
+     V4b          m<w         13         12       3      3        7      2.69        4        5         6
+     V4b          m=w          5          3       3      3        0      1.00        2        3         4
+
+  [6,4,2,0]^2  (0.9 s)   [weight spaces of dimension >= 2]
+     operator     kind    spaces  connected   paths  trees     asym   mean bw   max bw  max deg     max w
+     V3           m<w         44         44       4      4       25      4.61        8       13        15
+     V3           m=w         18         18      10     10        0      2.22        6        8        10
+     V3|V4a|V4b   m<w         44         44       4      4       23      4.61        8       13        15
+     V3|V4a|V4b   m=w         18         18      10     10        0      2.22        6        8        10
+     V3|V4b       m<w         44         44       4      4       23      4.61        8       13        15
+     V3|V4b       m=w         18         18      10     10        0      2.22        6        8        10
+     V4b          m<w         44         42       4      4       30      4.50        8       13        15
+     V4b          m=w         18         13      10     10        3      1.94        6        8        10
+
+  [3,2,1,0]x[4,2,1,0]  (0.0 s)   [weight spaces of dimension >= 2]
+     operator     kind    spaces  connected   paths  trees     asym   mean bw   max bw  max deg     max w
+     V3           m<w          4          4       0      0        0      3.00        3        3         4
+     V3           m=w          6          6       4      4        0      1.67        3        3         4
+     V3|V4a|V4b   m<w          4          4       0      0        0      3.00        3        3         4
+     V3|V4a|V4b   m=w          6          6       4      4        0      1.67        3        3         4
+     V3|V4b       m<w          4          4       0      0        0      3.00        3        3         4
+     V3|V4b       m=w          6          6       4      4        0      1.67        3        3         4
+     V4b          m<w          4          4       0      0        1      3.00        3        3         4
+     V4b          m=w          6          5       4      4        0      1.33        3        3         4
+
+  [4,2,2,0]^2  (0.0 s)   [weight spaces of dimension >= 2]
+     operator     kind    spaces  connected   paths  trees     asym   mean bw   max bw  max deg     max w
+     V3           m<w          8          8       0      0        2      2.12        3        5         6
+     V3|V4a|V4b   m<w          8          8       0      0        1      2.12        3        5         6
+     V3|V4b       m<w          8          8       0      0        1      2.12        3        5         6
+     V4b          m<w          8          8       0      0        2      2.12        3        5         6
+
+  [4,3,1,0]^2  (0.1 s)   [weight spaces of dimension >= 2]
+     operator     kind    spaces  connected   paths  trees     asym   mean bw   max bw  max deg     max w
+     V3           m<w         16         16       4      4        8      2.81        5        6         7
+     V3           m=w          6          6       4      4        0      1.83        4        4         5
+     V3|V4a|V4b   m<w         16         16       4      4        8      2.81        5        6         7
+     V3|V4a|V4b   m=w          6          6       4      4        0      1.83        4        4         5
+     V3|V4b       m<w         16         16       4      4        8      2.81        5        6         7
+     V3|V4b       m=w          6          6       4      4        0      1.83        4        4         5
+     V4b          m<w         16         15       4      4        9      2.62        5        6         7
+     V4b          m=w          6          4       4      4        1      1.33        4        4         5
+
+  TOTAL over all products above:
+     operator     kind    spaces  connected   paths  trees     asym   mean bw   max bw  max deg     max w
+     V3           m<w        106        106      19     19       43      3.34        8       13        15
+     V3           m=w         44         44      29     29        0      1.84        6        8        10
+     V3|V4a|V4b   m<w        106        106      19     19       40      3.34        8       13        15
+     V3|V4a|V4b   m=w         44         44      29     29        0      1.84        6        8        10
+     V3|V4b       m<w        106        106      19     19       40      3.34        8       13        15
+     V3|V4b       m=w         44         44      29     29        0      1.84        6        8        10
+     V4b          m<w        106        100      19     19       54      3.24        8       13        15
+     V4b          m=w         44         27      29     29        4      1.34        6        8        10
+
+  gl(3) comparison (the chain of jacobi_cg): V on V_Lam[mu - Lam], Lam = [8,4,0] and [6,4,2]:
+     [8,4,0]: 31 spaces (dim >= 2), connected 31, paths (tridiagonal) 31, max bandwidth after RCM 1, max w 5; sectors with m = w: 19, of which paths 19
+     [6,4,2]: 7 spaces (dim >= 2), connected 7, paths (tridiagonal) 7, max bandwidth after RCM 1, max w 3; sectors with m = w: 5, of which paths 5
+  [stage chain finished in 1.4 s]
+
+======================================================================================================================================================
+Q5(b,c)  POLYNOMIALITY OF THE SLICE COMPONENTS IN THE TRIPLE, CYCLIC COORDINATE VECTORS, GRADED KRYLOV DEGREES
+======================================================================================================================================================
+  On M_mu (m x m exact matrices in the PRV coordinates, m >= 2).  A coordinate x0 is CYCLIC iff e_x0^T generates the dual space under the commutative algebra of the triple, equivalently every
+  copy has a nonzero component x0.  Then every other component of every copy is a polynomial in the copy's triple with RATIONAL coefficients, u_j[y] / u_j[x0] = P_y(v3, v4a, v4b),
+  of minimal total degree deg(y) (graded Krylov degree, exact); also reported for the single generic operator G (degree <= m-1, always).  The polynomials are checked at 50 digits against G3's copies.
+
+  [2,1,0,0]^2: 1 sectors with m >= 2 (sum m = 2): coordinates cyclic for the triple 2 of 2 (all coordinates cyclic in 1 sectors; some cyclic coordinate in 1); cyclic for the triple <=> cyclic for G in 1 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.00 (<= m-1 in 1 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 1 / 0 / 0 sectors), mean for G alone 1.00;  exact polynomials vs G3 copies at 50 digits: max relative error 1.68e-51, failures 0  (0.0 s)
+     mu            m  x0(best)  max total degree (triple)  max degree (G)  generic bound  degree profile {degree: #coordinates}
+     (3,2,1,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+
+  [2,1,1,0]^2: 1 sectors with m >= 2 (sum m = 2): coordinates cyclic for the triple 2 of 2 (all coordinates cyclic in 1 sectors; some cyclic coordinate in 1); cyclic for the triple <=> cyclic for G in 1 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.00 (<= m-1 in 1 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 1 / 0 / 0 sectors), mean for G alone 1.00;  exact polynomials vs G3 copies at 50 digits: max relative error 1.92e-49, failures 0  (0.0 s)
+     mu            m  x0(best)  max total degree (triple)  max degree (G)  generic bound  degree profile {degree: #coordinates}
+     (3,2,2,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+
+  [3,2,1,0]^2: 8 sectors with m >= 2 (sum m = 22): coordinates cyclic for the triple 22 of 22 (all coordinates cyclic in 8 sectors; some cyclic coordinate in 8); cyclic for the triple <=> cyclic for G in 8 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.00 (<= m-1 in 8 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 8 / 0 / 0 sectors), mean for G alone 1.75;  exact polynomials vs G3 copies at 50 digits: max relative error 7.87e-49, failures 0  (0.1 s)
+     mu            m  x0(best)  max total degree (triple)  max degree (G)  generic bound  degree profile {degree: #coordinates}
+     (6,3,2,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (5,4,3,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (5,4,2,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (5,3,3,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (5,3,2,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (4,4,3,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (4,4,2,2)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (4,3,3,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+
+  [4,2,0,0]^2: 7 sectors with m >= 2 (sum m = 15): coordinates cyclic for the triple 15 of 15 (all coordinates cyclic in 7 sectors; some cyclic coordinate in 7); cyclic for the triple <=> cyclic for G in 7 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.14 (<= m-1 in 7 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 6 / 1 / 0 sectors), mean for G alone 1.14;  exact polynomials vs G3 copies at 50 digits: max relative error 4.18e-50, failures 0  (0.0 s)
+     mu            m  x0(best)  max total degree (triple)  max degree (G)  generic bound  degree profile {degree: #coordinates}
+     (7,4,1,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,3,2,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,5,1,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,4,2,0)     3   0         2                          2               1             [(0, 1), (1, 1), (2, 1)]
+     (6,3,2,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (5,4,3,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (5,4,2,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+
+  [4,2,1,0]^2: 14 sectors with m >= 2 (sum m = 43): coordinates cyclic for the triple 42 of 43 (all coordinates cyclic in 13 sectors; some cyclic coordinate in 14); cyclic for the triple <=> cyclic for G in 14 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.14 (<= m-1 in 14 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 13 / 1 / 0 sectors), mean for G alone 2.07;  exact polynomials vs G3 copies at 50 digits: max relative error 2.62e-47, failures 0  (0.1 s)
+     mu            m  x0(best)  max total degree (triple)  max degree (G)  generic bound  degree profile {degree: #coordinates}
+     (8,3,2,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,4,3,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,4,2,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (7,3,3,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (7,3,2,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (6,5,3,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,5,2,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (6,4,3,1)     5   1         2                          4               2             [(0, 1), (2, 4)]
+     (6,4,2,2)     4   0         2                          3               1             [(0, 1), (1, 2), (2, 1)]
+     (6,3,3,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (5,5,3,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (5,5,2,2)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (5,4,4,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (5,4,3,2)     4   0         1                          3               1             [(0, 1), (1, 3)]
+
+  [6,4,2,0]^2: 56 sectors with m >= 2 (sum m = 277): coordinates cyclic for the triple 274 of 277 (all coordinates cyclic in 54 sectors; some cyclic coordinate in 56); cyclic for the triple <=> cyclic for G in 56 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.62 (<= m-1 in 56 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 48 / 8 / 0 sectors), mean for G alone 3.95;  exact polynomials vs G3 copies at 50 digits: max relative error 7.44e-46, failures 0  (3.3 s)
+
+  [3,2,1,0]x[4,2,1,0]: 10 sectors with m >= 2 (sum m = 28): coordinates cyclic for the triple 28 of 28 (all coordinates cyclic in 10 sectors; some cyclic coordinate in 10); cyclic for the triple <=> cyclic for G in 10 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.00 (<= m-1 in 10 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 10 / 0 / 0 sectors), mean for G alone 1.80;  exact polynomials vs G3 copies at 50 digits: max relative error 1.10e-48, failures 0  (0.1 s)
+     mu            m  x0(best)  max total degree (triple)  max degree (G)  generic bound  degree profile {degree: #coordinates}
+     (7,3,2,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,4,3,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,4,2,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (6,3,3,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (6,3,2,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (5,5,2,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (5,4,3,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (5,4,2,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (5,3,3,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (4,4,3,2)     2   0         1                          1               1             [(0, 1), (1, 1)]
+
+  [4,2,2,0]^2: 6 sectors with m >= 2 (sum m = 13): coordinates cyclic for the triple 13 of 13 (all coordinates cyclic in 6 sectors; some cyclic coordinate in 6); cyclic for the triple <=> cyclic for G in 6 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.17 (<= m-1 in 6 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 5 / 1 / 0 sectors), mean for G alone 1.17;  exact polynomials vs G3 copies at 50 digits: max relative error 1.31e-48, failures 0  (0.0 s)
+     mu            m  x0(best)  max total degree (triple)  max degree (G)  generic bound  degree profile {degree: #coordinates}
+     (7,4,4,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,4,3,2)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,5,4,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,5,3,2)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,4,4,2)     3   0         2                          2               1             [(0, 1), (1, 1), (2, 1)]
+     (5,4,4,3)     2   0         1                          1               1             [(0, 1), (1, 1)]
+
+  [4,3,1,0]^2: 18 sectors with m >= 2 (sum m = 56): coordinates cyclic for the triple 52 of 56 (all coordinates cyclic in 15 sectors; some cyclic coordinate in 18); cyclic for the triple <=> cyclic for G in 18 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.17 (<= m-1 in 18 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 17 / 1 / 0 sectors), mean for G alone 2.11;  exact polynomials vs G3 copies at 50 digits: max relative error 1.66e-47, failures 0  (0.2 s)
+     mu            m  x0(best)  max total degree (triple)  max degree (G)  generic bound  degree profile {degree: #coordinates}
+     (8,5,2,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (8,4,3,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,6,3,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,6,2,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (7,5,4,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,5,3,1)     5   0         2                          4               2             [(0, 1), (2, 4)]
+     (7,5,2,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (7,4,4,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (7,4,3,2)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (6,6,3,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (6,6,2,2)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,5,4,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (6,5,3,2)     5   0         2                          4               2             [(0, 1), (2, 4)]
+     (6,4,4,2)     4   0         2                          3               1             [(0, 1), (2, 3)]
+     (6,4,3,3)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (5,5,4,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (5,5,3,3)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (5,4,4,3)     3   0         1                          2               1             [(0, 1), (1, 2)]
+
+  [5,3,1,0]^2: 32 sectors with m >= 2 (sum m = 119): coordinates cyclic for the triple 115 of 119 (all coordinates cyclic in 29 sectors; some cyclic coordinate in 32); cyclic for the triple <=> cyclic for G in 32 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.38 (<= m-1 in 32 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 27 / 5 / 0 sectors), mean for G alone 2.72;  exact polynomials vs G3 copies at 50 digits: max relative error 2.16e-47, failures 0  (0.6 s)
+     mu            m  x0(best)  max total degree (triple)  max degree (G)  generic bound  degree profile {degree: #coordinates}
+     (10,5,2,1)    2   0         1                          1               1             [(0, 1), (1, 1)]
+     (10,4,3,1)    2   0         1                          1               1             [(0, 1), (1, 1)]
+     (9,6,3,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (9,6,2,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (9,5,4,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (9,5,3,1)     5   0         2                          4               2             [(0, 1), (2, 4)]
+     (9,5,2,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (9,4,4,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (9,4,3,2)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (8,7,3,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (8,7,2,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (8,6,4,0)     3   0         2                          2               1             [(0, 1), (1, 1), (2, 1)]
+     (8,6,3,1)     7   1         2                          6               2             [(0, 1), (2, 6)]
+     (8,6,2,2)     4   0         2                          3               1             [(0, 1), (1, 2), (2, 1)]
+     (8,5,4,1)     6   0         2                          5               2             [(0, 1), (2, 5)]
+     (8,5,3,2)     7   0         2                          6               2             [(0, 1), (2, 6)]
+     (8,4,4,2)     4   0         2                          3               1             [(0, 1), (2, 3)]
+     (8,4,3,3)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (7,7,3,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (7,7,2,2)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,6,5,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,6,4,1)     6   0         2                          5               2             [(0, 1), (2, 5)]
+     (7,6,3,2)     6   0         2                          5               2             [(0, 1), (2, 5)]
+     (7,5,5,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (7,5,4,2)     7   0         2                          6               2             [(0, 1), (2, 6)]
+     (7,5,3,3)     4   0         2                          3               1             [(0, 1), (1, 2), (2, 1)]
+     (7,4,4,3)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (6,6,5,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (6,6,4,2)     4   0         2                          3               1             [(0, 1), (2, 3)]
+     (6,6,3,3)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,5,5,2)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (6,5,4,3)     4   0         1                          3               1             [(0, 1), (1, 3)]
+
+  [5,3,2,0]^2: 28 sectors with m >= 2 (sum m = 104): coordinates cyclic for the triple 103 of 104 (all coordinates cyclic in 27 sectors; some cyclic coordinate in 28); cyclic for the triple <=> cyclic for G in 28 sectors;
+     best cyclic coordinate: mean minimal max-degree in the triple 1.36 (<= m-1 in 28 sectors; = / > / < the generic dimension-counting bound d_gen(m) in 26 / 2 / 0 sectors), mean for G alone 2.71;  exact polynomials vs G3 copies at 50 digits: max relative error 3.75e-47, failures 0  (0.5 s)
+     mu            m  x0(best)  max total degree (triple)  max degree (G)  generic bound  degree profile {degree: #coordinates}
+     (10,5,4,1)    2   0         1                          1               1             [(0, 1), (1, 1)]
+     (10,5,3,2)    2   0         1                          1               1             [(0, 1), (1, 1)]
+     (9,6,5,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (9,6,4,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (9,6,3,2)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (9,5,5,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (9,5,4,2)     5   0         2                          4               2             [(0, 1), (1, 3), (2, 1)]
+     (9,5,3,3)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (9,4,4,3)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (8,7,5,0)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (8,7,4,1)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (8,7,3,2)     4   0         1                          3               1             [(0, 1), (1, 3)]
+     (8,6,5,1)     5   1         2                          4               2             [(0, 1), (2, 4)]
+     (8,6,4,2)     8   0         2                          7               2             [(0, 1), (1, 3), (2, 4)]
+     (8,6,3,3)     4   0         2                          3               1             [(0, 1), (1, 2), (2, 1)]
+     (8,5,5,2)     5   0         2                          4               2             [(0, 1), (1, 2), (2, 2)]
+     (8,5,4,3)     6   0         2                          5               2             [(0, 1), (2, 5)]
+     (7,7,5,1)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (7,7,4,2)     4   0         2                          3               1             [(0, 1), (1, 2), (2, 1)]
+     (7,7,3,3)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,6,6,1)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (7,6,5,2)     6   0         2                          5               2             [(0, 1), (1, 3), (2, 2)]
+     (7,6,4,3)     6   0         2                          5               2             [(0, 1), (2, 5)]
+     (7,5,5,3)     5   0         2                          4               2             [(0, 1), (1, 2), (2, 2)]
+     (7,5,4,4)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (6,6,5,3)     3   0         1                          2               1             [(0, 1), (1, 2)]
+     (6,6,4,4)     2   0         1                          1               1             [(0, 1), (1, 1)]
+     (6,5,5,4)     3   0         1                          2               1             [(0, 1), (1, 2)]
+
+  TOTAL: 181 sectors with m >= 2; cyclic coordinates 668 of 681; all coordinates cyclic in 171 sectors; a cyclic coordinate exists in 181 sectors; polynomial fits checked at 50 digits: worst error 7.44e-46, failures 0
+         by multiplicity m: number of sectors with (best total degree in the triple, degree for the generic single operator G) = ...  and d_gen(m):
+            m =  2  d_gen = 1 : (1, 1): 57
+            m =  3  d_gen = 1 : (1, 2): 44, (2, 2): 6
+            m =  4  d_gen = 1 : (1, 3): 21, (2, 3): 10
+            m =  5  d_gen = 2 : (2, 4): 9
+            m =  6  d_gen = 2 : (2, 5): 16
+            m =  7  d_gen = 2 : (2, 6): 6, (3, 6): 1
+            m =  8  d_gen = 2 : (2, 7): 4
+            m =  9  d_gen = 2 : (2, 8): 2
+            m = 10  d_gen = 2 : (2, 9): 1, (3, 9): 2
+            m = 11  d_gen = 3 : (3, 10): 1
+            m = 12  d_gen = 3 : (3, 11): 1
+         degree of the best cyclic coordinate compared with the dimension-counting bound d_gen(m) (smallest d with C(d+3,3) >= m): equal in 162, larger in 19, smaller in 0 sectors; sectors with m > 4: 43, of which affine (degree 1) 0
+  [stage poly finished in 4.9 s]
+
+======================================================================================================================================================
+Q5(c)  CYCLIC LATTICE POINTS ON THE WHOLE WEIGHT SPACE W = V_lam[mu - lam'] (exact graded Krylov spaces of the coordinate vectors under the triple)
+======================================================================================================================================================
+  For every weight space with w >= 2 (all irreps of the product, identity translate): the number of lattice points that are cyclic; whether the first / last GT-index point is cyclic; the best graded
+  degree (max over lattice points y of the minimal total degree of e_y^T in the Krylov space of e_x^T, minimised over the cyclic x) against d_gen(w).
+  [2,1,0,0]^2              3 spaces (w >= 2, 2 with m < w): cyclic lattice points 6 of 6; a cyclic point exists in 3, all points cyclic in 3; first GT-index point cyclic in 3, last in 3; best degree = d_gen(w) in 3, > in 0  (0.0 s)
+  [2,1,1,0]^2              1 spaces (w >= 2, 1 with m < w): cyclic lattice points 3 of 3; a cyclic point exists in 1, all points cyclic in 1; first GT-index point cyclic in 1, last in 1; best degree = d_gen(w) in 1, > in 0  (0.0 s)
+  [3,2,1,0]^2              8 spaces (w >= 2, 5 with m < w): cyclic lattice points 26 of 28; a cyclic point exists in 8, all points cyclic in 6; first GT-index point cyclic in 8, last in 6; best degree = d_gen(w) in 8, > in 0  (0.0 s)
+  [4,2,0,0]^2             18 spaces (w >= 2, 13 with m < w): cyclic lattice points 44 of 50; a cyclic point exists in 18, all points cyclic in 13; first GT-index point cyclic in 17, last in 14; best degree = d_gen(w) in 11, > in 7  (0.1 s)
+  [4,2,1,0]^2             18 spaces (w >= 2, 13 with m < w): cyclic lattice points 63 of 68; a cyclic point exists in 18, all points cyclic in 13; first GT-index point cyclic in 17, last in 15; best degree = d_gen(w) in 18, > in 0  (0.1 s)
+  [6,4,2,0]^2             62 spaces (w >= 2, 44 with m < w): cyclic lattice points 353 of 410; a cyclic point exists in 62, all points cyclic in 36; first GT-index point cyclic in 60, last in 40; best degree = d_gen(w) in 60, > in 2  (2.3 s)
+  [3,2,1,0]x[4,2,1,0]     10 spaces (w >= 2, 4 with m < w): cyclic lattice points 32 of 32; a cyclic point exists in 10, all points cyclic in 10; first GT-index point cyclic in 10, last in 10; best degree = d_gen(w) in 10, > in 0  (0.0 s)
+  [4,2,2,0]^2              8 spaces (w >= 2, 8 with m < w): cyclic lattice points 25 of 27; a cyclic point exists in 8, all points cyclic in 7; first GT-index point cyclic in 8, last in 7; best degree = d_gen(w) in 8, > in 0  (0.0 s)
+  [4,3,1,0]^2             22 spaces (w >= 2, 16 with m < w): cyclic lattice points 68 of 85; a cyclic point exists in 22, all points cyclic in 12; first GT-index point cyclic in 22, last in 13; best degree = d_gen(w) in 22, > in 0  (0.2 s)
+  TOTAL: 150 spaces: cyclic lattice points 620 of 709 (87.4 %); a cyclic point exists in 150 of 150, in 106 of the 106 spaces with m < w; first point cyclic in 146, last in 109
+  [stage cycW finished in 2.9 s]

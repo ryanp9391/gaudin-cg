@@ -1,0 +1,565 @@
+# slice_ops_gl4.py stage=all ext  (Python 3.13.13, numpy 2.5.2, scipy 1.18.1, mpmath 1.3.0; Windows-11-10.0.26300-SP0; 2026-10-22 07:12)
+
+======================================================================================================================================================
+G3.1  NORMAL ORDERING in U(gl(4)): class order lowering < Cartan < raising, PBW reordering by commutators (memoised)
+======================================================================================================================================================
+  words tested: 656 (all 256 words of length 2 + 400 random words of length 1..4, seed 11); exact-matrix mismatches on [2,1,0,0] and [1,1,0,0]: 0, PBW (representation-free, G2) mismatches: 0, class-order violations: 0, idempotence violations: 0; max number of terms of a normal-ordered word: 11
+  the 96 distinct length-3 site-2 words of S_{4,1}: exact-matrix mismatches 0, PBW mismatches 0, order violations 0, idempotence violations 0; max terms of a normal form 1
+  e12 e21 = e21 e12 + e11 - e22 (raising left of lowering): True;  e21 e12 is already normal ordered: True
+  normal-ordering failures in total: 0   (0.10s)
+
+======================================================================================================================================================
+G3.2  THE REDUCTION: universal polynomials in the site-1 generators, term counts, closed-form cross-check, sparsity
+======================================================================================================================================================
+  term counts of the reduction (original term list -> normal ordering of the site-2 words -> universal polynomial in the site-1 generators with coefficients in Q[lam'])
+  V3   terms   88 | distinct site-2 words  16 (max length 1) | terms killed outright (every normal-ordered site-2 word has a lowering factor)   29 | universal reduced words  39 (max length 3, 0.3 ms) | lam'=[2,1,1,0]: 39 words, 70 trie nodes, max len 3 | lam'=[3,2,1,0]: 39 words, 70 trie nodes, max len 3 | lam'=[6,4,2,0]: 39 words, 70 trie nodes, max len 3 | lam'=[12,6,0,0]: 36 words, 68 trie nodes, max len 3 | lam'=[8,8,0,0]: 36 words, 68 trie nodes, max len 3
+  V4a  terms  152 | distinct site-2 words  16 (max length 1) | terms killed outright (every normal-ordered site-2 word has a lowering factor)   57 | universal reduced words  78 (max length 4, 0.5 ms) | lam'=[2,1,1,0]: 59 words, 132 trie nodes, max len 4 | lam'=[3,2,1,0]: 67 words, 146 trie nodes, max len 4 | lam'=[6,4,2,0]: 67 words, 146 trie nodes, max len 4 | lam'=[12,6,0,0]: 61 words, 140 trie nodes, max len 4 | lam'=[8,8,0,0]: 61 words, 140 trie nodes, max len 4
+  V4b  terms  324 | distinct site-2 words  88 (max length 2) | terms killed outright (every normal-ordered site-2 word has a lowering factor)  173 | universal reduced words  85 (max length 4, 0.9 ms) | lam'=[2,1,1,0]: 63 words, 141 trie nodes, max len 4 | lam'=[3,2,1,0]: 65 words, 144 trie nodes, max len 4 | lam'=[6,4,2,0]: 69 words, 150 trie nodes, max len 4 | lam'=[12,6,0,0]: 67 words, 148 trie nodes, max len 4 | lam'=[8,8,0,0]: 67 words, 148 trie nodes, max len 4
+  S31  terms  156 | distinct site-2 words  76 (max length 2) | terms killed outright (every normal-ordered site-2 word has a lowering factor)   71 | universal reduced words  40 (max length 3, 0.5 ms) | lam'=[2,1,1,0]: 38 words, 69 trie nodes, max len 3 | lam'=[3,2,1,0]: 40 words, 70 trie nodes, max len 3 | lam'=[6,4,2,0]: 40 words, 70 trie nodes, max len 3 | lam'=[12,6,0,0]: 36 words, 68 trie nodes, max len 3 | lam'=[8,8,0,0]: 36 words, 68 trie nodes, max len 3
+  S41  terms  412 | distinct site-2 words 184 (max length 3) | terms killed outright (every normal-ordered site-2 word has a lowering factor)  246 | universal reduced words  86 (max length 4, 1.3 ms) | lam'=[2,1,1,0]: 66 words, 145 trie nodes, max len 4 | lam'=[3,2,1,0]: 69 words, 150 trie nodes, max len 4 | lam'=[6,4,2,0]: 68 words, 149 trie nodes, max len 4 | lam'=[12,6,0,0]: 65 words, 145 trie nodes, max len 4 | lam'=[8,8,0,0]: 65 words, 145 trie nodes, max len 4
+
+  universal V_red,3 (lam'-independent): V3 reduces to 39 words; the polynomial (word = product of site-1 generators E_ij, leftmost acts last; coefficient = polynomial in lam'_1..lam'_4 written l1..l4):
+     E22                                +1*l4 +1*l3
+     E33                                +2*l4 +1*l2 +1*l1
+     E44                                +2*l3 +2*l2 +2*l1
+     E11 E22                            +1*l4 +1*l3
+     E11 E33                            +1*l4 +1*l2
+     E11 E44                            +1*l3 +1*l2
+     E21 E12                            -1*l4 -1*l3
+     E22 E33                            +1*l4 +1*l1
+     E22 E44                            +1*l3 +1*l1
+     E31 E13                            -1*l4 -1*l2
+     E32 E23                            -1*l4 -1*l1 +1
+     E33 E44                            +1*l2 +1*l1
+     E41 E14                            -1*l3 -1*l2
+     E42 E24                            -1*l3 -1*l1 +1
+     E43 E34                            -1*l2 -1*l1 +2
+     E11 E32 E23                        +1
+     E11 E42 E24                        +1
+     E11 E43 E34                        +1
+     E21 E32 E13                        -1
+     E21 E33 E12                        +1
+     E21 E42 E14                        -1
+     E21 E44 E12                        +1
+     E22 E43 E34                        +1
+     E31 E12 E23                        -1
+     E31 E22 E13                        +1
+     E31 E23 E12                        -1
+     E31 E43 E14                        -1
+     E31 E44 E13                        +1
+     E32 E43 E24                        -1
+     E32 E44 E23                        +1
+     E41 E12 E24                        -1
+     E41 E13 E34                        -1
+     E41 E22 E14                        +1
+     E41 E24 E12                        -1
+     E41 E33 E14                        +1
+     E41 E34 E13                        -1
+     E42 E23 E34                        -1
+     E42 E33 E24                        +1
+     E42 E34 E23                        -1
+
+  universal V_red,4a (lam'-independent): V4a reduces to 78 words; the polynomial (word = product of site-1 generators E_ij, leftmost acts last; coefficient = polynomial in lam'_1..lam'_4 written l1..l4):
+     E33                                +2*l4
+     E44                                +2*l3 +2*l2 +2*l1
+     E11 E33                            +1*l4
+     E11 E44                            +1*l3 +1*l2
+     E22 E33                            +2*l4
+     E22 E44                            +2*l3 +1*l1
+     E31 E13                            -1*l4
+     E32 E23                            -2*l4
+     E33 E44                            +2*l2 +2*l1
+     E41 E14                            -1*l3 -1*l2
+     E42 E24                            -2*l3 -1*l1
+     E43 E34                            -2*l2 -2*l1 +2
+     E11 E22 E33                        +1*l4
+     E11 E22 E44                        +1*l3
+     E11 E32 E23                        -1*l4
+     E11 E33 E44                        +1*l2
+     E11 E42 E24                        -1*l3
+     E11 E43 E34                        -1*l2 +1
+     E21 E12 E33                        -1*l4
+     E21 E12 E44                        -1*l3
+     E21 E32 E13                        +1*l4
+     E21 E42 E14                        +1*l3
+     E21 E44 E12                        +1
+     E22 E33 E44                        +1*l1
+     E22 E43 E34                        -1*l1 +2
+     E31 E12 E23                        +1*l4
+     E31 E13 E44                        -1*l2
+     E31 E22 E13                        -1*l4
+     E31 E43 E14                        +1*l2 -1
+     E31 E44 E13                        +1
+     E32 E23 E44                        -1*l1
+     E32 E43 E24                        +1*l1 -2
+     E32 E44 E23                        +2
+     E41 E12 E24                        +1*l3
+     E41 E13 E34                        +1*l2 -1
+     E41 E22 E14                        -1*l3
+     E41 E24 E12                        -1
+     E41 E33 E14                        -1*l2 +1
+     E41 E34 E13                        -1
+     E42 E23 E34                        +1*l1 -2
+     E42 E33 E24                        -1*l1 +2
+     E42 E34 E23                        -2
+     E11 E22 E43 E34                    +1
+     E11 E32 E43 E24                    -1
+     E11 E32 E44 E23                    +1
+     E11 E42 E23 E34                    -1
+     E11 E42 E33 E24                    +1
+     E11 E42 E34 E23                    -1
+     E21 E12 E43 E34                    -1
+     E21 E32 E43 E14                    +1
+     E21 E32 E44 E13                    -1
+     E21 E33 E44 E12                    +1
+     E21 E42 E13 E34                    +1
+     E21 E42 E33 E14                    -1
+     E21 E42 E34 E13                    +1
+     E21 E43 E34 E12                    -1
+     E31 E12 E43 E24                    +1
+     E31 E12 E44 E23                    -1
+     E31 E22 E43 E14                    -1
+     E31 E22 E44 E13                    +1
+     E31 E23 E44 E12                    -1
+     E31 E42 E13 E24                    -1
+     E31 E42 E14 E23                    +1
+     E31 E42 E23 E14                    +1
+     E31 E42 E24 E13                    -1
+     E31 E43 E24 E12                    +1
+     E41 E12 E23 E34                    +1
+     E41 E12 E33 E24                    -1
+     E41 E12 E34 E23                    +1
+     E41 E22 E13 E34                    -1
+     E41 E22 E33 E14                    +1
+     E41 E22 E34 E13                    -1
+     E41 E23 E34 E12                    +1
+     E41 E32 E13 E24                    +1
+     E41 E32 E14 E23                    -1
+     E41 E32 E23 E14                    -1
+     E41 E32 E24 E13                    +1
+     E41 E33 E24 E12                    -1
+
+  universal V_red,4b (lam'-independent): V4b reduces to 85 words; the polynomial (word = product of site-1 generators E_ij, leftmost acts last; coefficient = polynomial in lam'_1..lam'_4 written l1..l4):
+     E22                                +1*l3*l4 +1*l4
+     E33                                +1*l2*l4 +1*l1*l4
+     E44                                +1*l2*l3 +1*l1*l3 +1*l1*l2 -1*l2 -2*l1
+     E11 E22                            +1*l3*l4 +1*l4
+     E11 E33                            +1*l2*l4
+     E11 E44                            +1*l2*l3 -1*l2
+     E21 E12                            -1*l3*l4 -1*l4
+     E22 E33                            +1*l1*l4 -1*l4
+     E22 E44                            +1*l1*l3 -1*l3 -1*l1
+     E31 E13                            -1*l2*l4
+     E32 E23                            -1*l1*l4 +2*l4
+     E33 E44                            +1*l1*l2 -1*l2 -2*l1
+     E41 E14                            -1*l2*l3 +1*l2
+     E42 E24                            -1*l1*l3 +2*l3 +1*l1 +1
+     E43 E34                            -1*l1*l2 +2*l2 +3*l1
+     E11 E22 E33                        -1*l4
+     E11 E22 E44                        -1*l3
+     E11 E32 E23                        +2*l4
+     E11 E33 E44                        -1*l2
+     E11 E42 E24                        +2*l3 +1
+     E11 E43 E34                        +2*l2
+     E21 E12 E33                        +1*l4
+     E21 E12 E44                        +1*l3
+     E21 E32 E13                        -2*l4
+     E21 E33 E12                        +1*l4
+     E21 E42 E14                        -2*l3 -1
+     E21 E44 E12                        +1*l3 -1
+     E22 E33 E44                        -1*l1
+     E22 E43 E34                        +2*l1 -1
+     E31 E12 E23                        -2*l4
+     E31 E13 E44                        +1*l2
+     E31 E22 E13                        +2*l4
+     E31 E23 E12                        -1*l4
+     E31 E43 E14                        -2*l2
+     E31 E44 E13                        +1*l2
+     E32 E23 E44                        +1*l1
+     E32 E43 E24                        -2*l1 +1
+     E32 E44 E23                        +1*l1 -1
+     E41 E12 E24                        -2*l3 -1
+     E41 E13 E34                        -2*l2
+     E41 E22 E14                        +2*l3 +1
+     E41 E24 E12                        -1*l3 +1
+     E41 E33 E14                        +2*l2
+     E41 E34 E13                        -1*l2
+     E42 E23 E34                        -2*l1 +1
+     E42 E33 E24                        +2*l1 -1
+     E42 E34 E23                        -1*l1 +2
+     E11 E22 E43 E34                    -1
+     E11 E32 E43 E24                    +1
+     E11 E32 E44 E23                    -1
+     E11 E42 E23 E34                    +1
+     E11 E42 E33 E24                    -1
+     E11 E42 E34 E23                    +2
+     E21 E12 E43 E34                    +1
+     E21 E32 E43 E14                    -1
+     E21 E32 E44 E13                    +1
+     E21 E33 E44 E12                    -1
+     E21 E42 E13 E34                    -1
+     E21 E42 E33 E14                    +1
+     E21 E42 E34 E13                    -2
+     E21 E43 E34 E12                    +2
+     E31 E12 E43 E24                    -1
+     E31 E12 E44 E23                    +1
+     E31 E22 E43 E14                    +1
+     E31 E22 E44 E13                    -1
+     E31 E23 E44 E12                    +1
+     E31 E42 E13 E24                    +1
+     E31 E42 E14 E23                    -1
+     E31 E42 E23 E14                    -2
+     E31 E42 E24 E13                    +2
+     E31 E43 E24 E12                    -2
+     E31 E44 E23 E12                    +1
+     E41 E12 E23 E34                    -1
+     E41 E12 E33 E24                    +1
+     E41 E12 E34 E23                    -2
+     E41 E22 E13 E34                    +1
+     E41 E22 E33 E14                    -1
+     E41 E22 E34 E13                    +2
+     E41 E23 E34 E12                    -2
+     E41 E32 E13 E24                    -1
+     E41 E32 E14 E23                    +1
+     E41 E32 E23 E14                    +2
+     E41 E32 E24 E13                    -2
+     E41 E33 E24 E12                    +2
+     E41 E34 E23 E12                    -1
+
+  closed-form cross-check (independent of the engine for the one-site-2-factor operators):
+  [2,1,0,0]^2        closed forms (sum_I D(2,1)_I + eta ; D(3,1) + V3 - eta/3, hand-reduced: 71 / 337 words) vs engine: 16 (operator, PRV vector) pairs, mismatches 0
+  [2,1,1,0]^2        closed forms (sum_I D(2,1)_I + eta ; D(3,1) + V3 - eta/3, hand-reduced: 74 / 364 words) vs engine: 14 (operator, PRV vector) pairs, mismatches 0
+  [2,2,1,0]x[2,1,1,0] closed forms (sum_I D(2,1)_I + eta ; D(3,1) + V3 - eta/3, hand-reduced: 74 / 364 words) vs engine: 14 (operator, PRV vector) pairs, mismatches 0
+  [1,1,0,0]x[2,1,0,0] closed forms (sum_I D(2,1)_I + eta ; D(3,1) + V3 - eta/3, hand-reduced: 71 / 337 words) vs engine: 8 (operator, PRV vector) pairs, mismatches 0
+  [3,2,0,0]x[2,1,1,0] closed forms (sum_I D(2,1)_I + eta ; D(3,1) + V3 - eta/3, hand-reduced: 74 / 364 words) vs engine: 16 (operator, PRV vector) pairs, mismatches 0
+  [3,2,1,0]^2        closed forms (sum_I D(2,1)_I + eta ; D(3,1) + V3 - eta/3, hand-reduced: 75 / 352 words) vs engine: 60 (operator, PRV vector) pairs, mismatches 0
+  [4,2,0,0]^2        closed forms (sum_I D(2,1)_I + eta ; D(3,1) + V3 - eta/3, hand-reduced: 71 / 337 words) vs engine: 64 (operator, PRV vector) pairs, mismatches 0
+  [4,2,1,0]^2        closed forms (sum_I D(2,1)_I + eta ; D(3,1) + V3 - eta/3, hand-reduced: 75 / 364 words) vs engine: 112 (operator, PRV vector) pairs, mismatches 0
+  [6,4,2,0]^2        closed forms (sum_I D(2,1)_I + eta ; D(3,1) + V3 - eta/3, hand-reduced: 75 / 364 words) vs engine: 594 (operator, PRV vector) pairs, mismatches 0
+  closed-form cross-check: 898 (operator, vector) pairs, 0 mismatches
+
+  where the normal ordering really matters: G2's antisymmetrised representative of V4b (a different polynomial from the file's cdet list, site-2 words in arbitrary index order):
+   [2,1,0,0]^2          G2's antisymmetrised V4b (1464 terms; site-2 words of length 2 in arbitrary index order): 8 PRV vectors: images differ from the file's V4b with the RULE (normal ordering): 0, with the NAIVE rule: 6
+   [2,1,1,0]^2          G2's antisymmetrised V4b (1464 terms; site-2 words of length 2 in arbitrary index order): 7 PRV vectors: images differ from the file's V4b with the RULE (normal ordering): 0, with the NAIVE rule: 6
+   [2,2,1,0]x[2,1,1,0]  G2's antisymmetrised V4b (1464 terms; site-2 words of length 2 in arbitrary index order): 7 PRV vectors: images differ from the file's V4b with the RULE (normal ordering): 0, with the NAIVE rule: 7
+   [1,1,0,0]x[2,1,0,0]  G2's antisymmetrised V4b (1464 terms; site-2 words of length 2 in arbitrary index order): 4 PRV vectors: images differ from the file's V4b with the RULE (normal ordering): 0, with the NAIVE rule: 3
+   [3,2,0,0]x[2,1,1,0]  G2's antisymmetrised V4b (1464 terms; site-2 words of length 2 in arbitrary index order): 8 PRV vectors: images differ from the file's V4b with the RULE (normal ordering): 0, with the NAIVE rule: 7
+   [3,2,1,0]^2          G2's antisymmetrised V4b (1464 terms; site-2 words of length 2 in arbitrary index order): 30 PRV vectors: images differ from the file's V4b with the RULE (normal ordering): 0, with the NAIVE rule: 30
+   [4,2,0,0]^2          G2's antisymmetrised V4b (1464 terms; site-2 words of length 2 in arbitrary index order): 32 PRV vectors: images differ from the file's V4b with the RULE (normal ordering): 0, with the NAIVE rule: 29
+   [4,2,1,0]^2          G2's antisymmetrised V4b (1464 terms; site-2 words of length 2 in arbitrary index order): 56 PRV vectors: images differ from the file's V4b with the RULE (normal ordering): 0, with the NAIVE rule: 56
+   [6,4,2,0]^2          G2's antisymmetrised V4b (1464 terms; site-2 words of length 2 in arbitrary index order): 297 PRV vectors: images differ from the file's V4b with the RULE (normal ordering): 0, with the NAIVE rule: 297
+  antisymmetrised V4b: 449 PRV vectors; rule (normal ordering) differs from the file's V4b on 0, naive rule (no normal ordering) on 441
+
+  sparsity (how often the reduced words act trivially):
+  [3,2,1,0]^2        V3    39 reduced words: trie nodes evaluated   2100, of which dead (zero vector / zero image)    668 (32%); (word, weight-space basis vector) pairs    1404, with w e_c = 0:     432 (31%)
+  [3,2,1,0]^2        V4a   67 reduced words: trie nodes evaluated   4380, of which dead (zero vector / zero image)   1609 (37%); (word, weight-space basis vector) pairs    2412, with w e_c = 0:     951 (39%)
+  [3,2,1,0]^2        V4b   65 reduced words: trie nodes evaluated   4320, of which dead (zero vector / zero image)   1593 (37%); (word, weight-space basis vector) pairs    2340, with w e_c = 0:     938 (40%)
+  [4,2,0,0]^2        V3    36 reduced words: trie nodes evaluated   2176, of which dead (zero vector / zero image)   1084 (50%); (word, weight-space basis vector) pairs    2016, with w e_c = 0:     721 (36%)
+  [4,2,0,0]^2        V4a   61 reduced words: trie nodes evaluated   4480, of which dead (zero vector / zero image)   2770 (62%); (word, weight-space basis vector) pairs    3416, with w e_c = 0:    1569 (46%)
+  [4,2,0,0]^2        V4b   67 reduced words: trie nodes evaluated   4736, of which dead (zero vector / zero image)   2890 (61%); (word, weight-space basis vector) pairs    3752, with w e_c = 0:    1735 (46%)
+  [6,4,2,0]^2        V3    39 reduced words: trie nodes evaluated  20790, of which dead (zero vector / zero image)   2763 (13%); (word, weight-space basis vector) pairs   16536, with w e_c = 0:    2142 (13%)
+  [6,4,2,0]^2        V4a   67 reduced words: trie nodes evaluated  43362, of which dead (zero vector / zero image)   6708 (15%); (word, weight-space basis vector) pairs   28408, with w e_c = 0:    4777 (17%)
+  [6,4,2,0]^2        V4b   69 reduced words: trie nodes evaluated  44550, of which dead (zero vector / zero image)   7067 (16%); (word, weight-space basis vector) pairs   29256, with w e_c = 0:    5115 (17%)
+
+  sensitivity of the tests to the rule (deliberately WRONG rules, same two tests as for the real rule: image outside M_mu / slice differs from the full two-site operator; entries = failing vectors of all).
+  (the rule "naive_order" = no normal ordering is NOT detected on the cdet term lists: in a column-ordered cdet word a raising factor never stands left of a lowering factor it fails to commute with,
+   because a raising factor E_{a c} (a < c) and a lowering factor E_{r c'} with c' > c have r > c' > c > a, so [E_{ac}, E_{rc'}] = 0 -- the same holds for the theta_2 words (sites exchanged, same word order);
+   it is detected by G2's antisymmetrised V4b above and by the random words of G3.1)
+   [2,1,0,0]^2          rule no_sign      V3: 0/8 outside M_mu, 6/8 wrong slice; V4a: 0/8 outside M_mu, 0/8 wrong slice; V4b: 2/8 outside M_mu, 2/8 wrong slice; S31: 2/8 outside M_mu, 5/8 wrong slice; S41: 2/8 outside M_mu, 2/8 wrong slice
+   [2,1,0,0]^2          rule no_reverse   V3: 0/8 outside M_mu, 0/8 wrong slice; V4a: 0/8 outside M_mu, 0/8 wrong slice; V4b: 2/8 outside M_mu, 2/8 wrong slice; S31: 2/8 outside M_mu, 5/8 wrong slice; S41: 2/8 outside M_mu, 2/8 wrong slice
+   [2,1,0,0]^2          rule naive_order  V3: 0/8 outside M_mu, 0/8 wrong slice; V4a: 0/8 outside M_mu, 0/8 wrong slice; V4b: 0/8 outside M_mu, 0/8 wrong slice; S31: 0/8 outside M_mu, 0/8 wrong slice; S41: 0/8 outside M_mu, 0/8 wrong slice
+   [3,2,1,0]^2          rule no_sign      V3: 13/30 outside M_mu, 29/30 wrong slice; V4a: 12/30 outside M_mu, 24/30 wrong slice; V4b: 13/30 outside M_mu, 24/30 wrong slice; S31: 6/30 outside M_mu, 25/30 wrong slice; S41: 12/30 outside M_mu, 24/30 wrong slice
+   [3,2,1,0]^2          rule no_reverse   V3: 0/30 outside M_mu, 0/30 wrong slice; V4a: 0/30 outside M_mu, 0/30 wrong slice; V4b: 13/30 outside M_mu, 22/30 wrong slice; S31: 13/30 outside M_mu, 25/30 wrong slice; S41: 14/30 outside M_mu, 22/30 wrong slice
+   [3,2,1,0]^2          rule naive_order  V3: 0/30 outside M_mu, 0/30 wrong slice; V4a: 0/30 outside M_mu, 0/30 wrong slice; V4b: 0/30 outside M_mu, 0/30 wrong slice; S31: 0/30 outside M_mu, 0/30 wrong slice; S41: 0/30 outside M_mu, 0/30 wrong slice
+   [2,2,1,0]x[2,1,1,0]  rule no_sign      V3: 0/7 outside M_mu, 6/7 wrong slice; V4a: 0/7 outside M_mu, 5/7 wrong slice; V4b: 1/7 outside M_mu, 5/7 wrong slice; S31: 1/7 outside M_mu, 6/7 wrong slice; S41: 1/7 outside M_mu, 5/7 wrong slice
+   [2,2,1,0]x[2,1,1,0]  rule no_reverse   V3: 0/7 outside M_mu, 0/7 wrong slice; V4a: 0/7 outside M_mu, 0/7 wrong slice; V4b: 2/7 outside M_mu, 4/7 wrong slice; S31: 2/7 outside M_mu, 5/7 wrong slice; S41: 2/7 outside M_mu, 4/7 wrong slice
+   [2,2,1,0]x[2,1,1,0]  rule naive_order  V3: 0/7 outside M_mu, 0/7 wrong slice; V4a: 0/7 outside M_mu, 0/7 wrong slice; V4b: 0/7 outside M_mu, 0/7 wrong slice; S31: 0/7 outside M_mu, 0/7 wrong slice; S41: 0/7 outside M_mu, 0/7 wrong slice
+
+  structure of the reduced operators beyond the brief (exact arithmetic; on the WHOLE weight space V_lam[mu - lam'] of every candidate mu, not only on M_mu):
+   [2,1,0,0]^2            7 weight spaces V_lam[mu-lam']: reduced operators commute on the whole space: 0 of 21 pairs fail | intertwining E_i^k V(lam') = V(s_i.lam') E_i^k: 90 tests (8 nonzero), 0 fail | joint spectrum on the whole weight space simple: 7 of 7 spaces; M_mu triples contained in it: 7 of 7; dim sum w = 10, of which 2 not in M_mu (sum m)
+   [2,1,1,0]^2            6 weight spaces V_lam[mu-lam']: reduced operators commute on the whole space: 0 of 18 pairs fail | intertwining E_i^k V(lam') = V(s_i.lam') E_i^k: 72 tests (6 nonzero), 0 fail | joint spectrum on the whole weight space simple: 6 of 6 spaces; M_mu triples contained in it: 6 of 6; dim sum w = 8, of which 1 not in M_mu (sum m)
+   [2,2,1,0]x[2,1,1,0]    6 weight spaces V_lam[mu-lam']: reduced operators commute on the whole space: 0 of 18 pairs fail | intertwining E_i^k V(lam') = V(s_i.lam') E_i^k: 81 tests (8 nonzero), 0 fail | joint spectrum on the whole weight space simple: 6 of 6 spaces; M_mu triples contained in it: 6 of 6; dim sum w = 9, of which 2 not in M_mu (sum m)
+   [1,1,0,0]x[2,1,0,0]    4 weight spaces V_lam[mu-lam']: reduced operators commute on the whole space: 0 of 12 pairs fail | intertwining E_i^k V(lam') = V(s_i.lam') E_i^k: 36 tests (0 nonzero), 0 fail | joint spectrum on the whole weight space simple: 4 of 4 spaces; M_mu triples contained in it: 4 of 4; dim sum w = 4, of which 0 not in M_mu (sum m)
+   [3,2,0,0]x[2,1,1,0]   10 weight spaces V_lam[mu-lam']: reduced operators commute on the whole space: 0 of 30 pairs fail | intertwining E_i^k V(lam') = V(s_i.lam') E_i^k: 171 tests (28 nonzero), 0 fail | joint spectrum on the whole weight space simple: 10 of 10 spaces; M_mu triples contained in it: 10 of 10; dim sum w = 19, of which 11 not in M_mu (sum m)
+   [3,2,1,0]^2           16 weight spaces V_lam[mu-lam']: reduced operators commute on the whole space: 0 of 48 pairs fail | intertwining E_i^k V(lam') = V(s_i.lam') E_i^k: 324 tests (36 nonzero), 0 fail | joint spectrum on the whole weight space simple: 16 of 16 spaces; M_mu triples contained in it: 16 of 16; dim sum w = 36, of which 6 not in M_mu (sum m)
+   [4,2,0,0]^2           26 weight spaces V_lam[mu-lam']: reduced operators commute on the whole space: 0 of 78 pairs fail | intertwining E_i^k V(lam') = V(s_i.lam') E_i^k: 531 tests (85 nonzero), 0 fail | joint spectrum on the whole weight space simple: 26 of 26 spaces; M_mu triples contained in it: 26 of 26; dim sum w = 59, of which 27 not in M_mu (sum m)
+   [4,2,1,0]^2           27 weight spaces V_lam[mu-lam']: reduced operators commute on the whole space: 0 of 81 pairs fail | intertwining E_i^k V(lam') = V(s_i.lam') E_i^k: 693 tests (134 nonzero), 0 fail | joint spectrum on the whole weight space simple: 27 of 27 spaces; M_mu triples contained in it: 27 of 27; dim sum w = 77, of which 21 not in M_mu (sum m)
+   [6,4,2,0]^2           76 weight spaces V_lam[mu-lam']: reduced operators commute on the whole space: 0 of 228 pairs fail | intertwining E_i^k V(lam') = V(s_i.lam') E_i^k: 3816 tests (825 nonzero), 0 fail | joint spectrum on the whole weight space simple: 76 of 76 spaces; M_mu triples contained in it: 76 of 76; dim sum w = 424, of which 127 not in M_mu (sum m)
+   V_lam = [3,2,1,0]  generic lam' (4 values, e.g. ('1/3', '5/7', '-2', '4/5')): commutator tests (pair x weight space of dim >= 2 x lam'): 168, failures 0
+   V_lam = [4,2,0,0]  generic lam' (4 values, e.g. ('1/3', '5/7', '-2', '4/5')): commutator tests (pair x weight space of dim >= 2 x lam'): 456, failures 0
+   V_lam = [2,1,1,0]  generic lam' (4 values, e.g. ('1/3', '5/7', '-2', '4/5')): commutator tests (pair x weight space of dim >= 2 x lam'): 12, failures 0
+
+======================================================================================================================================================
+G3.2  gl(3) CONVENTION TEST: the reduced N = 3 t S_{3,2} equals slice_engine.vred_apply + eta_1/2 exactly; S_{3,1}
+======================================================================================================================================================
+  N=3  [2,1,0]^2 :  5 irreps,  6 PRV basis vectors: reduced tS32 == slice_engine.vred_apply + eta1/2: mismatches 0;  t^2 S31_red + 2 (tS32_red) = c 1 on every M_mu: failures 0
+       c per irrep (m): {4,2,0}: 0 (m=1, c-eta1 = -4), {4,1,1}: 12 (m=1, c-eta1 = 6), {3,3,0}: 0 (m=1, c-eta1 = -6), {3,2,1}: 15 (m=2, c-eta1 = 6), {2,2,2}: 24 (m=1, c-eta1 = 12)
+  N=3  [3,1,0]^2 :  8 irreps, 10 PRV basis vectors: reduced tS32 == slice_engine.vred_apply + eta1/2: mismatches 0;  t^2 S31_red + 2 (tS32_red) = c 1 on every M_mu: failures 0
+       c per irrep (m): {6,2,0}: 0 (m=1, c-eta1 = -6), {6,1,1}: 16 (m=1, c-eta1 = 8), {5,3,0}: 0 (m=1, c-eta1 = -10), {5,2,1}: 21 (m=2, c-eta1 = 8), {4,4,0}: 0 (m=1, c-eta1 = -12), {4,3,1}: 24 (m=2, c-eta1 = 8), {4,2,2}: 36 (m=1, c-eta1 = 18), {3,3,2}: 40 (m=1, c-eta1 = 20)
+  N=3  [4,2,0]^2 : 13 irreps, 19 PRV basis vectors: reduced tS32 == slice_engine.vred_apply + eta1/2: mismatches 0;  t^2 S31_red + 2 (tS32_red) = c 1 on every M_mu: failures 0
+       c per irrep (m): {8,4,0}: 0 (m=1, c-eta1 = -16), {8,3,1}: 40 (m=1, c-eta1 = 20), {8,2,2}: 60 (m=1, c-eta1 = 38), {7,5,0}: 0 (m=1, c-eta1 = -20), {7,4,1}: 45 (m=2, c-eta1 = 20), {7,3,2}: 72 (m=2, c-eta1 = 44), {6,6,0}: 0 (m=1, c-eta1 = -22), {6,5,1}: 48 (m=2, c-eta1 = 20), {6,4,2}: 80 (m=3, c-eta1 = 48), {6,3,3}: 96 (m=1, c-eta1 = 62), {5,5,2}: 84 (m=1, c-eta1 = 50), {5,4,3}: 105 (m=2, c-eta1 = 68), {4,4,4}: 120 (m=1, c-eta1 = 80)
+  N=3 totals: 35 PRV vectors, convention-test mismatches 0; scalar-relation failures 0 (on 26 sectors); direct route (full two-site tS32 and S31 on exact HW vectors, slice AND full vector) mismatches 0 of 70
+  (0.05s)
+
+======================================================================================================================================================
+G3.3  DIRECT ROUTE on gl(4): the full two-site operators on the reconstructed exact HW vectors, slice read off  vs  the slice-reduced operators (exact)
+======================================================================================================================================================
+  [2,1,0,0]^2          sectors   7, PRV vectors   8 | direct route, exact: slice mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | full-vector mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | M_mu left: 0 | non-commuting pairs: 0 of 70 | scalar-relation failures: 0 | vs G2: 7 sectors, charpoly mismatches 0, restriction violations 0, max joint-eigenvalue diff 1.75e-41  (0.0s)
+    mu=(3, 2, 1, 0)   m= 2  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 1.75e-41   offdiag(mine) 2.71e-51
+  [2,1,1,0]^2          sectors   6, PRV vectors   7 | direct route, exact: slice mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | full-vector mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | M_mu left: 0 | non-commuting pairs: 0 of 60 | scalar-relation failures: 0 | vs G2: 6 sectors, charpoly mismatches 0, restriction violations 0, max joint-eigenvalue diff 5.37e-40  (0.1s)
+    mu=(3, 2, 2, 1)   m= 2  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 5.37e-40   offdiag(mine) 7.88e-49
+  [2,2,1,0]x[2,1,1,0]  sectors   6, PRV vectors   7 | direct route, exact: slice mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | full-vector mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | M_mu left: 0 | non-commuting pairs: 0 of 60 | scalar-relation failures: 0 | vs G2: 6 sectors, charpoly mismatches 0, restriction violations 0, max joint-eigenvalue diff 5.01e-40  (0.0s)
+    mu=(3, 3, 2, 1)   m= 2  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 5.01e-40   offdiag(mine) 5.56e-50
+  [1,1,0,0]x[2,1,0,0]  sectors   4, PRV vectors   4 | direct route, exact: slice mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | full-vector mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | M_mu left: 0 | non-commuting pairs: 0 of 40 | scalar-relation failures: 0 | vs G2: 4 sectors, charpoly mismatches 0, restriction violations 0, max joint-eigenvalue diff 0.0  (0.0s)
+  [3,2,0,0]x[2,1,1,0]  sectors   7, PRV vectors   8 | direct route, exact: slice mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | full-vector mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | M_mu left: 0 | non-commuting pairs: 0 of 70 | scalar-relation failures: 0 | vs G2: 7 sectors, charpoly mismatches 0, restriction violations 0, max joint-eigenvalue diff 3.47e-40  (0.1s)
+    mu=(4, 3, 1, 1)   m= 2  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 3.47e-40   offdiag(mine) 4.55e-50
+  [3,2,1,0]^2          sectors  16, PRV vectors  30 | direct route, exact: slice mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | full-vector mismatches V3 0, V4a 0, V4b 0, S31 0, S41 0 | M_mu left: 0 | non-commuting pairs: 0 of 160 | scalar-relation failures: 0 | vs G2: 16 sectors, charpoly mismatches 0, restriction violations 0, max joint-eigenvalue diff 1.33e-39  (0.9s)
+    mu=(6, 3, 2, 1)   m= 2  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 1.66e-40   offdiag(mine) 1.71e-49
+    mu=(5, 4, 3, 0)   m= 2  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 5.69e-40   offdiag(mine) 2.1e-50
+    mu=(5, 4, 2, 1)   m= 4  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 6.39e-40   offdiag(mine) 1.77e-48
+    mu=(5, 3, 3, 1)   m= 3  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 1.28e-39   offdiag(mine) 7.07e-49
+    mu=(5, 3, 2, 2)   m= 3  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 8.63e-40   offdiag(mine) 3.01e-49
+    mu=(4, 4, 3, 1)   m= 3  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 6.49e-40   offdiag(mine) 1.07e-48
+    mu=(4, 4, 2, 2)   m= 2  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 1.33e-39   offdiag(mine) 1.25e-49
+    mu=(4, 3, 3, 2)   m= 3  V3/V4a/V4b/generic exact char. polys equal G2: True   joint-triple max |diff| vs G2 (40 digits): 9.48e-40   offdiag(mine) 7.78e-49
+
+  scalars c, c' of  S31 + 2 V3 = c 1  (t^2 S_{3,1} = -2 V3 + c)  and  S41 + 3 (V4a + V4b) = c' 1  (t^3 S_{4,1} = -3 (V4a + V4b) + c')  per irrep (m):
+   [2,1,0,0]^2: {4,2,0,0} (m=1): c=0, c'=0;  {4,1,1,0} (m=1): c=12, c'=0;  {3,3,0,0} (m=1): c=0, c'=0;  {3,2,1,0} (m=2): c=15, c'=0;  {3,1,1,1} (m=1): c=36, c'=36;  {2,2,2,0} (m=1): c=24, c'=0;  {2,2,1,1} (m=1): c=40, c'=40
+   [2,1,1,0]^2: {4,2,2,0} (m=1): c=20, c'=0;  {4,2,1,1} (m=1): c=40, c'=56;  {3,3,2,0} (m=1): c=24, c'=0;  {3,3,1,1} (m=1): c=44, c'=60;  {3,2,2,1} (m=2): c=56, c'=72;  {2,2,2,2} (m=1): c=80, c'=120
+   [2,2,1,0]x[2,1,1,0]: {4,3,2,0} (m=1): c=28, c'=0;  {4,3,1,1} (m=1): c=50, c'=70;  {4,2,2,1} (m=1): c=64, c'=84;  {3,3,3,0} (m=1): c=40, c'=0;  {3,3,2,1} (m=2): c=70, c'=90;  {3,2,2,2} (m=1): c=94, c'=144
+   [1,1,0,0]x[2,1,0,0]: {3,2,0,0} (m=1): c=0, c'=0;  {3,1,1,0} (m=1): c=10, c'=0;  {2,2,1,0} (m=1): c=12, c'=0;  {2,1,1,1} (m=1): c=30, c'=30
+   [3,2,0,0]x[2,1,1,0]: {5,3,1,0} (m=1): c=20, c'=0;  {5,2,1,1} (m=1): c=56, c'=64;  {4,4,1,0} (m=1): c=22, c'=0;  {4,3,2,0} (m=1): c=40, c'=0;  {4,3,1,1} (m=2): c=62, c'=70;  {4,2,2,1} (m=1): c=76, c'=84;  {3,3,2,1} (m=1): c=82, c'=90
+   [3,2,1,0]^2: {6,4,2,0} (m=1): c=50, c'=0;  {6,4,1,1} (m=1): c=78, c'=108;  {6,3,3,0} (m=1): c=66, c'=0;  {6,3,2,1} (m=2): c=105, c'=135;  {6,2,2,2} (m=1): c=138, c'=216;  {5,5,2,0} (m=1): c=54, c'=0;  {5,5,1,1} (m=1): c=82, c'=112;  {5,4,3,0} (m=2): c=75, c'=0;  {5,4,2,1} (m=4): c=114, c'=144;  {5,3,3,1} (m=3): c=130, c'=160;  {5,3,2,2} (m=3): c=154, c'=240;  {4,4,4,0} (m=1): c=90, c'=0;  {4,4,3,1} (m=3): c=138, c'=168;  {4,4,2,2} (m=2): c=162, c'=252;  {4,3,3,2} (m=3): c=178, c'=280;  {3,3,3,3} (m=1): c=210, c'=360
+
+  closed forms of the scalars (exact polynomial fits in n1 = |lam|, n2 = |lam'| and the Perelomov-Popov chain Casimirs C2, C3, C4 of lam, lam', mu; fitted on random small products,
+  see RESULTS-G3; C_r = Perelomov-Popov chain Casimir sum_i l_i^r prod_{j != i} (1 - 1/(l_i - l_j)), l_i = mu_i + 4 - i; C2x = C2(lam) (x = 1), C2(lam') (x = 2), C2(mu) (x = m), likewise C3x, C4x):
+   c  = 1/2 n1^2 n2 + 7/3 n1 n2 + 1/2 n1 n2^2 + 1/2 n1 C21 + 1/2 n2 C22 + 5/3 (C21 + C22) - 1/3 (C31 + C32) - (5/3 + (n1 + n2)/2) C2m + 1/3 C3m
+   c' = +1/6*n1*n1*n1*n2 +5/4*n1*n1*n2 +1/4*n1*n1*n2*n2 +1/4*n1*n1*C21 -1/4*n1*n1*C2m +11/4*n1*n2 +5/4*n1*n2*n2 +1/6*n1*n2*n2*n2 -1/2*n1*n2*C2m +5/3*n1*C21 -5/3*n1*C2m -1/3*n1*C31 +1/3*n1*C3m +1/4*n2*n2*C22 -1/4*n2*n2*C2m +5/3*n2*C22 -5/3*n2*C2m -1/3*n2*C32 +1/3*n2*C3m +11/4*C21 -1/8*C21*C21 +11/4*C22 -1/8*C22*C22 -11/4*C2m +1/8*C2m*C2m -3/2*C31 -3/2*C32 +3/2*C3m +1/4*C41 +1/4*C42 -1/4*C4m
+  check against the computed scalars on the six products, and on larger products NOT used for the fits (dim x dim' > 2500):
+   [2,1,0,0]^2              7 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [2,1,1,0]^2              6 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [2,2,1,0]x[2,1,1,0]      6 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [1,1,0,0]x[2,1,0,0]      4 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [3,2,0,0]x[2,1,1,0]      7 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [3,2,1,0]^2             16 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [4,2,1,0]^2             27 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [3,2,1,0]x[4,2,1,0]     20 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [4,3,1,0]^2             31 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [5,3,2,0]^2             45 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [6,4,2,0]^2             76 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+   [5,2,1,1]x[3,2,2,1]      7 irreps: closed forms c_closed, cprime_closed differ from the computed scalars in 0 (irrep, scalar) checks
+  closed-form scalar check total: 252 irreps, 0 mismatches
+
+  the direct route at scale (exact; slice read-off of the full two-site operators V3, V4a, V4b of G2 on the exact HW vectors of the PRV basis):
+   [4,2,0,0]^2             24 irreps,   32 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (0.2s)
+   [4,2,1,0]^2             27 irreps,   56 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (0.3s)
+   [3,2,1,0]x[4,2,1,0]     20 irreps,   38 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (0.1s)
+   [4,2,1,0]x[3,2,1,0]     20 irreps,   38 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (0.2s)
+   [6,3,0,0]^2             58 irreps,   90 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (1.2s)
+   [6,4,2,0]^2             76 irreps,  297 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (8.5s)
+   [2,1,0,0]x[1,1,0,0]      4 irreps,    4 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (0.0s)
+   [2,1,1,0]x[2,2,1,0]      6 irreps,    7 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (0.0s)
+   [2,1,1,0]x[3,2,0,0]      7 irreps,    8 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (0.0s)
+   [2,1,0,0]x[3,2,1,0]     10 irreps,   14 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (0.0s)
+   [3,2,1,0]x[2,1,0,0]     10 irreps,   14 PRV vectors x 3 operators: slice read-off of the FULL two-site operators on the exact HW vectors vs the reduced operators: mismatches 0  (0.1s)
+
+  the theta_2 Laurent coefficients (sites exchanged: the former site-1 words, up to THREE generators in cdet column order, now on site 2):
+   [2,1,0,0]^2            7 irreps,   8 PRV vectors | theta_2 operators S_{3,1}, S_{3,2}, S_{4,1}, S_{4,2}, S_{4,3} (swapped): image left M_mu 0 times; slice vs FULL swapped two-site operator (exact): 0 mismatches of 40; G2 relations swap(hat) = aV3 + bV4a + cV4b + scalar: 0 failures of 35 | naive rule (no normal ordering): 0 of 40 slices wrong
+   [2,1,1,0]^2            6 irreps,   7 PRV vectors | theta_2 operators S_{3,1}, S_{3,2}, S_{4,1}, S_{4,2}, S_{4,3} (swapped): image left M_mu 0 times; slice vs FULL swapped two-site operator (exact): 0 mismatches of 35; G2 relations swap(hat) = aV3 + bV4a + cV4b + scalar: 0 failures of 30 | naive rule (no normal ordering): 0 of 35 slices wrong
+   [2,2,1,0]x[2,1,1,0]    6 irreps,   7 PRV vectors | theta_2 operators S_{3,1}, S_{3,2}, S_{4,1}, S_{4,2}, S_{4,3} (swapped): image left M_mu 0 times; slice vs FULL swapped two-site operator (exact): 0 mismatches of 35; G2 relations swap(hat) = aV3 + bV4a + cV4b + scalar: 0 failures of 30 | naive rule (no normal ordering): 0 of 35 slices wrong
+   [1,1,0,0]x[2,1,0,0]    4 irreps,   4 PRV vectors | theta_2 operators S_{3,1}, S_{3,2}, S_{4,1}, S_{4,2}, S_{4,3} (swapped): image left M_mu 0 times; slice vs FULL swapped two-site operator (exact): 0 mismatches of 20; G2 relations swap(hat) = aV3 + bV4a + cV4b + scalar: 0 failures of 20 | naive rule (no normal ordering): 0 of 20 slices wrong
+   [3,2,0,0]x[2,1,1,0]    7 irreps,   8 PRV vectors | theta_2 operators S_{3,1}, S_{3,2}, S_{4,1}, S_{4,2}, S_{4,3} (swapped): image left M_mu 0 times; slice vs FULL swapped two-site operator (exact): 0 mismatches of 40; G2 relations swap(hat) = aV3 + bV4a + cV4b + scalar: 0 failures of 35 | naive rule (no normal ordering): 0 of 40 slices wrong
+   [3,2,1,0]^2           16 irreps,  30 PRV vectors | theta_2 operators S_{3,1}, S_{3,2}, S_{4,1}, S_{4,2}, S_{4,3} (swapped): image left M_mu 0 times; slice vs FULL swapped two-site operator (exact): 0 mismatches of 150; G2 relations swap(hat) = aV3 + bV4a + cV4b + scalar: 0 failures of 80 | naive rule (no normal ordering): 0 of 150 slices wrong
+   [4,2,1,0]^2           27 irreps,  56 PRV vectors | theta_2 operators S_{3,1}, S_{3,2}, S_{4,1}, S_{4,2}, S_{4,3} (swapped): image left M_mu 0 times; slice vs FULL swapped two-site operator (exact): 0 mismatches of 280; G2 relations swap(hat) = aV3 + bV4a + cV4b + scalar: 0 failures of 135 | naive rule (no normal ordering): 0 of 280 slices wrong
+   [3,2,1,0]x[4,2,1,0]   20 irreps,  38 PRV vectors | theta_2 operators S_{3,1}, S_{3,2}, S_{4,1}, S_{4,2}, S_{4,3} (swapped): image left M_mu 0 times; slice vs FULL swapped two-site operator (exact): 0 mismatches of 190; G2 relations swap(hat) = aV3 + bV4a + cV4b + scalar: 0 failures of 100 | naive rule (no normal ordering): 0 of 190 slices wrong
+   [6,4,2,0]^2           76 irreps, 297 PRV vectors | theta_2 operators S_{3,1}, S_{3,2}, S_{4,1}, S_{4,2}, S_{4,3} (swapped): image left M_mu 0 times; slice vs FULL swapped two-site operator (exact): 0 mismatches of 1485; G2 relations swap(hat) = aV3 + bV4a + cV4b + scalar: 0 failures of 380 | naive rule (no normal ordering): 0 of 1485 slices wrong
+
+  float direct route (G1 float recursion + G2 float operators on the whole two-site vector; max over irreps of ||slice(O Psi_j) - V_red b_j|| / max(||V_red b_j||, ||b_j||), orthonormal basis of site 1):
+   [4,2,0,0]^2             24 irreps: worst deviation V3 3.5e-16, V4a 1.7e-14, V4b 3.4e-16  (0.5s)
+   [4,2,1,0]^2             27 irreps: worst deviation V3 3.4e-16, V4a 1.7e-15, V4b 1.1e-15  (0.9s)
+
+======================================================================================================================================================
+G3.4  CANONICAL COPIES: joint eigenvectors of (V_red,3, V_red,4a, V_red,4b) on M_mu; G-orthogonality, self-adjointness, agreement with G2's eigenbasis, exchange structure
+======================================================================================================================================================
+  [2,1,0,0]^2          sectors   7, copies    8 | joint diag failed: 0, worst off-diagonal 2.71e-51, worst imaginary part 0.0, smallest joint eigenvalue distance 6.708 | self-adjointness violations (exact, G-Gram of the PRV basis): 0 | G-orthogonality: exact-Gram 4.45e-52, float full vectors 7.7e-17 | worst HW residual 3.5e-16 | vs G2 joint eigenbasis: max triple diff 1.75e-41, max slice diff 1.17e-41 | exchange: 7 sectors, T-map failures 0, fixed copies 6, 2-cycles 1, max |overlap - signed permutation| 4.4e-16, exchange scalars (c, c') = the closed-form scalars of the S31 / S41 relations on 7 of 7 sectors; of the 1 sectors with m >= 2: |p+ - p-| >= 2 (V3 degeneracy forced): 0, V3 degenerate: 0 (not forced: 0), forced but V3 simple: 0  (0.0s)
+    mu=(3, 2, 1, 0)   m= 2 | joint-diag offmax 2.71e-51 imag 0.0 (dps 50) | selfadj viol 0 | G-orth: exact-Gram 4.45e-52, float 7.7e-17 | HW resid 1.9e-16 | joint gap 6.708 | vs G2: triples 1.75e-41, slices 1.17e-41
+  [2,1,1,0]^2          sectors   6, copies    7 | joint diag failed: 0, worst off-diagonal 7.88e-49, worst imaginary part 0.0, smallest joint eigenvalue distance 27.71 | self-adjointness violations (exact, G-Gram of the PRV basis): 0 | G-orthogonality: exact-Gram 5.82e-50, float full vectors 6.8e-17 | worst HW residual 2.5e-15 | vs G2 joint eigenbasis: max triple diff 5.37e-40, max slice diff 4.16e-39 | exchange: 6 sectors, T-map failures 0, fixed copies 5, 2-cycles 1, max |overlap - signed permutation| 1.3e-15, exchange scalars (c, c') = the closed-form scalars of the S31 / S41 relations on 6 of 6 sectors; of the 1 sectors with m >= 2: |p+ - p-| >= 2 (V3 degeneracy forced): 0, V3 degenerate: 0 (not forced: 0), forced but V3 simple: 0  (0.0s)
+  [2,2,1,0]x[2,1,1,0]  sectors   6, copies    7 | joint diag failed: 0, worst off-diagonal 5.56e-50, worst imaginary part 0.0, smallest joint eigenvalue distance 51.26 | self-adjointness violations (exact, G-Gram of the PRV basis): 0 | G-orthogonality: exact-Gram 2.83e-51, float full vectors 7.0e-16 | worst HW residual 2.6e-15 | vs G2 joint eigenbasis: max triple diff 5.01e-40, max slice diff 8.55e-41  (0.0s)
+  [1,1,0,0]x[2,1,0,0]  sectors   4, copies    4 | joint diag failed: 0, worst off-diagonal 0.0, worst imaginary part 0.0, smallest joint eigenvalue distance +inf | self-adjointness violations (exact, G-Gram of the PRV basis): 0 | G-orthogonality: exact-Gram 0.0, float full vectors 0.0e+00 | worst HW residual 2.0e-16 | vs G2 joint eigenbasis: max triple diff 0.0, max slice diff 0.0  (0.0s)
+  [3,2,0,0]x[2,1,1,0]  sectors   7, copies    8 | joint diag failed: 0, worst off-diagonal 4.55e-50, worst imaginary part 0.0, smallest joint eigenvalue distance 20.49 | self-adjointness violations (exact, G-Gram of the PRV basis): 0 | G-orthogonality: exact-Gram 1.43e-51, float full vectors 1.0e-15 | worst HW residual 2.9e-15 | vs G2 joint eigenbasis: max triple diff 3.47e-40, max slice diff 1.08e-40  (0.0s)
+  [3,2,1,0]^2          sectors  16, copies   30 | joint diag failed: 0, worst off-diagonal 1.77e-48, worst imaginary part 0.0, smallest joint eigenvalue distance 6.708 | self-adjointness violations (exact, G-Gram of the PRV basis): 0 | G-orthogonality: exact-Gram 1.24e-49, float full vectors 3.2e-16 | worst HW residual 2.4e-15 | vs G2 joint eigenbasis: max triple diff 1.33e-39, max slice diff 6.66e-39 | exchange: 16 sectors, T-map failures 0, fixed copies 14, 2-cycles 8, max |overlap - signed permutation| 8.9e-16, exchange scalars (c, c') = the closed-form scalars of the S31 / S41 relations on 16 of 16 sectors; of the 8 sectors with m >= 2: |p+ - p-| >= 2 (V3 degeneracy forced): 1, V3 degenerate: 2 (not forced: 1), forced but V3 simple: 0  (0.3s)
+    mu=(6, 3, 2, 1)   m= 2 | joint-diag offmax 1.71e-49 imag 0.0 (dps 50) | selfadj viol 0 | G-orth: exact-Gram 5.35e-51, float 7.7e-17 | HW resid 1.9e-16 | joint gap 33.54 | vs G2: triples 1.66e-40, slices 1.04e-40
+    mu=(5, 4, 3, 0)   m= 2 | joint-diag offmax 2.1e-50 imag 0.0 (dps 50) | selfadj viol 0 | G-orth: exact-Gram 6.46e-52, float 7.7e-17 | HW resid 1.9e-16 | joint gap 6.708 | vs G2: triples 5.69e-40, slices 1.04e-40
+    mu=(5, 4, 2, 1)   m= 4 | joint-diag offmax 1.77e-48 imag 0.0 (dps 50) | selfadj viol 0 | G-orth: exact-Gram 1.24e-49, float 1.7e-16 | HW resid 3.4e-16 | joint gap 15.72 | vs G2: triples 6.39e-40, slices 6.43e-39
+    mu=(5, 3, 3, 1)   m= 3 | joint-diag offmax 7.07e-49 imag 0.0 (dps 50) | selfadj viol 0 | G-orth: exact-Gram 1.38e-50, float 6.3e-17 | HW resid 1.5e-15 | joint gap 28.38 | vs G2: triples 1.28e-39, slices 1.09e-39
+    mu=(5, 3, 2, 2)   m= 3 | joint-diag offmax 3.01e-49 imag 0.0 (dps 50) | selfadj viol 0 | G-orth: exact-Gram 4.0e-50, float 2.6e-16 | HW resid 1.3e-15 | joint gap 26.15 | vs G2: triples 8.63e-40, slices 6.66e-39
+    mu=(4, 4, 3, 1)   m= 3 | joint-diag offmax 1.07e-48 imag 0.0 (dps 50) | selfadj viol 0 | G-orth: exact-Gram 1.13e-50, float 2.9e-16 | HW resid 1.6e-15 | joint gap 26.49 | vs G2: triples 6.49e-40, slices 2.39e-39
+    mu=(4, 4, 2, 2)   m= 2 | joint-diag offmax 1.25e-49 imag 0.0 (dps 50) | selfadj viol 0 | G-orth: exact-Gram 1.54e-51, float 1.9e-16 | HW resid 6.3e-16 | joint gap 82.49 | vs G2: triples 1.33e-39, slices 1.21e-40
+    mu=(4, 3, 3, 2)   m= 3 | joint-diag offmax 7.78e-49 imag 0.0 (dps 50) | selfadj viol 0 | G-orth: exact-Gram 1.81e-50, float 3.2e-16 | HW resid 2.2e-15 | joint gap 35.21 | vs G2: triples 9.48e-40, slices 8.27e-40
+
+  exchange structure (lam = lam'), [2,1,0,0]^2: P V3 P = -V3 + c,  P V4a P = -2 V4a - V4b + c',  P V4b P = 3 V4a + 2 V4b - c'
+    mu=(3, 2, 1, 0)   m= 2  c = 15.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 0.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 2)] | max |overlap - signed perm| 2.3e-16
+  exchange structure (lam = lam'), [2,1,1,0]^2: P V3 P = -V3 + c,  P V4a P = -2 V4a - V4b + c',  P V4b P = 3 V4a + 2 V4b - c'
+    mu=(3, 2, 2, 1)   m= 2  c = 56.0 (spectrum of V3 symmetric about c/2 to 8.6e-50), c' = 72.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 2)] | max |overlap - signed perm| 1.3e-15
+  exchange structure (lam = lam'), [3,2,1,0]^2: P V3 P = -V3 + c,  P V4a P = -2 V4a - V4b + c',  P V4b P = 3 V4a + 2 V4b - c'
+    mu=(6, 3, 2, 1)   m= 2  c = 105.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 135.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 2)] | max |overlap - signed perm| 2.3e-16
+    mu=(5, 4, 3, 0)   m= 2  c = 75.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 0.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 2)] | max |overlap - signed perm| 2.3e-16
+    mu=(5, 4, 2, 1)   m= 4  c = 114.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 144.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 4), (2, 3)] | max |overlap - signed perm| 2.2e-16
+    mu=(5, 3, 3, 1)   m= 3  c = 130.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 160.0 | T permutes the joint triples: True | fixed copies [2] (P-parities +; p+ - p- = 1) | 2-cycles [(1, 3)] | max |overlap - signed perm| 4.6e-16
+    mu=(5, 3, 2, 2)   m= 3  c = 154.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 240.0 | T permutes the joint triples: True | fixed copies [2] (P-parities -; p+ - p- = -1) | 2-cycles [(1, 3)] | max |overlap - signed perm| 5.3e-16
+    mu=(4, 4, 3, 1)   m= 3  c = 138.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 168.0 | T permutes the joint triples: True | fixed copies [2] (P-parities -; p+ - p- = -1) | 2-cycles [(1, 3)] | max |overlap - signed perm| 7.4e-16
+    mu=(4, 4, 2, 2)   m= 2  c = 162.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 252.0 | T permutes the joint triples: True | fixed copies [1, 2] (P-parities ++; p+ - p- = 2) | 2-cycles [] | max |overlap - signed perm| 2.2e-16
+    mu=(4, 3, 3, 2)   m= 3  c = 178.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 280.0 | T permutes the joint triples: True | fixed copies [2] (P-parities -; p+ - p- = -1) | 2-cycles [(1, 3)] | max |overlap - signed perm| 8.9e-16
+
+  larger products (copies, G-orthogonality, self-adjointness, exchange; no G2 comparison):
+  [4,2,0,0]^2          sectors  24, copies   32 | joint diag failed: 0, worst off-diagonal 1.4e-49, worst imaginary part 0.0, smallest joint eigenvalue distance 10.25 | self-adjointness violations (exact, G-Gram of the PRV basis): 0 | G-orthogonality: exact-Gram 1.66e-50, float full vectors 2.2e-16 | worst HW residual 1.7e-15 | exchange: 24 sectors, T-map failures 0, fixed copies 18, 2-cycles 7, max |overlap - signed permutation| 4.4e-16, exchange scalars (c, c') = the closed-form scalars of the S31 / S41 relations on 24 of 24 sectors; of the 7 sectors with m >= 2: |p+ - p-| >= 2 (V3 degeneracy forced): 0, V3 degenerate: 0 (not forced: 0), forced but V3 simple: 0  (0.1s)
+  [4,2,1,0]^2          sectors  27, copies   56 | joint diag failed: 0, worst off-diagonal 7.52e-48, worst imaginary part 0.0, smallest joint eigenvalue distance 10.25 | self-adjointness violations (exact, G-Gram of the PRV basis): 0 | G-orthogonality: exact-Gram 7.0e-49, float full vectors 4.5e-16 | worst HW residual 3.7e-15 | exchange: 27 sectors, T-map failures 0, fixed copies 22, 2-cycles 17, max |overlap - signed permutation| 4.4e-16, exchange scalars (c, c') = the closed-form scalars of the S31 / S41 relations on 27 of 27 sectors; of the 14 sectors with m >= 2: |p+ - p-| >= 2 (V3 degeneracy forced): 2, V3 degenerate: 2 (not forced: 0), forced but V3 simple: 0  (0.3s)
+  [6,4,2,0]^2          sectors  76, copies  297 | joint diag failed: 0, worst off-diagonal 1.16e-44, worst imaginary part 4.67e-49, smallest joint eigenvalue distance 10.25 | self-adjointness violations (exact, G-Gram of the PRV basis): 0 | G-orthogonality: exact-Gram 5.76e-47, float full vectors 8.9e-16 | worst HW residual 9.9e-15 | exchange: 76 sectors, T-map failures 0, fixed copies 69, 2-cycles 114, max |overlap - signed permutation| 9.6e-16, exchange scalars (c, c') = the closed-form scalars of the S31 / S41 relations on 76 of 76 sectors; of the 56 sectors with m >= 2: |p+ - p-| >= 2 (V3 degeneracy forced): 13, V3 degenerate: 19 (not forced: 6), forced but V3 simple: 0  (8.8s)
+  exchange structure (lam = lam'), [4,2,0,0]^2: P V3 P = -V3 + c,  P V4a P = -2 V4a - V4b + c',  P V4b P = 3 V4a + 2 V4b - c'
+    mu=(7, 4, 1, 0)   m= 2  c = 45.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 0.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 2)] | max |overlap - signed perm| 1.4e-16
+    mu=(7, 3, 2, 0)   m= 2  c = 72.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 0.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 2)] | max |overlap - signed perm| 1.5e-16
+    mu=(6, 5, 1, 0)   m= 2  c = 48.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 0.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 2)] | max |overlap - signed perm| 2.2e-16
+    mu=(6, 4, 2, 0)   m= 3  c = 80.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 0.0 | T permutes the joint triples: True | fixed copies [2] (P-parities +; p+ - p- = 1) | 2-cycles [(1, 3)] | max |overlap - signed perm| 2.7e-16
+    mu=(6, 3, 2, 1)   m= 2  c = 135.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 135.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 2)] | max |overlap - signed perm| 3.6e-16
+    mu=(5, 4, 3, 0)   m= 2  c = 105.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 0.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 2)] | max |overlap - signed perm| 3.2e-16
+    mu=(5, 4, 2, 1)   m= 2  c = 144.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 144.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 2)] | max |overlap - signed perm| 1.1e-16
+  exchange structure (lam = lam'), [6,4,2,0]^2 (m >= 6 only): P V3 P = -V3 + c,  P V4a P = -2 V4a - V4b + c',  P V4b P = 3 V4a + 2 V4b - c'
+    mu=(11, 7, 4, 2)  m= 7  c = 684.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1260.0 | T permutes the joint triples: True | fixed copies [4] (P-parities -; p+ - p- = -1) | 2-cycles [(1, 7), (2, 6), (3, 5)] | max |overlap - signed perm| 7.1e-16
+    mu=(11, 6, 5, 2)  m= 6  c = 729.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1344.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 6), (2, 5), (3, 4)] | max |overlap - signed perm| 3.5e-16
+    mu=(11, 6, 4, 3)  m= 6  c = 792.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1680.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 6), (2, 5), (3, 4)] | max |overlap - signed perm| 6.4e-16
+    mu=(10, 8, 5, 1)  m= 7  c = 620.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 780.0 | T permutes the joint triples: True | fixed copies [4] (P-parities -; p+ - p- = -1) | 2-cycles [(1, 7), (2, 6), (3, 5)] | max |overlap - signed perm| 7.7e-16
+    mu=(10, 8, 4, 2)  m=10  c = 708.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1300.0 | T permutes the joint triples: True | fixed copies [5, 6] (P-parities ++; p+ - p- = 2) | 2-cycles [(1, 10), (2, 9), (3, 8), (4, 7)] | max |overlap - signed perm| 5.2e-16
+    mu=(10, 7, 6, 1)  m= 6  c = 659.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 819.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 6), (2, 5), (3, 4)] | max |overlap - signed perm| 6.3e-16
+    mu=(10, 7, 5, 2)  m=11  c = 764.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1404.0 | T permutes the joint triples: True | fixed copies [7] (P-parities -; p+ - p- = -1) | 2-cycles [(1, 11), (2, 10), (3, 9), (4, 8), (5, 6)] | max |overlap - signed perm| 6.9e-16
+    mu=(10, 7, 4, 3)  m=10  c = 827.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1755.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 10), (2, 9), (3, 8), (4, 7), (5, 6)] | max |overlap - signed perm| 6.0e-16
+    mu=(10, 6, 6, 2)  m= 6  c = 792.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1456.0 | T permutes the joint triples: True | fixed copies [3, 4] (P-parities ++; p+ - p- = 2) | 2-cycles [(1, 6), (2, 5)] | max |overlap - signed perm| 6.6e-16
+    mu=(10, 6, 5, 3)  m= 9  c = 872.0 (spectrum of V3 symmetric about c/2 to 1.4e-48), c' = 1872.0 | T permutes the joint triples: True | fixed copies [5] (P-parities -; p+ - p- = -1) | 2-cycles [(1, 9), (2, 8), (3, 7), (4, 6)] | max |overlap - signed perm| 6.2e-16
+    mu=(10, 6, 4, 4)  m= 6  c = 912.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 2080.0 | T permutes the joint triples: True | fixed copies [3, 4] (P-parities ++; p+ - p- = 2) | 2-cycles [(1, 6), (2, 5)] | max |overlap - signed perm| 6.8e-16
+    mu=(9, 8, 6, 1)   m= 6  c = 680.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 840.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 6), (2, 5), (3, 4)] | max |overlap - signed perm| 5.9e-16
+    mu=(9, 8, 5, 2)   m=10  c = 785.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1440.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 10), (2, 9), (3, 8), (4, 7), (5, 6)] | max |overlap - signed perm| 6.1e-16
+    mu=(9, 8, 4, 3)   m= 8  c = 848.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1800.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 8), (2, 7), (3, 4), (5, 6)] | max |overlap - signed perm| 6.1e-16
+    mu=(9, 7, 6, 2)   m= 9  c = 824.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1512.0 | T permutes the joint triples: True | fixed copies [5] (P-parities -; p+ - p- = -1) | 2-cycles [(1, 9), (2, 8), (3, 7), (4, 6)] | max |overlap - signed perm| 6.4e-16
+    mu=(9, 7, 5, 3)   m=12  c = 904.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1944.0 | T permutes the joint triples: True | fixed copies [5, 7] (P-parities ++; p+ - p- = 2) | 2-cycles [(1, 12), (2, 10), (3, 9), (4, 11), (6, 8)] | max |overlap - signed perm| 6.0e-16
+    mu=(9, 7, 4, 4)   m= 6  c = 944.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 2160.0 | T permutes the joint triples: True | fixed copies [3, 4] (P-parities --; p+ - p- = -2) | 2-cycles [(1, 6), (2, 5)] | max |overlap - signed perm| 6.3e-16
+    mu=(9, 6, 6, 3)   m= 7  c = 932.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 2016.0 | T permutes the joint triples: True | fixed copies [4] (P-parities -; p+ - p- = -1) | 2-cycles [(1, 7), (2, 6), (3, 5)] | max |overlap - signed perm| 6.5e-16
+    mu=(9, 6, 5, 4)   m= 8  c = 989.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 2304.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 8), (2, 7), (3, 6), (4, 5)] | max |overlap - signed perm| 9.1e-16
+    mu=(8, 8, 6, 2)   m= 6  c = 840.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1540.0 | T permutes the joint triples: True | fixed copies [3, 4] (P-parities ++; p+ - p- = 2) | 2-cycles [(1, 6), (2, 5)] | max |overlap - signed perm| 3.5e-16
+    mu=(8, 8, 5, 3)   m= 6  c = 920.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 1980.0 | T permutes the joint triples: True | fixed copies [3, 4] (P-parities --; p+ - p- = -2) | 2-cycles [(1, 6), (2, 5)] | max |overlap - signed perm| 5.5e-16
+    mu=(8, 7, 6, 3)   m= 8  c = 959.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 2079.0 | T permutes the joint triples: True | fixed copies [] (P-parities -; p+ - p- = 0) | 2-cycles [(1, 8), (2, 7), (3, 6), (4, 5)] | max |overlap - signed perm| 8.2e-16
+    mu=(8, 7, 5, 4)   m= 7  c = 1016.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 2376.0 | T permutes the joint triples: True | fixed copies [5] (P-parities -; p+ - p- = -1) | 2-cycles [(1, 7), (2, 6), (3, 4)] | max |overlap - signed perm| 6.4e-16
+    mu=(8, 6, 6, 4)   m= 6  c = 1044.0 (spectrum of V3 symmetric about c/2 to 0.0), c' = 2464.0 | T permutes the joint triples: True | fixed copies [3, 4] (P-parities ++; p+ - p- = 2) | 2-cycles [(1, 6), (2, 5)] | max |overlap - signed perm| 3.8e-16
+
+======================================================================================================================================================
+G3.5  TIMING: n_W-free part t_a (PRV spaces + the three reduced operators on every M_mu + joint eigen-decomposition + copies' slices) vs t_b (+ full reconstruction of every copy)
+======================================================================================================================================================
+  machine: Windows-11-10.0.26300-SP0; Python 3.13.13, numpy 2.5.2, scipy 1.18.1, mpmath 1.3.0; single process; min over cold runs (caches cleared); perf_counter
+  family [2a,a,0,0]^2
+    a lam              dimV irreps copies max m max w   max nW |      t_a |      t_b |     entries |    resid | breakdown t_gen / t_gen_na / t_rs / t_prv / t_red / t_ops / t_eig | t_setup / t_recon | words (V3,V4a,V4b) | worst joint-diag offdiag, min joint dist | float64 copies: t_eig_f, t_a_f, t_b_f, max |ev - ev_mp|, max offdiag
+    1 [2,1,0,0]          20      7      8     2     2       20 |   0.0087 |   0.0097 |          59 |  3.5e-16 | 0.0005 / 0.0003 / 0.0001 / 0.0001 / 0.0041 / 0.0029 / 0.0007 | 0.0006 / 0.0003 | 36/53/66 | 2.7e-51, 6.708 | 0.0002, 0.0082, 0.0091, 1.6e-16, 1.5e-17   [min of 5 cold runs]
+    2 [4,2,0,0]         126     24     32     3     4      174 |   0.0411 |   0.0463 |        1287 |  1.7e-15 | 0.0034 / 0.0030 / 0.0003 / 0.0005 / 0.0039 / 0.0236 / 0.0064 | 0.0021 / 0.0032 | 36/61/67 | 1.4e-49, 10.25 | 0.0007, 0.0353, 0.0406, 2.0e-16, 1.1e-16   [min of 5 cold runs]
+    3 [6,3,0,0]         480     58     90     4     7      920 |   0.1669 |   0.1930 |       14208 |  6.3e-15 | 0.0128 / 0.0163 / 0.0009 / 0.0025 / 0.0043 / 0.1032 / 0.0268 | 0.0074 / 0.0187 | 36/61/67 | 3.0e-48, 13.75 | 0.0017, 0.1418, 0.1679, 2.1e-16, 7.9e-16   [min of 5 cold runs]
+    4 [8,4,0,0]        1375    115    205     5    11     3541 |   0.5176 |   0.6112 |      101092 |  9.1e-15 | 0.0406 / 0.0518 / 0.0024 / 0.0100 / 0.0041 / 0.3192 / 0.0897 | 0.0184 / 0.0751 | 36/61/66 | 8.9e-48, 17.23 | 0.0039, 0.4319, 0.5254, 2.1e-16, 2.2e-15   [min of 3 cold runs]
+    5 [10,5,0,0]       3276    201    406     6    15    10968 |   1.3751 |   1.6595 |      531186 |  1.5e-14 | 0.1309 / 0.1416 / 0.0050 / 0.0318 / 0.0043 / 0.8253 / 0.2362 | 0.0434 / 0.2410 | 36/61/67 | 4.1e-47, 20.71 | 0.0078, 1.1468, 1.4312, 2.2e-16, 4.0e-15   [min of 3 cold runs]
+    6 [12,6,0,0]       6860    322    728     7    20    29028 |   3.1602 |   3.8851 |     2236946 |  9.8e-14 | 0.2214 / 0.4296 / 0.0108 / 0.0913 / 0.0042 / 1.8423 / 0.5606 | 0.0882 / 0.6367 | 36/61/67 | 9.7e-47, 24.19 | 0.0140, 2.6136, 3.3385, 3.7e-16, 7.2e-15   [min of 2 cold runs]
+   separation of the copies by subsets of the commuting triple (sectors with m >= 2; number of sectors where the spectrum of the subset is DEGENERATE, 50-digit eigenvalues, tolerance 1e-20):
+     a = 1 [2,1,0,0]        1 sectors with m >= 2: {V3}: 0, {V4a}: 1, {V4b}: 1, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 1, {V3,V4a,V4b}: 0
+     a = 2 [4,2,0,0]        7 sectors with m >= 2: {V3}: 0, {V4a}: 7, {V4b}: 7, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 7, {V3,V4a,V4b}: 0
+     a = 3 [6,3,0,0]       24 sectors with m >= 2: {V3}: 0, {V4a}: 24, {V4b}: 24, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 24, {V3,V4a,V4b}: 0
+     a = 4 [8,4,0,0]       58 sectors with m >= 2: {V3}: 0, {V4a}: 58, {V4b}: 58, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 58, {V3,V4a,V4b}: 0
+     a = 5 [10,5,0,0]     115 sectors with m >= 2: {V3}: 0, {V4a}: 115, {V4b}: 115, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 115, {V3,V4a,V4b}: 0
+     a = 6 [12,6,0,0]     201 sectors with m >= 2: {V3}: 0, {V4a}: 201, {V4b}: 201, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 201, {V3,V4a,V4b}: 0
+  family [3a,2a,a,0]^2
+    a lam              dimV irreps copies max m max w   max nW |      t_a |      t_b |     entries |    resid | breakdown t_gen / t_gen_na / t_rs / t_prv / t_red / t_ops / t_eig | t_setup / t_recon | words (V3,V4a,V4b) | worst joint-diag offdiag, min joint dist | float64 copies: t_eig_f, t_a_f, t_b_f, max |ev - ev_mp|, max offdiag
+    1 [3,2,1,0]          64     16     30     4     4      152 |   0.0489 |   0.0518 |        1069 |  2.4e-15 | 0.0016 / 0.0016 / 0.0002 / 0.0003 / 0.0039 / 0.0273 / 0.0141 | 0.0013 / 0.0016 | 39/67/65 | 1.8e-48, 6.708 | 0.0007, 0.0355, 0.0384, 1.8e-16, 5.0e-15   [min of 5 cold runs]
+    2 [6,4,2,0]         729     76    297    12    15     4743 |   1.4672 |   1.5153 |      185606 |  6.5e-15 | 0.0213 / 0.0300 / 0.0012 / 0.0065 / 0.0040 / 0.6412 / 0.7630 | 0.0101 / 0.0380 | 39/67/69 | 1.2e-44, 10.25 | 0.0048, 0.7089, 0.7570, 4.2e-16, 1.5e-12   [min of 3 cold runs]
+    3 [9,6,3,0]        4096    213   1592    27    32    59008 |  23.4179 |  23.9045 |     8889611 |  3.9e-14 | 0.1343 / 0.2525 / 0.0067 / 0.0793 / 0.0044 / 5.9174 / 17.0233 | 0.0553 / 0.4313 | 39/67/69 | 5.0e-43, 12.52 | 0.0274, 6.4219, 6.9085, 7.2e-16, 6.8e-12   [min of 3 cold runs]
+   separation of the copies by subsets of the commuting triple (sectors with m >= 2; number of sectors where the spectrum of the subset is DEGENERATE, 50-digit eigenvalues, tolerance 1e-20):
+     a = 1 [3,2,1,0]        8 sectors with m >= 2: {V3}: 2, {V4a}: 1, {V4b}: 1, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 1, {V3,V4a,V4b}: 0
+     a = 2 [6,4,2,0]       56 sectors with m >= 2: {V3}: 19, {V4a}: 8, {V4b}: 6, {V3,V4a}: 1, {V3,V4b}: 0, {V4a,V4b}: 6, {V3,V4a,V4b}: 0
+     a = 3 [9,6,3,0]      179 sectors with m >= 2: {V3}: 69, {V4a}: 13, {V4b}: 13, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 13, {V3,V4a,V4b}: 0
+
+  cost of the reduction relative to gl(3) (same machine, same cold-run protocol; gl(3): slice_engine.bench_one, ONE operator = the 24-term V_red, exact application + float64 eigen-decomposition;
+  gl(4): t_ops = the THREE reduced operators (V3, V4a, V4b: 36 / 61 / 67 words at lam' = [2a,a,0,0]) applied exactly to every PRV basis vector of every irrep):
+   gl(3) [ 8, 4,0]^2: dim   125, irreps  41, copies   85, max w  5 | t_Vred 0.0139 s =  163 us per copy ( 338 us per irrep) | t_a 0.0194 s, t_b 0.0291 s
+   gl(3) [14, 7,0]^2: dim   512, irreps 113, copies  344, max w  8 | t_Vred 0.0739 s =  215 us per copy ( 654 us per irrep) | t_a 0.1002 s, t_b 0.1621 s
+   gl(3) [20,10,0]^2: dim  1331, irreps 221, copies  891, max w 11 | t_Vred 0.2071 s =  232 us per copy ( 937 us per irrep) | t_a 0.2872 s, t_b 0.5081 s
+   gl(3) [28,14,0]^2: dim  3375, irreps 421, copies 2255, max w 15 | t_Vred 0.5977 s =  265 us per copy (1420 us per irrep) | t_a 0.8806 s, t_b 1.7238 s
+   gl(4) [ 2, 1,0,0]^2: dim    20, irreps   7, copies    8, max w  2 | t_ops 0.0029 s =  365 us per copy for the triple =  122 us per operator and copy ( 417 us per irrep) | t_a 0.0087 s (t_a_f 0.0082 s with float64 eig), t_b 0.0097 s
+   gl(4) [ 4, 2,0,0]^2: dim   126, irreps  24, copies   32, max w  4 | t_ops 0.0236 s =  737 us per copy for the triple =  246 us per operator and copy ( 982 us per irrep) | t_a 0.0411 s (t_a_f 0.0353 s with float64 eig), t_b 0.0463 s
+   gl(4) [ 6, 3,0,0]^2: dim   480, irreps  58, copies   90, max w  7 | t_ops 0.1032 s = 1146 us per copy for the triple =  382 us per operator and copy (1779 us per irrep) | t_a 0.1669 s (t_a_f 0.1418 s with float64 eig), t_b 0.1930 s
+   gl(4) [ 8, 4,0,0]^2: dim  1375, irreps 115, copies  205, max w 11 | t_ops 0.3192 s = 1557 us per copy for the triple =  519 us per operator and copy (2775 us per irrep) | t_a 0.5176 s (t_a_f 0.4319 s with float64 eig), t_b 0.6112 s
+   gl(4) [10, 5,0,0]^2: dim  3276, irreps 201, copies  406, max w 15 | t_ops 0.8253 s = 2033 us per copy for the triple =  678 us per operator and copy (4106 us per irrep) | t_a 1.3751 s (t_a_f 1.1468 s with float64 eig), t_b 1.6595 s
+   gl(4) [12, 6,0,0]^2: dim  6860, irreps 322, copies  728, max w 20 | t_ops 1.8423 s = 2531 us per copy for the triple =  844 us per operator and copy (5721 us per irrep) | t_a 3.1602 s (t_a_f 2.6136 s with float64 eig), t_b 3.8851 s
+
+  extension (slices only, t_a; one cold run each): 
+  family [2a,a,0,0]^2 (extension, a = 7, 8)
+    a lam              dimV irreps copies max m max w   max nW |      t_a |      t_b |     entries |    resid | breakdown t_gen / t_gen_na / t_rs / t_prv / t_red / t_ops / t_eig | t_setup / t_recon | words (V3,V4a,V4b) | worst joint-diag offdiag, min joint dist | float64 copies: t_eig_f, t_a_f, t_b_f, max |ev - ev_mp|, max offdiag
+    7 [14,7,0,0]      13056    484   1212     8    26    68208 |   6.3549 |        - |           - |  0.0e+00 | 0.5066 / 0.7687 / 0.0740 / 0.2299 / 0.0050 / 3.6442 / 1.1265 | - | 36/61/67 | 2.0e-46, 27.66 | 0.0224, 5.2508, -, 6.1e-16, 1.2e-14   [min of 1 cold runs]
+    8 [16,8,0,0]      23085    693   1905     9    33   146025 |  11.9855 |        - |           - |  0.0e+00 | 0.9188 / 1.6161 / 0.0317 / 0.5523 / 0.0048 / 6.7277 / 2.1341 | - | 36/61/67 | 5.6e-46, 31.13 | 0.0353, 9.8867, -, 5.9e-16, 1.7e-14   [min of 1 cold runs]
+   separation of the copies by subsets of the commuting triple (sectors with m >= 2; number of sectors where the spectrum of the subset is DEGENERATE, 50-digit eigenvalues, tolerance 1e-20):
+     a = 7 [14,7,0,0]     322 sectors with m >= 2: {V3}: 0, {V4a}: 322, {V4b}: 322, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 322, {V3,V4a,V4b}: 0
+     a = 8 [16,8,0,0]     484 sectors with m >= 2: {V3}: 0, {V4a}: 484, {V4b}: 484, {V3,V4a}: 0, {V3,V4b}: 0, {V4a,V4b}: 484, {V3,V4a,V4b}: 0
+  family [3a,2a,a,0]^2 (extension, a = 4)
+    a lam              dimV irreps copies max m max w   max nW |      t_a |      t_b |     entries |    resid | breakdown t_gen / t_gen_na / t_rs / t_prv / t_red / t_ops / t_eig | t_setup / t_recon | words (V3,V4a,V4b) | worst joint-diag offdiag, min joint dist | float64 copies: t_eig_f, t_a_f, t_b_f, max |ev - ev_mp|, max offdiag
+    4 [12,8,4,0]      15625    459   5945    51    65   426425 | 257.5496 |        - |           - |  0.0e+00 | 0.7057 / 1.2213 / 0.0208 / 0.6978 / 0.0041 / 34.3659 / 220.5339 | - | 39/67/69 | 8.5e-43, 17.23 | 0.1364, 37.1521, -, 2.1e-15, 7.0e-12   [min of 1 cold runs]
+   separation of the copies by subsets of the commuting triple (sectors with m >= 2; number of sectors where the spectrum of the subset is DEGENERATE, 50-digit eigenvalues, tolerance 1e-20):
+     a = 4 [12,8,4,0]     409 sectors with m >= 2: {V3}: 169, {V4a}: 27, {V4b}: 25, {V3,V4a}: 1, {V3,V4b}: 0, {V4a,V4b}: 25, {V3,V4a,V4b}: 0
+
+  multiplicity-free family [S,S,0,0]^2:
+   S = 4: dim V 105, irreps 15, max w 3, max nW 147 | t_a 0.0171 s (gen 0.0027, gen_na 0.0022, rs 0.0003, prv 0.0002, red 0.0040, ops 0.0073, eig 0.0005), t_b 0.0225 s | worst HW resid 8.2e-16
+   S = 8: dim V 825, irreps 45, max w 5, max nW 1749 | t_a 0.0834 s (gen 0.0223, gen_na 0.0247, rs 0.0018, prv 0.0011, red 0.0040, ops 0.0278, eig 0.0016), t_b 0.1480 s | worst HW resid 5.6e-15
+  [4,4,0,0]^2 (m = 1 everywhere, 15 irreps): the scalars (V_red,3, V_red,4a, V_red,4b) on M_mu:
+     {8,8,0,0}: (0, 0, 0); {8,7,1,0}: (40, 0, 0); {8,6,2,0}: (70, 0, 0); {8,5,3,0}: (90, 0, 0); {8,4,4,0}: (100, 0, 0); {7,7,1,1}: (90, 0, 180); {7,6,2,1}: (120, 0, 240); {7,5,3,1}: (140, 0, 280); {7,4,4,1}: (150, 0, 300); {6,6,2,2}: (160, 0, 432); {6,5,3,2}: (180, 0, 504); {6,4,4,2}: (190, 0, 540); {5,5,3,3}: (210, 0, 672); {5,4,4,3}: (220, 0, 720); {4,4,4,4}: (240, 0, 840)
+  [8,8,0,0]^2 (m = 1 everywhere, 45 irreps): the scalars (V_red,3, V_red,4a, V_red,4b) on M_mu:
+     {16,16,0,0}: (0, 0, 0); {16,15,1,0}: (144, 0, 0); {16,14,2,0}: (270, 0, 0); {16,13,3,0}: (378, 0, 0); {16,12,4,0}: (468, 0, 0); {16,11,5,0}: (540, 0, 0); {16,10,6,0}: (594, 0, 0); {16,9,7,0}: (630, 0, 0); {16,8,8,0}: (648, 0, 0); {15,15,1,1}: (306, 0, 612); {15,14,2,1}: (432, 0, 864); {15,13,3,1}: (540, 0, 1080); {15,12,4,1}: (630, 0, 1260); {15,11,5,1}: (702, 0, 1404); {15,10,6,1}: (756, 0, 1512); {15,9,7,1}: (792, 0, 1584); {15,8,8,1}: (810, 0, 1620); {14,14,2,2}: (576, 0, 1632); {14,13,3,2}: (684, 0, 2040); {14,12,4,2}: (774, 0, 2380); {14,11,5,2}: (846, 0, 2652); {14,10,6,2}: (900, 0, 2856); {14,9,7,2}: (936, 0, 2992); {14,8,8,2}: (954, 0, 3060); {13,13,3,3}: (810, 0, 2880); {13,12,4,3}: (900, 0, 3360); {13,11,5,3}: (972, 0, 3744); {13,10,6,3}: (1026, 0, 4032); {13,9,7,3}: (1062, 0, 4224); {13,8,8,3}: (1080, 0, 4320); {12,12,4,4}: (1008, 0, 4200); {12,11,5,4}: (1080, 0, 4680); {12,10,6,4}: (1134, 0, 5040); {12,9,7,4}: (1170, 0, 5280); {12,8,8,4}: (1188, 0, 5400); {11,11,5,5}: (1170, 0, 5460); {11,10,6,5}: (1224, 0, 5880); {11,9,7,5}: (1260, 0, 6160); {11,8,8,5}: (1278, 0, 6300); {10,10,6,6}: (1296, 0, 6552); {10,9,7,6}: (1332, 0, 6864); {10,8,8,6}: (1350, 0, 7020); {9,9,7,7}: (1386, 0, 7392); {9,8,8,7}: (1404, 0, 7560); {8,8,8,8}: (1440, 0, 7920)
+  closed forms on [S,S,0,0]^2 (m = 1): V_red,3 = (S+1)/2 (C2(top) - C2(mu)), V_red,4a = 0, V_red,4b = F(mu) - F(top), F = (2S+1)/4 C2 - C4/4 + C2^2/8 (Perelomov-Popov chain Casimirs, top = (2S,2S,0,0)): checked on S = 1..10: 285 irreps, 0 mismatches
+
+======================================================================================================================================================
+G3.6  REFERENCE FILES  ref/gl4-cg-copies-*.txt
+======================================================================================================================================================
+  wrote gl4-cg-copies-2100.txt: 7 sectors, 8 copies, VEC 8, max HWRESID 3.47e-16, worst joint-eigenbasis off-diagonal 2.71e-51, 12895 bytes, 0.0s
+  wrote gl4-cg-copies-2110.txt: 6 sectors, 7 copies, VEC 7, max HWRESID 2.50e-15, worst joint-eigenbasis off-diagonal 7.88e-49, 11992 bytes, 0.0s
+  wrote gl4-cg-copies-3210.txt: 16 sectors, 30 copies, VEC 0, max HWRESID 2.39e-15, worst joint-eigenbasis off-diagonal 1.77e-48, 26028 bytes, 0.1s
+  wrote gl4-cg-copies-2210-2110.txt: 6 sectors, 7 copies, VEC 7, max HWRESID 2.63e-15, worst joint-eigenbasis off-diagonal 5.56e-50, 12167 bytes, 0.0s
+  wrote gl4-cg-copies-4200.txt: 24 sectors, 32 copies, VEC 0, max HWRESID 1.72e-15, worst joint-eigenbasis off-diagonal 1.4e-49, 31805 bytes, 0.1s
+  wrote gl4-cg-copies-6420.txt: 76 sectors, 297 copies, VEC 0, max HWRESID 9.89e-15, worst joint-eigenbasis off-diagonal 1.16e-44, 309001 bytes, 9.2s
+
+======================================================================================================================================================
+G3.6  INDEPENDENT RE-VERIFICATION of the reference files (parsed from the text; G1/G2 builders: full two-site operators, exact recursion, float recursion)
+======================================================================================================================================================
+  gl4-cg-copies-2100.txt: 7 sectors, 8 copies | TOTAL MISMATCHES 0  | max deviations: copy-in-span 0.0e+00, eigen-equation 6.8e-31, G-orthogonality 2.7e-31, HW residual 3.5e-16, full-operator eigen-equation 1.4e-15, GNORM2 5.9e-16, VEC 5.9e-16 (full vectors checked in 7 sectors)  (0.1s)
+  gl4-cg-copies-2110.txt: 6 sectors, 7 copies | TOTAL MISMATCHES 0  | max deviations: copy-in-span 6.7e-30, eigen-equation 4.1e-30, G-orthogonality 3.0e-31, HW residual 2.5e-15, full-operator eigen-equation 1.7e-14, GNORM2 9.9e-16, VEC 7.8e-16 (full vectors checked in 6 sectors)  (0.1s)
+  gl4-cg-copies-3210.txt: 16 sectors, 30 copies | TOTAL MISMATCHES 0  | max deviations: copy-in-span 1.5e-29, eigen-equation 4.3e-30, G-orthogonality 9.8e-31, HW residual 2.4e-15, full-operator eigen-equation 4.4e-15, GNORM2 1.1e-15, VEC 0.0e+00 (full vectors checked in 16 sectors)  (0.4s)
+  gl4-cg-copies-2210-2110.txt: 6 sectors, 7 copies | TOTAL MISMATCHES 0  | max deviations: copy-in-span 0.0e+00, eigen-equation 1.1e-30, G-orthogonality 4.2e-32, HW residual 2.6e-15, full-operator eigen-equation 2.4e-14, GNORM2 1.4e-15, VEC 1.5e-15 (full vectors checked in 6 sectors)  (0.1s)
+  gl4-cg-copies-4200.txt: 24 sectors, 32 copies | TOTAL MISMATCHES 0  | max deviations: copy-in-span 1.0e-29, eigen-equation 1.5e-30, G-orthogonality 9.5e-31, HW residual 1.7e-15, full-operator eigen-equation 1.1e-14, GNORM2 9.6e-16, VEC 0.0e+00 (full vectors checked in 24 sectors)  (0.5s)
+  gl4-cg-copies-6420.txt: 76 sectors, 297 copies | TOTAL MISMATCHES 0  | max deviations: copy-in-span 4.7e-28, eigen-equation 9.9e-29, G-orthogonality 3.4e-30, HW residual 9.9e-15, full-operator eigen-equation 1.2e-13, GNORM2 2.7e-15, VEC 0.0e+00 (full vectors checked in 76 sectors)  (13.6s)
+
+  consistency with the G1 slice files ref/gl4-cg-slices-*.txt (same products where G1 wrote a file):
+   [2,1,0,0]^2            vs gl4-cg-slices-2100.txt: 7 sectors (SECTOR fields, WSPACE, PRVBASIS exact), 6 m = 1 copies (slice, GNORM2), 6 full vectors: 0 mismatches
+   [2,1,1,0]^2            vs gl4-cg-slices-2110.txt: 6 sectors (SECTOR fields, WSPACE, PRVBASIS exact), 5 m = 1 copies (slice, GNORM2), 5 full vectors: 0 mismatches
+   [3,2,1,0]^2            vs gl4-cg-slices-3210.txt: 16 sectors (SECTOR fields, WSPACE, PRVBASIS exact), 8 m = 1 copies (slice, GNORM2), 0 full vectors: 0 mismatches
+   [2,2,1,0]x[2,1,1,0]    vs gl4-cg-slices-2210-2110.txt: 6 sectors (SECTOR fields, WSPACE, PRVBASIS exact), 5 m = 1 copies (slice, GNORM2), 5 full vectors: 0 mismatches
+   [4,2,0,0]^2            no G1 file (gl4-cg-slices-4200.txt) to compare with
+   [6,4,2,0]^2            no G1 file (gl4-cg-slices-6420.txt) to compare with
+
+  mutation test of the verifier (ONE record corrupted at a time in a copy of gl4-cg-copies-2100.txt, in the m = 2 sector (3,2,1,0) or the header):
+    pristine copy                                ->   0 failed checks  OK (passes)
+    VRED3 entry changed                          ->   6 failed checks {'vred_vs_full_V3': 1, 'cp3': 1, 'cpJ': 1, 'selfadj': 1, 'copy_eig': 2} DETECTED
+    VRED4A entry changed                         ->   6 failed checks {'vred_vs_full_V4a': 1, 'cpJ': 1, 'comm': 1, 'selfadj': 1, 'copy_eig': 2} DETECTED
+    VRED4B entry changed                         ->   6 failed checks {'vred_vs_full_V4b': 1, 'cpJ': 1, 'comm': 1, 'selfadj': 1, 'copy_eig': 2} DETECTED
+    CHARPOLY3 coefficient changed                ->   1 failed checks {'cp3': 1} DETECTED
+    CHARPOLYJ coefficient changed                ->   1 failed checks {'cpJ': 1} DETECTED
+    PRVGRAM entry changed                        ->   5 failed checks {'gram': 1, 'selfadj': 1, 'gnorm2': 2, 'copy_orth': 1} DETECTED
+    PRVBASIS value changed                       ->   6 failed checks {'prv_free': 1, 'vred_vs_full_V3': 2, 'gram': 1, 'copy_span': 2} DETECTED
+    PRVFREE index changed                        ->   8 failed checks {'prv_free': 1, 'copy_span': 2, 'copy_eig': 2, 'gnorm2': 2, 'copy_orth': 1} DETECTED
+    COPY eigenvalue ev3 changed by 1e-6          ->   2 failed checks {'copy_eig': 1, 'full_eig': 1} DETECTED
+    COPY eigenvalue ev4b changed by 1e-6         ->   2 failed checks {'copy_eig': 1, 'full_eig': 1} DETECTED
+    COPY slice value changed by 1e-6             ->   6 failed checks {'copy_eig': 1, 'gnorm2': 1, 'gnorm2_float': 1, 'full_eig': 1, 'vec': 1, 'copy_orth': 1} DETECTED
+    GNORM2 changed by 1e-6 (relative)            ->   2 failed checks {'gnorm2': 1, 'gnorm2_float': 1} DETECTED
+    VEC value changed by 1e-6                    ->   1 failed checks {'vec': 1} DETECTED
+    SECTOR multiplicity changed                  ->   1 failed checks  DETECTED (verifier raised IndexError)
+    WSPACE index changed                         ->   1 failed checks  DETECTED (verifier raised KeyError)
+    GMET1 entry changed                          ->   1 failed checks {'hdr': 1} DETECTED
+    GENERIC changed                              ->   1 failed checks {'hdr': 1} DETECTED
+
+total time 476.6s

@@ -3,11 +3,16 @@
 **Check `HANDOFF.md` first** — it has where the previous session left off (in-flight state, open
 threads, next steps). This file covers stable structure/conventions only.
 
-Research repo (Paul Ryan). **Project target (since 2026-10-16): Clebsch–Gordan coefficients of
-gl(3) from Separation of Variables (SoV) in the two-site Gaudin model** — the two-vacua overlap as a
-function of the Q-functions (the "jet formula"), its general-Λ kernel, and its analytic untwisting
-limit giving the CG coefficients as a generating function. gl(4)/su(4) rectangular representations
-were the original goal and are no longer a target. The repo is split into two subprojects:
+Research repo (Paul Ryan). **Project target (since 2026-10-22): the slice engine and the two-site
+Gaudin missing-label operators for gl(4)** — the PRV/Kostant slice theorem (string conditions on a
+weight space of one site) plus the commuting Laurent coefficients of the two-site gl(4) Gaudin cdet
+as the three missing labels, giving the highest-weight Clebsch–Gordan vectors of gl(4) without any
+n_W-sized null space (plan: `Paul/Mathematica/Gaudin/gl4-slice-engine-plan.md`, code in
+`Paul/Python/gaudin_gl4/`). This revives the repo's original gl(4)/su(4) interest. The gl(3) programme
+(2026-10-16..21: CG coefficients of gl(3) from SoV in the two-site Gaudin model — the jet formula, its
+general-Λ kernel, the untwisting limit, and finally the gl(3) slice engine + Jacobi chain that beat the
+Munich code) is complete and is the template; its write-up is `Slice-engine-notes.*` and
+`Gaudin-sl3-CG-notes.*`. The repo is split into two subprojects:
 
 - **Gaudin** — **the current focus.** Plans per round, notebooks, reference data and the working
   notes live under `Paul/Mathematica/Gaudin/` (see Layout); the Python cross-checks and fits under
@@ -31,8 +36,12 @@ between them.
 - `Paul/Mathematica/Gaudin/` — the sl(3) Gaudin CG program: `Gaudin-sl3-*plan.md` (one per round,
   with the verdict blocks), `Experiments/Gaudin-*.wb` (chain-side notebooks + their `-spec.md`
   briefs; no `Clean/` yet), `ref/*.txt` (exact machine-readable reference data for the Python
-  agents), the notes above. `Paul/Python/gaudin_sl3/` holds the Python side: `SPEC-*.md` briefs,
+  agents), the notes above. `Paul/Python/gaudin_sl3/` holds the gl(3) Python side: `SPEC-*.md` briefs,
   scripts, `RESULTS-*.md` reports beside each script, and `*.pkl` caches (gitignored, rebuildable).
+  `Paul/Python/gaudin_gl4/` is the gl(4) programme (2026-10-22 on): one `SPEC-G<k>-*.md` brief per work
+  package G1–G6 of the plan, the scripts (`glN_reps.py` — GT reps of gl(N), general N;
+  `slice_engine_gl4.py`; `gaudin_gl4_ops.py` — the cdet operators), `RESULTS-G<k>-*.md` beside each;
+  reference data in `Paul/Mathematica/Gaudin/ref/gl4-*.txt`.
   `Paul/Mathematica/old-conventions/old/Gaudin/` is the OLD gl(4)/su(4) Gaudin material, not this.
 - `Paul/Mathematica/new-conventions/` — **active** notebooks going forward (2026-10-01 convention
   change). New conventions: Lax ℒ_ij(u) = u δ_ij + h E_ij (was u − h Σ E_ji⊗e_ij), companion

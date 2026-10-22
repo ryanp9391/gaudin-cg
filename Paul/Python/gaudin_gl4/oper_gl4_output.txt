@@ -1,0 +1,442 @@
+# oper_gl4.py stage=all  (Python 3.13.13, numpy 2.5.2, scipy 1.18.1, sympy 1.14.0, mpmath 1.3.0; Windows-11-10.0.26300-SP0)
+
+======================================================================================================================================================
+G5.1  THE DICTIONARY: all 18 Laurent coefficients S^{(s)}_{k,j} = t^{j-k} (a V3 + b V4a + c V4b + scalar), the scalars in closed form
+======================================================================================================================================================
+DERIVATION (exact, from G2 facts only).  Unknowns A_{k,j} = S^{(1)}_{k,j}, B_{k,j} = S^{(2)}_{k,j} (k = 2,3,4; j = 1..k); known: the top poles A_{k,k} = T_k(lam), B_{k,k} = T_k(lam') (central scalars) and the
+  expansion at infinity: the coefficient of u^{-r} in S_k(u) is  sum_s sum_{j<=r} C(r-1,j-1) theta_s^{r-j} S^{(s)}_{k,j}  = 0 for r < k (residue relations, G2) and = T_k(mu) for r = k (the total Casimir:
+  at infinity L -> E^tot/u, so cdet(d - L) -> cdet(d - E^tot/u) = u^-N prod_c (theta - y_c(mu)), theta = u d_u).  Solving these k relations (theta_1 - theta_2 = t) for the Laurent coefficients leaves exactly
+  the free parameters A_{3,2} = v3/t, A_{4,3} = v4a/t, A_{4,2} = v4b/t^2 (the definition of the triple) and gives:
+     t   S^{(1)}_{2,1} = tau_2,   S^{(2)}_{2,1} = -tau_2 / t
+     t^2 S^{(1)}_{3,1} = tau_3 - 2 v3,   t S^{(1)}_{3,2} = v3,   S^{(2)}_{3,1} = -S^{(1)}_{3,1},   t S^{(2)}_{3,2} = v3 - tau_3
+     t^3 S^{(1)}_{4,1} = tau_4 - 3 v4a - 3 v4b,  t S^{(1)}_{4,3} = v4a,  t^2 S^{(1)}_{4,2} = v4b,  S^{(2)}_{4,1} = -S^{(1)}_{4,1},
+     t^2 S^{(2)}_{4,2} = 3 v4a + 2 v4b - tau_4,   t S^{(2)}_{4,3} = 2 v4a + v4b - tau_4
+  with T_k(nu) = (-1)^k a_{4-k}(nu) [prod_c (th - y_c) = sum_k a_k th^{falling k}, y_c = nu_c + 4 - c] and tau_k = T_k(mu) - T_k(lam) - T_k(lam').
+  This reproduces G2's integer table (section 6c) and fixes ALL scalars; below it is verified against the restricted operators on every sector.
+
+k      j      site   | hat = a V3 + b V4a + c V4b + scalar           | scalar
+2      1      1      | ( 0,  0,  0)  t-power -1                  | tau_2
+2      1      2      | ( 0,  0,  0)  t-power -1 (with (-t) at theta_2)                  | tau_2
+2      2      1      | ( 0,  0,  0)  t-power  0                  | T_2(lam)
+2      2      2      | ( 0,  0,  0)  t-power  0 (with (-t) at theta_2)                  | T_2(lam')
+3      1      1      | (-2,  0,  0)  t-power -2                  | tau_3
+3      1      2      | ( 2,  0,  0)  t-power -2 (with (-t) at theta_2)                  | -tau_3
+3      2      1      | ( 1,  0,  0)  t-power -1                  | 0
+3      2      2      | (-1,  0,  0)  t-power -1 (with (-t) at theta_2)                  | tau_3
+3      3      1      | ( 0,  0,  0)  t-power  0                  | T_3(lam)
+3      3      2      | ( 0,  0,  0)  t-power  0 (with (-t) at theta_2)                  | T_3(lam')
+4      1      1      | ( 0, -3, -3)  t-power -3                  | tau_4
+4      1      2      | ( 0, -3, -3)  t-power -3 (with (-t) at theta_2)                  | tau_4
+4      2      1      | ( 0,  0,  1)  t-power -2                  | 0
+4      2      2      | ( 0,  3,  2)  t-power -2 (with (-t) at theta_2)                  | -tau_4
+4      3      1      | ( 0,  1,  0)  t-power -1                  | 0
+4      3      2      | ( 0, -2, -1)  t-power -1 (with (-t) at theta_2)                  | tau_4
+4      4      1      | ( 0,  0,  0)  t-power  0                  | T_4(lam)
+4      4      2      | ( 0,  0,  0)  t-power  0 (with (-t) at theta_2)                  | T_4(lam')
+
+CLOSED FORMS OF THE CENTRAL CHARACTERS IN THE TRACE-FORM CASIMIRS (n = |nu|, C_k = sum e_{i2 i1} e_{i3 i2} ... e_{i1 i_k} on the HW vector of V_nu, GLNRep): exact fit on 63 partitions (nu_1 <= 4, |nu| <= 12),
+  verified on 20 held-out partitions with nu_1 in {5, 6} (rank of the fit systems: {2: 4, 3: 7, 4: 12}):
+   T_2(nu) = (-1/2)*C2 + (1/2)*n^2 + (3/2)*n      [fit ok on held-out: True]
+   T_3(nu) = (1/3)*C3 + (-1/2)*n*C2 + (1/6)*n^3 + (-1/3)*C2 + (5/6)*n^2 + 2*n      [fit ok on held-out: True]
+   T_4(nu) = (-1/4)*C4 + (1/8)*C2^2 + (1/3)*n*C3 + (-1/4)*n^2*C2 + (1/24)*n^4 + (-1/2)*C3 + (1/6)*n*C2 + (1/12)*n^3 + (-3/4)*C2 + (7/8)*n^2 + (3/2)*n      [fit ok on held-out: True]
+   => tau_2 = n1 n2 - Omega with Omega = (C2(mu) - C2(lam) - C2(lam'))/2 (G2: t S_{2,1} = n1 n2 - Omega), and tau_3, tau_4 = the same differences of the T_k above (n_mu = n1 + n2).  [0.6s]
+
+======================================================================================================================================================
+G5.1 verification: every Laurent coefficient restricted to M_mu, minus the integer combination of the restricted triple, is the SCALAR MATRIX of the closed form
+======================================================================================================================================================
+[2,1,0,0]x[2,1,0,0]        dim    400:  7 sectors, Sum m =  8: restricted 18 operators + triple per sector: 0 violations of (remainder scalar and = closed form)  [0.1s]
+[2,1,1,0]x[2,1,1,0]        dim    225:  6 sectors, Sum m =  7: restricted 18 operators + triple per sector: 0 violations of (remainder scalar and = closed form)  [0.1s]
+[3,2,1,0]x[3,2,1,0]        dim   4096: 16 sectors, Sum m = 30: restricted 18 operators + triple per sector: 0 violations of (remainder scalar and = closed form)  [1.5s]
+[2,2,1,0]x[2,1,1,0]        dim    300:  6 sectors, Sum m =  7: restricted 18 operators + triple per sector: 0 violations of (remainder scalar and = closed form)  [0.1s]
+[1,1,0,0]x[2,1,0,0]        dim    120:  4 sectors, Sum m =  4: restricted 18 operators + triple per sector: 0 violations of (remainder scalar and = closed form)  [0.0s]
+[4,2,1,0]x[4,2,1,0]        dim  19600: 27 sectors, Sum m = 56: restricted 18 operators + triple per sector: 0 violations of (remainder scalar and = closed form)  [6.8s]
+[3,2,0,0]x[2,1,1,0]        dim    900:  7 sectors, Sum m =  8: restricted 18 operators + triple per sector: 0 violations of (remainder scalar and = closed form)  [0.3s]
+[2,2,1,0]x[2,2,1,0]        dim    400:  7 sectors, Sum m =  8: restricted 18 operators + triple per sector: 0 violations of (remainder scalar and = closed form)  [0.1s]
+[3,2,0,0]x[3,2,0,0]        dim   3600: 15 sectors, Sum m = 18: restricted 18 operators + triple per sector: 0 violations of (remainder scalar and = closed form)  [0.7s]
+t = 31/35 : 23 sectors of the four small products, violations 0
+t = -3/7  : 23 sectors of the four small products, violations 0
+
+TOTAL: 95 sectors (Sum m = 146 copies), 1710 (sector, operator) tests at t = 1: 0 violations; tau_k from the Casimir closed forms and tau_2 = n1 n2 - Omega on all sectors: 0 violations
+written Mathematica\Gaudin\ref\gl4-oper-dictionary.txt (135 lines)
+
+======================================================================================================================================================
+G5.2  EXPONENTS, POLYNOMIAL SOLUTIONS OF EVERY COPY, WRONSKIAN, NEGATIVE TESTS  (mpmath 60 digits, exact Fractions where the triple is rational)
+======================================================================================================================================================
+[2,1,0,0]x[2,1,0,0]         7 sectors,  8 copies (6 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 7/7; indicial at inf & = prod(n-d): 7/7; residue relations: 7/7; null dims = #{k: d_k <= d_j} for all j: 8/8; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 8/8; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 8/8  [0.7s]
+[2,1,1,0]x[2,1,1,0]         6 sectors,  7 copies (5 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 6/6; indicial at inf & = prod(n-d): 6/6; residue relations: 6/6; null dims = #{k: d_k <= d_j} for all j: 7/7; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 7/7; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 7/7  [0.7s]
+[3,2,1,0]x[3,2,1,0]        16 sectors, 30 copies (8 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 16/16; indicial at inf & = prod(n-d): 16/16; residue relations: 16/16; null dims = #{k: d_k <= d_j} for all j: 30/30; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 30/30; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 30/30  [5.4s]
+[2,2,1,0]x[2,1,1,0]         6 sectors,  7 copies (5 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 6/6; indicial at inf & = prod(n-d): 6/6; residue relations: 6/6; null dims = #{k: d_k <= d_j} for all j: 7/7; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 7/7; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 7/7  [0.8s]
+[1,1,0,0]x[2,1,0,0]         4 sectors,  4 copies (4 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 4/4; indicial at inf & = prod(n-d): 4/4; residue relations: 4/4; null dims = #{k: d_k <= d_j} for all j: 4/4; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 4/4; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 4/4  [0.3s]
+[4,2,1,0]x[4,2,1,0]        27 sectors, 56 copies (13 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 27/27; indicial at inf & = prod(n-d): 27/27; residue relations: 27/27; null dims = #{k: d_k <= d_j} for all j: 56/56; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 56/56; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 56/56  [13.4s]
+[3,2,0,0]x[2,1,1,0]         7 sectors,  8 copies (6 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 7/7; indicial at inf & = prod(n-d): 7/7; residue relations: 7/7; null dims = #{k: d_k <= d_j} for all j: 8/8; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 8/8; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 8/8  [0.9s]
+[2,2,1,0]x[2,2,1,0]         7 sectors,  8 copies (6 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 7/7; indicial at inf & = prod(n-d): 7/7; residue relations: 7/7; null dims = #{k: d_k <= d_j} for all j: 8/8; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 8/8; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 8/8  [0.9s]
+[3,2,0,0]x[3,2,0,0]        15 sectors, 18 copies (12 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 15/15; indicial at inf & = prod(n-d): 15/15; residue relations: 15/15; null dims = #{k: d_k <= d_j} for all j: 18/18; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 18/18; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 18/18  [2.5s]
+[3,2,1,0]x[4,2,1,0]        20 sectors, 38 copies (10 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 20/20; indicial at inf & = prod(n-d): 20/20; residue relations: 20/20; null dims = #{k: d_k <= d_j} for all j: 38/38; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 38/38; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 38/38  [8.3s]
+[4,2,2,0]x[4,2,2,0]        19 sectors, 26 copies (13 with rational triple, exact): indicial theta_1,theta_2 v-independent & = prod(e-y): 19/19; indicial at inf & = prod(n-d): 19/19; residue relations: 19/19; null dims = #{k: d_k <= d_j} for all j: 26/26; Wronskian ~ (u-th1)^|lam| (u-th2)^|lam'|: 26/26; measured vanishing orders at theta_1, theta_2 = {lam_c+4-c}, {lam'_c+4-c}: 26/26  [6.6s]
+
+TOTAL: 134 sectors, 210 copies (88 exact/rational): null-space dimensions 210/210, Wronskians 210/210, vanishing orders 210/210; indicial v-independent: local 134/134, infinity 134/134, residue relations 134/134
+t-independence: the same exact triples at t = 31/35 and t = -3/7 (theta_2 = 0, theta_1 = t): null dimensions #{k: d_k <= d_j} in 56 of 56 tests (rational copies of the small products)
+numerical copies: worst (smallest) gap between kept and dropped singular values 3.117e+59 (criterion >= 1e20), worst dropped-sv / scale 3.471e-62, worst gauge-solution residual 1.763e-56, worst Wronskian deviation (rel, incl. exact copies = 0) 1.85e-59
+NEGATIVE TESTS (v): true triples: least-squares residual of a degree-exactly-d_1 solution <= 1.31e-60 (relative to ||M_1||_F);
+   630 perturbations (1e-3 in one component of every known triple): smallest residual 1.014e-12, smallest sigma_min/sigma_max of M_1 0.0 (the brief asked for >= 1e-6: 615 of 630 perturbations are BELOW 1e-6 in this measure;
+   all 630 perturbed triples are nevertheless rejected: no polynomial solution of degree d_1 (smallest residual 1.01e-12 vs 1.31e-60 at the true triples, a separation of > 47 orders of magnitude);
+   210 random triples (uniform in the box |v_i| <= 3 max|true triple|): smallest residual 2.062e-5, smallest sigma_min/sigma_max 2.859e-6
+   EXACT threshold-free negative tests on the 88 rational triples (Fractions: the column u^{d_1} of the pencil is NOT in the span of the other columns <=> no polynomial solution of degree exactly d_1): true triples have such a solution in 88 of 88; the 352 tests (each triple + 1/1000 in each component, and one random rational triple) are rejected in 352 of 352
+failures: none
+
+======================================================================================================================================================
+G5.3  THE INDEPENDENT SOLVE: {v : the oper D(v) has polynomial solutions of degrees d_j = mu_j + 4 - j for all j}  =?=  G2's joint spectrum
+======================================================================================================================================================
+METHOD (exact).  Frobenius recursion at infinity for each j (p_{d_j} = 1; the coefficient of u^{d_j-q} is determined by the equation c_q unless d_j - q is another exponent d_k, k > j: a RESONANCE, where
+  the equation is a condition on v and p_{d_k} is free -> gauge-fixed to 0, valid when the solution of degree d_k exists), plus the 4 bottom equations (D~ p = 0 has d+5 equations): all polynomial in v = (v3, v4a, v4b);
+  Groebner basis (sympy, grevlex) of the ideal J generated by all conditions of j = 4..1; dim_Q Q[v]/J = #standard monomials; every generator is evaluated EXACTLY on the commuting G2 matrices (V3, V4a, V4b): J subset K,
+  K = ideal of the m joint triples (radical, m points, simple joint spectrum).  So  dim Q[v]/J = m  =>  J = K  =>  Sigma = V(J) = exactly the m triples of G2, each a simple (Jacobian rank 3) solution.  The points of Sigma are
+  also computed from J alone (joint eigenvalues of the multiplication matrices of Q[v]/J, 60 digits) and compared with G2.  Subsets of the four conditions (15, small products only): dimension / #solutions / #distinct solutions
+  (time-box 5 s per subset, run in a worker process: T/O = not finished).
+  {4}: the condition for P_4 alone (degree d_4 = mu_4, no free parameter); {3}: P_3 alone with its u^{d_4} coefficient gauge-fixed to 0 (echelon gauge, as the gl(3) Q0/J reports), etc.; a subset J_S is the ideal generated by the gauge-fixed Frobenius conditions (resonance + bottom equations) of the listed j.
+
+
+[2,1,0,0]x[2,1,0,0] (dim 400), 7 irreps, Sum m = 8
+  mu=(4, 2, 0, 0)  m=1 nW=1     d=[7, 4, 1, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.0s
+  mu=(4, 1, 1, 0)  m=1 nW=2     d=[7, 3, 2, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.0s
+  mu=(3, 3, 0, 0)  m=1 nW=2     d=[6, 5, 1, 0]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {1,4} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:5/5 | 0.0s
+  mu=(3, 2, 1, 0)  m=2 nW=6     d=[6, 4, 2, 0]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,4} {2,4} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.0s
+  mu=(3, 1, 1, 1)  m=1 nW=12    d=[6, 3, 2, 1]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {2,3} {3,4} | singles {4}:curve {3}:2/2 {2}:curve {1}:curve | 0.0s
+  mu=(2, 2, 2, 0)  m=1 nW=10    d=[5, 4, 3, 0]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,2} {1,4} {2,4} | singles {4}:curve {3}:curve {2}:5/5 {1}:curve | 0.0s
+  mu=(2, 2, 1, 1)  m=1 nW=20    d=[5, 4, 2, 1]   conds 4/5/6/7 deg<=2 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {2,3} {3,4} | singles {4}:curve {3}:2/2 {2}:curve {1}:curve | 0.0s
+  [2.4s]
+
+[2,1,1,0]x[2,1,1,0] (dim 225), 6 irreps, Sum m = 7
+  mu=(4, 2, 2, 0)  m=1 nW=1     d=[7, 4, 3, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,4} {3,4} | singles {4}:curve {3}:curve {2}:2/2 {1}:curve | 0.0s
+  mu=(4, 2, 1, 1)  m=1 nW=2     d=[7, 4, 2, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,3} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.0s
+  mu=(3, 3, 2, 0)  m=1 nW=2     d=[6, 5, 3, 0]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1} {2,4} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:1/1 | 0.0s
+  mu=(3, 3, 1, 1)  m=1 nW=4     d=[6, 5, 2, 1]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:5/4 | 0.0s
+  mu=(3, 2, 2, 1)  m=2 nW=10    d=[6, 4, 3, 1]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | exact subsets (minimal): {2} | singles {4}:curve {3}:curve {2}:2/2 {1}:curve | 0.1s
+  mu=(2, 2, 2, 2)  m=1 nW=21    d=[5, 4, 3, 2]   conds 4/5/6/7 deg<=2 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2} {1,3} | singles {4}:curve {3}:curve {2}:1/1 {1}:curve | 0.0s
+  [2.3s]
+
+[3,2,1,0]x[3,2,1,0] (dim 4096), 16 irreps, Sum m = 30
+  mu=(6, 4, 2, 0)  m=1 nW=1     d=[9, 6, 3, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:T/O | 0.1s
+  mu=(6, 4, 1, 1)  m=1 nW=2     d=[9, 6, 2, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:T/O | 0.1s
+  mu=(6, 3, 3, 0)  m=1 nW=2     d=[9, 5, 4, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,4} | singles {4}:curve {3}:curve {2}:5/5 {1}:curve | 0.1s
+  mu=(6, 3, 2, 1)  m=2 nW=6     d=[9, 5, 3, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | exact subsets (minimal): {2,3,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.2s
+  mu=(6, 2, 2, 2)  m=1 nW=10    d=[9, 4, 3, 2]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,3} | singles {4}:curve {3}:5/5 {2}:curve {1}:curve | 0.1s
+  mu=(5, 5, 2, 0)  m=1 nW=2     d=[8, 7, 3, 0]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,4} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:9/9 | 0.1s
+  mu=(5, 5, 1, 1)  m=1 nW=4     d=[8, 7, 2, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:9/9 | 0.1s
+  mu=(5, 4, 3, 0)  m=2 nW=6     d=[8, 6, 4, 0]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 59 digits | Jacobian rank {3} | exact subsets (minimal): {1,4} {2,4} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:4/4 | 0.1s
+  mu=(5, 4, 2, 1)  m=4 nW=18    d=[8, 6, 3, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 59 digits | Jacobian rank {3} | exact subsets (minimal): {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:12/12 | 0.3s
+  mu=(5, 3, 3, 1)  m=3 nW=28    d=[8, 5, 4, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 60 digits | Jacobian rank {3} | exact subsets (minimal): {2,4} | singles {4}:curve {3}:curve {2}:5/5 {1}:curve | 0.2s
+  mu=(5, 3, 2, 2)  m=3 nW=44    d=[8, 5, 3, 2]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 60 digits | Jacobian rank {3} | exact subsets (minimal): {2,3} | singles {4}:curve {3}:5/5 {2}:curve {1}:curve | 0.1s
+  mu=(4, 4, 4, 0)  m=1 nW=10    d=[7, 6, 5, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1} {2,4} | singles {4}:curve {3}:curve {2}:curve {1}:1/1 | 0.0s
+  mu=(4, 4, 3, 1)  m=3 nW=44    d=[7, 6, 4, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 60 digits | Jacobian rank {3} | exact subsets (minimal): {1} | singles {4}:curve {3}:curve {2}:curve {1}:3/3 | 0.2s
+  mu=(4, 4, 2, 2)  m=2 nW=68    d=[7, 6, 3, 2]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | exact subsets (minimal): {1,3} | singles {4}:curve {3}:5/5 {2}:curve {1}:5/5 | 0.1s
+  mu=(4, 3, 3, 2)  m=3 nW=102   d=[7, 5, 4, 2]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | exact subsets (minimal): {2} | singles {4}:curve {3}:curve {2}:3/3 {1}:curve | 0.2s
+  mu=(3, 3, 3, 3)  m=1 nW=152   d=[6, 5, 4, 3]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2} {1,3} | singles {4}:curve {3}:curve {2}:1/1 {1}:curve | 0.1s
+  [70.6s]
+
+[2,2,1,0]x[2,1,1,0] (dim 300), 6 irreps, Sum m = 7
+  mu=(4, 3, 2, 0)  m=1 nW=1     d=[7, 5, 3, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,4} {2,4} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:3/3 | 0.0s
+  mu=(4, 3, 1, 1)  m=1 nW=2     d=[7, 5, 2, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:12/12 | 0.1s
+  mu=(4, 2, 2, 1)  m=1 nW=4     d=[7, 4, 3, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,4} | singles {4}:curve {3}:curve {2}:2/2 {1}:curve | 0.1s
+  mu=(3, 3, 3, 0)  m=1 nW=3     d=[6, 5, 4, 0]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1} {2,4} | singles {4}:curve {3}:curve {2}:curve {1}:1/1 | 0.0s
+  mu=(3, 3, 2, 1)  m=2 nW=10    d=[6, 5, 3, 1]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1} | singles {4}:curve {3}:curve {2}:curve {1}:2/2 | 0.1s
+  mu=(3, 2, 2, 2)  m=1 nW=18    d=[6, 4, 3, 2]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2} | singles {4}:curve {3}:curve {2}:1/1 {1}:curve | 0.0s
+  [6.7s]
+
+[1,1,0,0]x[2,1,0,0] (dim 120), 4 irreps, Sum m = 4
+  mu=(3, 2, 0, 0)  m=1 nW=1     d=[6, 4, 1, 0]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.0s
+  mu=(3, 1, 1, 0)  m=1 nW=2     d=[6, 3, 2, 0]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.0s
+  mu=(2, 2, 1, 0)  m=1 nW=4     d=[5, 4, 2, 0]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.0s
+  mu=(2, 1, 1, 1)  m=1 nW=9     d=[5, 3, 2, 1]   conds 4/5/6/7 deg<=2 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,2} {1,3} {2,3} {3,4} | singles {4}:curve {3}:2/2 {2}:curve {1}:curve | 0.0s
+  [0.5s]
+
+[4,2,1,0]x[4,2,1,0] (dim 19600), 27 irreps, Sum m = 56   [full system only]
+  mu=(8, 4, 2, 0)  m=1 nW=1     d=[11, 6, 3, 0]  conds 4/5/6/7 deg<=9 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(8, 4, 1, 1)  m=1 nW=2     d=[11, 6, 2, 1]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.3s
+  mu=(8, 3, 3, 0)  m=1 nW=2     d=[11, 5, 4, 0]  conds 4/5/6/7 deg<=9 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(8, 3, 2, 1)  m=2 nW=6     d=[11, 5, 3, 1]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.3s
+  mu=(8, 2, 2, 2)  m=1 nW=10    d=[11, 4, 3, 2]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(7, 5, 2, 0)  m=1 nW=2     d=[10, 7, 3, 0]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(7, 5, 1, 1)  m=1 nW=4     d=[10, 7, 2, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(7, 4, 3, 0)  m=2 nW=6     d=[10, 6, 4, 0]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 59 digits | Jacobian rank {3} | 0.1s
+  mu=(7, 4, 2, 1)  m=4 nW=18    d=[10, 6, 3, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 60 digits | Jacobian rank {3} | 0.4s
+  mu=(7, 3, 3, 1)  m=3 nW=28    d=[10, 5, 4, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 60 digits | Jacobian rank {3} | 0.3s
+  mu=(7, 3, 2, 2)  m=3 nW=44    d=[10, 5, 3, 2]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | 0.2s
+  mu=(6, 6, 2, 0)  m=1 nW=3     d=[9, 8, 3, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(6, 6, 1, 1)  m=1 nW=6     d=[9, 8, 2, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(6, 5, 3, 0)  m=2 nW=10    d=[9, 7, 4, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.1s
+  mu=(6, 5, 2, 1)  m=4 nW=30    d=[9, 7, 3, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 60 digits | Jacobian rank {3} | 0.4s
+  mu=(6, 4, 4, 0)  m=1 nW=14    d=[9, 6, 5, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(6, 4, 3, 1)  m=5 nW=60    d=[9, 6, 4, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 5 (distinct 5) == m | dev 59 digits | Jacobian rank {3} | 0.6s
+  mu=(6, 4, 2, 2)  m=4 nW=92    d=[9, 6, 3, 2]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 59 digits | Jacobian rank {3} | 0.4s
+  mu=(6, 3, 3, 2)  m=3 nW=130   d=[9, 5, 4, 2]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | 0.3s
+  mu=(5, 5, 4, 0)  m=1 nW=18    d=[8, 7, 5, 0]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(5, 5, 3, 1)  m=3 nW=76    d=[8, 7, 4, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 60 digits | Jacobian rank {3} | 0.3s
+  mu=(5, 5, 2, 2)  m=2 nW=116   d=[8, 7, 3, 2]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.2s
+  mu=(5, 4, 4, 1)  m=2 nW=100   d=[8, 6, 5, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.2s
+  mu=(5, 4, 3, 2)  m=4 nW=210   d=[8, 6, 4, 2]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 59 digits | Jacobian rank {3} | 0.4s
+  mu=(5, 3, 3, 3)  m=1 nW=288   d=[8, 5, 4, 3]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(4, 4, 4, 2)  m=1 nW=270   d=[7, 6, 5, 2]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(4, 4, 3, 3)  m=1 nW=368   d=[7, 6, 4, 3]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  [7.4s]
+
+[3,2,0,0]x[2,1,1,0] (dim 900), 7 irreps, Sum m = 8
+  mu=(5, 3, 1, 0)  m=1 nW=1     d=[8, 5, 2, 0]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:T/O | 0.0s
+  mu=(5, 2, 1, 1)  m=1 nW=3     d=[8, 4, 2, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,3,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.1s
+  mu=(4, 4, 1, 0)  m=1 nW=2     d=[7, 6, 2, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {1,4} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:9/9 | 0.0s
+  mu=(4, 3, 2, 0)  m=1 nW=4     d=[7, 5, 3, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1} {2,3,4} | singles {4}:curve {3}:curve {2}:curve {1}:1/1 | 0.0s
+  mu=(4, 3, 1, 1)  m=2 nW=10    d=[7, 5, 2, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:12/12 | 0.1s
+  mu=(4, 2, 2, 1)  m=1 nW=14    d=[7, 4, 3, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,2} {2,3} {2,4} | singles {4}:curve {3}:curve {2}:2/2 {1}:curve | 0.1s
+  mu=(3, 3, 2, 1)  m=1 nW=22    d=[6, 5, 3, 1]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1} | singles {4}:curve {3}:curve {2}:curve {1}:1/1 | 0.1s
+  [15.1s]
+
+[2,2,1,0]x[2,2,1,0] (dim 400), 7 irreps, Sum m = 8
+  mu=(4, 4, 2, 0)  m=1 nW=1     d=[7, 6, 3, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,4} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:5/5 | 0.0s
+  mu=(4, 4, 1, 1)  m=1 nW=2     d=[7, 6, 2, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:5/5 | 0.1s
+  mu=(4, 3, 3, 0)  m=1 nW=2     d=[7, 5, 4, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,4} {2,4} | singles {4}:curve {3}:curve {2}:curve {1}:2/2 | 0.0s
+  mu=(4, 3, 2, 1)  m=2 nW=6     d=[7, 5, 3, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | exact subsets (minimal): {1,3,4} {2,3,4} | singles {4}:curve {3}:curve {2}:curve {1}:5/5 | 0.1s
+  mu=(4, 2, 2, 2)  m=1 nW=10    d=[7, 4, 3, 2]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,3} | singles {4}:curve {3}:5/5 {2}:curve {1}:curve | 0.1s
+  mu=(3, 3, 3, 1)  m=1 nW=12    d=[6, 5, 4, 1]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,2} {1,3} {1,4} | singles {4}:curve {3}:curve {2}:curve {1}:2/2 | 0.1s
+  mu=(3, 3, 2, 2)  m=1 nW=20    d=[6, 5, 3, 2]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} | singles {4}:curve {3}:5/5 {2}:curve {1}:2/2 | 0.1s
+  [6.9s]
+
+[3,2,0,0]x[3,2,0,0] (dim 3600), 15 irreps, Sum m = 18
+  mu=(6, 4, 0, 0)  m=1 nW=1     d=[9, 6, 1, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:T/O | 0.0s
+  mu=(6, 3, 1, 0)  m=1 nW=2     d=[9, 5, 2, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,3,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.1s
+  mu=(6, 2, 2, 0)  m=1 nW=3     d=[9, 4, 3, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.0s
+  mu=(5, 5, 0, 0)  m=1 nW=2     d=[8, 7, 1, 0]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {1,4} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:9/9 | 0.0s
+  mu=(5, 4, 1, 0)  m=2 nW=6     d=[8, 6, 2, 0]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,4} {3,4} | singles {4}:curve {3}:curve {2}:curve {1}:T/O | 0.1s
+  mu=(5, 3, 2, 0)  m=2 nW=10    d=[8, 5, 3, 0]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | exact subsets (minimal): {2,4} | singles {4}:curve {3}:curve {2}:curve {1}:curve | 0.1s
+  mu=(5, 3, 1, 1)  m=1 nW=16    d=[8, 5, 2, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {2,3} {3,4} | singles {4}:curve {3}:2/2 {2}:curve {1}:curve | 0.1s
+  mu=(5, 2, 2, 1)  m=1 nW=22    d=[8, 4, 3, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,3} | singles {4}:curve {3}:5/4 {2}:curve {1}:curve | 0.1s
+  mu=(4, 4, 2, 0)  m=1 nW=14    d=[7, 6, 3, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,4} | singles {4}:curve {3}:curve {2}:curve {1}:5/5 | 0.0s
+  mu=(4, 4, 1, 1)  m=1 nW=24    d=[7, 6, 2, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {2,3} {3,4} | singles {4}:curve {3}:2/2 {2}:curve {1}:5/5 | 0.1s
+  mu=(4, 3, 3, 0)  m=1 nW=18    d=[7, 5, 4, 0]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2,4} | singles {4}:curve {3}:curve {2}:9/9 {1}:curve | 0.0s
+  mu=(4, 3, 2, 1)  m=2 nW=44    d=[7, 5, 3, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 59 digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {2,3} {3,4} | singles {4}:curve {3}:5/5 {2}:curve {1}:curve | 0.1s
+  mu=(4, 2, 2, 2)  m=1 nW=63    d=[7, 4, 3, 2]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {2,3} {3,4} | singles {4}:curve {3}:5/5 {2}:curve {1}:curve | 0.1s
+  mu=(3, 3, 3, 1)  m=1 nW=60    d=[6, 5, 4, 1]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {2} {1,3,4} | singles {4}:curve {3}:curve {2}:1/1 {1}:curve | 0.1s
+  mu=(3, 3, 2, 2)  m=1 nW=88    d=[6, 5, 3, 2]   conds 4/5/6/7 deg<=3 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | exact subsets (minimal): {1,3} {2,3} {3,4} | singles {4}:curve {3}:5/5 {2}:curve {1}:curve | 0.1s
+  [34.0s]
+
+[3,2,1,0]x[4,2,1,0] (dim 8960), 20 irreps, Sum m = 38   [full system only]
+  mu=(7, 4, 2, 0)  m=1 nW=1     d=[10, 6, 3, 0]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(7, 4, 1, 1)  m=1 nW=2     d=[10, 6, 2, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(7, 3, 3, 0)  m=1 nW=2     d=[10, 5, 4, 0]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(7, 3, 2, 1)  m=2 nW=6     d=[10, 5, 3, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.2s
+  mu=(7, 2, 2, 2)  m=1 nW=10    d=[10, 4, 3, 2]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(6, 5, 2, 0)  m=1 nW=2     d=[9, 7, 3, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(6, 5, 1, 1)  m=1 nW=4     d=[9, 7, 2, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(6, 4, 3, 0)  m=2 nW=6     d=[9, 6, 4, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 59 digits | Jacobian rank {3} | 0.1s
+  mu=(6, 4, 2, 1)  m=4 nW=18    d=[9, 6, 3, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 60 digits | Jacobian rank {3} | 0.4s
+  mu=(6, 3, 3, 1)  m=3 nW=28    d=[9, 5, 4, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 60 digits | Jacobian rank {3} | 0.2s
+  mu=(6, 3, 2, 2)  m=3 nW=44    d=[9, 5, 3, 2]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | 0.2s
+  mu=(5, 5, 3, 0)  m=1 nW=8     d=[8, 7, 4, 0]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(5, 5, 2, 1)  m=2 nW=24    d=[8, 7, 3, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.2s
+  mu=(5, 4, 4, 0)  m=1 nW=12    d=[8, 6, 5, 0]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(5, 4, 3, 1)  m=4 nW=52    d=[8, 6, 4, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 59 digits | Jacobian rank {3} | 0.3s
+  mu=(5, 4, 2, 2)  m=3 nW=80    d=[8, 6, 3, 2]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | 0.2s
+  mu=(5, 3, 3, 2)  m=3 nW=116   d=[8, 5, 4, 2]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | 0.2s
+  mu=(4, 4, 4, 1)  m=1 nW=72    d=[7, 6, 5, 1]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(4, 4, 3, 2)  m=2 nW=156   d=[7, 6, 4, 2]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.2s
+  mu=(4, 3, 3, 3)  m=1 nW=220   d=[7, 5, 4, 3]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  [4.1s]
+
+[4,2,2,0]x[4,2,2,0] (dim 7056), 19 irreps, Sum m = 26   [full system only]
+  mu=(8, 4, 4, 0)  m=1 nW=1     d=[11, 6, 5, 0]  conds 4/5/6/7 deg<=9 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(8, 4, 3, 1)  m=1 nW=2     d=[11, 6, 4, 1]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.4s
+  mu=(8, 4, 2, 2)  m=1 nW=3     d=[11, 6, 3, 2]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.3s
+  mu=(7, 5, 4, 0)  m=1 nW=2     d=[10, 7, 5, 0]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(7, 5, 3, 1)  m=1 nW=4     d=[10, 7, 4, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.4s
+  mu=(7, 5, 2, 2)  m=1 nW=6     d=[10, 7, 3, 2]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.3s
+  mu=(7, 4, 4, 1)  m=2 nW=10    d=[10, 6, 5, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.3s
+  mu=(7, 4, 3, 2)  m=2 nW=18    d=[10, 6, 4, 2]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.5s
+  mu=(6, 6, 4, 0)  m=1 nW=3     d=[9, 8, 5, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(6, 6, 3, 1)  m=1 nW=6     d=[9, 8, 4, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.4s
+  mu=(6, 6, 2, 2)  m=1 nW=9     d=[9, 8, 3, 2]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(6, 5, 4, 1)  m=2 nW=18    d=[9, 7, 5, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 59 digits | Jacobian rank {3} | 0.3s
+  mu=(6, 5, 3, 2)  m=2 nW=32    d=[9, 7, 4, 2]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.5s
+  mu=(6, 4, 4, 2)  m=3 nW=53    d=[9, 6, 5, 2]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | 0.3s
+  mu=(6, 4, 3, 3)  m=1 nW=68    d=[9, 6, 4, 3]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(5, 5, 4, 2)  m=1 nW=68    d=[8, 7, 5, 2]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.4s
+  mu=(5, 5, 3, 3)  m=1 nW=88    d=[8, 7, 4, 3]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(5, 4, 4, 3)  m=2 nW=130   d=[8, 6, 5, 3]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 59 digits | Jacobian rank {3} | 0.3s
+  mu=(4, 4, 4, 4)  m=1 nW=186   d=[7, 6, 5, 4]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  [6.2s]
+
+[4,3,1,0]x[4,3,1,0] (dim 30625), 31 irreps, Sum m = 69   [full system only]
+  mu=(8, 6, 2, 0)  m=1 nW=1     d=[11, 8, 3, 0]  conds 4/5/6/7 deg<=9 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(8, 6, 1, 1)  m=1 nW=2     d=[11, 8, 2, 1]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.3s
+  mu=(8, 5, 3, 0)  m=1 nW=2     d=[11, 7, 4, 0]  conds 4/5/6/7 deg<=9 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.3s
+  mu=(8, 5, 2, 1)  m=2 nW=6     d=[11, 7, 3, 1]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.4s
+  mu=(8, 4, 4, 0)  m=1 nW=3     d=[11, 6, 5, 0]  conds 4/5/6/7 deg<=9 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(8, 4, 3, 1)  m=2 nW=10    d=[11, 6, 4, 1]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 60 digits | Jacobian rank {3} | 0.4s
+  mu=(8, 4, 2, 2)  m=1 nW=14    d=[11, 6, 3, 2]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.3s
+  mu=(8, 3, 3, 2)  m=1 nW=18    d=[11, 5, 4, 2]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.3s
+  mu=(7, 7, 2, 0)  m=1 nW=2     d=[10, 9, 3, 0]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(7, 7, 1, 1)  m=1 nW=4     d=[10, 9, 2, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.3s
+  mu=(7, 6, 3, 0)  m=2 nW=6     d=[10, 8, 4, 0]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 59 digits | Jacobian rank {3} | 0.2s
+  mu=(7, 6, 2, 1)  m=4 nW=18    d=[10, 8, 3, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 59 digits | Jacobian rank {3} | 0.6s
+  mu=(7, 5, 4, 0)  m=2 nW=10    d=[10, 7, 5, 0]  conds 4/5/6/7 deg<=8 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 59 digits | Jacobian rank {3} | 0.2s
+  mu=(7, 5, 3, 1)  m=5 nW=36    d=[10, 7, 4, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 5 (distinct 5) == m | dev 58 digits | Jacobian rank {3} | 0.9s
+  mu=(7, 5, 2, 2)  m=3 nW=52    d=[10, 7, 3, 2]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | 0.5s
+  mu=(7, 4, 4, 1)  m=3 nW=46    d=[10, 6, 5, 1]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | 0.4s
+  mu=(7, 4, 3, 2)  m=4 nW=84    d=[10, 6, 4, 2]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 59 digits | Jacobian rank {3} | 0.7s
+  mu=(7, 3, 3, 3)  m=1 nW=108   d=[10, 5, 4, 3]  conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(6, 6, 4, 0)  m=1 nW=14    d=[9, 8, 5, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(6, 6, 3, 1)  m=3 nW=52    d=[9, 8, 4, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | 0.7s
+  mu=(6, 6, 2, 2)  m=2 nW=76    d=[9, 8, 3, 2]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 59 digits | Jacobian rank {3} | 0.3s
+  mu=(6, 5, 5, 0)  m=1 nW=18    d=[9, 7, 6, 0]   conds 4/5/6/7 deg<=7 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.1s
+  mu=(6, 5, 4, 1)  m=4 nW=84    d=[9, 7, 5, 1]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 58 digits | Jacobian rank {3} | 0.6s
+  mu=(6, 5, 3, 2)  m=5 nW=158   d=[9, 7, 4, 2]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 5 (distinct 5) == m | dev 58 digits | Jacobian rank {3} | 0.8s
+  mu=(6, 4, 4, 2)  m=4 nW=201   d=[9, 6, 5, 2]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 4 (distinct 4) == m | dev 59 digits | Jacobian rank {3} | 0.4s
+  mu=(6, 4, 3, 3)  m=3 nW=262   d=[9, 6, 4, 3]   conds 4/5/6/7 deg<=6 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 58 digits | Jacobian rank {3} | 0.3s
+  mu=(5, 5, 5, 1)  m=1 nW=108   d=[8, 7, 6, 1]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  mu=(5, 5, 4, 2)  m=3 nW=262   d=[8, 7, 5, 2]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 59 digits | Jacobian rank {3} | 0.5s
+  mu=(5, 5, 3, 3)  m=2 nW=344   d=[8, 7, 4, 3]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 2 (distinct 2) == m | dev 59 digits | Jacobian rank {3} | 0.2s
+  mu=(5, 4, 4, 3)  m=3 nW=444   d=[8, 6, 5, 3]   conds 4/5/6/7 deg<=5 | Sigma: dim 0, dimQ[v]/J = 3 (distinct 3) == m | dev 58 digits | Jacobian rank {3} | 0.3s
+  mu=(4, 4, 4, 4)  m=1 nW=577   d=[7, 6, 5, 4]   conds 4/5/6/7 deg<=4 | Sigma: dim 0, dimQ[v]/J = 1 (distinct 1) == m | dev exact digits | Jacobian rank {3} | 0.2s
+  [15.7s]
+
+TOTAL: 165 sectors (Sum m = 279 copies, 64 sectors with m >= 2, max m = 5): Sigma = G2's joint spectrum EXACTLY (dim_Q Q[v]/J = m = #distinct points, all conditions vanish on the G2 matrices, Jacobian rank 3) in 165 of 165 sectors; worst deviation of the points of Sigma (computed from J alone) from G2's triples: 2.79e-58
+
+THE gl(4) PENCIL-BUG ANALYSIS (small products: [2,1,0,0]x[2,1,0,0], [2,1,1,0]x[2,1,1,0], [3,2,1,0]x[3,2,1,0], [2,2,1,0]x[2,1,1,0], [1,1,0,0]x[2,1,0,0], [3,2,0,0]x[2,1,1,0], [2,2,1,0]x[2,2,1,0], [3,2,0,0]x[3,2,0,0]): for each subset of the four conditions (gauge-fixed as above): in how many sectors it cuts out EXACTLY the spectrum (J_S = K) / sectors with m >= 2 where it does,
+  in how many sectors its solution set has positive dimension, in how many it is finite but has MORE solutions than the spectrum, and in how many the Groebner computation hit the time-box:
+  subset           exact   exact (m>=2)      dim > 0   finite, too many      T/O
+  {4}              0/68         0/16              68                  0        0
+  {3}              0/68         0/16              54                 14        0
+  {2}              6/68         2/16              55                  7        0
+  {1}              7/68         2/15              36                 20        5
+  {4,3}           32/68         6/16               0                 36        0
+  {4,2}           24/68         6/16               0                 44        0
+  {4,1}           21/68         5/16               0                 46        1
+  {3,2}           20/68         4/16               0                 48        0
+  {3,1}           27/68         5/16               0                 39        2
+  {2,1}           17/68         4/16               0                 49        2
+  {4,3,2}         60/68        13/16               0                  8        0
+  {4,3,1}         49/68        10/16               0                 19        0
+  {4,2,1}         38/68         9/16               0                 30        0
+  {3,2,1}         38/68         8/16               0                 30        0
+  {4,3,2,1}       68/68        16/16               0                  0        0
+
+======================================================================================================================================================
+G5.3 (numerical, independent of the Groebner computation): random-start Levenberg-Marquardt on the full condition system, >= 200 real starts in the box |v_i| <= 3 max|spectrum|
+======================================================================================================================================================
+  [3,2,1,0]x[3,2,1,0] mu=(5, 4, 2, 1)  m=4: 240 starts, 240 converged (|residual| < 1e-10), 4 distinct solutions found, 4 of the 4 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.6s]
+  [3,2,1,0]x[3,2,1,0] mu=(5, 3, 3, 1)  m=3: 240 starts, 240 converged (|residual| < 1e-10), 3 distinct solutions found, 3 of the 3 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.4s]
+  [3,2,1,0]x[3,2,1,0] mu=(5, 3, 2, 2)  m=3: 240 starts, 240 converged (|residual| < 1e-10), 3 distinct solutions found, 3 of the 3 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.5s]
+  [3,2,1,0]x[3,2,1,0] mu=(4, 4, 3, 1)  m=3: 240 starts, 240 converged (|residual| < 1e-10), 3 distinct solutions found, 3 of the 3 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.5s]
+  [3,2,1,0]x[3,2,1,0] mu=(4, 4, 2, 2)  m=2: 240 starts, 240 converged (|residual| < 1e-10), 2 distinct solutions found, 2 of the 2 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.4s]
+  [3,2,1,0]x[3,2,1,0] mu=(4, 3, 3, 2)  m=3: 240 starts, 240 converged (|residual| < 1e-10), 3 distinct solutions found, 3 of the 3 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.4s]
+  [4,2,1,0]x[4,2,1,0] mu=(7, 4, 2, 1)  m=4: 240 starts, 169 converged (|residual| < 1e-10), 4 distinct solutions found, 4 of the 4 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.8s]
+  [4,2,1,0]x[4,2,1,0] mu=(6, 5, 2, 1)  m=4: 240 starts, 240 converged (|residual| < 1e-10), 4 distinct solutions found, 4 of the 4 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.6s]
+  [4,2,1,0]x[4,2,1,0] mu=(6, 4, 3, 1)  m=5: 240 starts, 240 converged (|residual| < 1e-10), 5 distinct solutions found, 5 of the 5 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.5s]
+  [4,2,1,0]x[4,2,1,0] mu=(6, 4, 2, 2)  m=4: 240 starts, 240 converged (|residual| < 1e-10), 4 distinct solutions found, 4 of the 4 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.6s]
+  [4,2,1,0]x[4,2,1,0] mu=(5, 4, 3, 2)  m=4: 240 starts, 240 converged (|residual| < 1e-10), 4 distinct solutions found, 4 of the 4 G2 triples reproduced, 0 solutions that are NOT G2 triples  [0.6s]
+  [6,4,2,0]x[6,4,2,0] mu=(9, 7, 5, 3)  m=12: 2400 starts, 2400 converged (|residual| < 1e-10), 10 distinct solutions found, 10 of the 12 G2 triples reproduced, 0 solutions that are NOT G2 triples  [25.3s]
+
+======================================================================================================================================================
+G5.4  THE JULY-2026 gl(4) GAUDIN ODE (GaudinSolver.wb: gaudinODE, Cas2, Cas4, muhat, degQ, wsub) vs OUR OPER
+======================================================================================================================================================
+TRANSCRIPTION: the cell `ClearAll[gaudinODE]; gaudinODE = ...` of Mathematica\old-conventions\old\Gaudin\Clean\GaudinSolver.wb is read as text from the notebook JSON and translated mechanically (Derivative[n][Q][z] -> Q_n, ^ -> **, sympy parse);
+  Cas2, Cas4, muhat, xw, Pw, degQ, irreps are transcribed by hand (their Mathematica source is quoted in the docstrings of wb_Cas2, wb_Cas4, wb_muhat, wb_xw, wb_degQ):
+     xw_i = mu_i + 5/2 - i,  Pw_k = sum_i xw_i^k,  Cas2 = Pw_2 - 5,  Cas4 = Pw_4 + 4 Pw_3 - Pw_1 Pw_2 + Pw_2/2 - 2 Pw_1^2 - 10 Pw_1 - 51/4,  muhat_k = mu_k + 4 - k,  degQ_k = (S+P+3) - muhat_k.
+  ODE = sum_n c_n(z) Q^(n)(z) with (factored; S at the site w1, P at w2, leading coefficient 8 (z-w1)^2 (z-w2)^2):
+     c_4 = 8*(-w1 + z)**2*(-w2 + z)**2
+     c_3 = -16*(-w1 + z)*(-w2 + z)*(-P*w1 + P*z - S*w2 + S*z)
+     c_2 = -4*(C2*w1*w2 - C2*w1*z - C2*w2*z + C2*z**2 - 2*P**2*w1**2 - 2*P**2*w1*w2 + 6*P**2*w1*z + 2*P**2*w2*z - 4*P**2*z**2 - 8*P*S*w1*w2 + 8*P*S*w1*z + 8*P*S*w2*z - 8*P*S*z**2 - 2*P*w1**2 - 4*P*w1*w2 + 8*P*w1*z + 4*P*w2*z - 6*P*z**2 - 2*S**2*w1*w2 + 2*S**2*w1*z - 2*S**2*w2**2 + 6*S**2*w2*z - 4*S**2*z**2 - 4*S*w1*w2 + 4*S*w1*z - 2*S*w2**2 + 8*S*w2*z - 6*S*z**2)
+     c_1 = 4*(C2 - 2*P**2 - 4*P*S - 4*P - 2*S**2 - 4*S)*(-P*w1 + P*z - S*w2 + S*z - w1 - w2 + 2*z)
+     c_0 = C2**2 + 2*C2*P + 2*C2*S + 2*C2 - 2*C4 + 4*P**3 + 12*P**2*S + 20*P**2 + 12*P*S**2 + 40*P*S + 24*P + 4*S**3 + 20*S**2 + 24*S
+
+(a) the notebook's claim: polynomial solutions of degrees degQ[S,P,mu]_k exist for every irrep of [S,S,0,0] x [P,P,0,0], and only those degrees (exact: the dimension of the polynomial solutions of degree <= n for n = 0..2(S+P)+8):
+   (S,P) = (1,1): 3 irreps (all multiplicity 1, Sum dim = dim^2 not rechecked here), polynomial solutions exactly at degQ with total dimension 4: 6 of 6 (w = (0,1) as the notebook and w = (2/7,-3/5))
+   (S,P) = (2,1): 3 irreps (all multiplicity 1, Sum dim = dim^2 not rechecked here), polynomial solutions exactly at degQ with total dimension 4: 6 of 6 (w = (0,1) as the notebook and w = (2/7,-3/5))
+   (S,P) = (2,2): 6 irreps (all multiplicity 1, Sum dim = dim^2 not rechecked here), polynomial solutions exactly at degQ with total dimension 4: 12 of 12 (w = (0,1) as the notebook and w = (2/7,-3/5))
+   (S,P) = (3,2): 6 irreps (all multiplicity 1, Sum dim = dim^2 not rechecked here), polynomial solutions exactly at degQ with total dimension 4: 12 of 12 (w = (0,1) as the notebook and w = (2/7,-3/5))
+   (S,P) = (3,3): 10 irreps (all multiplicity 1, Sum dim = dim^2 not rechecked here), polynomial solutions exactly at degQ with total dimension 4: 20 of 20 (w = (0,1) as the notebook and w = (2/7,-3/5))
+
+(b) relation to OUR oper: the ODE must equal  8 (z-w1)^2 (z-w2)^2  Pi^p o D^dagger o Pi^-p  (D^dagger = formal adjoint of our D = d^4 - s1 d^3 + s2 d^2 - s3 d + s4; Pi^p = (z-w1)^p1 (z-w2)^p2), with our D built from the
+    DICTIONARY with UNKNOWN accessory parameters (v3, v4a, v4b) and unknown T_k(mu) (k = 2,3,4); matching all coefficients of z^i in the 5 coefficient functions = a LINEAR system.  Scan of the gauge exponents (p1, p2) and of
+    which of the two sites carries [S,S,0,0] (site 1 = pole w1 = theta_1 or swapped), w = (2/7, -3/5), the top irrep of each (S,P):
+    (S,P) = (1,1), mu = (2, 2, 0, 0): 16 gauge/assignment candidates tested, consistent: [('S at w1', 1, 1)]  [35.0s]
+    (S,P) = (2,1), mu = (3, 3, 0, 0): 50 gauge/assignment candidates tested, consistent: [('S at w1', 2, 1)]  [107.1s]
+
+(c) all irreps of all five (S,P): with p = (S, P) (S at w1, P at w2) the linear system has a UNIQUE solution; it equals G2's exact triple (v3, v4a, v4b) of the (multiplicity-one) sector and T_k(mu) = the central characters;
+    then the two operators coincide COEFFICIENT BY COEFFICIENT (exact polynomial identity in z):
+   (S,P) = (1,1): 3 irreps  [1.3s]
+   (S,P) = (2,1): 3 irreps  [1.3s]
+   (S,P) = (2,2): 6 irreps  [1.3s]
+   (S,P) = (3,2): 6 irreps  [1.6s]
+   (S,P) = (3,3): 10 irreps  [1.6s]
+
+    (S,P)   mu               Cas2      Cas4 | G2: (v3, v4a, v4b)   | T_2, T_3, T_4 (mu)   | unique solution = G2 and T_k: | closed-form dictionary:
+    (1,1)  (2, 2, 0, 0)       16       256 | (0, 0, 0) | (6, 0, 0) | yes                           | yes
+    (1,1)  (2, 1, 1, 0)       12       188 | (4, 0, 0) | (8, 8, 0) | yes                           | yes
+    (1,1)  (1, 1, 1, 1)        4         4 | (12, 0, 24) | (12, 24, 24) | yes                           | yes
+    (2,1)  (3, 3, 0, 0)       30       750 | (0, 0, 0) | (12, 0, 0) | yes                           | yes
+    (2,1)  (3, 2, 1, 0)       24       564 | (9, 0, 0) | (15, 15, 0) | yes                           | yes
+    (2,1)  (2, 2, 1, 1)       14       174 | (24, 0, 40) | (20, 40, 40) | yes                           | yes
+    (2,2)  (4, 4, 0, 0)       48      1728 | (0, 0, 0) | (20, 0, 0) | yes                           | yes
+    (2,2)  (4, 3, 1, 0)       40      1336 | (12, 0, 0) | (24, 24, 0) | yes                           | yes
+    (2,2)  (4, 2, 2, 0)       36      1164 | (18, 0, 0) | (26, 36, 0) | yes                           | yes
+    (2,2)  (3, 3, 1, 1)       28       628 | (30, 0, 60) | (30, 60, 60) | yes                           | yes
+    (2,2)  (3, 2, 2, 1)       24       456 | (36, 0, 72) | (32, 72, 72) | yes                           | yes
+    (2,2)  (2, 2, 2, 2)       16        64 | (48, 0, 120) | (36, 96, 120) | yes                           | yes
+    (3,2)  (5, 5, 0, 0)       70      3430 | (0, 0, 0) | (30, 0, 0) | yes                           | yes
+    (3,2)  (5, 4, 1, 0)       60      2720 | (20, 0, 0) | (35, 35, 0) | yes                           | yes
+    (3,2)  (5, 3, 2, 0)       54      2342 | (32, 0, 0) | (38, 56, 0) | yes                           | yes
+    (3,2)  (4, 4, 1, 1)       46      1558 | (48, 0, 84) | (42, 84, 84) | yes                           | yes
+    (3,2)  (4, 3, 2, 1)       40      1180 | (60, 0, 105) | (45, 105, 105) | yes                           | yes
+    (3,2)  (3, 3, 2, 2)       30       470 | (80, 0, 180) | (50, 140, 180) | yes                           | yes
+    (3,3)  (6, 6, 0, 0)       96      6144 | (0, 0, 0) | (42, 0, 0) | yes                           | yes
+    (3,3)  (6, 5, 1, 0)       84      4980 | (24, 0, 0) | (48, 48, 0) | yes                           | yes
+    (3,3)  (6, 4, 2, 0)       76      4284 | (40, 0, 0) | (52, 80, 0) | yes                           | yes
+    (3,3)  (6, 3, 3, 0)       72      3960 | (48, 0, 0) | (54, 96, 0) | yes                           | yes
+    (3,3)  (5, 5, 1, 1)       68      3204 | (56, 0, 112) | (56, 112, 112) | yes                           | yes
+    (3,3)  (5, 4, 2, 1)       60      2508 | (72, 0, 144) | (60, 144, 144) | yes                           | yes
+    (3,3)  (5, 3, 3, 1)       56      2184 | (80, 0, 160) | (62, 160, 160) | yes                           | yes
+    (3,3)  (4, 4, 2, 2)       48      1344 | (96, 0, 252) | (66, 192, 252) | yes                           | yes
+    (3,3)  (4, 3, 3, 2)       44      1020 | (104, 0, 280) | (68, 208, 280) | yes                           | yes
+    (3,3)  (3, 3, 3, 3)       36       324 | (120, 0, 360) | (72, 240, 360) | yes                           | yes
+
+    DICTIONARY (N = S + P; derived symbolically with S, P, w1, w2, C2, C4 all symbolic by `oper_gl4.py wbsym` (150 s), verified here on 28 irreps of the five (S,P)):
+        v3  = (S+1) (2N(N+2) - Cas2)/2,    v4a = 0,    v4b = T_4(mu) = (Cas2^2 + 2(N+1) Cas2 - 2 Cas4 + 4N(N+2)(N+3))/8,
+        T_2(mu) = (4N^2 + 6N - Cas2)/2,    T_3(mu) = (N+2)(2N(N+2) - Cas2)/2 = ((N+2)/(S+1)) v3,    T_4(mu) = v4b
+    (Cas2, Cas4 = the notebook's su(4) Casimirs: Cas2 = C2^{gl}(mu) - |mu|^2/4 with C2^{gl} = sum mu_i (mu_i + 5 - 2i); the family has mu_1 + mu_4 = mu_2 + mu_3 = N, so the exponents at infinity {mu_c + 4 - c}
+    are symmetric about (N+3)/2, the odd characters are slaved to the even ones, and only (Cas2, Cas4) appear.)
+    verification: unique consistent solution equals G2 and T_k(mu): 28 of 28 irreps; closed-form dictionary equals G2 triple and T_k: 28 of 28
+    exact identity  8 Pi^2 Pi^p D^dagger(v_G2) Pi^-p = gaudinODE(Cas2, Cas4)  as differential operators (all 5 coefficient functions, rational functions of z), G2's triple substituted: 28 of 28 irreps
+
+(d) the degrees map as polynomial solutions of the adjoint: our polynomial solutions P_j (degrees d_j = mu_j + 4 - j) give the adjoint solutions psi_j = W_3[P_k, k != j] / W_4 and Q_j = Pi^p psi_j =
+    W_3[P_k, k != j] / ((z-w1)^S (z-w2)^P) (W_4 = c (z-w1)^{2S} (z-w2)^{2P}); each is a POLYNOMIAL of degree S+P+3-d_j = (S+P+3) - muhat_j = degQ_j and solves gaudinODE exactly (w = (1,0)):
+   (S,P) = (1,1): 12 of 12 adjoint polynomials Q_j (4 per irrep) are polynomials of degree degQ_j and solve the notebook ODE exactly
+   (S,P) = (2,1): 12 of 12 adjoint polynomials Q_j (4 per irrep) are polynomials of degree degQ_j and solve the notebook ODE exactly
+   (S,P) = (2,2): 24 of 24 adjoint polynomials Q_j (4 per irrep) are polynomials of degree degQ_j and solve the notebook ODE exactly
+   (S,P) = (3,2): 24 of 24 adjoint polynomials Q_j (4 per irrep) are polynomials of degree degQ_j and solve the notebook ODE exactly
+   (S,P) = (3,3): 40 of 40 adjoint polynomials Q_j (4 per irrep) are polynomials of degree degQ_j and solve the notebook ODE exactly
+
+======================================================================================================================================================
+G5.3 (extras): the largest multiplicity spaces of G2 (m up to 12): exact solve of the full condition system (no subsets), joint triples of G2 as reference
+======================================================================================================================================================
+
+[5,3,1,0]x[5,3,1,0] (dim 129600): the 5 sectors with the largest multiplicity
+  mu=(7, 5, 4, 2)   m=7  nW=434   d=[10, 7, 5, 2]    conds deg<=7 | Sigma: dim 0, dimQ[v]/J = 7 (distinct 7) == m | dev 57 digits | Jacobian rank {3} | 4.2s
+  mu=(8, 5, 3, 2)   m=7  nW=198   d=[11, 7, 4, 2]    conds deg<=8 | Sigma: dim 0, dimQ[v]/J = 7 (distinct 7) == m | dev 57 digits | Jacobian rank {3} | 3.2s
+  mu=(8, 6, 3, 1)   m=7  nW=72    d=[11, 8, 4, 1]    conds deg<=8 | Sigma: dim 0, dimQ[v]/J = 7 (distinct 7) == m | dev 57 digits | Jacobian rank {3} | 2.8s
+  mu=(7, 6, 3, 2)   m=6  nW=294   d=[10, 8, 4, 2]    conds deg<=7 | Sigma: dim 0, dimQ[v]/J = 6 (distinct 6) == m | dev 57 digits | Jacobian rank {3} | 2.5s
+  mu=(7, 6, 4, 1)   m=6  nW=160   d=[10, 8, 5, 1]    conds deg<=7 | Sigma: dim 0, dimQ[v]/J = 6 (distinct 6) == m | dev 58 digits | Jacobian rank {3} | 2.0s
+
+[5,3,2,0]x[5,3,2,0] (dim 90000): the 5 sectors with the largest multiplicity
+  mu=(8, 6, 4, 2)   m=8  nW=126   d=[11, 8, 5, 2]    conds deg<=8 | Sigma: dim 0, dimQ[v]/J = 8 (distinct 8) == m | dev 57 digits | Jacobian rank {3} | 4.9s
+  mu=(7, 6, 4, 3)   m=6  nW=422   d=[10, 8, 5, 3]    conds deg<=7 | Sigma: dim 0, dimQ[v]/J = 6 (distinct 6) == m | dev 56 digits | Jacobian rank {3} | 2.8s
+  mu=(7, 6, 5, 2)   m=6  nW=270   d=[10, 8, 6, 2]    conds deg<=7 | Sigma: dim 0, dimQ[v]/J = 6 (distinct 6) == m | dev 57 digits | Jacobian rank {3} | 2.5s
+  mu=(8, 5, 4, 3)   m=6  nW=270   d=[11, 7, 5, 3]    conds deg<=8 | Sigma: dim 0, dimQ[v]/J = 6 (distinct 6) == m | dev 57 digits | Jacobian rank {3} | 2.7s
+  mu=(7, 5, 5, 3)   m=5  nW=542   d=[10, 7, 6, 3]    conds deg<=7 | Sigma: dim 0, dimQ[v]/J = 5 (distinct 5) == m | dev 57 digits | Jacobian rank {3} | 2.3s
+
+[6,4,2,0]x[6,4,2,0] (dim 531441): the 5 sectors with the largest multiplicity
+  mu=(9, 7, 5, 3)   m=12 nW=916   d=[12, 9, 6, 3]    conds deg<=9 | Sigma: dim 0, dimQ[v]/J = 12 (distinct 12) == m | dev 55 digits | Jacobian rank {3} | 16.6s
+  mu=(10, 7, 5, 2)  m=11 nW=252   d=[13, 9, 6, 2]    conds deg<=10 | Sigma: dim 0, dimQ[v]/J = 11 (distinct 11) == m | dev 56 digits | Jacobian rank {3} | 15.2s
+  mu=(9, 8, 5, 2)   m=10 nW=372   d=[12, 10, 6, 2]   conds deg<=9 | Sigma: dim 0, dimQ[v]/J = 10 (distinct 10) == m | dev 56 digits | Jacobian rank {3} | 12.2s
+  mu=(10, 7, 4, 3)  m=10 nW=372   d=[13, 9, 5, 3]    conds deg<=10 | Sigma: dim 0, dimQ[v]/J = 10 (distinct 10) == m | dev 55 digits | Jacobian rank {3} | 12.1s
+  mu=(10, 8, 4, 2)  m=10 nW=144   d=[13, 10, 5, 2]   conds deg<=10 | Sigma: dim 0, dimQ[v]/J = 10 (distinct 10) == m | dev 57 digits | Jacobian rank {3} | 12.0s
+
+total time 516.0s

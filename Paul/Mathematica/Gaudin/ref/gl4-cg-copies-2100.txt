@@ -1,0 +1,131 @@
+# gl4-cg-copies-2100.txt   (WP-G3 of the gl(4) slice-engine programme; generator Paul/Python/gaudin_gl4/slice_ops_gl4.py `python -X utf8 slice_ops_gl4.py ref`; 2026-10-22)
+# Canonical multiplicity-space data of gl(4), V_Lambda (x) V_Lambda' with Lambda = {2,1,0,0} (REP, dim DIM) and Lambda' = {2,1,0,0} (REP2, dim DIM2): for EVERY irrep mu the PRV slice space M_mu (exact basis), the three two-site Gaudin missing-label operators V3, V4a, V4b REDUCED TO THE SLICE (exact m x m matrices in the PRV basis), their exact characteristic polynomials, the exact G-Gram of the PRV basis, and the canonical copies (joint eigenvectors; 30 digits): slice, eigenvalue triple, HW residual, G-norm^2, full vector (VEC).
+# FORMAT: one record per line, TAB-separated fields, first field = tag, nested braces = lists (Wolfram InputForm style). p/q = exact rationals (integers without denominator); the COPY / GNORM2 / VEC numbers are decimals with 30 significant digits; HWRESID are Python floats. Lines starting with # are comments. Same conventions as the G1 files ref/gl4-cg-slices-*.txt (GT order, 1-based indices, two sites, slice).
+# ORDER OF THE GT BASES, TWO SITES, SLICE: exactly as in ref/gl4-cg-slices-*.txt (order of gl3_reps.gt_patterns, HW state LAST; site 1 = first factor Lambda (nu, slow), site 2 = Lambda' (q, fast); flat index (nu-1)*DIM2 + q; slice = Psi[., q_top] in the weight space V_Lambda[mu-Lambda'] of site 1; GMET1/GMET2 = invariant diagonal metrics, G[HW] = 1).
+# THE OPERATORS (WP-G2, ref/gl4-gaudin-ops.txt; the t-free triple of the two-site gl(4) Gaudin model with L(u)_ij = e1_ij/(u-theta1) + e2_ij/(u-theta2), t = theta1 - theta2, cdet(d_u - L) = d^4 - S1 d^3 + S2 d^2 - S3 d + S4 column-ordered): V3 = t S_{3,2}, V4a = t S_{4,3}, V4b = t^2 S_{4,2} (S_{k,j} = Laurent coefficient of S_k at theta1 of order x^-j, x = u - theta1); exactly t-independent, mutually commuting, self-adjoint for G (x) G, simple joint spectrum on every sector tested (G2).
+# THE REDUCTION RULE (this file's VRED matrices): a term c W1 W2 of an operator (W1 = word of site-1 generators, W2 = word of site-2 generators) acts on the slice psi_top of a HW vector as follows: normal-order W2 in U(gl_4) as sum c_w L H R (L lowering, H Cartan, R raising factors); a term with L != 1 contributes 0; otherwise c c_w prod_{E_aa in H} Lambda'_a (-1)^|R| W1 E_{r_|R|} ... E_{r_1} psi_top for R = e2_{r_1} ... e2_{r_|R|} (raising factors move to site 1 with the sign (-1)^|R|, in REVERSED order, to the right of W1; every site-2 Cartan factor is evaluated to Lambda'). So each operator acts on M_mu as a polynomial in the site-1 generators of V_Lambda: no site-2 vector, no n_W-sized object.
+# RECORDS: REP | REP2 | DIM | DIM2 | GTBASIS | GTBASIS2 | WEIGHTS1 | WEIGHTS2 | GMET1 | GMET2 | NSECTORS | NCOPIES | GENERIC | then per sector (descending lexicographic mu): SECTOR, WSPACE, PRVBASIS x m, PRVFREE, PRVGRAM, VRED3, VRED4A, VRED4B, CHARPOLY3, CHARPOLYJ, then per copy k = 1..m: COPY, HWRESID, GNORM2, VEC |
+#   SECTOR mu m w nW | WSPACE mu {nu,...} (1-based GT indices of V_Lambda[mu-Lambda'], ascending; slice and PRVBASIS entries are indexed by them) | PRVBASIS mu {{nu,val},...} (m lines, exact canonical RREF basis of M_mu as in the G1 files: basis vector k = 1 at the k-th free position, 0 at the other free positions) |
+#   PRVFREE mu {nu_1,...,nu_m} : the free positions (1-based GT indices): the PRV coordinates u_k of a slice s in M_mu are u_k = s[nu_k] (s = sum_k u_k PRVBASIS_k) | PRVGRAM mu {{g_kl}} : EXACT m x m Gram matrix of the full HW vectors of the PRV basis for the invariant form G (x) G: g_kl = sum g1[nu] g2[q] Psi_k[nu,q] Psi_l[nu,q] |
+#   VRED3 / VRED4A / VRED4B mu {{a_ij}} : EXACT m x m matrices (rows i, columns j) of the slice-reduced V3, V4a, V4b in the PRV basis: V_red PRVBASIS_j = sum_i a_ij PRVBASIS_i (column j = image of the j-th basis vector in PRV coordinates) |
+#   CHARPOLY3 mu {c_0,...,c_m} : exact characteristic polynomial det(x - A3) of VRED3, ASCENDING powers (c_m = 1) | CHARPOLYJ mu {c_0,...,c_m} : the same for the GENERIC rational combination A3 + 7/19 A4a + 11/13 A4b of G2 (the combination used for the eigen-decomposition) | GENERIC {1,7/19,11/13} |
+#   COPY mu k ev3 ev4a ev4b {{nu,val},...} : the k-th canonical copy: joint eigenvector of (VRED3, VRED4A, VRED4B) with eigenvalues (ev3, ev4a, ev4b) (30 digits; copies ordered lexicographically ascending by (ev3, ev4a, ev4b), ties of ev3 resolved by ev4a, then ev4b); slice = {{nu,val}} on the weight space, normalised so that the first nonzero component (ascending GT index nu) is exactly 1 (nonzero components only); computed by mpmath at 50 digits from the exact matrices, every V_red,k diagonal in the eigenbasis to 1e-40 |
+#   HWRESID mu k residual : max over i < j of ||(E_ij (x) 1 + 1 (x) E_ij) Psi|| / ||Psi|| for the full vector of copy k reconstructed by the FLOAT level recursion of slice_engine_gl4 (double precision) from the copy's slice | GNORM2 mu k value : G-norm^2 sum g1 g2 Psi^2 of the full vector of copy k (= u^T PRVGRAM u, exact Gram, 30 digits) |
+#   VEC mu k {{idx,val},...} : (DIM*DIM2 <= 2000) the full HW vector of copy k, idx = (nu-1)*DIM2 + q (1-based), 30 digits, same scale as the slice of COPY (= sum_i u_i of the exact full vectors of the PRV basis) |
+# SUMMARY (self-check of this file): 7 sectors, 8 copies, exact full vectors used 8, VEC records 8; max HWRESID (float recursion, all E_ij) 3.47e-16; worst off-diagonal entry of the three V_red,k in the joint eigenbasis 2.71e-51
+REP	{2,1,0,0}
+REP2	{2,1,0,0}
+DIM	20
+DIM2	20
+GTBASIS	{{{0},{0,0},{1,0,0},{2,1,0,0}},{{0},{1,0},{1,0,0},{2,1,0,0}},{{1},{1,0},{1,0,0},{2,1,0,0}},{{0},{1,0},{1,1,0},{2,1,0,0}},{{1},{1,0},{1,1,0},{2,1,0,0}},{{1},{1,1},{1,1,0},{2,1,0,0}},{{0},{0,0},{2,0,0},{2,1,0,0}},{{0},{1,0},{2,0,0},{2,1,0,0}},{{1},{1,0},{2,0,0},{2,1,0,0}},{{0},{2,0},{2,0,0},{2,1,0,0}},{{1},{2,0},{2,0,0},{2,1,0,0}},{{2},{2,0},{2,0,0},{2,1,0,0}},{{0},{1,0},{2,1,0},{2,1,0,0}},{{1},{1,0},{2,1,0},{2,1,0,0}},{{1},{1,1},{2,1,0},{2,1,0,0}},{{0},{2,0},{2,1,0},{2,1,0,0}},{{1},{2,0},{2,1,0},{2,1,0,0}},{{2},{2,0},{2,1,0},{2,1,0,0}},{{1},{2,1},{2,1,0},{2,1,0,0}},{{2},{2,1},{2,1,0},{2,1,0,0}}}
+GTBASIS2	{{{0},{0,0},{1,0,0},{2,1,0,0}},{{0},{1,0},{1,0,0},{2,1,0,0}},{{1},{1,0},{1,0,0},{2,1,0,0}},{{0},{1,0},{1,1,0},{2,1,0,0}},{{1},{1,0},{1,1,0},{2,1,0,0}},{{1},{1,1},{1,1,0},{2,1,0,0}},{{0},{0,0},{2,0,0},{2,1,0,0}},{{0},{1,0},{2,0,0},{2,1,0,0}},{{1},{1,0},{2,0,0},{2,1,0,0}},{{0},{2,0},{2,0,0},{2,1,0,0}},{{1},{2,0},{2,0,0},{2,1,0,0}},{{2},{2,0},{2,0,0},{2,1,0,0}},{{0},{1,0},{2,1,0},{2,1,0,0}},{{1},{1,0},{2,1,0},{2,1,0,0}},{{1},{1,1},{2,1,0},{2,1,0,0}},{{0},{2,0},{2,1,0},{2,1,0,0}},{{1},{2,0},{2,1,0},{2,1,0,0}},{{2},{2,0},{2,1,0},{2,1,0,0}},{{1},{2,1},{2,1,0},{2,1,0,0}},{{2},{2,1},{2,1,0},{2,1,0,0}}}
+WEIGHTS1	{{0,0,1,2},{0,1,0,2},{1,0,0,2},{0,1,1,1},{1,0,1,1},{1,1,0,1},{0,0,2,1},{0,1,1,1},{1,0,1,1},{0,2,0,1},{1,1,0,1},{2,0,0,1},{0,1,2,0},{1,0,2,0},{1,1,1,0},{0,2,1,0},{1,1,1,0},{2,0,1,0},{1,2,0,0},{2,1,0,0}}
+WEIGHTS2	{{0,0,1,2},{0,1,0,2},{1,0,0,2},{0,1,1,1},{1,0,1,1},{1,1,0,1},{0,0,2,1},{0,1,1,1},{1,0,1,1},{0,2,0,1},{1,1,0,1},{2,0,0,1},{0,1,2,0},{1,0,2,0},{1,1,1,0},{0,2,1,0},{1,1,1,0},{2,0,1,0},{1,2,0,0},{2,1,0,0}}
+GMET1	{2304,576,576,96,96,96,576,72,72,16,8,4,9,9,6,4,2,1,1,1}
+GMET2	{2304,576,576,96,96,96,576,72,72,16,8,4,9,9,6,4,2,1,1,1}
+NSECTORS	7
+NCOPIES	8
+GENERIC	{1,7/19,11/13}
+SECTOR	{4,2,0,0}	1	1	1
+WSPACE	{4,2,0,0}	{20}
+PRVBASIS	{4,2,0,0}	{{20,1}}
+PRVFREE	{4,2,0,0}	{20}
+PRVGRAM	{4,2,0,0}	{{1}}
+VRED3	{4,2,0,0}	{{0}}
+VRED4A	{4,2,0,0}	{{0}}
+VRED4B	{4,2,0,0}	{{0}}
+CHARPOLY3	{4,2,0,0}	{0,1}
+CHARPOLYJ	{4,2,0,0}	{0,1}
+COPY	{4,2,0,0}	1	0	0	0	{{20,1.00000000000000000000000000000}}
+HWRESID	{4,2,0,0}	1	0.00e+00
+GNORM2	{4,2,0,0}	1	1.00000000000000000000000000000
+VEC	{4,2,0,0}	1	{{400,1.00000000000000000000000000000}}
+SECTOR	{4,1,1,0}	1	1	2
+WSPACE	{4,1,1,0}	{18}
+PRVBASIS	{4,1,1,0}	{{18,1}}
+PRVFREE	{4,1,1,0}	{18}
+PRVGRAM	{4,1,1,0}	{{2}}
+VRED3	{4,1,1,0}	{{6}}
+VRED4A	{4,1,1,0}	{{0}}
+VRED4B	{4,1,1,0}	{{0}}
+CHARPOLY3	{4,1,1,0}	{-6,1}
+CHARPOLYJ	{4,1,1,0}	{-6,1}
+COPY	{4,1,1,0}	1	6.00000000000000000000000000000	0	0	{{18,1.00000000000000000000000000000}}
+HWRESID	{4,1,1,0}	1	0.00e+00
+GNORM2	{4,1,1,0}	1	2.00000000000000000000000000000
+VEC	{4,1,1,0}	1	{{360,1.00000000000000000000000000000},{398,-1.00000000000000000000000000000}}
+SECTOR	{3,3,0,0}	1	1	2
+WSPACE	{3,3,0,0}	{19}
+PRVBASIS	{3,3,0,0}	{{19,1}}
+PRVFREE	{3,3,0,0}	{19}
+PRVGRAM	{3,3,0,0}	{{2}}
+VRED3	{3,3,0,0}	{{0}}
+VRED4A	{3,3,0,0}	{{0}}
+VRED4B	{3,3,0,0}	{{0}}
+CHARPOLY3	{3,3,0,0}	{0,1}
+CHARPOLYJ	{3,3,0,0}	{0,1}
+COPY	{3,3,0,0}	1	0	0	0	{{19,1.00000000000000000000000000000}}
+HWRESID	{3,3,0,0}	1	0.00e+00
+GNORM2	{3,3,0,0}	1	2.00000000000000000000000000000
+VEC	{3,3,0,0}	1	{{380,1.00000000000000000000000000000},{399,-1.00000000000000000000000000000}}
+SECTOR	{3,2,1,0}	2	2	6
+WSPACE	{3,2,1,0}	{15,17}
+PRVBASIS	{3,2,1,0}	{{15,1}}
+PRVBASIS	{3,2,1,0}	{{17,1}}
+PRVFREE	{3,2,1,0}	{15,17}
+PRVGRAM	{3,2,1,0}	{{21,3},{3,9}}
+VRED3	{3,2,1,0}	{{9/2,-3/2},{-3/2,21/2}}
+VRED4A	{3,2,1,0}	{{0,0},{0,0}}
+VRED4B	{3,2,1,0}	{{0,0},{0,0}}
+CHARPOLY3	{3,2,1,0}	{45,-15,1}
+CHARPOLYJ	{3,2,1,0}	{45,-15,1}
+COPY	{3,2,1,0}	1	4.14589803375031545538623949690	0	0	{{15,1.00000000000000000000000000000},{17,0.236067977499789696409173668731}}
+HWRESID	{3,2,1,0}	1	1.86e-16
+GNORM2	{3,2,1,0}	1	22.9179606750063091077247899381
+VEC	{3,2,1,0}	1	{{300,1.00000000000000000000000000000},{340,0.236067977499789696409173668731},{359,-0.472135954999579392818347337463},{378,-3.23606797749978969640917366873},{395,-0.381966011250105151795413165634},{397,1.61803398874989484820458683437}}
+COPY	{3,2,1,0}	2	10.8541019662496845446137605031	0	0	{{15,1.00000000000000000000000000000},{17,-4.23606797749978969640917366873}}
+HWRESID	{3,2,1,0}	2	1.42e-16
+GNORM2	{3,2,1,0}	2	157.082039324993690892275210062
+VEC	{3,2,1,0}	2	{{300,1.00000000000000000000000000000},{340,-4.23606797749978969640917366873},{359,8.47213595499957939281834733746},{378,1.23606797749978969640917366873},{395,-2.61803398874989484820458683437},{397,-0.618033988749894848204586834366}}
+SECTOR	{3,1,1,1}	1	2	12
+WSPACE	{3,1,1,1}	{5,9}
+PRVBASIS	{3,1,1,1}	{{5,-1/2},{9,1}}
+PRVFREE	{3,1,1,1}	{9}
+PRVGRAM	{3,1,1,1}	{{576}}
+VRED3	{3,1,1,1}	{{18}}
+VRED4A	{3,1,1,1}	{{0}}
+VRED4B	{3,1,1,1}	{{36}}
+CHARPOLY3	{3,1,1,1}	{-18,1}
+CHARPOLYJ	{3,1,1,1}	{-630/13,1}
+COPY	{3,1,1,1}	1	18.0000000000000000000000000000	0	36.0000000000000000000000000000	{{5,1.00000000000000000000000000000},{9,-2.00000000000000000000000000000}}
+HWRESID	{3,1,1,1}	1	2.67e-16
+GNORM2	{3,1,1,1}	1	2304.00000000000000000000000000
+VEC	{3,1,1,1}	1	{{100,1.00000000000000000000000000000},{118,-1.00000000000000000000000000000},{180,-2.00000000000000000000000000000},{218,6.00000000000000000000000000000},{235,2.00000000000000000000000000000},{237,-6.00000000000000000000000000000},{292,2.00000000000000000000000000000},{332,-6.00000000000000000000000000000},{346,-1.00000000000000000000000000000},{351,6.00000000000000000000000000000},{385,1.00000000000000000000000000000},{389,-2.00000000000000000000000000000}}
+SECTOR	{2,2,2,0}	1	1	10
+WSPACE	{2,2,2,0}	{13}
+PRVBASIS	{2,2,2,0}	{{13,1}}
+PRVFREE	{2,2,2,0}	{13}
+PRVGRAM	{2,2,2,0}	{{72}}
+VRED3	{2,2,2,0}	{{12}}
+VRED4A	{2,2,2,0}	{{0}}
+VRED4B	{2,2,2,0}	{{0}}
+CHARPOLY3	{2,2,2,0}	{-12,1}
+CHARPOLYJ	{2,2,2,0}	{-12,1}
+COPY	{2,2,2,0}	1	12.0000000000000000000000000000	0	0	{{13,1.00000000000000000000000000000}}
+HWRESID	{2,2,2,0}	1	3.47e-16
+GNORM2	{2,2,2,0}	1	72.0000000000000000000000000000
+VEC	{2,2,2,0}	1	{{260,1.00000000000000000000000000000},{279,-1.00000000000000000000000000000},{295,0.500000000000000000000000000000},{318,-1.50000000000000000000000000000},{337,1.50000000000000000000000000000},{356,-1.50000000000000000000000000000},{374,-1.00000000000000000000000000000},{393,1.00000000000000000000000000000}}
+SECTOR	{2,2,1,1}	1	2	20
+WSPACE	{2,2,1,1}	{4,8}
+PRVBASIS	{2,2,1,1}	{{4,-1/2},{8,1}}
+PRVFREE	{2,2,1,1}	{8}
+PRVGRAM	{2,2,1,1}	{{1280}}
+VRED3	{2,2,1,1}	{{20}}
+VRED4A	{2,2,1,1}	{{0}}
+VRED4B	{2,2,1,1}	{{40}}
+CHARPOLY3	{2,2,1,1}	{-20,1}
+CHARPOLYJ	{2,2,1,1}	{-700/13,1}
+COPY	{2,2,1,1}	1	20.0000000000000000000000000000	0	40.0000000000000000000000000000	{{4,1.00000000000000000000000000000},{8,-2.00000000000000000000000000000}}
+HWRESID	{2,2,1,1}	1	2.38e-16
+GNORM2	{2,2,1,1}	1	5120.00000000000000000000000000
+VEC	{2,2,1,1}	1	{{80,1.00000000000000000000000000000},{99,-1.00000000000000000000000000000},{115,0.333333333333333333333333333333},{160,-2.00000000000000000000000000000},{179,2.00000000000000000000000000000},{198,6.00000000000000000000000000000},{217,-6.00000000000000000000000000000},{236,6.00000000000000000000000000000},{286,-0.333333333333333333333333333333},{312,-6.00000000000000000000000000000},{331,6.00000000000000000000000000000},{350,-6.00000000000000000000000000000},{365,1.00000000000000000000000000000},{369,-2.00000000000000000000000000000},{384,-1.00000000000000000000000000000},{388,2.00000000000000000000000000000}}
