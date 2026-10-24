@@ -4,6 +4,17 @@ Where the last session left off. Read this first when picking the project back u
 history log (that's `git log`) — only what's still open or in-flight. Overwrite
 freely each session rather than appending.
 
+## >>> G9 RETURNED (2026-10-24 evening, Ubuntu laptop, Sonnet agent): the float64 gl(4) CG engine `cg_fast_gl4.py` — n_W-free stage x18 / x74 / x233 faster than G3 at [6,4,2,0]² / [9,6,3,0]² / [12,8,4,0]², 0 fallbacks in 1796 sectors <<<
+
+`RESULTS-G9-fast-cg.md` (§0 headline, §3 table, §6 surprises, §7 not done), `cg_fast_gl4.py` (module + CLI), `test_cg_fast_gl4.py` (11 tests, 3.2 s, pass), `cg_fast_gl4_output.txt` (T1/T2/T4/T5/T6), `cg_fast_gl4_timings.txt` (T3),
+raw files `Paul/Cpp/AlexCGC/results/su4-same-machine/g9/`. NOTHING COMMITTED; no Windows-verified file edited. Pipeline: three operators as float reduced words on W₁ (route B; closed forms route A for V₃, V₄ᵃ only) → physical subspace
+= null space of the ROW-NORMALISED E₂₃^{k₂}, E₃₄^{k₃} powers → Rayleigh–Ritz diagonalisation of the triple inside it → G1's `hw_from_slice`; descendants (full CG tables) too.
+**Numbers (cold, one machine, min of 5):** t_slices / t_total: [6,4,2,0]² 0.097 / 0.171 s vs G3 exact 1.73 / 1.80 s (x17.8 / x10.5), Munich eig 39.4 s; [9,6,3,0]² 0.357 / 0.968 s vs 26.3 / 26.9 s (x73.7 / x27.8), Munich eig ≥ 385 s (partial); [12,8,4,0]² 1.19 / 6.28 s vs 276 / 283 s (x233 / x44.9);
+[15,10,5,0]² (2.5·10⁹ coefficients) 3.99 / 58.2 s vs G3 float 224 / 285 s (G3 exact did not finish); rectangular S = 8: 0.054 / 0.144 s vs G3 0.074 / 0.162 s (x1.4 / x1.1), Munich orig 84.4 s, eig 3.52 s. Rectangular family: little gain over G3 (setup + output bound; lean mode x1.1–2.8 in t_total).
+**Agreement:** vs G3's 50-digit copies slices ≤ 4.1e-13 on 12 of 13 T1 products, 5.1e-12 at [9,6,3,0]², 2.0e-11 (m = 50/51 sectors of [12,8,4,0]²), 4.8e-11 at [16,8,0,0]² (the brief's 1e-12 is NOT met there; floor from rounding exact matrices ≈ 1e-12); Munich: 42/42 MF vectors ≤ 1.4e-15, 94/94 sectors ≤ 2.4e-15 (+ 6 big ones ≤ 1.6e-12); full CG tables vs Munich menu 5 ≤ 1.95e-13, unitarity ≤ 3.5e-13.
+**Findings to know:** (1) the brief's raw string statistic breaks at λ₃ = λ₄ = 0, large k (spurious s ≈ 1e-6): row-normalise; (2) G-eigenvectors alone are only 1e-10 accurate (small G-gap): use the null-space subspace + Ritz; (3) Route A is slower than B here (Q classes via exact Fractions; qcache build 5 min); (4) the m = 50 degenerate sector of [12,8,4,0]² is μ = (18,14,10,6).
+**Not done:** S2′ (30-digit refinement), vectorised float Q classes, Munich re-runs (G7's numbers used; none for [12,8,4,0]² and larger), full exact reference at [12,8,4,0]², [30,20,10,0]. C++ port: not worth it for the slice stage (§9).
+
 ## >>> FOR THE UBUNTU LAPTOP (written 2026-10-24, Paul: "an algorithm on how to use this technology to compute CG coefficients fast; write a plan on how the Ubuntu guy should implement and test"): brief `Paul/Python/gaudin_gl4/SPEC-G9-fast-cg-ubuntu.md` <<<
 
 Prerequisite: round G8 committed on Windows and pulled on the laptop (`SPEC/RESULTS-G8{a,b,c,d}-*`, `lattice_recursion_gl4.py`, `nested_gl3_gl4.py`, `relabelled_gl4.py`,

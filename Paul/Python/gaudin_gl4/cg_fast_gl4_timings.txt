@@ -1,0 +1,201 @@
+
+============================================================================================================================================
+T3  same-machine benchmark: ours (float64, cold, min of 5) vs G3/G1 (exact 50-digit and float64) vs Munich (G7 numbers)   [2026-10-24 18:04]
+============================================================================================================================================
+LC_ALL=C OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1; python 3.10.12, numpy 2.2.6; machine Linux-6.8.0-138-generic-x86_64-with-glibc2.35
+
+--- [4,4,0,0]^2   loadavg before: 0.50 7.00 13.69
+  ours  (min of 5)  t_setup 0.0062  t_ops 0.0155  t_eig 0.0024  | t_slices 0.0179 | t_hw 0.0032 | t_total 0.0273   [irreps 15 copies 15  max w1 1  entries 580  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.020 s for 15 of 15 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0062  t_prv 0.0004  t_ops(exact) 0.0173  t_diag 0.0007  | n_W-free 0.0183 | t_hw 0.0029 | total 0.0275
+  G3/G1 float (min of 3)  t_setup 0.0062  t_prv 0.0004  t_ops(exact) 0.0173  t_diag 0.0001  | n_W-free 0.0178 | t_hw 0.0029 | total 0.0270
+  speed-ups of ours: vs G3 exact: t_slices x1.0 (n_W-free), t_total x1.0; vs G3 float: t_slices x1.0 (n_W-free), t_total x1.0; t_hw/t_total = 0.12;  Munich orig 0.03126 s (x1 of our t_total); Munich eig 0.02583 s (x1 of our t_total)
+
+--- [5,5,0,0]^2   loadavg before: 0.50 7.00 13.69
+  ours  (min of 5)  t_setup 0.0110  t_ops 0.0207  t_eig 0.0033  | t_slices 0.0240 | t_hw 0.0070 | t_total 0.0420   [irreps 21 copies 21  max w1 1  entries 1544  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.022 s for 21 of 21 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0111  t_prv 0.0005  t_ops(exact) 0.0250  t_diag 0.0009  | n_W-free 0.0265 | t_hw 0.0066 | total 0.0442
+  G3/G1 float (min of 3)  t_setup 0.0111  t_prv 0.0005  t_ops(exact) 0.0250  t_diag 0.0002  | n_W-free 0.0257 | t_hw 0.0066 | total 0.0434
+  speed-ups of ours: vs G3 exact: t_slices x1.1 (n_W-free), t_total x1.1; vs G3 float: t_slices x1.1 (n_W-free), t_total x1.0; t_hw/t_total = 0.17;  Munich orig 0.3533 s (x8 of our t_total); Munich eig 0.09284 s (x2 of our t_total)
+
+--- [6,6,0,0]^2   loadavg before: 0.50 7.00 13.69
+  ours  (min of 5)  t_setup 0.0186  t_ops 0.0274  t_eig 0.0045  | t_slices 0.0319 | t_hw 0.0140 | t_total 0.0646   [irreps 28 copies 28  max w1 1  entries 3646  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.026 s for 28 of 28 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0185  t_prv 0.0009  t_ops(exact) 0.0361  t_diag 0.0013  | n_W-free 0.0383 | t_hw 0.0135 | total 0.0703
+  G3/G1 float (min of 3)  t_setup 0.0185  t_prv 0.0009  t_ops(exact) 0.0361  t_diag 0.0002  | n_W-free 0.0372 | t_hw 0.0135 | total 0.0692
+  speed-ups of ours: vs G3 exact: t_slices x1.2 (n_W-free), t_total x1.1; vs G3 float: t_slices x1.2 (n_W-free), t_total x1.1; t_hw/t_total = 0.22;  Munich orig 2.447 s (x38 of our t_total); Munich eig 0.2271 s (x4 of our t_total)
+
+--- [7,7,0,0]^2   loadavg before: 0.50 7.00 13.69
+  ours  (min of 5)  t_setup 0.0293  t_ops 0.0360  t_eig 0.0058  | t_slices 0.0418 | t_hw 0.0259 | t_total 0.0972   [irreps 36 copies 36  max w1 1  entries 7838  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.032 s for 36 of 36 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0295  t_prv 0.0011  t_ops(exact) 0.0497  t_diag 0.0016  | n_W-free 0.0524 | t_hw 0.0253 | total 0.1072
+  G3/G1 float (min of 3)  t_setup 0.0295  t_prv 0.0011  t_ops(exact) 0.0497  t_diag 0.0003  | n_W-free 0.0511 | t_hw 0.0253 | total 0.1058
+  speed-ups of ours: vs G3 exact: t_slices x1.3 (n_W-free), t_total x1.1; vs G3 float: t_slices x1.2 (n_W-free), t_total x1.1; t_hw/t_total = 0.27;  Munich orig 15 s (x154 of our t_total); Munich eig 1.018 s (x10 of our t_total)
+
+--- [8,8,0,0]^2   loadavg before: 0.50 7.00 13.69
+  ours  (min of 5)  t_setup 0.0442  t_ops 0.0468  t_eig 0.0073  | t_slices 0.0542 | t_hw 0.0458 | t_total 0.1443   [irreps 45 copies 45  max w1 1  entries 15625  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.035 s for 45 of 45 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0445  t_prv 0.0016  t_ops(exact) 0.0705  t_diag 0.0020  | n_W-free 0.0742 | t_hw 0.0436 | total 0.1623
+  G3/G1 float (min of 3)  t_setup 0.0445  t_prv 0.0016  t_ops(exact) 0.0705  t_diag 0.0003  | n_W-free 0.0725 | t_hw 0.0436 | total 0.1606
+  speed-ups of ours: vs G3 exact: t_slices x1.4 (n_W-free), t_total x1.1; vs G3 float: t_slices x1.3 (n_W-free), t_total x1.1; t_hw/t_total = 0.32;  Munich orig 84.36 s (x585 of our t_total); Munich eig 3.518 s (x24 of our t_total)
+
+--- [9,9,0,0]^2   loadavg before: 0.54 6.90 13.63
+  ours  (min of 5)  t_setup 0.0642  t_ops 0.0601  t_eig 0.0090  | t_slices 0.0690 | t_hw 0.0740 | t_total 0.2075   [irreps 55 copies 55  max w1 1  entries 29277  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.041 s for 55 of 55 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0647  t_prv 0.0022  t_ops(exact) 0.1134  t_diag 0.0027  | n_W-free 0.1182 | t_hw 0.0759 | total 0.2588
+  G3/G1 float (min of 3)  t_setup 0.0647  t_prv 0.0022  t_ops(exact) 0.1134  t_diag 0.0004  | n_W-free 0.1160 | t_hw 0.0759 | total 0.2566
+  speed-ups of ours: vs G3 exact: t_slices x1.7 (n_W-free), t_total x1.2; vs G3 float: t_slices x1.7 (n_W-free), t_total x1.2; t_hw/t_total = 0.36;  Munich eig 15.47 s (x75 of our t_total)
+
+--- [10,10,0,0]^2   loadavg before: 0.54 6.90 13.63
+  ours  (min of 5)  t_setup 0.0930  t_ops 0.0755  t_eig 0.0107  | t_slices 0.0862 | t_hw 0.1169 | t_total 0.2964   [irreps 66 copies 66  max w1 1  entries 52090  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.044 s for 66 of 66 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0927  t_prv 0.0029  t_ops(exact) 0.1467  t_diag 0.0032  | n_W-free 0.1527 | t_hw 0.1148 | total 0.3603
+  G3/G1 float (min of 3)  t_setup 0.0927  t_prv 0.0029  t_ops(exact) 0.1467  t_diag 0.0005  | n_W-free 0.1501 | t_hw 0.1148 | total 0.3576
+  speed-ups of ours: vs G3 exact: t_slices x1.8 (n_W-free), t_total x1.2; vs G3 float: t_slices x1.7 (n_W-free), t_total x1.2; t_hw/t_total = 0.39;  Munich eig 56.83 s (x192 of our t_total)
+
+--- [11,11,0,0]^2   loadavg before: 0.58 6.80 13.56
+  ours  (min of 5)  t_setup 0.1285  t_ops 0.1135  t_eig 0.0127  | t_slices 0.1262 | t_hw 0.1779 | t_total 0.4329   [irreps 78 copies 78  max w1 1  entries 88700  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.049 s for 78 of 78 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.1292  t_prv 0.0037  t_ops(exact) 0.2097  t_diag 0.0036  | n_W-free 0.2170 | t_hw 0.1773 | total 0.5234
+  G3/G1 float (min of 3)  t_setup 0.1292  t_prv 0.0037  t_ops(exact) 0.2097  t_diag 0.0006  | n_W-free 0.2139 | t_hw 0.1773 | total 0.5204
+  speed-ups of ours: vs G3 exact: t_slices x1.7 (n_W-free), t_total x1.2; vs G3 float: t_slices x1.7 (n_W-free), t_total x1.2; t_hw/t_total = 0.41;  Munich eig 201.8 s (x466 of our t_total)
+
+--- [12,12,0,0]^2   loadavg before: 0.61 6.70 13.49
+  ours  (min of 5)  t_setup 0.1931  t_ops 0.1175  t_eig 0.0152  | t_slices 0.1326 | t_hw 0.2621 | t_total 0.5881   [irreps 91 copies 91  max w1 1  entries 145456  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.054 s for 91 of 91 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 1)  t_setup 0.1923  t_prv 0.0047  t_ops(exact) 0.2457  t_diag 0.0042  | n_W-free 0.2546 | t_hw 0.2669 | total 0.7138
+  G3/G1 float (min of 1)  t_setup 0.1923  t_prv 0.0047  t_ops(exact) 0.2457  t_diag 0.0007  | n_W-free 0.2511 | t_hw 0.2669 | total 0.7103
+  speed-ups of ours: vs G3 exact: t_slices x1.9 (n_W-free), t_total x1.2; vs G3 float: t_slices x1.9 (n_W-free), t_total x1.2; t_hw/t_total = 0.45;  (no Munich number: not run)
+
+--- [14,14,0,0]^2   loadavg before: 0.61 6.70 13.49
+  ours  (min of 5)  t_setup 0.3383  t_ops 0.1762  t_eig 0.0207  | t_slices 0.1969 | t_hw 0.5312 | t_total 1.0670   [irreps 120 copies 120  max w1 1  entries 356052  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.071 s for 120 of 120 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 1)  t_setup 0.3406  t_prv 0.0076  t_ops(exact) 0.4199  t_diag 0.0056  | n_W-free 0.4331 | t_hw 0.5282 | total 1.3020
+  G3/G1 float (min of 1)  t_setup 0.3406  t_prv 0.0076  t_ops(exact) 0.4199  t_diag 0.0009  | n_W-free 0.4283 | t_hw 0.5282 | total 1.2972
+  speed-ups of ours: vs G3 exact: t_slices x2.2 (n_W-free), t_total x1.2; vs G3 float: t_slices x2.2 (n_W-free), t_total x1.2; t_hw/t_total = 0.50;  (no Munich number: not run)
+
+--- [16,16,0,0]^2   loadavg before: 0.67 6.52 13.36
+  ours  (min of 5)  t_setup 0.5491  t_ops 0.2468  t_eig 0.0276  | t_slices 0.2744 | t_hw 0.9939 | t_total 1.8182   [irreps 153 copies 153  max w1 1  entries 787257  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.076 s for 153 of 153 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 1)  t_setup 0.5535  t_prv 0.0112  t_ops(exact) 0.7152  t_diag 0.0074  | n_W-free 0.7338 | t_hw 0.9896 | total 2.2769
+  G3/G1 float (min of 1)  t_setup 0.5535  t_prv 0.0112  t_ops(exact) 0.7152  t_diag 0.0011  | n_W-free 0.7275 | t_hw 0.9896 | total 2.2706
+  speed-ups of ours: vs G3 exact: t_slices x2.7 (n_W-free), t_total x1.3; vs G3 float: t_slices x2.7 (n_W-free), t_total x1.2; t_hw/t_total = 0.55;  (no Munich number: not run)
+
+--- [20,20,0,0]^2   loadavg before: 0.72 6.33 13.22
+  ours  (min of 5)  t_setup 1.2076  t_ops 0.5193  t_eig 0.0449  | t_slices 0.5642 | t_hw 2.9193 | t_total 4.6927   [irreps 231 copies 231  max w1 1  entries 3064644  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.101 s for 231 of 231 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 1)  t_setup 1.2113  t_prv 0.0225  t_ops(exact) 1.5662  t_diag 0.0121  | n_W-free 1.6008 | t_hw 2.8754 | total 5.6875
+  G3/G1 float (min of 1)  t_setup 1.2113  t_prv 0.0225  t_ops(exact) 1.5662  t_diag 0.0016  | n_W-free 1.5903 | t_hw 2.8754 | total 5.6770
+  speed-ups of ours: vs G3 exact: t_slices x2.8 (n_W-free), t_total x1.2; vs G3 float: t_slices x2.8 (n_W-free), t_total x1.2; t_hw/t_total = 0.62;  (no Munich number: not run)
+
+--- [4,2,1,0]^2   loadavg before: 0.83 5.82 12.83
+  ours  (min of 5)  t_setup 0.0076  t_ops 0.0212  t_eig 0.0105  | t_slices 0.0318 | t_hw 0.0044 | t_total 0.0439   [irreps 27 copies 56  max w1 6  entries 3998  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.116 s for 27 of 27 sectors (88 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0077  t_prv 0.0011  t_ops(exact) 0.0996  t_diag 0.0414  | n_W-free 0.1420 | t_hw 0.0041 | total 0.1538
+  G3/G1 float (min of 3)  t_setup 0.0078  t_prv 0.0010  t_ops(exact) 0.0994  t_diag 0.0013  | n_W-free 0.1017 | t_hw 0.0041 | total 0.1136
+  speed-ups of ours: vs G3 exact: t_slices x4.5 (n_W-free), t_total x3.5; vs G3 float: t_slices x3.2 (n_W-free), t_total x2.6; t_hw/t_total = 0.10;  Munich orig 0.291 s (x7 of our t_total); Munich eig 0.0553 s (x1 of our t_total)
+
+--- [6,3,0,0]^2   loadavg before: 0.83 5.82 12.83
+  ours  (min of 5)  t_setup 0.0242  t_ops 0.0403  t_eig 0.0211  | t_slices 0.0614 | t_hw 0.0185 | t_total 0.1043   [irreps 58 copies 90  max w1 7  entries 14208  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.143 s for 58 of 58 sectors (156 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0242  t_prv 0.0035  t_ops(exact) 0.1598  t_diag 0.0307  | n_W-free 0.1940 | t_hw 0.0168 | total 0.2350
+  G3/G1 float (min of 3)  t_setup 0.0242  t_prv 0.0035  t_ops(exact) 0.1598  t_diag 0.0019  | n_W-free 0.1652 | t_hw 0.0168 | total 0.2063
+  speed-ups of ours: vs G3 exact: t_slices x3.2 (n_W-free), t_total x2.3; vs G3 float: t_slices x2.7 (n_W-free), t_total x2.0; t_hw/t_total = 0.18;  Munich orig 12.68 s (x122 of our t_total); Munich eig 1.028 s (x10 of our t_total)
+
+--- [6,4,2,0]^2   loadavg before: 0.85 5.74 12.77
+  ours  (min of 5)  t_setup 0.0381  t_ops 0.0577  t_eig 0.0394  | t_slices 0.0972 | t_hw 0.0350 | t_total 0.1706   [irreps 76 copies 297  max w1 14  entries 185606  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.645 s for 76 of 76 sectors (766 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0388  t_prv 0.0093  t_ops(exact) 0.9167  t_diag 0.8012  | n_W-free 1.7271 | t_hw 0.0325 | total 1.7985
+  G3/G1 float (min of 3)  t_setup 0.0385  t_prv 0.0091  t_ops(exact) 0.9123  t_diag 0.0054  | n_W-free 0.9269 | t_hw 0.0328 | total 0.9982
+  speed-ups of ours: vs G3 exact: t_slices x17.8 (n_W-free), t_total x10.5; vs G3 float: t_slices x9.5 (n_W-free), t_total x5.9; t_hw/t_total = 0.21;  Munich eig 39.39 s (x231 of our t_total)
+
+--- [8,4,0,0]^2   loadavg before: 0.86 5.66 12.71
+  ours  (min of 5)  t_setup 0.0706  t_ops 0.0832  t_eig 0.0473  | t_slices 0.1306 | t_hw 0.0701 | t_total 0.2719   [irreps 115 copies 205  max w1 11  entries 101092  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.399 s for 115 of 115 sectors (516 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 3)  t_setup 0.0703  t_prv 0.0136  t_ops(exact) 0.5209  t_diag 0.1002  | n_W-free 0.6347 | t_hw 0.0670 | total 0.7720
+  G3/G1 float (min of 3)  t_setup 0.0703  t_prv 0.0136  t_ops(exact) 0.5209  t_diag 0.0043  | n_W-free 0.5388 | t_hw 0.0670 | total 0.6761
+  speed-ups of ours: vs G3 exact: t_slices x4.9 (n_W-free), t_total x2.8; vs G3 float: t_slices x4.1 (n_W-free), t_total x2.5; t_hw/t_total = 0.26;  Munich orig 73.82 s (x272 of our t_total); Munich eig 40.34 s (x148 of our t_total)
+
+--- [9,6,3,0]^2   loadavg before: 0.87 5.58 12.64
+  ours  (min of 5)  t_setup 0.2487  t_ops 0.1959  t_eig 0.1615  | t_slices 0.3574 | t_hw 0.3614 | t_total 0.9684   [irreps 213 copies 1592  max w1 31  entries 8889611  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 4.090 s for 213 of 213 sectors (5924 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 1)  t_setup 0.2502  t_prv 0.1165  t_ops(exact) 8.4369  t_diag 17.7803  | n_W-free 26.3337 | t_hw 0.3600 | total 26.9439
+  G3/G1 float (min of 1)  t_setup 0.2502  t_prv 0.1165  t_ops(exact) 8.4369  t_diag 0.0306  | n_W-free 8.5839 | t_hw 0.3600 | total 9.1942
+  speed-ups of ours: vs G3 exact: t_slices x73.7 (n_W-free), t_total x27.8; vs G3 float: t_slices x24.0 (n_W-free), t_total x9.5; t_hw/t_total = 0.37;  Munich eig 385.1 s (x398 of our t_total)
+
+--- [12,8,4,0]^2   loadavg before: 0.93 5.08 12.21
+  ours  (min of 5)  t_setup 1.0835  t_ops 0.6095  t_eig 0.5750  | t_slices 1.1845 | t_hw 4.0122 | t_total 6.2841   [irreps 459 copies 5945  max w1 60  entries 193461415  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 17.772 s for 459 of 459 sectors (27094 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 1)  t_setup 1.0993  t_prv 0.9765  t_ops(exact) 49.6155  t_diag 225.4622  | n_W-free 276.0541 | t_hw 5.3004 | total 282.4538
+  G3/G1 float (min of 1)  t_setup 1.0993  t_prv 0.9765  t_ops(exact) 49.6155  t_diag 0.2204  | n_W-free 50.8123 | t_hw 5.3004 | total 57.2121
+  speed-ups of ours: vs G3 exact: t_slices x233.0 (n_W-free), t_total x44.9; vs G3 float: t_slices x42.9 (n_W-free), t_total x9.1; t_hw/t_total = 0.64;  (no Munich number: not run)
+
+--- [15,10,5,0]^2   loadavg before: 1.04 2.36 8.85
+  ours  (min of 2)  t_setup 3.4764  t_ops 1.9591  t_eig 2.0273  | t_slices 3.9863 | t_hw 50.7084 | t_total 58.1783   [irreps 846 copies 17550  max w1 103  entries 2492545121  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 45.000 s for 697 of 846 sectors (71044 Q-class entries through the exact evaluator)  [time budget hit]
+  G3/G1 exact: not finished within the limit
+  G3/G1 float (min of 1)  t_setup 3.4910  t_prv 6.0198  t_ops(exact) 216.7046  t_diag 0.9510  | n_W-free 223.6754 | t_hw 58.1436 | total 285.3101
+  speed-ups of ours: vs G3 float: t_slices x56.1 (n_W-free), t_total x4.9; t_hw/t_total = 0.87;  (no Munich number: not run)
+
+--- [16,8,0,0]^2   loadavg before: 1.02 1.11 4.43
+  ours  (min of 5)  t_setup 1.5098  t_ops 0.7520  t_eig 0.4147  | t_slices 1.1667 | t_hw 3.0188 | t_total 5.6989   [irreps 693 copies 1905  max w1 33  entries 24783433  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 7.563 s for 693 of 693 sectors (11528 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 1)  t_setup 1.5178  t_prv 0.8873  t_ops(exact) 10.9637  t_diag 2.2646  | n_W-free 14.1157 | t_hw 3.9569 | total 19.5904
+  G3/G1 float (min of 1)  t_setup 1.5178  t_prv 0.8873  t_ops(exact) 10.9637  t_diag 0.0517  | n_W-free 11.9027 | t_hw 3.9569 | total 17.3774
+  speed-ups of ours: vs G3 exact: t_slices x12.1 (n_W-free), t_total x3.4; vs G3 float: t_slices x10.2 (n_W-free), t_total x3.0; t_hw/t_total = 0.53;  (no Munich number: not run)
+
+--- [12,12,0,0]^2   loadavg before: 1.04 1.11 4.24
+  ours  (min of 5)  t_setup 0.1985  t_ops 0.1162  t_eig 0.0151  | t_slices 0.1314 | t_hw 0.2623 | t_total 0.5924   [irreps 91 copies 91  max w1 1  entries 145456  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.009 s for 91 of 91 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 1)  t_setup 0.2003  t_prv 0.0048  t_ops(exact) 0.2526  t_diag 0.0042  | n_W-free 0.2616 | t_hw 0.2633 | total 0.7251
+  G3/G1 float (min of 1)  t_setup 0.2003  t_prv 0.0048  t_ops(exact) 0.2526  t_diag 0.0007  | n_W-free 0.2581 | t_hw 0.2633 | total 0.7216
+  speed-ups of ours: vs G3 exact: t_slices x2.0 (n_W-free), t_total x1.2; vs G3 float: t_slices x2.0 (n_W-free), t_total x1.2; t_hw/t_total = 0.44;  (no Munich number: not run)
+
+loadavg after: 1.04 1.10 4.22
+
+============================================================================================================================================
+T3b  lean mode (multiplicity-one sectors: no operator applied, slice = null vector of the string powers; triples of those sectors not computed), cold, min of 5  [2026-10-24 18:25]
+============================================================================================================================================
+LC_ALL=C OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
+--- [4,4,0,0]^2   loadavg before: 0.88 1.07 4.17
+  ours lean (min of 5)  t_setup 0.0062  t_ops 0.0000  t_eig 0.0005  | t_slices 0.0005 | t_hw 0.0030 | t_total 0.0098   [irreps 15 copies 15  fallbacks 0]
+--- [5,5,0,0]^2   loadavg before: 0.88 1.07 4.17
+  ours lean (min of 5)  t_setup 0.0110  t_ops 0.0000  t_eig 0.0007  | t_slices 0.0007 | t_hw 0.0068 | t_total 0.0186   [irreps 21 copies 21  fallbacks 0]
+--- [6,6,0,0]^2   loadavg before: 0.88 1.07 4.17
+  ours lean (min of 5)  t_setup 0.0186  t_ops 0.0000  t_eig 0.0009  | t_slices 0.0009 | t_hw 0.0135 | t_total 0.0332   [irreps 28 copies 28  fallbacks 0]
+--- [7,7,0,0]^2   loadavg before: 0.89 1.07 4.16
+  ours lean (min of 5)  t_setup 0.0291  t_ops 0.0000  t_eig 0.0012  | t_slices 0.0012 | t_hw 0.0252 | t_total 0.0557   [irreps 36 copies 36  fallbacks 0]
+--- [8,8,0,0]^2   loadavg before: 0.89 1.07 4.16
+  ours lean (min of 5)  t_setup 0.0444  t_ops 0.0000  t_eig 0.0015  | t_slices 0.0015 | t_hw 0.0442 | t_total 0.0903   [irreps 45 copies 45  fallbacks 0]
+--- [9,9,0,0]^2   loadavg before: 0.89 1.07 4.16
+  ours lean (min of 5)  t_setup 0.0645  t_ops 0.0000  t_eig 0.0020  | t_slices 0.0020 | t_hw 0.0731 | t_total 0.1398   [irreps 55 copies 55  fallbacks 0]
+--- [10,10,0,0]^2   loadavg before: 0.89 1.07 4.16
+  ours lean (min of 5)  t_setup 0.0927  t_ops 0.0000  t_eig 0.0024  | t_slices 0.0024 | t_hw 0.1144 | t_total 0.2098   [irreps 66 copies 66  fallbacks 0]
+--- [11,11,0,0]^2   loadavg before: 0.89 1.07 4.16
+  ours lean (min of 5)  t_setup 0.1270  t_ops 0.0000  t_eig 0.0029  | t_slices 0.0029 | t_hw 0.1734 | t_total 0.3036   [irreps 78 copies 78  fallbacks 0]
+--- [12,12,0,0]^2   loadavg before: 0.89 1.07 4.16
+  ours lean (min of 5)  t_setup 0.1915  t_ops 0.0000  t_eig 0.0035  | t_slices 0.0035 | t_hw 0.2558 | t_total 0.4512   [irreps 91 copies 91  fallbacks 0]
+--- [14,14,0,0]^2   loadavg before: 0.90 1.06 4.14
+  ours lean (min of 5)  t_setup 0.3374  t_ops 0.0000  t_eig 0.0052  | t_slices 0.0052 | t_hw 0.5186 | t_total 0.8617   [irreps 120 copies 120  fallbacks 0]
+--- [16,16,0,0]^2   loadavg before: 0.91 1.06 4.12
+  ours lean (min of 5)  t_setup 0.5421  t_ops 0.0000  t_eig 0.0075  | t_slices 0.0075 | t_hw 0.9748 | t_total 1.5252   [irreps 153 copies 153  fallbacks 0]
+--- [20,20,0,0]^2   loadavg before: 0.91 1.06 4.10
+  ours lean (min of 5)  t_setup 1.2418  t_ops 0.0000  t_eig 0.0149  | t_slices 0.0149 | t_hw 2.8645 | t_total 4.1228   [irreps 231 copies 231  fallbacks 0]
+--- [4,2,1,0]^2   loadavg before: 0.94 1.06 4.02
+  ours lean (min of 5)  t_setup 0.0077  t_ops 0.0164  t_eig 0.0087  | t_slices 0.0251 | t_hw 0.0046 | t_total 0.0375   [irreps 27 copies 56  fallbacks 0]
+--- [6,3,0,0]^2   loadavg before: 0.94 1.06 4.02
+  ours lean (min of 5)  t_setup 0.0244  t_ops 0.0237  t_eig 0.0154  | t_slices 0.0392 | t_hw 0.0180 | t_total 0.0818   [irreps 58 copies 90  fallbacks 0]
+--- [6,4,2,0]^2   loadavg before: 0.94 1.06 4.02
+  ours lean (min of 5)  t_setup 0.0381  t_ops 0.0505  t_eig 0.0368  | t_slices 0.0873 | t_hw 0.0344 | t_total 0.1601   [irreps 76 copies 297  fallbacks 0]
+--- [8,4,0,0]^2   loadavg before: 0.94 1.06 4.02
+  ours lean (min of 5)  t_setup 0.0707  t_ops 0.0530  t_eig 0.0374  | t_slices 0.0903 | t_hw 0.0688 | t_total 0.2304   [irreps 115 copies 205  fallbacks 0]
+--- [9,6,3,0]^2   loadavg before: 0.94 1.06 4.02
+  ours lean (min of 5)  t_setup 0.2473  t_ops 0.1834  t_eig 0.1543  | t_slices 0.3377 | t_hw 0.3578 | t_total 0.9440   [irreps 213 copies 1592  fallbacks 0]
+--- [12,8,4,0]^2   loadavg before: 0.95 1.05 4.00
+  ours lean (min of 5)  t_setup 1.0667  t_ops 0.5889  t_eig 0.5653  | t_slices 1.1542 | t_hw 3.9940 | t_total 6.2187   [irreps 459 copies 5945  fallbacks 0]
+--- [15,10,5,0]^2   loadavg before: 0.97 1.05 3.91
+  ours lean (min of 2)  t_setup 3.6612  t_ops 1.9392  t_eig 2.0180  | t_slices 3.9572 | t_hw 50.5610 | t_total 58.1868   [irreps 846 copies 17550  fallbacks 0]
+--- [16,8,0,0]^2   loadavg before: 1.06 1.04 3.56
+  ours lean (min of 5)  t_setup 1.5255  t_ops 0.6005  t_eig 0.3744  | t_slices 0.9749 | t_hw 2.9828 | t_total 5.4871   [irreps 693 copies 1905  fallbacks 0]
+--- [12,12,0,0]^2   loadavg before: 1.04 1.04 3.47
+  ours lean (min of 5)  t_setup 0.2129  t_ops 0.0000  t_eig 0.0041  | t_slices 0.0041 | t_hw 0.2912 | t_total 0.5085   [irreps 91 copies 91  fallbacks 0]

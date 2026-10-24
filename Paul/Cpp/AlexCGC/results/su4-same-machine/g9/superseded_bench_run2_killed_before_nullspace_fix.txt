@@ -1,0 +1,21 @@
+
+============================================================================================================================================
+T3  same-machine benchmark: ours (float64, cold, min of 5) vs G3/G1 (exact 50-digit and float64) vs Munich (G7 numbers)   [2026-10-24 17:53]
+============================================================================================================================================
+LC_ALL=C OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1; python 3.10.12, numpy 2.2.6; machine Linux-6.8.0-138-generic-x86_64-with-glibc2.35
+
+--- [12,12,0,0]^2   loadavg before: 38.38 50.05 25.82
+  ours  (min of 5)  t_setup 0.1913  t_ops 0.1152  t_eig 0.0132  | t_slices 0.1285 | t_hw 0.2660 | t_total 0.5861   [irreps 91 copies 91  max w1 1  entries 145456  fallbacks 0]
+  route A (V3, V4a closed forms, warm): 0.056 s for 91 of 91 sectors (0 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 1)  t_setup 0.1901  t_prv 0.0048  t_ops(exact) 0.2463  t_diag 0.0044  | n_W-free 0.2555 | t_hw 0.2647 | total 0.7103
+  G3/G1 float (min of 1)  t_setup 0.1901  t_prv 0.0048  t_ops(exact) 0.2463  t_diag 0.0007  | n_W-free 0.2518 | t_hw 0.2647 | total 0.7066
+  speed-ups of ours: vs G3 exact: t_slices x2.0 (n_W-free), t_total x1.2; vs G3 float: t_slices x2.0 (n_W-free), t_total x1.2; t_hw/t_total = 0.45;  (no Munich number: not run)
+
+--- [16,8,0,0]^2   loadavg before: 35.39 49.23 25.68
+  ours  (min of 5)  t_setup 1.5095  t_ops 0.7571  t_eig 6.2184  | t_slices 6.9755 | t_hw 3.0653 | t_total 11.5557   [irreps 693 copies 1905  max w1 33  entries 24783433  fallbacks 127]
+  route A (V3, V4a closed forms, warm): 8.578 s for 693 of 693 sectors (11528 Q-class entries through the exact evaluator)
+  G3/G1 exact (min of 1)  t_setup 1.7129  t_prv 0.9863  t_ops(exact) 12.2971  t_diag 2.4852  | n_W-free 15.7685 | t_hw 3.4815 | total 20.9629
+  G3/G1 float (min of 1)  t_setup 1.7129  t_prv 0.9863  t_ops(exact) 12.2971  t_diag 0.0563  | n_W-free 13.3397 | t_hw 3.4815 | total 18.5340
+  speed-ups of ours: vs G3 exact: t_slices x2.3 (n_W-free), t_total x1.8; vs G3 float: t_slices x1.9 (n_W-free), t_total x1.6; t_hw/t_total = 0.27;  (no Munich number: not run)
+
+--- [15,10,5,0]^2   loadavg before: 8.71 36.71 23.41

@@ -1,0 +1,100 @@
+
+============================================================================================================================================
+T1  agreement with the existing engine (float64 vs G3 copies at 50 digits; HW residual; G(x)G orthogonality; Route A vs B; exact twin of the operators)
+============================================================================================================================================
+[2,1,0,0]^2            irreps    7 copies     8 maxw1   2 | fallbacks 0 | #phys=m in all: True | dev slices 2.1e-16  triples 7.9e-16 | HW resid 4.1e-16 orth 2.2e-16 wdev 0 | s_phys max 2.2e-16  s_spur min 9.45e-01 | W1 leak 0.0e+00 | twin(B vs exact) 4.0e-15 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 4.0e-15
+[2,1,1,0]^2            irreps    6 copies     7 maxw1   3 | fallbacks 0 | #phys=m in all: True | dev slices 6.1e-16  triples 1.8e-15 | HW resid 1.8e-15 orth 2.2e-16 wdev 0 | s_phys max 8.3e-16  s_spur min 8.94e-01 | W1 leak 0.0e+00 | twin(B vs exact) 1.8e-15 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 3.7e-17
+[3,2,1,0]^2            irreps   16 copies    30 maxw1   4 | fallbacks 0 | #phys=m in all: True | dev slices 2.1e-15  triples 1.1e-15 | HW resid 2.4e-15 orth 9.1e-16 wdev 0 | s_phys max 6.1e-15  s_spur min 8.61e-01 | W1 leak 8.1e-17 | twin(B vs exact) 2.2e-16 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 3.5e-16
+[4,2,0,0]^2            irreps   24 copies    32 maxw1   4 | fallbacks 0 | #phys=m in all: True | dev slices 1.2e-14  triples 5.8e-14 | HW resid 1.3e-15 orth 1.6e-15 wdev 0 | s_phys max 2.3e-15  s_spur min 6.83e-01 | W1 leak 5.9e-15 | twin(B vs exact) 6.9e-14 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 6.9e-14
+[4,2,1,0]^2            irreps   27 copies    56 maxw1   6 | fallbacks 0 | #phys=m in all: True | dev slices 6.2e-15  triples 1.4e-15 | HW resid 2.4e-15 orth 2.2e-15 wdev 0 | s_phys max 8.9e-15  s_spur min 7.13e-01 | W1 leak 1.0e-16 | twin(B vs exact) 6.8e-16 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 4.2e-16
+[3,2,1,0]x[4,2,1,0]    irreps   20 copies    38 maxw1   4 | fallbacks 0 | #phys=m in all: True | dev slices 7.3e-15  triples 9.6e-16 | HW resid 1.6e-15 orth 8.5e-16 wdev 0 | s_phys max 5.9e-15  s_spur min 8.95e-01 | W1 leak 0.0e+00 | twin(B vs exact) 3.9e-16 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 3.2e-16
+[4,2,1,0]x[3,2,1,0]    irreps   20 copies    38 maxw1   6 | fallbacks 0 | #phys=m in all: True | dev slices 4.1e-13  triples 2.0e-15 | HW resid 2.7e-15 orth 3.4e-15 wdev 0 | s_phys max 2.2e-14  s_spur min 6.81e-01 | W1 leak 1.9e-16 | twin(B vs exact) 4.6e-16 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 4.6e-16
+[4,2,2,0]^2            irreps   19 copies    26 maxw1   6 | fallbacks 0 | #phys=m in all: True | dev slices 1.9e-15  triples 1.1e-15 | HW resid 8.3e-16 orth 9.2e-16 wdev 0 | s_phys max 5.5e-15  s_spur min 6.74e-01 | W1 leak 2.7e-16 | twin(B vs exact) 5.6e-16 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 2.2e-16
+[4,3,1,0]^2            irreps   31 copies    69 maxw1   6 | fallbacks 0 | #phys=m in all: True | dev slices 3.9e-14  triples 1.2e-15 | HW resid 1.2e-15 orth 4.1e-15 wdev 0 | s_phys max 1.4e-13  s_spur min 8.45e-01 | W1 leak 1.2e-16 | twin(B vs exact) 7.3e-16 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 5.5e-16
+[6,4,2,0]^2            irreps   76 copies   297 maxw1  14 | fallbacks 0 | #phys=m in all: True | dev slices 5.8e-14  triples 1.8e-14 | HW resid 6.0e-15 orth 1.6e-14 wdev 0 | s_phys max 1.1e-13  s_spur min 5.01e-01 | W1 leak 1.4e-16 | twin(B vs exact) 6.8e-16 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 1.4e-15
+[5,3,1,0]^2            irreps   49 copies   136 maxw1   9 | fallbacks 0 | #phys=m in all: True | dev slices 3.7e-14  triples 2.4e-15 | HW resid 3.1e-15 orth 6.5e-15 wdev 0 | s_phys max 7.7e-13  s_spur min 5.87e-01 | W1 leak 1.4e-16 | twin(B vs exact) 9.3e-16 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 1.1e-15
+[5,3,2,1]^2            irreps   27 copies    56 maxw1   6 | fallbacks 0 | #phys=m in all: True | dev slices 6.0e-14  triples 6.7e-16 | HW resid 2.4e-15 orth 9.3e-15 wdev 0 | s_phys max 1.3e-12  s_spur min 7.13e-01 | W1 leak 1.1e-16 | twin(B vs exact) 4.4e-16 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 5.8e-16
+[9,6,3,0]^2            irreps  213 copies  1592 maxw1  31 | fallbacks 0 | #phys=m in all: True | dev slices 5.1e-12  triples 1.8e-14 | HW resid 3.1e-14 orth 4.2e-13 wdev 0 | s_phys max 4.5e-12  s_spur min 2.01e-01 | W1 leak 2.3e-16 | twin(B vs exact) 1.3e-15 (W1-invariance leak of the exact matrices 0.0e+00) | route A vs B 1.6e-15
+
+============================================================================================================================================
+T4  precision: deviation of the float64 slices from the 50-digit copies as a function of w1 and of the min joint gap; string-test statistics
+============================================================================================================================================
+  by w1 (max over sectors): w1<=4: 7.3e-14   w1<=8: 4.1e-13   w1<=16: 5.3e-13   w1<=24: 4.7e-12   w1<=40: 5.1e-12
+  by min joint gap of the sector (max dev): gap in (0,0.1]: 0.0e+00 (n=0)   gap in (0.1,1]: 0.0e+00 (n=0)   gap in (1,10]: 3.9e-14 (n=6)   gap in (10,100]: 5.1e-12 (n=233)   gap in (100,1e+09]: 1.8e-12 (n=117)
+  worst 8 sectors (dev, w1, m, min joint gap, smallest relative slice component, product, mu):
+    5.09e-12  w1=26 m=18 gap=12.5 smallest=8.9e-06 [9,6,3,0]^2 mu=(13, 10, 9, 4)
+    4.70e-12  w1=20 m=16 gap=49.2 smallest=7.4e-06 [9,6,3,0]^2 mu=(12, 11, 8, 5)
+    2.36e-12  w1=22 m=15 gap=41.5 smallest=4.4e-06 [9,6,3,0]^2 mu=(12, 10, 9, 5)
+    2.06e-12  w1=30 m=23 gap=66.1 smallest=5.0e-05 [9,6,3,0]^2 mu=(13, 10, 8, 5)
+    1.82e-12  w1=27 m=24 gap=34.7 smallest=1.1e-05 [9,6,3,0]^2 mu=(13, 11, 8, 4)
+    1.78e-12  w1=25 m=17 gap=124 smallest=8.0e-05 [9,6,3,0]^2 mu=(15, 9, 8, 4)
+    1.66e-12  w1=24 m=17 gap=46.3 smallest=1.5e-05 [9,6,3,0]^2 mu=(14, 10, 9, 3)
+    1.24e-12  w1=20 m=18 gap=44 smallest=6.6e-05 [9,6,3,0]^2 mu=(13, 12, 7, 4)
+  string test per product: min over spurious / max over physical of s(u) (orthonormal basis, 2-norm, tau = 1e-06):
+    [2,1,0,0]^2          min spurious 9.449e-01   max physical 2.220e-16   gap factor 4.3e+15
+    [2,1,1,0]^2          min spurious 8.944e-01   max physical 8.327e-16   gap factor 1.1e+15
+    [3,2,1,0]^2          min spurious 8.614e-01   max physical 6.106e-15   gap factor 1.4e+14
+    [4,2,0,0]^2          min spurious 6.827e-01   max physical 2.278e-15   gap factor 3.0e+14
+    [4,2,1,0]^2          min spurious 7.127e-01   max physical 8.924e-15   gap factor 8.0e+13
+    [3,2,1,0]x[4,2,1,0]  min spurious 8.953e-01   max physical 5.940e-15   gap factor 1.5e+14
+    [4,2,1,0]x[3,2,1,0]  min spurious 6.809e-01   max physical 2.211e-14   gap factor 3.1e+13
+    [4,2,2,0]^2          min spurious 6.743e-01   max physical 5.496e-15   gap factor 1.2e+14
+    [4,3,1,0]^2          min spurious 8.452e-01   max physical 1.437e-13   gap factor 5.9e+12
+    [6,4,2,0]^2          min spurious 5.014e-01   max physical 1.146e-13   gap factor 4.4e+12
+    [5,3,1,0]^2          min spurious 5.873e-01   max physical 7.681e-13   gap factor 7.6e+11
+    [5,3,2,1]^2          min spurious 7.127e-01   max physical 1.273e-12   gap factor 5.6e+11
+    [9,6,3,0]^2          min spurious 2.015e-01   max physical 4.522e-12   gap factor 4.5e+10
+
+============================================================================================================================================
+T5  robustness: degenerate (V3, V4a) sectors, lambda != lambda', lambda_4 > 0, void / full string sectors, complex-pair guard
+============================================================================================================================================
+  [6,4,2,0]^2, mu = (9,7,5,3): m = 12, w = 15, w1 = 14; min joint gap of the triple 38.4; min (V3,V4a) gap 1.71e-13 (V3 alone: 0); min G gap 6.51; ritz combination (0.3, 1.0, -0.7); fallback None; dev slices 4.8e-14; dev triples 6.4e-16
+  [12,8,4,0]^2, mu = (18, 14, 10, 6): m = 50 , w = 65, w1 = 60; min joint gap of the triple 77.8; min (V3,V4a) gap 4.55e-13; min G gap 0.416; ritz combination (0.3, 1.0, -0.7); fallback None; dev slices 2.0e-11; dev triples 1.3e-15   [float 1.17 s, exact 50-digit copies of this sector 8.947102469392121e-05]
+  [12,8,4,0]^2, mu = (19, 14, 10, 5): m = 51 , w = 60, w1 = 58; min joint gap of the triple 92.5; min (V3,V4a) gap 34.7; min G gap 2.38; ritz combination (0.0, 1.0, 0.0); fallback None; dev slices 1.9e-11; dev triples 1.5e-15   [float 0.01 s, exact 50-digit copies of this sector 6.562797352671623e-05]
+[12,8,4,0]^2           irreps  459 copies  5945 maxw1  60 | fallbacks 0 | #phys=m in all: True | dev slices nan  triples nan | HW resid 4.3e-13 orth 5.7e-13 wdev 0 | s_phys max 4.6e-11  s_spur min 7.00e-02 | W1 leak 3.2e-16
+  ([12,8,4,0]^2: HW residual / orthogonality checked on every 15th sector and the 5 largest n_W only; no exact reference except the two sectors above)
+[6,4,2,0]x[5,3,1,0]    irreps   60 copies   194 maxw1  14 | fallbacks 0 | #phys=m in all: True | dev slices 7.5e-14  triples 7.0e-15 | HW resid 4.1e-15 orth 1.4e-14 wdev 0 | s_phys max 4.0e-13  s_spur min 4.71e-01 | W1 leak 1.6e-16
+[7,4,1,0]x[4,2,2,0]    irreps   39 copies    61 maxw1  13 | fallbacks 0 | #phys=m in all: True | dev slices 6.6e-15  triples 1.3e-15 | HW resid 1.8e-15 orth 1.9e-15 wdev 0 | s_phys max 6.9e-13  s_spur min 4.92e-01 | W1 leak 5.4e-16
+[4,3,2,1]x[3,2,1,1]    irreps   10 copies    14 maxw1   4 | fallbacks 0 | #phys=m in all: True | dev slices 6.3e-16  triples 1.4e-15 | HW resid 3.9e-16 orth 3.4e-16 wdev 0 | s_phys max 1.8e-14  s_spur min 7.50e-01 | W1 leak 8.6e-17
+[16,8,0,0]^2           irreps  693 copies  1905 maxw1  33 | fallbacks 0 | #phys=m in all: True | dev slices 4.8e-11  triples 1.2e-11 | HW resid 3.0e-11 orth 2.2e-13 wdev 0 | s_phys max 4.6e-13  s_spur min 6.45e-02 | W1 leak 1.0e-11
+  sectors with a void E12 cut (W1 = W):            1348 sectors (6212 copies), max dev 4.8e-11, max dev triples 1.2e-11, fallbacks 0
+  sectors with an active E12 cut (W1 < W):         448 sectors (4292 copies), max dev 5.1e-12, max dev triples 1.0e-11, fallbacks 0
+  sectors with 0 non-void strings i = 2, 3:         614 sectors (2697 copies), max dev 4.8e-11, max dev triples 1.8e-14, fallbacks 0
+  sectors with 1 non-void strings i = 2, 3:         878 sectors (4998 copies), max dev 5.1e-12, max dev triples 1.2e-11, fallbacks 0
+  sectors with 2 non-void strings i = 2, 3:         304 sectors (2809 copies), max dev 4.7e-12, max dev triples 1.1e-11, fallbacks 0
+  every string active (E12 cut active and both i = 2, 3 non-void), |A| = 3: 64 sectors (1428 copies), max dev 4.7e-12, max dev triples 2.1e-15, fallbacks 0
+  complex-pair guard (eig of G on W1 returned complex eigenvalues; physical eigenvectors must be real, else fallback): complex eigenvalues in 0 of 1796 sectors (0 eigenvalues in total); fallbacks among them 0
+  fallbacks in all runs of T1 + T5: 0 of 1796 sectors
+  the brief's criterion alone (number of eigenvectors with row-normalised s < tau = 1e-06 equals m): holds in 1796 of 1796 sectors; eigenvectors of G at distance 1e-8..0.1 from the physical subspace (mixed): 0
+
+============================================================================================================================================
+T2  Munich literal comparison (cached G7 outputs; new engine as the source; MATCH <= 1e-9 after one global sign, sectors: subspace max|1 - sv| <= 1e-9)
+============================================================================================================================================
+   2a ([8,8,0,0]^2 from the repaired profiler output bench_eig_8_8_0_0__8_8_0_0__16_16_0_0.txt): OK, max |1 - sv| = 0.00e+00
+  2a (multiplicity-free, vector by vector): 42 MATCH of 42  (missing cached files: 0); max deviation after one global sign 1.39e-15 (tol 1e-09)
+  2b (multiplicity sectors of the 8 G7 products, subspace by subspace): 94 sectors, 94 OK, sum m = 148, max m = 5; worst max|1 - sv| = 2.44e-15 (tol 1e-09); worst Munich orthonormality 5.6e-15; worst residual 9.7e-15
+  [6,4,2,0]^2, the 6 sectors G7 ran through the repaired profiler: mu=(9, 7, 5, 3) m=12 maxdev 1.6e-12 OK; mu=(10, 7, 5, 2) m=11 maxdev 1.4e-12 OK; mu=(10, 7, 4, 3) m=10 maxdev 1.4e-12 OK; mu=(9, 8, 5, 2) m=10 maxdev 1.3e-12 OK; mu=(10, 8, 4, 2) m=10 maxdev 1.4e-12 OK; mu=(10, 6, 5, 3) m=9 maxdev 1.1e-12 OK
+  missing cached Munich files (not re-run): none
+
+============================================================================================================================================
+T4  large S: HW residual of the float64 pipeline on [S,S,0,0]^2 and against the exact recursion rounded to double
+============================================================================================================================================
+  S =  4:  15 irreps, worst HW residual 6.9e-16 (mu = (4, 4, 4, 4)), worst orthogonality 0.0e+00, weight deviation 0, string statistic s_phys max 0.0e+00 / s_spur min inf, fallbacks 0
+  S =  8:  45 irreps, worst HW residual 5.4e-15 (mu = (8, 8, 8, 8)), worst orthogonality 0.0e+00, weight deviation 0, string statistic s_phys max 0.0e+00 / s_spur min inf, fallbacks 0
+  S = 12:  91 irreps, worst HW residual 1.2e-14 (mu = (15, 13, 11, 9)), worst orthogonality 0.0e+00, weight deviation 0, string statistic s_phys max 0.0e+00 / s_spur min inf, fallbacks 0
+  S = 14: 120 irreps, worst HW residual 5.7e-14 (mu = (14, 14, 14, 14)), worst orthogonality 0.0e+00, weight deviation 0, string statistic s_phys max 0.0e+00 / s_spur min inf, fallbacks 0
+       mu = (14, 14, 14, 14) n_W   17816: float recursion 5.7e-14 (0.021 s)   exact recursion rounded to double 8.5e-16 (1.66 s)   max |difference| of the two unit vectors 2.4e-15
+       mu = (15, 14, 14, 13) n_W   17136: float recursion 5.2e-14 (0.020 s)   exact recursion rounded to double 9.5e-16 (1.07 s)   max |difference| of the two unit vectors 2.2e-15
+  S = 16: 153 irreps, worst HW residual 2.9e-13 (mu = (16, 16, 16, 16)), worst orthogonality 0.0e+00, weight deviation 0, string statistic s_phys max 0.0e+00 / s_spur min inf, fallbacks 0
+       mu = (16, 16, 16, 16) n_W   31977: float recursion 2.9e-13 (0.032 s)   exact recursion rounded to double 9.5e-16 (3.23 s)   max |difference| of the two unit vectors 1.3e-14
+       mu = (17, 16, 16, 15) n_W   31008: float recursion 2.4e-13 (0.030 s)   exact recursion rounded to double 1.0e-15 (2.19 s)   max |difference| of the two unit vectors 1.2e-14
+  S = 20: 231 irreps, worst HW residual 2.9e-11 (mu = (21, 20, 20, 19)), worst orthogonality 0.0e+00, weight deviation 0, string statistic s_phys max 0.0e+00 / s_spur min inf, fallbacks 0
+       mu = (21, 20, 20, 19) n_W   85008: float recursion 2.9e-11 (0.060 s)   exact recursion rounded to double 1.3e-15 (9.80 s)   max |difference| of the two unit vectors 1.3e-12
+       mu = (20, 20, 20, 20) n_W   86779: float recursion 2.5e-11 (0.083 s)   exact recursion rounded to double 1.2e-15 (7.53 s)   max |difference| of the two unit vectors 1.1e-12
+
+============================================================================================================================================
+T6  descendants: full CG tables vs Munich (clebsch menu 5, every row) and unitarity of the CG matrix
+============================================================================================================================================
+  [2,1,0,0]^2    CG matrix 400 x 400 (dims 20 x 20), built in 0.14 s (HW part 0.02 s): unitarity max|C C^T - 1|, |C^T C - 1| = 2.1e-15; vs Munich menu-5 tables: 7 irreps, 400 (copy, state) vectors, max deviation after the HW-fixed rotation 1.39e-15
+  [2,1,1,0]^2    CG matrix 225 x 225 (dims 15 x 15), built in 0.07 s (HW part 0.01 s): unitarity max|C C^T - 1|, |C^T C - 1| = 4.0e-15; vs Munich menu-5 tables: 6 irreps, 225 (copy, state) vectors, max deviation after the HW-fixed rotation 3.57e-15
+  [3,2,1,0]^2    CG matrix 4096 x 4096 (dims 64 x 64), built in 1.31 s (HW part 0.02 s): unitarity max|C C^T - 1|, |C^T C - 1| = 3.5e-13; vs Munich menu-5 tables: 16 irreps, 4096 (copy, state) vectors, max deviation after the HW-fixed rotation 1.95e-13
