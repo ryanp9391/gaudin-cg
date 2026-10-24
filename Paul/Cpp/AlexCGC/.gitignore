@@ -2,3 +2,5 @@
 /clebsch
 /cgc_hw_bench
 *.o
+/cgc_hw_prof
+/cgc_hw_prof_ob

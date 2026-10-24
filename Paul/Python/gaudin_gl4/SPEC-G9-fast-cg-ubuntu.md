@@ -25,7 +25,8 @@ V_λ[μ−λ′] (exact nullspace of the three string powers); (2) the three mis
 (Fractions) to the PRV basis — **56–62 % of the n_W-free time, 23 s for [9,6,3,0]²**; (3) joint diagonalisation (mpmath 50 digits, or float64); (4) the full HW vector by
 the level recursion from the slice (float64, output-bound: 0.73 s for the 8.9·10⁶ coefficients of [9,6,3,0]²). Munich computes the same HW vectors by an O(n_W³) null space.
 
-Round G8 established (exact, 222 weight spaces, 12 products; details in the plan §4): (a) **closed-form operators** — on every path P_κ (fixed row 3 = κ) of W the κ-block of
+Round G8 established (exact; the 12 test products below have 328 weight spaces W = V_λ[μ−λ′] with w ≥ 1, of which 222 have w ≥ 2 — the structural statements of
+G8a/b/c are about those 222, G8d's matrix check ran on all 328; details in the plan §4): (a) **closed-form operators** — on every path P_κ (fixed row 3 = κ) of W the κ-block of
 V₃ is a(κ;λ)·V^{(3)} + b₃ with V^{(3)} the gl(3) reduced vertex operator of (κ, λ′₁₂₃, μ₁₂₃) and **a = 1 − R₁ − R₂ − R₃**, R_i = Π_{s=1..4}(y_i − Y_s)/Π_{j≠i}(y_i − y_j)(y_i − y_j + 1)
 (y_i = κ_i − i, Y_s = λ_s − s; the GT norm of the neighbour κ + e_i), likewise V₄ᵃ with a₄ₐ = d + Σ_i R_i(2y_i − |κ| + 4), d = |λ| − |κ|; between paths the 12 hopping classes have
 G4's product formula and the 6 Δm₁₂ = 0 classes a cubic; `closed_forms_gl4.closed_form_mats(lam, lamp, mu)` builds V₃ and V₄ᵃ on W from the labels alone (exact on all 328
@@ -51,6 +52,12 @@ component = 1) AND, on request, G⊗G-orthonormal (CG) normalisation and Munich'
 `gr.candidates`/`racah_speiser` (all μ with multiplicities); `se.Recursion.of(lam, lamp)` (left inverses of the site-2 raising blocks, once per λ′); the universal reduced
 words `so.reduced_op(name, lamp).red` for the three operators (polynomial in λ′, evaluated once). Record t_setup.
 
+**Bases (binding).** Everything exact in G1–G8 (`weight_space_mats`, `closed_form_mats`, `copies`, the PRV basis) is in the PLAIN GT basis (M[row][col] = coefficient of
+e_row in V e_col); `GLNRep.float_ops()` are the generators in the ORTHONORMAL basis ẽ_c = e_c/√g_c, Eh[r,q] = E[r,q]√(g_r/g_q). S1–S2 work in the orthonormal basis: an
+operator there is M̃ = D M D⁻¹, D = diag(√g_c) on W₁ (entrywise M̃[r,c] = M[r,c]√(g_r/g_c)); an eigenvector ũ there has plain components u_c = ũ_c/√g_c; G3's normalisation
+(first nonzero plain component = 1) and `se.hw_from_slice` (which multiplies by √g internally) use the PLAIN u. Any comparison with an exact plain matrix is made after
+conjugating it by D. Eigenvalues are basis-independent.
+
 **S1 — operators on W₁ in float64, two routes, both implemented:**
   * Route B (complete, simplest): for each of the w₁ basis vectors e_c of W₁ (orthonormal basis), apply every reduced word (a product of ≤ 4 generators; the dict keys are
     tuples of (i, j) pairs, coefficient Fraction → float) with the CSR generators of `float_ops()`; accumulate the image restricted to W₁ (the operators preserve W₁; assert that
@@ -63,9 +70,11 @@ words `so.reduced_op(name, lamp).red` for the three operators (polynomial in λ�
   C++ port or for products where even building `GLNRep` is the bottleneck: [30,20,10,0] has dim 1.77·10⁶).
 
 **S2 — physical spectrum and slices from a w₁ × w₁ eigenproblem:** G = V₃ + (7/19)V₄ᵃ + (11/13)V₄ᵇ (G2's generic combination) on W₁; `numpy.linalg.eig` (non-symmetric: the
-reduced operators are not symmetric on the slice); for each eigenvector u: the string test s(u) = max_i ||E_{i,i+1}^{k_i} u|| / ||u|| over the non-void strings i = 2, 3
-(E₁₂ is the coordinate cut — verify once per sector that W₁ is exactly its kernel); physical iff s(u) < τ with τ = 1e-8 (report the distribution of s over physical and
-spurious eigenvectors: the gap must be ≥ 10⁶; adapt τ if it is not and say so). Assert #physical = m (Racah–Speiser) in every sector; on failure (degenerate G, complex pair,
+reduced operators are not symmetric on the slice, in either basis); for each eigenvector ũ (orthonormal components): the string test s(ũ) = max_i ‖E_{i,i+1}^{k_i} ũ‖₂ / ‖ũ‖₂
+over the non-void strings i = 2, 3, with the orthonormal CSR generators applied k_i times (the intermediate weight spaces leave W₁ — do not restrict during the power;
+E₁₂ is the coordinate cut — verify once per sector that W₁ is exactly its kernel); physical iff s(ũ) < τ with τ = 1e-8. G4/G8b measured "spurious ≥ 16, physical 0" in the
+PLAIN basis with the max norm at 50 digits, so re-measure in this basis: report per product min_spurious s and max_physical s; the gap must be ≥ 10⁶ with τ inside it
+(adapt τ if it is not and say so). Assert #physical = m (Racah–Speiser) in every sector; on failure (degenerate G, complex pair,
 gap too small) fall back to the exact path (G3 `copies`) for that sector and log it. Then the eigenvalue triples (v₃, v₄ᵃ, v₄ᵇ) = Rayleigh quotients of the physical u (or the
 diagonal of U⁻¹V_kU), the canonical ordering and normalisation of G3, and the slice = u (plain basis = u_c/√g_c). Optional refinement (S2′): one step of inverse iteration on
 G − v, or G8a's recursion from the triple (at 30 digits: the certified high-precision route; measure its cost and accuracy against the float eigenvector — the gl(3) lesson is
@@ -92,10 +101,12 @@ T1 **Agreement with the existing engine** (the Windows-verified reference): slic
   rotated to the copies, on P_small ([2,1,0,0]², [2,1,1,0]², [3,2,1,0]², [4,2,0,0]², [4,2,1,0]², [3,2,1,0]⊗[4,2,1,0] both orders, [4,2,2,0]², [4,3,1,0]²), [6,4,2,0]² (297 copies),
   [5,3,1,0]², [5,3,2,1]², [9,6,3,0]² (1592 copies): max relative deviation of every slice component ≤ 1e-12 (report the actual max per product), the eigenvalue triples to 1e-11,
   #physical = m in every sector (0 fallbacks expected — list any), HW residual ≤ 1e-11, G⊗G-orthogonality of the copies of each sector ≤ 1e-11, and the exact twin: Route B's
-  matrices vs G3's exact `weight_space_mats` on W₁ (≤ 1e-12 relative) on P_small; Route A vs Route B on everything.
+  matrices vs G3's exact `weight_space_mats` restricted to W₁ and conjugated by √g (M̃_ref[r,c] = float(M[r,c])√(g_r/g_c)), ≤ 1e-12 relative to max |M̃|, on P_small;
+  Route A (conjugated the same way) vs Route B on everything.
 T2 **Munich literal comparison** (G7's pipeline with the new engine as the source): all 42 multiplicity-free irreps of G7 (`munich_bridge.compare_mf`-style, reusing the cached
   `hw_*.txt`: MATCH ≤ 1e-9 after one global sign) and the 100 multiplicity sectors (`compare_sector`, subspace agreement max |1 − sv| ≤ 1e-9); additionally the sectors of
-  [6,4,2,0]² that G7 ran through the profiler. Nothing of Munich needs to be re-run unless a cached file is missing (then `run_hwcgc` with `timeout 1800`, memory rule of G7).
+  [6,4,2,0]² that G7 ran through the profiler. Nothing of Munich needs to be re-run unless a cached file is missing (then `run_hwcgc` with `timeout 1800`, memory rule of G7). The built binaries
+  `Paul/Cpp/AlexCGC/cgc_hw_prof`, `cgc_hw_prof_ob` (gitignored) are used as they are: do not rebuild, delete or commit them.
 T3 **Same-machine benchmark** (the G7 discipline: `LC_ALL=C`, `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1`, nothing else running, `/proc/loadavg` quoted, min of 5 cold runs,
   caches cleared as G1's `bench` does, `/usr/bin/time -v` for Munich): per product the columns t_setup / t_ops (S1, Route B; Route A in brackets) / t_eig+select (S2) /
   t_slices = sum of the three (the n_W-free time) / t_hw (S3) / t_total, against (i) G3 `copies` exact 50-digit and float64 (`joint_diag_float`) + G1 `hw_from_slice` — the
