@@ -1,0 +1,9 @@
+PASS  test_b0_identification               0.0s  B0 on [3,2,1,0]: kappa-block of E12,E21,E23,E32,E11,E22,E33,E13,E31 = gl(3) GLNRep(kappa) exactly (856 entries, 8 kappas)
+PASS  test_within_path_tridiagonal         0.0s  all 21 path blocks of [3,2,1,0]^2 are tridiagonal for V3, V4a, V4b
+PASS  test_b1_verdict                      0.1s  B1: V3, V4a = a V^(3) + b (a = 10/9, 20/9 at kappa=(6,4,1)); V4b not, fits a V + e[xi,V] + ... with e = -1/72, g = -e/4; failing example [2,1,1,0]^2 printed
+PASS  test_mtilde_direct_sum               0.1s  M~ = (+)_kappa M^(3)_kappa (dim = sum of Racah-Speiser m3) exactly on 3 sectors
+PASS  test_triple_preserves_mtilde         0.1s  the triple preserves M~ and M_mu in M~ (exact), with dim M~ > m on n >= k3 sectors
+PASS  test_mt_equals_m_iff_void            0.0s  dim M~ = m exactly when E34^k3 is void (all sectors of [4,2,1,0]^2)
+PASS  test_depth1_hopping_universal        0.0s  depth-1 sector (5,4,2,1) of [3,2,1,0]^2: 18 universal-formula tests (16 nonzero), 0 mismatches
+PASS  test_depth1_nested_solution          0.1s  depth-1 nested solution (nested basis + hopping) = so.copies on 3 sectors (16 copies, 1e-30)
+8 tests, 0 failed (0.4 s)

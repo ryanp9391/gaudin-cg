@@ -1,0 +1,108 @@
+
+======================================================================================================================================================
+D1: the nesting scalars a(kappa; lam), a_4a(kappa; lam)
+======================================================================================================================================================
+  data: 150 kappa values of 6 lam (kappa1 > kappa2 > kappa3), computed in 1.4 s
+  (i) ansatz a - 1 = c * sum_i R_i  (1 free parameter) fitted on lam = [6,4,2,0] (21 kappa): c = -1
+      held-out: 129 kappa on the other 5 lam: 0 mismatches
+  (ii) ansatz a4a - d = c0 + c1 sum R_i y_i + c2 |kappa| sum R_i + c3 sum R_i  (d = |lam| - |kappa|; 4 free parameters) fitted on [6,4,2,0] (21 kappa): c = ['0', '2', '-1', '4']
+      held-out: 129 kappa on the other 5 lam: 0 mismatches
+  final formulas  a = 1 - sum_i R_i,   a4a = d + sum_i R_i (2 y_i - |kappa| + 4):  150 kappa of the 6 lam: 0 / 0 mismatches
+  HELD-OUT lam (10 further lam, none used in the fits), each kappa with 3 samples (lam' = lam / two random generic lam', random weight space nu): 1503 samples, 0 / 0 mismatches [12.0 s]
+  in the labels: R_i = prod_{s=1..4} (kappa_i - lam_s - i + s) / prod_{j != i} (kappa_i - kappa_j - i + j)(kappa_i - kappa_j - i + j + 1);  a = 1 - R_1 - R_2 - R_3;  a4a = |lam| - |kappa| + sum_i R_i (2 kappa_i - 2 i - |kappa| + 4)
+  identity  sum_i R+_i = sum_i R-_i (raise-then-lower = lower-then-raise), all kappa (kappa1 > kappa2 > kappa3) of 16 lam: 651 checked, 0 violations
+  independence of (lam', nu): [9,6,3,0], every kappa with 3 random (lam', weight space) samples + the dominant one: 224 samples, 0 deviations from a(kappa), a4a(kappa)
+  [stage a: 14.2 s]
+
+======================================================================================================================================================
+D2: the shifts b3(kappa; nu, lam'), b4a(kappa; nu, lam') as polynomials in (nu1, nu2, lam') (degree 2) with coefficients  P(kappa, p1, p2, p3) + sum_i R_i S(y_i, e1(y), e2(y), p1, p2, p3),  p_k = sum_s Y_s^k
+======================================================================================================================================================
+  V3: 28 coefficient functions, 183 terms in total (tables in closed_forms_gl4_tables.txt)
+  V4a: 28 coefficient functions, 487 terms in total (tables in closed_forms_gl4_tables.txt)
+  HELD-OUT lam (10 lam never used for the fits): 2004 samples (kappa x lam' x weight space): b3 mismatches 0, b4a mismatches 0  [10.8 s]
+  degenerate kappa (kappa_i = kappa_{i+1}: 1x1 paths, no neighbour kappa + e_i): full diagonal J_ii = a alpha_ii + b with the pole-dropping convention R_i := 0: 432 tests (432 with a dropped R_i), 0 mismatches
+  [stage b: 11.4 s]
+
+======================================================================================================================================================
+D3: the 39 / 78 / 85 universal reduced words of V3 / V4a / V4b split into the groups alpha (gl(3) + E44), beta (one E_{i4}, one E_{4j}), gamma (rest)
+======================================================================================================================================================
+  V3   39 universal words (max length 3): alpha 21, beta 18, gamma 0
+  V4a  78 universal words (max length 4): alpha 30, beta 48, gamma 0
+  V4b  85 universal words (max length 4): alpha 36, beta 49, gamma 0
+  [4,2,1,0]^2: path blocks (|P| >= 2) fitted exactly by  a_group V^(3) + b_group  (V4b: a V + e [xi,V] + b + c xi + g xi^2)  [0.2 s]
+      V3   alpha: 19 / 19 blocks fit   a_group = 1 on all 6 kappa: 0 deviations
+      V3   beta : 19 / 19 blocks fit   a_group = a - 1 on all 6 kappa: 0 deviations
+      V4a  alpha: 19 / 19 blocks fit   a_group = d = |lam|-|kappa| on all 6 kappa: 0 deviations
+      V4a  beta : 19 / 19 blocks fit   a_group = a4a - d on all 6 kappa: 0 deviations
+      V4b  alpha: 19 / 19 blocks fit
+      V4b  beta : 19 / 19 blocks fit
+      V4b: e of the alpha part takes the values ['0'] ; e of the beta part takes 8 distinct values
+  [6,4,2,0]^2: path blocks (|P| >= 2) fitted exactly by  a_group V^(3) + b_group  (V4b: a V + e [xi,V] + b + c xi + g xi^2)  [1.7 s]
+      V3   alpha: 128 / 128 blocks fit   a_group = 1 on all 20 kappa: 0 deviations
+      V3   beta : 128 / 128 blocks fit   a_group = a - 1 on all 20 kappa: 0 deviations
+      V4a  alpha: 128 / 128 blocks fit   a_group = d = |lam|-|kappa| on all 20 kappa: 0 deviations
+      V4a  beta : 128 / 128 blocks fit   a_group = a4a - d on all 20 kappa: 0 deviations
+      V4b  alpha: 128 / 128 blocks fit
+      V4b  beta : 128 / 128 blocks fit
+      V4b: e of the alpha part takes the values ['0'] ; e of the beta part takes 30 distinct values
+  [stage words: 1.9 s]
+
+======================================================================================================================================================
+gl(3) chain with general lam': closed forms (u, d, alpha) vs the exact reduced operator V = t S_{3,2} on GLNRep(kappa)
+======================================================================================================================================================
+  random gl(3) irreps (dim <= 400) with generic rational lam' (3 components, denominators 1,2,3,4,7): 614 weight spaces (51 with a path of >= 3 points), 1571 matrix entries (1459 nonzero), 0 bad spaces, 0 mismatching entries  [0.4 s]
+  [stage gl3chain: 0.4 s]
+
+======================================================================================================================================================
+V4b within a path: J^{(4b)} = a' V^{(3)} + e [xi, V^{(3)}] + b' + c xi - (e/4) xi^2   (what is established; the full closed form of a', b', c is NOT identified, see section 7)
+======================================================================================================================================================
+  e(kappa; lam) = (1 - a(kappa; lam))/8 = (sum_i R_i)/8, g = -e/4:  378 (lam, kappa, weight space, lam') samples, 0 mismatches  [1.3 s]
+  kappa = (8,5,2) of [9,6,3,0]: e as a polynomial in (nu1, nu2, lam'1..4) of degree <= (0,): exact fit of degree 0 (1 monomials, rank 1)  (260 samples)
+  kappa = (8,5,2) of [9,6,3,0]: a' as a polynomial in (nu1, nu2, lam'1..4) of degree <= (1,): exact fit of degree 1 (7 monomials, rank 7)  (260 samples)
+  kappa = (8,5,2) of [9,6,3,0]: c as a polynomial in (nu1, nu2, lam'1..4) of degree <= (2,): exact fit of degree 2 (28 monomials, rank 28)  (260 samples)
+  kappa = (8,5,2) of [9,6,3,0]: b' as a polynomial in (nu1, nu2, lam'1..4) of degree <= (3, 4): exact fit of degree 4 (210 monomials, rank 210)  (260 samples)
+  [stage v4b: 156.7 s]
+
+======================================================================================================================================================
+D4a: closed_form_mats (V3, V4a from labels alone) == G3 weight_space_mats, EXACTLY, on every weight space of the listed products
+======================================================================================================================================================
+  [2,1,0,0]^2                  7 weight spaces (w <=  2,    32 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.01s, G3 0.00s]
+  [2,1,1,0]^2                  6 weight spaces (w <=  3,    28 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.02s, G3 0.00s]
+  [3,2,1,0]^2                 16 weight spaces (w <=  4,   224 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.06s, G3 0.03s]
+  [4,2,0,0]^2                 26 weight spaces (w <=  4,   322 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.05s, G3 0.04s]
+  [4,2,1,0]^2                 27 weight spaces (w <=  6,   610 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.11s, G3 0.06s]
+  [3,2,1,0]x[4,2,1,0]         20 weight spaces (w <=  4,   244 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.05s, G3 0.03s]
+  [4,2,1,0]x[3,2,1,0]         20 weight spaces (w <=  6,   524 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.07s, G3 0.04s]
+  [4,2,2,0]^2                 23 weight spaces (w <=  6,   228 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.06s, G3 0.02s]
+  [4,3,1,0]^2                 31 weight spaces (w <=  7,   776 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.13s, G3 0.08s]
+  [6,4,2,0]^2                 76 weight spaces (w <= 15,  7148 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.64s, G3 0.46s]
+  [5,3,1,0]^2                 49 weight spaces (w <=  9,  2272 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.27s, G3 0.19s]
+  [5,3,2,1]^2                 27 weight spaces (w <=  6,   610 matrix entries x 2 ops): V3 mismatching spaces 0, V4a 0   [closed 0.11s, G3 0.06s]
+  TOTAL products P_small + P_big: 328 weight spaces, 13018 matrix entries; mismatching spaces V3 0, V4a 0
+  beyond G3: lam = (30,20,10,0) (dim V_lam = 1771561, GLNRep infeasible): closed_form_mats on 4 random weight spaces (w = 28,31,44,46) built in 0.04,0.05,0.09,0.10 s; exact check [V3, V4a] = 0 on W: all True
+  [V3, V4a] = 0 on the WHOLE weight space (not only on M_mu) for the closed-form matrices: 156 weight spaces with w >= 3 of the 12 products, 0 violations
+  [9,6,3,0]^2 with GENERIC non-dominant rational lam' (random weight spaces, 2 <= w <= 14): 20 weight spaces (total w 120, 1920 entries x 2 ops): V3 mismatches 0, V4a 0  [0.5 s]
+  [stage mats: 4.8 s]
+
+======================================================================================================================================================
+D4c: forward determinacy of the lattice recursion with the two closed-form operators (V3, V4a) alone
+======================================================================================================================================================
+  weight spaces with w >= 2 of the 12 products: 222;  determined with (V3, V4a): 222 (n0 = 1: 101);  determined with the triple (G8a): 222 (n0 = 1: 188)  [4.2 s]
+  of which sectors with m > 0: 221, determined with (V3, V4a): 221
+  [stage det: 4.2 s]
+
+======================================================================================================================================================
+D4b: slices_closed (closed-form V3, V4a + forward lattice recursion) vs G3 copies (50 digits); timings vs G3 copies and G8a slice_from_triple
+======================================================================================================================================================
+  [6,4,2,0]^2: 76 sectors (m > 0), 297 copies; 39 sectors with n0 > 1 (null-vector start); copies NOT determined by (V3, V4a) alone (null space of C(v) of dimension > 1, a shared (v3, v4a) pair): 2; of the 295 determined copies: max slice deviation 2.94e-44, copies deviating by more than 1e-30: 0
+      time, whole product (all copies): G3 `copies` 1.65 s;  closed form: matrices 0.63 s + PRV eigenvalues (still G3 matrices) 1.63 s + grading/plan 0.24 s + recursion 0.46 s = 2.97 s   [wall incl. validation 4.6 s]
+      G8a slice_from_triple (G3 matrices, triple of operators, sectors with an n0 = 1 grading only; 20 sectors skipped for n0 > 1): sector matrices + grading search 0.80 s, recursion 0.08 s (158 copies)
+  [stage slices: 7.0 s]
+
+======================================================================================================================================================
+D4b: slices_closed (closed-form V3, V4a + forward lattice recursion) vs G3 copies (50 digits); timings vs G3 copies and G8a slice_from_triple
+======================================================================================================================================================
+  [9,6,3,0]^2: 213 sectors (m > 0), 1592 copies; 137 sectors with n0 > 1 (null-vector start); copies NOT determined by (V3, V4a) alone (null space of C(v) of dimension > 1, a shared (v3, v4a) pair): 0; of the 1592 determined copies: max slice deviation 4.01e-40, copies deviating by more than 1e-30: 0
+      time, whole product (all copies): G3 `copies` 25.95 s;  closed form: matrices 4.21 s + PRV eigenvalues (still G3 matrices) 25.67 s + grading/plan 1.95 s + recursion 13.14 s = 44.96 s   [wall incl. validation 71.0 s]
+      G8a slice_from_triple (G3 matrices, triple of operators, sectors with an n0 = 1 grading only; 85 sectors skipped for n0 > 1): sector matrices + grading search 10.32 s, recursion 0.53 s (534 copies)
+  [stage slices9: 107.5 s]

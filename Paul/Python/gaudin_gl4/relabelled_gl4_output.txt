@@ -1,0 +1,518 @@
+
+============================================================================================================================================
+C0  CONVENTION CHECK: joint spectrum of the relabelled triple on M^sigma = Spec(M_mu)  (exact charpolys of V3, V4a, V4b and the generic combination + exact commutation)
+============================================================================================================================================
+  [3,2,1,0]^2: 16 sectors x 24 sigma, convention tau = sigma^-1 (E_cd -> E_{tau c tau d}, weight nu_{sigma(a)}):
+      ok                                                 384
+  the WRONG convention (tau = sigma^-1 but weight nu_{sigma^-1(a)} instead of nu_{sigma(a)}), split by involution (sigma = sigma^-1) / non-involution:
+      involution     ok                                                 160
+      non-involution charpoly/commutation mismatch                       64
+      non-involution dim M^sigma = 0 != m = 1                            76
+      non-involution dim M^sigma = 0 != m = 2                            24
+      non-involution dim M^sigma = 2 != m = 3                            10
+      non-involution dim M^sigma = 2 != m = 4                             2
+      non-involution dim M^sigma = 3 != m = 2                            10
+      non-involution dim M^sigma = 3 != m = 4                            10
+      non-involution dim M^sigma = 4 != m = 2                             2
+      non-involution dim M^sigma = 4 != m = 3                            10
+      non-involution ok                                                  16
+
+============================================================================================================================================
+C3  THE SMALLEST NON-CHAIN SECTORS BY HAND
+============================================================================================================================================
+  m = w spaces (P_small) whose V3 graph at sigma = id is not a path: 8; the smallest ones (w, edges, product, mu):
+     w=4 edges=6 [3,2,1,0]^2 mu=(5, 4, 2, 1) (A = {})
+     w=4 edges=6 [3,2,1,0]x[4,2,1,0] mu=(5, 4, 3, 1) (A = {})
+     w=4 edges=6 [3,2,1,0]x[4,2,1,0] mu=(6, 4, 2, 1) (A = {})
+     w=4 edges=6 [4,2,1,0]x[3,2,1,0] mu=(6, 4, 2, 1) (A = {})
+     w=4 edges=6 [4,2,1,0]^2 mu=(6, 5, 2, 1) (A = {})
+     w=4 edges=6 [4,2,1,0]^2 mu=(7, 4, 2, 1) (A = {})
+     w=4 edges=6 [4,3,1,0]^2 mu=(7, 6, 2, 1) (A = {})
+     w=5 edges=10 [4,3,1,0]^2 mu=(7, 5, 3, 1) (A = {})
+  m < w spaces with a cycle: 56; the smallest (w, m, edges, product, mu):
+     w=3 m=1 edges=3 [4,2,0,0]^2 mu=(5, 3, 3, 1) (A = {2,3})
+     w=3 m=1 edges=3 [4,2,0,0]^2 mu=(5, 5, 1, 1) (A = {1,3})
+     w=3 m=1 edges=3 [4,2,0,0]^2 mu=(7, 3, 1, 1) (A = {3})
+     w=3 m=1 edges=3 [4,2,2,0]^2 mu=(5, 5, 4, 2) (A = {1,2})
+     w=3 m=1 edges=3 [4,2,2,0]^2 mu=(6, 4, 3, 3) (A = {2,3})
+     w=3 m=2 edges=3 [2,1,1,0]^2 mu=(3, 2, 2, 1) (A = {2})
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+SECTOR [3,2,1,0]^2  mu = (5, 4, 2, 1)   (w = dim W, m = dim M_mu)
+  w = 4, m = 4, active strings A = {}
+  lattice points (id chain), coordinates (m12, m13, m23) and full patterns:
+     1: coords (2, 2, 2)   pattern ((2,), (2, 2), (2, 2, 1))
+     2: coords (3, 3, 1)   pattern ((2,), (3, 1), (3, 1, 1))
+     3: coords (2, 3, 2)   pattern ((2,), (2, 2), (3, 2, 0))
+     4: coords (3, 3, 2)   pattern ((2,), (3, 1), (3, 2, 0))
+  V3 on W (column j = image of lattice point j):
+        [    381/8,      -9/8,     -11/8,       3/8 ]
+        [    -15/4,     231/4,       1/4,      -9/4 ]
+        [    -45/8,       9/8,     459/8,     -27/8 ]
+        [     15/4,     -15/4,      -9/4,     261/4 ]
+  V4a on W (column j = image of lattice point j):
+        [    171/8,      -9/8,     -33/8,       9/8 ]
+        [    -15/4,     105/4,       5/4,     -45/4 ]
+        [   -135/8,      45/8,     405/8,     -45/8 ]
+        [     45/4,     -75/4,     -15/4,     255/4 ]
+  V4b on W (column j = image of lattice point j):
+        [    135/4,         0,       9/4,      -9/4 ]
+        [        0,      87/2,        -3,        15 ]
+        [     45/4,        -9,      75/4,      45/4 ]
+        [      -15,      51/2,         8,        -6 ]
+  charpoly of V3 on M_mu = (x - 57)**2*(x**2 - 114*x + 3141)
+  charpoly of V4a on M_mu = (x**2 - 90*x + 1350)*(x**2 - 72*x + 1080)
+  charpoly of V4b on M_mu = (x**2 - 72*x + 1080)*(x**2 - 18*x - 594)
+  generic combination G = V3 + 7/19 V4a + 11/13 V4b: irreducible factors over Q of its charpoly: degrees [2, 2]
+     factor 61009*x**2 - 12290226*x + 615957057
+     factor 61009*x**2 - 9907170*x + 401954193
+     rational 2-dim invariant block, basis (in M_mu coordinates) columns: [[-1/15, -2/3, 1, 0], [-1/5, 2, 0, 1]] ; the triple on it:
+        V3|block = [[57, 0], [0, 57]]
+        V4a|block = [[48, 9], [8, 24]]
+        V4b|block = [[24, -9], [-8, 48]]
+        joint eigenvector (block coords) [1, -2*sqrt(6)/3 - 4/3]   joint eigenvalues (V3, V4a, V4b) = [57, 36 - 6*sqrt(6), 6*sqrt(6) + 36]
+        joint eigenvector (block coords) [1, -4/3 + 2*sqrt(6)/3]   joint eigenvalues (V3, V4a, V4b) = [57, 6*sqrt(6) + 36, 36 - 6*sqrt(6)]
+     rational 2-dim invariant block, basis (in M_mu coordinates) columns: [[7/3, 2/3, 1, 0], [1, 0, 0, 1]] ; the triple on it:
+        V3|block = [[45, -9], [4, 69]]
+        V4a|block = [[15, -45/2], [10, 75]]
+        V4b|block = [[39, 45/2], [-10, -21]]
+        joint eigenvector (block coords) [1, -4/3 + 2*sqrt(3)/3]   joint eigenvalues (V3, V4a, V4b) = [57 - 6*sqrt(3), 45 - 15*sqrt(3), 9 + 15*sqrt(3)]
+        joint eigenvector (block coords) [1, -4/3 - 2*sqrt(3)/3]   joint eigenvalues (V3, V4a, V4b) = [6*sqrt(3) + 57, 15*sqrt(3) + 45, 9 - 15*sqrt(3)]
+  sparsity graph of V3 (and of the triple) in the 24 sigma-bases [grouped by sigma ~ sigma o (12)]:
+     sigma 1234: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1243: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1324: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1342: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1423: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1432: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2314: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2341: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2413: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2431: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 3412: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 3421: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+  best sigma (path first, then smaller bandwidth of V3): 1234 (V3 path False, bw 3); number of the 12 classes with V3 path: 0
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+SECTOR [3,2,1,0]x[4,2,1,0]  mu = (5, 4, 3, 1)   (w = dim W, m = dim M_mu)
+  w = 4, m = 4, active strings A = {}
+  lattice points (id chain), coordinates (m12, m13, m23) and full patterns:
+     1: coords (2, 2, 2)   pattern ((1,), (2, 1), (2, 2, 1))
+     2: coords (2, 3, 1)   pattern ((1,), (2, 1), (3, 1, 1))
+     3: coords (2, 3, 2)   pattern ((1,), (2, 1), (3, 2, 0))
+     4: coords (3, 3, 2)   pattern ((1,), (3, 0), (3, 2, 0))
+  V3 on W (column j = image of lattice point j):
+        [    555/8,     -27/8,     -17/8,         2 ]
+        [     -5/4,     309/4,    -19/12,      -4/3 ]
+        [    -25/8,     -39/8,     699/8,        -6 ]
+        [      5/4,      -3/4,      -3/4,        96 ]
+  V4a on W (column j = image of lattice point j):
+        [    165/8,     -27/8,     -51/8,         6 ]
+        [     -5/4,     135/4,    -95/12,     -20/3 ]
+        [    -75/8,    -195/8,     685/8,       -10 ]
+        [     15/4,     -15/4,      -5/4,       100 ]
+  V4b on W (column j = image of lattice point j):
+        [    507/8,    -135/8,      31/8,       -10 ]
+        [    -25/4,     345/4,      51/4,        12 ]
+        [     55/8,     309/8,    -79/24,      58/3 ]
+        [       -5,      15/2,       8/3,     -88/3 ]
+  charpoly of V3 on M_mu = x**4 - 330*x**3 + 40608*x**2 - 2208195*x + 44768700
+  charpoly of V4a on M_mu = x**4 - 240*x**3 + 19035*x**2 - 556200*x + 5184000
+  charpoly of V4b on M_mu = x**4 - 117*x**3 - 135*x**2 + 194400*x + 1492992
+  generic combination G = V3 + 7/19 V4a + 11/13 V4b: irreducible factors over Q of its charpoly: degrees [4]
+     factor 3722098081*x**4 - 1925891907069*x**3 + 369358879737276*x**2 - 31165810036663536*x + 977361679572687936
+     degree-4 block: joint eigenvalues are roots of 3722098081*x**4 - 1925891907069*x**3 + 369358879737276*x**2 - 31165810036663536*x + 977361679572687936 (numbers not written)
+  sparsity graph of V3 (and of the triple) in the 24 sigma-bases [grouped by sigma ~ sigma o (12)]:
+     sigma 1234: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1243: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1324: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1342: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1423: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1432: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2314: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2341: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2413: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2431: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 3412: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 3421: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+  best sigma (path first, then smaller bandwidth of V3): 1234 (V3 path False, bw 3); number of the 12 classes with V3 path: 0
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+SECTOR [3,2,1,0]x[4,2,1,0]  mu = (6, 4, 2, 1)   (w = dim W, m = dim M_mu)
+  w = 4, m = 4, active strings A = {}
+  lattice points (id chain), coordinates (m12, m13, m23) and full patterns:
+     1: coords (2, 2, 2)   pattern ((2,), (2, 2), (2, 2, 1))
+     2: coords (3, 3, 1)   pattern ((2,), (3, 1), (3, 1, 1))
+     3: coords (2, 3, 2)   pattern ((2,), (2, 2), (3, 2, 0))
+     4: coords (3, 3, 2)   pattern ((2,), (3, 1), (3, 2, 0))
+  V3 on W (column j = image of lattice point j):
+        [    105/2,      -3/2,      -3/2,       1/2 ]
+        [    -15/2,     127/2,       1/2,      -5/2 ]
+        [    -15/2,       3/2,     125/2,      -9/2 ]
+        [     15/2,      -9/2,      -9/2,     143/2 ]
+  V4a on W (column j = image of lattice point j):
+        [     45/2,      -3/2,      -9/2,       3/2 ]
+        [    -15/2,      55/2,       5/2,     -25/2 ]
+        [    -45/2,      15/2,     105/2,     -15/2 ]
+        [     45/2,     -45/2,     -15/2,     135/2 ]
+  V4b on W (column j = image of lattice point j):
+        [       39,         0,         2,        -3 ]
+        [        0,        50,        -6,        16 ]
+        [       15,       -12,        28,        15 ]
+        [      -30,        30,        16,         0 ]
+  charpoly of V3 on M_mu = x**4 - 250*x**3 + 23288*x**2 - 958025*x + 14684250
+  charpoly of V4a on M_mu = x**4 - 170*x**3 + 9660*x**2 - 215325*x + 1640250
+  charpoly of V4b on M_mu = x**4 - 117*x**3 + 3530*x**2 + 17640*x - 1423008
+  generic combination G = V3 + 7/19 V4a + 11/13 V4b: irreducible factors over Q of its charpoly: degrees [4]
+     factor 3722098081*x**4 - 1532133110079*x**3 + 235282757762546*x**2 - 15977130354188796*x + 404867471723492256
+     degree-4 block: joint eigenvalues are roots of 3722098081*x**4 - 1532133110079*x**3 + 235282757762546*x**2 - 15977130354188796*x + 404867471723492256 (numbers not written)
+  sparsity graph of V3 (and of the triple) in the 24 sigma-bases [grouped by sigma ~ sigma o (12)]:
+     sigma 1234: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1243: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1324: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1342: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1423: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1432: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2314: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2341: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2413: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2431: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 3412: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 3421: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+  best sigma (path first, then smaller bandwidth of V3): 1234 (V3 path False, bw 3); number of the 12 classes with V3 path: 0
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+SECTOR [4,2,1,0]x[3,2,1,0]  mu = (6, 4, 2, 1)   (w = dim W, m = dim M_mu)
+  w = 4, m = 4, active strings A = {}
+  lattice points (id chain), coordinates (m12, m13, m23) and full patterns:
+     1: coords (3, 3, 2)   pattern ((3,), (3, 2), (3, 2, 1))
+     2: coords (4, 4, 1)   pattern ((3,), (4, 1), (4, 1, 1))
+     3: coords (3, 4, 2)   pattern ((3,), (3, 2), (4, 2, 0))
+     4: coords (4, 4, 2)   pattern ((3,), (4, 1), (4, 2, 0))
+  V3 on W (column j = image of lattice point j):
+        [       55,      -4/5,      -4/3,      4/15 ]
+        [       -8,     137/2,       1/3,     -13/6 ]
+        [       -8,       4/5,     200/3,    -44/15 ]
+        [        8,      -7/2,     -11/3,     455/6 ]
+  V4a on W (column j = image of lattice point j):
+        [       25,      -4/5,        -4,       4/5 ]
+        [       -8,        31,         2,       -13 ]
+        [      -24,      24/5,        60,     -24/5 ]
+        [       24,       -21,        -6,        75 ]
+  V4b on W (column j = image of lattice point j):
+        [    187/5,         0,      12/5,      -8/5 ]
+        [        0,     103/2,        -5,      37/2 ]
+        [     88/5,        -8,      88/5,      48/5 ]
+        [      -32,      61/2,        13,     -21/2 ]
+  charpoly of V3 on M_mu = x**4 - 266*x**3 + 26384*x**2 - 1156285*x + 18885264
+  charpoly of V4a on M_mu = x**4 - 191*x**3 + 12402*x**2 - 319788*x + 2834352
+  charpoly of V4b on M_mu = x**4 - 96*x**3 + 1550*x**2 + 55719*x - 1148904
+  generic combination G = V3 + 7/19 V4a + 11/13 V4b: irreducible factors over Q of its charpoly: degrees [4]
+     factor 3722098081*x**4 - 1554345144781*x**3 + 241748098989631*x**2 - 16604978454983295*x + 425185548484787100
+     degree-4 block: joint eigenvalues are roots of 3722098081*x**4 - 1554345144781*x**3 + 241748098989631*x**2 - 16604978454983295*x + 425185548484787100 (numbers not written)
+  sparsity graph of V3 (and of the triple) in the 24 sigma-bases [grouped by sigma ~ sigma o (12)]:
+     sigma 1234: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1243: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1324: V3 edges 5 maxdeg 3 path False bw 2 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1342: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1423: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 1432: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2314: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2341: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2413: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 2431: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 3412: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+     sigma 3421: V3 edges 6 maxdeg 3 path False bw 3 | triple edges 6 path False bw 3 | cut strings frozenset() | nested (kappa-eigenbasis of V3): 3 kappa-groups (max size 2), V3 edges 5 path False, triple edges 6 path False
+  best sigma (path first, then smaller bandwidth of V3): 1324 (V3 path False, bw 2); number of the 12 classes with V3 path: 0
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+SECTOR [4,2,0,0]^2  mu = (5, 3, 3, 1)   (w = dim W, m = dim M_mu)
+  w = 3, m = 1, active strings A = {2,3}
+  lattice points (id chain), coordinates (m12, m13, m23) and full patterns:
+     1: coords (2, 3, 2)   pattern ((1,), (2, 0), (3, 2, 0))
+     2: coords (1, 4, 1)   pattern ((1,), (1, 1), (4, 1, 0))
+     3: coords (2, 4, 1)   pattern ((1,), (2, 0), (4, 1, 0))
+  V3 on W (column j = image of lattice point j):
+        [    184/3,         3,     -25/3 ]
+        [      8/9,        72,     -20/9 ]
+        [     -8/3,        -6,     230/3 ]
+  V4a on W (column j = image of lattice point j):
+        [        0,         0,         0 ]
+        [        0,         0,         0 ]
+        [        0,         0,         0 ]
+  V4b on W (column j = image of lattice point j):
+        [    200/3,         0,    -140/3 ]
+        [     40/9,       160,      20/9 ]
+        [    -40/3,         0,     460/3 ]
+  M_mu (PRV basis, free positions [2] of W): V3|M = 
+        [       80 ]
+  charpoly of V3 on M_mu = x - 80
+  charpoly of V4a on M_mu = x
+  charpoly of V4b on M_mu = x - 160
+  generic combination G = V3 + 7/19 V4a + 11/13 V4b: irreducible factors over Q of its charpoly: degrees [1]
+     factor 13*x - 2800
+     rational line: vector [[1]], joint eigenvalues [80, 0, 160]
+  sparsity graph of V3 (and of the triple) in the 24 sigma-bases [grouped by sigma ~ sigma o (12)]:
+     sigma 1234: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 3 path False
+     sigma 1243: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 3 path False
+     sigma 1324: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 3 path False
+     sigma 1342: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 3 path False
+     sigma 1423: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 3 path False
+     sigma 1432: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 3 path False
+     sigma 2314: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [2] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 3 path False
+     sigma 2341: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [2] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 2 path True
+     sigma 2413: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 3 path False
+     sigma 2431: V3 edges 2 maxdeg 2 path True  bw 1 | triple edges 3 path False bw 2 | cut strings [] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 2 path True
+     sigma 3412: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [3] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 3 path False
+     sigma 3421: V3 edges 3 maxdeg 2 path False bw 2 | triple edges 3 path False bw 2 | cut strings [3] | nested (kappa-eigenbasis of V3): 2 kappa-groups (max size 2), V3 edges 2 path True, triple edges 2 path True
+  best sigma (path first, then smaller bandwidth of V3): 2431 (V3 path True, bw 1); number of the 12 classes with V3 path: 1
+
+============================================================================================================================================
+C3c  RATIONAL (Galois) BLOCK STRUCTURE OF THE COPIES: degrees of the irreducible factors over Q of the charpoly of the generic combination G on M_mu
+============================================================================================================================================
+  [2,1,0,0]^2: sectors with m >= 2: {'irreducible': 1}; examples of split sectors (mu, m, degrees): []
+  [2,1,1,0]^2: sectors with m >= 2: {'irreducible': 1}; examples of split sectors (mu, m, degrees): []
+  [3,2,1,0]^2: sectors with m >= 2: {'irreducible': 3, 'split': 5}; examples of split sectors (mu, m, degrees): [((5, 4, 2, 1), 4, [2, 2]), ((5, 3, 3, 1), 3, [1, 2]), ((5, 3, 2, 2), 3, [1, 2]), ((4, 4, 3, 1), 3, [1, 2]), ((4, 3, 3, 2), 3, [1, 2])]
+  [4,2,0,0]^2: sectors with m >= 2: {'all rational': 1, 'irreducible': 5, 'split': 1}; examples of split sectors (mu, m, degrees): [((6, 4, 2, 0), 3, [1, 2])]
+  [4,2,1,0]^2: sectors with m >= 2: {'irreducible': 8, 'split': 6}; examples of split sectors (mu, m, degrees): [((7, 3, 3, 1), 3, [1, 2]), ((7, 3, 2, 2), 3, [1, 2]), ((6, 4, 3, 1), 5, [1, 4]), ((6, 4, 2, 2), 4, [2, 2]), ((6, 3, 3, 2), 3, [1, 2]), ((5, 5, 3, 1), 3, [1, 2])]
+  [3,2,1,0]x[4,2,1,0]: sectors with m >= 2: {'irreducible': 10}; examples of split sectors (mu, m, degrees): []
+  [4,2,1,0]x[3,2,1,0]: sectors with m >= 2: {'irreducible': 10}; examples of split sectors (mu, m, degrees): []
+  [4,2,2,0]^2: sectors with m >= 2: {'irreducible': 5, 'split': 1}; examples of split sectors (mu, m, degrees): [((6, 4, 4, 2), 3, [1, 2])]
+  [4,3,1,0]^2: sectors with m >= 2: {'irreducible': 8, 'split': 9, 'all rational': 1}; examples of split sectors (mu, m, degrees): [((7, 6, 2, 1), 4, [2, 2]), ((7, 5, 3, 1), 5, [1, 2, 2]), ((7, 5, 2, 2), 3, [1, 2]), ((7, 4, 4, 1), 3, [1, 2]), ((6, 6, 3, 1), 3, [1, 2]), ((6, 4, 4, 2), 4, [1, 1, 2]), ((6, 4, 3, 3), 3, [1, 2]), ((5, 5, 4, 2), 3, [1, 2])]
+  [5,3,1,0]^2: sectors with m >= 2: {'irreducible': 14, 'all rational': 1, 'split': 17}; examples of split sectors (mu, m, degrees): [((9, 5, 3, 1), 5, [1, 4]), ((9, 5, 2, 2), 3, [1, 2]), ((9, 4, 4, 1), 3, [1, 2]), ((8, 6, 4, 0), 3, [1, 2]), ((8, 6, 3, 1), 7, [1, 6]), ((8, 6, 2, 2), 4, [1, 1, 2]), ((8, 5, 3, 2), 7, [1, 6]), ((8, 4, 4, 2), 4, [1, 1, 2])]
+  [5,3,2,1]^2: sectors with m >= 2: {'irreducible': 8, 'split': 6}; examples of split sectors (mu, m, degrees): [((9, 5, 5, 3), 3, [1, 2]), ((9, 5, 4, 4), 3, [1, 2]), ((8, 6, 5, 3), 5, [1, 4]), ((8, 6, 4, 4), 4, [2, 2]), ((8, 5, 5, 4), 3, [1, 2]), ((7, 7, 5, 3), 3, [1, 2])]
+
+============================================================================================================================================
+C1  BANDWIDTH AND CHAIN STRUCTURE PER SIGMA  [P_small]
+============================================================================================================================================
+  weight spaces (w >= 2): m = w: 29, m < w: 73, total 102
+
+  A. per sigma: number of weight spaces where the sparsity graph of V3 is a PATH (union graph of the triple in brackets), mean RCM bandwidth of V3, max bandwidth; connected counts
+     sigma  chn  | paths m=w    (triple)     | paths m<w    (triple)     | mean bw   max bw    | connected
+     1234   id   |    21/29       21/29    |    17/73       17/73    |      2.25         5 |       102
+     1243        |    21/29       21/29    |    17/73       17/73    |      2.23         5 |       102
+     1324        |    21/29       21/29    |    17/73       17/73    |      2.21         5 |       102
+     1342        |    21/29       21/29    |    17/73       17/73    |      2.23         5 |       102
+     1423        |    21/29       21/29    |    17/73       17/73    |      2.23         5 |       102
+     1432        |    21/29       21/29    |    17/73       17/73    |      2.24         5 |       102
+     2134        |    21/29       21/29    |    17/73       17/73    |      2.25         5 |       102
+     2143        |    21/29       21/29    |    17/73       17/73    |      2.23         5 |       102
+     2314        |    21/29       21/29    |    17/73       17/73    |      2.24         5 |       102
+     2341        |    21/29       21/29    |    17/73       17/73    |      2.23         5 |       102
+     2413        |    21/29       21/29    |    17/73       17/73    |      2.23         5 |       102
+     2431        |    21/29       21/29    |    18/73       17/73    |      2.20         5 |       102
+     3124        |    21/29       21/29    |    17/73       17/73    |      2.21         5 |       102
+     3142        |    21/29       21/29    |    17/73       17/73    |      2.23         5 |       102
+     3214        |    21/29       21/29    |    17/73       17/73    |      2.24         5 |       102
+     3241        |    21/29       21/29    |    17/73       17/73    |      2.23         5 |       102
+     3412        |    21/29       21/29    |    17/73       17/73    |      2.24         5 |       102
+     3421        |    21/29       21/29    |    17/73       17/73    |      2.24         5 |       102
+     4123        |    21/29       21/29    |    17/73       17/73    |      2.23         5 |       102
+     4132        |    21/29       21/29    |    17/73       17/73    |      2.24         5 |       102
+     4213        |    21/29       21/29    |    17/73       17/73    |      2.23         5 |       102
+     4231        |    21/29       21/29    |    18/73       17/73    |      2.20         5 |       102
+     4312        |    21/29       21/29    |    17/73       17/73    |      2.24         5 |       102
+     4321   w0   |    21/29       21/29    |    17/73       17/73    |      2.24         5 |       102
+
+  B. weight spaces where SOME sigma makes V3 (resp. the whole triple) a path / lowers the bandwidth:
+     m=w  :  29 spaces; V3 path at sigma = id:  21; at SOME sigma:  21 (triple union:  21); bandwidth strictly smaller at some sigma than at id:   2; NO sigma gives a path:   8; min over sigma of bw: mean 1.52, max 3 (id: mean 1.59, max 4)
+     m<w  :  73 spaces; V3 path at sigma = id:  17; at SOME sigma:  18 (triple union:  17); bandwidth strictly smaller at some sigma than at id:  17; NO sigma gives a path:  55; min over sigma of bw: mean 2.27, max 5 (id: mean 2.51, max 5)
+     all  : 102 spaces; V3 path at sigma = id:  38; at SOME sigma:  39 (triple union:  38); bandwidth strictly smaller at some sigma than at id:  19; NO sigma gives a path:  63; min over sigma of bw: mean 2.06, max 5 (id: mean 2.25, max 5)
+
+  C. by active-string class A (strings E_{i,i+1}^{k_i} that are non-void on the weight space) and kind: number of spaces; at id / at some sigma path; best sigma (max #paths, ties -> smaller mean bw)
+     A = {}        m=w :  29 spaces; id:  21 paths; some sigma:  21; best sigmas (sigma, #paths): [('1243', np.int64(21)), ('1324', np.int64(21)), ('1342', np.int64(21))]; all-sigma-path sigmas: []
+     A = {1}       m<w :  10 spaces; id:   4 paths; some sigma:   4; best sigmas (sigma, #paths): [('2431', np.int64(4)), ('4231', np.int64(4)), ('1342', np.int64(4))]; all-sigma-path sigmas: []
+     A = {2}       m<w :  22 spaces; id:   4 paths; some sigma:   4; best sigmas (sigma, #paths): [('2341', np.int64(4)), ('3241', np.int64(4)), ('1234', np.int64(4))]; all-sigma-path sigmas: []
+     A = {3}       m<w :  23 spaces; id:   9 paths; some sigma:   9; best sigmas (sigma, #paths): [('1243', np.int64(9)), ('1324', np.int64(9)), ('2143', np.int64(9))]; all-sigma-path sigmas: []
+     A = {1,2}     m<w :   3 spaces; id:   0 paths; some sigma:   0; best sigmas (sigma, #paths): [('1243', np.int64(0)), ('1324', np.int64(0)), ('1342', np.int64(0))]; all-sigma-path sigmas: []
+     A = {1,3}     m<w :   7 spaces; id:   0 paths; some sigma:   0; best sigmas (sigma, #paths): [('1432', np.int64(0)), ('4132', np.int64(0)), ('1234', np.int64(0))]; all-sigma-path sigmas: []
+     A = {2,3}     m<w :   7 spaces; id:   0 paths; some sigma:   1; best sigmas (sigma, #paths): [('2431', np.int64(1)), ('4231', np.int64(1)), ('1324', np.int64(0))]; all-sigma-path sigmas: []
+     A = {1,2,3}   m<w :   1 spaces; id:   0 paths; some sigma:   0; best sigmas (sigma, #paths): [('2314', np.int64(0)), ('2413', np.int64(0)), ('3214', np.int64(0))]; all-sigma-path sigmas: []
+
+============================================================================================================================================
+C1  BANDWIDTH AND CHAIN STRUCTURE PER SIGMA  [P_small + P_big]
+============================================================================================================================================
+  weight spaces (w >= 2): m = w: 63, m < w: 158, total 221
+
+  A. per sigma: number of weight spaces where the sparsity graph of V3 is a PATH (union graph of the triple in brackets), mean RCM bandwidth of V3, max bandwidth; connected counts
+     sigma  chn  | paths m=w    (triple)     | paths m<w    (triple)     | mean bw   max bw    | connected
+     1234   id   |    41/63       41/63    |    30/158      30/158   |      2.85         8 |       221
+     1243        |    41/63       41/63    |    30/158      30/158   |      2.81         8 |       221
+     1324        |    41/63       41/63    |    30/158      30/158   |      2.82         8 |       221
+     1342        |    41/63       41/63    |    30/158      30/158   |      2.81         8 |       221
+     1423        |    41/63       41/63    |    30/158      30/158   |      2.82         8 |       221
+     1432        |    41/63       41/63    |    30/158      30/158   |      2.84         8 |       221
+     2134        |    41/63       41/63    |    30/158      30/158   |      2.85         8 |       221
+     2143        |    41/63       41/63    |    30/158      30/158   |      2.81         8 |       221
+     2314        |    41/63       41/63    |    30/158      30/158   |      2.83         8 |       221
+     2341        |    41/63       41/63    |    30/158      30/158   |      2.83         8 |       221
+     2413        |    41/63       41/63    |    30/158      30/158   |      2.81         8 |       221
+     2431        |    41/63       41/63    |    31/158      30/158   |      2.81         8 |       221
+     3124        |    41/63       41/63    |    30/158      30/158   |      2.82         8 |       221
+     3142        |    41/63       41/63    |    30/158      30/158   |      2.81         8 |       221
+     3214        |    41/63       41/63    |    30/158      30/158   |      2.83         8 |       221
+     3241        |    41/63       41/63    |    30/158      30/158   |      2.83         8 |       221
+     3412        |    41/63       41/63    |    30/158      30/158   |      2.82         8 |       221
+     3421        |    41/63       41/63    |    30/158      30/158   |      2.84         8 |       221
+     4123        |    41/63       41/63    |    30/158      30/158   |      2.82         8 |       221
+     4132        |    41/63       41/63    |    30/158      30/158   |      2.84         8 |       221
+     4213        |    41/63       41/63    |    30/158      30/158   |      2.81         8 |       221
+     4231        |    41/63       41/63    |    31/158      30/158   |      2.81         8 |       221
+     4312        |    41/63       41/63    |    30/158      30/158   |      2.82         8 |       221
+     4321   w0   |    41/63       41/63    |    30/158      30/158   |      2.84         8 |       221
+
+  B. weight spaces where SOME sigma makes V3 (resp. the whole triple) a path / lowers the bandwidth:
+     m=w  :  63 spaces; V3 path at sigma = id:  41; at SOME sigma:  41 (triple union:  41); bandwidth strictly smaller at some sigma than at id:   7; NO sigma gives a path:  22; min over sigma of bw: mean 1.73, max 6 (id: mean 1.84, max 6)
+     m<w  : 158 spaces; V3 path at sigma = id:  30; at SOME sigma:  31 (triple union:  30); bandwidth strictly smaller at some sigma than at id:  53; NO sigma gives a path: 127; min over sigma of bw: mean 2.89, max 8 (id: mean 3.25, max 8)
+     all  : 221 spaces; V3 path at sigma = id:  71; at SOME sigma:  72 (triple union:  71); bandwidth strictly smaller at some sigma than at id:  60; NO sigma gives a path: 149; min over sigma of bw: mean 2.56, max 8 (id: mean 2.85, max 8)
+
+  C. by active-string class A (strings E_{i,i+1}^{k_i} that are non-void on the weight space) and kind: number of spaces; at id / at some sigma path; best sigma (max #paths, ties -> smaller mean bw)
+     A = {}        m=w :  63 spaces; id:  41 paths; some sigma:  41; best sigmas (sigma, #paths): [('1243', np.int64(41)), ('1342', np.int64(41)), ('2143', np.int64(41))]; all-sigma-path sigmas: []
+     A = {1}       m<w :  22 spaces; id:   6 paths; some sigma:   6; best sigmas (sigma, #paths): [('1342', np.int64(6)), ('2431', np.int64(6)), ('3142', np.int64(6))]; all-sigma-path sigmas: []
+     A = {2}       m<w :  45 spaces; id:  10 paths; some sigma:  10; best sigmas (sigma, #paths): [('1243', np.int64(10)), ('1342', np.int64(10)), ('2143', np.int64(10))]; all-sigma-path sigmas: []
+     A = {3}       m<w :  42 spaces; id:  14 paths; some sigma:  14; best sigmas (sigma, #paths): [('1234', np.int64(14)), ('2134', np.int64(14)), ('1324', np.int64(14))]; all-sigma-path sigmas: []
+     A = {1,2}     m<w :   8 spaces; id:   0 paths; some sigma:   0; best sigmas (sigma, #paths): [('1234', np.int64(0)), ('2134', np.int64(0)), ('1324', np.int64(0))]; all-sigma-path sigmas: []
+     A = {1,3}     m<w :  18 spaces; id:   0 paths; some sigma:   0; best sigmas (sigma, #paths): [('1432', np.int64(0)), ('2314', np.int64(0)), ('3214', np.int64(0))]; all-sigma-path sigmas: []
+     A = {2,3}     m<w :  20 spaces; id:   0 paths; some sigma:   1; best sigmas (sigma, #paths): [('2431', np.int64(1)), ('4231', np.int64(1)), ('3421', np.int64(0))]; all-sigma-path sigmas: []
+     A = {1,2,3}   m<w :   3 spaces; id:   0 paths; some sigma:   0; best sigmas (sigma, #paths): [('2314', np.int64(0)), ('3214', np.int64(0)), ('2341', np.int64(0))]; all-sigma-path sigmas: []
+
+============================================================================================================================================
+C1b  STENCIL, sigma-EQUIVALENCE, RULES  [P_small + P_big]
+============================================================================================================================================
+  (a) sigma and sigma o (12) (swap of the first two chain entries) have identical graph statistics of V3 and of the triple in ALL 221 x 24 cases: 0 differences (the gl(2)_{sigma1 sigma2} Weyl reflection is a monomial map of the GT basis);
+      so only the 12 ordered pairs (sigma4, sigma3) give different bases.
+
+  (b) stencil of V3 in the sigma-patterns: set of displacements (dm12, dm13, dm23) with a non-zero entry, union over all weight spaces:
+      sigma = id: 20 off-diagonal displacements; equal to the 20 off-diagonal points of the 21-point set {0,+-1} x ({0} u gl3 roots}: True
+      all 24 sigma: sizes [(20, 24)]; every stencil inside the 21-point set: True; every stencil equal to the 20 off-diagonal points: True
+
+  (c) the path property of V3 is the same in all 24 sigma-bases in 220 of 221 weight spaces; exceptions:
+      [4,2,0,0]^2 mu=(5, 3, 3, 1) w=3 m=1: path in sigma = ['2431', '4231']; at id: edges 3, maxdeg 2
+      the number of EDGES of the V3 graph is sigma-independent in: {('m=w', True): 55, ('m<w', True): 70, ('m<w', False): 88, ('m=w', False): 8}
+
+  (d) candidate rules 'active strings A -> sigma': number of spaces where V3 is a path / mean RCM bandwidth of V3 at the rule's sigma (id and the optimum over sigma for comparison)
+     A = {}        ( 63 spaces): id:  41 paths, bw 1.84 | optimum over sigma:  41 paths, bw 1.73 | 
+     A = {1}       ( 22 spaces): id:   6 paths, bw 3.14 | optimum over sigma:   6 paths, bw 2.64 | cut sigma of string 1 (1234): 6 paths, bw 3.14 | w0: 6 paths, bw 2.91
+     A = {2}       ( 45 spaces): id:  10 paths, bw 2.89 | optimum over sigma:  10 paths, bw 2.69 | cut sigma of string 2 (2314): 10 paths, bw 2.89 | w0: 10 paths, bw 2.89
+     A = {3}       ( 42 spaces): id:  14 paths, bw 2.60 | optimum over sigma:  14 paths, bw 2.43 | cut sigma of string 3 (3412): 14 paths, bw 2.69 | w0: 14 paths, bw 2.71
+     A = {1,2}     (  8 spaces): id:   0 paths, bw 4.00 | optimum over sigma:   0 paths, bw 3.50 | cut sigma of string 1 (1234): 0 paths, bw 4.00 | cut sigma of string 2 (2314): 0 paths, bw 4.12 | w0: 0 paths, bw 4.38
+     A = {1,3}     ( 18 spaces): id:   0 paths, bw 4.17 | optimum over sigma:   0 paths, bw 3.83 | cut sigma of string 1 (1234): 0 paths, bw 4.17 | cut sigma of string 3 (3412): 0 paths, bw 4.17 | w0: 0 paths, bw 4.39
+     A = {2,3}     ( 20 spaces): id:   0 paths, bw 4.00 | optimum over sigma:   1 paths, bw 3.10 | cut sigma of string 2 (2314): 0 paths, bw 3.85 | cut sigma of string 3 (3412): 0 paths, bw 3.85 | w0: 0 paths, bw 3.55
+     A = {1,2,3}   (  3 spaces): id:   0 paths, bw 6.33 | optimum over sigma:   0 paths, bw 5.67 | cut sigma of string 1 (1234): 0 paths, bw 6.33 | cut sigma of string 2 (2314): 0 paths, bw 5.67 | cut sigma of string 3 (3412): 0 paths, bw 6.00 | w0: 0 paths, bw 6.33
+
+============================================================================================================================================
+C2  COORDINATE CUTS  [P_small + P_big]
+============================================================================================================================================
+  A. for every sigma and string i: is ker E_{tau(i)tau(i+1)}^{k_i} on W^sigma a coordinate subspace?  counts over weight spaces where the string is NON-VOID; "pred" = prediction ({sigma1,sigma2} = {i,i+1})
+     sigma  | i=1: coord/nonvoid (pred) triv | i=2: coord/nonvoid (pred) triv | i=3: coord/nonvoid (pred) triv
+     1234   |   51/51   (yes)   0 |    4/76   (no )   0 |    0/83   (no )   0
+     1243   |   51/51   (yes)   0 |    0/76   (no )   0 |    0/83   (no )   0
+     1324   |    1/51   (no )   0 |    4/76   (no )   0 |    0/83   (no )   0
+     1342   |    0/51   (no )   0 |    0/76   (no )   0 |    9/83   (no )   0
+     1423   |    5/51   (no )   0 |    0/76   (no )   0 |    0/83   (no )   0
+     1432   |    0/51   (no )   0 |    0/76   (no )   0 |    9/83   (no )   0
+     2134   |   51/51   (yes)   0 |    4/76   (no )   0 |    0/83   (no )   0
+     2143   |   51/51   (yes)   0 |    0/76   (no )   0 |    0/83   (no )   0
+     2314   |    1/51   (no )   0 |   76/76   (yes)   0 |    0/83   (no )   0
+     2341   |    0/51   (no )   0 |   76/76   (yes)   0 |    5/83   (no )   0
+     2413   |    5/51   (no )   0 |    0/76   (no )   0 |    0/83   (no )   0
+     2431   |    0/51   (no )   0 |    6/76   (no )   0 |    5/83   (no )   0
+     3124   |    1/51   (no )   0 |    4/76   (no )   0 |    0/83   (no )   0
+     3142   |    0/51   (no )   0 |    0/76   (no )   0 |    9/83   (no )   0
+     3214   |    1/51   (no )   0 |   76/76   (yes)   0 |    0/83   (no )   0
+     3241   |    0/51   (no )   0 |   76/76   (yes)   0 |    5/83   (no )   0
+     3412   |    0/51   (no )   0 |    0/76   (no )   0 |   83/83   (yes)   0
+     3421   |    0/51   (no )   0 |    6/76   (no )   0 |   83/83   (yes)   0
+     4123   |    5/51   (no )   0 |    0/76   (no )   0 |    0/83   (no )   0
+     4132   |    0/51   (no )   0 |    0/76   (no )   0 |    9/83   (no )   0
+     4213   |    5/51   (no )   0 |    0/76   (no )   0 |    0/83   (no )   0
+     4231   |    0/51   (no )   0 |    6/76   (no )   0 |    5/83   (no )   0
+     4312   |    0/51   (no )   0 |    0/76   (no )   0 |   83/83   (yes)   0
+     4321   |    0/51   (no )   0 |    6/76   (no )   0 |   83/83   (yes)   0
+  predicted cuts that fail to be coordinate (non-void): 0;  accidental non-trivial coordinate kernels outside the prediction (sum over spaces): 120
+
+  B. sectors with >= 2 active strings: is there a sigma in which ALL their (non-void) kernels are coordinate subspaces?  (non-trivially: kernel not 0 and not everything)
+     A = {1,2,3}   any     : some sigma makes all strings coordinate: False in 3 spaces
+     A = {1,2,3}   nontriv : some sigma makes all strings coordinate: False in 3 spaces
+     A = {1,2}     any     : some sigma makes all strings coordinate: False in 8 spaces
+     A = {1,2}     nontriv : some sigma makes all strings coordinate: False in 8 spaces
+     A = {1,3}     any     : some sigma makes all strings coordinate: False in 18 spaces
+     A = {1,3}     nontriv : some sigma makes all strings coordinate: False in 18 spaces
+     A = {2,3}     any     : some sigma makes all strings coordinate: False in 20 spaces
+     A = {2,3}     nontriv : some sigma makes all strings coordinate: False in 20 spaces
+     counter-examples (non-trivial, two active strings both coordinate in one sigma): 0
+
+  C. sectors with ONE active string i: in the sigma with {s1,s2} = {i,i+1}, M^sigma is a coordinate subspace; is the invariant, and is the triple a path on it?
+     A = {1}: 22 spaces
+        sigma = 1234: M coordinate 22, dim M^sigma = m 22, triple-invariant 22, V3|M path 7, triple|M path 7, V3|M connected 22
+        sigma = 1243: M coordinate 22, dim M^sigma = m 22, triple-invariant 22, V3|M path 7, triple|M path 7, V3|M connected 22
+        sigma = 2134: M coordinate 22, dim M^sigma = m 22, triple-invariant 22, V3|M path 7, triple|M path 7, V3|M connected 22
+        sigma = 2143: M coordinate 22, dim M^sigma = m 22, triple-invariant 22, V3|M path 7, triple|M path 7, V3|M connected 22
+     A = {2}: 45 spaces
+        sigma = 2314: M coordinate 45, dim M^sigma = m 45, triple-invariant 45, V3|M path 19, triple|M path 19, V3|M connected 45
+        sigma = 2341: M coordinate 45, dim M^sigma = m 45, triple-invariant 45, V3|M path 19, triple|M path 19, V3|M connected 45
+        sigma = 3214: M coordinate 45, dim M^sigma = m 45, triple-invariant 45, V3|M path 19, triple|M path 19, V3|M connected 45
+        sigma = 3241: M coordinate 45, dim M^sigma = m 45, triple-invariant 45, V3|M path 19, triple|M path 19, V3|M connected 45
+     A = {3}: 42 spaces
+        sigma = 3412: M coordinate 42, dim M^sigma = m 42, triple-invariant 42, V3|M path 19, triple|M path 19, V3|M connected 42
+        sigma = 3421: M coordinate 42, dim M^sigma = m 42, triple-invariant 42, V3|M path 19, triple|M path 19, V3|M connected 42
+        sigma = 4312: M coordinate 42, dim M^sigma = m 42, triple-invariant 42, V3|M path 19, triple|M path 19, V3|M connected 42
+        sigma = 4321: M coordinate 42, dim M^sigma = m 42, triple-invariant 42, V3|M path 19, triple|M path 19, V3|M connected 42
+
+============================================================================================================================================
+C2b  CUT INEQUALITY AND THE CUT SUB-LATTICE  [P_small + P_big]
+============================================================================================================================================
+  (a) cut inequality in the sigma-coordinates:  for {sigma1, sigma2} = {i, i+1}:   ker E_{i,i+1}^{k_i} on W^sigma = { patterns with m12 <= mu_i - lam'_{i+1} }   (m12 = highest weight of the gl({i,i+1}) irrep)
+      (equivalently m22 >= mu_{i+1} - lam'_i); same threshold for E_12-type (sigma1 = i) and E_21-type (sigma1 = i+1) chains.  Checked on 840 (space, string, sigma) triples: 0 failures
+
+  (b) coordinate sub-lattice cut out by the strings that are coordinate in sigma (all non-void such strings), compared with M_mu: invariance under the triple; V3 path on it; dimension = m?
+      sigma  | spaces with a cut | invariant V3|cut path dim=m  mean dim/w | whole-W V3 path (same spaces)
+      1234   | 55                | 55        13          26     0.68       | 10
+      1243   | 51                | 51        9           22     0.70       | 6
+      1324   | 5                 | 5         5           5      0.50       | 5
+      1342   | 9                 | 9         9           9      0.48       | 9
+      1423   | 5                 | 5         5           5      0.50       | 5
+      1432   | 9                 | 9         9           9      0.48       | 9
+      2314   | 77                | 77        24          46     0.69       | 11
+      2341   | 81                | 81        28          50     0.68       | 15
+      2413   | 5                 | 5         5           5      0.50       | 5
+      2431   | 11                | 11        11          11     0.48       | 11
+      3412   | 83                | 83        26          43     0.64       | 14
+      3421   | 89                | 89        32          49     0.63       | 20
+
+  (c) sectors with exactly ONE active string i (sigma = first cut sigma of i): M^sigma = {m12 <= thr}; triple restricted to it a path?
+      A = {1} (sigma 1234): 22 spaces; M coordinate: 22; dim M = m: 22; invariant: 22; V3|M path: 7; triple|M path: 7; V3|M connected: 22; whole W V3 path at id: 6; both paths: 6; W path & M not: 0; M path & W not: 1
+      A = {2} (sigma 2314): 45 spaces; M coordinate: 45; dim M = m: 45; invariant: 45; V3|M path: 19; triple|M path: 19; V3|M connected: 45; whole W V3 path at id: 10; both paths: 10; W path & M not: 0; M path & W not: 9
+      A = {3} (sigma 3412): 42 spaces; M coordinate: 42; dim M = m: 42; invariant: 42; V3|M path: 19; triple|M path: 19; V3|M connected: 42; whole W V3 path at id: 14; both paths: 14; W path & M not: 0; M path & W not: 5
+
+============================================================================================================================================
+C4  THE EXCHANGE PARITY AS A LATTICE SYMMETRY (lam = lam')
+============================================================================================================================================
+  for each sector with m >= 2 and each sigma in which M^sigma is a coordinate sub-lattice: does a MONOMIAL matrix S (S e_a = d_a e_pi(a), exact) exist with S V3 S^-1 = -V3 + c, S V4a S^-1 = -2 V4a - V4b + c', S V4b S^-1 = 3 V4a + 2 V4b - c' on M^sigma?
+  (S then maps the joint eigenlines like P does; it equals P only up to a function of the triple, so this is a necessary condition for P to be a lattice reflection.)
+  [3,2,1,0]^2: {'sectors': 8, 'with coordinate M^sigma in some sigma': 7, 'monomial S exists in some sigma': 2, 'involutive monomial S in some sigma': 2}
+      mu=(6, 3, 2, 1) m=2: sigma-classes with coordinate M: 12; monomial S found in (sigma, #solutions, #involutive): [('1234', 1, 1), ('1243', 2, 2), ('1324', 1, 1), ('1342', 1, 1), ('1423', 2, 2), ('1432', 1, 1)]
+      mu=(5, 4, 3, 0) m=2: sigma-classes with coordinate M: 12; monomial S found in (sigma, #solutions, #involutive): [('1234', 1, 1), ('1243', 1, 1), ('1324', 2, 2), ('1342', 2, 2), ('1423', 1, 1), ('1432', 2, 2)]
+      mu=(5, 4, 2, 1) m=4: sigma-classes with coordinate M: 12; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(5, 3, 3, 1) m=3: sigma-classes with coordinate M: 2; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(5, 3, 2, 2) m=3: sigma-classes with coordinate M: 2; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(4, 4, 3, 1) m=3: sigma-classes with coordinate M: 2; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(4, 4, 2, 2) m=2: sigma-classes with coordinate M: 0; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(4, 3, 3, 2) m=3: sigma-classes with coordinate M: 2; monomial S found in (sigma, #solutions, #involutive): []
+  [4,2,1,0]^2: {'sectors': 14, 'with coordinate M^sigma in some sigma': 11, 'monomial S exists in some sigma': 4, 'involutive monomial S in some sigma': 4}
+      mu=(8, 3, 2, 1) m=2: sigma-classes with coordinate M: 12; monomial S found in (sigma, #solutions, #involutive): [('1234', 1, 1), ('1243', 2, 2), ('1324', 1, 1), ('1342', 1, 1), ('1423', 2, 2), ('1432', 1, 1)]
+      mu=(7, 4, 3, 0) m=2: sigma-classes with coordinate M: 12; monomial S found in (sigma, #solutions, #involutive): [('1234', 1, 1), ('1243', 1, 1), ('1324', 1, 1), ('1342', 1, 1), ('1423', 1, 1), ('1432', 1, 1)]
+      mu=(7, 4, 2, 1) m=4: sigma-classes with coordinate M: 12; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(7, 3, 3, 1) m=3: sigma-classes with coordinate M: 2; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(7, 3, 2, 2) m=3: sigma-classes with coordinate M: 2; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(6, 5, 3, 0) m=2: sigma-classes with coordinate M: 12; monomial S found in (sigma, #solutions, #involutive): [('1234', 1, 1), ('1243', 1, 1), ('1324', 2, 2), ('1342', 2, 2), ('1423', 1, 1), ('1432', 2, 2)]
+      mu=(6, 5, 2, 1) m=4: sigma-classes with coordinate M: 12; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(6, 4, 3, 1) m=5: sigma-classes with coordinate M: 2; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(6, 4, 2, 2) m=4: sigma-classes with coordinate M: 2; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(6, 3, 3, 2) m=3: sigma-classes with coordinate M: 0; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(5, 5, 3, 1) m=3: sigma-classes with coordinate M: 2; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(5, 5, 2, 2) m=2: sigma-classes with coordinate M: 0; monomial S found in (sigma, #solutions, #involutive): []
+      mu=(5, 4, 4, 1) m=2: sigma-classes with coordinate M: 2; monomial S found in (sigma, #solutions, #involutive): [('2314', 1, 1), ('2341', 1, 1)]
+      mu=(5, 4, 3, 2) m=4: sigma-classes with coordinate M: 0; monomial S found in (sigma, #solutions, #involutive): []
+
+(total 4.8 s)

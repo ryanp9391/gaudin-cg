@@ -22,3 +22,6 @@ Paul/Python/gaudin_sl3/*.pkl
 
 # large numeric caches of the Gaudin Python agents (rebuildable; kernel_N_L14.npz alone is 0.42 GB)
 *.npz
+
+# gl(4) agent caches (rebuildable)
+Paul/Python/gaudin_gl4/*.pkl

@@ -4,6 +4,50 @@ Where the last session left off. Read this first when picking the project back u
 history log (that's `git log`) — only what's still open or in-flight. Overwrite
 freely each session rather than appending.
 
+## >>> FOR THE UBUNTU LAPTOP (written 2026-10-24, Paul: "an algorithm on how to use this technology to compute CG coefficients fast; write a plan on how the Ubuntu guy should implement and test"): brief `Paul/Python/gaudin_gl4/SPEC-G9-fast-cg-ubuntu.md` <<<
+
+Prerequisite: round G8 committed on Windows and pulled on the laptop (`SPEC/RESULTS-G8{a,b,c,d}-*`, `lattice_recursion_gl4.py`, `nested_gl3_gl4.py`, `relabelled_gl4.py`,
+`closed_forms_gl4.py` + tests; nothing of G8 is committed yet). The brief specifies the float64 engine `cg_fast_gl4.py`: S0 G1's setup; S1 the three operators on the E₁₂-cut
+space W₁ by float CSR word application (Route B, complete) and by the closed forms of G8d (Route A, V₃/V₄ᵃ, representation-free); S2 the physical slices as the eigenvectors of
+the generic combination on W₁ that are killed by E₂₃^{k₂}, E₃₄^{k₃} (no PRV nullspace; G4/G8b: spurious ones violate by ≥ 16, physical by 0); S3 G1's `hw_from_slice`;
+S4 optional descendants (full CG tables by the triangular lowering sweep, validated against Munich's menu-5 tables and unitarity). Tests T1 (vs `copies`/`hw_from_slice` to
+1e-12 on P_small, [6,4,2,0]², [9,6,3,0]²), T2 (Munich literal comparison with G7's cached outputs: 42 + 100), T3 (same-machine benchmark vs G3 exact/float and Munich orig/eig:
+rectangular S ≤ 12/20, multiplicity products to [12,8,4,0]² and beyond), T4 precision, T5 robustness (the two (V₃,V₄ᵃ)-degenerate sectors, λ ≠ λ′, λ₄ > 0), T6 descendants.
+Deliverables `cg_fast_gl4.py`, `test_cg_fast_gl4.py`, `RESULTS-G9-fast-cg.md`, timings, a HANDOFF block.
+
+## >>> G8d RETURNED (2026-10-24 evening): the nesting scalars in closed form — a = 1 − R₁ − R₂ − R₃ (R_i = GT norm of the neighbour κ + e_i), a₄ₐ = d + Σ R_i(2y_i − |κ| + 4); V₃, V₄ᵃ on a weight space from the labels alone <<<
+
+`RESULTS-G8d-closed-forms.md`, `closed_forms_gl4.py` (+ `closed_forms_gl4_qcache.pkl`, rebuildable), 8 tests pass. R_i = Π_{s=1..4}(y_i − Y_s)/Π_{j≠i}(y_i − y_j)(y_i − y_j + 1),
+y_i = κ_i − i, Y_s = λ_s − s, d = |λ| − |κ|: a fitted with ONE parameter on 21 κ and exact on 129 held-out κ (five λ) + 1503 samples on 10 unseen λ; a₄ₐ with 4 parameters, same
+counts. b₃, b₄ₐ = exact tables (28 coefficient functions each, P(κ) + Σ R_i S(y_i,…); 2004 held-out samples), not derived. V₄ᵇ: e = (1 − a)/8 exact; a′, c, b′ not identified →
+no V₄ᵇ closed form. Mechanism: words split α (no index 4 except E₄₄) / β (one E_{i4}, one E_{4j}): α = (1, d)V^{(3)}, β = (a − 1, a₄ₐ − d)V^{(3)} (+ scalars) on every path block —
+the β words pass through the neighbours κ + e_k. `closed_form_mats` == G3 on all 328 weight spaces (+ 20 of [9,6,3,0]² with generic λ′); [V₃,V₄ᵃ] = 0 on all of W; matrices at
+λ = (30,20,10,0) (dim 1.77·10⁶) in 0.05 s; `slices_closed` = `copies` on 295/297 ([6,4,2,0]²; 2 copies need V₄ᵇ) and 1592/1592 ([9,6,3,0]²). No speed gain in exact arithmetic
+(the eigenvalues still come from the PRV matrices; recursion at 50 digits) → the float64 engine is the G9 brief above. Verdict table updated: plan §4.1.
+
+## >>> ROUND G8 RETURNED (2026-10-24): the gl(4) Jacobi structure — H-A lattice recursion TRUE, H-B nesting gl(3) ⊂ gl(4) TRUE (V₃, V₄ᵃ), H-C relabelled chains FALSE; G8d (closed forms) DISPATCHED <<<
+
+Paul (2026-10-24): "The beautiful Jacobi structure we had for gl(3) fails for gl(4). Surely life is not so cruel... nesting? linear combinations of generators? set up a plan and
+implement with sonnet subagents, I really want something beautiful here too." Plan + verdict table: `Paul/Mathematica/Gaudin/gl4-jacobi-plan.md` (§4). Briefs/reports in
+`Paul/Python/gaudin_gl4/`: `SPEC/RESULTS-G8a-lattice-recursion.md` (`lattice_recursion_gl4.py`, 8 tests), `SPEC/RESULTS-G8b-nested-gl3.md` (`nested_gl3_gl4.py`, 8 tests),
+`SPEC/RESULTS-G8c-relabelled-bases.md` (`relabelled_gl4.py`, 6 tests); all tests pass (session re-ran them: 0 failures). NOTHING COMMITTED.
+**What survives (verified on 222 weight spaces of 12 products, exact unless said):** (1) NESTING: on every path P_κ (fixed row 3 = κ) of W = V_λ[μ−λ′] the κ-block of V₃ is
+a(κ;λ)·V^{(3)}_red(κ;λ′₁₂₃) + b₃(ν,λ′) and that of V₄ᵃ is a₄ₐ(κ;λ)·V^{(3)} + b₄ₐ EXACTLY (305/305 + 369/369 held-out with generic λ′); a depends only on (κ,λ), a(λ₁₂₃) = 1;
+V₄ᵇ's block = aV + e[ξ,V] + b + cξ − (e/4)ξ² (ξ = gl(2)₁₂ Casimir). (2) COUPLING: paths κ, κ ± root coupled by G4's universal product formula (Δm₁₂ = ±1) and the cubic Q
+(Δm₁₂ = 0). (3) RECURSION: with the grading by m₁₂ (or −m₁₂; +m₃₃/−m₁₃ for the class A = {3}) the triple is block-Jacobi with jointly injective forward blocks on 222/222
+spaces (best grading per space; +m₁₂ alone 218/222); bottom level = one lattice point in 188/222 (W₁); `slice_from_triple` reproduces 358/358 copies to 2.9e-43 at 0.3 ms;
+deg P_x = level of x; the unused equations generate the vanishing ideal of Spec(W₁) (14/14 Gröbner) = THE gl(4) CONTINUANT; n₀ ∈ {2,3} in 34 sectors → polynomial-matrix
+kernel (203/203 copies). M̃ = ker E₁₂^{k₁} ∩ ker E₂₃^{k₂} = ⊕_κ gl(3) PRV slices, dim = Σ m₃(κ), = m iff E₃₄ void. **What does not exist:** no σ-relabelled GT chain makes the
+triple a path (the path property is sector-intrinsic; 12 inequivalent chains; exact cut rule: E_{i,i+1} is a coordinate cut iff {σ₁,σ₂} = {i,i+1}); no factorised slices
+(Ψ[κ][m₁₂] rank 1 in 4/146); the nested-basis hopping blocks are dense and full rank (no small secular problem); the exchange parity is no lattice involution. Side finding:
+for λ = λ′ the copy polynomial splits over ℚ by parity (K₄ example: ℚ(√6) ⊕ ℚ(√3) blocks, exchange = Galois conjugation); never for λ ≠ λ′ (0/20) — unexplained.
+Corrections to earlier reports: G5's "V₄ᵃ = V₄ᵇ = 0 when μ₄ = 0" is "when depth d = ν₄ − λ₄ = 0 and λ₄ = 0"; the plan's Vandermonde determinant formula holds for the two
+coherent orientation sets only; the brief's "wrong σ convention" is the σ⁻¹ chain, not wrong.
+**G8d RETURNED, see the block above (Sonnet, `SPEC-G8d-closed-forms.md`):** closed forms of a(κ;λ), a₄ₐ, b₃, b₄ₐ, the V₄ᵇ parameters; derivation from the word structure (index-4 words); the
+recursion assembled from closed forms only (no representation matrices), timed on [6,4,2,0]² / [9,6,3,0]². NEXT for the session: fold G8d into the verdict table; then
+Paul's call on proofs (B1 via Wigner–Eckart; determinacy per class), the characteristic ideal vs G5's oper conditions, and the notes/paper. Untracked since 2026-10-21:
+`Paul/Mathematica/Gaudin/Experiments/twist-pert-Baxter.{wl,md}` (perturbative twisted gl(3) Baxter solver), not mentioned elsewhere in this file.
+
 ## >>> DONE (2026-10-22, Ubuntu): gl(4) Munich comparison (SPEC-G7) -- report `Paul/Python/gaudin_gl4/RESULTS-G7-munich-comparison.md` <<<
 
 **D1 correct:** 42 of 42 multiplicity-free irreps of [S,S,0,0]^2 MATCH Munich (max dev 1.4e-15; the S=8 `16 16 0 0` one only via the repaired profiler because `hwcgc.sh` hit the 1800 s timeout); 100 multiplicity sectors (sum m = 210, m up to 12; 94 through the original `clebsch`, 6 of [6,4,2,0]^2 through the profiler) span the same subspace as our canonical copies (max |1-sv| 2.4e-15 original, 1.6e-12 profiler); the rotation Q between Munich's Gram-Schmidt copies and our Gaudin copies is never a signed permutation (tables in `munich_bridge_output.txt`). Python 3.10.12: all five test files pass, no shim.

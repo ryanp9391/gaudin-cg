@@ -1,0 +1,199 @@
+
+==================================================================================================================================
+A1  LATTICE GRADINGS: band, level sizes, forward determinacy of the stacked inter-level blocks (exact ranks over Q)
+==================================================================================================================================
+weight spaces (w >= 2) of P_small + P_big: 222  (1 with m = 0; 171 with W1 = W; W1 NOT invariant in 0; the cut m12 <= mu1 - lam'_2 differs from ker E12^k1 in 0)
+per product: [2,1,0,0]^2 3, [2,1,1,0]^2 1, [3,2,1,0]^2 8, [4,2,0,0]^2 19, [4,2,1,0]^2 18, [3,2,1,0]x[4,2,1,0] 10, [4,2,1,0]x[3,2,1,0] 14, [4,2,2,0]^2 8, [4,3,1,0]^2 22, [6,4,2,0]^2 62, [5,3,1,0]^2 39, [5,3,2,1]^2 18
+weight-space sizes w: 2:66, 3:17, 4:54, 5:26, 6:13, 7:23, 9:4, 10:6, 12:12, 15:1
+(124 directed gradings x 2 spaces x 222 weight spaces analysed in 1.8 s; 62 grading pairs, both directions listed since g -> -g reverses the recursion)
+band (max |g(target) - g(source)| over the nonzero entries of the three matrices, all 222 weight spaces): equals the structural bound |a| + max(|b|,|c|,|b-c|) for 124 of the 124 directed gradings; smaller for 0: 
+98 of the 124 directed gradings are primitive (gcd 1); the others coincide with them up to scale (identical level structure, identical results): 49 genuinely different pairs
+
+space W -- the 12 best directed gradings (ranked by full determinacy then n0 = 1 on the weight spaces with w >= 5; 222 spaces in total, 85 with w >= 5):
+   grading        det/all  n0=1   | w5-8: det/n  n0=1 | w9+: det/n  n0=1 | band
+   (+1,+0,+0)   218/222   41   |   62/ 62    3  |   21/ 23    0  | 1
+   (+2,+0,+0)   218/222   41   |   62/ 62    3  |   21/ 23    0  | 2
+   (+0,-2,-2)   215/222   18   |   60/ 62    0  |   22/ 23    0  | 2
+   (+0,-1,-1)   215/222   18   |   60/ 62    0  |   22/ 23    0  | 1
+   (+0,-2,+0)   212/222   13   |   59/ 62    0  |   22/ 23    0  | 2
+   (+0,-1,+0)   212/222   13   |   59/ 62    0  |   22/ 23    0  | 1
+   (+0,+1,+1)   215/222   51   |   58/ 62    2  |   20/ 23    3  | 1
+   (+0,+2,+2)   215/222   51   |   58/ 62    2  |   20/ 23    3  | 2
+   (+0,+0,-2)   210/222   74   |   56/ 62   15  |   19/ 23    3  | 2
+   (+0,+0,-1)   210/222   74   |   56/ 62   15  |   19/ 23    3  | 1
+   (+0,+1,+0)   207/222   77   |   53/ 62   14  |   17/ 23    3  | 1
+   (+0,+2,+0)   207/222   77   |   53/ 62   14  |   17/ 23    3  | 2
+named candidates:
+   +m12             (+1,+0,+0)  det  218/222  n0=1   41  | w>=5: det  83/ 85  n0=1   3  | worst deficit 1
+   -m12             (-1,+0,+0)  det  164/222  n0=1   67  | w>=5: det  47/ 85  n0=1  11  | worst deficit 6
+   +m13             (+0,+1,+0)  det  207/222  n0=1   77  | w>=5: det  70/ 85  n0=1  17  | worst deficit 1
+   -m13             (+0,-1,+0)  det  212/222  n0=1   13  | w>=5: det  81/ 85  n0=1   0  | worst deficit 2
+   +m23             (+0,+0,+1)  det  197/222  n0=1   78  | w>=5: det  68/ 85  n0=1  17  | worst deficit 2
+   -m23             (+0,+0,-1)  det  210/222  n0=1   74  | w>=5: det  75/ 85  n0=1  18  | worst deficit 2
+   +m33             (+0,-1,-1)  det  215/222  n0=1   18  | w>=5: det  82/ 85  n0=1   0  | worst deficit 2
+   -m33             (+0,+1,+1)  det  215/222  n0=1   51  | w>=5: det  78/ 85  n0=1   5  | worst deficit 1
+   +(m12+m13)       (+1,+1,+0)  det  160/222  n0=1  108  | w>=5: det  26/ 85  n0=1   5  | worst deficit 4
+   -(m12+m13)       (-1,-1,+0)  det  123/222  n0=1   79  | w>=5: det  13/ 85  n0=1   2  | worst deficit 7
+   +(m12-m13)       (+1,-1,+0)  det  150/222  n0=1   92  | w>=5: det  21/ 85  n0=1   0  | worst deficit 8
+   -(m12-m13)       (-1,+1,+0)  det  182/222  n0=1   56  | w>=5: det  54/ 85  n0=1   0  | worst deficit 4
+   +(m12+m13+m23)   (+1,+1,+1)  det  172/222  n0=1  101  | w>=5: det  37/ 85  n0=1   3  | worst deficit 4
+   -(m12+m13+m23)   (-1,-1,-1)  det  132/222  n0=1   90  | w>=5: det  16/ 85  n0=1   2  | worst deficit 7
+gradings (directed) fully determined on EVERY weight space of the list: 0  
+
+space W1 -- the 12 best directed gradings (ranked by full determinacy then n0 = 1 on the weight spaces with w >= 5; 222 spaces in total, 85 with w >= 5):
+   grading        det/all  n0=1   | w5-8: det/n  n0=1 | w9+: det/n  n0=1 | band
+   (+1,+0,+0)   218/222   41   |   62/ 62    3  |   21/ 23    0  | 1
+   (+2,+0,+0)   218/222   41   |   62/ 62    3  |   21/ 23    0  | 2
+   (+0,-2,-2)   216/222   37   |   60/ 62    6  |   22/ 23    1  | 2
+   (+0,-1,-1)   216/222   37   |   60/ 62    6  |   22/ 23    1  | 1
+   (+0,-2,+0)   212/222   32   |   59/ 62    7  |   22/ 23    1  | 2
+   (+0,-1,+0)   212/222   32   |   59/ 62    7  |   22/ 23    1  | 1
+   (+0,+1,+1)   217/222   63   |   60/ 62    8  |   20/ 23    3  | 1
+   (+0,+2,+2)   217/222   63   |   60/ 62    8  |   20/ 23    3  | 2
+   (-2,+0,+0)   215/222   73   |   59/ 62    9  |   21/ 23    2  | 2
+   (-1,+0,+0)   215/222   73   |   59/ 62    9  |   21/ 23    2  | 1
+   (+0,+0,-2)   214/222   82   |   59/ 62   17  |   19/ 23    3  | 2
+   (+0,+0,-1)   214/222   82   |   59/ 62   17  |   19/ 23    3  | 1
+named candidates:
+   +m12             (+1,+0,+0)  det  218/222  n0=1   41  | w>=5: det  83/ 85  n0=1   3  | worst deficit 1
+   -m12             (-1,+0,+0)  det  215/222  n0=1   73  | w>=5: det  80/ 85  n0=1  11  | worst deficit 1
+   +m13             (+0,+1,+0)  det  211/222  n0=1   90  | w>=5: det  74/ 85  n0=1  24  | worst deficit 1
+   -m13             (+0,-1,+0)  det  212/222  n0=1   32  | w>=5: det  81/ 85  n0=1   8  | worst deficit 2
+   +m23             (+0,+0,+1)  det  202/222  n0=1   87  | w>=5: det  72/ 85  n0=1  20  | worst deficit 2
+   -m23             (+0,+0,-1)  det  214/222  n0=1   82  | w>=5: det  78/ 85  n0=1  20  | worst deficit 2
+   +m33             (+0,-1,-1)  det  216/222  n0=1   37  | w>=5: det  82/ 85  n0=1   7  | worst deficit 2
+   -m33             (+0,+1,+1)  det  217/222  n0=1   63  | w>=5: det  80/ 85  n0=1  11  | worst deficit 1
+   +(m12+m13)       (+1,+1,+0)  det  172/222  n0=1  117  | w>=5: det  38/ 85  n0=1  14  | worst deficit 4
+   -(m12+m13)       (-1,-1,+0)  det  162/222  n0=1   98  | w>=5: det  36/ 85  n0=1  10  | worst deficit 4
+   +(m12-m13)       (+1,-1,+0)  det  163/222  n0=1  100  | w>=5: det  34/ 85  n0=1   8  | worst deficit 8
+   -(m12-m13)       (-1,+1,+0)  det  199/222  n0=1   81  | w>=5: det  65/ 85  n0=1  10  | worst deficit 4
+   +(m12+m13+m23)   (+1,+1,+1)  det  181/222  n0=1  108  | w>=5: det  46/ 85  n0=1  10  | worst deficit 4
+   -(m12+m13+m23)   (-1,-1,-1)  det  170/222  n0=1  109  | w>=5: det  38/ 85  n0=1   9  | worst deficit 4
+gradings (directed) fully determined on EVERY weight space of the list: 0  
+
+space W: smallest n0 over all fully determined gradings, distribution over the 222 weight spaces: n0=1: 180, n0=2: 40, n0=3: 2 ; no determined grading at all: 0
+
+space W1: smallest n0 over all fully determined gradings, distribution over the 222 weight spaces: n0=1: 188, n0=2: 33, n0=3: 1 ; no determined grading at all: 0
+
+RULE TEST: active strings A (string E_i^{k_i} non-void) -> natural gradings, space W1; entries det/n0=1 counts over the weight spaces of the class (w >= 2)
+      A=-       : 8 of the 98 primitive directed gradings are determined on every W1 of the class, n0 = 1 on all: 0  (-1,+0,+0) (-1,+1,+0) (+0,-1,-1) (+0,-1,+0) (+0,+0,-1) (+0,+0,+1)
+  A=-        n= 63: best (+0,+0,+1) det 63 n0=1 33 | +m12: 63/63  -m12: 63/63 | +m13: 60  +m23: 63
+      A=1       : 10 of the 98 primitive directed gradings are determined on every W1 of the class, n0 = 1 on all: 0  (-2,-1,+0) (-1,-1,+0) (-1,+0,+0) (+0,-1,-1) (+0,-1,+0) (+0,+0,-1)
+  A=1        n= 22: best (+0,-2,-2) det 22 n0=1 19 | +m12: 22/22  -m12: 22/22 | +m13: 21  +m23: 21
+      A=2       : 3 of the 98 primitive directed gradings are determined on every W1 of the class, n0 = 1 on all: 0  (-1,+1,+1) (+0,+1,+1) (+1,+0,+0)
+  A=2        n= 45: best (+0,+1,+1) det 45 n0=1 13 | +m12: 45/45  -m12: 44/45 | +m13: 42  +m23: 36
+      A=3       : 2 of the 98 primitive directed gradings are determined on every W1 of the class, n0 = 1 on all: 0  (+0,-1,-1) (+0,-1,+0)
+  A=3        n= 42: best (+0,-2,+0) det 42 n0=1 12 | +m12: 40/42  -m12: 37/42 | +m13: 41  +m23: 41
+      A=12      : 5 of the 98 primitive directed gradings are determined on every W1 of the class, n0 = 1 on all: 0  (-1,+0,+0) (-1,+1,+1) (+0,+0,-1) (+0,+1,+1) (+1,+0,-1)
+  A=12       n=  8: best (-2,+2,+2) det 8 n0=1 1 | +m12: 7/8  -m12: 8/8 | +m13: 7  +m23: 3
+      A=13      : 5 of the 98 primitive directed gradings are determined on every W1 of the class, n0 = 1 on all: 0  (-1,+0,+0) (-1,+1,+0) (+0,-1,-1) (+0,-1,+0) (+1,+0,+1)
+  A=13       n= 18: best (+0,-2,+0) det 18 n0=1 12 | +m12: 17/18  -m12: 18/18 | +m13: 17  +m23: 16
+      A=23      : 3 of the 98 primitive directed gradings are determined on every W1 of the class, n0 = 1 on all: 0  (-1,+1,+1) (+0,-1,-1) (+1,+0,+0)
+  A=23       n= 21: best (+1,+0,+0) det 21 n0=1 1 | +m12: 21/21  -m12: 20/21 | +m13: 20  +m23: 19
+      A=123     : 8 of the 98 primitive directed gradings are determined on every W1 of the class, n0 = 1 on all: 0  (-1,+0,+0) (-1,+1,+1) (+0,-1,-1) (+0,+0,+1) (+0,+1,+0) (+1,+0,-1)
+  A=123      n=  3: best (+0,+1,+0) det 3 n0=1 1 | +m12: 3/3  -m12: 3/3 | +m13: 3  +m23: 3
+
+==================================================================================================================================
+A1 side check: the Vandermonde determinant of the three Delta m12 = +1 root-move targets
+==================================================================================================================================
+38 candidate (sector, source) pairs with all three targets of a coherent orientation set (spectators 1, 2, 3) present and V3 != 0; 38 sampled (seed 7).
+ratio det[(V3, V4a, V4b) entries to the 3 targets] / (prod_alpha c_alpha (y2-y1)(y2-y3)), y_k = m_k3 - k of the SOURCE, per orientation set:
+   targets (moves of row 3) (0, -1, 1) : ratio 1  x 19
+   targets (moves of row 3) (0, 1, -1) : ratio -1  x 19
+all target triples with spectators 1,2,3 over [4,2,1,0]^2 and [6,4,2,0]^2: 28 with ratio exactly +-1, 24 with another ratio (the mixed-orientation triples)
+[stage gradings: 3.7 s]
+
+==================================================================================================================================
+A2  slice_from_triple: forward lattice recursion validated against so.copies (50 digits)
+==================================================================================================================================
+[2,1,0,0]^2          sectors validated   3 (m = 0: 0; no n0 = 1 grading on W1: 0 [0 copies not tested]); copies    4: reproduced with the FIRST grading    4, with a fallback n0=1 grading    4, NOT reproduced 0
+[2,1,1,0]^2          sectors validated   1 (m = 0: 0; no n0 = 1 grading on W1: 0 [0 copies not tested]); copies    2: reproduced with the FIRST grading    2, with a fallback n0=1 grading    2, NOT reproduced 0
+[3,2,1,0]^2          sectors validated   8 (m = 0: 0; no n0 = 1 grading on W1: 0 [0 copies not tested]); copies   22: reproduced with the FIRST grading   22, with a fallback n0=1 grading   22, NOT reproduced 0
+[4,2,0,0]^2          sectors validated  15 (m = 0: 1; no n0 = 1 grading on W1: 3 [5 copies not tested]); copies   21: reproduced with the FIRST grading   21, with a fallback n0=1 grading   21, NOT reproduced 0
+[4,2,1,0]^2          sectors validated  18 (m = 0: 0; no n0 = 1 grading on W1: 0 [0 copies not tested]); copies   47: reproduced with the FIRST grading   47, with a fallback n0=1 grading   47, NOT reproduced 0
+[3,2,1,0]x[4,2,1,0]  sectors validated  10 (m = 0: 0; no n0 = 1 grading on W1: 0 [0 copies not tested]); copies   28: reproduced with the FIRST grading   28, with a fallback n0=1 grading   28, NOT reproduced 0
+[4,2,1,0]x[3,2,1,0]  sectors validated  13 (m = 0: 0; no n0 = 1 grading on W1: 1 [4 copies not tested]); copies   28: reproduced with the FIRST grading   28, with a fallback n0=1 grading   28, NOT reproduced 0
+[4,2,2,0]^2          sectors validated   8 (m = 0: 0; no n0 = 1 grading on W1: 0 [0 copies not tested]); copies   15: reproduced with the FIRST grading   15, with a fallback n0=1 grading   15, NOT reproduced 0
+[4,3,1,0]^2          sectors validated  19 (m = 0: 0; no n0 = 1 grading on W1: 3 [13 copies not tested]); copies   47: reproduced with the FIRST grading   47, with a fallback n0=1 grading   47, NOT reproduced 0
+[6,4,2,0]^2          sectors validated  42 (m = 0: 0; no n0 = 1 grading on W1: 20 [139 copies not tested]); copies  144: reproduced with the FIRST grading  144, with a fallback n0=1 grading  144, NOT reproduced 0
+TOTAL: 137 sectors, 358 copies; reproduced (<= 1e-40 at 50 digits): 358 (first grading) / 358 (with fallback); NOT reproduced: 0; copies in sectors without an n0=1 grading (untested): 161
+max error over reproduced copies 2.89e-43; max residual of the unused equations at the true triples 3.98e-45; smallest residual at the perturbed triples (relative 1e-3) 0.023
+time: joint eigen-decomposition (so.copies, 50 digits) 0.85 s total vs recursion 0.112 s total over the copies (first grading)  ratio 8x
+gradings used first: (-1,+0,+0) x55, (+0,+0,-1) x29, (+0,+0,+1) x23, (+0,-1,+0) x20, (+0,+1,+0) x9, (+0,-1,-1) x1
+[stage recursion: 1.1 s]
+
+==================================================================================================================================
+A3  polynomials P_x(v3, v4a, v4b) and the characteristic equations (n0 = 1 sectors, space W1, band-1 gradings where available)
+==================================================================================================================================
+14 sectors selected (>= 3 with m >= 3 from P_small; 3 of [6,4,2,0]^2 with m >= 6)
+[4,2,1,0]^2        (6,4,3,1)    w1=6  m=5  (-1,+0,+0): deg P_x <= 2 (levels 0..2: [0, 1, 2]), C_j: 13 nonzero of 13 unused, degrees [2, 3]; |C_j| at W1 triples 5.4e-45, at phys 1.2e-44; groebner dim 6 (w1 = 6, distinct triples 6); M~ {'dim': 5, 'in_W1': 5, 'phys_in_Mt': 5, 'W1_notin_Mt': 1}
+   example C_j polynomials (first sector), primitive integer form:
+      3*v3**2 - 2*v3*v4a - 378*v3 + 155*v4a - 15*v4b + 12240
+      18*v3**2 - 11*v3*v4a - 2268*v3 - 13*v4a**2 - 6*v4a*v4b + 2334*v4a + 50112
+      72*v3**2 - 53*v3*v4a - 9072*v3 - v4a**2 - 3*v4a*v4b + 4422*v4a - 216*v4b + 282096
+      72*v3**2 - 49*v3*v4a - 9072*v3 + 3*v4a**2 + v4a*v4b + 3486*v4a - 360*v4b + 297648
+      54*v3**2 - 46*v3*v4a - 6*v3*v4b - 5508*v3 + 13*v4a*v4b + 2664*v4a + 6*v4b**2 - 1404*v4b + 200880
+      180*v3**2 - 136*v3*v4a - 3*v3*v4b - 22032*v3 + v4a*v4b + 10524*v4a + 3*v4b**2 - 1170*v4b + 703296
+      156*v3**2 - 104*v3*v4a + v3*v4b - 19872*v3 - 3*v4a*v4b + 8276*v4a - v4b**2 - 546*v4b + 636480
+      9*v3**3 - 25*v3**2*v4a - 9*v3**2*v4b + 756*v3**2 + 3160*v3*v4a + 1206*v3*v4b - 234468*v3 - 94140*v4a - 42840*v4b + 9635760
+[3,2,1,0]^2        (5,4,2,1)    w1=4  m=4  (+0,+0,+1): deg P_x <= 1 (levels 0..1: [0, 1]), C_j: 9 nonzero of 9 unused, degrees [2]; |C_j| at W1 triples 1.0e-47, at phys 1.0e-47; groebner dim 4 (w1 = 4, distinct triples 4); M~ {'dim': 4, 'in_W1': 4, 'phys_in_Mt': 4, 'W1_notin_Mt': 0}
+[4,2,1,0]^2        (7,4,2,1)    w1=4  m=4  (+0,+0,+1): deg P_x <= 1 (levels 0..1: [0, 1]), C_j: 9 nonzero of 9 unused, degrees [2]; |C_j| at W1 triples 1.8e-46, at phys 1.8e-46; groebner dim 4 (w1 = 4, distinct triples 4); M~ {'dim': 4, 'in_W1': 4, 'phys_in_Mt': 4, 'W1_notin_Mt': 0}
+[4,2,1,0]^2        (6,5,2,1)    w1=4  m=4  (+0,+0,+1): deg P_x <= 1 (levels 0..1: [0, 1]), C_j: 9 nonzero of 9 unused, degrees [2]; |C_j| at W1 triples 4.8e-47, at phys 4.8e-47; groebner dim 4 (w1 = 4, distinct triples 4); M~ {'dim': 4, 'in_W1': 4, 'phys_in_Mt': 4, 'W1_notin_Mt': 0}
+[3,2,1,0]x[4,2,1,0] (6,4,2,1)    w1=4  m=4  (+0,+0,+1): deg P_x <= 1 (levels 0..1: [0, 1]), C_j: 9 nonzero of 9 unused, degrees [2]; |C_j| at W1 triples 3.0e-47, at phys 3.0e-47; groebner dim 4 (w1 = 4, distinct triples 4); M~ {'dim': 4, 'in_W1': 4, 'phys_in_Mt': 4, 'W1_notin_Mt': 0}
+[3,2,1,0]x[4,2,1,0] (5,4,3,1)    w1=4  m=4  (-1,+0,+0): deg P_x <= 1 (levels 0..1: [0, 1]), C_j: 9 nonzero of 9 unused, degrees [2]; |C_j| at W1 triples 1.2e-46, at phys 1.2e-46; groebner dim 4 (w1 = 4, distinct triples 4); M~ {'dim': 4, 'in_W1': 4, 'phys_in_Mt': 4, 'W1_notin_Mt': 0}
+[4,2,1,0]x[3,2,1,0] (6,4,2,1)    w1=4  m=4  (+0,+0,+1): deg P_x <= 1 (levels 0..1: [0, 1]), C_j: 9 nonzero of 9 unused, degrees [2]; |C_j| at W1 triples 2.7e-46, at phys 2.7e-46; groebner dim 4 (w1 = 4, distinct triples 4); M~ {'dim': 4, 'in_W1': 4, 'phys_in_Mt': 4, 'W1_notin_Mt': 0}
+[4,3,1,0]^2        (7,6,2,1)    w1=4  m=4  (+0,+0,+1): deg P_x <= 1 (levels 0..1: [0, 1]), C_j: 9 nonzero of 9 unused, degrees [2]; |C_j| at W1 triples 8.0e-46, at phys 8.0e-46; groebner dim 4 (w1 = 4, distinct triples 4); M~ {'dim': 4, 'in_W1': 4, 'phys_in_Mt': 4, 'W1_notin_Mt': 0}
+[4,2,0,0]^2        (6,4,2,0)    w1=3  m=3  (-1,+0,+0): deg P_x <= 2 (levels 0..2: [0, 1, 2]), C_j: 7 nonzero of 7 unused, degrees [1, 2, 3]; |C_j| at W1 triples 9.9e-48, at phys 9.9e-48; groebner dim 3 (w1 = 3, distinct triples 3); M~ {'dim': 3, 'in_W1': 3, 'phys_in_Mt': 3, 'W1_notin_Mt': 0}
+[3,2,1,0]^2        (5,3,3,1)    w1=4  m=3  (-1,+0,+0): deg P_x <= 1 (levels 0..1: [0, 1]), C_j: 9 nonzero of 9 unused, degrees [2]; |C_j| at W1 triples 7.6e-47, at phys 4.9e-47; groebner dim 4 (w1 = 4, distinct triples 4); M~ {'dim': 3, 'in_W1': 3, 'phys_in_Mt': 3, 'W1_notin_Mt': 1}
+[4,2,2,0]^2        (6,4,4,2)    w1=6  m=3  (-1,+0,+0): deg P_x <= 2 (levels 0..2: [0, 1, 2]), C_j: 12 nonzero of 13 unused, degrees [1, 2, 3]; |C_j| at W1 triples 1.2e-44, at phys 1.4e-45; groebner dim 6 (w1 = 6, distinct triples 6); M~ {'dim': 3, 'in_W1': 3, 'phys_in_Mt': 3, 'W1_notin_Mt': 3}
+[6,4,2,0]^2        (10,8,4,2)   w1=10 m=10 (+0,+0,+1): deg P_x <= 2 (levels 0..2: [0, 1, 2]), C_j: 18 nonzero of 21 unused, degrees [3]; |C_j| at W1 triples 4.4e-42, at phys 4.4e-42; groebner dim 10 (w1 = 10, distinct triples 10); M~ {'dim': 10, 'in_W1': 10, 'phys_in_Mt': 10, 'W1_notin_Mt': 0}
+[6,4,2,0]^2        (11,7,4,2)   w1=7  m=7  (+0,+0,+1): deg P_x <= 2 (levels 0..2: [0, 1, 2]), C_j: 15 nonzero of 15 unused, degrees [2, 3]; |C_j| at W1 triples 1.1e-42, at phys 1.1e-42; groebner dim 7 (w1 = 7, distinct triples 7); M~ {'dim': 7, 'in_W1': 7, 'phys_in_Mt': 7, 'W1_notin_Mt': 0}
+[6,4,2,0]^2        (11,6,5,2)   w1=7  m=6  (+0,+0,+1): deg P_x <= 2 (levels 0..2: [0, 1, 2]), C_j: 15 nonzero of 15 unused, degrees [2, 3]; |C_j| at W1 triples 8.2e-43, at phys 1.2e-42; groebner dim 7 (w1 = 7, distinct triples 7); M~ {'dim': 6, 'in_W1': 6, 'phys_in_Mt': 6, 'W1_notin_Mt': 1}
+AGGREGATE over 14 sectors: all C_j vanish at every W1 joint triple (bottom component != 0) in 14, at all physical triples in 14; deg P_x <= level in 14; PRV-coordinate degree = G4 Krylov degree in 14 (<= in 14); band-1 gradings 14; groebner finished 14, dim Q[v]/J = dim W1 in 14, = #distinct triples in 14
+[stage charpoly: 9.5 s]
+
+==================================================================================================================================
+A4  n0 > 1: the recursion psi = T(v) psi0, characteristic equations C(v) psi0 = 0 with C a polynomial matrix; minimal n0 over gradings
+==================================================================================================================================
+space W: minimal n0 by weight-space dimension w: w=2: {1: 66}; w=3: {1: 17}; w=4: {1: 51, 2: 3}; w=5: {2: 11, 1: 15}; w=6: {1: 12, 2: 1}; w=7: {2: 10, 1: 13}; w=9: {2: 4}; w=10: {1: 6}; w=12: {2: 10, 3: 2}; w=15: {2: 1}
+space W: minimal n0 by active strings A: A=- {1: 58, 2: 5}; A=1 {1: 15, 2: 6, 3: 1}; A=12 {2: 6, 1: 2}; A=123 {1: 1, 2: 1, 3: 1}; A=13 {1: 11, 2: 7}; A=2 {1: 43, 2: 2}; A=23 {1: 15, 2: 6}; A=3 {1: 35, 2: 7}
+space W1: minimal n0 by weight-space dimension w: w=2: {1: 66}; w=3: {1: 17}; w=4: {1: 51, 2: 3}; w=5: {2: 5, 1: 21}; w=6: {1: 12, 2: 1}; w=7: {2: 8, 1: 15}; w=9: {2: 4}; w=10: {1: 6}; w=12: {2: 11, 3: 1}; w=15: {2: 1}
+space W1: minimal n0 by active strings A: A=- {1: 58, 2: 5}; A=1 {1: 19, 2: 3}; A=12 {2: 4, 1: 4}; A=123 {1: 1, 2: 1, 3: 1}; A=13 {1: 13, 2: 5}; A=2 {1: 43, 2: 2}; A=23 {1: 15, 2: 6}; A=3 {1: 35, 2: 7}
+
+Per product: the grading with the largest number of sectors (w >= 2) fully determined with n0 = 1 (space W1 / W):
+   [2,1,0,0]^2              3 sectors:  W: (-2,-2,-1) n0=1 in 3 (det 3); some grading gives n0=1 in 3  W1: (-2,-2,-1) n0=1 in 3 (det 3); some grading gives n0=1 in 3
+   [2,1,1,0]^2              1 sectors:  W: (-2,-2,-2) n0=1 in 1 (det 1); some grading gives n0=1 in 1  W1: (-2,-2,-2) n0=1 in 1 (det 1); some grading gives n0=1 in 1
+   [3,2,1,0]^2              8 sectors:  W: (-1,+2,-2) n0=1 in 8 (det 8); some grading gives n0=1 in 8  W1: (-2,-2,-1) n0=1 in 8 (det 8); some grading gives n0=1 in 8
+   [4,2,0,0]^2             19 sectors:  W: (+1,+0,-2) n0=1 in 16 (det 16); some grading gives n0=1 in 16  W1: (-2,+1,-2) n0=1 in 16 (det 16); some grading gives n0=1 in 16
+   [4,2,1,0]^2             18 sectors:  W: (+1,+1,-2) n0=1 in 15 (det 15); some grading gives n0=1 in 18  W1: (-2,+0,-1) n0=1 in 15 (det 16); some grading gives n0=1 in 18
+   [3,2,1,0]x[4,2,1,0]     10 sectors:  W: (-2,-2,-1) n0=1 in 10 (det 10); some grading gives n0=1 in 10  W1: (-2,-2,-1) n0=1 in 10 (det 10); some grading gives n0=1 in 10
+   [4,2,1,0]x[3,2,1,0]     14 sectors:  W: (+1,+1,-2) n0=1 in 11 (det 11); some grading gives n0=1 in 13  W1: (-1,+2,-2) n0=1 in 12 (det 12); some grading gives n0=1 in 13
+   [4,2,2,0]^2              8 sectors:  W: (+0,+1,-2) n0=1 in 8 (det 8); some grading gives n0=1 in 8  W1: (+0,+1,-2) n0=1 in 8 (det 8); some grading gives n0=1 in 8
+   [4,3,1,0]^2             22 sectors:  W: (+1,+0,+2) n0=1 in 15 (det 18); some grading gives n0=1 in 17  W1: (-1,-2,+2) n0=1 in 19 (det 19); some grading gives n0=1 in 19
+   [6,4,2,0]^2             62 sectors:  W: (+2,+1,-1) n0=1 in 24 (det 25); some grading gives n0=1 in 37  W1: (+2,+2,+1) n0=1 in 29 (det 29); some grading gives n0=1 in 42
+   [5,3,1,0]^2             39 sectors:  W: (+1,+1,-2) n0=1 in 23 (det 23); some grading gives n0=1 in 31  W1: (+1,+1,-2) n0=1 in 26 (det 26); some grading gives n0=1 in 32
+   [5,3,2,1]^2             18 sectors:  W: (+1,+1,-2) n0=1 in 15 (det 15); some grading gives n0=1 in 18  W1: (-2,+0,-1) n0=1 in 15 (det 16); some grading gives n0=1 in 18
+
+Numerical verification on sectors whose minimal n0 over the determined gradings (W1) is 2 or 3 (50 digits):
+   34 candidate sectors (m >= 1)
+   verified: 34 sectors (n0 = 2: 33, n0 = 3: 1), 203 copies: rank C(v) = n0 - 1 at 203 of them (sigma_n0/sigma_1 < 1e-40, sigma_{n0-1}/sigma_1 > 1e-15); kernel = bottom component of the copy (1 - cos <= 1.6e-61) and T(v)ker = the copy (error <= 4.2e-44) checked at 203 (bottom component zero at 0)
+
+Symbolic C(v) (polynomial matrix, n0 = 2) and its 2 x 2 minors:
+   [4,2,0,0]^2 (6,4,1,1) w1=4 m=1 g=(+0,-1,+0): C has 10 nonzero rows, entry degrees [1, 2], 41 distinct nonzero 2x2 minors (degrees [2, 3, 4]); dim Q[v]/(minors) = {'dim': 4, 'zero_dim': True, 'ngens': 4}
+   [4,2,0,0]^2 (6,3,2,1) w1=4 m=2 g=(-1,+0,+0): C has 10 nonzero rows, entry degrees [1, 2], 45 distinct nonzero 2x2 minors (degrees [2, 3, 4]); dim Q[v]/(minors) = {'dim': 4, 'zero_dim': True, 'ngens': 4}
+   [4,2,0,0]^2 (5,4,2,1) w1=4 m=2 g=(-1,+0,+0): C has 10 nonzero rows, entry degrees [1, 2], 45 distinct nonzero 2x2 minors (degrees [2, 3, 4]); dim Q[v]/(minors) = {'dim': 4, 'zero_dim': True, 'ngens': 4}
+   [4,2,1,0]x[3,2,1,0] (5,4,3,1) w1=5 m=4 g=(+0,+1,+0): C has 12 nonzero rows, entry degrees [1, 2], 66 distinct nonzero 2x2 minors (degrees [2, 3, 4]); dim Q[v]/(minors) = {'dim': 5, 'zero_dim': True, 'ngens': 6}
+   [4,3,1,0]^2 (7,5,3,1) w1=5 m=5 g=(-1,+0,+0): C has 12 nonzero rows, entry degrees [1, 2], 66 distinct nonzero 2x2 minors (degrees [2, 3, 4]); dim Q[v]/(minors) = {'dim': 5, 'zero_dim': True, 'ngens': 6}
+[stage n0: 5.9 s]
+
+==================================================================================================================================
+A5  separability diagnostic: rank of Psi[kappa][m12], Psi[m13][(m23,m12)], Psi[m23][(m13,m12)] for every physical copy of P_small (50 digits, threshold 1e-30)
+==================================================================================================================================
+304 physical copies of P_small
+Psi[kappa][m12]: (rank over full-range rows, rank over all rows) distribution over copies: {(0, 1): 4, (0, 2): 8, (0, 3): 4, (1, 1): 158, (1, 2): 111, (1, 3): 7, (2, 2): 12}
+      among copies whose matrix has >= 2 nonzero rows and >= 2 nonzero columns: {(0, 2): 8, (0, 3): 4, (1, 1): 4, (1, 2): 111, (1, 3): 7, (2, 2): 12}
+Psi[m13][(m23,m12)]: (rank over full-range rows, rank over all rows) distribution over copies: {(0, 1): 3, (0, 2): 74, (0, 3): 20, (1, 1): 119, (1, 2): 85, (1, 3): 3}
+      among copies whose matrix has >= 2 nonzero rows and >= 2 nonzero columns: {(0, 2): 74, (0, 3): 20, (1, 2): 85, (1, 3): 3}
+Psi[m23][(m13,m12)]: (rank over full-range rows, rank over all rows) distribution over copies: {(0, 1): 2, (0, 2): 58, (0, 3): 7, (1, 1): 138, (1, 2): 87, (1, 3): 12}
+      among copies whose matrix has >= 2 nonzero rows and >= 2 nonzero columns: {(0, 2): 58, (0, 3): 7, (1, 2): 87, (1, 3): 12}
+[stage separability: 0.9 s]
